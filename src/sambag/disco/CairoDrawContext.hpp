@@ -129,6 +129,42 @@ public:
 		);
 	}
 	//-------------------------------------------------------------------------
+	virtual void relCurveTo(
+		const Point2D &x1,
+		const Point2D &x2,
+		const Point2D &x3 )
+	{
+		cairo_rel_curve_to(
+			context,
+			x1.x(),
+			x1.y(),
+			x2.x(),
+			x2.y(),
+			x3.x(),
+			x3.y()
+		);
+	}
+	//-------------------------------------------------------------------------
+	virtual void quadraticCurveTo( const Point2D &x1, const Point2D &x2 ) {
+		Point2D x0 = getCurrentPoint();
+		cairo_curve_to (context,
+		                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
+		                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
+		                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x2.x(),
+		                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x2.y(),
+		                x2.x(), x2.y());
+	}
+	//-------------------------------------------------------------------------
+	virtual void relQuadraticCurveTo( const Point2D &x1, const Point2D &x2 ) {
+		Point2D x0 = getCurrentPoint();
+		cairo_rel_curve_to (context,
+		                    2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
+		                    2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
+		                    2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x2.x(),
+		                    2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x2.y(),
+		                    x2.x(), x2.y());
+	}
+	//-------------------------------------------------------------------------
 	virtual void arc(
 		const Point2D &c,
 		const Number &r,

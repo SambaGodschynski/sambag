@@ -274,7 +274,7 @@ const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name )
 	return it->second;
 }
 //-----------------------------------------------------------------------------
-pathInstruction::Instruction
+pathInstruction::InstructionOp
 AttributeParser::getPathInstruction( const std::string &op )
 {
 	if (pathInstrMap.empty())

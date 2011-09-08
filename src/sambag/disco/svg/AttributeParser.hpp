@@ -28,7 +28,7 @@ private:
 	//-------------------------------------------------------------------------
 	typedef std::map<std::string, ColorRGBA> HtmlColors;
 	//-------------------------------------------------------------------------
-	typedef std::map<std::string, pathInstruction::Instruction> PathInstrMap;
+	typedef std::map<std::string, pathInstruction::InstructionOp> PathInstrMap;
 	//-------------------------------------------------------------------------
 	static HtmlColors htmlColors;
 	//-------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public:
 	 * @param svg path command like M or z
 	 * @return Instruction
 	 */
-	static pathInstruction::Instruction getPathInstruction(const std::string&);
+	static pathInstruction::InstructionOp getPathInstruction(const std::string&);
 	//-------------------------------------------------------------------------
 	static const ColorRGBA & getColorByHtmlName( const std::string &name );
 };

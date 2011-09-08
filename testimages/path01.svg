@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="400px" height="400px" viewBox="0 0 400 400"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
@@ -12,4 +12,15 @@
     <path d="M 100 100 L300 100 L200 300 z" transform="translate(40,35)scale(0.8)"/>
     <path d="M 100 100 L 300 100 200 300 z" transform="translate(80,70)scale(0.6)"/>
   </g>
+  
+  <path d="M0 200 h 200 200 M 200 0 v 200 V 400" stroke="red" stroke-width="1"/>
+  <path d="M100,200 C100,100 250,100 250,200 S400,300 400,200"
+        fill="none" stroke="green" transform="translate(-50,0)"/>
+  
+  <path d="M100,200 C100,300 250,300 250,200 S400,100 400,200"
+        fill="none" stroke="green" transform="translate(-50,0)"/>
+
+  <path id="quadcurveABC" d="M200,300 Q400,50 600,300 T1000,300" 
+  stroke="red" stroke-width="5" fill="none" transform="translate(-100, -15)scale(0.5)"/>
 </svg>
+

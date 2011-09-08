@@ -20,7 +20,7 @@ namespace sambag { namespace disco { namespace graphicElements {
 namespace pathInstruction {
 //=============================================================================
 //-----------------------------------------------------------------------------
-enum Instruction {
+enum InstructionOp {
 	NONE,
 	CLOSEPATH                    ,
 	MOVETO_ABS                   ,
@@ -42,11 +42,12 @@ enum Instruction {
 	CURVETO_QUADRATIC_SMOOTH_ABS ,
 	CURVETO_QUADRATIC_SMOOTH_REL
 };
-typedef std::vector<Number> PointContainer;
-typedef std::pair<PointContainer, Instruction> PathInstruction;
+typedef std::vector<sambag::com::Number> PointContainer;
+typedef std::pair<PointContainer, InstructionOp> PathInstruction;
 typedef std::list<PathInstruction> PathInstructions;
-}
+extern bool isCubic ( InstructionOp op );
+extern bool isQuadratic ( InstructionOp op );
 
-}}} // namespace
+}}}} // namespace
 
 #endif /* PATHINSTRUCTION_HPP_ */

@@ -67,6 +67,15 @@ public:
 		const Point2D &x2,
 		const Point2D &x3 ) = 0;
 	//-------------------------------------------------------------------------
+	virtual void relCurveTo(
+		const Point2D &x1,
+		const Point2D &x2,
+		const Point2D &x3 ) = 0;
+	//-------------------------------------------------------------------------
+	virtual void quadraticCurveTo( const Point2D &x1, const Point2D &x2 ) = 0;
+	//-------------------------------------------------------------------------
+	virtual void relQuadraticCurveTo( const Point2D &x1, const Point2D &x2 ) = 0;
+	//-------------------------------------------------------------------------
 	virtual void arc(
 		const Point2D &c,
 		const Number &r,
