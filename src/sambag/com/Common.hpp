@@ -14,12 +14,14 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/logic/tribool.hpp>
 
 namespace sambag { namespace com {
 //#############################################################################
 // metrics
 //#############################################################################
 typedef double Number;
+extern const Number NULL_NUMBER;
 
 //#############################################################################
 // geometry
@@ -70,7 +72,15 @@ public:
 		return result.y();
 	}
 	//-------------------------------------------------------------------------
-	Rectangle( Point2D x0 = Point2D() , Point2D x1 = Point2D() ) :
+	void setWidth( const Number &w )  {
+		box.max_corner().x( box.min_corner().x() + w );
+	}
+	//-------------------------------------------------------------------------
+	void setHeight( const Number &h )  {
+		box.max_corner().y( box.min_corner().y() + h );
+	}
+	//-------------------------------------------------------------------------
+	Rectangle( Point2D x0 = Point2D(0,0) , Point2D x1 = Point2D(0,0) ) :
 		box( Box(x0, x1) ){}
 	//-------------------------------------------------------------------------
 	Rectangle( Point2D _x0,
@@ -117,6 +127,8 @@ struct ColorRGBA : public sambag::math::VectorN<Number, 4> {
 		setValues(r,g,b,a);
 	}
 };
+extern const ColorRGBA NULL_COLOR;
+
 //#############################################################################
 // Math
 //#############################################################################
@@ -152,6 +164,9 @@ bool operator!=(const matrix<T>& m, const matrix<T>& n) {
 //#############################################################################
 //=============================================================================
 #define for_each BOOST_FOREACH
+//=============================================================================
+using namespace boost::logic;
+typedef tribool TriBool;
 
 }} // namespaces
 

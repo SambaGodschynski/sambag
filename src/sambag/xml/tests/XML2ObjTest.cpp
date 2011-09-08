@@ -10,10 +10,23 @@
 #include <sstream>
 #include <iostream>
 #include "ticpp/ticpp.h"
+#include <boost/foreach.hpp>
 
-const std::string XML01 = "<root/>";
-const std::string XML02 = "<root id='01'><objectA id='02'/></root>";
-const std::string XML03 = "<root id='01'><objectA id='02'><objectB id='03' descr='b-type'/></objectA><objectA id='04'/></root>";
+const std::string XML01 = "<root>this is it</root>";
+const std::string XML02 = std::string("<root id='01'>") +
+                                        "<objectA id='02'/>" +
+                                      "</root>";
+const std::string XML03 = std::string("<root id='01'>") +
+                                           "<objectA id='02'>" +
+                                             "<objectB id='03' descr='b-type'/>" +
+                                           "</objectA>"
+                                         "<objectA id='04'/>" +
+                                       "</root>";
+
+const std::string XML04 = std::string("<root id='01'>") +
+		                                "<objectA id='02'  x='10' />" +
+		                                 "<objectB id='03' descr='b-type' x='20'/>" +
+		                              "</root>";
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::XML2ObjectTest );
@@ -23,6 +36,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( tests::XML2ObjectTest );
 struct Attr_Id {};
 //------------------------------------------------------------------------------
 struct Attr_Descr{};
+//------------------------------------------------------------------------------
+struct Attr_X{};
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // Object Classes which are registered in the XML2Object Parser
 //------------------------------------------------------------------------------
@@ -30,10 +45,12 @@ struct BaseObject {
   typedef boost::shared_ptr<BaseObject> Ptr;
   typedef std::list<Ptr> ObjectList;
   ObjectList oL;
+  std::string xmlText;
   static int numObjects;
   int id;
   BaseObject() : id(-1) { ++numObjects; }
   virtual std::string getClassName() const { return "BaseObject"; }
+  virtual void setXmlText( const std::string & str) { xmlText = str; }
   virtual void set ( int _id, const Attr_Id &tag ) {
     id = _id;
   }
@@ -55,17 +72,22 @@ struct Root : public BaseObject {
 //------------------------------------------------------------------------------
 struct ObjectA : public BaseObject {
   typedef boost::shared_ptr<ObjectA> Ptr;
-  ObjectA() {}
+  int x;
+  ObjectA() : x(0) {}
   static Ptr create() {
     return Ptr( new ObjectA() );
   }
   virtual std::string getClassName() const { return "ObjectA"; }
+  virtual void set ( int _x, const Attr_X & ) {
+	  x = _x;
+  }
 };
 //------------------------------------------------------------------------------
 struct ObjectB : public BaseObject {
   typedef boost::shared_ptr<ObjectB> Ptr;
   std::string descr;
-  ObjectB() {}
+  int x;
+  ObjectB() : x(0) {}
   static Ptr create() {
     return Ptr( new ObjectB() );
   }
@@ -73,6 +95,9 @@ struct ObjectB : public BaseObject {
   virtual void set ( const std::string &_descr, const Attr_Descr& ) {
     descr = _descr;
   }
+  virtual void set ( int _x, const Attr_X & ) {
+ 	  x = _x;
+   }
 };
 //----------------------------------------------------------------------------
 void objCreated ( BaseObject::Ptr obj ) {
@@ -168,6 +193,7 @@ void XML2ObjectTest::testBuildStructure() {
   ptr = xml2Obj.buildWithXmlString ( XML01 );
   CPPUNIT_ASSERT( ptr );
   CPPUNIT_ASSERT_EQUAL( (int)1, BaseObject::numObjects );
+  CPPUNIT_ASSERT_EQUAL( std::string("this is it"), ptr->xmlText );
   ticpp::Document doc;
   doc.Parse ( XML01 );
   std::string ret = compareRekursive ( ptr, *( doc.FirstChildElement() ) );
@@ -188,6 +214,23 @@ void XML2ObjectTest::testBuildStructure() {
   doc.Parse ( XML03 );
   ret = compareRekursive ( ptr, *doc.FirstChildElement() );
   CPPUNIT_ASSERT_EQUAL( std::string("ok"), ret );
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>XML03
+  xml2Obj.registerAttribute<int, Attr_X, ObjectA>("x");
+  xml2Obj.registerAttribute<int, Attr_X, ObjectB>("x");
+  //xml2Obj.registerAttribute<int, Attr_X, ObjectA>("x");
+  ptr = xml2Obj.buildWithXmlString ( XML04 );
+  CPPUNIT_ASSERT( ptr );
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert x
+  BOOST_FOREACH( BaseObject::Ptr obj, ptr->oL ) {
+	  if (obj->getClassName() == "ObjectA") {
+		  ObjectA::Ptr oa = boost::shared_dynamic_cast<ObjectA, BaseObject>(obj);
+		  CPPUNIT_ASSERT_EQUAL( 10, oa->x);
+	  }
+	  if (obj->getClassName() == "ObjectB") {
+		  ObjectB::Ptr ob = boost::shared_dynamic_cast<ObjectB, BaseObject>(obj);
+	  	  CPPUNIT_ASSERT_EQUAL( 20, ob->x);
+	  }
+  }
 }
 
 

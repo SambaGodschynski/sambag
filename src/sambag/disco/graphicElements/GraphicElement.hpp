@@ -11,11 +11,12 @@
 #include "sambag/disco/IDrawContext.hpp"
 #include "Style.hpp"
 #include "sambag/com/Common.hpp"
+#include "IGraphicObject.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
 // Abstract base class for all graphic elements.
-class GraphicElement {
+class GraphicElement : public IGraphicObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -32,9 +33,15 @@ protected:
 	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
-	const Style & getStyle() const { return style; }
+	virtual const Style & getStyle() const { return style; }
 	//-------------------------------------------------------------------------
-	void setStyle( const Style &_style ) { style = _style; }
+	/**
+	 * @see Style.copyFrom()
+	 * @param _style
+	 */
+	virtual void copyStyleFrom( const Style &b ) { style.copyFrom(b); }
+	//-------------------------------------------------------------------------
+	virtual void setStyle( const Style &_style ) { style =_style; }
 	//-------------------------------------------------------------------------
 	virtual ~GraphicElement();
 	//-------------------------------------------------------------------------

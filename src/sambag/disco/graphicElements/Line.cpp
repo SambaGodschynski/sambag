@@ -14,14 +14,13 @@ namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 Line::Line(const Point2D &p0, const Point2D &p1) : p0(p0), p1(p1) {
-	style.isStroked = true;
 }
 //-----------------------------------------------------------------------------
 Line::~Line() {
 }
 //-----------------------------------------------------------------------------
 void Line::draw( IDrawContext::Ptr cn ) {
-	if (!style.isStroked)
+	if ( !style.isStroked() )
 		return;
 	style.setStrokeStyle(cn);
 	cn->moveTo(p0); cn->lineTo(p1);

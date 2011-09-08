@@ -1,0 +1,98 @@
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound}{
+\section{sambag::disco::graphicElements::Compound Class Reference}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound}\index{sambag::disco::graphicElements::Compound@{sambag::disco::graphicElements::Compound}}
+}
+
+
+{\ttfamily \#include $<$Compound.hpp$>$}
+
+Inheritance diagram for sambag::disco::graphicElements::Compound:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classsambag_1_1disco_1_1graphic_elements_1_1_compound}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_af349c4293a7d91edb8dc755ed50c1e9f}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_compound}{Compound} $>$ {\bfseries Ptr}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_af349c4293a7d91edb8dc755ed50c1e9f}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a201169180198d1eee0893649d8ba77fa}{
+typedef std::list$<$ GraphicElement::Ptr $>$ {\bfseries GraphicElements}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a201169180198d1eee0893649d8ba77fa}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a7a36ede1ba0ed02f7928d03a8dbaa36e}{copyStyleFrom} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{Style} \&b)
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_af5d80d77106b3bed9da7941d3cc94785}{
+virtual void {\bfseries setStyle} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{Style} \&\_\-style)}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_af5d80d77106b3bed9da7941d3cc94785}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_adc75502f599a1b9d60f79277d71f63ae}{
+size\_\-t {\bfseries getNumChildren} () const }
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_adc75502f599a1b9d60f79277d71f63ae}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_acf9313f534408e838484f2aae5974b9d}{
+virtual void {\bfseries add} (GraphicElement::Ptr obj)}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_acf9313f534408e838484f2aae5974b9d}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a67b83de2dd7a640751eb5911d3cbfbea}{
+virtual void {\bfseries draw} (IDrawContext::Ptr context)}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a67b83de2dd7a640751eb5911d3cbfbea}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a280b0ff0aeec431bc2c4ff40a62ca84c}{
+virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const }
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a280b0ff0aeec431bc2c4ff40a62ca84c}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a621edf232bd598eaadeccbffec3556eb}{
+static Ptr {\bfseries create} ()}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a621edf232bd598eaadeccbffec3556eb}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class for all compounded SVG elements. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a7a36ede1ba0ed02f7928d03a8dbaa36e}{
+\index{sambag::disco::graphicElements::Compound@{sambag::disco::graphicElements::Compound}!copyStyleFrom@{copyStyleFrom}}
+\index{copyStyleFrom@{copyStyleFrom}!sambag::disco::graphicElements::Compound@{sambag::disco::graphicElements::Compound}}
+\subsubsection[{copyStyleFrom}]{\setlength{\rightskip}{0pt plus 5cm}void sambag::disco::graphicElements::Compound::copyStyleFrom (
+\begin{DoxyParamCaption}
+\item[{const {\bf Style} \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a7a36ede1ba0ed02f7928d03a8dbaa36e}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style_a10ef3a436a11e0fb65d02e5e9f91b46e}{Style.copyFrom()} 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em \_\-style} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2d2553a6d3a539fa8fe8e0d43a1e250e}{sambag::disco::graphicElements::GraphicElement}.
+
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+/home/samba/workspace/sambag/src/sambag/disco/graphicElements/Compound.hpp\item 
+/home/samba/workspace/sambag/src/sambag/disco/graphicElements/Compound.cpp\end{DoxyCompactItemize}

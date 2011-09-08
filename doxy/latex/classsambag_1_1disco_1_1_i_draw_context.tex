@@ -1,0 +1,232 @@
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context}{
+\section{sambag::disco::IDrawContext Class Reference}
+\label{classsambag_1_1disco_1_1_i_draw_context}\index{sambag::disco::IDrawContext@{sambag::disco::IDrawContext}}
+}
+Inheritance diagram for sambag::disco::IDrawContext:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classsambag_1_1disco_1_1_i_draw_context}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries DASH\_\-ARRAY}, 
+{\bfseries DASH\_\-COUNT}, 
+{\bfseries DASH\_\-OFFSET}
+ \}
+\item 
+enum {\bfseries LineCapStyle} \{ {\bfseries NO\_\-LINE\_\-CAP} =  -\/1, 
+{\bfseries LINE\_\-CAP\_\-BUTT}, 
+{\bfseries LINE\_\-CAP\_\-ROUND}, 
+{\bfseries LINE\_\-CAP\_\-SQUARE}
+ \}
+\item 
+enum {\bfseries FillRule} \{ {\bfseries NO\_\-FILL\_\-RULE} =  -\/1, 
+{\bfseries FILL\_\-RULE\_\-WINDING}, 
+{\bfseries FILL\_\-RULE\_\-EVEN\_\-ODD}
+ \}
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a3d48fedddfad7a1cfc39215c8a818d13}{
+typedef boost::tuple$<$ Number $\ast$, int, Number $>$ {\bfseries Dash}}
+\label{classsambag_1_1disco_1_1_i_draw_context_a3d48fedddfad7a1cfc39215c8a818d13}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ad80ce08b17efe735486eed67e9705615}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1_i_draw_context}{IDrawContext} $>$ {\bfseries Ptr}}
+\label{classsambag_1_1disco_1_1_i_draw_context_ad80ce08b17efe735486eed67e9705615}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a5087b239c24adb7fde90bc3a7b232715}{
+virtual void {\bfseries moveTo} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a5087b239c24adb7fde90bc3a7b232715}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a6e56ef732ee024052f6461dc7ca9cd81}{
+virtual void {\bfseries lineTo} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a6e56ef732ee024052f6461dc7ca9cd81}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a665245a8a3f17f4d0ecc3d64e32c69c1}{
+virtual void {\bfseries curveTo} (const Point2D \&x1, const Point2D \&x2, const Point2D \&x3)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a665245a8a3f17f4d0ecc3d64e32c69c1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a12295a2b8a087f850f289cffda40c36a}{
+virtual void {\bfseries arc} (const Point2D \&c, const Number \&r, const Number \&angle1=0, const Number \&angle2=M\_\-PI $\ast$2.0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a12295a2b8a087f850f289cffda40c36a}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a91ee5cf9e5910ad7994ba2769c5e3b5f}{
+virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a91ee5cf9e5910ad7994ba2769c5e3b5f}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_af48bf4a4491fc0ce83223cf2773ccf8d}{
+virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect, Number cornerRadius)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_af48bf4a4491fc0ce83223cf2773ccf8d}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a6bd68f0eebceec0e50fd361e6e39a7ca}{
+virtual void {\bfseries fill} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a6bd68f0eebceec0e50fd361e6e39a7ca}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a2bdaa26eaa7281ee9ca9b398c70e3962}{
+virtual void {\bfseries fillPreserve} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a2bdaa26eaa7281ee9ca9b398c70e3962}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_abfe5f2a85bfda41886ba10d2c3ef20ca}{
+virtual void {\bfseries stroke} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_abfe5f2a85bfda41886ba10d2c3ef20ca}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a5f8aa0028936dc0313a6aa9578b27626}{
+virtual void {\bfseries setFont} (const \hyperlink{structsambag_1_1disco_1_1_font}{Font} \&font)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a5f8aa0028936dc0313a6aa9578b27626}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_aa81698f5faa0d0b1487b260037cfc6a6}{
+virtual \hyperlink{structsambag_1_1disco_1_1_font}{Font} {\bfseries getCurrentFont} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_aa81698f5faa0d0b1487b260037cfc6a6}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a875db8270b3a869a5c35735bd1c483e4}{
+virtual void {\bfseries textPath} (const std::string \&text)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a875db8270b3a869a5c35735bd1c483e4}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a1251bdb0ab496f3063176c97b01b4423}{
+virtual void {\bfseries setStrokeWidth} (const Number \&val)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a1251bdb0ab496f3063176c97b01b4423}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a260b3ea8d4e34577f47ac9d28d680a14}{
+virtual Number {\bfseries getStrokeWidth} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a260b3ea8d4e34577f47ac9d28d680a14}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_aeed4d66d6a3a6b58ddfc516eae98e501}{
+virtual void {\bfseries setSourceColor} (const \hyperlink{structsambag_1_1com_1_1_color_r_g_b_a}{ColorRGBA} \&val)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_aeed4d66d6a3a6b58ddfc516eae98e501}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a3a5752b558b912552e9b9841573c5867}{
+virtual \hyperlink{structsambag_1_1com_1_1_color_r_g_b_a}{ColorRGBA} {\bfseries getSourceColor} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a3a5752b558b912552e9b9841573c5867}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a701ff53730c3afd6a43f79ef6400db14}{
+virtual void {\bfseries setDash} (const Dash \&dash)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a701ff53730c3afd6a43f79ef6400db14}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a129413ff1bd86b25ae47c357f3683d76}{
+virtual Dash {\bfseries getDash} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a129413ff1bd86b25ae47c357f3683d76}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_afdb619017d8088bab614240966cc0c4a}{
+virtual void {\bfseries disableDash} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_afdb619017d8088bab614240966cc0c4a}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a74ff0e47eef82dbaeb16b0c821a132da}{
+virtual void {\bfseries setLineCap} (LineCapStyle style)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a74ff0e47eef82dbaeb16b0c821a132da}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a2a7bc6b1f2c8bcf5001cbd49dfd99e53}{
+virtual LineCapStyle {\bfseries getLineCap} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a2a7bc6b1f2c8bcf5001cbd49dfd99e53}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ae6bd3e9099eaac7b63c3a6632746f5b7}{
+virtual void {\bfseries setFillRule} (FillRule rule)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_ae6bd3e9099eaac7b63c3a6632746f5b7}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a4b0f6e4290ba8ead8c1cce5dc7ee4b5e}{
+virtual FillRule {\bfseries getFillRule} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a4b0f6e4290ba8ead8c1cce5dc7ee4b5e}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a666f7394140782077eb236308294cab2}{
+virtual Point2D {\bfseries getCurrentPoint} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a666f7394140782077eb236308294cab2}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a7a4254eda37f4b2a7a4cacb5acbd0c1a}{
+virtual bool {\bfseries hasCurrentPoint} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a7a4254eda37f4b2a7a4cacb5acbd0c1a}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_aaf8942d581da0ae577bfdd5df2b957d5}{
+virtual void {\bfseries clip} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_aaf8942d581da0ae577bfdd5df2b957d5}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ae37ae14bdcea70b141c832fbd6814502}{
+virtual void {\bfseries newSubPath} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_ae37ae14bdcea70b141c832fbd6814502}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}{
+virtual void {\bfseries closePath} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a16f8014b6b2550e9264569bff8efd5a4}{
+virtual Path::Ptr {\bfseries copyPath} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a16f8014b6b2550e9264569bff8efd5a4}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_adaec2870d5347aab184e018081de14bc}{
+virtual Path::Ptr {\bfseries copyPathFlat} () const =0}
+\label{classsambag_1_1disco_1_1_i_draw_context_adaec2870d5347aab184e018081de14bc}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a7267a44eb08728da715a8f4c79d51bdd}{
+virtual void {\bfseries appendPath} (Path::Ptr path)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a7267a44eb08728da715a8f4c79d51bdd}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a48dfe08aebf5b0de9f01dc1b01e9ad9d}{
+virtual void {\bfseries translate} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a48dfe08aebf5b0de9f01dc1b01e9ad9d}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a73191666cb8d40d8c25db0a613237bb7}{
+virtual void {\bfseries scale} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a73191666cb8d40d8c25db0a613237bb7}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_aaa66abee764e1cf9a21ff99f4970242a}{
+virtual void {\bfseries rotate} (const Number \&angle)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_aaa66abee764e1cf9a21ff99f4970242a}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_af445ec1f242f091789865a59d7a36b11}{
+virtual void {\bfseries identityMatrix} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_af445ec1f242f091789865a59d7a36b11}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_acaee8e16ccdf7b29e287ba1e49391453}{
+virtual void {\bfseries transform} (const Matrix \&m)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_acaee8e16ccdf7b29e287ba1e49391453}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a84c26f109b3ca41b6d5ae42ee6ea9427}{
+virtual void {\bfseries getMatrix} (Matrix \&m)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a84c26f109b3ca41b6d5ae42ee6ea9427}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+/home/samba/workspace/sambag/src/sambag/disco/IDrawContext.hpp\end{DoxyCompactItemize}

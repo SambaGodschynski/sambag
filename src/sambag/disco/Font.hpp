@@ -32,13 +32,24 @@ struct Font {
 	Size size;
 	Slant slant;
 	Weight weight;
-	Font() : fontFace("serif"),
-			  size(11.),
-			  slant(SLANT_NORMAL),
-			  weight(WEIGHT_NORMAL)
+	Font(const std::string& fontFace="arial",
+		 Size size=11.,
+		 Slant slant=SLANT_NORMAL,
+		 Weight weight=WEIGHT_NORMAL
+	) : fontFace(fontFace),
+			  size(size),
+			  slant(slant),
+			  weight(weight)
 	{
 	}
 	virtual ~Font(){}
+	bool operator==( const Font &b ) const {
+		return fontFace==b.fontFace && size == b.size && slant == b.slant &&
+			   weight == b.weight;
+	}
+	bool operator!=( const Font &b ) const {
+		return !( *this == b );
+	}
 };
 
 }} //namespaces

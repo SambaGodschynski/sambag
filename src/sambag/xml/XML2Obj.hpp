@@ -2,6 +2,7 @@
 #define XML2OBJ_H
 
 #include <boost/unordered_map.hpp>
+#include <map>
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>
@@ -9,8 +10,6 @@
 #include <boost/function.hpp>
 #include <sstream>
 #include "ticpp/ticpp.h"
-
-
 
 namespace sambag { namespace xml {
 //==============================================================================
@@ -68,8 +67,6 @@ private:
 		if (it == tagMap.end())
 			return typename BaseType::Ptr();
 		typename BaseType::Ptr obj = it->second->create();
-		setAttributes(obj, el);
-		sObjCreated(obj); // fire objCreate signal
 		return obj;
 	}
 	//############################################################################
@@ -108,16 +105,17 @@ private:
 	};
 	//---------------------------------------------------------------------------
 	typedef std::string AttributeName;
-	typedef boost::unordered_map<AttributeName, IAttributeSetter*> AttributeMap;
+	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
 	AttributeMap attrMap;
 	//----------------------------------------------------------------------------
 	void setAttribute(typename BaseType::Ptr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
-		typename AttributeMap::iterator it = attrMap.find(
-				to_lower_copy(attr.Name()));
-		if (it == attrMap.end())
-			return;
-		it->second->set(obj, attr.Value());
+		typedef typename AttributeMap::iterator It;
+		std::pair<It, It> range = attrMap.equal_range(to_lower_copy( attr.Name() ));
+		// try every possible entries (stupid)
+		for ( It it=range.first; it!=range.second; ++it) {
+			it->second->set(obj, attr.Value());
+		}
 	}
 	//----------------------------------------------------------------------------
 	void setAttributes(typename BaseType::Ptr obj, const ticpp::Element &el) {
@@ -145,6 +143,9 @@ private:
 				continue;
 			node->add(app);
 		}
+		setAttributes(node, element);
+		node->setXmlText(element.GetTextOrDefault(""));
+		sObjCreated(node); // fire objCreated signal
 		return node;
 	}
 	//----------------------------------------------------------------------------

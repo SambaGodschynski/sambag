@@ -14,6 +14,7 @@
 #include <string>
 #include "Font.hpp"
 #include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
 
 namespace sambag { namespace disco {
 
@@ -85,11 +86,13 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	enum LineCapStyle {
+		 NO_LINE_CAP = -1,
 		 LINE_CAP_BUTT,
 		 LINE_CAP_ROUND,
 		 LINE_CAP_SQUARE
 	};
 	enum FillRule {
+	   NO_FILL_RULE = -1,
 	   FILL_RULE_WINDING,
 	   FILL_RULE_EVEN_ODD
 	};

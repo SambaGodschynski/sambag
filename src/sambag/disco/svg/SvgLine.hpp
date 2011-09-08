@@ -36,11 +36,8 @@ protected:
 	SvgLine();
 public:
 	//-------------------------------------------------------------------------
-	/**
-	/* @return a ptr to that GraphicElement that will be drawn.
-	*/
-	virtual GraphicElement::Ptr getDrawObject() { 
-		return line; 
+	GraphicElement::Ptr getDrawingObject() const {
+		return line;
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create() {

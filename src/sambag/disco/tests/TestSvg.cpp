@@ -28,6 +28,7 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include "sambag/disco/svg/SvgBuilder.hpp"
+#include "sambag/disco/svg/SvgRoot.hpp"
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSvg );
@@ -48,20 +49,19 @@ void TestSvg::setUp() {
 void TestSvg::testSvgLine() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
-	static const std::string TEST_SVG = IN_FOLDER + "simpleline01.svg";
+	static const std::string TEST_SVG = IN_FOLDER + "firstElements.svg";
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
 	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
-	CPPUNIT_ASSERT_EQUAL( (size_t)5, rootObject->getNumChildren() );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	rootObject->draw(context);
-	testPng("testSvgLine", surface);
+	testPng("testSvgFirstElements", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);

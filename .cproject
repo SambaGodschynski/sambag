@@ -49,6 +49,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2110725256" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.libs.337670248" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dl"/>
+									<listOptionValue builtIn="false" value="boost_regex"/>
 									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="cairo"/>
 									<listOptionValue builtIn="false" value="ticppd"/>
