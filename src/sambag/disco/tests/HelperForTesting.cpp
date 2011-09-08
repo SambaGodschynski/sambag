@@ -22,7 +22,7 @@ const std::string REFERENCE_FOLDER = "references/";
 const std::string COMPARE_SCRIPT = "sh " + OUTPUT_FOLDER + "comparepng.script ";
 
 // make reference pictures for compare
-//#define DISCO_CONTEXT_MAKE_REFERENCES
+#define DISCO_CONTEXT_MAKE_REFERENCES
 //-----------------------------------------------------------------------------
 bool comparePng( const std::string &f1, const std::string &f2) {
 	std::string cmd(COMPARE_SCRIPT + f1 + " " + f2 );

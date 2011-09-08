@@ -110,9 +110,9 @@ class DFSVisitor : public boost::dfs_visitor<> {
 private:
 public:
 	//-------------------------------------------------------------------------
-	Container container;
+	Container &container;
 	//-------------------------------------------------------------------------
-	DFSVisitor(){}
+	DFSVisitor(Container &container) : container(container){}
 	//-------------------------------------------------------------------------
 	template <class Edge, class Graph>
 	void back_edge(Edge, Graph&) const {}
@@ -136,13 +136,12 @@ public:
 template<typename Container>
 void SceneGraph::getElementsSorted (Container &out)
 {
-	DFSVisitor<Container> vis;
+	DFSVisitor<Container> vis(out);
 	boost::depth_first_search(
 		g,
 		boost::visitor(vis).
 		root_vertex( SceneGraph::Vertex() )
 	);
-	out = vis.container;
 }
 
 }}} // namespace
