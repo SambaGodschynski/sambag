@@ -65,11 +65,11 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>drawing
 	//-------------------------------------------------------------------------
 	virtual void moveTo( const Point2D &p0 ) {
-		cairo_move_to ( context, p0.getX(), p0.getY() );
+		cairo_move_to ( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
 	virtual void lineTo( const Point2D &p0 ) {
-		cairo_line_to ( context, p0.getX(), p0.getY() );
+		cairo_line_to ( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
 	virtual void curveTo(
@@ -79,12 +79,12 @@ public:
 	{
 		cairo_curve_to(
 			context,
-			x1.getX(),
-			x1.getY(),
-			x2.getX(),
-			x2.getY(),
-			x3.getX(),
-			x3.getY()
+			x1.x(),
+			x1.y(),
+			x2.x(),
+			x2.y(),
+			x3.x(),
+			x3.y()
 		);
 	}
 	//-------------------------------------------------------------------------
@@ -94,14 +94,14 @@ public:
 		const Number &angle1 = 0,
 		const Number &angle2 = M_PI *2.0 )
 	{
-		cairo_arc( context, c.getX(), c.getY(), r, angle1, angle2 );
+		cairo_arc( context, c.x(), c.y(), r, angle1, angle2 );
 	}
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) {
 		cairo_rectangle(
 			context,
-			rect.getX0().getX(),
-			rect.getX0().getY(),
+			rect.getX0().x(),
+			rect.getX0().y(),
 			rect.getWidth(),
 			rect.getHeight()
 		);
@@ -168,11 +168,11 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) {
-		cairo_translate( context, p0.getX(), p0.getY() );
+		cairo_translate( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
 	virtual void scale( const Point2D &p0 ) {
-		cairo_scale( context, p0.getX(), p0.getY() );
+		cairo_scale( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
 	virtual void rotate( const Number &angle ) {

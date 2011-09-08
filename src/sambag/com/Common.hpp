@@ -12,6 +12,7 @@
 #include <math.h>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include <boost/geometry.hpp>
 
 namespace sambag { namespace com {
 //#############################################################################
@@ -23,50 +24,68 @@ typedef double Number;
 // geometry
 //#############################################################################
 //=============================================================================
-struct Point2D : public sambag::math::VectorN<Number, 2> {
+using namespace boost::geometry;
+typedef model::d2::point_xy<Number> Point2D;
 //=============================================================================
-	enum { X = 1, Y };
-	Number getX() const { return get<X>(); }
-	Number getY() const { return get<Y>(); }
-	void setX ( const Number & val ) { set<X>(val); }
-	void setY ( const Number & val ) { set<Y>(val); }
-	void setValues( const Number &x, const Number &y ) { setX(x); setY(y); }
-	Point2D( Number x = 0.0, Number y = 0.0 ) {
-		setValues(x,y);
-	}
-};
 //=============================================================================
 class Rectangle {
 //=============================================================================
-private:
-	Point2D x0, x1;
 public:
-	const Point2D & getX0() const { return x0; }
-	const Point2D & getX1() const { return x1; }
-	void setX0 ( const Point2D & val ) { x0 = val; }
-	void setX1 ( const Point2D & val ) { x1 = val; }
+	typedef model::box<Point2D> Box;
+private:
+	Box box;
+public:
+	//-------------------------------------------------------------------------
+	const Point2D & getX0() const { return box.min_corner(); }
+	//-------------------------------------------------------------------------
+	const Point2D & getX1() const { return box.max_corner(); }
+	//-------------------------------------------------------------------------
+	const Box & getBox() const { return box; }
+	//-------------------------------------------------------------------------
+	void setX0 ( const Point2D & val ) {
+		box.min_corner().x( val.x() );
+		box.min_corner().y( val.y() );
+	}
+	//-------------------------------------------------------------------------
+	void setX1 ( const Point2D & val ) {
+		box.max_corner().x( val.x() );
+		box.max_corner().y( val.y() );
+	}
+	//-------------------------------------------------------------------------
 	Number getWidth() const {
-		return ( x1 - x0 ).get<Point2D::X>(); //TODO
+		Point2D result = box.max_corner();
+		subtract_point(result, box.min_corner());
+		return result.x();
+
 	}
+	//-------------------------------------------------------------------------
 	Number getHeight() const {
-		return ( x1 - x0 ).get<Point2D::Y>(); //TODO
+		Point2D result = box.max_corner();
+		subtract_point(result, box.min_corner());
+		return result.y();
 	}
+	//-------------------------------------------------------------------------
 	Rectangle( Point2D x0 = Point2D() , Point2D x1 = Point2D() ) :
-		x0(x0), x1(x1) {}
-	Rectangle( Point2D x0 = Point2D() ,
+		box( Box(x0, x1) ){}
+	//-------------------------------------------------------------------------
+	Rectangle( Point2D _x0 = Point2D() ,
 			   const Number &width = 0,
-			   const Number &height = 0 ) : x0(x0)
+			   const Number &height = 0 )
+
 	{
-		x1 = Point2D(width, height);
-		x1 += x0;
+		Point2D x0(_x0), x1(width, height);
+		add_point(x1, x0);
+		Rectangle::box = Box(x0, x1);
 	}
+	//-------------------------------------------------------------------------
 	Rectangle( const Number &x = 0,
 			   const Number &y = 0,
 			   const Number &width = 0,
-			   const Number &height = 0 ) : x0(x,y)
+			   const Number &height = 0 )
 	{
-		x1 = Point2D(width, height);
-		x1 += x0;
+		Point2D x0(x,y), x1(width, height);
+		add_point(x1, x0);
+		Rectangle::box = Box(x0, x1);
 	}
 };
 //#############################################################################

@@ -27,8 +27,12 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="/home/samba/clibs/boost_1_47_0"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.2122029999" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="BOOST_FILESYSTEM_VERSION=2"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -44,6 +48,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2110725256" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.libs.337670248" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="dl"/>
+									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="cairo"/>
 									<listOptionValue builtIn="false" value="ticppd"/>
 									<listOptionValue builtIn="false" value="cppunit"/>
@@ -52,7 +57,9 @@
 								</option>
 								<option id="gnu.cpp.link.option.paths.242609843" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
+									<listOptionValue builtIn="false" value="/home/samba/clibs/boost_1_47_0/stage/lib"/>
 								</option>
+								<option id="gnu.cpp.link.option.other.285420063" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1587039989" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
