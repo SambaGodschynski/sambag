@@ -125,7 +125,7 @@ void TestCairoDrawContext::testConstructor() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testLine() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -163,7 +163,7 @@ void TestCairoDrawContext::testLine() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testArc() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -189,7 +189,7 @@ void TestCairoDrawContext::testArc() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testRectangle() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -215,7 +215,7 @@ void TestCairoDrawContext::testRectangle() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testCurve() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -236,7 +236,7 @@ void TestCairoDrawContext::testCurve() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testText() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -265,7 +265,7 @@ void TestCairoDrawContext::testText() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testPath() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -306,7 +306,7 @@ void TestCairoDrawContext::testPath() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testClip() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -335,7 +335,7 @@ void TestCairoDrawContext::testClip() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testTransformation() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare
@@ -392,7 +392,7 @@ void TestCairoDrawContext::testMatrixConv() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testLineStyle() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
@@ -454,7 +454,7 @@ void TestCairoDrawContext::testLineStyle() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testSetStrokeWidth() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
@@ -467,7 +467,7 @@ void TestCairoDrawContext::testSetStrokeWidth() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testSetColor() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	std::stringstream ss;
 	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
@@ -482,7 +482,7 @@ void TestCairoDrawContext::testSetColor() {
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testMisc() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	std::stringstream ss;
 	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
