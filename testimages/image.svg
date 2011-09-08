@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1200" height="400px" version="1.1" 
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <desc>This graphic links to an external image
+  </desc>
+  <rect width="1200" height="400" fill="white"/>
+  <image x="200" y="200" width="100px" height="100px"
+         xlink:href="disco-floor.png" >
+    <title>My image</title>
+  </image>
+  <image x="0" y="0" width="100px" height="100px"
+       xlink:href="disco-floor.png" transform="translate(550,100) scale(1.5,1.5)rotate(45)">
+  </image>
+
+  <image x="0" y="0" width="100px" height="100px"
+       xlink:href="disco-floor.png" transform="translate(750,200) skewY(15)" opacity="0.5">
+  </image>
+
+
+</svg>
+

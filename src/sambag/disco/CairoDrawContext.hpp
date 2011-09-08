@@ -11,7 +11,7 @@
 #include "IDrawContext.hpp"
 #include "cairo.h"
 #include <boost/shared_ptr.hpp>
-
+#include "CairoSurface.hpp"
 namespace sambag { namespace disco {
 
 //=============================================================================
@@ -208,10 +208,10 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * draws an image. Png's are currently accepted only.
-	 * @param a CairoDataHandler all others will be ignored.
+	 * draws an surface.
+	 * 	 * @param a CairoSurface all others will be ignored.
 	 */
-	virtual void drawImage(IDataHandler&);
+	virtual void drawSurface(ISurface::Ptr surface, const Number &alpha = 1.0);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) {
@@ -327,6 +327,8 @@ public:
 	virtual void newSubPath() {
 		cairo_new_sub_path(context);
 	}
+	//-------------------------------------------------------------------------
+	virtual ISurface::Ptr createPngSurface(IDataHandler::Ptr handler);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) {

@@ -6,7 +6,28 @@
  */
 
 #include "CairoDrawContext.hpp"
-#include "CairoDataHandler.hpp"
+#include "CairoSurface.hpp"
+
+namespace {
+//-----------------------------------------------------------------------------
+using namespace sambag::disco;
+cairo_status_t read_handler (
+		void *handler,
+		unsigned char *data,
+		unsigned int length)
+{
+	IDataHandler *ptr = static_cast<IDataHandler*>(handler);
+	if (!ptr)
+		return CAIRO_STATUS_NULL_POINTER;
+	IDataHandler::StreamPtr is = ptr->getDataStream();
+	if (!is)
+		return CAIRO_STATUS_NULL_POINTER;
+	is->read((char*)data, length);
+	if (is->fail())
+		return CAIRO_STATUS_READ_ERROR;
+	return CAIRO_STATUS_SUCCESS;
+}
+} // namespace
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -44,18 +65,31 @@ void CairoDrawContext::rect( const Rectangle &rect, const Number &cornerRadius )
 
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::drawImage(IDataHandler& _handler) {
-	CairoDataHandler *handler = dynamic_cast<CairoDataHandler*>(&_handler);
-	if (!handler)
+void CairoDrawContext::drawSurface(ISurface::Ptr _surface, const Number &alpha) {
+	CairoSurface::Ptr surface = boost::shared_dynamic_cast<CairoSurface>(_surface);
+	if (!_surface)
 		return;
-	cairo_surface_t *png =
-			cairo_image_surface_create_from_png_stream (
-				CairoDataHandler::getCairoReadFunction(), handler);
+	cairo_surface_t *png = surface->getCairoSurface();
 	if (!png)
 		return;
 	cairo_set_source_surface (context, png, 0, 0);
-	cairo_paint (context);
-	cairo_surface_destroy (png);
+	if (alpha>=1.0) {
+		cairo_paint (context);
+	} else {
+		cairo_paint_with_alpha(context, alpha);
+	}
+}
+//-----------------------------------------------------------------------------
+ISurface::Ptr CairoDrawContext::createPngSurface(IDataHandler::Ptr handler) {
+	if (!handler)
+		return ISurface::Ptr();
+	cairo_surface_t * surface =
+			cairo_image_surface_create_from_png_stream
+				(&read_handler, handler.get());
+	if (!surface)
+		return ISurface::Ptr();
+	CairoSurface::Ptr neu = CairoSurface::create(surface);
+	return neu;
 }
 
 }} // namespaces

@@ -31,6 +31,7 @@ private:
 	CPPUNIT_TEST( testSvgFont );
 	CPPUNIT_TEST( testSvgUse );
 	CPPUNIT_TEST( testSvgOpacity );
+	CPPUNIT_TEST( testSvgImage );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -49,6 +50,7 @@ public:
 	void testSvgArc();
 	void testSvgFont();
 	void testSvgOpacity();
+	void testSvgImage();
 };
 
 } // namespace

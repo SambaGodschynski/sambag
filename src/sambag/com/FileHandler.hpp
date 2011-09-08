@@ -1,57 +1,49 @@
 /*
- * PngHandler.h
+ * FileHandler.h
  *
  *  Created on: 11.10.2011
  *      Author: samba
  */
 
-#ifndef DISCO_PNGHANDLER_H_
-#define DISCO_PNGHANDLER_H_
+#ifndef DISCO_FILEHANDLER_H_
+#define DISCO_FILEHANDLER_H_
 
 #include "IDataHandler.hpp"
 #include "cairo.h"
+#include <fstream>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace com {
 
 //=============================================================================
-/**
- * A wrapper for: istream cairo data access and
- * cairo access via cairo_read_func_t.
- */
-class CairoDataHandler : public IDataHandler {
+class FileHandler : public IDataHandler {
 //=============================================================================
-private:
-	//-------------------------------------------------------------------------
-	std::istream *is; // stream to png data
-	//-------------------------------------------------------------------------
-	/**
-	 * cairo callback
-	 * @param closure ptr to PngHandler
-	 * @param data
-	 * @param length
-	 * @return
-	 */
-	static cairo_status_t read_func (void *handler, unsigned char *data, unsigned int length);
 public:
 	//-------------------------------------------------------------------------
-	static cairo_read_func_t getCairoReadFunction()  {
-		return &read_func;
-	}
+	typedef boost::shared_ptr<FileHandler> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<std::fstream> FStreamPtr;
+private:
+	//-------------------------------------------------------------------------
+	StreamPtr is; // stream to data
+protected:
 	//-------------------------------------------------------------------------
 	/**
-	 * @param pngStream
+	 * @param stream
 	 */
-	CairoDataHandler(std::istream &pngStream);
+	FileHandler(StreamPtr stream);
+public:
 	//-------------------------------------------------------------------------
-	/**
-	 * set data in stream.
-	 * @param is
-	 */
-	virtual void setDataInStream(std::istream &_is) {
-		is = &_is;
+	static Ptr create(const std::string &location);
+	//-------------------------------------------------------------------------
+	static Ptr create(StreamPtr stream) {
+		return Ptr(new FileHandler(stream));
 	}
 	//-------------------------------------------------------------------------
-	virtual ~CairoDataHandler();
+	StreamPtr getDataStream() {
+		return is;
+	}
+	//-------------------------------------------------------------------------
+	virtual ~FileHandler();
 };
 
 }} // namespace

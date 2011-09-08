@@ -15,7 +15,8 @@
 #include "Font.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
-#include "IDataHandler.hpp"
+#include "ISurface.hpp"
+#include "sambag/com/FileHandler.hpp"
 
 namespace sambag { namespace disco {
 
@@ -99,7 +100,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void stroke() = 0;
 	//-------------------------------------------------------------------------
-	virtual void drawImage(IDataHandler&) = 0;
+	virtual void drawSurface(ISurface::Ptr, const Number &alpha = 1.0) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) = 0;
@@ -161,6 +162,10 @@ public:
 	virtual Path::Ptr copyPathFlat() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void appendPath( Path::Ptr path ) = 0;
+	//-------------------------------------------------------------------------
+	virtual ISurface::Ptr createPngSurface(IDataHandler::Ptr handler) = 0;
+	//-------------------------------------------------------------------------
+	//virtual IDataHandler
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) = 0;
@@ -207,6 +212,7 @@ public:
 		cn->transform(tmp);
 		cn.reset();
 	}
+	// TODO: translate(), rotate(), scale()
 	//-------------------------------------------------------------------------
 	AutoTransform( const sambag::com::Matrix &matrix, IDrawContext::Ptr cn ) :
 		matrix(matrix), cn(cn), tmp( sambag::com::Matrix(3,3) )

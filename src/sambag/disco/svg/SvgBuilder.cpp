@@ -19,6 +19,7 @@
 #include "sambag/disco/svg/SvgUse.hpp"
 #include "sambag/disco/svg/SvgPolyline.hpp"
 #include "sambag/disco/svg/SvgPolygon.hpp"
+#include "sambag/disco/svg/SvgImage.hpp"
 #include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
@@ -47,6 +48,7 @@ void SvgBuilder::registerSvgClasses() {
 	 xml2Obj.registerObject<SvgUse>("use");
 	 xml2Obj.registerObject<SvgPolyline>("polyline");
 	 xml2Obj.registerObject<SvgPolygon>("polygon");
+	 xml2Obj.registerObject<SvgImage>("image");
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgAttributes() {
@@ -60,6 +62,7 @@ void SvgBuilder::registerSvgAttributes() {
 	SvgUse::registerAttributes(xml2Obj);
 	SvgPolyline::registerAttributes(xml2Obj);
 	SvgPolygon::registerAttributes(xml2Obj);
+	SvgImage::registerAttributes(xml2Obj);
 }
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
