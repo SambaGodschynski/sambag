@@ -17,7 +17,10 @@
 namespace sambag { namespace disco { namespace svg {
 
 //=============================================================================
-// SVG version of Graphic Element.
+/** 
+/* SVG version of GraphicElement. SvgObjects doesent draw anything.
+/* But they mostly have one GraphicElement object that do it. 
+*/
 class SvgObject : public sambag::disco::graphicElements::GraphicElement {
 //=============================================================================
 public:
@@ -37,6 +40,11 @@ private:
 protected:
 	SvgObject(){}
 public:
+	//-------------------------------------------------------------------------
+	/**
+	/* @return a ptr to that GraphicElement that will be drawn.
+	*/
+	virtual GraphicElement::Ptr getDrawObject() = 0;
 	//-------------------------------------------------------------------------
 	virtual void add(Ptr obj) {}
 	//-------------------------------------------------------------------------
@@ -79,6 +87,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
 		svgObjects.push_back(obj);
+	}
+	//-------------------------------------------------------------------------
+	/**
+	/* @return a ptr to that GraphicElement that will be drawn.
+	*/
+	virtual GraphicElement::Ptr getDrawObject() { 
+		return GraphicElement::Ptr(); 
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgRoot(){}

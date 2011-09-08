@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_42_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd.lib"
+				AdditionalDependencies="cppunitd.lib libcairo.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_42_0\stage\lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_47_0\stage\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\pixman\pixman\release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -117,8 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_42_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd.lib"
+				AdditionalDependencies="cppunitd.lib libcairo.lib pixman-1.lib libpng.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_42_0\stage\lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_47_0\stage\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\pixman\pixman\release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -278,6 +278,14 @@
 				Name="com"
 				>
 				<File
+					RelativePath="..\..\..\src\sambag\com\Common.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Common.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
 					>
 				</File>
@@ -317,6 +325,106 @@
 					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxmlparser.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="disco"
+				>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoDrawContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoDrawContext.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Font.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IDrawContext.hpp"
+					>
+				</File>
+				<Filter
+					Name="graphicElements"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Line.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Line.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Style.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="tests"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestCairoDrawContext.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestCairoDrawContext.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestHelper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestHelper.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestSvg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestSvg.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="svg"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\Svg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\Svg.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgBuilder.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgBuilder.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgLine.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgLine.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

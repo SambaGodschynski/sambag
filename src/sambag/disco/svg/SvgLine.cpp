@@ -22,6 +22,7 @@ SvgLine::~SvgLine() {
 }
 //-----------------------------------------------------------------------------
 void SvgLine::draw( IDrawContext::Ptr cn ) {
+	line->setStyle(style);
 	line->draw(cn);
 }
 

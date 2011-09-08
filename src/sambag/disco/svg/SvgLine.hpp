@@ -36,6 +36,13 @@ protected:
 	SvgLine();
 public:
 	//-------------------------------------------------------------------------
+	/**
+	/* @return a ptr to that GraphicElement that will be drawn.
+	*/
+	virtual GraphicElement::Ptr getDrawObject() { 
+		return line; 
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create() {
 		Ptr neu(new SvgLine());
 		neu->__setSelf(neu);
