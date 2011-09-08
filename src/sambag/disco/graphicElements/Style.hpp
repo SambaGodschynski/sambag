@@ -161,7 +161,7 @@ public:
 	//-------------------------------------------------------------------------
 	void setFillStyle( IDrawContext::Ptr cn ) {
 		cn->setFillRule(_fillRule);
-		cn->setSourceColor(_fillColor);
+		cn->setSourceColor(fillColor());
 	}
 	//-------------------------------------------------------------------------
 	const Font & font() const {

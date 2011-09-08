@@ -82,6 +82,12 @@ public:
 		const Number &angle1 = 0,
 		const Number &angle2 = M_PI *2.0 ) = 0;
 	//-------------------------------------------------------------------------
+	virtual void arcNegative(
+		const Point2D &c,
+		const Number &r,
+		const Number &angle1 = 0,
+		const Number &angle2 = M_PI *2.0 ) = 0;
+	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect, Number cornerRadius ) = 0;
@@ -135,6 +141,10 @@ public:
 	virtual FillRule getFillRule() const =0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
+	virtual void save() = 0;
+	//-------------------------------------------------------------------------
+	virtual void restore() = 0;
+	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const = 0;
 	//-------------------------------------------------------------------------
 	virtual bool hasCurrentPoint() const = 0;
@@ -161,8 +171,55 @@ public:
 	virtual void transform ( const Matrix &m ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void getMatrix( Matrix &m ) = 0;
-
 };
+//=============================================================================
+/**
+*  Helper class which sets transformation of given Matrix and
+*  automatically resets when object is destroying.
+*  Usage:
+*
+*    draw(IContext::Ptr cn) {
+*      AutoTransform at(matrix, cn) // set transformation of object on cn
+*      // ... do your drawing stuff
+*      // ...
+*      // transformation will be automatically reseted on the end of scope
+*    }
+*/
+class AutoTransform {
+//=============================================================================
+private:
+	//-------------------------------------------------------------------------
+	const sambag::com::Matrix &matrix;
+	//-------------------------------------------------------------------------
+	IDrawContext::Ptr cn;
+	//-------------------------------------------------------------------------
+	sambag::com::Matrix tmp;
+public:
+	//-------------------------------------------------------------------------
+	/**
+	 * reset manually
+	 */
+	void reset() {
+		cn->identityMatrix();
+		cn->transform(tmp);
+		cn.reset();
+	}
+	//-------------------------------------------------------------------------
+	AutoTransform( const sambag::com::Matrix &matrix, IDrawContext::Ptr cn ) :
+		matrix(matrix), cn(cn), tmp( sambag::com::Matrix(3,3) )
+	{
+		if (!cn)
+			return;
+		cn->getMatrix(tmp);
+		cn->transform(matrix);
+	}
+	//-------------------------------------------------------------------------
+	~AutoTransform() {
+		if (cn)
+			reset();
+	}
+};
+
 
 }} // namespaces
 

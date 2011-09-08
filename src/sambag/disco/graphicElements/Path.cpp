@@ -12,6 +12,14 @@
 #include <boost/geometry/policies/compare.hpp>
 
 
+namespace sambag { namespace disco { namespace graphicElements { namespace pathHelper {
+extern boost::tuple<Number, Number, Number, Number, Number, Number> fromEndpointToCenter(
+		Number x1, Number y1, Number x2, Number y2,
+		Number rx, Number ry, Number phi,
+		Number fA, Number fS);
+}}}}
+
+
 namespace { // path impl.
 using namespace sambag;
 using namespace sambag::disco;
@@ -339,7 +347,73 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_SMOOTH_REL>
 	return DrawReturn(pathInstruction::CURVETO_QUADRATIC_SMOOTH_REL, x1);
 }
 //-----------------------------------------------------------------------------
+template <>
+DrawReturn _draw<pathInstruction::ARC_ABS>
+	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
+{
+	using namespace sambag::disco::graphicElements::pathHelper;
+	PointContainer::const_iterator it = c.begin(), end=c.end();
+	while (it!=end) {
+		Number rx=0, ry=0, x_axis_rot=0, arc_flag=0, sweep_flag=0, x=0, y=0;
+		tie(rx,ry,x_axis_rot,arc_flag,sweep_flag,x,y) =
+				com::extractContainer<Tuple7, PointContainer>(it, end);
+		Point2D p0 = cn->getCurrentPoint();
+		Number cx=0, cy=0, theta=0, delta=0;
+		tie(cx, cy, rx, ry, theta, delta)	=
+				fromEndpointToCenter(p0.x(), p0.y(), x, y, rx, ry,
+						             x_axis_rot, arc_flag, sweep_flag);
+		Number sA = theta * M_PI/180.0;
+		Number eA = delta * M_PI/180.0;
+
+		cn->save();
+
+		cn->translate( Point2D(cx, cy) );
+		cn->rotate(x_axis_rot * M_PI/180.0);
+		cn->scale(Point2D(1.0, ry/rx));
+
+		if (sweep_flag>=1.0)
+			cn->arc(Point2D(0,0),rx, sA, eA + sA);
+		else
+			cn->arcNegative(Point2D(0,0),rx, sA, eA + sA);
+
+		cn->restore();
+	}
+	return DrawReturn(pathInstruction::ARC_ABS);
+}
 //-----------------------------------------------------------------------------
+template <>
+DrawReturn _draw<pathInstruction::ARC_REL>
+	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
+{
+	using namespace sambag::disco::graphicElements::pathHelper;
+	PointContainer::const_iterator it = c.begin(), end=c.end();
+	while (it!=end) {
+		Number rx=0, ry=0, x_axis_rot=0, arc_flag=0, sweep_flag=0, x=0, y=0;
+		tie(rx,ry,x_axis_rot,arc_flag,sweep_flag,x,y) =
+				com::extractContainer<Tuple7, PointContainer>(it, end);
+		Point2D p0 = cn->getCurrentPoint();
+		x+=p0.x(); y+=p0.y();
+		Number cx=0, cy=0, theta=0, delta=0;
+		tie(cx, cy, rx, ry, theta, delta)	=
+				fromEndpointToCenter(p0.x(), p0.y(), x, y, rx, ry,
+						             x_axis_rot, arc_flag, sweep_flag);
+		Number sA = theta * M_PI/180.0;
+		Number eA = delta * M_PI/180.0;
+
+		cn->save();
+		cn->translate( Point2D(cx, cy) );
+		cn->rotate(x_axis_rot * M_PI/180.0);
+		cn->scale(Point2D(1.0, ry/rx));
+
+		if (sweep_flag>=1.0)
+			cn->arc(Point2D(0,0),rx, sA, eA + sA);
+		else
+			cn->arcNegative(Point2D(0,0),rx, sA, eA + sA);
+
+		cn->restore();
+	}
+	return DrawReturn(pathInstruction::ARC_REL);
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -368,15 +442,15 @@ void Path::drawPath( IDrawContext::Ptr cn ) {
 }
 //-----------------------------------------------------------------------------
 void Path::draw( IDrawContext::Ptr cn ) {
+	if ( style.isFilled() ) {
+		style.setFillStyle(cn);
+		drawPath(cn);
+		cn->fill();
+	}
 	if ( style.isStroked() ) {
 		style.setStrokeStyle(cn);
 		drawPath(cn);
 		cn->stroke();
-	}
-	if ( !style.isStroked() ) {
-		style.setFillStyle(cn);
-		drawPath(cn);
-		cn->fill();
 	}
 }
 //-----------------------------------------------------------------------------
@@ -415,8 +489,10 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) {
 			ret = _draw<CURVETO_QUADRATIC_REL>( cn, pI.first );
 			continue;
 		case ARC_ABS                      : //................................
+			ret = _draw<ARC_ABS>( cn, pI.first );
 			continue;
 		case ARC_REL                      : //................................
+			ret = _draw<ARC_REL>( cn, pI.first );
 			continue;
 		case LINETO_HORIZONTAL_ABS        : //................................
 			_draw<LINETO_HORIZONTAL_ABS>( cn, pI.first );

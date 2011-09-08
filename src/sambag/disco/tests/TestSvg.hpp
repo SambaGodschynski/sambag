@@ -23,6 +23,9 @@ private:
 	CPPUNIT_TEST( testSvgTransform04 );
 	CPPUNIT_TEST( testSvgStdFill );
 	CPPUNIT_TEST( testSvgPath );
+	CPPUNIT_TEST( testSvgPath02 );
+	CPPUNIT_TEST( testSvgPath03 );
+	CPPUNIT_TEST( testSvgArc );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -33,6 +36,9 @@ public:
 	void testSvgTransform04();
 	void testSvgStdFill();
 	void testSvgPath();
+	void testSvgPath02();
+	void testSvgPath03();
+	void testSvgArc();
 };
 
 } // namespace

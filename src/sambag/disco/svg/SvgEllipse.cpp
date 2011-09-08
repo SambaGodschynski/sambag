@@ -1,30 +1,29 @@
 /*
- * SvgRect.cpp
+ * SvgCircle.cpp
  *
- *  Created on: 22.09.2011
+ *  Created on: 04.10.2011
  *      Author: samba
  */
 
-#include "SvgRect.hpp"
-namespace sambag { namespace disco { namespace svg {
+#include "SvgEllipse.hpp"
 
+namespace sambag { namespace disco { namespace svg {
 //=============================================================================
-// class SvgRect
+// class SvgEllipse
 //=============================================================================
 //-----------------------------------------------------------------------------
-SvgRect::SvgRect() {
+SvgEllipse::SvgEllipse() {
 	using namespace sambag::disco::graphicElements;
-	rect = Rect::create();
-	ColorRGBA r = rect->getStyle().fillColor();
-	int c = 0;
+	ellipse = Arc::create();
 }
 //-----------------------------------------------------------------------------
-SvgRect::~SvgRect() {
+SvgEllipse::~SvgEllipse() {
 }
 //-----------------------------------------------------------------------------
-void SvgRect::draw( IDrawContext::Ptr cn ) {
-	if (!rect) return;
+void SvgEllipse::draw( IDrawContext::Ptr cn ) {
+	if (!ellipse) return;
 	AutoTransform at(getTransformMatrix(), cn);
-	rect->draw(cn);
+	ellipse->draw(cn);
 }
+
 }}}

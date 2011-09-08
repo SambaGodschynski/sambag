@@ -18,6 +18,7 @@
 
 
 // TODO: more elements
+// TODO: viewbox
 
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
@@ -178,43 +179,6 @@ public:
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder );
 };
-//=============================================================================
-/**
-*  Helper class which sets transformation of given SvgObject and
-*  automatically resets when object is destroying.
-*  Usage:
-*
-*    draw(IContext::Ptr cn) {
-*      AutoTransform at(object, cn) // set transformation of object on cn
-*      // ... do your drawing stuff
-*      // ...
-*      // transformation will be automatically reseted on the end of scope
-*    }
-*/
-class AutoTransform {
-//=============================================================================
-private:
-	//-------------------------------------------------------------------------
-	const sambag::com::Matrix &matrix;
-	//-------------------------------------------------------------------------
-	IDrawContext::Ptr cn;
-	//-------------------------------------------------------------------------
-	sambag::com::Matrix tmp;
-public:
-	//-------------------------------------------------------------------------
-	AutoTransform( const sambag::com::Matrix &matrix, IDrawContext::Ptr cn ) :
-		matrix(matrix), cn(cn), tmp( sambag::com::Matrix(3,3) )
-	{
-		cn->getMatrix(tmp);
-		cn->transform(matrix);
-	}
-	//-------------------------------------------------------------------------
-	~AutoTransform() {
-		cn->identityMatrix();
-		cn->transform(tmp);
-	}
-};
-
 }}} // namespace
 
 #endif /* SVGGRAPHICELEMENT_HPP_ */

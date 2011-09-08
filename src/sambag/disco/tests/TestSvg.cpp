@@ -181,6 +181,50 @@ void TestSvg::testSvgPath() {
 	cairo_surface_destroy(surface);
 }
 //-----------------------------------------------------------------------------
+void TestSvg::testSvgPath02() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "path02.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	testPng("testSvgPath02", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgPath03() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "path03.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	testPng("testSvgPath03", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
 void TestSvg::testSvgStdFill() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
@@ -198,6 +242,28 @@ void TestSvg::testSvgStdFill() {
 	rootObject->draw(context);
 	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
 	testPng("testSvgStdFill", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgArc() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "arc.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	testPng("testSvgArc", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);

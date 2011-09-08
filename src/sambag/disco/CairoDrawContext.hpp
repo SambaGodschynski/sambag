@@ -174,6 +174,15 @@ public:
 		cairo_arc( context, c.x(), c.y(), r, angle1, angle2 );
 	}
 	//-------------------------------------------------------------------------
+	virtual void arcNegative(
+		const Point2D &c,
+		const Number &r,
+		const Number &angle1 = 0,
+		const Number &angle2 = M_PI *2.0 )
+	{
+		cairo_arc_negative( context, c.x(), c.y(), r, angle1, angle2 );
+	}
+	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) {
 		cairo_rectangle(
 			context,
@@ -270,6 +279,14 @@ public:
 		return (FillRule)cairo_get_fill_rule(context);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
+	//-------------------------------------------------------------------------
+	virtual void save() {
+		cairo_save(context);
+	}
+	//-------------------------------------------------------------------------
+	virtual void restore() {
+		cairo_restore(context);
+	}
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const {
 		Number x=0, y=0;
