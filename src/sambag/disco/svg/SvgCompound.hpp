@@ -30,45 +30,25 @@ protected:
 	sambag::disco::graphicElements::Compound::Ptr combo;
 	//-------------------------------------------------------------------------
 	SvgCompound(){
-		using sambag::disco::graphicElements::Compound;
-		combo = Compound::create();
+		combo = sambag::disco::graphicElements::Compound::create();
 	}
 public:
 	//-------------------------------------------------------------------------
-	/**
-	 * @see Style.copyFrom()
-	 * @param _style
-	 */
-	virtual void copyStyleFrom( const sambag::disco::graphicElements::Style &b ) {
-		using namespace sambag::disco::graphicElements;
-		GraphicElement::copyStyleFrom(b);
-		if (!combo) return;
-		combo->copyStyleFrom(b);
-	}
-	//-------------------------------------------------------------------------
-	virtual void setStyle( const sambag::disco::graphicElements::Style &b ) {
-		using namespace sambag::disco::graphicElements;
-		GraphicElement::setStyle(b);
-		if (!combo) return;
-		//only copyStyleFrom for sub objects !!
-		combo->copyStyleFrom(b);
-	}
-	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getDrawingObject() const {
+	GraphicElement::Ptr getGraphicElement() const {
 		return combo;
 	}
 	//-------------------------------------------------------------------------
 	size_t getNumChildren() const { return combo->getNumChildren(); }
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
-		combo->add(obj);
+		using sambag::disco::graphicElements::GraphicElement;
+		GraphicElement::Ptr gObj=obj->getGraphicElement();
+		if (!gObj)
+			return;
+		combo->add(gObj);
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgCompound(){}
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const  { return combo->getBoundingBox(); }
 	//-------------------------------------------------------------------------
 	static Ptr create() {
 		Ptr neu(new SvgCompound());

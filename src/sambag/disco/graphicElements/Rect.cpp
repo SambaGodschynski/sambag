@@ -20,6 +20,7 @@ Rect::~Rect() {
 }
 //-----------------------------------------------------------------------------
 void Rect::draw( IDrawContext::Ptr cn ) {
+	AutoTransform at(getTransformMatrix(), cn);
 	if ( style.isFilled() ) {
 		cn->rect(rect);
 		style.setFillStyle(cn);

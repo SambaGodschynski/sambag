@@ -16,6 +16,9 @@
 namespace sambag { namespace disco { namespace svg {
 
 //=============================================================================
+/**
+ * binding to the svg <root> element.
+ */
 class SvgRoot : public SvgCompound {
 //=============================================================================
 public:
@@ -23,10 +26,10 @@ public:
 	typedef boost::shared_ptr<SvgRoot> Ptr;
 	//-------------------------------------------------------------------------
 	// all svg objects with a id are stored here
-	typedef std::map<IdType, SvgObject::WPtr> IdMap;
+	typedef std::map<IdType, SvgObject::Ptr> IdMap;
 	//-------------------------------------------------------------------------
 	// all svg class with a id are stored here
-	typedef std::multimap<IdType, SvgObject::WPtr> ClassMap;
+	typedef std::multimap<IdType, SvgObject::Ptr> ClassMap;
 private:
 	//-------------------------------------------------------------------------
 	IdMap idMap;
@@ -58,7 +61,7 @@ public:
 	SvgObject::Ptr getObjectById( const IdType &id ) const {
 		IdMap::const_iterator it = idMap.find(id);
 		if (it==idMap.end()) return SvgObject::Ptr();
-		return it->second.lock();
+		return it->second;
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -71,7 +74,7 @@ public:
 		typedef ClassMap::const_iterator It;
 		std::pair<It, It> range = classMap.equal_range(_class);
 		for ( It it =range.first; it!=range.second; ++it ) {
-			c.push_back( it->second.lock() );
+			c.push_back( it->second );
 		}
  	}
 	//-------------------------------------------------------------------------

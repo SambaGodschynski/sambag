@@ -36,7 +36,7 @@ protected:
 	SvgLine();
 public:
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getDrawingObject() const {
+	GraphicElement::Ptr getGraphicElement() const {
 		return line;
 	}
 	//-------------------------------------------------------------------------
@@ -47,13 +47,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgLine();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		if (!line) return Rectangle();
-		return line->getBoundingBox();
-	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X1_tag::Type &coord, X1_tag ) {

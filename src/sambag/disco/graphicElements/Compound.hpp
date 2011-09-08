@@ -32,6 +32,8 @@ protected:
 	Compound(){}
 public:
 	//-------------------------------------------------------------------------
+	virtual GraphicElement::Ptr clone() const;
+	//-------------------------------------------------------------------------
 	virtual void copyStyleFrom( const Style &b );
 	//-------------------------------------------------------------------------
 	virtual void setStyle( const Style &_style );

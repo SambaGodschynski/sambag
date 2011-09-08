@@ -5,26 +5,26 @@
  *      Author: samba
  */
 
-#ifndef IGRAPHICOBJECT_HPP_
-#define IGRAPHICOBJECT_HPP_
+#ifndef DISCO_I_DRAWABLE_HPP
+#define DISCO_I_DRAWABLE_HPP
 
-#include "sambag/disco/IDrawContext.hpp"
+#include "IDrawContext.hpp"
 #include "sambag/com/Common.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco {
 //=============================================================================
 // Abstract base class for all graphic elements.
-class IGraphicObject {
+class IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IGraphicObject> Ptr;
+	typedef boost::shared_ptr<IDrawable> Ptr;
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context ) = 0;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const = 0;
 };
 
-}}}
+}}
 
 #endif /* IGRAPHICOBJECT_HPP_ */

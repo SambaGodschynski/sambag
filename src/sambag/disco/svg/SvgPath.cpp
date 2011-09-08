@@ -19,11 +19,5 @@ SvgPath::SvgPath() {
 //-----------------------------------------------------------------------------
 SvgPath::~SvgPath() {
 }
-//-----------------------------------------------------------------------------
-void SvgPath::draw( IDrawContext::Ptr cn ) {
-	if (!path) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	path->draw(cn);
-}
 
 }}}

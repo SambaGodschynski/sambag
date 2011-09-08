@@ -19,11 +19,6 @@ SvgCircle::SvgCircle() {
 //-----------------------------------------------------------------------------
 SvgCircle::~SvgCircle() {
 }
-//-----------------------------------------------------------------------------
-void SvgCircle::draw( IDrawContext::Ptr cn ) {
-	if (!circle) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	circle->draw(cn);
-}
+
 
 }}}

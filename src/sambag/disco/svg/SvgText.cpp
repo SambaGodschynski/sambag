@@ -19,11 +19,5 @@ SvgText::SvgText() {
 //-----------------------------------------------------------------------------
 SvgText::~SvgText() {
 }
-//-----------------------------------------------------------------------------
-void SvgText::draw( IDrawContext::Ptr cn ) {
-	if (!text) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	text->draw(cn);
-}
 }}}
 

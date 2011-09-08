@@ -1,59 +1,69 @@
 /*
- * Path.hpp
+ * SvgUse.hpp
  *
- *  Created on: 27.09.2011
+ *  Created on: 06.10.2011
  *      Author: samba
  */
 
-#ifndef DISCO_SVG_PATH_HPP_
-#define DISCO_SVG_PATH_HPP_
+#ifndef DISCO_SVG_USE_HPP_
+#define DISCO_SVG_USE_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Path.hpp"
-
+#include "sambag/com/Common.hpp"
+#include "sambag/disco/graphicElements/RefElement.hpp"
 
 namespace sambag { namespace disco { namespace svg {
-using sambag::disco::graphicElements::pathInstruction::PathInstructions;
+
 //=============================================================================
-class SvgPath : public SvgObject {
+class SvgUse : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPath> Ptr;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
+	typedef boost::shared_ptr<SvgUse> Ptr;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 	//-------------------------------------------------------------------------
-	struct D_tag { typedef PathInstructions Type; };
+	struct HRef_tag { typedef std::string Type; };
 private:
+	//-------------------------------------------------------------------------
+	std::string href;
+	//-------------------------------------------------------------------------
+	sambag::disco::graphicElements::RefElement::Ptr object;
+	//-------------------------------------------------------------------------
+	/**
+	 * gets the element with the given href id and puts into object.
+	 */
+	void solveHRef();
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Path::Ptr path;
+	SvgUse();
 	//-------------------------------------------------------------------------
-	SvgPath();
+	virtual void init() {
+		solveHRef();
+	}
 public:
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getGraphicElement() const {
-		return path;
-	}
+	virtual ~SvgUse(){}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		Ptr neu(new SvgPath());
+		Ptr neu(new SvgUse());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	virtual ~SvgPath();
+	GraphicElement::Ptr getGraphicElement() const {
+		return object;
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
-	virtual void set( const D_tag::Type &v, D_tag ) {
-		path->setPathInstructions(v);
+	virtual void set( const HRef_tag::Type &val, HRef_tag ) {
+		href=val;
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {
-		binder.registerAttribute<D_tag::Type, D_tag, SvgPath>("d");
+		binder.registerAttribute<HRef_tag::Type, HRef_tag, SvgUse>("xlink:href");
 	}
 };
 
-}}} // namespace
+}}} // namespaces
 
-
-#endif /* PATH_HPP_ */
+#endif /* SVGUSE_HPP_ */

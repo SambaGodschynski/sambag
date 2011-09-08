@@ -36,6 +36,10 @@ void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	binder.registerAttribute
 		<Transform_tag::Type, Transform_tag, SvgObject>
 			("transform");
+	binder.registerAttribute<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");
+	binder.registerAttribute<FontSize_tag::Type, FontSize_tag, SvgObject>("font-size");
+	binder.registerAttribute<FontWeight_tag::Type, FontWeight_tag, SvgObject>("font-weight");
+	binder.registerAttribute<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
 	// TODO: register more style tags
 }
 

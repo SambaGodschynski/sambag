@@ -17,17 +17,22 @@
 #include <list>
 
 
-// TODO: more elements
+// TODO: polygon
+// TODO: polyline
 // TODO: viewbox
+// TODO: fillpatterns
+// TODO: styletag
+// TODO: css
 
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
 //=============================================================================
 /** 
-*  SVG version of GraphicElement. SvgObjects doesn't draw anything.
-*  But they mostly contains one GraphicElement object that do it.
+*  Class SVG.
+*  SvgObjects are for creating Graphic Elements
+*  via XML2Object.
 */
-class SvgObject : public sambag::disco::graphicElements::GraphicElement {
+class SvgObject  {
 //=============================================================================
 friend class SvgRoot;
 public:
@@ -59,6 +64,14 @@ public:
 	struct Class_tag { typedef ClassType Type; };
 	//-------------------------------------------------------------------------
 	struct Transform_tag { typedef sambag::com::Matrix Type; };
+	//-------------------------------------------------------------------------
+	struct FontFamily_tag { typedef std::string Type; };
+	//-------------------------------------------------------------------------
+	struct FontSize_tag { typedef Number Type; };
+	//-------------------------------------------------------------------------
+	struct FontWeight_tag { typedef Font::Weight Type; };
+	//-------------------------------------------------------------------------
+	struct FontStyle_tag { typedef Font::Slant Type; };
 	// TODO: more style tags
 private:
 	//-------------------------------------------------------------------------
@@ -71,36 +84,50 @@ private:
 	static IdType NULL_ID;
 	//-------------------------------------------------------------------------
 	static IdType NULL_CLASS;
-	//-------------------------------------------------------------------------
-	/**
-	 * the object transformations matrix
-	 */
-	sambag::com::Matrix tMatrix; // TODO: make flyweight
 protected:
 	//-------------------------------------------------------------------------
-	SvgObject() : _id(NULL_ID), _class(NULL_CLASS) {
-		using namespace boost::numeric::ublas;
-		tMatrix = IDENTITY_MATRIX;
-	}
+	/**
+	 * called when finishing @see SvgRoot::subObjectCreated.
+	 */
+	virtual void init(){}
+	//-------------------------------------------------------------------------
+	SvgObject() : _id(NULL_ID), _class(NULL_CLASS) {}
+	//-------------------------------------------------------------------------
+	boost::weak_ptr<SvgObject> __self;
+	//-------------------------------------------------------------------------
+	void __setSelf( Ptr self ) { __self = self; }
 public:
+	//-------------------------------------------------------------------------
+	virtual void
+	copyStyleToGraphicElement(const sambag::disco::graphicElements::Style &b)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		obj->copyStyleFrom(b);
+	}
 	//-------------------------------------------------------------------------
 	Ptr getRoot() const {
 		return svgRootObject.lock();
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * SvgObjects doesn't draw anything.
-	 * But they mostly contains one GraphicElement object that do it.
-	 * @return that GraphicElement that draw the SVG object.
-	 */
-	virtual GraphicElement::Ptr getDrawingObject() const = 0;
+	* @return the GraphicElement object which is contained by the SVG object
+	*/
+	virtual GraphicElement::Ptr getGraphicElement() const = 0;
 	//-------------------------------------------------------------------------
 	void setTransformMatrix( const sambag::com::Matrix &m ) {
-		tMatrix = m;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj)
+			return;
+		return obj->setTransformMatrix(m);
 	}
 	//-------------------------------------------------------------------------
 	const sambag::com::Matrix & getTransformMatrix() const {
-		return tMatrix;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj)
+			return NULL_MATRIX;
+		return obj->getTransformMatrix();
 	}
 	//-------------------------------------------------------------------------
 	virtual void add(Ptr obj) {}
@@ -109,57 +136,39 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setXmlText( const std::string & str) {}
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context ) = 0;
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const  = 0;
-	//-------------------------------------------------------------------------
 	const IdType & getId() { return _id; }
 	//-------------------------------------------------------------------------
 	const ClassType & getClass() { return _class; }
-	//-------------------------------------------------------------------------
-	/**
-	 * @see Style.copyFrom()
-	 * @param _style
-	 */
-	virtual void copyStyleFrom( const sambag::disco::graphicElements::Style &b ) {
-		using namespace sambag::disco::graphicElements;
-		GraphicElement::copyStyleFrom(b);
-		GraphicElement::Ptr obj = getDrawingObject();
-		if (!obj) return;
-		obj->copyStyleFrom(b);
-	}
-	//-------------------------------------------------------------------------
-	virtual void setStyle( const sambag::disco::graphicElements::Style &b ) {
-		using namespace sambag::disco::graphicElements;
-		GraphicElement::setStyle(b);
-		GraphicElement::Ptr obj = getDrawingObject();
-		if (!obj) return;
-		obj->setStyle(b);
-	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeWidth_tag::Type &width, const StrokeWidth_tag&)
 	{
 		using sambag::disco::graphicElements::Style;
-		Style neu = getStyle();
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
 		neu.strokeWidth(width);
-		setStyle(neu);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Stroke_tag::Type &color, const Stroke_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		if (color==NULL_COLOR) return;
-		Style neu = getStyle();
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
 		neu.strokeColor(color);
-		setStyle(neu);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Fill_tag::Type &color, const Fill_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		if (color==NULL_COLOR) return;
-		Style neu = getStyle();
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
 		neu.fillColor(color);
-		setStyle(neu);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Id_tag::Type &v, const Id_tag&)
@@ -175,6 +184,43 @@ public:
 	virtual void set( const Transform_tag::Type &v, const Transform_tag&)
 	{
 		setTransformMatrix(v);
+	}
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
+	//-------------------------------------------------------------------------
+	virtual void set( const FontFamily_tag::Type &v, FontFamily_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
+		neu.fontFace(v);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const FontSize_tag::Type &v, FontSize_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
+		neu.fontSize(v);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const FontWeight_tag::Type &v, FontWeight_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
+		neu.fontWeight(v);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const FontStyle_tag::Type &v, FontStyle_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
+		neu.fontSlant(v);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder );

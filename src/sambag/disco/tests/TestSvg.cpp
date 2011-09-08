@@ -54,22 +54,25 @@ void TestSvg::testSvgFirstElements() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgFirstElements", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> some asserts
+	CPPUNIT_ASSERT_EQUAL((size_t)5, rootObject->getNumClassObjects());
+	CPPUNIT_ASSERT_EQUAL((size_t)1, rootObject->getNumIdObjects());
 	typedef std::list<svg::SvgObject::Ptr> SvgObjects;
 	SvgObjects c;
 	rootObject->getObjectsByClass<SvgObjects>("line",c);
 	CPPUNIT_ASSERT(!c.empty());
-	svg::SvgObject::Ptr text = rootObject->getObjectById("text");
+	svg::SvgObject::Ptr text = rootObject->getObjectById("#text");
 	CPPUNIT_ASSERT(text);
+	CPPUNIT_ASSERT(text->getGraphicElement());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);
@@ -89,7 +92,7 @@ void TestSvg::testSvgTransform01() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgTransform01", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -110,7 +113,7 @@ void TestSvg::testSvgTransform02() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgTransform02", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -131,7 +134,7 @@ void TestSvg::testSvgTransform03() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgTransform03", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -152,7 +155,7 @@ void TestSvg::testSvgTransform04() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 150);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgTransform04", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -173,8 +176,8 @@ void TestSvg::testSvgPath() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
-	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	rootObject->getGraphicElement()->draw(context);
+	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
 	testPng("testSvgPath01", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -195,8 +198,8 @@ void TestSvg::testSvgPath02() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
-	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	rootObject->getGraphicElement()->draw(context);
+	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
 	testPng("testSvgPath02", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -217,8 +220,8 @@ void TestSvg::testSvgPath03() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
-	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	rootObject->getGraphicElement()->draw(context);
+	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
 	testPng("testSvgPath03", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -239,8 +242,7 @@ void TestSvg::testSvgStdFill() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
-	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgStdFill", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -261,9 +263,50 @@ void TestSvg::testSvgArc() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->draw(context);
-	rootObject->draw(context); // draw 2 times: drawInstructions, drawPath
+	rootObject->getGraphicElement()->draw(context);
 	testPng("testSvgArc", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgUse() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "use.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->getGraphicElement()->draw(context);
+	testPng("testSvgUse", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgFont() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "font.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->getGraphicElement()->draw(context);
+	testPng("testSvgFont", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);

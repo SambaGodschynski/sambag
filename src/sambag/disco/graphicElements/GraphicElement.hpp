@@ -11,17 +11,22 @@
 #include "sambag/disco/IDrawContext.hpp"
 #include "Style.hpp"
 #include "sambag/com/Common.hpp"
-#include "IGraphicObject.hpp"
+#include "sambag/disco/IDrawable.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
 // Abstract base class for all graphic elements.
-class GraphicElement : public IGraphicObject {
+class GraphicElement : public IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<GraphicElement> Ptr;
 private:
+	//-------------------------------------------------------------------------
+	/**
+	 * the object transformations matrix
+	 */
+	sambag::com::Matrix tMatrix; // TODO: make flyweight
 protected:
 	//-------------------------------------------------------------------------
 	Style style;
@@ -32,6 +37,18 @@ protected:
 	//-------------------------------------------------------------------------
 	void __setSelf( Ptr self ) { __self = self; }
 public:
+	//-------------------------------------------------------------------------
+	virtual Ptr clone() const = 0;
+	//-------------------------------------------------------------------------
+	virtual const sambag::com::Matrix & getTransformMatrix() const {
+		return tMatrix;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setTransformMatrix(const sambag::com::Matrix &m) {
+		if (m.size1() != 3 || m.size2() != 3)
+			return;
+		tMatrix = m;
+	}
 	//-------------------------------------------------------------------------
 	virtual const Style & getStyle() const { return style; }
 	//-------------------------------------------------------------------------

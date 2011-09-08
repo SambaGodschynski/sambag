@@ -25,6 +25,12 @@ protected:
 	Rect( const Rectangle &rect=NULL_RECTANGLE );
 public:
 	//-------------------------------------------------------------------------
+	virtual GraphicElement::Ptr clone() const {
+		Ptr neu = create();
+		*neu = *this;
+		return neu;
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create( const Rectangle &rect=NULL_RECTANGLE )
 	{
 		Ptr neu(new Rect(rect));

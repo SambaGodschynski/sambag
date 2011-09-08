@@ -20,11 +20,13 @@ struct Font {
 	typedef std::string FontFace;
 	typedef Number Size;
 	enum Slant {
+		SLANT_UNDEFINED = -1,
 		SLANT_NORMAL,
 		SLANT_ITALIC,
 		SLANT_OBLIQUE
 	};
 	enum Weight {
+		WEIGHT_UNDEFINED = -1,
 		WEIGHT_NORMAL,
 		WEIGHT_BOLD
 	};

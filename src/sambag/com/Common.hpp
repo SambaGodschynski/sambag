@@ -140,6 +140,7 @@ extern const ColorRGBA NONE_COLOR;
 //=============================================================================
 typedef boost::numeric::ublas::matrix<Number> Matrix;
 extern const Matrix IDENTITY_MATRIX;
+extern const Matrix NULL_MATRIX;
 //=============================================================================
 using namespace boost::numeric::ublas;
 //=============================================================================

@@ -16,6 +16,8 @@
 
 namespace tests {
 
+// TODO: split files in folder: references, created
+
 const std::string OUTPUT_FOLDER = "output/";
 const std::string MR = "soll_";
 const std::string COMPARE_SCRIPT = "sh " + OUTPUT_FOLDER + "comparepng.script ";

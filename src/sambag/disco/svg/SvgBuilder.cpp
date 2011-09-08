@@ -14,6 +14,8 @@
 #include "sambag/disco/svg/SvgPath.hpp"
 #include "sambag/disco/svg/SvgCircle.hpp"
 #include "sambag/disco/svg/SvgEllipse.hpp"
+#include "sambag/disco/svg/SvgDefs.hpp"
+#include "sambag/disco/svg/SvgUse.hpp"
 #include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
@@ -38,6 +40,8 @@ void SvgBuilder::registerSvgClasses() {
 	 xml2Obj.registerObject<SvgPath>("path");
 	 xml2Obj.registerObject<SvgCircle>("circle");
 	 xml2Obj.registerObject<SvgEllipse>("ellipse");
+	 xml2Obj.registerObject<SvgDefs>("defs");
+	 xml2Obj.registerObject<SvgUse>("use");
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgAttributes() {
@@ -48,6 +52,7 @@ void SvgBuilder::registerSvgAttributes() {
 	SvgPath::registerAttributes(xml2Obj);
 	SvgCircle::registerAttributes(xml2Obj);
 	SvgEllipse::registerAttributes(xml2Obj);
+	SvgUse::registerAttributes(xml2Obj);
 }
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)

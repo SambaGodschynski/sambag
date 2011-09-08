@@ -36,7 +36,7 @@ protected:
 	SvgEllipse();
 public:
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getDrawingObject() const {
+	GraphicElement::Ptr getGraphicElement() const {
 		return ellipse;
 	}
 	//-------------------------------------------------------------------------
@@ -47,13 +47,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgEllipse();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		if (!ellipse) return Rectangle();
-		return ellipse->getBoundingBox();
-	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const CX_tag::Type &coord, CX_tag ) {

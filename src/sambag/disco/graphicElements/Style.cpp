@@ -52,7 +52,7 @@ const Style::FillRule Style::NO_FILL_RULE = IDrawContext::NO_FILL_RULE;
 const ColorRGBA Style::NO_COLOR = NULL_COLOR;
 const ColorRGBA Style::NONE_COLOR = NONE_COLOR;
 const Style::Dash Style::NO_DASH = Style::Dash(NULL, 0, DBL_MAX);
-const Font Style::NO_FONT = Font("no-xxx-font", -1.0);
+const Font Style::NO_FONT = Font("no-xxx-font", -1.0, Font::SLANT_UNDEFINED, Font::WEIGHT_UNDEFINED);
 //-----------------------------------------------------------------------------
 const Number Style::DEFAULT_NUMBER = 0.0;
 const Number Style::DEFAULT_STROKE_WIDTH = 1.0;
@@ -76,8 +76,15 @@ void Style::copyFrom( const Style &b ) {
 		_fillColor = b._fillColor;
 	if (_dash==NO_DASH && b._dash!=NO_DASH)
 		_dash = b._dash;
-	if (_font==NO_FONT && b._font!=NO_FONT)
-		_font = b._font;
+	// font
+	if (_font.fontFace == NO_FONT.fontFace && b._font.fontFace!=NO_FONT.fontFace)
+		_font.fontFace = b._font.fontFace;
+	if (_font.size == NO_FONT.size && b._font.size!=NO_FONT.size)
+		_font.size = b._font.size;
+	if (_font.slant == NO_FONT.slant && b._font.slant!=NO_FONT.slant)
+		_font.slant = b._font.slant;
+	if (_font.weight == NO_FONT.weight && b._font.weight!=NO_FONT.weight)
+		_font.weight = b._font.weight;
 }
 
 

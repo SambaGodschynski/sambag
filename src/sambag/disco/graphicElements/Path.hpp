@@ -34,6 +34,12 @@ protected:
 	Path();
 public:
 	//-------------------------------------------------------------------------
+	virtual GraphicElement::Ptr clone() const {
+		Ptr neu = create();
+		*neu = *this;
+		return neu;
+	}
+	//-------------------------------------------------------------------------
 	void setPathInstructions( const pathInstruction::PathInstructions &pI ) {
 		pathInstructions = pI;
 		storedPath.reset();

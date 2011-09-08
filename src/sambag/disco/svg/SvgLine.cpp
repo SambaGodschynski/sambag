@@ -20,11 +20,5 @@ SvgLine::SvgLine() {
 //-----------------------------------------------------------------------------
 SvgLine::~SvgLine() {
 }
-//-----------------------------------------------------------------------------
-void SvgLine::draw( IDrawContext::Ptr cn ) {
-	if (!line) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	line->draw(cn);
-}
 
 }}}

@@ -22,6 +22,7 @@ Line::~Line() {
 void Line::draw( IDrawContext::Ptr cn ) {
 	if ( !style.isStroked() )
 		return;
+	AutoTransform at(getTransformMatrix(), cn);
 	style.setStrokeStyle(cn);
 	cn->moveTo(p0); cn->lineTo(p1);
 	cn->stroke();

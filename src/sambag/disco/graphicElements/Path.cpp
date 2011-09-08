@@ -442,6 +442,7 @@ void Path::drawPath( IDrawContext::Ptr cn ) {
 }
 //-----------------------------------------------------------------------------
 void Path::draw( IDrawContext::Ptr cn ) {
+	AutoTransform at(getTransformMatrix(), cn);
 	if ( style.isFilled() ) {
 		style.setFillStyle(cn);
 		drawPath(cn);

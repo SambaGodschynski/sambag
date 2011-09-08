@@ -25,6 +25,12 @@ protected:
 	Point2D r;
 public:
 	//-------------------------------------------------------------------------
+	virtual GraphicElement::Ptr clone() const {
+		Ptr neu = create();
+		*neu = *this;
+		return neu;
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create()
 	{
 		Ptr neu(new Arc());

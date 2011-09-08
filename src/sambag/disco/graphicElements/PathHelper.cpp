@@ -44,7 +44,7 @@ using namespace boost::numeric::ublas;
 namespace {
 
 /*
- * Modulo 360 deg for floating numbers
+ * Modulo for floating numbers
  */
 Number floatMod(Number x, Number m = 360.0) {
 	Number f = long(x/m);

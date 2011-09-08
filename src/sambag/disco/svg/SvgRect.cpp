@@ -15,16 +15,8 @@ namespace sambag { namespace disco { namespace svg {
 SvgRect::SvgRect() {
 	using namespace sambag::disco::graphicElements;
 	rect = Rect::create();
-	ColorRGBA r = rect->getStyle().fillColor();
-	int c = 0;
 }
 //-----------------------------------------------------------------------------
 SvgRect::~SvgRect() {
-}
-//-----------------------------------------------------------------------------
-void SvgRect::draw( IDrawContext::Ptr cn ) {
-	if (!rect) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	rect->draw(cn);
 }
 }}}

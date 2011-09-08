@@ -1,28 +1,32 @@
 /*
- * GraphicElement.hpp
+ * RefElement.hpp
  *
- *  Created on: 20.09.2011
+ *  Created on: 07.10.2011
  *      Author: samba
  */
 
-#ifndef DISCO_LINE_HPP_
-#define DISCO_LINE_HPP_
+#ifndef REFELEMENT_HPP_
+#define REFELEMENT_HPP_
 
-#include "GraphicElement.hpp"
+#include "sambag/disco/graphicElements/GraphicElement.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
-class Line : public GraphicElement {
+/**
+ * Class RefElement.
+ * Graphic element which contains another GraphicElement to draw.
+ */
+class RefElement : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Line> Ptr;
+	typedef boost::shared_ptr<RefElement> Ptr;
 private:
+	//-------------------------------------------------------------------------
+	GraphicElement::Ptr ref;
 protected:
 	//-------------------------------------------------------------------------
-	Point2D p0, p1;
-	//-------------------------------------------------------------------------
-	Line( const Point2D &p0=NULL_POINT2D, const Point2D &p1=NULL_POINT2D );
+	RefElement(){}
 public:
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -31,31 +35,32 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create( const Point2D &p0=NULL_POINT2D,
-			           const Point2D &p1=NULL_POINT2D)
+	static Ptr create()
 	{
-		Ptr neu(new Line(p0, p1));
+		Ptr neu(new RefElement());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getP0() const { return p0; }
+	void setReference(GraphicElement::Ptr r)  { ref = r; }
 	//-------------------------------------------------------------------------
-	const Point2D & getP1() const { return p1; }
+	GraphicElement::Ptr getReference() const  { return ref; }
 	//-------------------------------------------------------------------------
-	void setP0(const Point2D &p)  { p0 = p; }
+	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
-	void setP1(const Point2D &p)  { p1 = p; }
-	//-------------------------------------------------------------------------
-	virtual ~Line();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
+	virtual void draw( IDrawContext::Ptr context ) {
+		if (!ref) return;
+		AutoTransform at(getTransformMatrix(), context);
+		ref->draw(context);
+	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
-		return Rectangle(p0, p1);
+		if (!ref) return Rectangle();
+		return ref->getBoundingBox();;
 	}
 };
 
 }}} // namespace
 
-#endif /* GRAPHICELEMENT_HPP_ */
+
+#endif /* REFELEMENT_HPP_ */

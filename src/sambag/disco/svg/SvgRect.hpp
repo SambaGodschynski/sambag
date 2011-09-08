@@ -42,18 +42,11 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getDrawingObject() const {
+	GraphicElement::Ptr getGraphicElement() const {
 		return rect;
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgRect();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		if (!rect) return Rectangle();
-		return rect->getBoundingBox();
-	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, X_tag ) {

@@ -19,11 +19,4 @@ SvgEllipse::SvgEllipse() {
 //-----------------------------------------------------------------------------
 SvgEllipse::~SvgEllipse() {
 }
-//-----------------------------------------------------------------------------
-void SvgEllipse::draw( IDrawContext::Ptr cn ) {
-	if (!ellipse) return;
-	AutoTransform at(getTransformMatrix(), cn);
-	ellipse->draw(cn);
-}
-
 }}}

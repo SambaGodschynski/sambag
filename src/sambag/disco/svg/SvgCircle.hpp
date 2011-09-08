@@ -34,7 +34,7 @@ protected:
 	SvgCircle();
 public:
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getDrawingObject() const {
+	GraphicElement::Ptr getGraphicElement() const {
 		return circle;
 	}
 	//-------------------------------------------------------------------------
@@ -45,13 +45,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgCircle();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		if (!circle) return Rectangle();
-		return circle->getBoundingBox();
-	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const CX_tag::Type &coord, CX_tag ) {

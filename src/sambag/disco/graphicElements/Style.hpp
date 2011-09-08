@@ -10,6 +10,15 @@
 
 #include "sambag/disco/IDrawContext.hpp"
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// Fly weight switch
+#define USE_DISCO_STYLE_FLY_WEIGHT
+#ifndef USE_DISCO_STYLE_FLY_WEIGHT
+#define FLYWEIGHT(type, name) boost::flyweight<type> name
+#else
+#define FLYWEIGHT(type, name) type name
+#endif
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // hash functions first ...
 namespace boost {
@@ -56,12 +65,12 @@ public:
 	static const Font DEFAULT_FONT;
 private:
 	//-------------------------------------------------------------------------
-	boost::flyweight<Number> _strokeWidth;
-	boost::flyweight<LineCapStyle> _lineCapStyle;
-	boost::flyweight<FillRule> _fillRule;
-	boost::flyweight<ColorRGBA> _strokeColor;
-	boost::flyweight<ColorRGBA> _fillColor;
-	boost::flyweight<Font> _font;
+	FLYWEIGHT(Number,_strokeWidth);
+	FLYWEIGHT(LineCapStyle,_lineCapStyle);
+	FLYWEIGHT(FillRule,_fillRule);
+	FLYWEIGHT(ColorRGBA,_strokeColor);
+	FLYWEIGHT(ColorRGBA,_fillColor);
+	FLYWEIGHT(Font,_font);
 	Dash _dash; // TODO: make flyweight too
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
 public:
@@ -78,8 +87,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * copy value from b to self, only if b.value is NOT undefined(NO_VALUE)
-	 * and self.value IS undefined.
+	 * copy value from b to self. Copies attribute only if not setted to keep
+	 * a cascading effect.
 	 * @param b
 	 */
 	void copyFrom (const Style&b);
@@ -89,8 +98,9 @@ public:
 		return _strokeWidth;
 	}
 	//-------------------------------------------------------------------------
-	void strokeWidth(const Number &v) {
+	Style & strokeWidth(const Number &v) {
 		_strokeWidth = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const LineCapStyle & lineCapStyle() const {
@@ -98,8 +108,9 @@ public:
 		return _lineCapStyle;
 	}
 	//-------------------------------------------------------------------------
-	void lineCapStyle(const LineCapStyle &v) {
+	Style lineCapStyle(const LineCapStyle &v) {
 		_lineCapStyle = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const FillRule & fillRule() const {
@@ -107,8 +118,9 @@ public:
 		return _fillRule;
 	}
 	//-------------------------------------------------------------------------
-	void fillRule(const FillRule &v) {
+	Style & fillRule(const FillRule &v) {
 		_fillRule = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & strokeColor() const {
@@ -117,8 +129,9 @@ public:
 		return _strokeColor;
 	}
 	//-------------------------------------------------------------------------
-	void strokeColor(const ColorRGBA &v) {
+	Style & strokeColor(const ColorRGBA &v) {
 		_strokeColor = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & fillColor() const {
@@ -126,8 +139,9 @@ public:
 		return _fillColor;
 	}
 	//-------------------------------------------------------------------------
-	void fillColor(const ColorRGBA &v) {
+	Style & fillColor(const ColorRGBA &v) {
 		_fillColor = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const Dash & dash() const {
@@ -135,8 +149,9 @@ public:
 		return _dash;
 	}
 	//-------------------------------------------------------------------------
-	void dash(const Dash &v) {
+	Style & dash(const Dash &v) {
 		_dash = v;
+		return *this;
 	}
 	//-------------------------------------------------------------------------
 	const bool isFilled() const {
@@ -164,13 +179,44 @@ public:
 		cn->setSourceColor(fillColor());
 	}
 	//-------------------------------------------------------------------------
-	const Font & font() const {
+	Font font() const {
+		// keep cascading effect: check every font value
 		if (_font==NO_FONT) return DEFAULT_FONT;
-		return _font;
+		Font res = _font;
+		if (_font.fontFace == NO_FONT.fontFace)
+			res.fontFace = DEFAULT_FONT.fontFace;
+		if (_font.size == NO_FONT.size)
+			res.size = DEFAULT_FONT.size;
+		if (_font.slant == NO_FONT.slant)
+			res.slant = DEFAULT_FONT.slant;
+		if (_font.weight== NO_FONT.weight)
+			res.weight = DEFAULT_FONT.weight;
+		return res;
 	}
 	//-------------------------------------------------------------------------
-	void font( const Font& f ) {
+	Style & font_( const Font& f ) {
 		_font = f;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & fontFace( const Font::FontFace & v) {
+		_font.fontFace = v;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & fontSize( const Font::Size & v) {
+		_font.size = v;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & fontSlant( const Font::Slant & v) {
+		_font.slant = v;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & fontWeight( const Font::Weight & v) {
+		_font.weight = v;
+		return *this;
 	}
 
 };

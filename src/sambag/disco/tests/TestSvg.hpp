@@ -26,6 +26,8 @@ private:
 	CPPUNIT_TEST( testSvgPath02 );
 	CPPUNIT_TEST( testSvgPath03 );
 	CPPUNIT_TEST( testSvgArc );
+	CPPUNIT_TEST( testSvgFont );
+	CPPUNIT_TEST( testSvgUse );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -38,7 +40,9 @@ public:
 	void testSvgPath();
 	void testSvgPath02();
 	void testSvgPath03();
+	void testSvgUse();
 	void testSvgArc();
+	void testSvgFont();
 };
 
 } // namespace
