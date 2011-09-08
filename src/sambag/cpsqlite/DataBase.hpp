@@ -41,19 +41,19 @@ class DataBase {
 public:
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	struct Result {
-		typedef std::string ColumnType;
-		typedef std::string EntryType;
-		typedef boost::unordered_map<ColumnType, EntryType> Column2Entry; // unordered = mapping via hash
+		typedef std::string Column;
+		typedef std::string Entry;
+		typedef boost::unordered_map<Column, Entry> Column2Entry; // unordered = mapping via hash
 		typedef boost::shared_ptr<Result> Ptr;
 		//...................................................................................................
-		static const EntryType NULL_ENTRY;
+		static const Entry NULL_ENTRY;
 		//...................................................................................................
 		Column2Entry col2Entry;
 		//...................................................................................................
-		const EntryType & get( const ColumnType &col ) const;
+		const Entry & get( const Column &col ) const;
 		//...................................................................................................
 		template<typename T>
-		T getConv( const ColumnType &col ) const {
+		T getConv( const Column &col ) const {
 			stringstream ss;
 			T ret;
 			ss<<get(col);
@@ -62,7 +62,7 @@ public:
 		}
 		//...................................................................................................
 		template<typename T>
-		T getConv( const ColumnType &col, const T &null /*returned if covertion failed*/ ) const {
+		T getConv( const Column &col, const T &null /*returned if covertion failed*/ ) const {
 			stringstream ss;
 			T ret;
 			ss<<get(col);

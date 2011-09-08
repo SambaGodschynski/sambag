@@ -23,91 +23,30 @@
 
 #include "TestCairoDrawContext.hpp"
 #include <cppunit/config/SourcePrefix.h>
-#include "cairo/cairo-svg.h"
 #include <boost/filesystem.hpp>
 #include <sstream>
 #include <string>
 #include <fstream>
 #include <sambag/com/Common.hpp>
+#include "TestHelper.hpp"
 
 using namespace sambag::com;
 
-static const std::string OUTPUT_FOLDER = "output/";
-static const std::string MR = "soll_";
-static const std::string COMPARE_SCRIPT = "sh " + OUTPUT_FOLDER + "comparepng.script ";
-
-// make reference pictures for compare
-//#define DISCO_CONTEXT_MAKE_REFERENCES
-
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestCairoDrawContext );
-
-cairo_status_t
-write_func (void *pStringstream, unsigned char *data, unsigned int length)
-{
-	std::stringstream &ss = *(reinterpret_cast<std::stringstream*>(pStringstream));
-	std::string strData((const char*)data, length);
-	ss<<strData;
-	return CAIRO_STATUS_SUCCESS;
-}
-
-void writeSvg ( const std::stringstream &stream, const std::string filename ) {
-	using namespace std;
-	std::fstream fstr;
-	fstr.open (filename.c_str(), fstream::out );
-	fstr<<stream.str();
-	fstr.close();
-}
-
-cairo_surface_t * createSvgSurface( std::stringstream &ss, const Number &width, const Number &height ) {
-	cairo_write_func_t f = (cairo_write_func_t)write_func;
-	cairo_surface_t *surface =
-	cairo_svg_surface_create_for_stream( f, &ss, width, height );
-	return surface;
-}
 
 // TODO: create shared_ptr wrapper for surface
 void releaseSurface( cairo_surface_t *surface ) {
 	cairo_surface_destroy(surface);
 }
 
-bool comparePng( const std::string &f1, const std::string &f2) {
-	std::string cmd(COMPARE_SCRIPT + f1 + " " + f2 );
-	int r = system(cmd.c_str());
-	return r == 0;
-}
-
-void writePng(cairo_surface_t *surface, const std::string name) {
-	cairo_surface_write_to_png(surface, name.c_str() );
-}
-
-void testPng( const std::string &testName, cairo_surface_t *surface ) {
-	const std::string f1( OUTPUT_FOLDER + MR + testName + ".png" );
-	const std::string f2( OUTPUT_FOLDER + testName + ".png" );
-
-#ifdef DISCO_CONTEXT_MAKE_REFERENCES
-	writePng(surface, f1);
-#else
-	writePng(surface, f2);
-	CPPUNIT_ASSERT ( comparePng(f1, f2) );
-#endif
-}
-
-
 namespace tests {
 //=============================================================================
 // TestCairoDrawContext::setUp
 //=============================================================================
 void TestCairoDrawContext::setUp() {
-	using namespace boost::filesystem;
-	if ( !exists(OUTPUT_FOLDER) ) {
-		create_directory(OUTPUT_FOLDER);
-	}
+	setupEnv();
 }
-//-----------------------------------------------------------------------------
-//=============================================================================
-// TestCairoDrawContext::testConstructor
-//=============================================================================
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testConstructor() {
 	using namespace sambag::disco;
@@ -126,7 +65,7 @@ void TestCairoDrawContext::testConstructor() {
 void TestCairoDrawContext::testLine() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 
@@ -164,7 +103,7 @@ void TestCairoDrawContext::testLine() {
 void TestCairoDrawContext::testArc() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -190,7 +129,7 @@ void TestCairoDrawContext::testArc() {
 void TestCairoDrawContext::testRectangle() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -206,6 +145,15 @@ void TestCairoDrawContext::testRectangle() {
 	context->setSourceColor( ColorRGBA( 1.0, 1.0, 0.0 ) );
 	context->rect( Rectangle(Point2D(400,100), 400, 200 ) );
 	context->fill();
+
+	context->setSourceColor( ColorRGBA( 1.0, 0.0, 0.0 ) );
+	context->rect(Rectangle(500, 150, 400, 200), 15.0 );
+	context->stroke();
+
+	context->setSourceColor( ColorRGBA( 0.0, 1.0, 0.3 ) );
+	context->rect(Rectangle(500, 150, 400, 200), 15.0 );
+	context->fill();
+
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
 	testPng("testRectangle", surface);
 	context.reset();
@@ -216,7 +164,7 @@ void TestCairoDrawContext::testRectangle() {
 void TestCairoDrawContext::testCurve() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -237,7 +185,7 @@ void TestCairoDrawContext::testCurve() {
 void TestCairoDrawContext::testText() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -266,7 +214,7 @@ void TestCairoDrawContext::testText() {
 void TestCairoDrawContext::testPath() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -307,7 +255,7 @@ void TestCairoDrawContext::testPath() {
 void TestCairoDrawContext::testClip() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -336,7 +284,7 @@ void TestCairoDrawContext::testClip() {
 void TestCairoDrawContext::testTransformation() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare
 	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -393,7 +341,7 @@ void TestCairoDrawContext::testMatrixConv() {
 void TestCairoDrawContext::testLineStyle() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
 	IDrawContext::Dash dash;
@@ -455,7 +403,7 @@ void TestCairoDrawContext::testLineStyle() {
 void TestCairoDrawContext::testSetStrokeWidth() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
 	context->setStrokeWidth(5.0);
@@ -469,7 +417,7 @@ void TestCairoDrawContext::testSetColor() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	std::stringstream ss;
-	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
 	context->setSourceColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
@@ -484,7 +432,7 @@ void TestCairoDrawContext::testMisc() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	std::stringstream ss;
-	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>has current point / get current point
 	CPPUNIT_ASSERT( !context->hasCurrentPoint() );

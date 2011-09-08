@@ -9,7 +9,7 @@
 #define CAIRODRAWCONTEXT_H_
 
 #include "IDrawContext.hpp"
-#include "cairo/cairo.h"
+#include "cairo.h"
 #include <boost/shared_ptr.hpp>
 
 namespace sambag { namespace disco {
@@ -136,12 +136,18 @@ public:
 		);
 	}
 	//-------------------------------------------------------------------------
+	virtual void rect( const Rectangle &rect, Number cornerRadius );
+	//-------------------------------------------------------------------------
 	virtual void stroke() {
 		cairo_stroke(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fill() {
 		cairo_fill(context);
+	}
+	//-------------------------------------------------------------------------
+	virtual void fillPreserve() {
+		cairo_fill_preserve(context);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
@@ -207,6 +213,14 @@ public:
 	virtual LineCapStyle getLineCap () const {
 		return (LineCapStyle)cairo_get_line_cap(context);
 	}
+	//-------------------------------------------------------------------------
+	virtual void setFillRule( FillRule rule ) {
+		cairo_set_fill_rule(context, (cairo_fill_rule_t)rule);
+	}
+	//-------------------------------------------------------------------------
+	virtual FillRule getFillRule() const {
+		return (FillRule)cairo_get_fill_rule(context);
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const {
@@ -237,6 +251,14 @@ public:
 		CairoPath::Ptr cp = boost::shared_dynamic_cast<CairoPath, Path>(path);
 		if (!cp) return;
 		cairo_append_path(context, cp->getPath());
+	}
+	//-------------------------------------------------------------------------
+	virtual void newSubPath() {
+		cairo_new_sub_path(context);
+	}
+	//-------------------------------------------------------------------------
+	virtual void closePath() {
+		cairo_close_path(context);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------

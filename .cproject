@@ -27,6 +27,7 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/boost_1_47_0"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
@@ -72,6 +73,8 @@
 					</folderInfo>
 				</configuration>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="scannerConfiguration">
 				<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
@@ -237,7 +240,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -320,7 +323,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -487,10 +490,8 @@
 					</profile>
 				</scannerConfigBuildInfo>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
-				<doc-comment-owner id="org.eclipse.cdt.internal.ui.text.doctools.NullDocCommentOwner">
+				<doc-comment-owner id="org.eclipse.cdt.ui.doxygen">
 					<path value=""/>
 				</doc-comment-owner>
 			</storageModule>
@@ -538,6 +539,8 @@
 					</folderInfo>
 				</configuration>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="scannerConfiguration">
 				<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
@@ -703,7 +706,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -786,7 +789,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -953,10 +956,8 @@
 					</profile>
 				</scannerConfigBuildInfo>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
-				<doc-comment-owner id="org.eclipse.cdt.internal.ui.text.doctools.NullDocCommentOwner">
+				<doc-comment-owner id="org.eclipse.cdt.ui.doxygen">
 					<path value=""/>
 				</doc-comment-owner>
 			</storageModule>

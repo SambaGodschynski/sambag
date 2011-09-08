@@ -9,4 +9,7 @@
 
 namespace sambag { namespace com {
 
+const Point2D   NULL_POINT2D;
+const Rectangle NULL_RECTANGLE;
+
 }}

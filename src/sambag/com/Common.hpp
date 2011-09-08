@@ -10,9 +10,10 @@
 
 #include <sambag/math/VectorN.hpp>
 #include <math.h>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
 #include <boost/geometry.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/foreach.hpp>
 
 namespace sambag { namespace com {
 //#############################################################################
@@ -26,6 +27,10 @@ typedef double Number;
 //=============================================================================
 using namespace boost::geometry;
 typedef model::d2::point_xy<Number> Point2D;
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+extern const Point2D NULL_POINT2D;
 //=============================================================================
 //=============================================================================
 class Rectangle {
@@ -68,9 +73,9 @@ public:
 	Rectangle( Point2D x0 = Point2D() , Point2D x1 = Point2D() ) :
 		box( Box(x0, x1) ){}
 	//-------------------------------------------------------------------------
-	Rectangle( Point2D _x0 = Point2D() ,
-			   const Number &width = 0,
-			   const Number &height = 0 )
+	Rectangle( Point2D _x0,
+			   const Number &width,
+			   const Number &height)
 
 	{
 		Point2D x0(_x0), x1(width, height);
@@ -78,16 +83,17 @@ public:
 		Rectangle::box = Box(x0, x1);
 	}
 	//-------------------------------------------------------------------------
-	Rectangle( const Number &x = 0,
-			   const Number &y = 0,
-			   const Number &width = 0,
-			   const Number &height = 0 )
+	Rectangle( const Number &x,
+			   const Number &y,
+			   const Number &width,
+			   const Number &height )
 	{
 		Point2D x0(x,y), x1(width, height);
 		add_point(x1, x0);
 		Rectangle::box = Box(x0, x1);
 	}
 };
+extern const Rectangle NULL_RECTANGLE;
 //#############################################################################
 // colors
 //#############################################################################
@@ -141,7 +147,11 @@ bool operator!=(const matrix<T>& m, const matrix<T>& n) {
 //=============================================================================
   return !(m == n);
 }
-
+//#############################################################################
+// Misc.
+//#############################################################################
+//=============================================================================
+#define for_each BOOST_FOREACH
 
 }} // namespaces
 

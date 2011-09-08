@@ -33,9 +33,9 @@ namespace cpsqlite {
 // class DataBase::Result 
 //============================================================================================================
 //------------------------------------------------------------------------------------------------------------
-const DataBase::Result::EntryType DataBase::Result::NULL_ENTRY = "NULL";
+const DataBase::Result::Entry DataBase::Result::NULL_ENTRY = "NULL";
 //------------------------------------------------------------------------------------------------------------
-const DataBase::Result::EntryType & DataBase::Result::get( const ColumnType &col ) const {
+const DataBase::Result::Entry & DataBase::Result::get( const Column &col ) const {
 	if ( col2Entry.empty() ) return NULL_ENTRY;
 	string in = col;
 	boost::to_lower(in);
@@ -47,7 +47,7 @@ const DataBase::Result::EntryType & DataBase::Result::get( const ColumnType &col
 // class DataBase : 
 //============================================================================================================
 //------------------------------------------------------------------------------------------------------------
-DataBase::Result::EntryType NULL_ENTRY = "NULL";
+DataBase::Result::Entry NULL_ENTRY = "NULL";
 //------------------------------------------------------------------------------------------------------------
 DataBase::DataBase(const Path &dbLocation) : location(dbLocation) {
 	dieLate = _loc2DB;
@@ -154,8 +154,8 @@ int sqliteCallback ( void *resultsPtr, int argc, char **argv, char **azColName )
 //============================================================================================================
 	using namespace sambag;
 	using namespace cpsqlite;
-	typedef DataBase::Result::ColumnType ColumnType;
-	typedef DataBase::Result::EntryType EntryType;
+	typedef DataBase::Result::Column ColumnType;
+	typedef DataBase::Result::Entry EntryType;
     ResultList *results = static_cast<ResultList*> (resultsPtr);
 	DataBase::Result::Ptr res( new DataBase::Result() );
 	results->push_back(res);
