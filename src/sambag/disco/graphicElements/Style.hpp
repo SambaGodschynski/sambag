@@ -71,7 +71,7 @@ public:
 		_lineCapStyle(NO_LINE_CAP_STYLE),
 		_fillRule(NO_FILL_RULE),
 		_strokeColor( NO_COLOR ),
-		_fillColor( DEFAULT_COLOR ),
+		_fillColor( NO_COLOR ),
 		_font(NO_FONT),
 		_dash(NO_DASH)
 	{
@@ -112,7 +112,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & strokeColor() const {
-		if(_strokeColor==NO_COLOR) return DEFAULT_COLOR;
+		if (_strokeColor == NO_COLOR || _strokeColor == NONE_COLOR)
+			return DEFAULT_COLOR;
 		return _strokeColor;
 	}
 	//-------------------------------------------------------------------------
@@ -139,7 +140,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const bool isFilled() const {
-		if (_fillColor == NO_COLOR ||  _fillColor == NONE_COLOR )
+		if ( _fillColor == NONE_COLOR )
 			return false;
 		return true;
 	}

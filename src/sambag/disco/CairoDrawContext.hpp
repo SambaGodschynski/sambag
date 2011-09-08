@@ -101,6 +101,18 @@ public:
 		cairo_line_to ( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
+	virtual void relMoveTo( const Point2D &p0 ) {
+		cairo_rel_move_to ( context, p0.x(), p0.y() );
+	}
+	//-------------------------------------------------------------------------
+	virtual void relLineTo( const Point2D &p0 ) {
+		cairo_rel_line_to ( context, p0.x(), p0.y() );
+	}
+	//-------------------------------------------------------------------------
+	virtual void closePath() {
+		cairo_close_path(context);
+	}
+	//-------------------------------------------------------------------------
 	virtual void curveTo(
 		const Point2D &x1,
 		const Point2D &x2,
@@ -255,10 +267,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void newSubPath() {
 		cairo_new_sub_path(context);
-	}
-	//-------------------------------------------------------------------------
-	virtual void closePath() {
-		cairo_close_path(context);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------

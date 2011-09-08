@@ -8,6 +8,7 @@
 #include "AttributeParser.hpp"
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/regex.hpp>
 #include <boost/assign/list_inserter.hpp>
 #include <vector>
 #include "sambag/com/Common.hpp"
@@ -17,6 +18,18 @@
 
 namespace {
 using namespace sambag::disco;
+//-----------------------------------------------------------------------------
+/**
+ * Prepares string for further processing. such as trim, to_lower ...
+ * @param inout
+ * @return prepared string
+ */
+std::string & prepareString(std::string &inout, bool toLower = true) {
+	boost::algorithm::trim(inout);
+	if (toLower)
+		boost::algorithm::to_lower(inout);
+	return inout;
+}
 //-----------------------------------------------------------------------------
 int hex2Int ( const std::string &hex) {
 	int x = 0;
@@ -60,6 +73,20 @@ void string2Number(const StrContainer &in, NumberContainer &out) {
 		out.push_back(n);
 	}
 }
+/**
+ * gets values string such as "3, 4.5, 3" into Container of Numbers
+ * @param values
+ * @param out
+ */
+template< typename Container >
+void getValuesFromString( const std::string &_values, Container &out ) {
+	std::string values = boost::algorithm::trim_copy(_values);
+	std::vector<std::string> strs;
+	boost::algorithm::split_regex( strs, values, boost::regex( "\\s*,\\s*|\\s+" ) ) ;
+	if (strs.empty()) return;
+	string2Number<std::vector<std::string>, Container >(strs, out);
+}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>transfomation
 //-----------------------------------------------------------------------------
 void transformTransl(const std::vector<Number> &values, Matrix& m) {
 	if (values.size()<1) return;
@@ -128,33 +155,41 @@ void transformMatr(const std::vector<Number> &values, Matrix& m) {
  * @param values: a list of numbers: x,y,...
  * @param m: out matrix
  */
-void processTransformStrings( std::string cmd, std::string values, Matrix& matrix ) {
+void processTransformStrings( const std::string &cmd, const std::string &values, Matrix& matrix ) {
 	// split components of value string
-	std::vector<std::string> v;
-	if (cmd=="matrix")
-		boost::algorithm::split(v, values, boost::is_any_of(" "));
-	else
-		boost::algorithm::split(v, values, boost::is_any_of(","));
+	std::vector<Number> v;
+	getValuesFromString< std::vector<Number> >(values, v);
 	if (v.empty()) return;
-	// covert vector<string> 2 vector<Number>
-	std::vector<Number> v2;
-	v2.reserve(v.size());
-	string2Number<std::vector<std::string>, std::vector<Number> >(v, v2);
-	if (v2.empty()) return;
 	// select fitting transformation
 	if (cmd=="translate")
-		transformTransl(v2, matrix);
+		transformTransl(v, matrix);
 	if (cmd=="rotate")
-		transformRot(v2, matrix);
+		transformRot(v, matrix);
 	if (cmd=="scale")
-		transformScal(v2, matrix);
+		transformScal(v, matrix);
 	if (cmd=="skewx")
-		transformSkewX(v2, matrix);
+		transformSkewX(v, matrix);
 	if (cmd=="skewy")
-		transformSkewY(v2, matrix);
+		transformSkewY(v, matrix);
 	if (cmd=="matrix")
-		transformMatr(v2, matrix);
+		transformMatr(v, matrix);
 }
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>path
+void processPathStrings(
+		const std::string &cmd,
+		const std::string &values,
+		sambag::disco::graphicElements::pathInstruction::PathInstructions &pI)
+{
+	using namespace graphicElements::pathInstruction;
+	if (cmd=="") return;
+	PointContainer pC;
+	getValuesFromString<PointContainer>(values, pC);
+	pI.push_back( std::make_pair(
+		pC,
+		svg::AttributeParser::getPathInstruction(cmd)
+	));
+}
+
 } // namespace
 
 namespace sambag { namespace disco { namespace svg {
@@ -164,25 +199,44 @@ namespace sambag { namespace disco { namespace svg {
 //-----------------------------------------------------------------------------
 AttributeParser::HtmlColors AttributeParser::htmlColors;
 //-----------------------------------------------------------------------------
+AttributeParser::PathInstrMap AttributeParser::pathInstrMap;
+//-----------------------------------------------------------------------------
 void AttributeParser::parseTransform(const std::string &str, Matrix &matrix) {
 	if (str.length()==0) return;
 	std::string inStr = str;
 	prepareString(inStr);
 	// extract all matches
-	while (true) {
-		static const boost::regex expr("([a-zA-Z]+?)\\s*\\(([ 0-9.,-]+)\\)");
-		boost::smatch what;
-		if (!boost::regex_search(inStr, what, expr) ) break; // no more matches
-		std::string e = what[0];
-		std::string cmd = what[1];
-		std::string values = what[2];
-		// cutoff the matched string
-		inStr.erase(0, e.length());
-		Matrix m = IDENTITY_MATRIX;
-		processTransformStrings(cmd, values, m);
-		matrix = prod(matrix, m);
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	for ( ;
+		regex_search(begin, end, what, boost::regex("([a-zA-Z]+?)\\s*\\(([ 0-9.,-]+)\\)"));
+		begin = what[0].second
+	) {
+	    std::string cmd = what[1];
+	    std::string values = what[2];
+	    Matrix m = IDENTITY_MATRIX;
+	    processTransformStrings(cmd, values, m);
+	    matrix = prod(matrix, m);
 	}
-
+}
+//-----------------------------------------------------------------------------
+void AttributeParser::parsePathInstructions(const std::string &str, PathInstructions& pi) {
+	if (str.length()==0) return;
+	std::string inStr = str;
+	prepareString(inStr, false);
+	// extract all matches
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	for ( ;
+		regex_search(begin, end, what, boost::regex("([a-zA-Z]+)\\s*([ 0-9.,-]*)"));
+		begin = what[0].second
+	) {
+		std::string cmd = what[1];
+	    std::string values = what[2];
+		processPathStrings(cmd, values, pi);
+	}
 }
 //-----------------------------------------------------------------------------
 void AttributeParser::parseColor(const std::string &str, ColorRGBA &color) {
@@ -220,10 +274,15 @@ const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name )
 	return it->second;
 }
 //-----------------------------------------------------------------------------
-std::string & AttributeParser::prepareString(std::string &inout) {
-	boost::algorithm::trim(inout);
-	boost::algorithm::to_lower(inout);
-	return inout;
+pathInstruction::Instruction
+AttributeParser::getPathInstruction( const std::string &op )
+{
+	if (pathInstrMap.empty())
+		initPathInstr();
+	PathInstrMap::const_iterator it = pathInstrMap.find(op);
+	if (it==pathInstrMap.end())
+		return pathInstruction::NONE;
+	return it->second;
 }
 }}} // namespaces
 
@@ -243,7 +302,7 @@ std::istream & operator>>(std::istream& istr, sambag::disco::Font::Weight &weigh
 	using namespace sambag::disco;
 	std::string in;
 	getWholeString(istr, in);
-	svg::AttributeParser::prepareString(in);
+	prepareString(in);
 	if (in=="bold") weight = Font::WEIGHT_BOLD;
 	else weight = Font::WEIGHT_NORMAL;
 	return istr;
@@ -254,7 +313,7 @@ std::istream & operator>>(std::istream& istr, sambag::disco::Font::Slant &slant)
 	using namespace sambag::disco;
 	std::string in;
 	getWholeString(istr, in);
-	svg::AttributeParser::prepareString(in);
+	prepareString(in);
 	if (in=="italic") slant = Font::SLANT_ITALIC; return istr;
 	if (in=="oblique") slant = Font::SLANT_OBLIQUE; return istr;
 	slant = Font::SLANT_NORMAL;
@@ -267,5 +326,16 @@ std::istream & operator>>(std::istream& istr, sambag::com::Matrix &m) {
 	getWholeString(istr, str);
 	m = IDENTITY_MATRIX;
 	AttributeParser::parseTransform(str, m);
+	return istr;
+}
+//-----------------------------------------------------------------------------
+std::istream & operator>>(
+	std::istream& istr,
+    sambag::disco::graphicElements::pathInstruction::PathInstructions &pI)
+{
+	using namespace sambag::disco::svg;
+	std::string str;
+	getWholeString(istr, str);
+	AttributeParser::parsePathInstructions(str, pI);
 	return istr;
 }

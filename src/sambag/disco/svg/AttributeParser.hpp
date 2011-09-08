@@ -14,9 +14,12 @@
 #include <string>
 #include <map>
 #include "sambag/disco/Font.hpp"
+#include "sambag/disco/graphicElements/PointContainer.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
+using namespace sambag::disco::graphicElements;
+using sambag::disco::graphicElements::pathInstruction::PathInstructions;
 //=============================================================================
 // parser
 //=============================================================================
@@ -25,17 +28,16 @@ private:
 	//-------------------------------------------------------------------------
 	typedef std::map<std::string, ColorRGBA> HtmlColors;
 	//-------------------------------------------------------------------------
+	typedef std::map<std::string, pathInstruction::Instruction> PathInstrMap;
+	//-------------------------------------------------------------------------
 	static HtmlColors htmlColors;
 	//-------------------------------------------------------------------------
-	static void initHtmlColors();
-public:
+	static PathInstrMap pathInstrMap;
 	//-------------------------------------------------------------------------
-	/**
-	 * Prepares string for further processing. such as trim, to_lower ...
-	 * @param inout
-	 * @return prepared string
-	 */
-	static std::string & prepareString(std::string &inout);
+	static void initHtmlColors();
+	//-------------------------------------------------------------------------
+	static void initPathInstr();
+public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Parses html string color to ColorRGBA.
@@ -46,6 +48,14 @@ public:
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
 	static void parseTransform(const std::string &str, Matrix&);
+	//-------------------------------------------------------------------------
+	static void parsePathInstructions(const std::string &str, PathInstructions&);
+	//-------------------------------------------------------------------------
+	/**
+	 * @param svg path command like M or z
+	 * @return Instruction
+	 */
+	static pathInstruction::Instruction getPathInstruction(const std::string&);
 	//-------------------------------------------------------------------------
 	static const ColorRGBA & getColorByHtmlName( const std::string &name );
 };
@@ -59,7 +69,10 @@ extern std::istream & operator>>(std::istream&, sambag::com::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
 extern std::istream & operator>>(std::istream&, sambag::com::Matrix&);
-
+extern std::istream & operator>>(
+		std::istream&,
+		sambag::disco::graphicElements::pathInstruction::PathInstructions &
+);
 
 
 #endif /* ATTRIBUTE_PARSER_HPP_ */

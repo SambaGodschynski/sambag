@@ -17,7 +17,6 @@
 #include <list>
 
 
-// TODO: transformation
 // TODO: more elements
 
 namespace sambag { namespace disco { namespace svg {

@@ -28,7 +28,7 @@
 #include <string>
 #include <fstream>
 #include <sambag/com/Common.hpp>
-#include "TestHelper.hpp"
+#include "HelperForTesting.hpp"
 
 using namespace sambag::com;
 

@@ -5,7 +5,7 @@
  *      Author: samba
  */
 
-#include "TestHelper.hpp"
+#include "HelperForTesting.hpp"
 #include <boost/filesystem.hpp>
 #include <sstream>
 #include <string>
