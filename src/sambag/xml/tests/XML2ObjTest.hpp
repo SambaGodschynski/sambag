@@ -10,11 +10,13 @@ class XML2ObjectTest : public CPPUNIT_NS::TestFixture {
 //=============================================================================
   CPPUNIT_TEST_SUITE( XML2ObjectTest );
   CPPUNIT_TEST( testConstructor );
+  CPPUNIT_TEST( testClosure );
   CPPUNIT_TEST( testBuildStructure );
   CPPUNIT_TEST_SUITE_END();
 private:
 public:
   void testConstructor();
+  void testClosure();
   void testBuildStructure();
 };
 } // namespace tests

@@ -13,6 +13,7 @@
 #include "ticpp/ticpp.h"
 #include <boost/foreach.hpp>
 
+
 const std::string XML01 = "<root>this is it</root>";
 const std::string XML02 = std::string("<root id='01'>") +
                                         "<objectA id='02'/>" +
@@ -66,9 +67,14 @@ static bool createdSignalPassed = false;
 //------------------------------------------------------------------------------
 struct Root : public BaseObject {
   typedef boost::shared_ptr<Root> Ptr;
+  typedef std::pair<double, int> Closure;
+  Closure closure;
   Root() {}
-  static Ptr create() {
-    return Ptr( new Root() );
+  static Ptr create(Closure *closure=NULL) {
+    Ptr p( new Root() );
+    if (closure!=NULL)
+    	p->closure = *closure;
+    return p;
   }
   virtual std::string getClassName() const { return "root"; }
   void objCreated ( BaseObject::Ptr obj ) {
@@ -178,6 +184,18 @@ void XML2ObjectTest::testConstructor() {
   XML2Object<BaseObject> xml2Obj;
 }
 //=============================================================================
+void XML2ObjectTest::testClosure() {
+	using namespace sambag::xml;
+	std::pair<double, int> pv(1.0, 10);
+	XML2Object<BaseObject, std::pair<double, int> > xml2Obj(&pv);
+	xml2Obj.registerObject<Root>("root");
+	BaseObject::Ptr base = xml2Obj.buildWithXmlString("<root/>");
+	Root::Ptr root = boost::shared_dynamic_cast<Root>(base);
+	CPPUNIT_ASSERT( root );
+	CPPUNIT_ASSERT( root->closure == pv );
+}
+//=============================================================================
+//=============================================================================
 void XML2ObjectTest::testBuildStructure() {
 //=============================================================================
   using namespace sambag::xml;
@@ -197,7 +215,6 @@ void XML2ObjectTest::testBuildStructure() {
   xml2Obj.addObjectCreatedSlot(f);
   ptr = xml2Obj.buildWithXmlString ( XML01, root );
   CPPUNIT_ASSERT( ptr );
-  CPPUNIT_ASSERT_EQUAL( (int)1, BaseObject::numObjects );
   CPPUNIT_ASSERT_EQUAL( std::string("this is it"), ptr->xmlText );
   ticpp::Document doc;
   doc.Parse ( XML01 );

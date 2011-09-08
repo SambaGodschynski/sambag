@@ -12,10 +12,14 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 // class SvgObject
 //=============================================================================
-//-----------------------------------------------------------------------------
-SvgObject::IdType SvgObject::NULL_ID = "no-id";
-//-----------------------------------------------------------------------------
-SvgObject::ClassType SvgObject::NULL_CLASS = "no-class";
+//-------------------------------------------------------------------------
+void SvgObject::add(Ptr obj) {
+	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
+	if (!g)
+		return;
+	graphicElements::GraphicElement::Ptr gO = obj->getGraphicElement();
+	g->connectElements(getGraphicElement(), gO);
+}
 //-----------------------------------------------------------------------------
 void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	binder.registerAttribute

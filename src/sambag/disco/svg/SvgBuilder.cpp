@@ -67,7 +67,9 @@ void SvgBuilder::registerSvgAttributes() {
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 {
-	SvgRoot::Ptr root = SvgRoot::create();
+	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
+	SvgRoot::Ptr root = SvgRoot::create(g.get());
+	xml2Obj.setClosure(g.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
 	xml2Obj.addObjectCreatedSlot(f);
@@ -76,7 +78,9 @@ SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
 {
-	SvgRoot::Ptr root = SvgRoot::create();
+	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
+	SvgRoot::Ptr root = SvgRoot::create(g.get());
+	xml2Obj.setClosure(g.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
 	xml2Obj.addObjectCreatedSlot(f);

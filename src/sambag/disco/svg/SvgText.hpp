@@ -38,9 +38,12 @@ public:
 		return text;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create() {
+	static Ptr create(graphicElements::SceneGraph *g = NULL) {
 		Ptr neu(new SvgText());
 		neu->__setSelf(neu);
+		if (!g)
+			return neu;
+		neu->setRelatedSceneGraph(g->getPtr());
 		return neu;
 	}
 	//-------------------------------------------------------------------------

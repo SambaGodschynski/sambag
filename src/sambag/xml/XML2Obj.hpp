@@ -13,14 +13,15 @@
 
 namespace sambag { namespace xml {
 //=============================================================================
-/**  XML2Object Parser:
+/** @class XML2Object Parser:
   Builds an object structure using a given XML string.
   You can regsiter a class related to a tag name.
   You have to set a object base class as template argument.
   Every registered object has to be an virtual subobject of this base class.
   Every base class object has to implement an add( BaseClass::Ptr obj ) method.
   Every base class has to define a Ptr typedef which is a shared_ptr type.
-  Every object class has to implement a static create() method
+  Every object class has to implement a static create()
+  respective a create(ClosureType*) method dependent whether a ClosureType is setted.
   Every object class has to implement a setTagName( string txt ) method.
   which returns a Ptr object.
   You can register an attributes with an attributeType a tag class and the
@@ -31,7 +32,18 @@ namespace sambag { namespace xml {
   boost::signal will be sent.
 */
 //=============================================================================
-template<typename BaseType>
+struct NoClosureType{};
+template <typename ObjectType, typename ClosureType>
+typename ObjectType::Ptr _create(ObjectType* alwaysNULL, ClosureType*closure) {
+	return typename ObjectType::Ptr( ObjectType::create(closure) );
+}
+//-----------------------------------------------------------------------------
+template <typename ObjectType>
+typename ObjectType::Ptr _create(ObjectType* alwaysNULL, NoClosureType*) {
+	return typename ObjectType::Ptr( ObjectType::create() );
+}
+//=============================================================================
+template<typename BaseType, typename ClosureType=NoClosureType>
 class XML2Object {
 public:
 	//-------------------------------------------------------------------------
@@ -41,6 +53,8 @@ public:
 	//-------------------------------------------------------------------------
 	CreatedSignal sObjCreated;
 private:
+	//-------------------------------------------------------------------------
+	ClosureType *closure[1];
 	//#########################################################################
 	// Object Creation:
 	//-------------------------------------------------------------------------
@@ -51,8 +65,11 @@ private:
 	template<typename ObjectType>
 	struct ObjectFactory: public IObjectFactory {
 		//---------------------------------------------------------------------
+		ClosureType **closure;
+		//---------------------------------------------------------------------
 		virtual typename BaseType::Ptr create() {
-			return typename BaseType::Ptr(ObjectType::create());
+			ObjectType* t=NULL; // dummy for function matching
+			return _create(t, *closure);
 		}
 	};
 	//-------------------------------------------------------------------------
@@ -173,6 +190,25 @@ private:
 	}
 public:
 	//--------------------------------------------------------------------------
+	void setClosure(ClosureType *_closure) {
+		closure[0] = _closure;
+	}
+	//--------------------------------------------------------------------------
+	/**
+	 * XML2Object<BaseObject, ClosureType=NO_TYPE>
+	 * Closure is a pointer which comes as parameter for the
+	 * ObjectType::create() method. If no ClosureType setted this create
+	 * will be called without this closure parameter.
+	 * @param closure
+	 */
+	XML2Object(ClosureType *closure=NULL) {
+		setClosure(closure);
+	}
+	//--------------------------------------------------------------------------
+	const ClosureType * const getClosure() const {
+		return *closure;
+	}
+	//--------------------------------------------------------------------------
 	// frees IOBjectFactory objects
 	~XML2Object() {
 		//release IFactory Objects
@@ -201,11 +237,14 @@ public:
 	template<typename ObjectType>
 	void registerObject(const std::string &tagName) {
 		using namespace boost::algorithm;
-		IObjectFactory *fact = new ObjectFactory<ObjectType> ();
+		ObjectFactory<ObjectType> *fact = new ObjectFactory<ObjectType> ();
+		fact->closure = closure;
 		tagMap.insert(std::make_pair(to_lower_copy(tagName), fact));
 	}
 	//-------------------------------------------------------------------------
 	/**
+	 * TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
+	 *
 	 * @param xml:  a valid xml document as string
 	 * @param givenRoot: you are able to use a already created root element.
 	 * @return the root object containing a object representation of the xml structure.
@@ -220,6 +259,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
+	 * TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
+	 *
 	 * @param xml: location of a valid xml document.
 	 * @param givenRoot: you are able to use a already created root element.
 	 * @return the root object containing a object representation of the xml structure.

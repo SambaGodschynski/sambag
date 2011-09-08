@@ -16,8 +16,7 @@
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 /**
- * class SvgBuilder creates SvgGraphicElement object structure with
- * SVG data.
+ * @class SvgBuilder creates GraphicElement sceneGraph structure.
  */
 class SvgBuilder {
 //=============================================================================

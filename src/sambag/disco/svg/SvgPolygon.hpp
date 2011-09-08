@@ -39,9 +39,12 @@ public:
 		return path;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create() {
+	static Ptr create(graphicElements::SceneGraph *g = NULL) {
 		Ptr neu(new SvgPolygon());
 		neu->__setSelf(neu);
+		if (!g)
+			return neu;
+		neu->setRelatedSceneGraph(g->getPtr());
 		return neu;
 	}
 	//-------------------------------------------------------------------------

@@ -14,8 +14,8 @@
 #include "sambag/xml/XML2Obj.hpp"
 #include "AttributeParser.hpp"
 #include "boost/flyweight.hpp"
+#include "sambag/disco/graphicElements/SceneGraph.hpp"
 #include "StyleParser.hpp"
-#include "sambag/xml/DomObject.hpp"
 #include <list>
 
 
@@ -31,7 +31,7 @@ class SvgRoot;
 *  SvgObjects are for creating Graphic Elements
 *  via XML2Object.
 */
-class SvgObject : public xml::DomObject {
+class SvgObject {
 //=============================================================================
 friend class SvgRoot;
 public:
@@ -39,7 +39,7 @@ public:
 	/**
 	 * needed for registerAttributes()
 	 */
-	typedef sambag::xml::XML2Object<SvgObject> BuilderType;
+	typedef sambag::xml::XML2Object<SvgObject, SceneGraph> BuilderType;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<SvgObject> Ptr;
 	//-------------------------------------------------------------------------
@@ -79,6 +79,14 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	WPtr svgRootObject;
+	//-------------------------------------------------------------------------
+	std::string tagName;
+	//-------------------------------------------------------------------------
+	std::string idName;
+	//-------------------------------------------------------------------------
+	std::string className;
+	//-------------------------------------------------------------------------
+	graphicElements::SceneGraph::Ptr sceneGraph;
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -102,9 +110,25 @@ public:
 		obj->copyStyleFrom(b);
 	}
 	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return __self.lock();
+	}
+	//-------------------------------------------------------------------------
+	void setRelatedSceneGraph(SceneGraph::Ptr ptr) {
+		sceneGraph = ptr;
+		if (sceneGraph)
+			sceneGraph->addElement(getGraphicElement());
+	}
+	//-------------------------------------------------------------------------
+	SceneGraph::Ptr getRelatedSceneGraph() const {
+		return sceneGraph;
+	}
+	//-------------------------------------------------------------------------
 	Ptr getRoot() const {
 		return svgRootObject.lock();
 	}
+	//-------------------------------------------------------------------------
+	virtual void setXmlText(const std::string &str) {}
 	//-------------------------------------------------------------------------
 	/**
 	* @return the GraphicElement object which is contained by the SVG object
@@ -125,11 +149,21 @@ public:
 		return obj->getTransformMatrix();
 	}
 	//-------------------------------------------------------------------------
-	virtual void add(Ptr obj) {
-		addDomChild(obj);
-	}
+	virtual void add(Ptr obj);
 	//-------------------------------------------------------------------------
 	virtual ~SvgObject(){}
+	//-------------------------------------------------------------------------
+	virtual void setTagName(const std::string & str) { tagName = str; }
+	//-------------------------------------------------------------------------
+	virtual void setClassName(const std::string & str) { className = str; }
+	//-------------------------------------------------------------------------
+	virtual void setIdName(const std::string & str) { idName = str; }
+	//-------------------------------------------------------------------------
+	const std::string & getTagName() const { return tagName; }
+	//-------------------------------------------------------------------------
+	const std::string & getClassName() const { return className; }
+	//-------------------------------------------------------------------------
+	const std::string & getIdName() const { return idName; }
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeWidth_tag::Type &width, const StrokeWidth_tag&)

@@ -76,6 +76,13 @@ void TestSvg::testSvgFirstElements() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);
+	//>>>>>>>>>>>>>>>>>>>>>> scene graph TODO:temp. test=>until graph fully impl.
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	CPPUNIT_ASSERT(g);
+	typedef std::list<graphicElements::SceneGraph::Vertex> Vertices;
+	Vertices vertices;
+	g->getElementsSorted<Vertices>(vertices);
+	CPPUNIT_ASSERT_EQUAL((size_t)10, vertices.size());
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform01() {

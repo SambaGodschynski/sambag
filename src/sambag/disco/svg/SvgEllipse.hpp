@@ -40,9 +40,12 @@ public:
 		return ellipse;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create() {
+	static Ptr create(graphicElements::SceneGraph *g = NULL) {
 		Ptr neu(new SvgEllipse());
 		neu->__setSelf(neu);
+		if (!g)
+			return neu;
+		neu->setRelatedSceneGraph(g->getPtr());
 		return neu;
 	}
 	//-------------------------------------------------------------------------
