@@ -5,14 +5,19 @@
 #include <stack>
 #include <iostream>
 #include <boost/assign/std/list.hpp>
+#include <boost/algorithm/string.hpp>
+#include <string>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::ComTests );
 
 using namespace sambag;
 
-const com::Location TEST_FOLDERS = com::Location(__FILE__).parent_path().string()
-								   + std::string("/TestFolders"); 
+const std::string FILENAME = boost::algorithm::erase_all_copy( std::string(__FILE__), std::string("../") );
+
+const com::Location TEST_FOLDERS = boost::filesystem::complete(
+		com::Location(FILENAME).parent_path().string() + std::string("/TestFolders")
+	);
 
 //=============================================================================
 // compares directory iteration with ExpectedTree;
@@ -26,7 +31,7 @@ struct WalkerVis : public com::IWalkerVisitor {
 	size_t numDirs, numFiles;
 	//-------------------------------------------------------------------------
 	WalkerVis( bool abortAfter2Files = false) : 
-		numDirs(0), numFiles(0), abortAfter2Files(abortAfter2Files), abort(false) {}
+		abort(false), abortAfter2Files(abortAfter2Files), numDirs(0), numFiles(0) {}
 	//-------------------------------------------------------------------------	
 	// called while starting iterate path. If returned with false scanning path will be skipped.
 	virtual bool changeDirectory ( const com::Location & path ) {	

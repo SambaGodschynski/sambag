@@ -14,7 +14,6 @@ void dirWalker ( const Location &loc, IWalkerVisitor &vis, bool *abort ) {
 	using namespace com;
 	using namespace boost;	
 	using namespace filesystem; // boost::filesystem	
-	int files = 0;
 	if ( !exists( loc ) ) return;
 	directory_iterator end_it;
 	directory_iterator it(loc);

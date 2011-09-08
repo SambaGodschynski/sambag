@@ -14,7 +14,7 @@ void VectorNTest::testConstructor() {
 	using namespace sambag;
 	math::VectorN<float, 3 > v;
 	math::VectorN<int, 2 > v2;
-	math::VectorN<int, 500 > v3;
+	math::VectorN<int, 50 > v3;
 	CPPUNIT_ASSERT_EQUAL( 0.0f, v.get<1>() );
 	CPPUNIT_ASSERT_EQUAL( 0.0f, v.get<2>() );
 	CPPUNIT_ASSERT_EQUAL( 0.0f, v.get<3>() );
@@ -40,9 +40,22 @@ void VectorNTest::testOperations() {
 	Vector3D v2 = math::createVector<T>(  1.5f, 2.5f, 3.5f);
 	Vector3D ist = v1 + v2;
 	Vector3D soll = math::createVector<T>( 2.6f, 4.7f, 6.8f);
-	bool b = ist == soll;
-    //CPPUNIT_ASSERT_EQUAL ( ist, soll );
-	CPPUNIT_ASSERT( b );
+    CPPUNIT_ASSERT ( ist == soll );
+}
+//=============================================================================
+void VectorNTest::testCompare() {
+//=============================================================================
+	using namespace sambag;
+	typedef float T;
+	typedef math::VectorN<T, 3> Vector3D;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add
+	Vector3D v1 = math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	Vector3D v11 = math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	Vector3D v2 = math::createVector<T>(  1.5f, 2.5f, 3.5f);
+
+	CPPUNIT_ASSERT ( v1 == v11 );
+	CPPUNIT_ASSERT ( v1 != v2 );
+
 }
 //=============================================================================
 void VectorNTest::testCreators() {

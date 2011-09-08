@@ -118,6 +118,10 @@ public:
 		return get<N>() == v.get<N>() && PrevVectorType::operator==(v);
 	}
 	//--------------------------------------------------------------------------
+	bool operator!=(const VectorN<ContentType, N> &v) const {
+		return !(*this == v);
+	}
+	//--------------------------------------------------------------------------
 	ContentType abs() const {
 		return sqrt( *this * *this ); 
 	}

@@ -13,6 +13,7 @@ class VectorNTest : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST( testToString );
 	CPPUNIT_TEST( testOperations );
 	CPPUNIT_TEST( testCreators );
+	CPPUNIT_TEST( testCompare );
 	CPPUNIT_TEST_SUITE_END();
 private:
 public:
@@ -21,6 +22,7 @@ public:
 	void testConstructor();
 	void testOperations();
 	void testCreators();
+	void testCompare();
 	void testToString();
 };
 } // namespace tests
