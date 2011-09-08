@@ -24,13 +24,30 @@ class SvgRoot : public SvgCompound {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<SvgRoot> Ptr;
+	//#########################################################################
+	// TODO: create a svg element database class:
+	//       -- getElementById
+	//       -- getElementByClass
+	//       -- getElementByTag
+	//#########################################################################
 	//-------------------------------------------------------------------------
 	// all svg objects with a id are stored here
 	typedef std::map<IdType, SvgObject::Ptr> IdMap;
 	//-------------------------------------------------------------------------
 	// all svg class with a id are stored here
 	typedef std::multimap<IdType, SvgObject::Ptr> ClassMap;
+	//-------------------------------------------------------------------------
+	/**
+	 * TODO: workaround; use future SvgElementDatabase instead
+	 */
+	typedef std::list<SvgObject::Ptr> Svgs;
+	Svgs svgs;
 private:
+	//-------------------------------------------------------------------------
+	/**
+	 * Initiates svg objects. eg
+	 */
+	virtual void init();
 	//-------------------------------------------------------------------------
 	IdMap idMap;
 	//-------------------------------------------------------------------------

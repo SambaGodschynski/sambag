@@ -14,6 +14,7 @@
 #include "sambag/xml/XML2Obj.hpp"
 #include "AttributeParser.hpp"
 #include "boost/flyweight.hpp"
+#include "StyleParser.hpp"
 #include <list>
 
 
@@ -72,6 +73,8 @@ public:
 	struct FontStyle_tag { typedef Font::Slant Type; };
 	//-------------------------------------------------------------------------
 	struct OpacityStyle_tag { typedef std::string Type; };
+	//-------------------------------------------------------------------------
+	struct Style_tag { typedef disco::graphicElements::Style Type; };
 	// TODO: more style tags
 private:
 	//-------------------------------------------------------------------------
@@ -196,6 +199,14 @@ public:
 		AttributeParser::parseOpacity(strV, v);
 		neu.opacity(v);
 		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const Style_tag::Type &style, const Style_tag&)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		copyStyleToGraphicElement(style);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
 	//-------------------------------------------------------------------------

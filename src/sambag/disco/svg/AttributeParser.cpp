@@ -18,82 +18,7 @@
 
 namespace {
 using namespace sambag::disco;
-//-----------------------------------------------------------------------------
-/**
- * Prepares string for further processing. such as trim, to_lower ...
- * @param inout
- * @return prepared string
- */
-std::string & prepareString(std::string &inout, bool toLower = true) {
-	boost::algorithm::trim(inout);
-	if (toLower)
-		boost::algorithm::to_lower(inout);
-	return inout;
-}
-//-----------------------------------------------------------------------------
-int hex2Int ( const std::string &hex) {
-	int x = 0;
-	std::stringstream ss;
-	ss << std::hex << hex;
-	ss >> x;
-	return x;
-}
-//-----------------------------------------------------------------------------
-/**
- * copies whole istream content to out string.
- * @param istr
- * @param out
- */
-void getWholeString( std::istream& istr, std::string &out ) {
-	istr>>out;
-	while ( !istr.eof() ) {
-		std::string n;
-		istr>>n;
-		out+= " " + n;
-	}
-}
-//-----------------------------------------------------------------------------
-Number string2Number(const std::string &str) {
-	std::stringstream ss;
-	ss<<str;
-	Number n;
-	ss>>n;
-	return n;
-}
-//-----------------------------------------------------------------------------
-/**
- * Converts Container<string>:in to Container<Number>:out.
- * out will be empty if one convertion failed.
- * @param in
- * @param out
- */
-template <typename StrContainer, typename NumberContainer>
-void strings2Numbers(const StrContainer &in, NumberContainer &out) {
-	for_each( const std::string &str, in ) {
-		std::stringstream ss;
-		ss<<str;
-		Number n;
-		ss>>n;
-		if (ss.fail() || !ss.eof()) {
-			out.clear();
-			return;
-		}
-		out.push_back(n);
-	}
-}
-/**
- * gets values string such as "3, 4.5, 3" into Container of Numbers
- * @param values
- * @param out
- */
-template< typename Container >
-void getValuesFromString( const std::string &_values, Container &out ) {
-	std::string values = boost::algorithm::trim_copy(_values);
-	std::vector<std::string> strs;
-	boost::algorithm::split_regex( strs, values, boost::regex( "\\s*,\\s*|\\s+" ) ) ;
-	if (strs.empty()) return;
-	strings2Numbers<std::vector<std::string>, Container >(strs, out);
-}
+using namespace sambag::disco::svg;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>transfomation
 //-----------------------------------------------------------------------------
 void transformTransl(const std::vector<Number> &values, Matrix& m) {
@@ -166,7 +91,7 @@ void transformMatr(const std::vector<Number> &values, Matrix& m) {
 void processTransformStrings( const std::string &cmd, const std::string &values, Matrix& matrix ) {
 	// split components of value string
 	std::vector<Number> v;
-	getValuesFromString< std::vector<Number> >(values, v);
+	AttributeParser::getValuesFromString< std::vector<Number> >(values, v);
 	if (v.empty()) return;
 	// select fitting transformation
 	if (cmd=="translate")
@@ -191,7 +116,7 @@ void processPathStrings(
 	using namespace graphicElements::pathInstruction;
 	if (cmd=="") return;
 	PointContainer pC;
-	getValuesFromString<PointContainer>(values, pC);
+	AttributeParser::getValuesFromString<PointContainer>(values, pC);
 	pI.push_back( std::make_pair(
 		pC,
 		svg::AttributeParser::getPathInstruction(cmd)
@@ -327,6 +252,83 @@ AttributeParser::getPathInstruction( const std::string &op )
 		return pathInstruction::NONE;
 	return it->second;
 }
+//-----------------------------------------------------------------------------
+/**
+ * Prepares string for further processing. such as trim, to_lower ...
+ * @param inout
+ * @return prepared string
+ */
+std::string &
+AttributeParser::prepareString(std::string &inout, bool toLower) {
+	boost::algorithm::trim(inout);
+	if (toLower)
+		boost::algorithm::to_lower(inout);
+	return inout;
+}
+//-----------------------------------------------------------------------------
+int AttributeParser::hex2Int ( const std::string &hex) {
+	int x = 0;
+	std::stringstream ss;
+	ss << std::hex << hex;
+	ss >> x;
+	return x;
+}
+//-----------------------------------------------------------------------------
+/**
+ * copies whole istream content to out string.
+ * @param istr
+ * @param out
+ */
+void AttributeParser::getWholeString( std::istream& istr, std::string &out ) {
+	istr>>out;
+	while ( !istr.eof() ) {
+		std::string n;
+		istr>>n;
+		out+= " " + n;
+	}
+}
+//-----------------------------------------------------------------------------
+Number AttributeParser::string2Number(const std::string &str) {
+	std::stringstream ss;
+	ss<<str;
+	Number n;
+	ss>>n;
+	return n;
+}
+//-----------------------------------------------------------------------------
+/**
+ * Converts Container<string>:in to Container<Number>:out.
+ * out will be empty if one convertion failed.
+ * @param in
+ * @param out
+ */
+template <typename StrContainer, typename NumberContainer>
+void AttributeParser::strings2Numbers(const StrContainer &in, NumberContainer &out) {
+	for_each( const std::string &str, in ) {
+		std::stringstream ss;
+		ss<<str;
+		Number n;
+		ss>>n;
+		if (ss.fail() || !ss.eof()) {
+			out.clear();
+			return;
+		}
+		out.push_back(n);
+	}
+}
+/**
+ * gets values string such as "3, 4.5, 3" into Container of Numbers
+ * @param values
+ * @param out
+ */
+template< typename Container >
+void AttributeParser::getValuesFromString( const std::string &_values, Container &out ) {
+	std::string values = boost::algorithm::trim_copy(_values);
+	std::vector<std::string> strs;
+	boost::algorithm::split_regex( strs, values, boost::regex( "\\s*,\\s*|\\s+" ) ) ;
+	if (strs.empty()) return;
+	strings2Numbers<std::vector<std::string>, Container >(strs, out);
+}
 }}} // namespaces
 
 //=============================================================================
@@ -336,7 +338,7 @@ AttributeParser::getPathInstruction( const std::string &op )
 std::istream & operator>>(std::istream& istr, sambag::com::ColorRGBA& color) {
 	using namespace sambag::disco::svg;
 	std::string str;
-	getWholeString(istr, str);
+	AttributeParser::getWholeString(istr, str);
 	AttributeParser::parseColor(str, color);
 	return istr;
 }
@@ -344,8 +346,8 @@ std::istream & operator>>(std::istream& istr, sambag::com::ColorRGBA& color) {
 std::istream & operator>>(std::istream& istr, sambag::disco::Font::Weight &weight) {
 	using namespace sambag::disco;
 	std::string in;
-	getWholeString(istr, in);
-	prepareString(in);
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in);
 	if (in=="bold") weight = Font::WEIGHT_BOLD;
 	else weight = Font::WEIGHT_NORMAL;
 	return istr;
@@ -355,8 +357,8 @@ std::istream & operator>>(std::istream& istr, sambag::disco::Font::Weight &weigh
 std::istream & operator>>(std::istream& istr, sambag::disco::Font::Slant &slant) {
 	using namespace sambag::disco;
 	std::string in;
-	getWholeString(istr, in);
-	prepareString(in);
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in);
 	if (in=="italic") slant = Font::SLANT_ITALIC; return istr;
 	if (in=="oblique") slant = Font::SLANT_OBLIQUE; return istr;
 	slant = Font::SLANT_NORMAL;
@@ -366,7 +368,7 @@ std::istream & operator>>(std::istream& istr, sambag::disco::Font::Slant &slant)
 std::istream & operator>>(std::istream& istr, sambag::com::Matrix &m) {
 	using namespace sambag::disco::svg;
 	std::string str;
-	getWholeString(istr, str);
+	AttributeParser::getWholeString(istr, str);
 	m = IDENTITY_MATRIX;
 	AttributeParser::parseTransform(str, m);
 	return istr;
@@ -378,7 +380,7 @@ std::istream & operator>>(
 {
 	using namespace sambag::disco::svg;
 	std::string str;
-	getWholeString(istr, str);
+	AttributeParser::getWholeString(istr, str);
 	AttributeParser::parsePathInstructions(str, pI);
 	return istr;
 }
@@ -389,7 +391,7 @@ std::istream & operator>>(
 {
 	using namespace sambag::disco::svg;
 	std::string str;
-	getWholeString(istr, str);
+	AttributeParser::getWholeString(istr, str);
 	AttributeParser::parsePointContainer(str, pC);
 	return istr;
 }

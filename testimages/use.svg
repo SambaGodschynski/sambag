@@ -19,5 +19,11 @@
     </defs> 
     <use xlink:href="#baseEllipses" fill="none"/> 
     <use xlink:href="#baseEllipses" transform="translate(100,100) scale(1.5,1.5)" fill="yellow"/>
+    <use xlink:href="#nerd" font-family="monospaced"/>
+    <!--defs after use tags-->
+    <defs>
+	<text id="nerd" x="425" y="145" font-size="120" stroke-width="4" fill="lightblue" stroke="black">N.E.R.D  1.0</text>
+    </defs>
+
 </svg> 
  

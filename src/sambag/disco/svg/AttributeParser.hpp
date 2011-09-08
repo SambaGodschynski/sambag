@@ -9,10 +9,6 @@
 #define ATTRIBUTE_PARSER_HPP_
 
 #include "sambag/com/Common.hpp"
-#include <boost/algorithm/string.hpp>
-#include <sstream>
-#include <string>
-#include <map>
 #include "sambag/disco/Font.hpp"
 #include "sambag/disco/graphicElements/PointContainer.hpp"
 
@@ -64,6 +60,41 @@ public:
 	static pathInstruction::InstructionOp getPathInstruction(const std::string&);
 	//-------------------------------------------------------------------------
 	static const ColorRGBA & getColorByHtmlName( const std::string &name );
+	//-------------------------------------------------------------------------
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>helper
+	/**
+	 * Prepares string for further processing. such as trim, to_lower ...
+	 * @param inout
+	 * @return prepared string
+	 */
+	static std::string & prepareString(std::string &inout, bool toLower = true);
+	//-------------------------------------------------------------------------
+	static int hex2Int ( const std::string &hex);
+	//-------------------------------------------------------------------------
+	/**
+	 * copies whole istream content to out string.
+	 * @param istr
+	 * @param out
+	 */
+	static void getWholeString( std::istream& istr, std::string &out );
+	//-------------------------------------------------------------------------
+	static Number string2Number(const std::string &str);
+	//-------------------------------------------------------------------------
+	/**
+	 * Converts Container<string>:in to Container<Number>:out.
+	 * out will be empty if one convertion failed.
+	 * @param in
+	 * @param out
+	 */
+	template <typename StrContainer, typename NumberContainer>
+	static void strings2Numbers(const StrContainer &in, NumberContainer &out);
+	/**
+	 * gets values string such as "3, 4.5, 3" into Container of Numbers
+	 * @param values
+	 * @param out
+	 */
+	template< typename Container >
+	static void getValuesFromString( const std::string &_values, Container &out );
 };
 
 }}} // namespaces
