@@ -15,7 +15,7 @@
 #include "AttributeParser.hpp"
 #include "boost/flyweight.hpp"
 #include "StyleParser.hpp"
-#include "DomObject.hpp"
+#include "sambag/xml/DomObject.hpp"
 #include <list>
 
 
@@ -27,11 +27,11 @@ namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
 //=============================================================================
 /** 
-*  Class SVG.
+*  @class SVG.
 *  SvgObjects are for creating Graphic Elements
 *  via XML2Object.
 */
-class SvgObject : public DomObject {
+class SvgObject : public xml::DomObject {
 //=============================================================================
 friend class SvgRoot;
 public:
@@ -79,14 +79,6 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	WPtr svgRootObject;
-	//-------------------------------------------------------------------------
-	IdType _id;
-	//-------------------------------------------------------------------------
-	ClassType _class;
-	//-------------------------------------------------------------------------
-	static IdType NULL_ID;
-	//-------------------------------------------------------------------------
-	static IdType NULL_CLASS;
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -94,7 +86,7 @@ protected:
 	 */
 	virtual void init(){}
 	//-------------------------------------------------------------------------
-	SvgObject() : _id(NULL_ID), _class(NULL_CLASS) {}
+	SvgObject() {}
 	//-------------------------------------------------------------------------
 	boost::weak_ptr<SvgObject> __self;
 	//-------------------------------------------------------------------------
@@ -138,10 +130,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgObject(){}
-	//-------------------------------------------------------------------------
-	const IdType & getId() { return _id; }
-	//-------------------------------------------------------------------------
-	const ClassType & getClass() { return _class; }
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeWidth_tag::Type &width, const StrokeWidth_tag&)
@@ -176,12 +164,12 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const Id_tag::Type &v, const Id_tag&)
 	{
-		_id = v;
+		setIdName(v);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Class_tag::Type &v, const Class_tag&)
 	{
-		_class = v;
+		setClassName(v);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Transform_tag::Type &v, const Transform_tag&)

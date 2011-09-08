@@ -12,7 +12,7 @@
 #include "ticpp/ticpp.h"
 
 namespace sambag { namespace xml {
-//==============================================================================
+//=============================================================================
 /**  XML2Object Parser:
   Builds an object structure using a given XML string.
   You can regsiter a class related to a tag name.
@@ -21,7 +21,7 @@ namespace sambag { namespace xml {
   Every base class object has to implement an add( BaseClass::Ptr obj ) method.
   Every base class has to define a Ptr typedef which is a shared_ptr type.
   Every object class has to implement a static create() method
-  Every object class has to implement a setXmlText( string txt ) method.
+  Every object class has to implement a setTagName( string txt ) method.
   which returns a Ptr object.
   You can register an attributes with an attributeType a tag class and the
   Object Type which have a set( attributeType value, TagClass ) method.
@@ -30,37 +30,37 @@ namespace sambag { namespace xml {
   When object created and all attributes setted a "object created"
   boost::signal will be sent.
 */
-//==============================================================================
+//=============================================================================
 template<typename BaseType>
 class XML2Object {
 public:
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	typedef boost::signal<void(typename BaseType::Ptr)> CreatedSignal;
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	typedef boost::function<void(typename BaseType::Ptr)> CreatedSignalFunction;
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	CreatedSignal sObjCreated;
 private:
-	//############################################################################
+	//#########################################################################
 	// Object Creation:
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	struct IObjectFactory {
 		virtual typename BaseType::Ptr create() = 0;
 	};
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	template<typename ObjectType>
 	struct ObjectFactory: public IObjectFactory {
-		//--------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		virtual typename BaseType::Ptr create() {
 			return typename BaseType::Ptr(ObjectType::create());
 		}
 	};
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	// relation from tagname to object factory
 	typedef std::string TagName;
 	typedef boost::unordered_map<TagName, IObjectFactory*> TagMap;
 	TagMap tagMap;
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	typename BaseType::Ptr buildObject(const ticpp::Element &el) {
 		using namespace boost::algorithm;
 		typename TagMap::iterator it = tagMap.find(to_lower_copy(el.Value()));
@@ -69,15 +69,15 @@ private:
 		typename BaseType::Ptr obj = it->second->create();
 		return obj;
 	}
-	//############################################################################
+	//#########################################################################
 	// Attribute Setter
 	//
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	struct IAttributeSetter {
 		virtual void set(typename BaseType::Ptr obj,
 				const std::string &attrValue) = 0;
 	};
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	template<typename AttrType, typename TagClassType, typename ObjectType>
 	struct AttributeSetter: public IAttributeSetter {
 		virtual void set(typename BaseType::Ptr obj,
@@ -92,7 +92,7 @@ private:
 			tObj->set(value, TagClassType());
 		}
 	};
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	template<typename TagClassType, typename ObjectType>
 	struct AttributeSetter<std::string, TagClassType, ObjectType> : public IAttributeSetter {
 		virtual void set(typename BaseType::Ptr obj,
@@ -103,11 +103,11 @@ private:
 			tObj->set(strValue, TagClassType());
 		}
 	};
-	//---------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	typedef std::string AttributeName;
 	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
 	AttributeMap attrMap;
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	void setAttribute(typename BaseType::Ptr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
 		typedef typename AttributeMap::iterator It;
@@ -117,7 +117,7 @@ private:
 			it->second->set(obj, attr.Value());
 		}
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	void setAttributes(typename BaseType::Ptr obj, const ticpp::Element &el) {
 		ticpp::Iterator < ticpp::Attribute > attribute;
 		attribute = attribute.begin(&el);
@@ -125,9 +125,9 @@ private:
 			setAttribute(obj, *attribute);
 		}
 	}
-	//############################################################################
+	//#########################################################################
 	// building
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	/**
 	 *  walks rekursively through xml element structure and creates objects if
 	 *  tagnames are registered.
@@ -156,7 +156,7 @@ private:
 		sObjCreated(node); // fire objCreated signal
 		return node;
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	/**
 	 * builds object structure. Container has to append ObjectType objects
 	 * with a push_back method.
@@ -172,7 +172,7 @@ private:
 		return walk(*pElem, givenRoot);
 	}
 public:
-	//----------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// frees IOBjectFactory objects
 	~XML2Object() {
 		//release IFactory Objects
@@ -188,15 +188,15 @@ public:
 			atIt->second = NULL;
 		}
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	CreatedSignal & getCreatedSignal() const {
 		return sObjCreated;
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	boost::signals::connection addObjectCreatedSlot(CreatedSignalFunction f) {
 		return sObjCreated.connect(f);
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	// register object type with related tag string
 	template<typename ObjectType>
 	void registerObject(const std::string &tagName) {
@@ -204,7 +204,7 @@ public:
 		IObjectFactory *fact = new ObjectFactory<ObjectType> ();
 		tagMap.insert(std::make_pair(to_lower_copy(tagName), fact));
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	/**
 	 * @param xml:  a valid xml document as string
 	 * @param givenRoot: you are able to use a already created root element.
@@ -218,7 +218,7 @@ public:
 		doc.Parse(xml);
 		return build(doc, givenRoot);
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	/**
 	 * @param xml: location of a valid xml document.
 	 * @param givenRoot: you are able to use a already created root element.
@@ -232,7 +232,7 @@ public:
 		doc.LoadFile();
 		return build(doc, givenRoot);
 	}
-	//----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	/**
 	 * template: AttrType,
 	 *           TagClassType,

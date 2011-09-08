@@ -28,12 +28,12 @@ void SvgRoot::subObjectCreated( SvgObject::Ptr newObject ) {
 	SvgObject::Ptr self = __self.lock();
 	newObject->svgRootObject = self;
 	// register id if exists
-	if (newObject->getId() != NULL_ID) {
-		idMap.insert( std::make_pair("#" + newObject->getId(), newObject));
+	if (newObject->getIdName() != "") {
+		idMap.insert( std::make_pair("#" + newObject->getIdName(), newObject));
 	}
 	// register class if exists
-	if (newObject->getClass() != NULL_CLASS) {
-		classMap.insert( std::make_pair(newObject->getClass(), newObject));
+	if (newObject->getClassName() != "") {
+		classMap.insert( std::make_pair(newObject->getClassName(), newObject));
 	}
 	svgs.push_back(newObject);
 }

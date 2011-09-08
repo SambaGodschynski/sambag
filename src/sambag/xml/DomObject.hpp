@@ -13,29 +13,20 @@
 #include <list>
 
 namespace sambag { namespace xml {
-	template <typename T>
-	class XML2Object;
-}} // namespace
-
-namespace sambag { namespace disco { namespace svg {
 //=============================================================================
-class SvgObject;
 class DomIterator;
-typedef boost::shared_ptr<DomIterator> DomIteratorPtr;
 //=============================================================================
 /**
-*  Class DomObject.
+*  @class DomObject.
 *  What it does:
 *      - representing the svg structure as object model
-*      - accessing to objects via iterators
+*      - accessing to objects via css style expressions such as:".classA object"
 *  What it not does:
 *      - changing objects structure
 *      - access to attributes
 */
 class DomObject  {
 //=============================================================================
-friend class sambag::xml::XML2Object<SvgObject>;
-friend class PrivateIterator;
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<DomObject> Ptr;
@@ -46,9 +37,9 @@ private:
 	//-------------------------------------------------------------------------
 	std::string tagName;
 	//-------------------------------------------------------------------------
-	virtual void setXmlText( const std::string & str) {
-		tagName = str;
-	}
+	std::string idName;
+	//-------------------------------------------------------------------------
+	std::string className;
 	//-------------------------------------------------------------------------
 	DomObjects children;
 protected:
@@ -58,10 +49,33 @@ protected:
 	}
 public:
 	//-------------------------------------------------------------------------
-	DomIteratorPtr allSiblingObjects();
-
+	void find(const std::string &expr, DomObjects &outList);
+	//-------------------------------------------------------------------------
+	virtual void setTagName(const std::string & str) {
+		tagName = str;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setClassName(const std::string & str) {
+		idName = str;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setIdName(const std::string & str) {
+		className = str;
+	}
+	//-------------------------------------------------------------------------
+	const std::string & getTagName() const {
+		return tagName;
+	}
+	//-------------------------------------------------------------------------
+	const std::string & getClassName() const {
+		return className;
+	}
+	//-------------------------------------------------------------------------
+	const std::string & getIdName() const {
+		return idName;
+	}
 };
 
-}}} // namespace
+}} // namespace
 
 #endif /* DOMOBJECT_HPP_ */
