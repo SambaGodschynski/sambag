@@ -52,6 +52,8 @@ public:
 	//-------------------------------------------------------------------------
 	static void parsePathInstructions(const std::string &str, PathInstructions&);
 	//-------------------------------------------------------------------------
+	static void parseOpacity(const std::string &str, Number &v);
+	//-------------------------------------------------------------------------
 	static void parsePointContainer(const std::string &str, PointContainer&);
 	//-------------------------------------------------------------------------
 	/**

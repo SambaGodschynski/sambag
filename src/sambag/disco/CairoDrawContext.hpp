@@ -206,6 +206,12 @@ public:
 	virtual void fillPreserve() {
 		cairo_fill_preserve(context);
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * draws an image. Png's are currently accepted only.
+	 * @param a CairoDataHandler all others will be ignored.
+	 */
+	virtual void drawImage(IDataHandler&);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) {

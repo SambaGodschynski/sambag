@@ -10,16 +10,6 @@
 
 #include "sambag/disco/IDrawContext.hpp"
 
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// Fly weight switch
-#define USE_DISCO_STYLE_FLY_WEIGHT
-#ifndef USE_DISCO_STYLE_FLY_WEIGHT
-#define FLYWEIGHT(type, name) boost::flyweight<type> name
-#else
-#define FLYWEIGHT(type, name) type name
-#endif
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 // hash functions first ...
 namespace boost {
 extern size_t hash_value(const sambag::com::ColorRGBA &o);
@@ -29,9 +19,22 @@ extern size_t hash_value(const sambag::disco::Font &o);
 // .. then boost flyweight
 #include <boost/flyweight.hpp>
 
-namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
-// A container for styling information.
+// Flyweight Switch
+//=============================================================================
+#define DISCO_USE_FLYWEIGHT
+#ifdef DISCO_USE_FLYWEIGHT
+#define FLYWEIGHT(type, name) boost::flyweight<type> (name)
+#else
+#define FLYWEIGHT(type, name) type (name)
+#endif
+
+namespace sambag { namespace disco { namespace graphicElements {
+
+//=============================================================================
+/**
+ *  A container for styling information.
+ */
 class Style {
 //=============================================================================
 public:
@@ -57,6 +60,7 @@ public:
 	//-------------------------------------------------------------------------
 	static const Number DEFAULT_NUMBER;
 	static const Number DEFAULT_STROKE_WIDTH;
+	static const Number DEFAULT_OPACITY;
 	static const LineCapStyle DEFAULT_LINE_CAP_STYLE;
 	static const FillRule DEFAULT_FILL_RULE;
 	static const ColorRGBA DEFAULT_COLOR;
@@ -65,13 +69,14 @@ public:
 	static const Font DEFAULT_FONT;
 private:
 	//-------------------------------------------------------------------------
-	FLYWEIGHT(Number,_strokeWidth);
-	FLYWEIGHT(LineCapStyle,_lineCapStyle);
-	FLYWEIGHT(FillRule,_fillRule);
-	FLYWEIGHT(ColorRGBA,_strokeColor);
-	FLYWEIGHT(ColorRGBA,_fillColor);
-	FLYWEIGHT(Font,_font);
-	Dash _dash; // TODO: make flyweight too
+	FLYWEIGHT(Number, _strokeWidth);
+	FLYWEIGHT(LineCapStyle, _lineCapStyle);
+	FLYWEIGHT(FillRule, _fillRule);
+	FLYWEIGHT(ColorRGBA, _strokeColor);
+	FLYWEIGHT(ColorRGBA, _fillColor);
+	FLYWEIGHT(Font, _font);
+	Dash _dash; // TODO: make flyweight
+	FLYWEIGHT(Number, _opacity);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
 public:
 	//-------------------------------------------------------------------------
@@ -82,7 +87,8 @@ public:
 		_strokeColor( NO_COLOR ),
 		_fillColor( NO_COLOR ),
 		_font(NO_FONT),
-		_dash(NO_DASH)
+		_dash(NO_DASH),
+		_opacity(NO_NUMBER)
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -170,26 +176,30 @@ public:
 		cn->setStrokeWidth(strokeWidth());
 		cn->setLineCap(lineCapStyle());
 		if (_dash!=NO_DASH)
-			cn->setDash(_dash);
-		cn->setSourceColor(strokeColor());
+			cn->setDash(dash());
+		ColorRGBA c = strokeColor();
+		c.setA(opacity());
+		cn->setSourceColor(c);
 	}
 	//-------------------------------------------------------------------------
 	void setFillStyle( IDrawContext::Ptr cn ) {
-		cn->setFillRule(_fillRule);
-		cn->setSourceColor(fillColor());
+		cn->setFillRule(fillRule());
+		ColorRGBA c = fillColor();
+		c.setA(opacity());
+		cn->setSourceColor(c);
 	}
 	//-------------------------------------------------------------------------
 	Font font() const {
 		// keep cascading effect: check every font value
 		if (_font==NO_FONT) return DEFAULT_FONT;
 		Font res = _font;
-		if (_font.fontFace == NO_FONT.fontFace)
+		if (res.fontFace == NO_FONT.fontFace)
 			res.fontFace = DEFAULT_FONT.fontFace;
-		if (_font.size == NO_FONT.size)
+		if (res.size == NO_FONT.size)
 			res.size = DEFAULT_FONT.size;
-		if (_font.slant == NO_FONT.slant)
+		if (res.slant == NO_FONT.slant)
 			res.slant = DEFAULT_FONT.slant;
-		if (_font.weight== NO_FONT.weight)
+		if (res.weight== NO_FONT.weight)
 			res.weight = DEFAULT_FONT.weight;
 		return res;
 	}
@@ -200,22 +210,43 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Style & fontFace( const Font::FontFace & v) {
-		_font.fontFace = v;
+		Font f = _font.get(); // flyweight: get, change, assign
+		f.fontFace = v;
+		_font = f;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontSize( const Font::Size & v) {
-		_font.size = v;
+		Font f = _font.get(); // flyweight: get, change, assign
+		f.size = v;
+		_font = f;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontSlant( const Font::Slant & v) {
-		_font.slant = v;
+		Font f = _font.get(); // flyweight: get, change, assign
+		f.slant = v;
+		_font = f;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontWeight( const Font::Weight & v) {
-		_font.weight = v;
+		Font f = _font.get(); // flyweight: get, change, assign
+		f.weight = v;
+		_font = f;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	const Number & opacity() const {
+		if (_opacity == NO_NUMBER)
+			return DEFAULT_OPACITY;
+		return _opacity;
+	}
+	//-------------------------------------------------------------------------
+	Style & opacity(const Number & v) {
+		if (v<0.0 || v > 1.0)
+			return *this;
+		_opacity = v;
 		return *this;
 	}
 

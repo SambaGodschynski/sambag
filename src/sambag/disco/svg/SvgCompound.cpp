@@ -10,8 +10,6 @@
 
 namespace sambag { namespace disco { namespace svg {
 
-// TODO: make base class for compound objects
-
 //=============================================================================
 // class SvgCompound
 //=============================================================================

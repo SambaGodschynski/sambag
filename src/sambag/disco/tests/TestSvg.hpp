@@ -27,9 +27,10 @@ private:
 	CPPUNIT_TEST( testSvgPath03 );
 	CPPUNIT_TEST( testSvgPolyline );
 	CPPUNIT_TEST( testSvgPolygon );
-	CPPUNIT_TEST( testSvgArc );
+    CPPUNIT_TEST( testSvgArc );
 	CPPUNIT_TEST( testSvgFont );
 	CPPUNIT_TEST( testSvgUse );
+	CPPUNIT_TEST( testSvgOpacity );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -47,6 +48,7 @@ public:
 	void testSvgUse();
 	void testSvgArc();
 	void testSvgFont();
+	void testSvgOpacity();
 };
 
 } // namespace

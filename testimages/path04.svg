@@ -1,0 +1,39 @@
+<svg width="12cm" height="4cm" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" version="1.1">
+     
+    <defs>
+    	<circle id="p" fill="green" cx="0" cy="0" r="15"/>
+    </defs>
+
+    <rect x="1" y="1" width="1198" height="398" stroke="green" stroke-width="10" fill="hotpink"/>
+    <g stroke="black" stroke-width="10" fill="red">
+    	
+     <path d="M202, 82, 
+	H406, 
+	A50, 25, 0, 0, 1, 406, 82, 
+	V312, 
+	A50, 25, 0, 0, 1, 406, 312, 
+	H202, 
+	A50, 25, 0, 0, 1, 202, 312, 
+	V82, 
+	A50, 25, 0, 0, 1, 202, 82, 
+	"/>
+    </g>
+    
+    <g stroke="lightblue">
+	<line class="line" x1="100" y1="300" x2="300" y2="100" stroke-width="5" stroke="yellow"/>
+    	<line class="line" x1="300" y1="300" x2="500" y2="100" stroke-width="10" stroke="saddlebrown"/>
+    	<line class="line" x1="500" y1="300" x2="700" y2="100" stroke-width="15" stroke="#FF0000"/>
+    	<line class="line" x1="700" y1="300" x2="900" y2="100" stroke-width="20"/>
+    	<line class="line" x1="900" y1="300" x2="1100" y2="100" stroke-width="25" stroke="#0000FF"/>
+    </g>
+ 
+    <!-- line without min. of needed attributes-->
+    <line y1="200" x2="1200" y2="200" stroke="black"/>    
+
+
+
+
+    <use xlink:href="#p" transform="translate(202, 82)"/>
+    <use xlink:href="#p" transform="translate(406, 82)"/>
+
+</svg>

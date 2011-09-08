@@ -13,7 +13,9 @@
 
 namespace sambag { namespace disco {
 //=============================================================================
-// Abstract base class for all graphic elements.
+/**
+ * Abstract base class for all graphic elements.
+ */
 class IDrawable {
 //=============================================================================
 public:

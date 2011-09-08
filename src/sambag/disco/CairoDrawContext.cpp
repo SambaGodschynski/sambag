@@ -6,6 +6,7 @@
  */
 
 #include "CairoDrawContext.hpp"
+#include "CairoDataHandler.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -41,6 +42,20 @@ void CairoDrawContext::rect( const Rectangle &rect, const Number &cornerRadius )
 	cairo_arc (context, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
 	cairo_close_path (context);
 
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::drawImage(IDataHandler& _handler) {
+	CairoDataHandler *handler = dynamic_cast<CairoDataHandler*>(&_handler);
+	if (!handler)
+		return;
+	cairo_surface_t *png =
+			cairo_image_surface_create_from_png_stream (
+				CairoDataHandler::getCairoReadFunction(), handler);
+	if (!png)
+		return;
+	cairo_set_source_surface (context, png, 0, 0);
+	cairo_paint (context);
+	cairo_surface_destroy (png);
 }
 
 }} // namespaces

@@ -33,7 +33,7 @@
 using namespace sambag::com;
 
 // Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestCairoDrawContext );
+//CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestCairoDrawContext );
 
 // TODO: create shared_ptr wrapper for surface
 void releaseSurface( cairo_surface_t *surface ) {

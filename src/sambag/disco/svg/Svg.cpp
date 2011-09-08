@@ -36,6 +36,9 @@ void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	binder.registerAttribute
 		<Transform_tag::Type, Transform_tag, SvgObject>
 			("transform");
+	binder.registerAttribute
+		<OpacityStyle_tag::Type, OpacityStyle_tag, SvgObject>
+			("opacity");
 	binder.registerAttribute<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");
 	binder.registerAttribute<FontSize_tag::Type, FontSize_tag, SvgObject>("font-size");
 	binder.registerAttribute<FontWeight_tag::Type, FontWeight_tag, SvgObject>("font-weight");

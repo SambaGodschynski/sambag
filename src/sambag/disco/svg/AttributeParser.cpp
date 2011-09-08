@@ -264,8 +264,11 @@ void AttributeParser::parsePointContainer(const std::string &str, PointContainer
 	}
 }
 //-----------------------------------------------------------------------------
-void AttributeParser::parseColor(const std::string &str, ColorRGBA &color) {
-	if (str.length()==0) return;
+void AttributeParser::parseColor(const std::string &in, ColorRGBA &color) {
+	if (in.length()==0) return;
+
+	std::string str=in;
+	prepareString(str);
 	static const boost::regex colorname("[a-zA-Z]+");
 	static const boost::regex colorval("#[0-9a-fA-F]+");
 	if ( boost::regex_match(str, colorname) ) { // is colorname
@@ -283,9 +286,24 @@ void AttributeParser::parseColor(const std::string &str, ColorRGBA &color) {
 	Number r = hex2Int(expr.substr(1,2)) / 255.0;
 	Number g = hex2Int(expr.substr(3,2)) / 255.0;
 	Number b = hex2Int(expr.substr(5,2)) / 255.0;
-	Number a = 255;
+	Number a = 1.0;
 
 	color.setValues(r,g,b,a);
+}
+//-----------------------------------------------------------------------------
+void AttributeParser::parseOpacity(const std::string &in, Number &v) {
+	if (in.length()==0) return;
+	std::string str=in;
+	prepareString(str);
+	static const boost::regex single("[0-9.]+");
+	static const boost::regex percent("[0-9.]+%");
+	if ( boost::regex_match(str, single) ) { // is a single number
+		v = string2Number(str);
+	}
+	if ( !boost::regex_match(str, percent) ) return;
+
+	v = string2Number(str);
+	v /= 100; // percent to 0.0 .. 1.0
 }
 //-----------------------------------------------------------------------------
 const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name ) {

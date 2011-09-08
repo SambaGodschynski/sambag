@@ -15,6 +15,7 @@
 #include "Font.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
+#include "IDataHandler.hpp"
 
 namespace sambag { namespace disco {
 
@@ -97,6 +98,8 @@ public:
 	virtual void fillPreserve() = 0;
 	//-------------------------------------------------------------------------
 	virtual void stroke() = 0;
+	//-------------------------------------------------------------------------
+	virtual void drawImage(IDataHandler&) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) = 0;

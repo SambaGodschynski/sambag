@@ -52,6 +52,15 @@ struct Font {
 	bool operator!=( const Font &b ) const {
 		return !( *this == b );
 	}
+	/**
+	 * dummy function:
+	 * needed by @see graphicElements::Style where you can switch
+	 * between flyweight or not. If not we need a get().
+	 * @return
+	 */
+	const Font & get() const {
+		return *this;
+	}
 };
 
 }} //namespaces

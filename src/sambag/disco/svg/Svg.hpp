@@ -70,6 +70,8 @@ public:
 	struct FontWeight_tag { typedef Font::Weight Type; };
 	//-------------------------------------------------------------------------
 	struct FontStyle_tag { typedef Font::Slant Type; };
+	//-------------------------------------------------------------------------
+	struct OpacityStyle_tag { typedef std::string Type; };
 	// TODO: more style tags
 private:
 	//-------------------------------------------------------------------------
@@ -182,6 +184,18 @@ public:
 	virtual void set( const Transform_tag::Type &v, const Transform_tag&)
 	{
 		setTransformMatrix(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const OpacityStyle_tag::Type &strV, const OpacityStyle_tag&)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = obj->getStyle();
+		Number v;
+		AttributeParser::parseOpacity(strV, v);
+		neu.opacity(v);
+		copyStyleToGraphicElement(neu);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
 	//-------------------------------------------------------------------------
