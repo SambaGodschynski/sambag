@@ -41,7 +41,7 @@ void parseStyleRules( const std::string &rules, graphicElements::Style& outStyle
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
 	for ( ;
-		regex_search(begin, end, what, boost::regex("([a-zA-Z-]+)\\s*:\\s*([a-zA-Z0-9#.\"':/ ]+)\\s*;"));
+		regex_search(begin, end, what, boost::regex("([a-zA-Z-]+)\\s*:\\s*([a-zA-Z0-9#%.\"':/ ]+)\\s*;{0,1}"));
 		begin = what[0].second
 	) {
 		std::string attribute = what[1];

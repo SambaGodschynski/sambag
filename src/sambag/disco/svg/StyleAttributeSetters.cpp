@@ -24,6 +24,14 @@ void setStrokeColor( Style &style, const std::string &value ) {
 	style.strokeColor(col);
 }
 //-----------------------------------------------------------------------------
+void setStrokeWitdh( Style &style, const std::string &value ) {
+	std::stringstream is;
+	is<<value;
+	Number v;
+	is>>v;
+	style.strokeWidth(v);
+}
+//-----------------------------------------------------------------------------
 void setFillColor( Style &style, const std::string &value ) {
 	std::stringstream is;
 	is<<value;
@@ -31,6 +39,45 @@ void setFillColor( Style &style, const std::string &value ) {
 	is>>col;
 	style.fillColor(col);
 }
+//-----------------------------------------------------------------------------
+void setOpacity( Style &style, const std::string &value ) {
+	Number v=1.0;
+	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
+	style.opacity(v);
+}
+//-----------------------------------------------------------------------------
+void setFontSize( Style &style, const std::string &value ) {
+	std::stringstream is;
+	is<<value;
+	Number v;
+	is>>v;
+	style.fontSize(v);
+}
+//-----------------------------------------------------------------------------
+void setFontFace( Style &style, const std::string &value ) {
+	style.fontFace(value);
+}
+//-----------------------------------------------------------------------------
+void setFontSlant( Style &style, const std::string &value ) {
+	std::stringstream is;
+	is<<value;
+	int v;
+	is>>v;
+	if (v<=Font::SLANT_NUM_MIN || v >= Font::NUM_SLANT)
+		v = Font::SLANT_UNDEFINED;
+	style.fontSlant(static_cast<Font::Slant>(v));
+}
+//-----------------------------------------------------------------------------
+void setFontWeight( Style &style, const std::string &value ) {
+	std::stringstream is;
+	is<<value;
+	int v;
+	is>>v;
+	if (v<=Font::WEIGHT_NUM_MIN || v >= Font::NUM_WEIGHT)
+		v = Font::WEIGHT_UNDEFINED;
+	style.fontWeight(static_cast<Font::Weight>(v));
+}
+
 
 }//namespace
 
@@ -46,6 +93,12 @@ void StyleParser::initSetterMap() {
 	using namespace boost::assign;
 	insert(attr2Setter)
 	("stroke", &setStrokeColor)
+	("stroke-width", &setStrokeWitdh)
+	("opacity", &setOpacity)
+	("font-size", &setFontSize)
+	("font-family", &setFontFace)
+	("font-weight", &setFontWeight)
+	("font-style", &setFontSlant)
 	("fill", &setFillColor);
 }
 //-----------------------------------------------------------------------------

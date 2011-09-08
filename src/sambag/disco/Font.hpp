@@ -20,15 +20,19 @@ struct Font {
 	typedef std::string FontFace;
 	typedef Number Size;
 	enum Slant {
-		SLANT_UNDEFINED = -1,
+		SLANT_NUM_MIN = -2,
+		SLANT_UNDEFINED,
 		SLANT_NORMAL,
 		SLANT_ITALIC,
-		SLANT_OBLIQUE
+		SLANT_OBLIQUE,
+		NUM_SLANT
 	};
 	enum Weight {
-		WEIGHT_UNDEFINED = -1,
+		WEIGHT_NUM_MIN = -2,
+		WEIGHT_UNDEFINED,
 		WEIGHT_NORMAL,
-		WEIGHT_BOLD
+		WEIGHT_BOLD,
+		NUM_WEIGHT
 	};
 	FontFace fontFace;
 	Size size;
