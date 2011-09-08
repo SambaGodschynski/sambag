@@ -41,6 +41,7 @@ public:
 	size_t getNumChildren() const { return combo->getNumChildren(); }
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
+		SvgObject::add(obj);
 		using sambag::disco::graphicElements::GraphicElement;
 		GraphicElement::Ptr gObj=obj->getGraphicElement();
 		if (!gObj)

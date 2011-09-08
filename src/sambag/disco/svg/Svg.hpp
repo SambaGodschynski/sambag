@@ -15,12 +15,12 @@
 #include "AttributeParser.hpp"
 #include "boost/flyweight.hpp"
 #include "StyleParser.hpp"
+#include "DomObject.hpp"
 #include <list>
 
 
 // TODO: viewbox
 // TODO: fillpatterns
-// TODO: styletag
 // TODO: css
 
 namespace sambag { namespace disco { namespace svg {
@@ -31,7 +31,7 @@ class SvgRoot;
 *  SvgObjects are for creating Graphic Elements
 *  via XML2Object.
 */
-class SvgObject  {
+class SvgObject : public DomObject {
 //=============================================================================
 friend class SvgRoot;
 public:
@@ -133,11 +133,11 @@ public:
 		return obj->getTransformMatrix();
 	}
 	//-------------------------------------------------------------------------
-	virtual void add(Ptr obj) {}
+	virtual void add(Ptr obj) {
+		addDomChild(obj);
+	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgObject(){}
-	//-------------------------------------------------------------------------
-	virtual void setXmlText( const std::string & str) {}
 	//-------------------------------------------------------------------------
 	const IdType & getId() { return _id; }
 	//-------------------------------------------------------------------------

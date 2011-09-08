@@ -59,23 +59,27 @@ void setFontFace( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setFontSlant( Style &style, const std::string &value ) {
-	std::stringstream is;
-	is<<value;
-	int v;
-	is>>v;
-	if (v<=Font::SLANT_NUM_MIN || v >= Font::NUM_SLANT)
-		v = Font::SLANT_UNDEFINED;
-	style.fontSlant(static_cast<Font::Slant>(v));
+	std::string in = value;
+	svg::AttributeParser::prepareString(in);
+	Font::Slant v = Font::SLANT_UNDEFINED;
+	if (in=="normal")
+		v = Font::SLANT_NORMAL;
+	if (in=="italic")
+			v = Font::SLANT_ITALIC;
+	if (in=="oblique")
+			v = Font::SLANT_OBLIQUE;
+	style.fontSlant(v);
 }
 //-----------------------------------------------------------------------------
 void setFontWeight( Style &style, const std::string &value ) {
-	std::stringstream is;
-	is<<value;
-	int v;
-	is>>v;
-	if (v<=Font::WEIGHT_NUM_MIN || v >= Font::NUM_WEIGHT)
-		v = Font::WEIGHT_UNDEFINED;
-	style.fontWeight(static_cast<Font::Weight>(v));
+	std::string in = value;
+	svg::AttributeParser::prepareString(in);
+	Font::Weight v = Font::WEIGHT_UNDEFINED;
+	if (in=="normal")
+		v = Font::WEIGHT_NORMAL;
+	if (in=="bold")
+		v = Font::WEIGHT_BOLD;
+	style.fontWeight(v);
 }
 
 
