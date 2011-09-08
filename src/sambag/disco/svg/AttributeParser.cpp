@@ -53,6 +53,14 @@ void getWholeString( std::istream& istr, std::string &out ) {
 	}
 }
 //-----------------------------------------------------------------------------
+Number string2Number(const std::string &str) {
+	std::stringstream ss;
+	ss<<str;
+	Number n;
+	ss>>n;
+	return n;
+}
+//-----------------------------------------------------------------------------
 /**
  * Converts Container<string>:in to Container<Number>:out.
  * out will be empty if one convertion failed.
@@ -60,7 +68,7 @@ void getWholeString( std::istream& istr, std::string &out ) {
  * @param out
  */
 template <typename StrContainer, typename NumberContainer>
-void string2Number(const StrContainer &in, NumberContainer &out) {
+void strings2Numbers(const StrContainer &in, NumberContainer &out) {
 	for_each( const std::string &str, in ) {
 		std::stringstream ss;
 		ss<<str;
@@ -84,7 +92,7 @@ void getValuesFromString( const std::string &_values, Container &out ) {
 	std::vector<std::string> strs;
 	boost::algorithm::split_regex( strs, values, boost::regex( "\\s*,\\s*|\\s+" ) ) ;
 	if (strs.empty()) return;
-	string2Number<std::vector<std::string>, Container >(strs, out);
+	strings2Numbers<std::vector<std::string>, Container >(strs, out);
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>transfomation
 //-----------------------------------------------------------------------------
@@ -239,6 +247,23 @@ void AttributeParser::parsePathInstructions(const std::string &str, PathInstruct
 	}
 }
 //-----------------------------------------------------------------------------
+void AttributeParser::parsePointContainer(const std::string &str, PointContainer& pC) {
+	if (str.length()==0) return;
+	std::string inStr = str;
+	prepareString(inStr, false);
+	// extract all matches
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	for ( ;
+		regex_search(begin, end, what, boost::regex("([0-9.-]+)"));
+		begin = what[0].second
+	) {
+		std::string value = what[1];
+		pC.push_back(string2Number(value));
+	}
+}
+//-----------------------------------------------------------------------------
 void AttributeParser::parseColor(const std::string &str, ColorRGBA &color) {
 	if (str.length()==0) return;
 	static const boost::regex colorname("[a-zA-Z]+");
@@ -337,5 +362,16 @@ std::istream & operator>>(
 	std::string str;
 	getWholeString(istr, str);
 	AttributeParser::parsePathInstructions(str, pI);
+	return istr;
+}
+//-----------------------------------------------------------------------------
+std::istream & operator>>(
+	std::istream& istr,
+    sambag::disco::graphicElements::pathInstruction::PointContainer &pC)
+{
+	using namespace sambag::disco::svg;
+	std::string str;
+	getWholeString(istr, str);
+	AttributeParser::parsePointContainer(str, pC);
 	return istr;
 }

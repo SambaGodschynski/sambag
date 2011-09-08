@@ -20,6 +20,7 @@ namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
 using namespace sambag::disco::graphicElements;
 using sambag::disco::graphicElements::pathInstruction::PathInstructions;
+using sambag::disco::graphicElements::pathInstruction::PointContainer;
 //=============================================================================
 // parser
 //=============================================================================
@@ -51,7 +52,10 @@ public:
 	//-------------------------------------------------------------------------
 	static void parsePathInstructions(const std::string &str, PathInstructions&);
 	//-------------------------------------------------------------------------
+	static void parsePointContainer(const std::string &str, PointContainer&);
+	//-------------------------------------------------------------------------
 	/**
+	 * Maps from a string to PathInstruction enum.
 	 * @param svg path command like M or z
 	 * @return Instruction
 	 */
@@ -72,6 +76,10 @@ extern std::istream & operator>>(std::istream&, sambag::com::Matrix&);
 extern std::istream & operator>>(
 		std::istream&,
 		sambag::disco::graphicElements::pathInstruction::PathInstructions &
+);
+extern std::istream & operator>>(
+		std::istream&,
+		sambag::disco::graphicElements::pathInstruction::PointContainer &
 );
 
 

@@ -42,7 +42,7 @@ enum InstructionOp {
 	CURVETO_QUADRATIC_SMOOTH_ABS ,
 	CURVETO_QUADRATIC_SMOOTH_REL
 };
-typedef std::vector<sambag::com::Number> PointContainer;
+typedef std::list<sambag::com::Number> PointContainer;
 typedef std::pair<PointContainer, InstructionOp> PathInstruction;
 typedef std::list<PathInstruction> PathInstructions;
 extern bool isCubic ( InstructionOp op );
