@@ -17,6 +17,7 @@ CairoDrawContext::CairoDrawContext( cairo_surface_t *surface )
 : surface(surface), context(NULL)
 {
 	context = cairo_create(surface);
+	setFont(currentFont);
 
 }
 //-----------------------------------------------------------------------------

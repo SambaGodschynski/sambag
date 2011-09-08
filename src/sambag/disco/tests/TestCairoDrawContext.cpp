@@ -1,6 +1,22 @@
 /*
  * TestCairoDrawContext.cpp
  *
+ *
+ *                                            Test Suite for CairoDraw Context
+ *
+ *                This test creates png files. For comparing it uses perceptualdiff (http://pdiff.sourceforge.net/)
+ *                The Comparing is initiated via a system call to this script: outputfolder/comparepng.script
+ *                Edit this script to adjust perecputaldiff. Or use another program to compare.
+ *                Use "#define DISCO_CONTEXT_MAKE_REFERENCES" if you want create compare reference files.
+ *
+ *
+ *                !Perceptualdiff converts png transparency to black, so use a background color to compare correctly!
+ *
+ *
+ *
+ *
+ *
+ *
  *  Created on: 11.09.2011
  *      Author: samba
  */
@@ -15,6 +31,13 @@
 #include <sambag/com/Common.hpp>
 
 using namespace sambag::com;
+
+static const std::string OUTPUT_FOLDER = "output/";
+static const std::string MR = "soll_";
+static const std::string COMPARE_SCRIPT = "sh " + OUTPUT_FOLDER + "comparepng.script ";
+
+// make reference pictures for compare
+//#define DISCO_CONTEXT_MAKE_REFERENCES
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestCairoDrawContext );
@@ -48,16 +71,40 @@ void releaseSurface( cairo_surface_t *surface ) {
 	cairo_surface_destroy(surface);
 }
 
-int compareStr( const std::string &s1, const std::string &s2 ) {
-	if ( s1.length() != s2.length() ) return -1;
-	for ( size_t i=0; i<s1.length(); ++i ) {
-		if ( s1.at(i) != s2.at(i) ) return i;
-	}
-	return 0;
+bool comparePng( const std::string &f1, const std::string &f2) {
+	std::string cmd(COMPARE_SCRIPT + f1 + " " + f2 );
+	int r = system(cmd.c_str());
+	return r == 0;
+}
+
+void writePng(cairo_surface_t *surface, const std::string name) {
+	cairo_surface_write_to_png(surface, name.c_str() );
+}
+
+void testPng( const std::string &testName, cairo_surface_t *surface ) {
+	const std::string f1( OUTPUT_FOLDER + MR + testName + ".png" );
+	const std::string f2( OUTPUT_FOLDER + testName + ".png" );
+
+#ifdef DISCO_CONTEXT_MAKE_REFERENCES
+	writePng(surface, f1);
+#else
+	writePng(surface, f2);
+	CPPUNIT_ASSERT ( comparePng(f1, f2) );
+#endif
 }
 
 
 namespace tests {
+//=============================================================================
+// TestCairoDrawContext::setUp
+//=============================================================================
+void TestCairoDrawContext::setUp() {
+	using namespace boost::filesystem;
+	if ( !exists(OUTPUT_FOLDER) ) {
+		create_directory(OUTPUT_FOLDER);
+	}
+}
+//-----------------------------------------------------------------------------
 //=============================================================================
 // TestCairoDrawContext::testConstructor
 //=============================================================================
@@ -67,83 +114,246 @@ void TestCairoDrawContext::testConstructor() {
 	using namespace boost;
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 320, 200);
 	CairoDrawContext::Ptr context = CairoDrawContext::create( surface );
-	cairo_surface_write_to_png(surface, "testConstructor.png");
+	cairo_surface_write_to_png(surface, (OUTPUT_FOLDER + "testConstructor.png").c_str() );
 	context.reset();
 	cairo_surface_destroy(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>check file exists
-	CPPUNIT_ASSERT( filesystem::exists("testConstructor.png") );
-	filesystem::remove("testConstructor.png");
+	CPPUNIT_ASSERT( filesystem::exists(OUTPUT_FOLDER + "testConstructor.png") );
+	filesystem::remove(OUTPUT_FOLDER + "/testConstructor.png");
 
 }
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testLine() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> expected svg
-	static const std::string EXP = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"1200pt\" height=\"400pt\" viewBox=\"0 0 1200 400\" version=\"1.1\">\n"
-			"<g id=\"surface2\">\n"
-			"<path style=\"fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 100 300 L 300 100 \"/>\n"
-			"<path style=\"fill:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 300 300 L 500 100 \"/>\n"
-			"<path style=\"fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 500 300 L 700 100 \"/>\n"
-			"<path style=\"fill:none;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 700 300 L 900 100 \"/>\n"
-			"<path style=\"fill:none;stroke-width:25;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 900 300 L 1100 100 \"/>\n"
-			"</g>\n"
-			"</svg>\n";
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
-	std::stringstream ss;
-	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
 	context->setStrokeWidth(5.0);
-	context->drawLine( Point2D(100, 300), Point2D(300, 100)  );
+	context->moveTo( Point2D(100, 300) ); context->lineTo( Point2D(300, 100) );
+	context->stroke();
+
 	context->setStrokeWidth(10.0);
-	context->drawLine( Point2D(300, 300), Point2D(500, 100)  );
+	context->moveTo( Point2D(300, 300)); context->lineTo( Point2D(500, 100) );
+	context->stroke();
+
 	context->setStrokeWidth(15.0);
-	context->drawLine( Point2D(500, 300), Point2D(700, 100)  );
+	context->moveTo( Point2D(500, 300)); context->lineTo( Point2D(700, 100) );
+	context->stroke();
+
 	context->setStrokeWidth(20.0);
-	context->drawLine( Point2D(700, 300), Point2D(900, 100)  );
-	context->setStrokeWidth(25.0);
-	context->drawLine( Point2D(900, 300), Point2D(1100, 100)  );
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>release context
+	context->moveTo( Point2D(700, 300)); context->lineTo( Point2D(900, 100) );
+	context->stroke();
+
+	context->setStrokeWidth(50.0);
+	context->moveTo( Point2D(900, 300)); context->lineTo( Point2D(1100, 100) );
+	context->stroke();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testLine", surface);
 	context.reset();
 	releaseSurface(surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> compareOutput
-	CPPUNIT_ASSERT_EQUAL( EXP, ss.str() );
+
 }
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testArc() {
 	using namespace sambag::disco;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> expected svg
-	static const std::string EXP = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"1200pt\" height=\"400pt\" viewBox=\"0 0 1200 400\" version=\"1.1\">\n"
-			"<g id=\"surface6\">\n"
-			"<path style=\"fill:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;\" d=\"M 700 200 C 700 255.226562 655.226562 300 600 300 C 544.773438 300 500 255.226562 500 200 C 500 144.773438 544.773438 100 600 100 C 655.226562 100 700 144.773438 700 200 \"/>\n"
-			"<path style=\" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,100%);fill-opacity:1;\" d=\"M 700 200 C 700 255.226562 655.226562 300 600 300 C 544.773438 300 500 255.226562 500 200 C 500 144.773438 544.773438 100 600 100 C 655.226562 100 700 144.773438 700 200 \"/>\n"
-			"</g>\n"
-			"</svg>\n";
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
-	std::stringstream ss;
-	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
 	context->setStrokeWidth(10);
-	context->setStrokeColor( ColorRGBA( 1.0, 0, 0 ) );
-	context->drawArc( Point2D(600, 200), 100 );
-	context->setFillColor( ColorRGBA( 0, 0, 1.0 ) );
-	context->fillArc( Point2D(600, 200), 100 );
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>release context
+	context->setSourceColor( ColorRGBA( 1.0, 0, 0 ) );
+	context->arc( Point2D(600, 200), 100 );
+	context->stroke();
+
+	context->setSourceColor( ColorRGBA( 0, 0, 1.0 ) );
+	context->arc( Point2D(600, 200), 100 );
+	context->fill();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testArc", surface);
 	context.reset();
 	releaseSurface(surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> compareOutput
-	writeSvg(ss, "tmpOut.svg");
-	CPPUNIT_ASSERT_EQUAL( EXP, ss.str() );
+
 }
 //-----------------------------------------------------------------------------
-void TestCairoDrawContext::testSetWidth() {
+void TestCairoDrawContext::testRectangle() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
-	std::stringstream ss;
-	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
+	context->setStrokeWidth(10);
+	context->setSourceColor( ColorRGBA( 0, 0, 1.0 ) );
+	context->rect( Rectangle(Point2D(400,100), 400, 200 ) );
+	context->stroke();
+
+	context->setSourceColor( ColorRGBA( 1.0, 1.0, 0.0 ) );
+	context->rect( Rectangle(Point2D(400,100), 400, 200 ) );
+	context->fill();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testRectangle", surface);
+	context.reset();
+	releaseSurface(surface);
+
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testCurve() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
+	context->setStrokeWidth(10);
+	context->curveTo( Point2D(100,200), Point2D(100,100), Point2D(250,100) );
+	context->stroke();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testCurve", surface);
+	context.reset();
+	releaseSurface(surface);
+
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testText() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
+	Font font;
+	font.size = 184.;
+	font.fontFace = "arial";
+	context->setFont(font);
+	context->setSourceColor( ColorRGBA(1.0) );
+	context->moveTo( Point2D(150., 250.) );
+	context->textPath("D.I.S.C.O");
+	context->fill();
+	context->setSourceColor( ColorRGBA(0.0) );
+	context->moveTo( Point2D(150., 250.) );
+	context->textPath("D.I.S.C.O");
+	context->stroke();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testText", surface);
+	context.reset();
+	releaseSurface(surface);
+
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testClip() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
+	context->rect( Rectangle( Point2D(150., 120.), 105., 15.) );
+	context->stroke();
+	context->rect( Rectangle( Point2D(150., 120.), 105., 15.) );
+	context->clip();
+	Font font;
+	font.size = 34.;
+	font.fontFace = "arial";
+	context->setFont(font);
+	context->setSourceColor( ColorRGBA(1.0) );
+	context->moveTo( Point2D(150., 150.) );
+	context->textPath("DISCO");
+	context->fill();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testClip", surface);
+	context.reset();
+	releaseSurface(surface);
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testTransformation() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set tr matrix
+	Matrix m(3,3);
+	m(0,0) = 1;  m(0,1) = 0.5; m(0,2) = 0;
+	m(1,0) = 0;  m(1,1) = 1; m(1,2) = 1;
+	m(2,0) = 0;  m(2,1) = 0; m(2,2) = 0;
+	context->moveTo( Point2D(250., 250.) );
+	context->transform(m);
+	context->rotate(12.0);
+	context->scale(1.5);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	Font font;
+	font.size = 184.;
+	font.fontFace = "arial";
+	context->setFont(font);
+	context->setSourceColor( ColorRGBA(1.0) );
+	context->moveTo( Point2D(150., 250.) );
+	context->textPath("D.I.S.C.O");
+	context->fill();
+	context->setSourceColor( ColorRGBA(0.0) );
+	context->moveTo( Point2D(0, 0) );
+	context->textPath("D.I.S.C.O");
+	context->stroke();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testTransformation", surface);
+	context.reset();
+	releaseSurface(surface);
+
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testMatrixConv() {
+	using namespace sambag::disco;
+	using namespace boost::numeric::ublas;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>init matrix
+	Matrix m(3,3);
+	m(0,0) = 1;  m(0,1) = 0.5; m(0,2) = 0.21;
+	m(1,0) = 2;  m(1,1) = 1.9; m(1,2) = 1.11;
+	m(2,0) = 0;  m(2,1) = 0; m(2,2) = 0; // unused by cairo matrix
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>to cairo matrix
+	cairo_matrix_t cm;
+	CairoDrawContext::discoMatrixToCairoMatrix(m, cm);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>and back
+	Matrix dm(3,3);
+	CairoDrawContext::cairoMatrixToDiscoMatrix(cm, dm);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compare
+	CPPUNIT_ASSERT( m == dm );
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testSetStrokeWidth() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
 	context->setStrokeWidth(5.0);
@@ -160,11 +370,26 @@ void TestCairoDrawContext::testSetColor() {
 	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
-	context->setStrokeColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
-	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getStrokeColor() );
+	context->setSourceColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
+	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getSourceColor() );
 
-	context->setFillColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
-	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getFillColor() );
+	//
+	context.reset();
+	releaseSurface(surface);
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testMisc() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	std::stringstream ss;
+	cairo_surface_t *surface = createSvgSurface( ss, 1200.0, 400.0 );
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>has current point / get current point
+	CPPUNIT_ASSERT( !context->hasCurrentPoint() );
+	Point2D p0(1., .5);
+	context->moveTo( p0 );
+	CPPUNIT_ASSERT( context->hasCurrentPoint() );
+	CPPUNIT_ASSERT( p0 == context->getCurrentPoint() );
 	//
 	context.reset();
 	releaseSurface(surface);

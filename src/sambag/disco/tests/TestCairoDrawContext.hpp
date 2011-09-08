@@ -20,15 +20,30 @@ private:
 	CPPUNIT_TEST( testConstructor );
 	CPPUNIT_TEST( testLine );
 	CPPUNIT_TEST( testArc );
-	CPPUNIT_TEST( testSetWidth );
+	CPPUNIT_TEST( testRectangle );
+	CPPUNIT_TEST( testCurve );
+	CPPUNIT_TEST( testSetStrokeWidth );
 	CPPUNIT_TEST( testSetColor );
+	CPPUNIT_TEST( testMisc );
+	CPPUNIT_TEST( testClip );
+	CPPUNIT_TEST( testTransformation );
+	CPPUNIT_TEST( testMatrixConv );
+	CPPUNIT_TEST( testText );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testConstructor();
 	void testLine();
 	void testArc();
+	void testRectangle();
+	void testCurve();
 	void testSetColor();
-	void testSetWidth();
+	void testText();
+	void testClip();
+	void testSetStrokeWidth();
+	void testMatrixConv();
+	void testTransformation();
+	void testMisc();
+	void setUp();
 };
 
 } // namespace
