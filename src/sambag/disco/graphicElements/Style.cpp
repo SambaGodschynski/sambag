@@ -50,6 +50,7 @@ const Number Style::NO_NUMBER = NULL_NUMBER;
 const Style::LineCapStyle Style::NO_LINE_CAP_STYLE = IDrawContext::NO_LINE_CAP;
 const Style::FillRule Style::NO_FILL_RULE = IDrawContext::NO_FILL_RULE;
 const ColorRGBA Style::NO_COLOR = NULL_COLOR;
+const ColorRGBA Style::NONE_COLOR = NONE_COLOR;
 const Style::Dash Style::NO_DASH = Style::Dash(NULL, 0, DBL_MAX);
 const Font Style::NO_FONT = Font("no-xxx-font", -1.0);
 //-----------------------------------------------------------------------------
@@ -76,7 +77,7 @@ void Style::copyFrom( const Style &b ) {
 	if (_dash==NO_DASH && b._dash!=NO_DASH)
 		_dash = b._dash;
 	if (_font==NO_FONT && b._font!=NO_FONT)
-			_font = b._font;
+		_font = b._font;
 }
 
 

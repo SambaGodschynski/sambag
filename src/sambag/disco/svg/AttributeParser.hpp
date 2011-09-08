@@ -37,6 +37,12 @@ public:
 	 */
 	static std::string & prepareString(std::string &inout);
 	//-------------------------------------------------------------------------
+	/**
+	 * Parses html string color to ColorRGBA.
+	 * Can be color name or "#rrggbb" hex string
+	 * @param str
+	 * @param out_color
+	 */
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
 	static void parseTransform(const std::string &str, Matrix&);

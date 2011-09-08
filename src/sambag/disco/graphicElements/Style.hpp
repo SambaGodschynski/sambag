@@ -42,6 +42,10 @@ public:
 	static const Dash NO_DASH;
 	static const Font NO_FONT;
 	//-------------------------------------------------------------------------
+	// special case color none: its not the same like NO_COLOR.
+	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
+	static const ColorRGBA NONE_COLOR;
+	//-------------------------------------------------------------------------
 	static const Number DEFAULT_NUMBER;
 	static const Number DEFAULT_STROKE_WIDTH;
 	static const LineCapStyle DEFAULT_LINE_CAP_STYLE;
@@ -67,7 +71,7 @@ public:
 		_lineCapStyle(NO_LINE_CAP_STYLE),
 		_fillRule(NO_FILL_RULE),
 		_strokeColor( NO_COLOR ),
-		_fillColor( NO_COLOR ),
+		_fillColor( DEFAULT_COLOR ),
 		_font(NO_FONT),
 		_dash(NO_DASH)
 	{
@@ -135,13 +139,15 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const bool isFilled() const {
-		if (_fillColor == NO_COLOR ) return false;
+		if (_fillColor == NO_COLOR ||  _fillColor == NONE_COLOR )
+			return false;
 		return true;
 	}
 	//-------------------------------------------------------------------------
 	const bool isStroked() const {
-		if (_strokeColor == NO_COLOR ) return false;
-		return true;;
+		if (_strokeColor == NO_COLOR ||  _strokeColor == NONE_COLOR )
+			return false;
+		return true;
 	}
 	//-------------------------------------------------------------------------
 	void setStrokeStyle( IDrawContext::Ptr cn ) {

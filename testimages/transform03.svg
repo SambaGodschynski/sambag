@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="400px" height="120px" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <desc>Example RotateScale - Rotate and scale transforms</desc>
+  <rect fill="white" width="400" height="120"/>
+  <g fill="none" stroke="green" stroke-width="3" >
+    <!-- Draw the axes of the original coordinate system -->
+    <line x1="0" y1="1.5" x2="400" y2="1.5" />
+    <line x1="1.5" y1="0" x2="1.5" y2="120" />
+  </g>
+  <g transform="matrix (1 0 0 1 150 15)">
+    <rect width="70" height="40" fill="none" stroke="black" transform="rotate(45)"/>
+    <rect width="70" height="40" fill="red" transform="rotate(45, 10, 50)"/>
+  </g>
+</svg>

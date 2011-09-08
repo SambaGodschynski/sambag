@@ -95,6 +95,67 @@ void TestSvg::testSvgTransform01() {
 	context.reset();
 	cairo_surface_destroy(surface);
 }
-
-
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgTransform02() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "transform02.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	testPng("testSvgTransform02", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgTransform03() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "transform03.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	testPng("testSvgTransform03", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgTransform04() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "transform04.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 150);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	testPng("testSvgTransform04", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
 } //namespaces

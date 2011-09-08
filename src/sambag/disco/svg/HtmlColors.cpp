@@ -8,6 +8,7 @@
 #include "AttributeParser.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/assign/list_inserter.hpp>
+#include "sambag/com/Common.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -166,6 +167,7 @@ void AttributeParser::initHtmlColors() {
 	( "white", ColorRGBA(1.0,1.0,1.0, 1.0) )
 	( "whitesmoke", ColorRGBA(0.960784313725,0.960784313725,0.960784313725, 1.0) )
 	( "yellow", ColorRGBA(1.0,1.0,0.0, 1.0) )
-	( "yellowgreen", ColorRGBA(0.603921568627,0.803921568627,0.196078431373, 1.0) );
+	( "yellowgreen", ColorRGBA(0.603921568627,0.803921568627,0.196078431373, 1.0) )
+	( "none", NONE_COLOR );
 }
 }}} // namespaces

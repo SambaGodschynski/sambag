@@ -25,7 +25,7 @@
   </g>
   <!-- Establish a new coordinate system whose origin is at (200,40)
        in the initial coord. system and which is scaled by 1.5. -->
-  <g transform="translate(200,40)">
+  <g transform="translate(200,  40)">
     <g transform="scale(1.5)rotate(9)">
       <g fill="none" stroke="red" stroke-width="3" >
         <line x1="0" y1="0" x2="50" y2="0" />

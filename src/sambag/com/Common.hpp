@@ -128,6 +128,11 @@ struct ColorRGBA : public sambag::math::VectorN<Number, 4> {
 	}
 };
 extern const ColorRGBA NULL_COLOR;
+//-----------------------------------------------------------------------------
+/** special case color none: its not the same like NULL_COLOR.
+* NULL_COLOR is unsetted. NONE_COLOR is setted but none.
+*/
+extern const ColorRGBA NONE_COLOR;
 
 //#############################################################################
 // Math
