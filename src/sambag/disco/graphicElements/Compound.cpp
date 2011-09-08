@@ -25,10 +25,6 @@ GraphicElement::Ptr Compound::clone() const {
 }
 //-----------------------------------------------------------------------------
 void Compound::draw( IDrawContext::Ptr cn ) {
-	AutoTransform at(getTransformMatrix(), cn);
-	for_each( GraphicElement::Ptr obj, objects ) {
-		obj->draw(cn);
-	}
 }
 //-----------------------------------------------------------------------------
 void Compound::copyStyleFrom( const Style &b ) {

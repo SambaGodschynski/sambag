@@ -27,7 +27,7 @@ public:
 	typedef std::list<GraphicElement::Ptr> GraphicElements;
 private:
 	//-------------------------------------------------------------------------
-	GraphicElements objects;
+	GraphicElements objects; //TODO: remove
 protected:
 	Compound(){}
 public:

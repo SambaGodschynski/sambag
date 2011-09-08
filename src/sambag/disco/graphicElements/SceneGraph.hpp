@@ -27,9 +27,11 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<SceneGraph> WPtr;
 	//-------------------------------------------------------------------------
+	typedef GraphicElementPtr SceneGraphElement;
+	//-------------------------------------------------------------------------
 	struct node_object_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
-	typedef boost::property<node_object_t, GraphicElementPtr> vertexProperty;
+	typedef boost::property<node_object_t, SceneGraphElement> vertexProperty;
 	//-------------------------------------------------------------------------
 	/**
 	 * Graph type
@@ -60,7 +62,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef G::inv_adjacency_iterator InvAdjacencyIterator;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<GraphicElementPtr, Vertex> Element2Vertex;
+	typedef boost::unordered_map<SceneGraphElement, Vertex> Element2Vertex;
 	//-------------------------------------------------------------------------
 private:
 	//-------------------------------------------------------------------------
@@ -70,12 +72,19 @@ private:
 	//-------------------------------------------------------------------------
 	VertexElementMap vertexElementMap;
 	//-------------------------------------------------------------------------
+	ConstVertexElementMap constVertexElementMap;
+	//-------------------------------------------------------------------------
 	Element2Vertex element2Vertex;
 	//-------------------------------------------------------------------------
 	SceneGraph(){
 		vertexElementMap = get( node_object_t(), g );
+		//constVertexElementMap = get( node_object_t(), g);
 	}
 public:
+	//-------------------------------------------------------------------------
+	const SceneGraphElement & getSceneGraphElement( const Vertex &v ) const;
+	//-------------------------------------------------------------------------
+	void draw(IDrawContext::Ptr) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();
@@ -92,27 +101,30 @@ public:
 	 * @param out container
 	 */
 	template<typename Container>
-	void getElementsSorted(Container &out);
+	void getElementsSorted(Container &out) const;
 	//-------------------------------------------------------------------------
-	bool addElement( GraphicElementPtr ptr );
+	bool addElement( SceneGraphElement ptr );
 	//-------------------------------------------------------------------------
-	bool connectElements(GraphicElementPtr from, GraphicElementPtr to);
+	bool connectElements(SceneGraphElement from, SceneGraphElement to);
 };
 //=============================================================================
 /**
  *  @class DFSVisitor
- *  fills a container with GraphicElements topological sorted.
+ *  fills a container with @see SceneGraphElement topological sorted.
  */
 //=============================================================================
 using namespace boost;
-template <typename Container>
+template <typename SceneGraph, typename Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:
 public:
 	//-------------------------------------------------------------------------
 	Container &container;
 	//-------------------------------------------------------------------------
-	DFSVisitor(Container &container) : container(container){}
+	const SceneGraph &sceneGraph;
+	//-------------------------------------------------------------------------
+	DFSVisitor(const SceneGraph &sc, Container &container) :
+		container(container), sceneGraph(sc) {}
 	//-------------------------------------------------------------------------
 	template <class Edge, class Graph>
 	void back_edge(Edge, Graph&) const {}
@@ -123,7 +135,10 @@ public:
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_vertex(const Vertex &v, Graph&) {
-		container.push_back(v);
+		typename SceneGraph::SceneGraphElement obj =
+				sceneGraph.getSceneGraphElement(v);
+		if (obj)
+			container.push_back(obj);
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
@@ -134,13 +149,12 @@ public:
 // getElementsSorted
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename Container>
-void SceneGraph::getElementsSorted (Container &out)
+void SceneGraph::getElementsSorted (Container &out) const
 {
-	DFSVisitor<Container> vis(out);
+	DFSVisitor<SceneGraph, Container> vis(*this, out);
 	boost::depth_first_search(
 		g,
-		boost::visitor(vis).
-		root_vertex( SceneGraph::Vertex() )
+		boost::visitor(vis)
 	);
 }
 

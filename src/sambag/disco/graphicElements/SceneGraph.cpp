@@ -7,6 +7,7 @@
 
 #include "GraphicElement.hpp"
 #include "SceneGraph.hpp"
+#include "sambag/com/Common.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -42,5 +43,19 @@ bool SceneGraph::connectElements(GraphicElementPtr from, GraphicElementPtr to) {
 	tie(e, connected) = add_edge(vFrom, vTo, g);
 	return connected;
 }
-
+//-----------------------------------------------------------------------------
+const SceneGraph::SceneGraphElement &
+SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
+{
+	return vertexElementMap[v];
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::draw(IDrawContext::Ptr context) const {
+	typedef std::list<SceneGraphElement> Elements;
+	Elements elements;
+	getElementsSorted<Elements>(elements);
+	for_each( SceneGraphElement o, elements ) {
+		o->draw(context);
+	}
+}
 }}} // namespaces

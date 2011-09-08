@@ -30,6 +30,7 @@
 #include "sambag/disco/svg/SvgBuilder.hpp"
 #include "sambag/disco/svg/SvgRoot.hpp"
 #include <list>
+#include "sambag/com/Common.hpp"
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSvg );
@@ -61,7 +62,9 @@ void TestSvg::testSvgFirstElements() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	//>>>>>>>>>>>>>>>>>>>>>> scene graph TODO:temp. test=>until graph fully impl.
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgFirstElements", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> some asserts
 	CPPUNIT_ASSERT_EQUAL((size_t)5, rootObject->getNumClassObjects());
@@ -76,13 +79,6 @@ void TestSvg::testSvgFirstElements() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);
-	//>>>>>>>>>>>>>>>>>>>>>> scene graph TODO:temp. test=>until graph fully impl.
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
-	CPPUNIT_ASSERT(g);
-	typedef std::list<graphicElements::SceneGraph::Vertex> Vertices;
-	Vertices vertices;
-	g->getElementsSorted<Vertices>(vertices);
-	CPPUNIT_ASSERT_EQUAL((size_t)10, vertices.size());
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform01() {
