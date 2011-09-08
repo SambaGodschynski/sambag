@@ -13,6 +13,35 @@
 #include <boost/shared_ptr.hpp>
 
 namespace sambag { namespace disco {
+
+//=============================================================================
+// Class CairoPath
+// a wrapper for cairo_path_t
+//=============================================================================
+class CairoPath : public Path {
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<CairoPath> Ptr;
+private:
+	//-------------------------------------------------------------------------
+	cairo_path_t * cpath;
+protected:
+	//-------------------------------------------------------------------------
+	CairoPath( cairo_path_t * cpath ) : cpath(cpath) {}
+public:
+	//-------------------------------------------------------------------------
+	static Ptr create( cairo_path_t *cpath ) {
+		Ptr neu(new CairoPath(cpath));
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual ~CairoPath() {
+		cairo_path_destroy(cpath);
+	}
+	//-------------------------------------------------------------------------
+	cairo_path_t * getPath() const { return cpath; }
+};
+
 //=============================================================================
 //  Class CairoDrawContext:
 //    implements IDrawContext with Cairos draw operations.
@@ -150,6 +179,34 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getSourceColor() const { return currentColor; }
+	//-------------------------------------------------------------------------
+	virtual void setDash( const Dash &dash ) {
+		cairo_set_dash(
+			context,
+			dash.get<DASH_ARRAY>(),
+			dash.get<DASH_COUNT>(),
+			dash.get<DASH_OFFSET>());
+	}
+	//-------------------------------------------------------------------------
+	virtual void disableDash() {
+		cairo_set_dash( context, NULL, 0, 0 );
+	}
+	//-------------------------------------------------------------------------
+	virtual Dash getDash() const {
+		Number *dash = NULL, offset = 0;
+		int numDash = 0;
+		cairo_get_dash(context, dash, &offset);
+		numDash = cairo_get_dash_count(context);
+		return boost::make_tuple(dash, numDash, offset);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setLineCap ( LineCapStyle style ) {
+		cairo_set_line_cap( context, (cairo_line_cap_t)style );
+	}
+	//-------------------------------------------------------------------------
+	virtual LineCapStyle getLineCap () const {
+		return (LineCapStyle)cairo_get_line_cap(context);
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const {
@@ -164,6 +221,22 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void clip() {
 		cairo_clip(context);
+	}
+	//-------------------------------------------------------------------------
+	virtual Path::Ptr copyPath() const {
+		cairo_path_t * path = cairo_copy_path(context);
+		return CairoPath::create(path);
+	}
+	//-------------------------------------------------------------------------
+	virtual Path::Ptr copyPathFlat() const {
+		cairo_path_t * path = cairo_copy_path_flat(context);
+		return CairoPath::create(path);
+	}
+	//-------------------------------------------------------------------------
+	virtual void appendPath( Path::Ptr path ) {
+		CairoPath::Ptr cp = boost::shared_dynamic_cast<CairoPath, Path>(path);
+		if (!cp) return;
+		cairo_append_path(context, cp->getPath());
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
@@ -189,6 +262,13 @@ public:
 		cairo_matrix_t cm;
 		discoMatrixToCairoMatrix( m, cm );
 		cairo_transform(context, &cm);
+	}
+	//-------------------------------------------------------------------------
+	virtual void getMatrix( Matrix &m ) {
+		if ( m.size1() != 3 || m.size2() != 3 ) return;
+		cairo_matrix_t cm;
+		cairo_get_matrix(context, &cm);
+		cairoMatrixToDiscoMatrix(cm, m);
 	}
 };
 

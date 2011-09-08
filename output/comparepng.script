@@ -1,2 +1,2 @@
 #!bin/sh
-perceptualdiff $1 $2 -fov 10
+perceptualdiff $1 $2 -fov 10 -threshold 10

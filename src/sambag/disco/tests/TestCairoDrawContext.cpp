@@ -261,7 +261,47 @@ void TestCairoDrawContext::testText() {
 	testPng("testText", surface);
 	context.reset();
 	releaseSurface(surface);
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testPath() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
 
+	Font font;
+	font.size = 184.;
+	font.fontFace = "arial";
+	context->setFont(font);
+	context->setSourceColor( ColorRGBA(1.0) );
+	context->translate( Point2D(150., 200.) );
+	context->textPath("D.I.S.C.O");
+	Path::Ptr path = context->copyPath();
+	context->stroke();
+	context->setSourceColor( ColorRGBA(1.0, 1.0) );
+	context->appendPath(path);
+	context->fill();
+	Number rot=0.0;
+	for ( Number a=1.0; a>0; a-=0.025) {
+		context->setSourceColor( ColorRGBA(1.0, 0, 0, a) );
+		context->appendPath(path);
+		context->stroke();
+		context->setSourceColor( ColorRGBA(1.0, 1.0, 0, a) );
+		context->appendPath(path);
+		context->fill();
+		context->rotate(rot);
+		rot+=0.0001;
+	}
+
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testPath", surface);
+	context.reset();
+	releaseSurface(surface);
 }
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testClip() {
@@ -348,6 +388,68 @@ void TestCairoDrawContext::testMatrixConv() {
 	CairoDrawContext::cairoMatrixToDiscoMatrix(cm, dm);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compare
 	CPPUNIT_ASSERT( m == dm );
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testLineStyle() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> svg as stream
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200.0, 400.0);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
+	IDrawContext::Dash dash;
+	{
+		Number dashes[] = {5.0, 5.0, 10.0, 5.0};
+		int numDash = sizeof(dashes)/sizeof(dashes[0]);
+		Number offset = 0.0;
+		dash = IDrawContext::Dash(dashes, numDash, offset);
+	}
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+
+	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->rect( Rectangle(0.,0.,1200.,400.) );
+	context->fill();
+	context->setSourceColor( ColorRGBA(0) );
+
+	context->setStrokeWidth(5.0);
+	context->setDash(dash);
+	context->moveTo( Point2D(100, 300) ); context->lineTo( Point2D(300, 100) );
+	context->stroke();
+	context->disableDash();
+
+	context->setLineCap( IDrawContext::LINE_CAP_SQUARE );
+	context->setStrokeWidth(10.0);
+	context->moveTo( Point2D(300, 300)); context->lineTo( Point2D(500, 100) );
+	context->stroke();
+
+	context->setStrokeWidth(15.0);
+	context->setLineCap( IDrawContext::LINE_CAP_ROUND );
+	context->moveTo( Point2D(500, 300)); context->lineTo( Point2D(700, 100) );
+	context->stroke();
+
+
+
+	context->setStrokeWidth(20.0);
+	context->setLineCap( IDrawContext::LINE_CAP_BUTT );
+	context->setDash(dash);
+	context->moveTo( Point2D(700, 300)); context->lineTo( Point2D(900, 100) );
+	context->stroke();
+
+	{
+		Number dashes[] = { 50.0, 50.0 };
+		int numDash = sizeof(dashes)/sizeof(dashes[0]);
+		Number offset = 0.0;
+		dash = IDrawContext::Dash(dashes, numDash, offset);
+	}
+
+	context->setDash(dash);
+	context->setStrokeWidth(50.0);
+	context->moveTo( Point2D(900, 300)); context->lineTo( Point2D(1100, 100) );
+	context->stroke();
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testLineStyle", surface);
+	context.reset();
+	releaseSurface(surface);
+
 }
 //-----------------------------------------------------------------------------
 void TestCairoDrawContext::testSetStrokeWidth() {

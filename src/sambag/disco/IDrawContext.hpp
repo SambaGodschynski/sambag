@@ -13,10 +13,22 @@
 #include <math.h>
 #include <string>
 #include "Font.hpp"
+#include <boost/tuple/tuple.hpp>
 
 namespace sambag { namespace disco {
 
 using namespace sambag::com;
+
+//=============================================================================
+// Class Path
+// a base class for path. A Path is exchangeable only on his concrete
+// implementation. Means: A Path created by CairoContext fits only
+// to CairoContext.
+//=============================================================================
+struct Path {
+	typedef boost::shared_ptr<Path> Ptr;
+	virtual ~Path() {}
+};
 
 //=============================================================================
 // Interface IDrawContext.
@@ -26,6 +38,15 @@ using namespace sambag::com;
 //=============================================================================
 class IDrawContext {
 public:
+	//-------------------------------------------------------------------------
+	// < array of dashes, number of dashes, offset >
+	typedef boost::tuple<Number*, int, Number> Dash;
+	//-------------------------------------------------------------------------
+	enum {
+		 DASH_ARRAY,
+		 DASH_COUNT,
+		 DASH_OFFSET
+	};
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IDrawContext> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>drawing
@@ -59,6 +80,12 @@ public:
 	virtual void textPath( const std::string &text ) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
+	enum LineCapStyle {
+		 LINE_CAP_BUTT,
+		 LINE_CAP_ROUND,
+		 LINE_CAP_SQUARE
+	};
+	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Number &val ) = 0;
 	//-------------------------------------------------------------------------
 	virtual Number getStrokeWidth() const = 0;
@@ -66,6 +93,16 @@ public:
 	virtual void setSourceColor( const ColorRGBA &val ) = 0;
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getSourceColor() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setDash( const Dash &dash ) = 0;
+	//-------------------------------------------------------------------------
+	virtual Dash getDash() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void disableDash() = 0;
+	//-------------------------------------------------------------------------
+	virtual void setLineCap ( LineCapStyle style ) = 0;
+	//-------------------------------------------------------------------------
+	virtual LineCapStyle getLineCap () const = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const = 0;
@@ -73,6 +110,12 @@ public:
 	virtual bool hasCurrentPoint() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void clip() = 0;
+	//-------------------------------------------------------------------------
+	virtual Path::Ptr copyPath() const = 0;
+	//-------------------------------------------------------------------------
+	virtual Path::Ptr copyPathFlat() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void appendPath( Path::Ptr path ) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) = 0;
@@ -84,6 +127,8 @@ public:
 	virtual void identityMatrix() = 0;
 	//-------------------------------------------------------------------------
 	virtual void transform ( const Matrix &m ) = 0;
+	//-------------------------------------------------------------------------
+	virtual void getMatrix( Matrix &m ) = 0;
 
 };
 

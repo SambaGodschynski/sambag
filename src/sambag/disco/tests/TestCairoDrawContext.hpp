@@ -28,6 +28,8 @@ private:
 	CPPUNIT_TEST( testClip );
 	CPPUNIT_TEST( testTransformation );
 	CPPUNIT_TEST( testMatrixConv );
+	CPPUNIT_TEST( testLineStyle );
+	CPPUNIT_TEST( testPath );
 	CPPUNIT_TEST( testText );
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -38,10 +40,12 @@ public:
 	void testCurve();
 	void testSetColor();
 	void testText();
+	void testLineStyle();
 	void testClip();
 	void testSetStrokeWidth();
 	void testMatrixConv();
 	void testTransformation();
+	void testPath();
 	void testMisc();
 	void setUp();
 };
