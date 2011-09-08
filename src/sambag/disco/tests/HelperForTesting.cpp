@@ -16,10 +16,10 @@
 
 namespace tests {
 
-// TODO: split files in folder: references, created
+// TODO: split files in folder: references
 
 const std::string OUTPUT_FOLDER = "output/";
-const std::string MR = "soll_";
+const std::string REFERENCE_FOLDER = "references/";
 const std::string COMPARE_SCRIPT = "sh " + OUTPUT_FOLDER + "comparepng.script ";
 
 // make reference pictures for compare
@@ -36,7 +36,7 @@ void writePng(cairo_surface_t *surface, const std::string name) {
 }
 //-----------------------------------------------------------------------------
 void testPng( const std::string &testName, cairo_surface_t *surface ) {
-	const std::string f1( OUTPUT_FOLDER + MR + testName + ".png" );
+	const std::string f1( OUTPUT_FOLDER + REFERENCE_FOLDER + testName + ".png" );
 	const std::string f2( OUTPUT_FOLDER + testName + ".png" );
 
 #ifdef DISCO_CONTEXT_MAKE_REFERENCES
@@ -51,6 +51,9 @@ void setupEnv() {
 	using namespace boost::filesystem;
 	if ( !exists(OUTPUT_FOLDER) ) {
 		create_directory(OUTPUT_FOLDER);
+	}
+	if ( !exists(OUTPUT_FOLDER+REFERENCE_FOLDER) ) {
+		create_directory(OUTPUT_FOLDER+REFERENCE_FOLDER);
 	}
 }
 

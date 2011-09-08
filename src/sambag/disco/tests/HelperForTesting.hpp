@@ -14,7 +14,7 @@
 namespace tests {
 
 extern const std::string OUTPUT_FOLDER;
-extern const std::string MR;
+extern const std::string REFERENCE_FOLDER;
 extern const std::string COMPARE_SCRIPT;
 
 // make reference pictures for compare
