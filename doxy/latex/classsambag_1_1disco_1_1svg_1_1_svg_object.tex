@@ -1,0 +1,157 @@
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object}{
+\section{sambag::disco::svg::SvgObject Class Reference}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object}\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+}
+
+
+{\ttfamily \#include $<$Svg.hpp$>$}
+
+Inheritance diagram for sambag::disco::svg::SvgObject:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.911263cm]{classsambag_1_1disco_1_1svg_1_1_svg_object}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_fill__tag}{Fill\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke__tag}{Stroke\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke_width__tag}{StrokeWidth\_\-tag}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a658b68f468a3d69bc714d67af800fdaf}{
+typedef \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{sambag::xml::XML2Object}$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries BuilderType}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a658b68f468a3d69bc714d67af800fdaf}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aff27d18dd0c94f46600edf6ace085ed9}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries Ptr}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aff27d18dd0c94f46600edf6ace085ed9}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a5f38522de0c74a49514e6fba84e9fcb1}{
+typedef std::list$<$ SvgObject::Ptr $>$ {\bfseries SvgObjects}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a5f38522de0c74a49514e6fba84e9fcb1}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{getDrawingObject} () const =0
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab413d4e961c20fb164ef10cfa01cfb53}{
+virtual void {\bfseries add} (Ptr obj)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab413d4e961c20fb164ef10cfa01cfb53}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a17dfe153c81cd09b1e08b33d44cc4ef2}{
+virtual void {\bfseries setXmlText} (const std::string \&str)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a17dfe153c81cd09b1e08b33d44cc4ef2}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a42e6ae33457f1e7eaa9a5c31ae197e42}{
+virtual void {\bfseries draw} (IDrawContext::Ptr context)=0}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a42e6ae33457f1e7eaa9a5c31ae197e42}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa1dbea0f2f716828a19a18b0ef18b77b}{
+virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const =0}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa1dbea0f2f716828a19a18b0ef18b77b}
+
+\item 
+virtual void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{copyStyleFrom} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a6ff59420e02b5f80730be964767aaf30}{
+virtual void {\bfseries setStyle} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a6ff59420e02b5f80730be964767aaf30}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_abee1cd5d8cfcb9d7846aad0b5fca7384}{
+virtual void {\bfseries set} (const StrokeWidth\_\-tag::Type \&width, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke_width__tag}{StrokeWidth\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_abee1cd5d8cfcb9d7846aad0b5fca7384}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aab0b180e22a531e6a125753c82eebd4f}{
+virtual void {\bfseries set} (const \hyperlink{structsambag_1_1com_1_1_color_r_g_b_a}{Stroke\_\-tag::Type} \&color, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke__tag}{Stroke\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aab0b180e22a531e6a125753c82eebd4f}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab4bf18768e274d7382ac0bcc5603bbd8}{
+virtual void {\bfseries set} (const \hyperlink{structsambag_1_1com_1_1_color_r_g_b_a}{Fill\_\-tag::Type} \&color, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_fill__tag}{Fill\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab4bf18768e274d7382ac0bcc5603bbd8}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a3491876592666a552c937661cc21aca0}{
+static void {\bfseries registerAttributes} (\hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{SvgObject::BuilderType} \&binder)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a3491876592666a552c937661cc21aca0}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+SVG version of GraphicElement. SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. 
+
+Definition at line 30 of file Svg.hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!copyStyleFrom@{copyStyleFrom}}
+\index{copyStyleFrom@{copyStyleFrom}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{copyStyleFrom}]{\setlength{\rightskip}{0pt plus 5cm}virtual void sambag::disco::svg::SvgObject::copyStyleFrom (
+\begin{DoxyParamCaption}
+\item[{const {\bf sambag::disco::graphicElements::Style} \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}
+\begin{DoxySeeAlso}{See also}
+Style.copyFrom() 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em \_\-style} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2d2553a6d3a539fa8fe8e0d43a1e250e}{sambag::disco::graphicElements::GraphicElement}.
+
+
+
+Reimplemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}{sambag::disco::svg::SvgCompound}.
+
+
+
+Definition at line 75 of file Svg.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!getDrawingObject@{getDrawingObject}}
+\index{getDrawingObject@{getDrawingObject}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{getDrawingObject}]{\setlength{\rightskip}{0pt plus 5cm}virtual GraphicElement::Ptr sambag::disco::svg::SvgObject::getDrawingObject (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}
+SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. \begin{DoxyReturn}{Returns}
+that GraphicElement that draw the SVG object. 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3f778dfdf91a6b6a7fcd8065708e132d}{sambag::disco::svg::SvgCompound}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_line_adf873ecfe1079a7a33890138d9f93bcb}{sambag::disco::svg::SvgLine}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad21262edb7fda1a7ab1a45ef15c2f303}{sambag::disco::svg::SvgRect}, and \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_text_af07f166b433d947c117c797bd8891e89}{sambag::disco::svg::SvgText}.
+
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+/home/samba/workspace/sambag/src/sambag/disco/svg/Svg.hpp\item 
+/home/samba/workspace/sambag/src/sambag/disco/svg/Svg.cpp\end{DoxyCompactItemize}

@@ -1,0 +1,131 @@
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound}{
+\section{sambag::disco::svg::SvgCompound Class Reference}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound}\index{sambag::disco::svg::SvgCompound@{sambag::disco::svg::SvgCompound}}
+}
+
+
+{\ttfamily \#include $<$SvgCompound.hpp$>$}
+
+Inheritance diagram for sambag::disco::svg::SvgCompound:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.778157cm]{classsambag_1_1disco_1_1svg_1_1_svg_compound}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_a947fb6d7a19ded36f83bde3cad36a8e7}{
+typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound}{SvgCompound} $>$ {\bfseries Ptr}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_a947fb6d7a19ded36f83bde3cad36a8e7}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}{copyStyleFrom} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_abf2ed04d2056cc23f2bd18e733a37010}{
+virtual void {\bfseries setStyle} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_abf2ed04d2056cc23f2bd18e733a37010}
+
+\item 
+GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3f778dfdf91a6b6a7fcd8065708e132d}{getDrawingObject} () const 
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_ab97cedaf15e20a3dbe8530e0baf95d43}{
+size\_\-t {\bfseries getNumChildren} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_ab97cedaf15e20a3dbe8530e0baf95d43}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_adea06ff47c94f6ef3dfafa09e63c6df5}{
+virtual void {\bfseries add} (SvgObject::Ptr obj)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_adea06ff47c94f6ef3dfafa09e63c6df5}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_a8e81a118a56bba814020938288c4dce3}{
+virtual void {\bfseries draw} (IDrawContext::Ptr context)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_a8e81a118a56bba814020938288c4dce3}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3a133a2b00b8161750722992ccf8235d}{
+virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3a133a2b00b8161750722992ccf8235d}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_ada54b80d89a9f70b36b519cfac1e510e}{
+static Ptr {\bfseries create} ()}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_ada54b80d89a9f70b36b519cfac1e510e}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_a72cd5fb9db21515519ddf9fb8ae3f3e2}{
+sambag::disco::graphicElements::Compound::Ptr {\bfseries combo}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_a72cd5fb9db21515519ddf9fb8ae3f3e2}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class for all compounded SVG elements. 
+
+Definition at line 22 of file SvgCompound.hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}{
+\index{sambag::disco::svg::SvgCompound@{sambag::disco::svg::SvgCompound}!copyStyleFrom@{copyStyleFrom}}
+\index{copyStyleFrom@{copyStyleFrom}!sambag::disco::svg::SvgCompound@{sambag::disco::svg::SvgCompound}}
+\subsubsection[{copyStyleFrom}]{\setlength{\rightskip}{0pt plus 5cm}virtual void sambag::disco::svg::SvgCompound::copyStyleFrom (
+\begin{DoxyParamCaption}
+\item[{const {\bf sambag::disco::graphicElements::Style} \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}
+\begin{DoxySeeAlso}{See also}
+Style.copyFrom() 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em \_\-style} & \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{sambag::disco::svg::SvgObject}.
+
+
+
+Definition at line 42 of file SvgCompound.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3f778dfdf91a6b6a7fcd8065708e132d}{
+\index{sambag::disco::svg::SvgCompound@{sambag::disco::svg::SvgCompound}!getDrawingObject@{getDrawingObject}}
+\index{getDrawingObject@{getDrawingObject}!sambag::disco::svg::SvgCompound@{sambag::disco::svg::SvgCompound}}
+\subsubsection[{getDrawingObject}]{\setlength{\rightskip}{0pt plus 5cm}GraphicElement::Ptr sambag::disco::svg::SvgCompound::getDrawingObject (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3f778dfdf91a6b6a7fcd8065708e132d}
+SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. \begin{DoxyReturn}{Returns}
+that GraphicElement that draw the SVG object. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{sambag::disco::svg::SvgObject}.
+
+
+
+Definition at line 57 of file SvgCompound.hpp.
+
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+/home/samba/workspace/sambag/src/sambag/disco/svg/SvgCompound.hpp\item 
+/home/samba/workspace/sambag/src/sambag/disco/svg/SvgCompound.cpp\end{DoxyCompactItemize}
