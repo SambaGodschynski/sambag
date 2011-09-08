@@ -29,6 +29,7 @@
 #include <boost/filesystem.hpp>
 #include "sambag/disco/svg/SvgBuilder.hpp"
 #include "sambag/disco/svg/SvgRoot.hpp"
+#include <list>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSvg );
@@ -46,7 +47,7 @@ void TestSvg::setUp() {
 	setupEnv();
 }
 //-----------------------------------------------------------------------------
-void TestSvg::testSvgLine() {
+void TestSvg::testSvgFirstElements() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
 	static const std::string TEST_SVG = IN_FOLDER + "firstElements.svg";
@@ -62,6 +63,34 @@ void TestSvg::testSvgLine() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	rootObject->draw(context);
 	testPng("testSvgFirstElements", surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> some asserts
+	typedef std::list<svg::SvgObject::Ptr> SvgObjects;
+	SvgObjects c;
+	rootObject->getObjectsByClass<SvgObjects>("line",c);
+	CPPUNIT_ASSERT(!c.empty());
+	svg::SvgObject::Ptr text = rootObject->getObjectById("text");
+	CPPUNIT_ASSERT(text);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
+	context.reset();
+	cairo_surface_destroy(surface);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testSvgTransform01() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "transform01.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	rootObject->draw(context);
+	testPng("testSvgTransform01", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);

@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/function.hpp>
 #include <boost/signal.hpp>
+#include <boost/bind.hpp>
 #include <list>
 #include <string>
 #include <sstream>
@@ -60,6 +61,8 @@ struct BaseObject {
 };
 //------------------------------------------------------------------------------
 int BaseObject::numObjects = 0;
+//----------------------------------------------------------------------------
+static bool createdSignalPassed = false;
 //------------------------------------------------------------------------------
 struct Root : public BaseObject {
   typedef boost::shared_ptr<Root> Ptr;
@@ -68,6 +71,10 @@ struct Root : public BaseObject {
     return Ptr( new Root() );
   }
   virtual std::string getClassName() const { return "root"; }
+  void objCreated ( BaseObject::Ptr obj ) {
+    using namespace std;
+    createdSignalPassed = true;
+  }
 };
 //------------------------------------------------------------------------------
 struct ObjectA : public BaseObject {
@@ -99,11 +106,6 @@ struct ObjectB : public BaseObject {
  	  x = _x;
    }
 };
-//----------------------------------------------------------------------------
-void objCreated ( BaseObject::Ptr obj ) {
-  using namespace std;
-  //cout<<obj->id<<endl;
-}
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // object and xml structure compare
 //----------------------------------------------------------------------------
@@ -181,7 +183,6 @@ void XML2ObjectTest::testBuildStructure() {
   using namespace sambag::xml;
   XML2Object<BaseObject> xml2Obj;
   // register obj. created slot
-  xml2Obj.addObjectCreatedSlot( &objCreated );
   // register attributtes
   xml2Obj.registerAttribute<int, Attr_Id, BaseObject>("id");
   xml2Obj.registerAttribute<std::string, Attr_Descr, ObjectB>("descr");
@@ -190,7 +191,11 @@ void XML2ObjectTest::testBuildStructure() {
   CPPUNIT_ASSERT( !ptr );
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>XML01
   xml2Obj.registerObject<Root>("root");
-  ptr = xml2Obj.buildWithXmlString ( XML01 );
+  Root::Ptr root = Root::create();
+  XML2Object<BaseObject>::CreatedSignalFunction f =
+		  boost::bind( &Root::objCreated, root.get(), _1 );
+  xml2Obj.addObjectCreatedSlot(f);
+  ptr = xml2Obj.buildWithXmlString ( XML01, root );
   CPPUNIT_ASSERT( ptr );
   CPPUNIT_ASSERT_EQUAL( (int)1, BaseObject::numObjects );
   CPPUNIT_ASSERT_EQUAL( std::string("this is it"), ptr->xmlText );
@@ -198,6 +203,7 @@ void XML2ObjectTest::testBuildStructure() {
   doc.Parse ( XML01 );
   std::string ret = compareRekursive ( ptr, *( doc.FirstChildElement() ) );
   CPPUNIT_ASSERT_EQUAL( std::string("ok"), ret );
+  CPPUNIT_ASSERT(createdSignalPassed);
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>XML02
   xml2Obj.registerObject<ObjectA>("objectA");
   ptr = xml2Obj.buildWithXmlString ( XML02 );

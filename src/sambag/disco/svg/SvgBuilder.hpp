@@ -12,6 +12,7 @@
 #include "sambag/xml/XML2Obj.hpp"
 #include <string>
 
+
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 /**

@@ -21,6 +21,8 @@ SvgRect::~SvgRect() {
 }
 //-----------------------------------------------------------------------------
 void SvgRect::draw( IDrawContext::Ptr cn ) {
+	if (!rect) return;
+	AutoTransform at(getTransformMatrix(), cn);
 	rect->draw(cn);
 }
 }}}

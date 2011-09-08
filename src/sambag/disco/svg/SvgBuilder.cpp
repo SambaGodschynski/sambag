@@ -11,6 +11,7 @@
 #include "sambag/disco/svg/SvgGroup.hpp"
 #include "sambag/disco/svg/SvgRoot.hpp"
 #include "sambag/disco/svg/SvgText.hpp"
+#include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -23,7 +24,6 @@ SvgBuilder::SvgBuilder() {
 }
 //-----------------------------------------------------------------------------
 SvgBuilder::~SvgBuilder() {
-
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgClasses() {
@@ -43,12 +43,20 @@ void SvgBuilder::registerSvgAttributes() {
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 {
-	return xml2Obj.buildWithXmlString(str);
+	SvgRoot::Ptr root = SvgRoot::create();
+	SvgObject::BuilderType::CreatedSignalFunction f =
+			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
+	xml2Obj.addObjectCreatedSlot(f);
+	return xml2Obj.buildWithXmlString(str, root);
 }
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
 {
-	return xml2Obj.buildWithXmlFile(name);
+	SvgRoot::Ptr root = SvgRoot::create();
+	SvgObject::BuilderType::CreatedSignalFunction f =
+			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
+	xml2Obj.addObjectCreatedSlot(f);
+	return xml2Obj.buildWithXmlFile(name, root);
 }
 
 }}}

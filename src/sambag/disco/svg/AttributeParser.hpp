@@ -5,8 +5,8 @@
  *      Author: samba
  */
 
-#ifndef STYLEPARSER_HPP_
-#define STYLEPARSER_HPP_
+#ifndef ATTRIBUTE_PARSER_HPP_
+#define ATTRIBUTE_PARSER_HPP_
 
 #include "sambag/com/Common.hpp"
 #include <boost/algorithm/string.hpp>
@@ -20,7 +20,7 @@ using namespace sambag::com;
 //=============================================================================
 // parser
 //=============================================================================
-class StyleParser {
+class AttributeParser {
 private:
 	//-------------------------------------------------------------------------
 	typedef std::map<std::string, ColorRGBA> HtmlColors;
@@ -39,6 +39,8 @@ public:
 	//-------------------------------------------------------------------------
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
+	static void parseTransform(const std::string &str, Matrix&);
+	//-------------------------------------------------------------------------
 	static const ColorRGBA & getColorByHtmlName( const std::string &name );
 };
 
@@ -50,7 +52,8 @@ public:
 extern std::istream & operator>>(std::istream&, sambag::com::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
+extern std::istream & operator>>(std::istream&, sambag::com::Matrix&);
 
 
 
-#endif /* STYLEPARSER_HPP_ */
+#endif /* ATTRIBUTE_PARSER_HPP_ */

@@ -16,11 +16,13 @@ class TestSvg : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestSvg );
-	CPPUNIT_TEST( testSvgLine );
+	CPPUNIT_TEST( testSvgFirstElements );
+	CPPUNIT_TEST( testSvgTransform01 );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
-	void testSvgLine();
+	void testSvgFirstElements();
+	void testSvgTransform01();
 };
 
 } // namespace

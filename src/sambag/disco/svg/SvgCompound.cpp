@@ -17,6 +17,8 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void SvgCompound::draw( IDrawContext::Ptr cn ) {
+	if (!combo) return;
+	AutoTransform at(getTransformMatrix(), cn);
 	combo->draw(cn);
 }
 

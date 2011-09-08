@@ -35,11 +35,11 @@ template<typename BaseType>
 class XML2Object {
 public:
 	//----------------------------------------------------------------------------
-	typedef boost::signal<void(typename BaseType::Ptr)> SiObjectCreated;
+	typedef boost::signal<void(typename BaseType::Ptr)> CreatedSignal;
 	//----------------------------------------------------------------------------
-	typedef boost::function<void(typename BaseType::Ptr)> BaseTypeF;
+	typedef boost::function<void(typename BaseType::Ptr)> CreatedSignalFunction;
 	//----------------------------------------------------------------------------
-	SiObjectCreated sObjCreated;
+	CreatedSignal sObjCreated;
 private:
 	//############################################################################
 	// Object Creation:
@@ -128,11 +128,19 @@ private:
 	//############################################################################
 	// building
 	//----------------------------------------------------------------------------
-	// walks rekursively through xml element structure and creates objects if
-	// tagnames are registered.
-	typename BaseType::Ptr walk(const ticpp::Element &element) {
+	/**
+	 *  walks rekursively through xml element structure and creates objects if
+	 *  tagnames are registered.
+	 * @param element: current xml emelment
+	 * @param givenRoot: setted if the root object is already created (opt.)
+	 * @return created object ptr
+	 */
+	typename BaseType::Ptr walk(
+			const ticpp::Element &element,
+			typename BaseType::Ptr givenRoot = typename BaseType::Ptr() )
+	{
 		// create new object
-		typename BaseType::Ptr node = buildObject(element);
+		typename BaseType::Ptr node = (givenRoot) ? givenRoot : buildObject(element);
 		if (!node)
 			return typename BaseType::Ptr();
 		// iterate through child elements
@@ -149,11 +157,19 @@ private:
 		return node;
 	}
 	//----------------------------------------------------------------------------
-	// builds object structure. Container has to append ObjectType objects
-	// with a push_back method.
-	typename BaseType::Ptr build(ticpp::Document &doc) {
+	/**
+	 * builds object structure. Container has to append ObjectType objects
+	 * with a push_back method.
+	 * @param doc
+	 * @param givenRoot setted if the root object is already created (opt.)
+	 * @return root object ptr
+	 */
+	typename BaseType::Ptr build(
+			ticpp::Document &doc,
+			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+	{
 		ticpp::Element* pElem = doc.FirstChildElement();
-		return walk(*pElem);
+		return walk(*pElem, givenRoot);
 	}
 public:
 	//----------------------------------------------------------------------------
@@ -173,7 +189,11 @@ public:
 		}
 	}
 	//----------------------------------------------------------------------------
-	boost::signals::connection addObjectCreatedSlot(BaseTypeF f) {
+	CreatedSignal & getCreatedSignal() const {
+		return sObjCreated;
+	}
+	//----------------------------------------------------------------------------
+	boost::signals::connection addObjectCreatedSlot(CreatedSignalFunction f) {
 		return sObjCreated.connect(f);
 	}
 	//----------------------------------------------------------------------------
@@ -185,20 +205,32 @@ public:
 		tagMap.insert(std::make_pair(to_lower_copy(tagName), fact));
 	}
 	//----------------------------------------------------------------------------
-	// builds object structure. Returns first xml tag as BaseObject which contains
-	// the other registered tags as objects.
-	typename BaseType::Ptr buildWithXmlString(const std::string &xml) {
+	/**
+	 * @param xml:  a valid xml document as string
+	 * @param givenRoot: you are able to use a already created root element.
+	 * @return the root object containing a object representation of the xml structure.
+	 */
+	typename BaseType::Ptr buildWithXmlString(
+			const std::string &xml,
+			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+	{
 		ticpp::Document doc;
 		doc.Parse(xml);
-		return build(doc);
+		return build(doc, givenRoot);
 	}
 	//----------------------------------------------------------------------------
-	// builds object structure. Returns first xml tag as BaseObject which contains
-	// the other registered tags as objects.
-	typename BaseType::Ptr buildWithXmlFile(const std::string &filename) {
+	/**
+	 * @param xml: location of a valid xml document.
+	 * @param givenRoot: you are able to use a already created root element.
+	 * @return the root object containing a object representation of the xml structure.
+	 */
+	typename BaseType::Ptr buildWithXmlFile(
+			const std::string &filename,
+			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+	{
 		ticpp::Document doc(filename);
 		doc.LoadFile();
-		return build(doc);
+		return build(doc, givenRoot);
 	}
 	//----------------------------------------------------------------------------
 	/**

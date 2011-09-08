@@ -5,7 +5,7 @@
  *      Author: samba
  */
 
-#include "StyleParser.hpp"
+#include "AttributeParser.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/assign/list_inserter.hpp>
 
@@ -17,7 +17,7 @@ namespace sambag { namespace disco { namespace svg {
 /**
  * created with "extract_html_colors.py"
  */
-void StyleParser::initHtmlColors() {
+void AttributeParser::initHtmlColors() {
 	using namespace boost::assign;
 	insert(htmlColors)
 	( "aliceblue", ColorRGBA(0.941176470588,0.972549019608,1.0, 1.0) )
