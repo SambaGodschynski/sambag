@@ -193,7 +193,7 @@ public:
 		);
 	}
 	//-------------------------------------------------------------------------
-	virtual void rect( const Rectangle &rect, Number cornerRadius );
+	virtual void rect( const Rectangle &rect, const Number &cornerRadius );
 	//-------------------------------------------------------------------------
 	virtual void stroke() {
 		cairo_stroke(context);

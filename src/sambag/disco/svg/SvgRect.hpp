@@ -28,12 +28,19 @@ public:
 	struct WIDTH_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct HEIGHT_tag { typedef Number Type; };
+	//-------------------------------------------------------------------------
+	struct RX_tag { typedef Number Type; };
+	//-------------------------------------------------------------------------
+	struct RY_tag { typedef Number Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
 	sambag::disco::graphicElements::Rect::Ptr rect;
 	//-------------------------------------------------------------------------
-	SvgRect();
+	SvgRect() {
+		using namespace sambag::disco::graphicElements;
+		rect = Rect::create();
+	}
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create() {
@@ -46,7 +53,7 @@ public:
 		return rect;
 	}
 	//-------------------------------------------------------------------------
-	virtual ~SvgRect();
+	virtual ~SvgRect() {}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, X_tag ) {
@@ -78,11 +85,25 @@ public:
 		rect->setRectangle(r);
 	}
 	//-------------------------------------------------------------------------
+	virtual void set( const RX_tag::Type &x, RX_tag ) {
+		Point2D r = rect->getRadius();
+		r.x(x);
+		rect->setRadius(r);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const RY_tag::Type &y, RY_tag ) {
+		Point2D r = rect->getRadius();
+		r.y(y);
+		rect->setRadius(r);
+	}
+	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {
 		binder.registerAttribute<X_tag::Type, X_tag, SvgRect>("x");
 		binder.registerAttribute<Y_tag::Type, Y_tag, SvgRect>("y");
 		binder.registerAttribute<WIDTH_tag::Type, WIDTH_tag, SvgRect>("width");
 		binder.registerAttribute<HEIGHT_tag::Type, HEIGHT_tag, SvgRect>("height");
+		binder.registerAttribute<RX_tag::Type, RX_tag, SvgRect>("rx");
+		binder.registerAttribute<RY_tag::Type, RY_tag, SvgRect>("ry");
 	}
 };
 

@@ -25,7 +25,7 @@ CairoDrawContext::~CairoDrawContext() {
 	cairo_destroy(context);
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::rect( const Rectangle &rect, Number cornerRadius ) {
+void CairoDrawContext::rect( const Rectangle &rect, const Number &cornerRadius ) {
 	Number radius = cornerRadius;
 	Number degrees = M_PI / 180.0;
 

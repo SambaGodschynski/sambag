@@ -26,13 +26,21 @@ private:
 	//-------------------------------------------------------------------------
 	virtual void drawPath( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual void drawInstructions( IDrawContext::Ptr context );
+	virtual void drawInstructions( IDrawContext::Ptr context ) const;
 protected:
 	//-------------------------------------------------------------------------
 	pathInstruction::PathInstructions pathInstructions;
 	//-------------------------------------------------------------------------
 	Path();
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * TODO: do this for all graphic elements.
+	 * @param cn
+	 */
+	virtual void appendPathToContext(IDrawContext::Ptr cn) const {
+		drawInstructions(cn);
+	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
 		Ptr neu = create();

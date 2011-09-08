@@ -18,11 +18,15 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Rect> Ptr;
 private:
+	//-------------------------------------------------------------------------
+	void _rect(IDrawContext::Ptr context);
 protected:
 	//-------------------------------------------------------------------------
 	Rectangle rect;
 	//-------------------------------------------------------------------------
-	Rect( const Rectangle &rect=NULL_RECTANGLE );
+	Point2D r; // roudned rect radius
+	//-------------------------------------------------------------------------
+	Rect();
 public:
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -31,9 +35,9 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create( const Rectangle &rect=NULL_RECTANGLE )
+	static Ptr create()
 	{
-		Ptr neu(new Rect(rect));
+		Ptr neu(new Rect());
 		neu->__setSelf(neu);
 		return neu;
 	}
@@ -41,6 +45,10 @@ public:
 	const Rectangle & getRectangle() const { return rect; }
 	//-------------------------------------------------------------------------
 	void setRectangle(const Rectangle &r)  { rect = r; }
+	//-------------------------------------------------------------------------
+	const Point2D & getRadius() const { return r; }
+	//-------------------------------------------------------------------------
+	void setRadius(const Point2D &_r)  { r = _r; }
 	//-------------------------------------------------------------------------
 	virtual ~Rect();
 	//-------------------------------------------------------------------------

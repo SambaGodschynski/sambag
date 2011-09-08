@@ -90,7 +90,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) = 0;
 	//-------------------------------------------------------------------------
-	virtual void rect( const Rectangle &rect, Number cornerRadius ) = 0;
+	virtual void rect( const Rectangle &rect, const Number &cornerRadius ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void fill() = 0;
 	//-------------------------------------------------------------------------

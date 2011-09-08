@@ -17,8 +17,6 @@
 #include <list>
 
 
-// TODO: polygon
-// TODO: polyline
 // TODO: viewbox
 // TODO: fillpatterns
 // TODO: styletag

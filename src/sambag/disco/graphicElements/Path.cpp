@@ -455,7 +455,7 @@ void Path::draw( IDrawContext::Ptr cn ) {
 	}
 }
 //-----------------------------------------------------------------------------
-void Path::drawInstructions( IDrawContext::Ptr cn ) {
+void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 	if (pathInstructions.empty())
 		return;
 	DrawReturn ret;

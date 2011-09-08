@@ -10,6 +10,7 @@
 
 #include <list>
 #include "sambag/com/Common.hpp"
+#include "ostream"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -49,5 +50,14 @@ extern bool isCubic ( InstructionOp op );
 extern bool isQuadratic ( InstructionOp op );
 
 }}}} // namespace
+
+/**
+ * for debugging.
+ * @return svg path instructions
+ */
+extern std::ostream & operator<<(
+		std::ostream &,
+		const sambag::disco::graphicElements::pathInstruction::PathInstructions&
+);
 
 #endif /* PATHINSTRUCTION_HPP_ */

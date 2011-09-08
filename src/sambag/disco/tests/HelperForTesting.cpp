@@ -16,7 +16,6 @@
 
 namespace tests {
 
-// TODO: split files in folder: references
 
 const std::string OUTPUT_FOLDER = "output/";
 const std::string REFERENCE_FOLDER = "references/";
