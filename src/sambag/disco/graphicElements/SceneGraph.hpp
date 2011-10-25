@@ -171,10 +171,12 @@ private:
 	}
 public:
 	//-------------------------------------------------------------------------
+	static const Vertex NULL_VERTEX;
+	//-------------------------------------------------------------------------
 	/**
 	 * Assumes that graph contains vertex.
-	 * @param v
-	 * @return
+	 * @param vertex
+	 * @return the order number
 	 */
 	VertexType getVertexType(const Vertex &v) const {
 		return vertexTypeMap[v];
@@ -182,19 +184,26 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Assumes that graph contains vertex.
-	* @param v
+	* @param v vertex
+	* @param ord order number
 	* @return
 	*/
 	OrderNumber getVertexOrderNumber(const Vertex &v) const {
 		return vertexOrderMap[v];
 	}
 	//-------------------------------------------------------------------------
+	void setVertexOrderNumber(const Vertex &v, const OrderNumber &ord) {
+		vertexOrderMap[v] = ord;
+	}
+	//-------------------------------------------------------------------------
+	Vertex getRelatedVertex(const SceneGraphElement &el) const;
+	//-------------------------------------------------------------------------
 	/**
 	 * Assumes that graph contains vertex.
 	* @param v
 	* @return
 	*/
-	IDrawable::Ptr getSceneGraphElement(const Vertex &v) const;
+	const SceneGraphElement & getSceneGraphElement(const Vertex &v) const;
 	//-------------------------------------------------------------------------
 	void draw(IDrawContext::Ptr) const;
 	//-------------------------------------------------------------------------
@@ -214,6 +223,14 @@ public:
 	 */
 	template<typename Container>
 	void getProcessList(Container &out) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * fills Container with all parent vertices which matches to VertexType.
+	 * @param v
+	 * @param out
+	 */
+	template<typename Container>
+	void findParentsWithType(const Vertex& v, VertexType type, Container &out) const;
 	//-------------------------------------------------------------------------
 	bool addElement( IDrawable::Ptr ptr );
 	//-------------------------------------------------------------------------
@@ -333,13 +350,9 @@ template <class T> struct CompareNodeOrder {
 	}
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-/**
- * getProcessList
- * @param out
- */
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename Container>
 void SceneGraph::getProcessList (Container &out) const
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 {
 	/**
 	 * @brief copies org. graph into a "vector as graph" graph.
@@ -361,6 +374,18 @@ void SceneGraph::getProcessList (Container &out) const
 		g2,
 		boost::visitor(vis)
 	);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+template<typename Container>
+void SceneGraph::findParentsWithType(const Vertex& v, VertexType type, Container &out) const
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+{
+	InvAdjacencyIterator it, end;
+	boost::tie(it, end) = boost::inv_adjacent_vertices(v,g);
+	for(; it!=end; ++it) {
+		if (getVertexType(*it) == type)
+			out.push_back(*it);
+	}
 }
 }}} // namespace
 

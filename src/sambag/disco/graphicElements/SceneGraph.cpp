@@ -9,6 +9,7 @@
 #include "SceneGraph.hpp"
 #include "sambag/com/Common.hpp"
 #include <iostream>
+#include <limits.h>
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -39,6 +40,8 @@ void RestoreContextState::perform(IDrawContext::Ptr context) {
 	//std::cout<<"restore: " << name << std::endl;
 };
 //=============================================================================
+const SceneGraph::Vertex SceneGraph::NULL_VERTEX = UINT_MAX;
+//=============================================================================
 // class SceneGraph
 //=============================================================================
 //-----------------------------------------------------------------------------
@@ -51,7 +54,6 @@ bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
 	const Vertex &u = add_vertex(g);
 	vertexElementMap[u] = ptr;
 	vertexTypeMap[u] = IDRAWABLE;
-	vertexOrderMap[u] = boost::num_vertices(g);
 	it->second = u;
 	return true;
 }
@@ -69,14 +71,25 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 		return false;
 	Vertex vTo = it->second;
 	Edge e;
+	// set order number
+	vertexOrderMap[vTo] = boost::out_degree(vFrom,g);
+
 	bool connected;
 	tie(e, connected) = add_edge(vFrom, vTo, g);
 	return connected;
 }
 //-----------------------------------------------------------------------------
-IDrawable::Ptr SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
+const SceneGraph::SceneGraphElement &
+SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
 	return vertexElementMap[v];
+}
+//-----------------------------------------------------------------------------
+SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) const {
+	Element2Vertex::const_iterator it = element2Vertex.find(el);
+	if (it==element2Vertex.end())
+		return NULL_VERTEX;
+	return it->second;
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::draw(IDrawContext::Ptr context) const {
