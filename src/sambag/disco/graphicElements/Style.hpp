@@ -57,16 +57,6 @@ public:
 	// special case color none: its not the same like NO_COLOR.
 	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
 	static const ColorRGBA NONE_COLOR;
-	//-------------------------------------------------------------------------
-	static const Number DEFAULT_NUMBER;
-	static const Number DEFAULT_STROKE_WIDTH;
-	static const Number DEFAULT_OPACITY;
-	static const LineCapStyle DEFAULT_LINE_CAP_STYLE;
-	static const FillRule DEFAULT_FILL_RULE;
-	static const ColorRGBA DEFAULT_COLOR;
-	static const Dash DEFAULT_DASH;
-	static const boost::logic::tribool DEFAULT_BOOL;
-	static const Font DEFAULT_FONT;
 private:
 	//-------------------------------------------------------------------------
 	FLYWEIGHT(Number, _strokeWidth);
@@ -76,7 +66,6 @@ private:
 	FLYWEIGHT(ColorRGBA, _fillColor);
 	FLYWEIGHT(Font, _font);
 	Dash _dash; // TODO: make flyweight
-	FLYWEIGHT(Number, _opacity);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
 public:
 	//-------------------------------------------------------------------------
@@ -87,8 +76,7 @@ public:
 		_strokeColor( NO_COLOR ),
 		_fillColor( NO_COLOR ),
 		_font(NO_FONT),
-		_dash(NO_DASH),
-		_opacity(NO_NUMBER)
+		_dash(NO_DASH)
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -99,23 +87,14 @@ public:
 		_strokeColor == b._strokeColor &&
 		_fillColor == b._fillColor &&
 		_font == b._font &&
-		_dash == b._dash &&
-		_opacity == b._opacity;
+		_dash == b._dash;
 	}
 	//-------------------------------------------------------------------------
 	bool operator != (const Style &b) const {
 		return !((*this)==b);
 	}
 	//-------------------------------------------------------------------------
-	/**
-	 * copy value from b to self. Copies attribute only if not setted to keep
-	 * a cascading effect.
-	 * @param b
-	 */
-	void copyFrom (const Style&b);
-	//-------------------------------------------------------------------------
 	const Number & strokeWidth() const {
-		if (_strokeWidth==NO_NUMBER) return DEFAULT_STROKE_WIDTH;
 		return _strokeWidth;
 	}
 	//-------------------------------------------------------------------------
@@ -125,7 +104,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const LineCapStyle & lineCapStyle() const {
-		if(_lineCapStyle==NO_LINE_CAP_STYLE) return DEFAULT_LINE_CAP_STYLE;
 		return _lineCapStyle;
 	}
 	//-------------------------------------------------------------------------
@@ -135,7 +113,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const FillRule & fillRule() const {
-		if(_fillRule==NO_FILL_RULE) return DEFAULT_FILL_RULE;
 		return _fillRule;
 	}
 	//-------------------------------------------------------------------------
@@ -145,8 +122,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & strokeColor() const {
-		if (_strokeColor == NO_COLOR || _strokeColor == NONE_COLOR)
-			return DEFAULT_COLOR;
 		return _strokeColor;
 	}
 	//-------------------------------------------------------------------------
@@ -156,7 +131,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & fillColor() const {
-		if(_fillColor==NO_COLOR) return DEFAULT_COLOR;
 		return _fillColor;
 	}
 	//-------------------------------------------------------------------------
@@ -166,7 +140,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const Dash & dash() const {
-		if(_dash==NO_DASH) return DEFAULT_DASH;
 		return _dash;
 	}
 	//-------------------------------------------------------------------------
@@ -175,36 +148,13 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	const bool isFilled() const {
-		if ( _fillColor == NONE_COLOR )
-			return false;
-		return true;
-	}
-	//-------------------------------------------------------------------------
-	const bool isStroked() const {
-		if (_strokeColor == NO_COLOR ||  _strokeColor == NONE_COLOR )
-			return false;
-		return true;
-	}
-	//-------------------------------------------------------------------------
 	void intoContext( IDrawContext::Ptr cn ) const;
 	//-------------------------------------------------------------------------
 	Font font() const {
-		// keep cascading effect: check every font value
-		if (_font==NO_FONT) return DEFAULT_FONT;
-		Font res = _font;
-		if (res.fontFace == NO_FONT.fontFace)
-			res.fontFace = DEFAULT_FONT.fontFace;
-		if (res.size == NO_FONT.size)
-			res.size = DEFAULT_FONT.size;
-		if (res.slant == NO_FONT.slant)
-			res.slant = DEFAULT_FONT.slant;
-		if (res.weight== NO_FONT.weight)
-			res.weight = DEFAULT_FONT.weight;
-		return res;
+		return _font;
 	}
 	//-------------------------------------------------------------------------
-	Style & font_( const Font& f ) {
+	Style & font( const Font& f ) {
 		_font = f;
 		return *this;
 	}
@@ -234,19 +184,6 @@ public:
 		Font f = _font.get(); // flyweight: get, change, assign
 		f.weight = v;
 		_font = f;
-		return *this;
-	}
-	//-------------------------------------------------------------------------
-	const Number & opacity() const {
-		if (_opacity == NO_NUMBER)
-			return DEFAULT_OPACITY;
-		return _opacity;
-	}
-	//-------------------------------------------------------------------------
-	Style & opacity(const Number & v) {
-		if (v<0.0 || v > 1.0)
-			return *this;
-		_opacity = v;
 		return *this;
 	}
 

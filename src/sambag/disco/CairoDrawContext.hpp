@@ -11,7 +11,9 @@
 #include "IDrawContext.hpp"
 #include "cairo.h"
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 #include "CairoSurface.hpp"
+#include <list>
 namespace sambag { namespace disco {
 
 //=============================================================================
@@ -52,6 +54,16 @@ public:
 	typedef boost::shared_ptr<CairoDrawContext> Ptr;
 private:
 	//-------------------------------------------------------------------------
+	void _save();
+	//-------------------------------------------------------------------------
+	void _restore();
+	//-------------------------------------------------------------------------
+	typedef boost::tuple<ColorRGBA, ColorRGBA, Font> StateInfo;
+	//-------------------------------------------------------------------------
+	typedef std::list<StateInfo> StateStack;
+	//-------------------------------------------------------------------------
+	StateStack stack;
+	//-------------------------------------------------------------------------
 	ColorRGBA fillColor;
 	//-------------------------------------------------------------------------
 	ColorRGBA strokeColor;
@@ -59,8 +71,6 @@ private:
 	cairo_surface_t *surface;
 	//-------------------------------------------------------------------------
 	Font currentFont;
-	//-------------------------------------------------------------------------
-	bool _isFilled, _isStroked;
 protected:
 	//-------------------------------------------------------------------------
 	cairo_t *context;
@@ -200,7 +210,7 @@ public:
 	virtual void rect( const Rectangle &rect, const Number &cornerRadius );
 	//-------------------------------------------------------------------------
 	virtual void stroke() {
-		if (!_isStroked)
+		if (!isStroked())
 			return;
 		cairo_set_source_rgba(context,
 				strokeColor.getR(),
@@ -211,7 +221,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void fill() {
-		if (!_isFilled)
+		if (!isFilled())
 			return;
 		cairo_set_source_rgba(context,
 				fillColor.getR(),
@@ -222,7 +232,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void fillPreserve() {
-		if (!_isFilled)
+		if (!isFilled())
 			return;
 		cairo_set_source_rgba(context,
 				fillColor.getR(),
@@ -259,20 +269,12 @@ public:
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
-	virtual void setStroked(bool b) {
-		_isStroked = b;
-	}
-	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {
-		return _isStroked;
-	}
-	//-------------------------------------------------------------------------
-	virtual void setFilled(bool b) {
-		_isFilled = b;
+		return strokeColor.getA() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual bool isFilled() const {
-		return _isFilled;
+		return fillColor.getA() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Number &val ) {
@@ -337,10 +339,12 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual void save() {
+		_save();
 		cairo_save(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void restore() {
+		_restore();
 		cairo_restore(context);
 	}
 	//-------------------------------------------------------------------------

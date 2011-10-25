@@ -36,7 +36,7 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 CairoDrawContext::CairoDrawContext(cairo_surface_t *surface)
-: surface(surface), _isFilled(true),_isStroked(true), context(NULL)
+: surface(surface), context(NULL)
 {
 	context = cairo_create(surface);
 	setFont(currentFont);
@@ -45,6 +45,19 @@ CairoDrawContext::CairoDrawContext(cairo_surface_t *surface)
 //-----------------------------------------------------------------------------
 CairoDrawContext::~CairoDrawContext() {
 	cairo_destroy(context);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::_save() {
+	stack.push_back(
+			StateInfo(strokeColor, fillColor, currentFont)
+	);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::_restore() {
+	if (stack.empty())
+		return;
+	boost::tie(strokeColor, fillColor, currentFont) = stack.back();
+	stack.pop_back();
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {

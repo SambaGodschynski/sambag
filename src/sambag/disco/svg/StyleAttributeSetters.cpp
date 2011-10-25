@@ -1,5 +1,6 @@
 /*
  * StyleAttributeSetters.cpp
+ * Another file for StyleParser.
  *
  *  Created on: 14.10.2011
  *      Author: samba
@@ -43,7 +44,11 @@ void setFillColor( Style &style, const std::string &value ) {
 void setOpacity( Style &style, const std::string &value ) {
 	Number v=1.0;
 	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
-	style.opacity(v);
+	ColorRGBA fill = style.fillColor();
+	ColorRGBA stroke = style.strokeColor();
+	fill.setA(v); stroke.setA(v);
+	style.fillColor(fill);
+	style.strokeColor(stroke);
 }
 //-----------------------------------------------------------------------------
 void setFontSize( Style &style, const std::string &value ) {

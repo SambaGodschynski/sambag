@@ -28,8 +28,9 @@ using namespace sambag::com;
 // implementation. Means: A Path created by CairoContext fits only
 // to CairoContext.
 //=============================================================================
-struct Path {
+struct Path { // TODO: change to interface
 	typedef boost::shared_ptr<Path> Ptr;
+	// TODO: use boost::iterator if possible
 	virtual ~Path() {}
 };
 
@@ -130,12 +131,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getFillColor() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setStroked(bool isStroked) = 0;
-	//-------------------------------------------------------------------------
+	/**
+	 * @return true if strokeColor.alpha > 0
+	 */
 	virtual bool isStroked() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setFilled(bool isFilled) = 0;
-	//-------------------------------------------------------------------------
+	/**
+	* @return true if fillColor.alpha > 0
+	*/
 	virtual bool isFilled() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void setStrokeColor( const ColorRGBA &val ) = 0;

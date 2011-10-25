@@ -209,7 +209,11 @@ public:
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
-		neu.opacity(v);
+		ColorRGBA fill = neu.fillColor();
+		ColorRGBA stroke = neu.strokeColor();
+		fill.setA(v); stroke.setA(v);
+		neu.fillColor(fill);
+		neu.strokeColor(stroke);
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------

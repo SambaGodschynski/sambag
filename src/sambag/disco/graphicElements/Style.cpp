@@ -53,47 +53,11 @@ const ColorRGBA Style::NO_COLOR = com::NULL_COLOR;
 const ColorRGBA Style::NONE_COLOR = com::NONE_COLOR;
 const Style::Dash Style::NO_DASH = Style::Dash(NULL, 0, DBL_MAX);
 const Font Style::NO_FONT = Font("no-xxx-font", -1.0, Font::SLANT_UNDEFINED, Font::WEIGHT_UNDEFINED);
-//-----------------------------------------------------------------------------
-const Number Style::DEFAULT_NUMBER = 0.0;
-const Number Style::DEFAULT_STROKE_WIDTH = 1.0;
-const Style::LineCapStyle Style::DEFAULT_LINE_CAP_STYLE = IDrawContext::LINE_CAP_BUTT;
-const Style::FillRule Style::DEFAULT_FILL_RULE = IDrawContext::FILL_RULE_WINDING;
-const ColorRGBA Style::DEFAULT_COLOR = ColorRGBA(0,0,0,1);
-const Style::Dash Style::DEFAULT_DASH = Style::Dash(NULL, 0, 0);
-const boost::logic::tribool Style::DEFAULT_BOOL = false;
-const Font Style::DEFAULT_FONT;
-const Number Style::DEFAULT_OPACITY = 1.0;
 //------------------------------------------------------------------------------
 // define NULL_STYLE after all const objects above,
 // because a Style object needs them.
 // (otherwise you probably earn a segmentation fault.)
 const Style NULL_STYLE;
-//------------------------------------------------------------------------------
-void Style::copyFrom( const Style &b ) {
-	if (_strokeWidth == NO_NUMBER && b._strokeWidth != NO_NUMBER)
-		_strokeWidth = b._strokeWidth;
-	if (_lineCapStyle == NO_LINE_CAP_STYLE && b._lineCapStyle != NO_LINE_CAP_STYLE)
-		_lineCapStyle = b._lineCapStyle;
-	if (_fillRule==NO_FILL_RULE && b._fillRule!=NO_FILL_RULE)
-		_fillRule = b._fillRule;
-	if (_strokeColor==NO_COLOR && b._strokeColor!=NO_COLOR)
-		_strokeColor = b._strokeColor;
-	if (_fillColor==NO_COLOR && b._fillColor!=NO_COLOR)
-		_fillColor = b._fillColor;
-	if (_dash==NO_DASH && b._dash!=NO_DASH)
-		_dash = b._dash;
-	if (_opacity==NO_NUMBER && b._opacity!=NO_NUMBER)
-		_opacity = b._opacity;
-	// font
-	if (_font.get().fontFace == NO_FONT.fontFace && b._font.get().fontFace!=NO_FONT.fontFace)
-		 fontFace(b._font.get().fontFace);
-	if (_font.get().size == NO_FONT.size && b._font.get().size!=NO_FONT.size)
-		fontSize(b._font.get().size);
-	if (_font.get().slant == NO_FONT.slant && b._font.get().slant!=NO_FONT.slant)
-		fontSlant(b._font.get().slant);
-	if (_font.get().weight == NO_FONT.weight && b._font.get().weight!=NO_FONT.weight)
-		fontWeight(b._font.get().weight);
-}
 //-------------------------------------------------------------------------
 void Style::intoContext( IDrawContext::Ptr cn ) const {
 	if (_strokeColor!=NO_COLOR)

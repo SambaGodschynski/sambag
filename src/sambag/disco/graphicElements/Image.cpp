@@ -41,7 +41,7 @@ void Image::draw( IDrawContext::Ptr cn ) {
 		outline.getWidth()/orgSz.getWidth(),
 		outline.getHeight()/orgSz.getHeight()
 	));
-	cn->drawSurface(image, 1.0/*TODO replace with opacity val.*/);
+	cn->drawSurface(image, cn->getFillColor().getA());
 
 	cn->identityMatrix();
 	cn->transform(tmp);
