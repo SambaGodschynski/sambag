@@ -238,7 +238,7 @@ const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name )
 	std::string key = to_lower_copy(name);
 	HtmlColors::const_iterator it = htmlColors.find(key);
 	if (it==htmlColors.end())
-		return NULL_COLOR;
+		return ColorRGBA::NULL_COLOR;
 	return it->second;
 }
 //-----------------------------------------------------------------------------

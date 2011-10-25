@@ -168,7 +168,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const Stroke_tag::Type &color, const Stroke_tag & ) {
 		using sambag::disco::graphicElements::Style;
-		if (color==NULL_COLOR) return;
+		if (color==ColorRGBA::NULL_COLOR) return;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -178,7 +178,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const Fill_tag::Type &color, const Fill_tag & ) {
 		using sambag::disco::graphicElements::Style;
-		if (color==NULL_COLOR) return;
+		if (color==ColorRGBA::NULL_COLOR) return;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);

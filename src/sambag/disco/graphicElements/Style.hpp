@@ -45,10 +45,6 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>properties
 	//-------------------------------------------------------------------------
 	// NO_VALUES are for recognize whether a value is setted or not.
-	static const Number NO_NUMBER;
-	static const LineCapStyle NO_LINE_CAP_STYLE;
-	static const FillRule NO_FILL_RULE;
-	static const ColorRGBA NO_COLOR;
 	static const Dash NO_DASH;
 	static const Font::FontFace NO_FONT_FACE;
 	static const Font NO_FONT;
@@ -75,11 +71,11 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	Style() :
-		_strokeWidth(NO_NUMBER),
-		_lineCapStyle(NO_LINE_CAP_STYLE),
-		_fillRule(NO_FILL_RULE),
-		_strokeColor(NO_COLOR),
-		_fillColor(NO_COLOR),
+		_strokeWidth(NULL_NUMBER),
+		_lineCapStyle(IDrawContext::NO_LINE_CAP),
+		_fillRule(IDrawContext::NO_FILL_RULE),
+		_strokeColor(ColorRGBA::NULL_COLOR),
+		_fillColor(ColorRGBA::NULL_COLOR),
 		_fontFace(NO_FONT.fontFace),
 		_fontSize(NO_FONT.size),
 		_fontSlant(NO_FONT.slant),
