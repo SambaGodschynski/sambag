@@ -121,7 +121,8 @@ public:
 	 */
 	typedef boost::adjacency_list<
 			boost::listS,
-			boost::vecS,
+			boost::vecS, 			// has to be vecS. Otherwise the processlist
+									// creation is getting more complex.
 			boost::bidirectionalS,
 			vertexProperties > G;
 	//-------------------------------------------------------------------------
@@ -231,26 +232,25 @@ private:
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_drawable(const Vertex &v, Graph& g) {
-		/*typename SceneGraph::SceneGraphElement obj =
+		typename SceneGraph::SceneGraphElement obj =
 				sceneGraph.getSceneGraphElement(v);
 		if (!obj)
 			return;
 		size_t numOutEdges = boost::out_degree(v, g);
 		container.push_back(ProcessDrawable::create(obj, numOutEdges));
-		*/
+
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void discover_drawable(const Vertex &v, Graph &g) {
-		/*// only need to restore if has child objects in graph
+		// only need to restore if has child objects in graph
 		if ( boost::out_degree(v, g) == 0 )
 			return;
 
 		typename SceneGraph::SceneGraphElement obj =
 					sceneGraph.getSceneGraphElement(v);
 		RestoreContextState::Ptr re = RestoreContextState::create();
-		re->name = std::string( typeid(*obj.get()).name() );
-		container.push_back(re);*/
+		container.push_back(re);
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -287,17 +287,75 @@ public:
 	}
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// getElementsSorted
+/**
+	@brief Copies grap src to graph dst. Assumes that dst is empty.
+	Using this because the boost::copy_graph function dosen't works
+	if G2 type is a "vector as graph" type. ( for all I know )
+	Only works if G1 vertex_desc. type is vecS.
+	Otherwise you have create a mapping from G1 to G2 vertex.
+
+	@param src
+	@param dst
+*/
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+template <typename G1, typename G2, typename Set, typename Comparator>
+void copyGraph( const G1 &src, G2 &dst, const Comparator &cmp ) {
+	typedef typename boost::graph_traits<G1>::vertex_iterator VertexIterator;
+	typedef typename boost::graph_traits<G1>::edge_iterator EdgeIterator;
+
+	using namespace boost;
+
+	VertexIterator vi, vend;
+	boost::tie(vi, vend) = vertices(src);
+	for ( ; vi!=vend; ++vi ) {
+		dst.push_back( Set(cmp) );
+
+	}
+
+	EdgeIterator ei, eend;
+	boost::tie(ei, eend) = edges(src);
+	for (; ei!=eend; ++ei) {
+		add_edge(source(*ei,src), target(*ei,src), dst);
+	}
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * @class comparator for set.
+ * Compares in order to the node_order_t property.
+ */
+template <class T> struct CompareNodeOrder {
+	const SceneGraph *g; // reference dosen't work
+	CompareNodeOrder( const SceneGraph *g = NULL ) : g(g) {}
+	bool operator() (const T& x, const T& y) const {
+		if (!g)
+			return false;
+		return g->getVertexOrderNumber(x)  <  g->getVertexOrderNumber(y);
+	}
+};
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * getProcessList
+ * @param out
+ */
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename Container>
 void SceneGraph::getProcessList (Container &out) const
 {
+	/**
+	 * @brief copies org. graph into a "vector as graph" graph.
+	 * where the edge container is a set<vertex> to affect in which order
+	 * the depth_first_search alg. selects the out_edges.
+	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph
+	 */
 	if (boost::num_vertices(g)==0)
 		return;
 	DFSVisitor<Container> vis(*this, out);
-
-	std::vector< std::set<size_t> > g2;
-
+	typedef CompareNodeOrder<Vertex> Comparator;
+	typedef std::set<Vertex, Comparator > Set;
+	typedef std::vector<Set> G2;
+	G2 g2;
+	Comparator cmp(this);
+	copyGraph<G, G2, Set, Comparator>(g,g2,cmp); // O(n)
 
 	boost::depth_first_search(
 		g2,
