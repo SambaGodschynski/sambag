@@ -12,9 +12,10 @@
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include "sambag/disco/boost/graph/depth_first_search.hpp"
 #include <boost/unordered_map.hpp>
-#include "sambag/disco/IDrawable.hpp"
+#include <boost/graph/vector_as_graph.hpp>
+#include <boost/graph/depth_first_search.hpp>
+#include <boost/graph/copy.hpp>
 
 namespace sambag { namespace disco { namespace graphicElements {
 
@@ -228,33 +229,20 @@ template <typename Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:
 	//-------------------------------------------------------------------------
-	// make sure that all nodes are in the right order68.
-	std::map<size_t, SceneGraph::Vertex> orderMap;
-	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_drawable(const Vertex &v, Graph& g) {
-		typename SceneGraph::SceneGraphElement obj =
+		/*typename SceneGraph::SceneGraphElement obj =
 				sceneGraph.getSceneGraphElement(v);
 		if (!obj)
 			return;
 		size_t numOutEdges = boost::out_degree(v, g);
 		container.push_back(ProcessDrawable::create(obj, numOutEdges));
-		// insert into ordermap
-		// ====================
-		// get parent node
-		if ( boost::in_degree(v,g) == 0 ) { // no parents == root node
-			orderMap[0] = v;
-		}
-		SceneGraph::InvAdjacencyIterator it, end;
-		boost::tie(it,end) = boost::inv_adjacent_vertices(v,g);
-		// TODO: assumes that every node has one parent
-		size_t parentOrder = sceneGraph.getVertexOrderNumber(*it);
-		orderMap[parentOrder] = v;
+		*/
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void discover_drawable(const Vertex &v, Graph &g) {
-		// only need to restore if has child objects in graph
+		/*// only need to restore if has child objects in graph
 		if ( boost::out_degree(v, g) == 0 )
 			return;
 
@@ -262,7 +250,7 @@ private:
 					sceneGraph.getSceneGraphElement(v);
 		RestoreContextState::Ptr re = RestoreContextState::create();
 		re->name = std::string( typeid(*obj.get()).name() );
-		container.push_back(re);
+		container.push_back(re);*/
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -307,8 +295,12 @@ void SceneGraph::getProcessList (Container &out) const
 	if (boost::num_vertices(g)==0)
 		return;
 	DFSVisitor<Container> vis(*this, out);
+
+	std::vector< std::set<size_t> > g2;
+
+
 	boost::depth_first_search(
-		g,
+		g2,
 		boost::visitor(vis)
 	);
 }
