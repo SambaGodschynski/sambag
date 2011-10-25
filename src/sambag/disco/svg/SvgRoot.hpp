@@ -97,12 +97,26 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~SvgRoot(){}
 	//-------------------------------------------------------------------------
-	static Ptr create(graphicElements::SceneGraph *g = NULL) {
+	/**
+	 *
+	 * @param g
+	 * @param firstElement true if first element in tree
+	 * @return
+	 */
+	static Ptr create(
+			graphicElements::SceneGraph *g = NULL,
+			bool firstElement = false)
+	{
 		Ptr neu(new SvgRoot());
 		neu->__setSelf(neu);
 		if (!g)
 			return neu;
 		neu->setRelatedSceneGraph(g->getPtr());
+		// set default style if first element
+		if (firstElement) {
+			g->setStyleTo(neu->getGraphicElement(),
+					graphicElements::Style::DEFAULT_STYLE);
+		}
 		return neu;
 	}
 	//-------------------------------------------------------------------------

@@ -106,6 +106,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) = 0;
 	//-------------------------------------------------------------------------
+	virtual void setFontFace(const Font::FontFace &fontFace) = 0;
+	//-------------------------------------------------------------------------
+	virtual void setFontWeight(const Font::Weight &weight) = 0;
+	//-------------------------------------------------------------------------
+	virtual void setFontSlant(const Font::Slant &slant) = 0;
+	//-------------------------------------------------------------------------
+	virtual void setFontSize(const Font::Size &size) = 0;
+	//-------------------------------------------------------------------------
 	virtual Font getCurrentFont() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void textPath( const std::string &text ) = 0;

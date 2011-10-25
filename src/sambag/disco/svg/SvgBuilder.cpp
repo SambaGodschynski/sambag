@@ -79,7 +79,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
-	SvgRoot::Ptr root = SvgRoot::create(g.get());
+	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);
 	xml2Obj.setClosure(g.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );

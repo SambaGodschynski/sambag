@@ -55,6 +55,7 @@ std::string getInstructionAsString(InstructionOp op) {
 		case CURVETO_CUBIC_SMOOTH_REL: return "s";
 		case CURVETO_QUADRATIC_SMOOTH_ABS: return "T";
 		case CURVETO_QUADRATIC_SMOOTH_REL: return "t";
+		case NONE: break;
 	}
 	return "?";
 }

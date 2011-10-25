@@ -152,13 +152,13 @@ SceneGraph::getStyleOf(const SceneGraphElement &el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
-		return graphicElements::NULL_STYLE;
+		return graphicElements::Style::NULL_STYLE;
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
 	findParentsWithType(rv, STYLE, vertices);
 	if (vertices.empty())
-		return graphicElements::NULL_STYLE;
+		return graphicElements::Style::NULL_STYLE;
 	// assume only one style node per vertex
 	return vertexStyleMap[vertices.back()];
 }

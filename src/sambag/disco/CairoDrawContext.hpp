@@ -260,6 +260,41 @@ public:
 		currentFont = font;
 	}
 	//-------------------------------------------------------------------------
+	virtual void setFontFace(const Font::FontFace &fontFace) {
+		currentFont.fontFace = fontFace;
+		cairo_select_font_face (
+			context,
+			currentFont.fontFace.c_str(),
+			(cairo_font_slant_t)currentFont.slant,
+			(cairo_font_weight_t)currentFont.weight
+		);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setFontWeight(const Font::Weight &weight) {
+		currentFont.weight = weight;
+		cairo_select_font_face (
+			context,
+			currentFont.fontFace.c_str(),
+			(cairo_font_slant_t)currentFont.slant,
+			(cairo_font_weight_t)currentFont.weight
+		);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setFontSlant(const Font::Slant &slant) {
+		currentFont.slant = slant;
+		cairo_select_font_face (
+			context,
+			currentFont.fontFace.c_str(),
+			(cairo_font_slant_t)currentFont.slant,
+			(cairo_font_weight_t)currentFont.weight
+		);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setFontSize(const Font::Size &size) {
+		currentFont.size = size;
+		cairo_set_font_size (context, currentFont.size);
+	}
+	//-------------------------------------------------------------------------
 	virtual Font getCurrentFont() const {
 		return currentFont;
 	}

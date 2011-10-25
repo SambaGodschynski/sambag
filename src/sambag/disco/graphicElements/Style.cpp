@@ -6,6 +6,7 @@
  */
 
 #include "Style.hpp"
+#include "sambag/com/Common.hpp"
 #include <float.h>
 
 //=============================================================================
@@ -42,22 +43,35 @@ size_t hash_value(const sambag::disco::Font &o) {
 } // namespace boost
 
 namespace sambag { namespace disco { namespace graphicElements {
+namespace {
+Style createDefaultStyle() {
+	Style neu;
+	neu.strokeColor(ColorRGBA(0,0,0,0));
+	neu.fillColor(ColorRGBA(0,0,0,1));
+	neu.font(Font());
+	neu.strokeWidth(1.0);
+	return neu;
+}
+} // namespace
 //=============================================================================
 // struct Style
 //=============================================================================
 //-----------------------------------------------------------------------------
-const Number Style::NO_NUMBER = NULL_NUMBER;
+// consider def. order while referencing each other
+const Number Style::NO_NUMBER = com::NULL_NUMBER;
 const Style::LineCapStyle Style::NO_LINE_CAP_STYLE = IDrawContext::NO_LINE_CAP;
 const Style::FillRule Style::NO_FILL_RULE = IDrawContext::NO_FILL_RULE;
-const ColorRGBA Style::NO_COLOR = com::NULL_COLOR;
-const ColorRGBA Style::NONE_COLOR = com::NONE_COLOR;
+const ColorRGBA Style::NO_COLOR = ColorRGBA(NULL_NUMBER,NULL_NUMBER,NULL_NUMBER,NULL_NUMBER); //com::NULL_COLOR;
+const ColorRGBA Style::NONE_COLOR = ColorRGBA(-1,-1,-1,-1); //com::NONE_COLOR;
 const Style::Dash Style::NO_DASH = Style::Dash(NULL, 0, DBL_MAX);
-const Font Style::NO_FONT = Font("no-xxx-font", -1.0, Font::SLANT_UNDEFINED, Font::WEIGHT_UNDEFINED);
+const Font::FontFace Style::NO_FONT_FACE = "undefined-disco-font";
+const Font Style::NO_FONT = Font(Style::NO_FONT_FACE, Style::NO_NUMBER, Font::SLANT_UNDEFINED, Font::WEIGHT_UNDEFINED);
 //------------------------------------------------------------------------------
 // define NULL_STYLE after all const objects above,
 // because a Style object needs them.
 // (otherwise you probably earn a segmentation fault.)
-const Style NULL_STYLE;
+const Style Style::NULL_STYLE;
+const Style Style::DEFAULT_STYLE = createDefaultStyle();
 //-------------------------------------------------------------------------
 void Style::intoContext( IDrawContext::Ptr cn ) const {
 	if (_strokeColor!=NO_COLOR)
@@ -68,8 +82,14 @@ void Style::intoContext( IDrawContext::Ptr cn ) const {
 		cn->setDash(_dash);
 	if (_fillColor!=NO_COLOR)
 		cn->setFillColor(_fillColor);
-	if (_font != NO_FONT)
-		cn->setFont(_font);
+	if (_fontFace != NO_FONT.fontFace)
+		cn->setFontFace(_fontFace);
+	if (_fontSize != NO_FONT.size)
+		cn->setFontSize(_fontSize);
+	if (_fontSlant != NO_FONT.slant)
+		cn->setFontSlant(_fontSlant);
+	if (_fontWeight != NO_FONT.weight)
+		cn->setFontWeight(_fontWeight);
 }
 
 

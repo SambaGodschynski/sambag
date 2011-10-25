@@ -44,15 +44,17 @@ public:
 	typedef IDrawContext::Dash Dash;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>properties
 	//-------------------------------------------------------------------------
-	// NO_VALUES are for recognize whether a value is setted or not. NO_VALUES are only
-	// for intern use. For returning a member which is a NO_VALUE return the
-	// DEFAULT_VALUE.
+	// NO_VALUES are for recognize whether a value is setted or not.
 	static const Number NO_NUMBER;
 	static const LineCapStyle NO_LINE_CAP_STYLE;
 	static const FillRule NO_FILL_RULE;
 	static const ColorRGBA NO_COLOR;
 	static const Dash NO_DASH;
+	static const Font::FontFace NO_FONT_FACE;
 	static const Font NO_FONT;
+	//-------------------------------------------------------------------------
+	static const Style DEFAULT_STYLE;
+	static const Style NULL_STYLE;
 	//-------------------------------------------------------------------------
 	// special case color none: its not the same like NO_COLOR.
 	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
@@ -64,7 +66,10 @@ private:
 	FLYWEIGHT(FillRule, _fillRule);
 	FLYWEIGHT(ColorRGBA, _strokeColor);
 	FLYWEIGHT(ColorRGBA, _fillColor);
-	FLYWEIGHT(Font, _font);
+	FLYWEIGHT(Font::FontFace, _fontFace);
+	FLYWEIGHT(Font::Size, _fontSize);
+	FLYWEIGHT(Font::Slant, _fontSlant);
+	FLYWEIGHT(Font::Weight, _fontWeight);
 	Dash _dash; // TODO: make flyweight
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
 public:
@@ -73,9 +78,12 @@ public:
 		_strokeWidth(NO_NUMBER),
 		_lineCapStyle(NO_LINE_CAP_STYLE),
 		_fillRule(NO_FILL_RULE),
-		_strokeColor( NO_COLOR ),
-		_fillColor( NO_COLOR ),
-		_font(NO_FONT),
+		_strokeColor(NO_COLOR),
+		_fillColor(NO_COLOR),
+		_fontFace(NO_FONT.fontFace),
+		_fontSize(NO_FONT.size),
+		_fontSlant(NO_FONT.slant),
+		_fontWeight(NO_FONT.weight),
 		_dash(NO_DASH)
 	{
 	}
@@ -86,7 +94,10 @@ public:
 		_fillRule == b._fillRule &&
 		_strokeColor == b._strokeColor &&
 		_fillColor == b._fillColor &&
-		_font == b._font &&
+		_fontFace == b._fontFace &&
+		_fontSize == b._fontSize &&
+		_fontSlant == b._fontSlant &&
+		_fontWeight == b._fontWeight &&
 		_dash == b._dash;
 	}
 	//-------------------------------------------------------------------------
@@ -151,44 +162,38 @@ public:
 	void intoContext( IDrawContext::Ptr cn ) const;
 	//-------------------------------------------------------------------------
 	Font font() const {
-		return _font;
+		return Font(_fontFace, _fontSize, _fontSlant, _fontWeight);
 	}
 	//-------------------------------------------------------------------------
 	Style & font( const Font& f ) {
-		_font = f;
+		fontFace(f.fontFace);
+		fontSize(f.size);
+		fontSlant(f.slant);
+		fontWeight(f.weight);
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontFace( const Font::FontFace & v) {
-		Font f = _font.get(); // flyweight: get, change, assign
-		f.fontFace = v;
-		_font = f;
+		_fontFace = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontSize( const Font::Size & v) {
-		Font f = _font.get(); // flyweight: get, change, assign
-		f.size = v;
-		_font = f;
+		_fontSize = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontSlant( const Font::Slant & v) {
-		Font f = _font.get(); // flyweight: get, change, assign
-		f.slant = v;
-		_font = f;
+		_fontSlant = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & fontWeight( const Font::Weight & v) {
-		Font f = _font.get(); // flyweight: get, change, assign
-		f.weight = v;
-		_font = f;
+		_fontWeight = v;
 		return *this;
 	}
 
 };
-extern const Style NULL_STYLE;
 }}} // namespace
 
 #endif /* STYLE_H_ */
