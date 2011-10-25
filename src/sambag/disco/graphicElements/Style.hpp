@@ -251,6 +251,7 @@ public:
 	}
 
 };
+extern const Style NULL_STYLE;
 }}} // namespace
 
 #endif /* STYLE_H_ */

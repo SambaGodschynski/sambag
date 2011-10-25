@@ -24,7 +24,7 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	g->draw(context);
 	// only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
-	if (numChildren==0) {
+	if (resetContextState==true) {
 		context->restore();
 	}
 
@@ -91,6 +91,49 @@ SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) con
 	if (it==element2Vertex.end())
 		return NULL_VERTEX;
 	return it->second;
+}
+//----------------------------------------------------------------------------
+bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m) {
+	Vertex rv = getRelatedVertex(el);
+	if (rv==NULL_VERTEX)
+		return false;
+	Vertex tv = boost::add_vertex(g);
+	vertexTransformationMap[tv] = m;
+	Edge e; bool succeed;
+	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
+	return succeed;
+}
+//----------------------------------------------------------------------------
+bool SceneGraph::setStyleTo(
+	const SceneGraphElement &el,
+	const graphicElements::Style &s)
+{
+	Vertex rv = getRelatedVertex(el);
+	if (rv==NULL_VERTEX)
+		return false;
+	Vertex tv = boost::add_vertex(g);
+	vertexStyleMap[tv] = s;
+	Edge e; bool succeed;
+	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
+	return succeed;
+}
+//----------------------------------------------------------------------------
+const Matrix &
+SceneGraph::getTransformationOf(const SceneGraphElement &el) const
+{
+	Vertex rv = getRelatedVertex(el);
+	if (rv==NULL_VERTEX)
+		return NULL_MATRIX;
+	return vertexTransformationMap[rv];
+}
+//----------------------------------------------------------------------------
+const graphicElements::Style &
+SceneGraph::getStyleOf(const SceneGraphElement &el) const
+{
+	Vertex rv = getRelatedVertex(el);
+	if (rv==NULL_VERTEX)
+		return graphicElements::NULL_STYLE;
+	return vertexStyleMap[rv];
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::draw(IDrawContext::Ptr context) const {

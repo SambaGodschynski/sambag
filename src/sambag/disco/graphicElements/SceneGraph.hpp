@@ -9,6 +9,7 @@
 #define SCENEGRAPH_HPP_
 
 #include "sambag/disco/IDrawContext.hpp"
+#include "sambag/disco/graphicElements/Style.hpp"
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -46,17 +47,34 @@ private:
 	//-------------------------------------------------------------------------
 	IDrawable::Ptr drawable;
 	//-------------------------------------------------------------------------
-	/**
-	 * how many child nodes in scenegraph has the drawable object
-	 */
-	const size_t numChildren;
+	// reset context state after draw. otherwise a RestoreContextState
+	// will do it later.
+	const bool resetContextState;
 	//-------------------------------------------------------------------------
-	ProcessDrawable(IDrawable::Ptr drawable, size_t numChildren ) :
-		drawable(drawable), numChildren(numChildren){};
+	const graphicElements::Style &style;
+	//-------------------------------------------------------------------------
+	const Matrix &transformation;
+	//-------------------------------------------------------------------------
+	ProcessDrawable(IDrawable::Ptr drawable,
+					bool resetContextState,
+					const graphicElements::Style &style,
+					const Matrix &transformation ) :
+		drawable(drawable),
+		resetContextState(resetContextState),
+		style(style),
+		transformation(transformation){}
 public:
 	//-------------------------------------------------------------------------
-	static Ptr create(IDrawable::Ptr drawable, size_t numChildren) {
-		Ptr neu(new ProcessDrawable(drawable, numChildren));
+	static Ptr create(
+			IDrawable::Ptr drawable,
+			bool resetContextState,
+			const graphicElements::Style &style,
+			const Matrix &transformation )
+	{
+		Ptr neu( new ProcessDrawable(drawable,
+									 resetContextState,
+									 style,
+									 transformation));
 		return neu;
 	}
 	//-------------------------------------------------------------------------
@@ -88,6 +106,10 @@ public:
 class GraphicElement;
 typedef boost::shared_ptr<GraphicElement> GraphicElementPtr;
 //=============================================================================
+/**
+ * @class SceneGraph.
+ * see http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph
+ */
 class SceneGraph {
 //=============================================================================
 public:
@@ -98,15 +120,25 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IDrawable::Ptr SceneGraphElement;
 	//-------------------------------------------------------------------------
+	typedef graphicElements::Style StyleNode;
+	//-------------------------------------------------------------------------
+	typedef Matrix TransformationNode;
+	//-------------------------------------------------------------------------
 	typedef int OrderNumber;
 	//-------------------------------------------------------------------------
 	static const int NO_ORDER_NUMBER = -1;
 	//-------------------------------------------------------------------------
 	enum VertexType {
-		IDRAWABLE
+		IDRAWABLE,
+		TRANSFORM,
+		STYLE
 	};
 	//-------------------------------------------------------------------------
 	struct node_object_t { typedef boost::vertex_property_tag kind; };
+	//-------------------------------------------------------------------------
+	struct node_style_t { typedef boost::vertex_property_tag kind; };
+	//-------------------------------------------------------------------------
+	struct node_transformation_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
 	struct node_vtype_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
@@ -114,9 +146,11 @@ public:
 	struct node_order_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
 	typedef boost::property<node_object_t, SceneGraphElement,
+			boost::property<node_style_t, StyleNode,
+			boost::property<node_transformation_t, TransformationNode,
 			boost::property<node_vtype_t, VertexType,
 			boost::property<node_order_t, OrderNumber
-			> > > vertexProperties;
+			> > > > > vertexProperties;
 	//-------------------------------------------------------------------------
 	/**
 	 * Graph type
@@ -137,6 +171,10 @@ public:
 	typedef boost::property_map<G, node_vtype_t>::type VertexTypeMap;
 	//-------------------------------------------------------------------------
 	typedef boost::property_map<G, node_order_t>::type VertexOrderMap;
+	//-------------------------------------------------------------------------
+	typedef boost::property_map<G, node_style_t>::type VertexStyleMap;
+	//-------------------------------------------------------------------------
+	typedef boost::property_map<G, node_transformation_t>::type VertexTransformationMap;
 	//-------------------------------------------------------------------------
 	typedef boost::graph_traits<G>::vertex_iterator VertexIterator;
 	//-------------------------------------------------------------------------
@@ -166,10 +204,16 @@ private:
 	//-------------------------------------------------------------------------
 	VertexOrderMap vertexOrderMap;
 	//-------------------------------------------------------------------------
+	VertexTransformationMap vertexTransformationMap;
+	//-------------------------------------------------------------------------
+	VertexStyleMap vertexStyleMap;
+	//-------------------------------------------------------------------------
 	SceneGraph(){
 		vertexElementMap = get( node_object_t(), g );
 		vertexTypeMap = get( node_vtype_t(), g );
 		vertexOrderMap  = get( node_order_t(), g );
+		vertexTransformationMap = get( node_transformation_t(), g );
+		vertexStyleMap = get( node_style_t(), g );
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -213,6 +257,24 @@ public:
 	const SceneGraphElement & getSceneGraphElement(const Vertex &v) const;
 	//-------------------------------------------------------------------------
 	void draw(IDrawContext::Ptr) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * creates a transformation node and relates it to el
+	 * @param el a SceneGraphElement of this graph object
+	 * @param m a transformation matrix
+	 */
+	bool setTransfomationTo(const SceneGraphElement &el, const Matrix &m);
+	//-------------------------------------------------------------------------
+	/**
+	* creates a style node and relates it to el
+	* @param el a SceneGraphElement of this graph object
+	* @param s a @see Style object
+	*/
+	bool setStyleTo(const SceneGraphElement &el, const graphicElements::Style &s);
+	//-------------------------------------------------------------------------
+	const Matrix & getTransformationOf(const SceneGraphElement &el) const;
+	//-------------------------------------------------------------------------
+	const graphicElements::Style & getStyleOf(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();
@@ -261,7 +323,12 @@ private:
 		if (!obj)
 			return;
 		size_t numOutEdges = boost::out_degree(v, g);
-		container.push_back(ProcessDrawable::create(obj, numOutEdges));
+		container.push_back(
+			ProcessDrawable::create(obj,
+			     	                numOutEdges==0,
+						            sceneGraph.getStyleOf(obj),
+						            sceneGraph.getTransformationOf(obj))
+		);
 
 	}
 	//-------------------------------------------------------------------------

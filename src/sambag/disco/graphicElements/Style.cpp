@@ -46,6 +46,7 @@ namespace sambag { namespace disco { namespace graphicElements {
 // struct Style
 //=============================================================================
 //-----------------------------------------------------------------------------
+const Style NULL_STYLE;
 const Number Style::NO_NUMBER = NULL_NUMBER;
 const Style::LineCapStyle Style::NO_LINE_CAP_STYLE = IDrawContext::NO_LINE_CAP;
 const Style::FillRule Style::NO_FILL_RULE = IDrawContext::NO_FILL_RULE;
