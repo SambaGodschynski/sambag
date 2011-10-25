@@ -38,17 +38,6 @@ public:
 		return combo;
 	}
 	//-------------------------------------------------------------------------
-	size_t getNumChildren() const { return combo->getNumChildren(); }
-	//-------------------------------------------------------------------------
-	virtual void add(SvgObject::Ptr obj) {
-		SvgObject::add(obj);
-		using sambag::disco::graphicElements::GraphicElement;
-		GraphicElement::Ptr gObj=obj->getGraphicElement();
-		if (!gObj)
-			return;
-		combo->add(gObj);
-	}
-	//-------------------------------------------------------------------------
 	virtual ~SvgCompound(){}
 	//-------------------------------------------------------------------------
 	static Ptr create(graphicElements::SceneGraph *g = NULL) {

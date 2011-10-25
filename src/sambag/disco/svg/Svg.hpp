@@ -135,18 +135,15 @@ public:
 	*/
 	virtual GraphicElement::Ptr getGraphicElement() const = 0;
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO: puts transformation matrix into scenegraph.
+	 * @param m
+	 */
 	void setTransformMatrix( const sambag::com::Matrix &m ) {
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj)
 			return;
 		return obj->setTransformMatrix(m);
-	}
-	//-------------------------------------------------------------------------
-	const sambag::com::Matrix & getTransformMatrix() const {
-		GraphicElement::Ptr obj = getGraphicElement();
-		if (!obj)
-			return NULL_MATRIX;
-		return obj->getTransformMatrix();
 	}
 	//-------------------------------------------------------------------------
 	virtual void add(Ptr obj);

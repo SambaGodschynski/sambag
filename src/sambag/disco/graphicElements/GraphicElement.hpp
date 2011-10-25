@@ -26,7 +26,7 @@ private:
 	/**
 	 * the object transformations matrix
 	 */
-	sambag::com::Matrix tMatrix; // TODO: make flyweight
+	sambag::com::Matrix tMatrix;
 protected:
 	//-------------------------------------------------------------------------
 	Style style;
@@ -40,7 +40,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Ptr clone() const = 0;
 	//-------------------------------------------------------------------------
-	virtual const sambag::com::Matrix & getTransformMatrix() const {
+	virtual const sambag::com::Matrix & getTransformMatrixDeprecated() const {
 		return tMatrix;
 	}
 	//-------------------------------------------------------------------------

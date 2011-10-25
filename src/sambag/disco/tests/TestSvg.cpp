@@ -62,7 +62,6 @@ void TestSvg::testSvgFirstElements() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	//>>>>>>>>>>>>>>>>>>>>>> scene graph TODO:temp. test=>until graph fully impl.
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testPng("testSvgFirstElements", surface);
@@ -95,7 +94,8 @@ void TestSvg::testSvgTransform01() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgTransform01", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -116,7 +116,8 @@ void TestSvg::testSvgTransform02() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgTransform02", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -137,7 +138,8 @@ void TestSvg::testSvgTransform03() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgTransform03", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -158,7 +160,8 @@ void TestSvg::testSvgTransform04() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 150);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgTransform04", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -179,8 +182,9 @@ void TestSvg::testSvgPath() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
-	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
+	g->draw(context); // draw 2 times: drawInstructions, drawPath
 	testPng("testSvgPath01", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -201,8 +205,8 @@ void TestSvg::testSvgPath02() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
-	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgPath02", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -223,8 +227,8 @@ void TestSvg::testSvgPath03() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
-	rootObject->getGraphicElement()->draw(context); // draw 2 times: drawInstructions, drawPath
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgPath03", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -245,7 +249,8 @@ void TestSvg::testSvgPolyline() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgPolyline", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -266,7 +271,8 @@ void TestSvg::testSvgPolygon() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgPolygon", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -287,7 +293,8 @@ void TestSvg::testSvgStdFill() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgStdFill", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -308,7 +315,8 @@ void TestSvg::testSvgArc() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgArc", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -329,7 +337,8 @@ void TestSvg::testSvgUse() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgUse", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -350,7 +359,8 @@ void TestSvg::testSvgFont() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgFont", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -371,7 +381,8 @@ void TestSvg::testSvgOpacity() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 350);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgOpacity", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -392,7 +403,8 @@ void TestSvg::testSvgImage() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgImage", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
@@ -413,7 +425,8 @@ void TestSvg::testSvgStyle() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	rootObject->getGraphicElement()->draw(context);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
 	testPng("testSvgStyle", surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();

@@ -23,11 +23,7 @@ class Compound : public GraphicElement {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Compound> Ptr;
-	//-------------------------------------------------------------------------
-	typedef std::list<GraphicElement::Ptr> GraphicElements;
 private:
-	//-------------------------------------------------------------------------
-	GraphicElements objects; //TODO: remove
 protected:
 	Compound(){}
 public:
@@ -37,12 +33,6 @@ public:
 	virtual void copyStyleFrom( const Style &b );
 	//-------------------------------------------------------------------------
 	virtual void setStyle( const Style &_style );
-	//-------------------------------------------------------------------------
-	size_t getNumChildren() const { return objects.size(); }
-	//-------------------------------------------------------------------------
-	virtual void add(GraphicElement::Ptr obj) {
-		objects.push_back(obj);
-	}
 	//-------------------------------------------------------------------------
 	virtual ~Compound(){}
 	//-------------------------------------------------------------------------

@@ -87,7 +87,6 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void Rect::draw( IDrawContext::Ptr cn ) {
-	AutoTransform at(getTransformMatrix(), cn);
 	if ( style.isFilled() ) {
 		_rect(cn);
 		style.setFillStyle(cn);

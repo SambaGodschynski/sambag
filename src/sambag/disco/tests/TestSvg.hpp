@@ -27,7 +27,7 @@ private:
 	CPPUNIT_TEST( testSvgPath03 );
 	CPPUNIT_TEST( testSvgPolyline );
 	CPPUNIT_TEST( testSvgPolygon );
-    CPPUNIT_TEST( testSvgArc );
+	CPPUNIT_TEST( testSvgArc );
 	CPPUNIT_TEST( testSvgFont );
 	CPPUNIT_TEST( testSvgUse );
 	CPPUNIT_TEST( testSvgOpacity );

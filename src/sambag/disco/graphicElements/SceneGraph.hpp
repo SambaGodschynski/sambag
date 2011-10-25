@@ -12,10 +12,78 @@
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/topological_sort.hpp>
+#include <boost/graph/depth_first_search.hpp>
 #include <boost/unordered_map.hpp>
+#include "sambag/disco/IDrawable.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
+
+//=============================================================================
+/**
+ * @class interface for ProcessListProcessors.
+ */
+class ProcessListProcessor {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<ProcessListProcessor> Ptr;
+	//-------------------------------------------------------------------------
+	virtual void perform(IDrawContext::Ptr context) = 0;
+};
+
+
+//=============================================================================
+/**
+ * @class performs a iDrawObject->draw()
+ */
+class ProcessDrawable : public ProcessListProcessor {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<ProcessDrawable> Ptr;
+private:
+	//-------------------------------------------------------------------------
+	IDrawable::Ptr drawable;
+	//-------------------------------------------------------------------------
+	/**
+	 * how many child nodes in scenegraph has the drawable object
+	 */
+	const size_t numChildren;
+	//-------------------------------------------------------------------------
+	ProcessDrawable(IDrawable::Ptr drawable, size_t numChildren ) :
+		drawable(drawable), numChildren(numChildren){};
+public:
+	//-------------------------------------------------------------------------
+	static Ptr create(IDrawable::Ptr drawable, size_t numChildren) {
+		Ptr neu(new ProcessDrawable(drawable, numChildren));
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual void perform(IDrawContext::Ptr context);
+};
+//=============================================================================
+/**
+ * @class restores context state such as transformations
+ */
+class RestoreContextState : public ProcessListProcessor {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<RestoreContextState> Ptr;
+private:
+	//-------------------------------------------------------------------------
+	RestoreContextState(){};
+public:
+	std::string name;
+	//-------------------------------------------------------------------------
+	static Ptr create() {
+		Ptr neu(new RestoreContextState());
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual void perform(IDrawContext::Ptr context);
+};
+
 class GraphicElement;
 typedef boost::shared_ptr<GraphicElement> GraphicElementPtr;
 //=============================================================================
@@ -27,11 +95,25 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<SceneGraph> WPtr;
 	//-------------------------------------------------------------------------
-	typedef GraphicElementPtr SceneGraphElement;
+	typedef IDrawable::Ptr SceneGraphElement;
+	//-------------------------------------------------------------------------
+	typedef size_t OrderNumber;
+	//-------------------------------------------------------------------------
+	enum VertexType {
+		IDRAWABLE
+	};
 	//-------------------------------------------------------------------------
 	struct node_object_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
-	typedef boost::property<node_object_t, SceneGraphElement> vertexProperty;
+	struct node_vtype_t { typedef boost::vertex_property_tag kind; };
+	//-------------------------------------------------------------------------
+	// order number:
+	struct node_order_t { typedef boost::vertex_property_tag kind; };
+	//-------------------------------------------------------------------------
+	typedef boost::property<node_object_t, SceneGraphElement,
+			boost::property<node_vtype_t, VertexType,
+			boost::property<node_order_t, OrderNumber
+			> > > vertexProperties;
 	//-------------------------------------------------------------------------
 	/**
 	 * Graph type
@@ -40,7 +122,7 @@ public:
 			boost::listS,
 			boost::vecS,
 			boost::bidirectionalS,
-			vertexProperty > G;
+			vertexProperties > G;
 	//-------------------------------------------------------------------------
 	typedef boost::graph_traits<G>::vertex_descriptor Vertex;
 	//-------------------------------------------------------------------------
@@ -48,7 +130,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::property_map<G, node_object_t>::type VertexElementMap;
 	//-------------------------------------------------------------------------
-	typedef boost::property_map<G, node_object_t>::const_type ConstVertexElementMap;
+	typedef boost::property_map<G, node_vtype_t>::type VertexTypeMap;
+	//-------------------------------------------------------------------------
+	typedef boost::property_map<G, node_order_t>::type VertexOrderMap;
 	//-------------------------------------------------------------------------
 	typedef boost::graph_traits<G>::vertex_iterator VertexIterator;
 	//-------------------------------------------------------------------------
@@ -72,17 +156,43 @@ private:
 	//-------------------------------------------------------------------------
 	VertexElementMap vertexElementMap;
 	//-------------------------------------------------------------------------
-	ConstVertexElementMap constVertexElementMap;
+	VertexTypeMap vertexTypeMap;
 	//-------------------------------------------------------------------------
 	Element2Vertex element2Vertex;
 	//-------------------------------------------------------------------------
+	VertexOrderMap vertexOrderMap;
+	//-------------------------------------------------------------------------
 	SceneGraph(){
 		vertexElementMap = get( node_object_t(), g );
-		//constVertexElementMap = get( node_object_t(), g);
+		vertexTypeMap = get( node_vtype_t(), g );
+		vertexOrderMap  = get( node_order_t(), g );
 	}
 public:
 	//-------------------------------------------------------------------------
-	const SceneGraphElement & getSceneGraphElement( const Vertex &v ) const;
+	/**
+	 * Assumes that graph contains vertex.
+	 * @param v
+	 * @return
+	 */
+	VertexType getVertexType(const Vertex &v) const {
+		return vertexTypeMap[v];
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Assumes that graph contains vertex.
+	* @param v
+	* @return
+	*/
+	OrderNumber getVertexOrderNumber(const Vertex &v) const {
+		return vertexOrderMap[v];
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Assumes that graph contains vertex.
+	* @param v
+	* @return
+	*/
+	IDrawable::Ptr getSceneGraphElement(const Vertex &v) const;
 	//-------------------------------------------------------------------------
 	void draw(IDrawContext::Ptr) const;
 	//-------------------------------------------------------------------------
@@ -101,22 +211,59 @@ public:
 	 * @param out container
 	 */
 	template<typename Container>
-	void getElementsSorted(Container &out) const;
+	void getProcessList(Container &out) const;
 	//-------------------------------------------------------------------------
-	bool addElement( SceneGraphElement ptr );
+	bool addElement( IDrawable::Ptr ptr );
 	//-------------------------------------------------------------------------
-	bool connectElements(SceneGraphElement from, SceneGraphElement to);
+	bool connectElements(IDrawable::Ptr from, IDrawable::Ptr to);
 };
 //=============================================================================
 /**
  *  @class DFSVisitor
- *  fills a container with @see SceneGraphElement topological sorted.
+ *  fills a container with @see ProcessListProcessor objects, topological sorted.
  */
 //=============================================================================
 using namespace boost;
-template <typename SceneGraph, typename Container>
+template <typename Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:
+	//-------------------------------------------------------------------------
+	// make sure that all nodes are in the right order68.
+	std::map<size_t, SceneGraph::Vertex> orderMap;
+	//-------------------------------------------------------------------------
+	template <class Vertex, class Graph>
+	void finish_drawable(const Vertex &v, Graph& g) {
+		typename SceneGraph::SceneGraphElement obj =
+				sceneGraph.getSceneGraphElement(v);
+		if (!obj)
+			return;
+		size_t numOutEdges = boost::out_degree(v, g);
+		container.push_back(ProcessDrawable::create(obj, numOutEdges));
+		// insert into ordermap
+		// ====================
+		// get parent node
+		if ( boost::in_degree(v,g) == 0 ) { // no parents == root node
+			orderMap[0] = v;
+		}
+		SceneGraph::InvAdjacencyIterator it, end;
+		boost::tie(it,end) = boost::inv_adjacent_vertices(v,g);
+		// TODO: assumes that every node has one parent
+		size_t parentOrder = sceneGraph.getVertexOrderNumber(*it);
+		orderMap[parentOrder] = v;
+	}
+	//-------------------------------------------------------------------------
+	template <class Vertex, class Graph>
+	void discover_drawable(const Vertex &v, Graph &g) {
+		// only need to restore if has child objects in graph
+		if ( boost::out_degree(v, g) == 0 )
+			return;
+
+		typename SceneGraph::SceneGraphElement obj =
+					sceneGraph.getSceneGraphElement(v);
+		RestoreContextState::Ptr re = RestoreContextState::create();
+		re->name = std::string( typeid(*obj.get()).name() );
+		container.push_back(re);
+	}
 public:
 	//-------------------------------------------------------------------------
 	Container &container;
@@ -130,15 +277,21 @@ public:
 	void back_edge(Edge, Graph&) const {}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
-	void discover_vertex(const Vertex &v, Graph&) {
+	void discover_vertex(const Vertex &v, Graph &g) {
+		SceneGraph::VertexType type = sceneGraph.getVertexType(v);
+			switch (type) {
+				case SceneGraph::IDRAWABLE :
+					discover_drawable(v, g); break;
+			}
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
-	void finish_vertex(const Vertex &v, Graph&) {
-		typename SceneGraph::SceneGraphElement obj =
-				sceneGraph.getSceneGraphElement(v);
-		if (obj)
-			container.push_back(obj);
+	void finish_vertex(const Vertex &v, Graph &g) {
+		SceneGraph::VertexType type = sceneGraph.getVertexType(v);
+		switch (type) {
+			case SceneGraph::IDRAWABLE :
+				finish_drawable(v, g); break;
+		}
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
@@ -149,15 +302,16 @@ public:
 // getElementsSorted
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename Container>
-void SceneGraph::getElementsSorted (Container &out) const
+void SceneGraph::getProcessList (Container &out) const
 {
-	DFSVisitor<SceneGraph, Container> vis(*this, out);
+	if (boost::num_vertices(g)==0)
+		return;
+	DFSVisitor<Container> vis(*this, out);
 	boost::depth_first_search(
 		g,
 		boost::visitor(vis)
 	);
 }
-
 }}} // namespace
 
 

@@ -171,6 +171,7 @@ bool operator!=(const matrix<T>& m, const matrix<T>& n) {
 //#############################################################################
 //=============================================================================
 #define for_each BOOST_FOREACH
+#define reverse_for_each BOOST_REVERSE_FOREACH
 //=============================================================================
 using namespace boost::logic;
 typedef tribool TriBool;

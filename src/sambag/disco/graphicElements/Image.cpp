@@ -19,7 +19,6 @@ void Image::loadImage(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
-	AutoTransform at(getTransformMatrix(), cn);
 	cn->setSourceColor(ColorRGBA());
 	cn->rect(outline);
 	cn->fill();
@@ -33,7 +32,6 @@ void Image::draw( IDrawContext::Ptr cn ) {
 			return;
 		}
 	}
-	AutoTransform at(getTransformMatrix(), cn);
 
 	Matrix tmp;
 	cn->getMatrix(tmp);

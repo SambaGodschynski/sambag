@@ -20,7 +20,6 @@ Text::~Text() {
 }
 //-----------------------------------------------------------------------------
 void Text::draw( IDrawContext::Ptr cn ) {
-	AutoTransform at(getTransformMatrix(), cn);
 	cn->setFont( style.font() );
 	if ( style.isFilled() ) {
 		cn->moveTo(pos);

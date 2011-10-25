@@ -13,7 +13,6 @@ namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Arc::draw( IDrawContext::Ptr cn ) {
-	AutoTransform at(getTransformMatrix(), cn);
 
 	Matrix tmp;
 	cn->getMatrix(tmp);

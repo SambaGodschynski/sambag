@@ -8,13 +8,41 @@
 #include "GraphicElement.hpp"
 #include "SceneGraph.hpp"
 #include "sambag/com/Common.hpp"
+#include <iostream>
 
 namespace sambag { namespace disco { namespace graphicElements {
+//=============================================================================
+// class ProcessDrawable
+//=============================================================================
+//-----------------------------------------------------------------------------
+void ProcessDrawable::perform(IDrawContext::Ptr context) {
+	// TODO: deprecated code
+	GraphicElement::Ptr g = boost::shared_dynamic_cast<GraphicElement>(drawable);
+	context->save();
+	context->transform( g->getTransformMatrixDeprecated() );
+	g->draw(context);
+	// only need to restore state if no children in scenegraph.
+	// otherwise state will be restored later with RestoreContextState.
+	if (numChildren==0) {
+		context->restore();
+	}
+
+	//std::cout<<"draw: " << typeid(*g.get()).name() << std::endl;
+
+};
+//=============================================================================
+// class RestoreContextState
+//=============================================================================
+//-----------------------------------------------------------------------------
+void RestoreContextState::perform(IDrawContext::Ptr context) {
+	context->restore();
+	//std::cout<<"restore: " << name << std::endl;
+};
 //=============================================================================
 // class SceneGraph
 //=============================================================================
 //-----------------------------------------------------------------------------
-bool SceneGraph::addElement( GraphicElementPtr ptr ) {
+bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
 	bool inserted;
 	Element2Vertex::iterator it;
 	tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
@@ -22,11 +50,13 @@ bool SceneGraph::addElement( GraphicElementPtr ptr ) {
 		return false;
 	const Vertex &u = add_vertex(g);
 	vertexElementMap[u] = ptr;
+	vertexTypeMap[u] = IDRAWABLE;
+	vertexOrderMap[u] = boost::num_vertices(g);
 	it->second = u;
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool SceneGraph::connectElements(GraphicElementPtr from, GraphicElementPtr to) {
+bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 	Element2Vertex::iterator it;
 	it = element2Vertex.find(from);
 	// find "from" vertex
@@ -44,18 +74,17 @@ bool SceneGraph::connectElements(GraphicElementPtr from, GraphicElementPtr to) {
 	return connected;
 }
 //-----------------------------------------------------------------------------
-const SceneGraph::SceneGraphElement &
-SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
+IDrawable::Ptr SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
 	return vertexElementMap[v];
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::draw(IDrawContext::Ptr context) const {
-	typedef std::list<SceneGraphElement> Elements;
+	typedef std::list<ProcessListProcessor::Ptr> Elements;
 	Elements elements;
-	getElementsSorted<Elements>(elements);
-	for_each( SceneGraphElement o, elements ) {
-		o->draw(context);
+	getProcessList<Elements>(elements);
+	for_each( ProcessListProcessor::Ptr o, elements ) {
+		o->perform(context);
 	}
 }
 }}} // namespaces

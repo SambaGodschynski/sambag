@@ -49,8 +49,6 @@ public:
 	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context ) {
-		if (!ref) return;
-		AutoTransform at(getTransformMatrix(), context);
 		ref->draw(context);
 	}
 	//-------------------------------------------------------------------------
