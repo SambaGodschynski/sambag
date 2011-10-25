@@ -57,9 +57,9 @@ private:
 	// will do it later.
 	const bool resetContextState;
 	//-------------------------------------------------------------------------
-	const graphicElements::Style &style;
+	Style style;
 	//-------------------------------------------------------------------------
-	const Matrix &transformation;
+	Matrix transformation;
 	//-------------------------------------------------------------------------
 	ProcessDrawable(IDrawable::Ptr drawable,
 					bool resetContextState,
@@ -344,11 +344,14 @@ private:
 		if (!obj)
 			return;
 		size_t numOutEdges = boost::out_degree(v, g);
+		com::Matrix tM = sceneGraph.getTransformationOf(obj);
+		if (tM==com::NULL_MATRIX)
+			tM = com::IDENTITY_MATRIX;
 		container.push_back(
 			ProcessDrawable::create(obj,
 									numOutEdges==0,
 									sceneGraph.getStyleOf(obj),
-									sceneGraph.getTransformationOf(obj))
+									tM)
 		);
 
 	}

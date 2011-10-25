@@ -15,6 +15,11 @@ Inheritance diagram for Root:\begin{figure}[H]
 typedef boost::shared\_\-ptr$<$ \hyperlink{struct_root}{Root} $>$ {\bfseries Ptr}}
 \label{struct_root_ac88e2fc9ec740e51c91f1b2991972cbd}
 
+\item 
+\hypertarget{struct_root_a6daaf82ea38e20d267344439e3c26576}{
+typedef std::pair$<$ double, int $>$ {\bfseries Closure}}
+\label{struct_root_a6daaf82ea38e20d267344439e3c26576}
+
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -23,13 +28,26 @@ typedef boost::shared\_\-ptr$<$ \hyperlink{struct_root}{Root} $>$ {\bfseries Ptr
 virtual std::string {\bfseries getClassName} () const }
 \label{struct_root_af6da62aa054c938eaac301d5847fb9b7}
 
+\item 
+\hypertarget{struct_root_a7a7f2b28f7d0a47eaae75448a1b91789}{
+void {\bfseries objCreated} (BaseObject::Ptr obj)}
+\label{struct_root_a7a7f2b28f7d0a47eaae75448a1b91789}
+
 \end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_root_ae770a0682c207a6c949ebd5051f9a044}{
-static Ptr {\bfseries create} ()}
-\label{struct_root_ae770a0682c207a6c949ebd5051f9a044}
+\hypertarget{struct_root_a3085afc466bfba61d6cf7851e3197e24}{
+static Ptr {\bfseries create} (Closure $\ast$closure=NULL)}
+\label{struct_root_a3085afc466bfba61d6cf7851e3197e24}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_root_a0a409c75e0b74b81315afb319b8b63e4}{
+Closure {\bfseries closure}}
+\label{struct_root_a0a409c75e0b74b81315afb319b8b63e4}
 
 \end{DoxyCompactItemize}
 
@@ -37,7 +55,7 @@ static Ptr {\bfseries create} ()}
 \subsection{Detailed Description}
 
 
-Definition at line 64 of file XML2ObjTest.cpp.
+Definition at line 68 of file XML2ObjTest.cpp.
 
 
 

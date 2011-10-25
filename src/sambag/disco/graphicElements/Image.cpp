@@ -19,7 +19,7 @@ void Image::loadImage(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
-	cn->setSourceColor(ColorRGBA());
+	cn->setFillColor(ColorRGBA());
 	cn->rect(outline);
 	cn->fill();
 }
@@ -41,7 +41,7 @@ void Image::draw( IDrawContext::Ptr cn ) {
 		outline.getWidth()/orgSz.getWidth(),
 		outline.getHeight()/orgSz.getHeight()
 	));
-	cn->drawSurface(image, getStyle().opacity());
+	cn->drawSurface(image, 1.0/*TODO replace with opacity val.*/);
 
 	cn->identityMatrix();
 	cn->transform(tmp);

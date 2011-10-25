@@ -50,9 +50,39 @@ virtual void {\bfseries lineTo} (const Point2D \&p0)=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a6e56ef732ee024052f6461dc7ca9cd81}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a0af80829bd9fd7b959fb894df0da49ca}{
+virtual void {\bfseries relMoveTo} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a0af80829bd9fd7b959fb894df0da49ca}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ab1d4ba04913116138a937f308f2cfdba}{
+virtual void {\bfseries relLineTo} (const Point2D \&p0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_ab1d4ba04913116138a937f308f2cfdba}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}{
+virtual void {\bfseries closePath} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a665245a8a3f17f4d0ecc3d64e32c69c1}{
 virtual void {\bfseries curveTo} (const Point2D \&x1, const Point2D \&x2, const Point2D \&x3)=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a665245a8a3f17f4d0ecc3d64e32c69c1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a405229704974f66abf5c8fa443acdcdc}{
+virtual void {\bfseries relCurveTo} (const Point2D \&x1, const Point2D \&x2, const Point2D \&x3)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a405229704974f66abf5c8fa443acdcdc}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_af6c1598386646cd0bec7e8c1186af037}{
+virtual void {\bfseries quadraticCurveTo} (const Point2D \&x1, const Point2D \&x2)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_af6c1598386646cd0bec7e8c1186af037}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a77bd901126df3c89ae1b7a61b8b11738}{
+virtual void {\bfseries relQuadraticCurveTo} (const Point2D \&x1, const Point2D \&x2)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a77bd901126df3c89ae1b7a61b8b11738}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a12295a2b8a087f850f289cffda40c36a}{
@@ -60,14 +90,19 @@ virtual void {\bfseries arc} (const Point2D \&c, const Number \&r, const Number 
 \label{classsambag_1_1disco_1_1_i_draw_context_a12295a2b8a087f850f289cffda40c36a}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a946ff541d9bbb1f932d69e6168113f35}{
+virtual void {\bfseries arcNegative} (const Point2D \&c, const Number \&r, const Number \&angle1=0, const Number \&angle2=M\_\-PI $\ast$2.0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a946ff541d9bbb1f932d69e6168113f35}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a91ee5cf9e5910ad7994ba2769c5e3b5f}{
 virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect)=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a91ee5cf9e5910ad7994ba2769c5e3b5f}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1_i_draw_context_af48bf4a4491fc0ce83223cf2773ccf8d}{
-virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect, Number cornerRadius)=0}
-\label{classsambag_1_1disco_1_1_i_draw_context_af48bf4a4491fc0ce83223cf2773ccf8d}
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a5bfd53d10fc94f4a837d9a1c50c40a1f}{
+virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect, const Number \&cornerRadius)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a5bfd53d10fc94f4a837d9a1c50c40a1f}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a6bd68f0eebceec0e50fd361e6e39a7ca}{
@@ -83,6 +118,11 @@ virtual void {\bfseries fillPreserve} ()=0}
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_abfe5f2a85bfda41886ba10d2c3ef20ca}{
 virtual void {\bfseries stroke} ()=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_abfe5f2a85bfda41886ba10d2c3ef20ca}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a26e9e04071f6dc357bbe2c9671ab12ad}{
+virtual void {\bfseries drawSurface} (ISurface::Ptr, const Number \&alpha=1.0)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a26e9e04071f6dc357bbe2c9671ab12ad}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a5f8aa0028936dc0313a6aa9578b27626}{
@@ -155,6 +195,16 @@ virtual FillRule {\bfseries getFillRule} () const =0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a4b0f6e4290ba8ead8c1cce5dc7ee4b5e}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a2810809be1d0a6b4418064b5b1522dd1}{
+virtual void {\bfseries save} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a2810809be1d0a6b4418064b5b1522dd1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a245d720f2aa857ba8d6eef9ca34a6f43}{
+virtual void {\bfseries restore} ()=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a245d720f2aa857ba8d6eef9ca34a6f43}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a666f7394140782077eb236308294cab2}{
 virtual Point2D {\bfseries getCurrentPoint} () const =0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a666f7394140782077eb236308294cab2}
@@ -175,11 +225,6 @@ virtual void {\bfseries newSubPath} ()=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_ae37ae14bdcea70b141c832fbd6814502}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}{
-virtual void {\bfseries closePath} ()=0}
-\label{classsambag_1_1disco_1_1_i_draw_context_ab6c55a8cce7276da30d42edc0b59895a}
-
-\item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a16f8014b6b2550e9264569bff8efd5a4}{
 virtual Path::Ptr {\bfseries copyPath} () const =0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a16f8014b6b2550e9264569bff8efd5a4}
@@ -193,6 +238,11 @@ virtual Path::Ptr {\bfseries copyPathFlat} () const =0}
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a7267a44eb08728da715a8f4c79d51bdd}{
 virtual void {\bfseries appendPath} (Path::Ptr path)=0}
 \label{classsambag_1_1disco_1_1_i_draw_context_a7267a44eb08728da715a8f4c79d51bdd}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_i_draw_context_a41e067b502c91d0dd8eac3bd6e175163}{
+virtual ISurface::Ptr {\bfseries createPngSurface} (IDataHandler::Ptr handler)=0}
+\label{classsambag_1_1disco_1_1_i_draw_context_a41e067b502c91d0dd8eac3bd6e175163}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_i_draw_context_a48dfe08aebf5b0de9f01dc1b01e9ad9d}{
@@ -230,7 +280,7 @@ virtual void {\bfseries getMatrix} (Matrix \&m)=0}
 \subsection{Detailed Description}
 
 
-Definition at line 40 of file IDrawContext.hpp.
+Definition at line 42 of file IDrawContext.hpp.
 
 
 

@@ -17,19 +17,15 @@ namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
-	// TODO: deprecated code
-	GraphicElement::Ptr g = boost::shared_dynamic_cast<GraphicElement>(drawable);
 	context->save();
-	context->transform( g->getTransformMatrixDeprecated() );
-	g->draw(context);
+	context->transform(transformation);
+	style.intoContext(context);
+	drawable->draw(context);
 	// only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
 	if (resetContextState==true) {
 		context->restore();
 	}
-
-	//std::cout<<"draw: " << typeid(*g.get()).name() << std::endl;
-
 };
 //=============================================================================
 // class RestoreContextState
@@ -37,7 +33,6 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 //-----------------------------------------------------------------------------
 void RestoreContextState::perform(IDrawContext::Ptr context) {
 	context->restore();
-	//std::cout<<"restore: " << name << std::endl;
 };
 //=============================================================================
 const SceneGraph::Vertex SceneGraph::NULL_VERTEX = UINT_MAX;

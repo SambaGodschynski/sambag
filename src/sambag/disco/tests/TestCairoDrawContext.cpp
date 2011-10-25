@@ -69,10 +69,10 @@ void TestCairoDrawContext::testLine() {
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	context->setStrokeWidth(5.0);
 	context->moveTo( Point2D(100, 300) ); context->lineTo( Point2D(300, 100) );
@@ -106,17 +106,17 @@ void TestCairoDrawContext::testArc() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	context->setStrokeWidth(10);
-	context->setSourceColor( ColorRGBA( 1.0, 0, 0 ) );
+	context->setStrokeColor( ColorRGBA( 1.0, 0, 0 ) );
 	context->arc( Point2D(600, 200), 100 );
 	context->stroke();
 
-	context->setSourceColor( ColorRGBA( 0, 0, 1.0 ) );
+	context->setFillColor( ColorRGBA( 0, 0, 1.0 ) );
 	context->arc( Point2D(600, 200), 100 );
 	context->fill();
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
@@ -132,25 +132,25 @@ void TestCairoDrawContext::testRectangle() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+
 
 	context->setStrokeWidth(10);
-	context->setSourceColor( ColorRGBA( 0, 0, 1.0 ) );
+	context->setStrokeColor( ColorRGBA( 0, 0, 1.0 ) );
 	context->rect( Rectangle(Point2D(400,100), 400, 200 ) );
 	context->stroke();
 
-	context->setSourceColor( ColorRGBA( 1.0, 1.0, 0.0 ) );
+	context->setFillColor( ColorRGBA( 1.0, 1.0, 0.0 ) );
 	context->rect( Rectangle(Point2D(400,100), 400, 200 ) );
 	context->fill();
 
-	context->setSourceColor( ColorRGBA( 1.0, 0.0, 0.0 ) );
+	context->setStrokeColor( ColorRGBA( 1.0, 0.0, 0.0 ) );
 	context->rect(Rectangle(500, 150, 400, 200), 15.0 );
 	context->stroke();
 
-	context->setSourceColor( ColorRGBA( 0.0, 1.0, 0.3 ) );
+	context->setFillColor( ColorRGBA( 0.0, 1.0, 0.3 ) );
 	context->rect(Rectangle(500, 150, 400, 200), 15.0 );
 	context->fill();
 
@@ -167,10 +167,10 @@ void TestCairoDrawContext::testCurve() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	context->setStrokeWidth(10);
 	context->curveTo( Point2D(100,200), Point2D(100,100), Point2D(250,100) );
@@ -188,20 +188,20 @@ void TestCairoDrawContext::testText() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	Font font;
 	font.size = 184.;
 	font.fontFace = "arial";
 	context->setFont(font);
-	context->setSourceColor( ColorRGBA(1.0) );
+	context->setFillColor( ColorRGBA(1.0) );
 	context->moveTo( Point2D(150., 250.) );
 	context->textPath("D.I.S.C.O");
 	context->fill();
-	context->setSourceColor( ColorRGBA(0.0) );
+	context->setStrokeColor( ColorRGBA(0.0) );
 	context->moveTo( Point2D(150., 250.) );
 	context->textPath("D.I.S.C.O");
 	context->stroke();
@@ -217,29 +217,28 @@ void TestCairoDrawContext::testPath() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
 
 	Font font;
 	font.size = 184.;
 	font.fontFace = "arial";
 	context->setFont(font);
-	context->setSourceColor( ColorRGBA(1.0) );
+	context->setStrokeColor( ColorRGBA(1.0) );
 	context->translate( Point2D(150., 200.) );
 	context->textPath("D.I.S.C.O");
 	Path::Ptr path = context->copyPath();
 	context->stroke();
-	context->setSourceColor( ColorRGBA(1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0) );
 	context->appendPath(path);
 	context->fill();
 	Number rot=0.0;
 	for ( Number a=1.0; a>0; a-=0.025) {
-		context->setSourceColor( ColorRGBA(1.0, 0, 0, a) );
+		context->setStrokeColor( ColorRGBA(1.0, 0, 0, a) );
 		context->appendPath(path);
 		context->stroke();
-		context->setSourceColor( ColorRGBA(1.0, 1.0, 0, a) );
+		context->setFillColor( ColorRGBA(1.0, 1.0, 0, a) );
 		context->appendPath(path);
 		context->fill();
 		context->rotate(rot);
@@ -258,10 +257,10 @@ void TestCairoDrawContext::testClip() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	context->rect( Rectangle( Point2D(150., 120.), 105., 15.) );
 	context->stroke();
@@ -271,7 +270,7 @@ void TestCairoDrawContext::testClip() {
 	font.size = 34.;
 	font.fontFace = "arial";
 	context->setFont(font);
-	context->setSourceColor( ColorRGBA(1.0) );
+	context->setFillColor( ColorRGBA(1.0) );
 	context->moveTo( Point2D(150., 150.) );
 	context->textPath("DISCO");
 	context->fill();
@@ -287,10 +286,9 @@ void TestCairoDrawContext::testTransformation() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set tr matrix
 	Matrix m(3,3);
 	m(0,0) = 1;  m(0,1) = 0.5; m(0,2) = 0;
@@ -305,11 +303,11 @@ void TestCairoDrawContext::testTransformation() {
 	font.size = 184.;
 	font.fontFace = "arial";
 	context->setFont(font);
-	context->setSourceColor( ColorRGBA(1.0) );
+	context->setFillColor( ColorRGBA(1.0) );
 	context->moveTo( Point2D(0., 0.) );
 	context->textPath("D.I.S.C.O");
 	context->fill();
-	context->setSourceColor( ColorRGBA(0.0) );
+	context->setStrokeColor( ColorRGBA(0.0) );
 	context->moveTo( Point2D(0, 0) );
 	context->textPath("D.I.S.C.O");
 	context->stroke();
@@ -353,10 +351,10 @@ void TestCairoDrawContext::testLineStyle() {
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 
-	context->setSourceColor( ColorRGBA(1.0, 1.0, 1.0) );
+	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
 	context->rect( Rectangle(0.,0.,1200.,400.) );
 	context->fill();
-	context->setSourceColor( ColorRGBA(0) );
+	context->setStrokeColor( ColorRGBA(0) );
 
 	context->setStrokeWidth(5.0);
 	context->setDash(dash);
@@ -420,8 +418,10 @@ void TestCairoDrawContext::testSetColor() {
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
-	context->setSourceColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
-	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getSourceColor() );
+	context->setFillColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
+	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getFillColor() );
+	context->setStrokeColor( ColorRGBA( 1.5, 0.25, 0.125 ) );
+	CPPUNIT_ASSERT ( ColorRGBA( 1.5, 0.25, 0.125 ) == context->getStrokeColor() );
 
 	//
 	context.reset();

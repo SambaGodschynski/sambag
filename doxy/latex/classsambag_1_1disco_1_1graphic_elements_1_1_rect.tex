@@ -19,6 +19,13 @@ typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1graphic_eleme
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+std::string \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a59e2dec44fd445a6ae838a14340c083c}{toString} () const 
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_ab94ca87d07262f661e16052d61821cfb}{
+virtual GraphicElement::Ptr {\bfseries clone} () const }
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_ab94ca87d07262f661e16052d61821cfb}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_ac438dc164da29d27f9dc53a9f802cb7f}{
 const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \& {\bfseries getRectangle} () const }
 \label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_ac438dc164da29d27f9dc53a9f802cb7f}
@@ -27,6 +34,16 @@ const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \& {\bfseries getR
 \hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_af4a07543054a006831b16fa51ded12a7}{
 void {\bfseries setRectangle} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&r)}
 \label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_af4a07543054a006831b16fa51ded12a7}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a574705addcdc803e680d101f94183319}{
+const Point2D \& {\bfseries getRadius} () const }
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a574705addcdc803e680d101f94183319}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a3bd20e2c519ed158a662eed46b245075}{
+void {\bfseries setRadius} (const Point2D \&\_\-r)}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a3bd20e2c519ed158a662eed46b245075}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a15d3b855152772bd3142f759a9777f65}{
@@ -42,17 +59,9 @@ virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBo
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a6ab71eda840abdcc483f933d9c94532c}{
-static Ptr {\bfseries create} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect=NULL\_\-RECTANGLE)}
-\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a6ab71eda840abdcc483f933d9c94532c}
-
-\end{DoxyCompactItemize}
-\subsection*{Protected Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a2fa724238b2552481d9b77c92395da09}{
-{\bfseries Rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect=NULL\_\-RECTANGLE)}
-\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a2fa724238b2552481d9b77c92395da09}
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_af8e9798b4ad4692b16c05c04cee5330b}{
+static Ptr {\bfseries create} ()}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_af8e9798b4ad4692b16c05c04cee5330b}
 
 \end{DoxyCompactItemize}
 \subsection*{Protected Attributes}
@@ -62,6 +71,11 @@ static Ptr {\bfseries create} (const \hyperlink{classsambag_1_1com_1_1_rectangle
 \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries rect}}
 \label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a676f2829e7383023f03ecec87ef203c2}
 
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a801f8cbbeb1015a706779cd4184bd817}{
+Point2D {\bfseries r}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a801f8cbbeb1015a706779cd4184bd817}
+
 \end{DoxyCompactItemize}
 
 
@@ -69,6 +83,26 @@ static Ptr {\bfseries create} (const \hyperlink{classsambag_1_1com_1_1_rectangle
 
 
 Definition at line 15 of file Rect.hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a59e2dec44fd445a6ae838a14340c083c}{
+\index{sambag::disco::graphicElements::Rect@{sambag::disco::graphicElements::Rect}!toString@{toString}}
+\index{toString@{toString}!sambag::disco::graphicElements::Rect@{sambag::disco::graphicElements::Rect}}
+\subsubsection[{toString}]{\setlength{\rightskip}{0pt plus 5cm}std::string sambag::disco::graphicElements::Rect::toString (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a59e2dec44fd445a6ae838a14340c083c}
+for testing and debugging 
+
+Implements \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2e07ce40a1a6a929e87dc291de7addff}{sambag::disco::graphicElements::GraphicElement}.
+
+
+
+Definition at line 32 of file Rect.hpp.
 
 
 

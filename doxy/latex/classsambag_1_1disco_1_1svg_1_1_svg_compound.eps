@@ -5,7 +5,7 @@
 %%For: 
 %Magnification: 1.00
 %%Orientation: Portrait
-%%BoundingBox: 0 0 500 170.648464
+%%BoundingBox: 0 0 500 93.896714
 %%Pages: 0
 %%BeginSetup
 %%EndSetup
@@ -19,13 +19,13 @@
 /marginwidth 10 def
 /distx 20 def
 /disty 40 def
-/boundaspect 2.930000 def  % aspect ratio of the BoundingBox (width/height)
+/boundaspect 5.325000 def  % aspect ratio of the BoundingBox (width/height)
 /boundx 500 def
 /boundy boundx boundaspect div def
 /xspacing 0 def
 /yspacing 0 def
-/rows 5 def
-/cols 2 def
+/rows 3 def
+/cols 3 def
 /scalefactor 0 def
 /boxfont /Times-Roman findfont fontheight scalefont def
 
@@ -175,8 +175,7 @@ boxfont setfont
 1 boundaspect scale
 (sambag::disco::svg::SvgCompound) cw
 (sambag::disco::svg::SvgObject) cw
-(sambag::disco::graphicElements::GraphicElement) cw
-(sambag::disco::graphicElements::IGraphicObject) cw
+(sambag::disco::svg::SvgDefs) cw
 (sambag::disco::svg::SvgGroup) cw
 (sambag::disco::svg::SvgRoot) cw
 /boxwidth boxwidth marginwidth 2 mul add def
@@ -190,32 +189,25 @@ boundx scalefactor div boundy scalefactor div scale
 
 % ----- classes -----
 
- (sambag::disco::svg::SvgCompound) 0.500000 1.000000 box
- (sambag::disco::svg::SvgObject) 0.500000 2.000000 box
- (sambag::disco::graphicElements::GraphicElement) 0.500000 3.000000 box
- (sambag::disco::graphicElements::IGraphicObject) 0.500000 4.000000 box
- (sambag::disco::svg::SvgGroup) 0.000000 0.000000 box
- (sambag::disco::svg::SvgRoot) 1.000000 0.000000 box
+ (sambag::disco::svg::SvgCompound) 1.000000 1.000000 box
+ (sambag::disco::svg::SvgObject) 1.000000 2.000000 box
+ (sambag::disco::svg::SvgDefs) 0.000000 0.000000 box
+ (sambag::disco::svg::SvgGroup) 1.000000 0.000000 box
+ (sambag::disco::svg::SvgRoot) 2.000000 0.000000 box
 
 % ----- relations -----
 
 solid
-0 0.500000 1.000000 out
+0 1.000000 1.000000 out
 solid
-1 0.500000 2.000000 in
+1 1.000000 2.000000 in
 solid
-0 0.500000 2.000000 out
+1 1.000000 0.250000 out
 solid
-1 0.500000 3.000000 in
-solid
-0 0.500000 3.000000 out
-solid
-1 0.500000 4.000000 in
-solid
-1 0.500000 0.250000 out
-solid
-0.000000 1.000000 1.000000 conn
+0.000000 2.000000 1.000000 conn
 solid
 0 0.000000 0.750000 in
 solid
 0 1.000000 0.750000 in
+solid
+0 2.000000 0.750000 in

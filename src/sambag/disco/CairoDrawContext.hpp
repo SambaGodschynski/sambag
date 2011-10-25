@@ -52,11 +52,15 @@ public:
 	typedef boost::shared_ptr<CairoDrawContext> Ptr;
 private:
 	//-------------------------------------------------------------------------
-	ColorRGBA currentColor;
+	ColorRGBA fillColor;
+	//-------------------------------------------------------------------------
+	ColorRGBA strokeColor;
 	//-------------------------------------------------------------------------
 	cairo_surface_t *surface;
 	//-------------------------------------------------------------------------
 	Font currentFont;
+	//-------------------------------------------------------------------------
+	bool _isFilled, _isStroked;
 protected:
 	//-------------------------------------------------------------------------
 	cairo_t *context;
@@ -196,14 +200,35 @@ public:
 	virtual void rect( const Rectangle &rect, const Number &cornerRadius );
 	//-------------------------------------------------------------------------
 	virtual void stroke() {
+		if (!_isStroked)
+			return;
+		cairo_set_source_rgba(context,
+				strokeColor.getR(),
+				strokeColor.getG(),
+				strokeColor.getB(),
+				strokeColor.getA());
 		cairo_stroke(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fill() {
+		if (!_isFilled)
+			return;
+		cairo_set_source_rgba(context,
+				fillColor.getR(),
+				fillColor.getG(),
+				fillColor.getB(),
+				fillColor.getA());
 		cairo_fill(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fillPreserve() {
+		if (!_isFilled)
+			return;
+		cairo_set_source_rgba(context,
+				fillColor.getR(),
+				fillColor.getG(),
+				fillColor.getB(),
+				fillColor.getA());
 		cairo_fill_preserve(context);
 	}
 	//-------------------------------------------------------------------------
@@ -234,6 +259,22 @@ public:
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
+	virtual void setStroked(bool b) {
+		_isStroked = b;
+	}
+	//-------------------------------------------------------------------------
+	virtual bool isStroked() const {
+		return _isStroked;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setFilled(bool b) {
+		_isFilled = b;
+	}
+	//-------------------------------------------------------------------------
+	virtual bool isFilled() const {
+		return _isFilled;
+	}
+	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Number &val ) {
 		cairo_set_line_width(context, val);
 	}
@@ -242,12 +283,21 @@ public:
 		return (Number)cairo_get_line_width(context);
 	}
 	//-------------------------------------------------------------------------
-	virtual void setSourceColor( const ColorRGBA &col ) {
-		cairo_set_source_rgba( context, col.getR(), col.getG(), col.getB(), col.getA() );
-		currentColor = col;
+	virtual void setFillColor( const ColorRGBA &val ) {
+		fillColor = val;
 	}
 	//-------------------------------------------------------------------------
-	virtual ColorRGBA getSourceColor() const { return currentColor; }
+	virtual ColorRGBA getFillColor() const {
+		return fillColor;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setStrokeColor( const ColorRGBA &val ) {
+		strokeColor = val;
+	}
+	//-------------------------------------------------------------------------
+	virtual ColorRGBA getStrokeColor() const {
+		return strokeColor;
+	}
 	//-------------------------------------------------------------------------
 	virtual void setDash( const Dash &dash ) {
 		cairo_set_dash(

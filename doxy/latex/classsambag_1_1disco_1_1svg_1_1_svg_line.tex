@@ -5,7 +5,7 @@
 Inheritance diagram for sambag::disco::svg::SvgLine:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=4.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_line}
+\includegraphics[height=2.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_line}
 \end{center}
 \end{figure}
 \subsection*{Classes}
@@ -30,17 +30,7 @@ typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_l
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_line_adf873ecfe1079a7a33890138d9f93bcb}{getDrawingObject} () const 
-\item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_aa4b3132a23b987800be32a6021f5feb4}{
-virtual void {\bfseries draw} (IDrawContext::Ptr context)}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_line_aa4b3132a23b987800be32a6021f5feb4}
-
-\item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_a1a0677b14c7b4159217eb69bab293f3d}{
-virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const }
-\label{classsambag_1_1disco_1_1svg_1_1_svg_line_a1a0677b14c7b4159217eb69bab293f3d}
-
+GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_line_a3aaf9f0b25b22387c252b06006414acd}{getGraphicElement} () const 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_aa80f8a324e4671c23df0898783df5489}{
 virtual void {\bfseries set} (const X1\_\-tag::Type \&coord, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_line_1_1_x1__tag}{X1\_\-tag})}
@@ -65,9 +55,9 @@ virtual void {\bfseries set} (const Y2\_\-tag::Type \&coord, \hyperlink{structsa
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_ade22e529c325991ced1af206998bad76}{
-static Ptr {\bfseries create} ()}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_line_ade22e529c325991ced1af206998bad76}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_a83a7db324d077424a330fe646445f536}{
+static Ptr {\bfseries create} (\hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_scene_graph}{graphicElements::SceneGraph} $\ast$g=NULL)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_line_a83a7db324d077424a330fe646445f536}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_aa02807989c1f5cc0f5a5d471432d25d3}{
@@ -93,21 +83,21 @@ Definition at line 17 of file SvgLine.hpp.
 
 
 \subsection{Member Function Documentation}
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_adf873ecfe1079a7a33890138d9f93bcb}{
-\index{sambag::disco::svg::SvgLine@{sambag::disco::svg::SvgLine}!getDrawingObject@{getDrawingObject}}
-\index{getDrawingObject@{getDrawingObject}!sambag::disco::svg::SvgLine@{sambag::disco::svg::SvgLine}}
-\subsubsection[{getDrawingObject}]{\setlength{\rightskip}{0pt plus 5cm}GraphicElement::Ptr sambag::disco::svg::SvgLine::getDrawingObject (
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_line_a3aaf9f0b25b22387c252b06006414acd}{
+\index{sambag::disco::svg::SvgLine@{sambag::disco::svg::SvgLine}!getGraphicElement@{getGraphicElement}}
+\index{getGraphicElement@{getGraphicElement}!sambag::disco::svg::SvgLine@{sambag::disco::svg::SvgLine}}
+\subsubsection[{getGraphicElement}]{\setlength{\rightskip}{0pt plus 5cm}GraphicElement::Ptr sambag::disco::svg::SvgLine::getGraphicElement (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 ) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_line_adf873ecfe1079a7a33890138d9f93bcb}
-SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. \begin{DoxyReturn}{Returns}
-that GraphicElement that draw the SVG object. 
+\label{classsambag_1_1disco_1_1svg_1_1_svg_line_a3aaf9f0b25b22387c252b06006414acd}
+\begin{DoxyReturn}{Returns}
+the GraphicElement object which is contained by the SVG object 
 \end{DoxyReturn}
 
 
-Implements \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{sambag::disco::svg::SvgObject}.
+Implements \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_ade2fddb3895338d0f294e7f5de1e4a80}{sambag::disco::svg::SvgObject}.
 
 
 

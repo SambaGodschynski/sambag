@@ -87,14 +87,12 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void Rect::draw( IDrawContext::Ptr cn ) {
-	if ( style.isFilled() ) {
+	if ( cn->isFilled() ) {
 		_rect(cn);
-		style.setFillStyle(cn);
 		cn->fill();
 	}
-	if ( style.isStroked() ) {
+	if ( cn->isStroked() ) {
 		_rect(cn);
-		style.setStrokeStyle(cn);
 		cn->stroke();
 	}
 }

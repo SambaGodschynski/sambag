@@ -5,7 +5,7 @@
 Inheritance diagram for sambag::disco::graphicElements::GraphicElement:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=1.365188cm]{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element}
+\includegraphics[height=9.556314cm]{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element}
 \end{center}
 \end{figure}
 \subsection*{Public Types}
@@ -18,6 +18,23 @@ typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1graphic_eleme
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
+\item 
+std::string \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2e07ce40a1a6a929e87dc291de7addff}{toString} () const =0
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_af833b65108012e121635be881e4ec1bc}{
+virtual Ptr {\bfseries clone} () const =0}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_af833b65108012e121635be881e4ec1bc}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a1cd0346f5fd46c7db5060f539ba76324}{
+virtual const sambag::com::Matrix \& {\bfseries getTransformMatrixDeprecated} () const }
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a1cd0346f5fd46c7db5060f539ba76324}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a706d3153925e0a4cd46fda299fddfe69}{
+virtual void {\bfseries setTransformMatrix} (const sambag::com::Matrix \&m)}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a706d3153925e0a4cd46fda299fddfe69}
+
 \item 
 \hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2b799a6a65dc0c95f25ece24b63a313c}{
 virtual const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{Style} \& {\bfseries getStyle} () const }
@@ -91,11 +108,28 @@ Definition at line 19 of file GraphicElement.hpp.
 \end{DoxyParams}
 
 
-Reimplemented in \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a7a36ede1ba0ed02f7928d03a8dbaa36e}{sambag::disco::graphicElements::Compound}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{sambag::disco::svg::SvgObject}, and \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}{sambag::disco::svg::SvgCompound}.
+Reimplemented in \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a7a36ede1ba0ed02f7928d03a8dbaa36e}{sambag::disco::graphicElements::Compound}.
 
 
 
-Definition at line 42 of file GraphicElement.hpp.
+Definition at line 61 of file GraphicElement.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2e07ce40a1a6a929e87dc291de7addff}{
+\index{sambag::disco::graphicElements::GraphicElement@{sambag::disco::graphicElements::GraphicElement}!toString@{toString}}
+\index{toString@{toString}!sambag::disco::graphicElements::GraphicElement@{sambag::disco::graphicElements::GraphicElement}}
+\subsubsection[{toString}]{\setlength{\rightskip}{0pt plus 5cm}std::string sambag::disco::graphicElements::GraphicElement::toString (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2e07ce40a1a6a929e87dc291de7addff}
+for testing and debugging 
+
+Implements \hyperlink{classsambag_1_1disco_1_1_i_drawable_a66e1188c0cfe805c4209f6f4a23adccf}{sambag::disco::IDrawable}.
+
+
+
+Implemented in \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_arc_a9e5439bb4ef3188984fadcb96ba8e728}{sambag::disco::graphicElements::Arc}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_compound_a439be982b9afae50b0544569bf9af445}{sambag::disco::graphicElements::Compound}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_image_a564764ff95cd32aff3f06a3f2e249961}{sambag::disco::graphicElements::Image}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_line_a8bb285a12889ce7539b46ab817e97c91}{sambag::disco::graphicElements::Line}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_path_afb347ed3aa7e913b6f3b01f33a48a424}{sambag::disco::graphicElements::Path}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_rect_a59e2dec44fd445a6ae838a14340c083c}{sambag::disco::graphicElements::Rect}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_ref_element_a448ebae491a0c4d06dabfa19af449693}{sambag::disco::graphicElements::RefElement}, and \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_text_ae987dd42626fb41ae57af91fc1c27e85}{sambag::disco::graphicElements::Text}.
 
 
 

@@ -62,6 +62,32 @@ void TestSceneGraph::testBuildGraph() {
 			"(Image[i4.img]), DrawAndRestoreContextState(Image[i5.img]), RestoreContextState"
 			", DrawAndRestoreContextState(Image[i3.img]), RestoreContextState}";
 	CPPUNIT_ASSERT_EQUAL(soll, g->processListAsString());
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check scenegraph vertex order
+	typedef SceneGraph::OrderNumber OrderNumber;
+	SceneGraph::G bg = g->getGraphImpl();
+	SceneGraph::VertexIterator vi, end;
+	boost::tie(vi, end) = boost::vertices(bg);
+	std::vector<OrderNumber> res;
+	res.reserve( boost::num_vertices(bg) );
+	for (; vi!=end; ++vi) {
+		res.push_back( g->getVertexOrderNumber(*vi) );
+	}
+	OrderNumber sollO[] = {-1,0,1,0,1};
+	const size_t N_SOLL = sizeof(sollO) / sizeof(sollO[0]);
+	CPPUNIT_ASSERT_EQUAL(N_SOLL, res.size());
+	bool eq = std::equal(res.begin(), res.end(), &sollO[0]);
+	if (!eq) {
+		std::stringstream ss1;
+		ss1<<"{";
+		std::stringstream ss2;
+		size_t i = 0;
+		for_each(OrderNumber on, res) {
+			ss1<<on<<", ";
+			ss2<<sollO[i++]<<", ";
+		}
+		ss1<<"} is not "<< std::endl <<"{"<<ss2.str()<<"}";
+		CPPUNIT_ASSERT_MESSAGE(ss1.str(), false);
+	}
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testTransformNode() {

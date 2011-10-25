@@ -16,7 +16,8 @@
 #include <boost/foreach.hpp>
 #include <boost/logic/tribool.hpp>
 
-namespace sambag { namespace com {
+namespace sambag {
+namespace com {
 //#############################################################################
 // metrics
 //#############################################################################
@@ -43,20 +44,26 @@ private:
 	Box box;
 public:
 	//-------------------------------------------------------------------------
-	const Point2D & getX0() const { return box.min_corner(); }
-	//-------------------------------------------------------------------------
-	const Point2D & getX1() const { return box.max_corner(); }
-	//-------------------------------------------------------------------------
-	const Box & getBox() const { return box; }
-	//-------------------------------------------------------------------------
-	void setX0 ( const Point2D & val ) {
-		box.min_corner().x( val.x() );
-		box.min_corner().y( val.y() );
+	const Point2D & getX0() const {
+		return box.min_corner();
 	}
 	//-------------------------------------------------------------------------
-	void setX1 ( const Point2D & val ) {
-		box.max_corner().x( val.x() );
-		box.max_corner().y( val.y() );
+	const Point2D & getX1() const {
+		return box.max_corner();
+	}
+	//-------------------------------------------------------------------------
+	const Box & getBox() const {
+		return box;
+	}
+	//-------------------------------------------------------------------------
+	void setX0(const Point2D & val) {
+		box.min_corner().x(val.x());
+		box.min_corner().y(val.y());
+	}
+	//-------------------------------------------------------------------------
+	void setX1(const Point2D & val) {
+		box.max_corner().x(val.x());
+		box.max_corner().y(val.y());
 	}
 	//-------------------------------------------------------------------------
 	Number getWidth() const {
@@ -72,20 +79,19 @@ public:
 		return result.y();
 	}
 	//-------------------------------------------------------------------------
-	void setWidth( const Number &w )  {
-		box.max_corner().x( box.min_corner().x() + w );
+	void setWidth(const Number &w) {
+		box.max_corner().x(box.min_corner().x() + w);
 	}
 	//-------------------------------------------------------------------------
-	void setHeight( const Number &h )  {
-		box.max_corner().y( box.min_corner().y() + h );
+	void setHeight(const Number &h) {
+		box.max_corner().y(box.min_corner().y() + h);
 	}
 	//-------------------------------------------------------------------------
-	Rectangle( Point2D x0 = Point2D(0,0) , Point2D x1 = Point2D(0,0) ) :
-		box( Box(x0, x1) ){}
+	Rectangle(Point2D x0 = Point2D(0, 0), Point2D x1 = Point2D(0, 0)) :
+		box(Box(x0, x1)) {
+	}
 	//-------------------------------------------------------------------------
-	Rectangle( Point2D _x0,
-			   const Number &width,
-			   const Number &height)
+	Rectangle(Point2D _x0, const Number &width, const Number &height)
 
 	{
 		Point2D x0(_x0), x1(width, height);
@@ -93,12 +99,9 @@ public:
 		Rectangle::box = Box(x0, x1);
 	}
 	//-------------------------------------------------------------------------
-	Rectangle( const Number &x,
-			   const Number &y,
-			   const Number &width,
-			   const Number &height )
-	{
-		Point2D x0(x,y), x1(width, height);
+	Rectangle(const Number &x, const Number &y, const Number &width,
+			const Number &height) {
+		Point2D x0(x, y), x1(width, height);
 		add_point(x1, x0);
 		Rectangle::box = Box(x0, x1);
 	}
@@ -109,29 +112,51 @@ extern const Rectangle NULL_RECTANGLE;
 //#############################################################################
 //=============================================================================
 // red, green, blue, alpha as 0..1 values
-struct ColorRGBA : public sambag::math::VectorN<Number, 4> {
+struct ColorRGBA: public sambag::math::VectorN<Number, 4> {
 //=============================================================================
-	enum { R = 1, G, B, A };
-	Number getR() const { return get<R>(); }
-	Number getG() const { return get<G>(); }
-	Number getB() const { return get<B>(); }
-	Number getA() const { return get<A>(); }
-	void setR ( const Number & val ) { set<R>(val); }
-	void setG ( const Number & val ) { set<G>(val); }
-	void setB ( const Number & val ) { set<B>(val); }
-	void setA ( const Number & val ) { set<A>(val); }
-	void setValues( const Number &r, const Number &g, const Number &b, const Number &a ) {
-		setR(r); setG(g); setB(b); setA(a);
+	enum {
+		R = 1, G, B, A
+	};
+	Number getR() const {
+		return get<R> ();
 	}
-	ColorRGBA( Number r = 0.0, Number g = 0.0, Number b = 0.0, Number a = 1.0 ) {
-		setValues(r,g,b,a);
+	Number getG() const {
+		return get<G> ();
+	}
+	Number getB() const {
+		return get<B> ();
+	}
+	Number getA() const {
+		return get<A> ();
+	}
+	void setR(const Number & val) {
+		set<R> (val);
+	}
+	void setG(const Number & val) {
+		set<G> (val);
+	}
+	void setB(const Number & val) {
+		set<B> (val);
+	}
+	void setA(const Number & val) {
+		set<A> (val);
+	}
+	void setValues(const Number &r, const Number &g, const Number &b,
+			const Number &a) {
+		setR(r);
+		setG(g);
+		setB(b);
+		setA(a);
+	}
+	ColorRGBA(Number r = 0.0, Number g = 0.0, Number b = 0.0, Number a = 1.0) {
+		setValues(r, g, b, a);
 	}
 };
 extern const ColorRGBA NULL_COLOR;
 //-----------------------------------------------------------------------------
 /** special case color none: its not the same like NULL_COLOR.
-* NULL_COLOR is unsetted. NONE_COLOR is setted but none.
-*/
+ * NULL_COLOR is unsetted. NONE_COLOR is setted but none.
+ */
 extern const ColorRGBA NONE_COLOR;
 
 //#############################################################################
@@ -148,23 +173,21 @@ using namespace boost::numeric::ublas;
 template<typename T>
 bool operator==(const matrix<T>& m, const matrix<T>& n) {
 //=============================================================================
-  bool returnValue =
-    (m.size1() == n.size1()) &&
-    (m.size2() == n.size2());
-  if (returnValue) {
-    for (unsigned int i = 0; returnValue && i < m.size1(); ++i) {
-      for (unsigned int j = 0; returnValue && j < m.size2(); ++j) {
-        returnValue &= m(i,j) == n(i,j);
-      }
-    }
-  }
-  return returnValue;
+	bool returnValue = (m.size1() == n.size1()) && (m.size2() == n.size2());
+	if (returnValue) {
+		for (unsigned int i = 0; returnValue && i < m.size1(); ++i) {
+			for (unsigned int j = 0; returnValue && j < m.size2(); ++j) {
+				returnValue &= m(i, j) == n(i, j);
+			}
+		}
+	}
+	return returnValue;
 }
 //=============================================================================
 template<typename T>
 bool operator!=(const matrix<T>& m, const matrix<T>& n) {
 //=============================================================================
-  return !(m == n);
+	return !(m == n);
 }
 //#############################################################################
 // Misc.
@@ -176,6 +199,7 @@ bool operator!=(const matrix<T>& m, const matrix<T>& n) {
 using namespace boost::logic;
 typedef tribool TriBool;
 
-}} // namespaces
+}
+} // namespaces
 
 #endif /* COMMON_HPP_ */

@@ -36,7 +36,7 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 CairoDrawContext::CairoDrawContext(cairo_surface_t *surface)
-: surface(surface), context(NULL)
+: surface(surface), _isFilled(true),_isStroked(true), context(NULL)
 {
 	context = cairo_create(surface);
 	setFont(currentFont);

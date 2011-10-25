@@ -19,13 +19,11 @@ void Arc::draw( IDrawContext::Ptr cn ) {
 	cn->translate(c);
 	cn->scale(Point2D(1.0, r.y()/r.x()));
 
-	if ( style.isFilled() ) {
-		style.setFillStyle(cn);
+	if ( cn->isFilled() ) {
 		cn->arc(Point2D(), r.x(), 0, 2.0*M_PI);
 		cn->fill();
 	}
-	if ( style.isStroked() ) {
-		style.setStrokeStyle(cn);
+	if ( cn->isStroked() ) {
 		cn->arc(Point2D(), r.x(), 0, 2.0*M_PI);
 		cn->identityMatrix();
 		cn->transform(tmp);

@@ -2,51 +2,95 @@
 \section{sambag::disco::svg::SvgObject Class Reference}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object}\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
 }
-
-
-{\ttfamily \#include $<$Svg.hpp$>$}
-
 Inheritance diagram for sambag::disco::svg::SvgObject:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=1.911263cm]{classsambag_1_1disco_1_1svg_1_1_svg_object}
+\includegraphics[height=12.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_object}
 \end{center}
 \end{figure}
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_class__tag}{Class\_\-tag}
+\item 
 struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_fill__tag}{Fill\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_family__tag}{FontFamily\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_size__tag}{FontSize\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_style__tag}{FontStyle\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_weight__tag}{FontWeight\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_id__tag}{Id\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_opacity_style__tag}{OpacityStyle\_\-tag}
 \item 
 struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke__tag}{Stroke\_\-tag}
 \item 
 struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_stroke_width__tag}{StrokeWidth\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_style__tag}{Style\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_transform__tag}{Transform\_\-tag}
 \end{DoxyCompactItemize}
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a658b68f468a3d69bc714d67af800fdaf}{
-typedef \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{sambag::xml::XML2Object}$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries BuilderType}}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a658b68f468a3d69bc714d67af800fdaf}
-
+typedef \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{sambag::xml::XML2Object}$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject}, \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_scene_graph}{SceneGraph} $>$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_af28e33e92eb4e235101d9f4a66c69a6f}{BuilderType}
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aff27d18dd0c94f46600edf6ace085ed9}{
 typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries Ptr}}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object_aff27d18dd0c94f46600edf6ace085ed9}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa35d1e492d0cc0bc8b87d7b8674da0bb}{
+typedef boost::weak\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries WPtr}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa35d1e492d0cc0bc8b87d7b8674da0bb}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a5f38522de0c74a49514e6fba84e9fcb1}{
 typedef std::list$<$ SvgObject::Ptr $>$ {\bfseries SvgObjects}}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object_a5f38522de0c74a49514e6fba84e9fcb1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_af0f032eff537e1eb1582978865a3a320}{
+typedef std::string {\bfseries IdType}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_af0f032eff537e1eb1582978865a3a320}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a979d239ab9ef07722ceca86d05c8d967}{
+typedef std::string {\bfseries ClassType}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a979d239ab9ef07722ceca86d05c8d967}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{getDrawingObject} () const =0
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a18da079e0214a0cae6918af69d7c42a4}{
+virtual void {\bfseries copyStyleToGraphicElement} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a18da079e0214a0cae6918af69d7c42a4}
+
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab413d4e961c20fb164ef10cfa01cfb53}{
-virtual void {\bfseries add} (Ptr obj)}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab413d4e961c20fb164ef10cfa01cfb53}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ac650d4e62c53e0011d31ca10ed6b4b33}{
+Ptr {\bfseries getPtr} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ac650d4e62c53e0011d31ca10ed6b4b33}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a19573df9bef92f94251ccade267a2d9e}{
+void {\bfseries setRelatedSceneGraph} (SceneGraph::Ptr ptr)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a19573df9bef92f94251ccade267a2d9e}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a4ee5a98b842ca4df824af38d51c75e29}{
+SceneGraph::Ptr {\bfseries getRelatedSceneGraph} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a4ee5a98b842ca4df824af38d51c75e29}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a960f18bbf9aec25098759ae14fc6dd36}{
+Ptr {\bfseries getRoot} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a960f18bbf9aec25098759ae14fc6dd36}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a17dfe153c81cd09b1e08b33d44cc4ef2}{
@@ -54,21 +98,43 @@ virtual void {\bfseries setXmlText} (const std::string \&str)}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object_a17dfe153c81cd09b1e08b33d44cc4ef2}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a42e6ae33457f1e7eaa9a5c31ae197e42}{
-virtual void {\bfseries draw} (IDrawContext::Ptr context)=0}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a42e6ae33457f1e7eaa9a5c31ae197e42}
+virtual GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_ade2fddb3895338d0f294e7f5de1e4a80}{getGraphicElement} () const =0
+\item 
+void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a0869371b11d31c42bc57868ded63a9e1}{setTransformMatrix} (const sambag::com::Matrix \&m)
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a49dd6c1e536f75aa48aed82bb752f0e3}{
+virtual void {\bfseries add} (Ptr obj)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a49dd6c1e536f75aa48aed82bb752f0e3}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa1dbea0f2f716828a19a18b0ef18b77b}{
-virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const =0}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa1dbea0f2f716828a19a18b0ef18b77b}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ad8c577fd3f4636001833f7400746413c}{
+virtual void {\bfseries setTagName} (const std::string \&str)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ad8c577fd3f4636001833f7400746413c}
 
 \item 
-virtual void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{copyStyleFrom} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aada81ea231142b5bf88e5247905a3d35}{
+virtual void {\bfseries setClassName} (const std::string \&str)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aada81ea231142b5bf88e5247905a3d35}
+
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a6ff59420e02b5f80730be964767aaf30}{
-virtual void {\bfseries setStyle} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{sambag::disco::graphicElements::Style} \&b)}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a6ff59420e02b5f80730be964767aaf30}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a7f4902ea2de8fa403c489257e9fcc6fa}{
+virtual void {\bfseries setIdName} (const std::string \&str)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a7f4902ea2de8fa403c489257e9fcc6fa}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_acb5796cc159fb006ad31c4aa5c2612e5}{
+const std::string \& {\bfseries getTagName} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_acb5796cc159fb006ad31c4aa5c2612e5}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa406cbe116670451c6d6188eeca6b912}{
+const std::string \& {\bfseries getClassName} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa406cbe116670451c6d6188eeca6b912}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_afa955471a374c2a5239f6377ad047518}{
+const std::string \& {\bfseries getIdName} () const }
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_afa955471a374c2a5239f6377ad047518}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_abee1cd5d8cfcb9d7846aad0b5fca7384}{
@@ -85,6 +151,51 @@ virtual void {\bfseries set} (const \hyperlink{structsambag_1_1com_1_1_color_r_g
 virtual void {\bfseries set} (const \hyperlink{structsambag_1_1com_1_1_color_r_g_b_a}{Fill\_\-tag::Type} \&color, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_fill__tag}{Fill\_\-tag} \&)}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab4bf18768e274d7382ac0bcc5603bbd8}
 
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ad2017885db12ab1d9458a84edc4b46e8}{
+virtual void {\bfseries set} (const Id\_\-tag::Type \&v, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_id__tag}{Id\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ad2017885db12ab1d9458a84edc4b46e8}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa66af8a8c60d9f98e2c0a6a4dfba7bc8}{
+virtual void {\bfseries set} (const Class\_\-tag::Type \&v, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_class__tag}{Class\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa66af8a8c60d9f98e2c0a6a4dfba7bc8}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_af1506089b38e309571c479b23ffa955b}{
+virtual void {\bfseries set} (const Transform\_\-tag::Type \&v, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_transform__tag}{Transform\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_af1506089b38e309571c479b23ffa955b}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a64543094101f6d88f5a9f308960af8b1}{
+virtual void {\bfseries set} (const OpacityStyle\_\-tag::Type \&strV, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_opacity_style__tag}{OpacityStyle\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a64543094101f6d88f5a9f308960af8b1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a53a96f9619375343fdbaf750ad12cc07}{
+virtual void {\bfseries set} (const \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{Style\_\-tag::Type} \&style, const \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_style__tag}{Style\_\-tag} \&)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a53a96f9619375343fdbaf750ad12cc07}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a4ade0c6fc8151050569e7ef0a84dacc1}{
+virtual void {\bfseries set} (const FontFamily\_\-tag::Type \&v, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_family__tag}{FontFamily\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a4ade0c6fc8151050569e7ef0a84dacc1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a380188d3bebe67790de27fd583c3be91}{
+virtual void {\bfseries set} (const FontSize\_\-tag::Type \&v, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_size__tag}{FontSize\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a380188d3bebe67790de27fd583c3be91}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab35d4343859173a7dfb11255bca45eea}{
+virtual void {\bfseries set} (const FontWeight\_\-tag::Type \&v, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_weight__tag}{FontWeight\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab35d4343859173a7dfb11255bca45eea}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_aa6504bca246a76135310968e39ca8de8}{
+virtual void {\bfseries set} (const FontStyle\_\-tag::Type \&v, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_object_1_1_font_style__tag}{FontStyle\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_aa6504bca246a76135310968e39ca8de8}
+
 \end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -94,60 +205,107 @@ static void {\bfseries registerAttributes} (\hyperlink{classsambag_1_1xml_1_1_x_
 \label{classsambag_1_1disco_1_1svg_1_1_svg_object_a3491876592666a552c937661cc21aca0}
 
 \end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_abe89580d9d709841f9bc09fd77990b5e}{init} ()
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab96837246a618d2afa370ee8cadf18c4}{
+void {\bfseries \_\-\_\-setSelf} (Ptr self)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab96837246a618d2afa370ee8cadf18c4}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ac6c7d567167fb17b0193c66a2c8be983}{
+boost::weak\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} $>$ {\bfseries \_\-\_\-self}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ac6c7d567167fb17b0193c66a2c8be983}
+
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ab89a83cbd54d4b219c848f7c7ef96422}{
+class {\bfseries SvgRoot}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ab89a83cbd54d4b219c848f7c7ef96422}
+
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-SVG version of GraphicElement. SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. 
 
-Definition at line 30 of file Svg.hpp.
+
+Definition at line 34 of file Svg.hpp.
+
+
+
+\subsection{Member Typedef Documentation}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_af28e33e92eb4e235101d9f4a66c69a6f}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!BuilderType@{BuilderType}}
+\index{BuilderType@{BuilderType}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{BuilderType}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf sambag::xml::XML2Object}$<${\bf SvgObject}, {\bf SceneGraph}$>$ {\bf sambag::disco::svg::SvgObject::BuilderType}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_af28e33e92eb4e235101d9f4a66c69a6f}
+needed for registerAttributes() 
+
+Definition at line 42 of file Svg.hpp.
 
 
 
 \subsection{Member Function Documentation}
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}{
-\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!copyStyleFrom@{copyStyleFrom}}
-\index{copyStyleFrom@{copyStyleFrom}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
-\subsubsection[{copyStyleFrom}]{\setlength{\rightskip}{0pt plus 5cm}virtual void sambag::disco::svg::SvgObject::copyStyleFrom (
-\begin{DoxyParamCaption}
-\item[{const {\bf sambag::disco::graphicElements::Style} \&}]{b}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_adbe97b7b7d0bb9e41add7304f090ac91}
-\begin{DoxySeeAlso}{See also}
-Style.copyFrom() 
-\end{DoxySeeAlso}
-
-\begin{DoxyParams}{Parameters}
-{\em \_\-style} & \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented from \hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_graphic_element_a2d2553a6d3a539fa8fe8e0d43a1e250e}{sambag::disco::graphicElements::GraphicElement}.
-
-
-
-Reimplemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_afd816234932cc473e71799defc511b93}{sambag::disco::svg::SvgCompound}.
-
-
-
-Definition at line 75 of file Svg.hpp.
-
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{
-\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!getDrawingObject@{getDrawingObject}}
-\index{getDrawingObject@{getDrawingObject}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
-\subsubsection[{getDrawingObject}]{\setlength{\rightskip}{0pt plus 5cm}virtual GraphicElement::Ptr sambag::disco::svg::SvgObject::getDrawingObject (
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_ade2fddb3895338d0f294e7f5de1e4a80}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!getGraphicElement@{getGraphicElement}}
+\index{getGraphicElement@{getGraphicElement}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{getGraphicElement}]{\setlength{\rightskip}{0pt plus 5cm}virtual GraphicElement::Ptr sambag::disco::svg::SvgObject::getGraphicElement (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 ) const\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}
-SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. \begin{DoxyReturn}{Returns}
-that GraphicElement that draw the SVG object. 
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_ade2fddb3895338d0f294e7f5de1e4a80}
+\begin{DoxyReturn}{Returns}
+the GraphicElement object which is contained by the SVG object 
 \end{DoxyReturn}
 
 
-Implemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_a3f778dfdf91a6b6a7fcd8065708e132d}{sambag::disco::svg::SvgCompound}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_line_adf873ecfe1079a7a33890138d9f93bcb}{sambag::disco::svg::SvgLine}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad21262edb7fda1a7ab1a45ef15c2f303}{sambag::disco::svg::SvgRect}, and \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_text_af07f166b433d947c117c797bd8891e89}{sambag::disco::svg::SvgText}.
+Implemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_circle_a63abf09b846dc9e8c739c82a9478737e}{sambag::disco::svg::SvgCircle}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_compound_ab0809c2e972c0242209ae7f997fa4787}{sambag::disco::svg::SvgCompound}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_defs_ace65e2c959aa9d3e5b6d2e9145781e8b}{sambag::disco::svg::SvgDefs}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_ellipse_a8613699775694962a6005d857ab8dace}{sambag::disco::svg::SvgEllipse}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_image_a2aa288d5f186220c588319b233cd2a29}{sambag::disco::svg::SvgImage}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_line_a3aaf9f0b25b22387c252b06006414acd}{sambag::disco::svg::SvgLine}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_path_a0ef772926b743390d9c2200ff543bf42}{sambag::disco::svg::SvgPath}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_polygon_acebd97f1120614710e3a1397dba0929f}{sambag::disco::svg::SvgPolygon}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_polyline_a744d4d46bb623f9511135d82c38d9081}{sambag::disco::svg::SvgPolyline}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_rect_a371add36265c803afc6d1d41403a4690}{sambag::disco::svg::SvgRect}, \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_text_aa1f3ca78615ca97b0c3883584104683b}{sambag::disco::svg::SvgText}, and \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_use_a5eacfe071e0d8ad078ed3315a7a93b53}{sambag::disco::svg::SvgUse}.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_abe89580d9d709841f9bc09fd77990b5e}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!init@{init}}
+\index{init@{init}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{init}]{\setlength{\rightskip}{0pt plus 5cm}virtual void sambag::disco::svg::SvgObject::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline, protected, virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_abe89580d9d709841f9bc09fd77990b5e}
+called when finishing \begin{DoxySeeAlso}{See also}
+\hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a5af86b505c33e874853d1f53ac4809a9}{SvgRoot::subObjectCreated}. 
+\end{DoxySeeAlso}
+
+
+Reimplemented in \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_use_a649833341c81d8bf543d570e78397a41}{sambag::disco::svg::SvgUse}.
+
+
+
+Definition at line 95 of file Svg.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_object_a0869371b11d31c42bc57868ded63a9e1}{
+\index{sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}!setTransformMatrix@{setTransformMatrix}}
+\index{setTransformMatrix@{setTransformMatrix}!sambag::disco::svg::SvgObject@{sambag::disco::svg::SvgObject}}
+\subsubsection[{setTransformMatrix}]{\setlength{\rightskip}{0pt plus 5cm}void sambag::disco::svg::SvgObject::setTransformMatrix (
+\begin{DoxyParamCaption}
+\item[{const sambag::com::Matrix \&}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_object_a0869371b11d31c42bc57868ded63a9e1}
+TODO: puts transformation matrix into scenegraph. 
+\begin{DoxyParams}{Parameters}
+{\em m} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 142 of file Svg.hpp.
 
 
 

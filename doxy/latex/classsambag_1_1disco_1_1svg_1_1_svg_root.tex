@@ -2,10 +2,14 @@
 \section{sambag::disco::svg::SvgRoot Class Reference}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_root}\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
 }
+
+
+{\ttfamily \#include $<$SvgRoot.hpp$>$}
+
 Inheritance diagram for sambag::disco::svg::SvgRoot:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=5.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_root}
+\includegraphics[height=3.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_root}
 \end{center}
 \end{figure}
 \subsection*{Public Types}
@@ -15,24 +19,168 @@ Inheritance diagram for sambag::disco::svg::SvgRoot:\begin{figure}[H]
 typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root}{SvgRoot} $>$ {\bfseries Ptr}}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_root_ad634cc2a6f9798fa68c99d6f0401adc9}
 
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a99e19374ad6ef425342ccc9c7d58dde2}{
+typedef std::map$<$ IdType, SvgObject::Ptr $>$ {\bfseries IdMap}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a99e19374ad6ef425342ccc9c7d58dde2}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a406ec8c1f9cf1dd4199f495b87de58e0}{
+typedef std::multimap$<$ IdType, SvgObject::Ptr $>$ {\bfseries ClassMap}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a406ec8c1f9cf1dd4199f495b87de58e0}
+
+\item 
+typedef std::list$<$ SvgObject::Ptr $>$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a5c09e3b0f6e210ca6780d65e6802cc49}{Svgs}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+size\_\-t \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a7a7364f3b0dc222fdc89e86325700f8d}{getNumIdObjects} () const 
+\item 
+size\_\-t \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a4c3286360fec06dcc0874ac4b4cadbc5}{getNumClassObjects} () const 
+\item 
+SvgObject::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a3ec30a0c25f17ebee317b32d73ebd331}{getObjectById} (const IdType \&id) const 
+\item 
+{\footnotesize template$<$typename Container $>$ }\\void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a1d3e0122f0a7aac356acc1f9aa9b1d2c}{getObjectsByClass} (const ClassType \&\_\-class, Container \&c) const 
+\item 
+void \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a5af86b505c33e874853d1f53ac4809a9}{subObjectCreated} (SvgObject::Ptr newObject)
 \end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a970150ebe3be1ceef4c07d0b552e68ee}{
-static Ptr {\bfseries create} ()}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a970150ebe3be1ceef4c07d0b552e68ee}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_aaa061e4bf23ccfa9c60e3d90afe1b6cb}{
+static Ptr {\bfseries create} (\hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_scene_graph}{graphicElements::SceneGraph} $\ast$g=NULL)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_aaa061e4bf23ccfa9c60e3d90afe1b6cb}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_afc6c4451636a6fb6ee6ff4a3261db204}{
+\hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_root_a5c09e3b0f6e210ca6780d65e6802cc49}{Svgs} {\bfseries svgs}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_afc6c4451636a6fb6ee6ff4a3261db204}
 
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
+binding to the svg $<$root$>$ element. 
+
+Definition at line 22 of file SvgRoot.hpp.
 
 
-Definition at line 17 of file SvgRoot.hpp.
+
+\subsection{Member Typedef Documentation}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a5c09e3b0f6e210ca6780d65e6802cc49}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!Svgs@{Svgs}}
+\index{Svgs@{Svgs}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{Svgs}]{\setlength{\rightskip}{0pt plus 5cm}typedef std::list$<$SvgObject::Ptr$>$ {\bf sambag::disco::svg::SvgRoot::Svgs}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a5c09e3b0f6e210ca6780d65e6802cc49}
+TODO: workaround; use future SvgElementDatabase instead 
+
+Definition at line 43 of file SvgRoot.hpp.
 
 
 
-The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a4c3286360fec06dcc0874ac4b4cadbc5}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!getNumClassObjects@{getNumClassObjects}}
+\index{getNumClassObjects@{getNumClassObjects}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{getNumClassObjects}]{\setlength{\rightskip}{0pt plus 5cm}size\_\-t sambag::disco::svg::SvgRoot::getNumClassObjects (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a4c3286360fec06dcc0874ac4b4cadbc5}
+\begin{DoxyReturn}{Returns}
+num of all registered objects with an class attribute 
+\end{DoxyReturn}
+
+
+Definition at line 70 of file SvgRoot.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a7a7364f3b0dc222fdc89e86325700f8d}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!getNumIdObjects@{getNumIdObjects}}
+\index{getNumIdObjects@{getNumIdObjects}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{getNumIdObjects}]{\setlength{\rightskip}{0pt plus 5cm}size\_\-t sambag::disco::svg::SvgRoot::getNumIdObjects (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a7a7364f3b0dc222fdc89e86325700f8d}
+\begin{DoxyReturn}{Returns}
+num of all registered objects with an id attribute 
+\end{DoxyReturn}
+
+
+Definition at line 63 of file SvgRoot.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a3ec30a0c25f17ebee317b32d73ebd331}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!getObjectById@{getObjectById}}
+\index{getObjectById@{getObjectById}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{getObjectById}]{\setlength{\rightskip}{0pt plus 5cm}SvgObject::Ptr sambag::disco::svg::SvgRoot::getObjectById (
+\begin{DoxyParamCaption}
+\item[{const IdType \&}]{id}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a3ec30a0c25f17ebee317b32d73ebd331}
+
+\begin{DoxyParams}{Parameters}
+{\em id} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object}{SvgObject} with specific id. 
+\end{DoxyReturn}
+
+
+Definition at line 78 of file SvgRoot.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a1d3e0122f0a7aac356acc1f9aa9b1d2c}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!getObjectsByClass@{getObjectsByClass}}
+\index{getObjectsByClass@{getObjectsByClass}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{getObjectsByClass}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Container $>$ void sambag::disco::svg::SvgRoot::getObjectsByClass (
+\begin{DoxyParamCaption}
+\item[{const ClassType \&}]{\_\-class, }
+\item[{Container \&}]{c}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a1d3e0122f0a7aac356acc1f9aa9b1d2c}
+Container needs a push\_\-back(SvgObject::Ptr) method. 
+\begin{DoxyParams}{Parameters}
+{\em \_\-class} & class name \\
+\hline
+{\em c} & container object \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 90 of file SvgRoot.hpp.
+
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_root_a5af86b505c33e874853d1f53ac4809a9}{
+\index{sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}!subObjectCreated@{subObjectCreated}}
+\index{subObjectCreated@{subObjectCreated}!sambag::disco::svg::SvgRoot@{sambag::disco::svg::SvgRoot}}
+\subsubsection[{subObjectCreated}]{\setlength{\rightskip}{0pt plus 5cm}void sambag::disco::svg::SvgRoot::subObjectCreated (
+\begin{DoxyParamCaption}
+\item[{SvgObject::Ptr}]{newObject}
+\end{DoxyParamCaption}
+)}}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_root_a5af86b505c33e874853d1f53ac4809a9}
+Funtion for \begin{DoxySeeAlso}{See also}
+XML2Object::CreatedSignal slot. Will be called whenever a sub object of this root element was created. 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em newObject} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 23 of file SvgRoot.cpp.
+
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
 \item 
-/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRoot.hpp\end{DoxyCompactItemize}
+/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRoot.hpp\item 
+/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRoot.cpp\end{DoxyCompactItemize}

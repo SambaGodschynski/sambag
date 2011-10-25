@@ -27,20 +27,5 @@ GraphicElement::Ptr Compound::clone() const {
 //-----------------------------------------------------------------------------
 void Compound::draw( IDrawContext::Ptr cn ) {
 }
-//-----------------------------------------------------------------------------
-void Compound::copyStyleFrom( const Style &b ) {
-//	GraphicElement::copyStyleFrom(b);
-//	for_each( GraphicElement::Ptr obj, objects ) {
-//		obj->copyStyleFrom(b);
-//	}
-}
-//-----------------------------------------------------------------------------
-void Compound::setStyle( const Style &_style ) {
-//	GraphicElement::setStyle(_style);
-//	for_each( GraphicElement::Ptr obj, objects ) {
-//		obj->setStyle(_style);
-//	}
-}
-
 }}}
 

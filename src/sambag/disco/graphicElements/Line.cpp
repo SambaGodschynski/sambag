@@ -20,9 +20,8 @@ Line::~Line() {
 }
 //-----------------------------------------------------------------------------
 void Line::draw( IDrawContext::Ptr cn ) {
-	if ( !style.isStroked() )
+	if ( !cn->isStroked() )
 		return;
-	style.setStrokeStyle(cn);
 	cn->moveTo(p0); cn->lineTo(p1);
 	cn->stroke();
 }

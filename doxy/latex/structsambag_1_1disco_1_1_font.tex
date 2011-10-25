@@ -5,13 +5,19 @@
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-enum {\bfseries Slant} \{ {\bfseries SLANT\_\-NORMAL}, 
+enum {\bfseries Slant} \{ \par
+{\bfseries SLANT\_\-UNDEFINED} =  -\/1, 
+{\bfseries SLANT\_\-NORMAL}, 
 {\bfseries SLANT\_\-ITALIC}, 
-{\bfseries SLANT\_\-OBLIQUE}
+{\bfseries SLANT\_\-OBLIQUE}, 
+\par
+{\bfseries NUM\_\-SLANT}
  \}
 \item 
-enum {\bfseries Weight} \{ {\bfseries WEIGHT\_\-NORMAL}, 
-{\bfseries WEIGHT\_\-BOLD}
+enum {\bfseries Weight} \{ {\bfseries WEIGHT\_\-UNDEFINED} =  -\/1, 
+{\bfseries WEIGHT\_\-NORMAL}, 
+{\bfseries WEIGHT\_\-BOLD}, 
+{\bfseries NUM\_\-WEIGHT}
  \}
 \item 
 \hypertarget{structsambag_1_1disco_1_1_font_a25660acc9cf6e13c39fcf3c0f5dff2d3}{
@@ -41,6 +47,8 @@ bool {\bfseries operator==} (const \hyperlink{structsambag_1_1disco_1_1_font}{Fo
 bool {\bfseries operator!=} (const \hyperlink{structsambag_1_1disco_1_1_font}{Font} \&b) const }
 \label{structsambag_1_1disco_1_1_font_a4792b2676588f6385795a4cf0f0870d3}
 
+\item 
+const \hyperlink{structsambag_1_1disco_1_1_font}{Font} \& \hyperlink{structsambag_1_1disco_1_1_font_a976b75f75d25621519bf863de0f5ad2f}{get} () const 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -71,6 +79,28 @@ Weight {\bfseries weight}}
 
 
 Definition at line 18 of file Font.hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{structsambag_1_1disco_1_1_font_a976b75f75d25621519bf863de0f5ad2f}{
+\index{sambag::disco::Font@{sambag::disco::Font}!get@{get}}
+\index{get@{get}!sambag::disco::Font@{sambag::disco::Font}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Font}\& sambag::disco::Font::get (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{structsambag_1_1disco_1_1_font_a976b75f75d25621519bf863de0f5ad2f}
+dummy function: needed by \begin{DoxySeeAlso}{See also}
+\hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_style}{graphicElements::Style} where you can switch between flyweight or not. If not we need a \hyperlink{structsambag_1_1disco_1_1_font_a976b75f75d25621519bf863de0f5ad2f}{get()}. 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Definition at line 63 of file Font.hpp.
 
 
 

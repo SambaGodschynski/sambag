@@ -94,6 +94,19 @@ void Style::copyFrom( const Style &b ) {
 	if (_font.get().weight == NO_FONT.weight && b._font.get().weight!=NO_FONT.weight)
 		fontWeight(b._font.get().weight);
 }
+//-------------------------------------------------------------------------
+void Style::intoContext( IDrawContext::Ptr cn ) const {
+	if (_strokeColor!=NO_COLOR)
+		cn->setStrokeColor(_strokeColor);
+	if (_strokeWidth!=NO_NUMBER)
+		cn->setStrokeWidth(_strokeWidth);
+	if (_dash!=NO_DASH)
+		cn->setDash(_dash);
+	if (_fillColor!=NO_COLOR)
+		cn->setFillColor(_fillColor);
+	if (_font != NO_FONT)
+		cn->setFont(_font);
+}
 
 
 

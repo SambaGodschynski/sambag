@@ -20,17 +20,14 @@ Text::~Text() {
 }
 //-----------------------------------------------------------------------------
 void Text::draw( IDrawContext::Ptr cn ) {
-	cn->setFont( style.font() );
-	if ( style.isFilled() ) {
+	if ( cn->isFilled() ) {
 		cn->moveTo(pos);
 		cn->textPath(text);
-		style.setFillStyle(cn);
 		cn->fill();
 	}
-	if ( style.isStroked() ) {
+	if ( cn->isStroked() ) {
 		cn->moveTo(pos);
 		cn->textPath(text);
-		style.setStrokeStyle(cn);
 		cn->stroke();
 	}
 }

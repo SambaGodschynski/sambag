@@ -5,13 +5,17 @@
 Inheritance diagram for sambag::disco::svg::SvgRect:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=4.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_rect}
+\includegraphics[height=2.000000cm]{classsambag_1_1disco_1_1svg_1_1_svg_rect}
 \end{center}
 \end{figure}
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_h_e_i_g_h_t__tag}{HEIGHT\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_r_x__tag}{RX\_\-tag}
+\item 
+struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_r_y__tag}{RY\_\-tag}
 \item 
 struct \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_w_i_d_t_h__tag}{WIDTH\_\-tag}
 \item 
@@ -30,17 +34,7 @@ typedef boost::shared\_\-ptr$<$ \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_r
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad21262edb7fda1a7ab1a45ef15c2f303}{getDrawingObject} () const 
-\item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_a1a31a397e5c6aad2c83e07318278139a}{
-virtual void {\bfseries draw} (IDrawContext::Ptr context)}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_a1a31a397e5c6aad2c83e07318278139a}
-
-\item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_a8b98650b0a06c0402f9f1e41f915e401}{
-virtual \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} {\bfseries getBoundingBox} () const }
-\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_a8b98650b0a06c0402f9f1e41f915e401}
-
+GraphicElement::Ptr \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_rect_a371add36265c803afc6d1d41403a4690}{getGraphicElement} () const 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad0c483c304a55b6cb0d0eb8a357c6b0d}{
 virtual void {\bfseries set} (const X\_\-tag::Type \&coord, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_x__tag}{X\_\-tag})}
@@ -61,13 +55,23 @@ virtual void {\bfseries set} (const WIDTH\_\-tag::Type \&w, \hyperlink{structsam
 virtual void {\bfseries set} (const HEIGHT\_\-tag::Type \&h, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_h_e_i_g_h_t__tag}{HEIGHT\_\-tag})}
 \label{classsambag_1_1disco_1_1svg_1_1_svg_rect_a424bac3cb498825a3b46581c108d11f3}
 
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_af2f72135d0a6d1bc2110c5c0cfff7bd8}{
+virtual void {\bfseries set} (const RX\_\-tag::Type \&x, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_r_x__tag}{RX\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_af2f72135d0a6d1bc2110c5c0cfff7bd8}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_ac93f66f566f96740d5bd627272f37c6c}{
+virtual void {\bfseries set} (const RY\_\-tag::Type \&y, \hyperlink{structsambag_1_1disco_1_1svg_1_1_svg_rect_1_1_r_y__tag}{RY\_\-tag})}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_ac93f66f566f96740d5bd627272f37c6c}
+
 \end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_aef9401a232a2222cfaa23405833ce3c0}{
-static Ptr {\bfseries create} ()}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_aef9401a232a2222cfaa23405833ce3c0}
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_a6fee73a3794e3bd717246194b27749bf}{
+static Ptr {\bfseries create} (\hyperlink{classsambag_1_1disco_1_1graphic_elements_1_1_scene_graph}{graphicElements::SceneGraph} $\ast$g=NULL)}
+\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_a6fee73a3794e3bd717246194b27749bf}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_af04b290fa1361836ebe9eb1b7477bbe3}{
@@ -93,29 +97,28 @@ Definition at line 17 of file SvgRect.hpp.
 
 
 \subsection{Member Function Documentation}
-\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad21262edb7fda1a7ab1a45ef15c2f303}{
-\index{sambag::disco::svg::SvgRect@{sambag::disco::svg::SvgRect}!getDrawingObject@{getDrawingObject}}
-\index{getDrawingObject@{getDrawingObject}!sambag::disco::svg::SvgRect@{sambag::disco::svg::SvgRect}}
-\subsubsection[{getDrawingObject}]{\setlength{\rightskip}{0pt plus 5cm}GraphicElement::Ptr sambag::disco::svg::SvgRect::getDrawingObject (
+\hypertarget{classsambag_1_1disco_1_1svg_1_1_svg_rect_a371add36265c803afc6d1d41403a4690}{
+\index{sambag::disco::svg::SvgRect@{sambag::disco::svg::SvgRect}!getGraphicElement@{getGraphicElement}}
+\index{getGraphicElement@{getGraphicElement}!sambag::disco::svg::SvgRect@{sambag::disco::svg::SvgRect}}
+\subsubsection[{getGraphicElement}]{\setlength{\rightskip}{0pt plus 5cm}GraphicElement::Ptr sambag::disco::svg::SvgRect::getGraphicElement (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 ) const\hspace{0.3cm}{\ttfamily  \mbox{[}inline, virtual\mbox{]}}}}
-\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_ad21262edb7fda1a7ab1a45ef15c2f303}
-SvgObjects doesn't draw anything. But they mostly contains one GraphicElement object that do it. \begin{DoxyReturn}{Returns}
-that GraphicElement that draw the SVG object. 
+\label{classsambag_1_1disco_1_1svg_1_1_svg_rect_a371add36265c803afc6d1d41403a4690}
+\begin{DoxyReturn}{Returns}
+the GraphicElement object which is contained by the SVG object 
 \end{DoxyReturn}
 
 
-Implements \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_a93bac29f2db22d713aa49678eb168183}{sambag::disco::svg::SvgObject}.
+Implements \hyperlink{classsambag_1_1disco_1_1svg_1_1_svg_object_ade2fddb3895338d0f294e7f5de1e4a80}{sambag::disco::svg::SvgObject}.
 
 
 
-Definition at line 45 of file SvgRect.hpp.
+Definition at line 55 of file SvgRect.hpp.
 
 
 
-The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
 \item 
-/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRect.hpp\item 
-/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRect.cpp\end{DoxyCompactItemize}
+/home/samba/workspace/sambag/src/sambag/disco/svg/SvgRect.hpp\end{DoxyCompactItemize}

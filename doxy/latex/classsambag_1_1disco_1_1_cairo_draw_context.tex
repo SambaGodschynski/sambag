@@ -34,9 +34,39 @@ virtual void {\bfseries lineTo} (const Point2D \&p0)}
 \label{classsambag_1_1disco_1_1_cairo_draw_context_af621fb2525f19011ad6a5b6173da9fa4}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a481de64f1782d18ac3eec5606590e8f1}{
+virtual void {\bfseries relMoveTo} (const Point2D \&p0)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a481de64f1782d18ac3eec5606590e8f1}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_adee4d08f15fca2e3fccf6486ebd5e23d}{
+virtual void {\bfseries relLineTo} (const Point2D \&p0)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_adee4d08f15fca2e3fccf6486ebd5e23d}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a7aa3668596df43caeafa530c845ca8b8}{
+virtual void {\bfseries closePath} ()}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a7aa3668596df43caeafa530c845ca8b8}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a4cf3f69ebb2dc2186d6ccbb45553d59b}{
 virtual void {\bfseries curveTo} (const Point2D \&x1, const Point2D \&x2, const Point2D \&x3)}
 \label{classsambag_1_1disco_1_1_cairo_draw_context_a4cf3f69ebb2dc2186d6ccbb45553d59b}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a51182974df4d180b31e9005b4ac06a8e}{
+virtual void {\bfseries relCurveTo} (const Point2D \&x1, const Point2D \&x2, const Point2D \&x3)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a51182974df4d180b31e9005b4ac06a8e}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_adf858391bfd5cf0b3fed2094a6d5d524}{
+virtual void {\bfseries quadraticCurveTo} (const Point2D \&x1, const Point2D \&x2)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_adf858391bfd5cf0b3fed2094a6d5d524}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_aef79e684ed1a3390e0f5ca090022a3c6}{
+virtual void {\bfseries relQuadraticCurveTo} (const Point2D \&x1, const Point2D \&x2)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_aef79e684ed1a3390e0f5ca090022a3c6}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a28aa2bd5f5032114716f8062bfd7446a}{
@@ -44,14 +74,19 @@ virtual void {\bfseries arc} (const Point2D \&c, const Number \&r, const Number 
 \label{classsambag_1_1disco_1_1_cairo_draw_context_a28aa2bd5f5032114716f8062bfd7446a}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a4c4be120cecd1fff712025129853e30f}{
+virtual void {\bfseries arcNegative} (const Point2D \&c, const Number \&r, const Number \&angle1=0, const Number \&angle2=M\_\-PI $\ast$2.0)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a4c4be120cecd1fff712025129853e30f}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a3361d581f01a4fbca5afde6ee2d27183}{
 virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect)}
 \label{classsambag_1_1disco_1_1_cairo_draw_context_a3361d581f01a4fbca5afde6ee2d27183}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a1ef4af971a386d1b8292b24f1b6319ca}{
-virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect, Number cornerRadius)}
-\label{classsambag_1_1disco_1_1_cairo_draw_context_a1ef4af971a386d1b8292b24f1b6319ca}
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a141b8f4311079eef3d2c53d25dcb2c25}{
+virtual void {\bfseries rect} (const \hyperlink{classsambag_1_1com_1_1_rectangle}{Rectangle} \&rect, const Number \&cornerRadius)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a141b8f4311079eef3d2c53d25dcb2c25}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_aaa3aa1fea122b50ce02fa85fa8d1ddab}{
@@ -68,6 +103,8 @@ virtual void {\bfseries fill} ()}
 virtual void {\bfseries fillPreserve} ()}
 \label{classsambag_1_1disco_1_1_cairo_draw_context_ac04b67ccfbf57cdc6416de5aa37608f3}
 
+\item 
+virtual void \hyperlink{classsambag_1_1disco_1_1_cairo_draw_context_a6424563c33b11aa82e0a4bf1324af8c5}{drawSurface} (ISurface::Ptr surface, const Number \&alpha=1.0)
 \item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_aae26d01983dee20a2262313c39e59290}{
 virtual void {\bfseries setFont} (const \hyperlink{structsambag_1_1disco_1_1_font}{Font} \&font)}
@@ -139,6 +176,16 @@ virtual FillRule {\bfseries getFillRule} () const }
 \label{classsambag_1_1disco_1_1_cairo_draw_context_a27b91d32884d1f5d306e38e7d2402aed}
 
 \item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_ab5982954c64eec3208019443746ef1af}{
+virtual void {\bfseries save} ()}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_ab5982954c64eec3208019443746ef1af}
+
+\item 
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a8915557d9f96a4061ff7a1f0ac4010ca}{
+virtual void {\bfseries restore} ()}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a8915557d9f96a4061ff7a1f0ac4010ca}
+
+\item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a50cc34c0306d9ca33481c05497e4ba48}{
 virtual Point2D {\bfseries getCurrentPoint} () const }
 \label{classsambag_1_1disco_1_1_cairo_draw_context_a50cc34c0306d9ca33481c05497e4ba48}
@@ -174,9 +221,9 @@ virtual void {\bfseries newSubPath} ()}
 \label{classsambag_1_1disco_1_1_cairo_draw_context_acf182785e2f3560a6f6e2ec1abe4fb7b}
 
 \item 
-\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a7aa3668596df43caeafa530c845ca8b8}{
-virtual void {\bfseries closePath} ()}
-\label{classsambag_1_1disco_1_1_cairo_draw_context_a7aa3668596df43caeafa530c845ca8b8}
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_ab4ac9a61b1736eb1358c6db1101ad3a0}{
+virtual ISurface::Ptr {\bfseries createPngSurface} (IDataHandler::Ptr handler)}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_ab4ac9a61b1736eb1358c6db1101ad3a0}
 
 \item 
 \hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a4fbc6fa2e607327a7a9c1e92ca44c6b3}{
@@ -249,6 +296,32 @@ cairo\_\-t $\ast$ {\bfseries context}}
 
 
 Definition at line 48 of file CairoDrawContext.hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsambag_1_1disco_1_1_cairo_draw_context_a6424563c33b11aa82e0a4bf1324af8c5}{
+\index{sambag::disco::CairoDrawContext@{sambag::disco::CairoDrawContext}!drawSurface@{drawSurface}}
+\index{drawSurface@{drawSurface}!sambag::disco::CairoDrawContext@{sambag::disco::CairoDrawContext}}
+\subsubsection[{drawSurface}]{\setlength{\rightskip}{0pt plus 5cm}void sambag::disco::CairoDrawContext::drawSurface (
+\begin{DoxyParamCaption}
+\item[{ISurface::Ptr}]{surface, }
+\item[{const Number \&}]{alpha = {\ttfamily 1.0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}virtual\mbox{]}}}}
+\label{classsambag_1_1disco_1_1_cairo_draw_context_a6424563c33b11aa82e0a4bf1324af8c5}
+draws an surface. $\ast$ 
+\begin{DoxyParams}{Parameters}
+{\em a} & \hyperlink{classsambag_1_1disco_1_1_cairo_surface}{CairoSurface} all others will be ignored. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classsambag_1_1disco_1_1_i_draw_context}{sambag::disco::IDrawContext}.
+
+
+
+Definition at line 68 of file CairoDrawContext.cpp.
 
 
 

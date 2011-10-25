@@ -15,7 +15,6 @@ namespace sambag { namespace disco { namespace graphicElements {
 //-----------------------------------------------------------------------------
 GraphicElement::GraphicElement() {
 	using namespace boost::numeric::ublas;
-	tMatrix = IDENTITY_MATRIX;
 }
 //-----------------------------------------------------------------------------
 GraphicElement::~GraphicElement() {

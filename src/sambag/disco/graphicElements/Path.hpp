@@ -39,7 +39,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * TODO: do this for all graphic elements.
 	 * @param cn
 	 */
 	virtual void appendPathToContext(IDrawContext::Ptr cn) const {

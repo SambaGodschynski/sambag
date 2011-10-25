@@ -18,11 +18,6 @@
 #include "StyleParser.hpp"
 #include <list>
 
-
-// TODO: viewbox
-// TODO: fillpatterns
-// TODO: css
-
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
 //=============================================================================
@@ -75,7 +70,6 @@ public:
 	struct OpacityStyle_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
 	struct Style_tag { typedef disco::graphicElements::Style Type; };
-	// TODO: more style tags
 private:
 	//-------------------------------------------------------------------------
 	WPtr svgRootObject;
@@ -107,7 +101,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		obj->copyStyleFrom(b);
+		getRelatedSceneGraph()->setStyleTo(obj, b);
 	}
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
@@ -136,14 +130,13 @@ public:
 	virtual GraphicElement::Ptr getGraphicElement() const = 0;
 	//-------------------------------------------------------------------------
 	/**
-	 * TODO: puts transformation matrix into scenegraph.
 	 * @param m
 	 */
 	void setTransformMatrix( const sambag::com::Matrix &m ) {
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj)
 			return;
-		return obj->setTransformMatrix(m);
+		getRelatedSceneGraph()->setTransfomationTo(obj, m);
 	}
 	//-------------------------------------------------------------------------
 	virtual void add(Ptr obj);
@@ -168,7 +161,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.strokeWidth(width);
 		copyStyleToGraphicElement(neu);
 	}
@@ -178,7 +171,7 @@ public:
 		if (color==NULL_COLOR) return;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.strokeColor(color);
 		copyStyleToGraphicElement(neu);
 	}
@@ -188,7 +181,7 @@ public:
 		if (color==NULL_COLOR) return;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fillColor(color);
 		copyStyleToGraphicElement(neu);
 	}
@@ -213,7 +206,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
 		neu.opacity(v);
@@ -233,7 +226,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fontFace(v);
 		copyStyleToGraphicElement(neu);
 	}
@@ -242,7 +235,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fontSize(v);
 		copyStyleToGraphicElement(neu);
 	}
@@ -251,7 +244,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fontWeight(v);
 		copyStyleToGraphicElement(neu);
 	}
@@ -260,7 +253,7 @@ public:
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
-		Style neu = obj->getStyle();
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fontSlant(v);
 		copyStyleToGraphicElement(neu);
 	}

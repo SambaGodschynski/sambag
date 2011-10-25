@@ -1,11 +1,7 @@
 \hypertarget{classsambag_1_1xml_1_1_x_m_l2_object}{
-\section{sambag::xml::XML2Object$<$ BaseType $>$ Class Template Reference}
+\section{sambag::xml::XML2Object$<$ BaseType, ClosureType $>$ Class Template Reference}
 \label{classsambag_1_1xml_1_1_x_m_l2_object}\index{sambag::xml::XML2Object@{sambag::xml::XML2Object}}
 }
-
-
-{\ttfamily \#include $<$XML2Obj.hpp$>$}
-
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -22,70 +18,154 @@ struct {\bfseries ObjectFactory}
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a52df8bea6f71602d16a8af4e66879c95}{
-typedef boost::signal$<$ void(typename BaseType::Ptr)$>$ {\bfseries SiObjectCreated}}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_a52df8bea6f71602d16a8af4e66879c95}
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_afd3d1ae457610c657ca9916a117f05ce}{
+typedef boost::signal$<$ void(typename BaseType::Ptr)$>$ {\bfseries CreatedSignal}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_afd3d1ae457610c657ca9916a117f05ce}
 
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a94263e4ae315299e2fcf10b0f682b7ca}{
-typedef boost::function$<$ void(typename BaseType::Ptr)$>$ {\bfseries BaseTypeF}}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_a94263e4ae315299e2fcf10b0f682b7ca}
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a04e83335cccac904ad150889d3b943df}{
+typedef boost::function$<$ void(typename BaseType::Ptr)$>$ {\bfseries CreatedSignalFunction}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a04e83335cccac904ad150889d3b943df}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a951833ea56dd1e016065c112fb851a4c}{
-boost::signals::connection {\bfseries addObjectCreatedSlot} (BaseTypeF f)}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_a951833ea56dd1e016065c112fb851a4c}
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a2b058ada4c3e0cd2a23a4e945a708e45}{
+void {\bfseries setClosure} (ClosureType $\ast$\_\-closure)}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a2b058ada4c3e0cd2a23a4e945a708e45}
 
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_ae679ea60582f47899ef4ffa8b321cf54}{
+\hyperlink{classsambag_1_1xml_1_1_x_m_l2_object_aa29cc2faf47f065c48aea6d8c2295002}{XML2Object} (ClosureType $\ast$closure=NULL)
+\item 
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a1341964c71a82a89644c5fa2532dedd1}{
+const ClosureType $\ast$const {\bfseries getClosure} () const }
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a1341964c71a82a89644c5fa2532dedd1}
+
+\item 
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a0519b768171680ec22540d4501ddfdc4}{
+CreatedSignal \& {\bfseries getCreatedSignal} () const }
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a0519b768171680ec22540d4501ddfdc4}
+
+\item 
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a88230eac8b5170e9a9fe11e75ae5d5ef}{
+boost::signals::connection {\bfseries addObjectCreatedSlot} (CreatedSignalFunction f)}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a88230eac8b5170e9a9fe11e75ae5d5ef}
+
+\item 
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a83f2d6c64778350de56f5ac806c0862f}{
 {\footnotesize template$<$typename ObjectType $>$ }\\void {\bfseries registerObject} (const std::string \&tagName)}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_ae679ea60582f47899ef4ffa8b321cf54}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a83f2d6c64778350de56f5ac806c0862f}
 
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a326e98bc3acca5061c5510ac6c16b229}{
-BaseType::Ptr {\bfseries buildWithXmlString} (const std::string \&xml)}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_a326e98bc3acca5061c5510ac6c16b229}
-
+BaseType::Ptr \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object_a8f90af1990f3043b68d5cd606cfd3b9d}{buildWithXmlString} (const std::string \&xml, typename BaseType::Ptr givenRoot=typename BaseType::Ptr())
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a83aa9167825fc66a5646a228d21eba67}{
-BaseType::Ptr {\bfseries buildWithXmlFile} (const std::string \&filename)}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_a83aa9167825fc66a5646a228d21eba67}
-
+BaseType::Ptr \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object_a2e2376841f95b0aed23a90ebdecd69e9}{buildWithXmlFile} (const std::string \&filename, typename BaseType::Ptr givenRoot=typename BaseType::Ptr())
 \item 
-{\footnotesize template$<$typename AttrType , typename TagClassType , typename ObjectType $>$ }\\void \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object_af56d1121737bec42c2808d9a767e5070}{registerAttribute} (const std::string \&attrName)
+{\footnotesize template$<$typename AttrType , typename TagClassType , typename ObjectType $>$ }\\void \hyperlink{classsambag_1_1xml_1_1_x_m_l2_object_a598fc8426cf32faf5a8cdacead3b404a}{registerAttribute} (const std::string \&attrName)
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_adb6b5ac2da9cfc82ee313d76e02fa8f4}{
-SiObjectCreated {\bfseries sObjCreated}}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_adb6b5ac2da9cfc82ee313d76e02fa8f4}
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_afb74f9adf5469285cee91505d1f860f5}{
+CreatedSignal {\bfseries sObjCreated}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_afb74f9adf5469285cee91505d1f860f5}
 
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-\subsubsection*{template$<$typename BaseType$>$ class sambag::xml::XML2Object$<$ BaseType $>$}
+\subsubsection*{template$<$typename BaseType, typename ClosureType = NoClosureType$>$class sambag::xml::XML2Object$<$ BaseType, ClosureType $>$}
 
-\hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{XML2Object} Parser: Builds an object structure using a given XML string. You can regsiter a class related to a tag name. You have to set a object base class as template argument. Every registered object has to be an virtual subobject of this base class. Every base class object has to implement an add( BaseClass::Ptr obj ) method. Every base class has to define a Ptr typedef which is a shared\_\-ptr type. Every object class has to implement a static create() method Every object class has to implement a setXmlText( string txt ) method. which returns a Ptr object. You can register an attributes with an attributeType a tag class and the Object Type which have a set( attributeType value, TagClass ) method. The convertion from string to the attr. type value will be done by the stringstream::$>$$>$ operator. When object created and all attributes setted a \char`\"{}object created\char`\"{} boost::signal will be sent. 
+Builds an object structure using a given XML string. You can regsiter a class related to a tag name. You have to set a object base class as template argument. Every registered object has to be an virtual subobject of this base class. Every base class object has to implement an add( BaseClass::Ptr obj ) method. Every base class has to define a Ptr typedef which is a shared\_\-ptr type. Every object class has to implement a static create() respective a create(ClosureType$\ast$) method dependent whether a ClosureType is setted. Every object class has to implement a setTagName( string txt ) method. which returns a Ptr object. You can register an attributes with an attributeType a tag class and the Object Type which have a set( attributeType value, TagClass ) method. The convertion from string to the attr. type value will be done by the stringstream::$>$$>$ operator. When object created and all attributes setted a \char`\"{}object created\char`\"{} boost::signal will be sent. 
 
-Definition at line 35 of file XML2Obj.hpp.
+Definition at line 47 of file XML2Obj.hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_aa29cc2faf47f065c48aea6d8c2295002}{
+\index{sambag::xml::XML2Object@{sambag::xml::XML2Object}!XML2Object@{XML2Object}}
+\index{XML2Object@{XML2Object}!sambag::xml::XML2Object@{sambag::xml::XML2Object}}
+\subsubsection[{XML2Object}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename BaseType, typename ClosureType = NoClosureType$>$ {\bf sambag::xml::XML2Object}$<$ BaseType, ClosureType $>$::{\bf XML2Object} (
+\begin{DoxyParamCaption}
+\item[{ClosureType $\ast$}]{closure = {\ttfamily NULL}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_aa29cc2faf47f065c48aea6d8c2295002}
+\hyperlink{classsambag_1_1xml_1_1_x_m_l2_object}{XML2Object}$<$\hyperlink{struct_base_object}{BaseObject}, ClosureType=NO\_\-TYPE$>$ Closure is a pointer which comes as parameter for the ObjectType::create() method. If no ClosureType setted this create will be called without this closure parameter. 
+\begin{DoxyParams}{Parameters}
+{\em closure} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 204 of file XML2Obj.hpp.
 
 
 
 \subsection{Member Function Documentation}
-\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_af56d1121737bec42c2808d9a767e5070}{
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a2e2376841f95b0aed23a90ebdecd69e9}{
+\index{sambag::xml::XML2Object@{sambag::xml::XML2Object}!buildWithXmlFile@{buildWithXmlFile}}
+\index{buildWithXmlFile@{buildWithXmlFile}!sambag::xml::XML2Object@{sambag::xml::XML2Object}}
+\subsubsection[{buildWithXmlFile}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename BaseType, typename ClosureType = NoClosureType$>$ BaseType::Ptr {\bf sambag::xml::XML2Object}$<$ BaseType, ClosureType $>$::buildWithXmlFile (
+\begin{DoxyParamCaption}
+\item[{const std::string \&}]{filename, }
+\item[{typename BaseType::Ptr}]{givenRoot = {\ttfamily typename~BaseType::Ptr()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a2e2376841f95b0aed23a90ebdecd69e9}
+TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
+
+
+\begin{DoxyParams}{Parameters}
+{\em xml,:} & location of a valid xml document. \\
+\hline
+{\em givenRoot,:} & you are able to use a already created root element. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the root object containing a object representation of the xml structure. 
+\end{DoxyReturn}
+
+
+Definition at line 268 of file XML2Obj.hpp.
+
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a8f90af1990f3043b68d5cd606cfd3b9d}{
+\index{sambag::xml::XML2Object@{sambag::xml::XML2Object}!buildWithXmlString@{buildWithXmlString}}
+\index{buildWithXmlString@{buildWithXmlString}!sambag::xml::XML2Object@{sambag::xml::XML2Object}}
+\subsubsection[{buildWithXmlString}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename BaseType, typename ClosureType = NoClosureType$>$ BaseType::Ptr {\bf sambag::xml::XML2Object}$<$ BaseType, ClosureType $>$::buildWithXmlString (
+\begin{DoxyParamCaption}
+\item[{const std::string \&}]{xml, }
+\item[{typename BaseType::Ptr}]{givenRoot = {\ttfamily typename~BaseType::Ptr()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a8f90af1990f3043b68d5cd606cfd3b9d}
+TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
+
+
+\begin{DoxyParams}{Parameters}
+{\em xml,:} & a valid xml document as string \\
+\hline
+{\em givenRoot,:} & you are able to use a already created root element. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the root object containing a object representation of the xml structure. 
+\end{DoxyReturn}
+
+
+Definition at line 252 of file XML2Obj.hpp.
+
+\hypertarget{classsambag_1_1xml_1_1_x_m_l2_object_a598fc8426cf32faf5a8cdacead3b404a}{
 \index{sambag::xml::XML2Object@{sambag::xml::XML2Object}!registerAttribute@{registerAttribute}}
 \index{registerAttribute@{registerAttribute}!sambag::xml::XML2Object@{sambag::xml::XML2Object}}
-\subsubsection[{registerAttribute}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename BaseType$>$ template$<$typename AttrType , typename TagClassType , typename ObjectType $>$ void {\bf sambag::xml::XML2Object}$<$ BaseType $>$::registerAttribute (
+\subsubsection[{registerAttribute}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename BaseType, typename ClosureType = NoClosureType$>$ template$<$typename AttrType , typename TagClassType , typename ObjectType $>$ void {\bf sambag::xml::XML2Object}$<$ BaseType, ClosureType $>$::registerAttribute (
 \begin{DoxyParamCaption}
 \item[{const std::string \&}]{attrName}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
-\label{classsambag_1_1xml_1_1_x_m_l2_object_af56d1121737bec42c2808d9a767e5070}
+\label{classsambag_1_1xml_1_1_x_m_l2_object_a598fc8426cf32faf5a8cdacead3b404a}
 template: AttrType, TagClassType, ObjectType 
 \begin{DoxyParams}{Parameters}
 {\em attrName} & \\
@@ -93,7 +173,7 @@ template: AttrType, TagClassType, ObjectType
 \end{DoxyParams}
 
 
-Definition at line 211 of file XML2Obj.hpp.
+Definition at line 284 of file XML2Obj.hpp.
 
 
 

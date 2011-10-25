@@ -9,7 +9,6 @@
 #define GRAPHICELEMENT_HPP_
 
 #include "sambag/disco/IDrawContext.hpp"
-#include "Style.hpp"
 #include "sambag/com/Common.hpp"
 #include "sambag/disco/IDrawable.hpp"
 
@@ -22,14 +21,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<GraphicElement> Ptr;
 private:
-	//-------------------------------------------------------------------------
-	/**
-	 * the object transformations matrix
-	 */
-	sambag::com::Matrix tMatrix;
 protected:
-	//-------------------------------------------------------------------------
-	Style style;
 	//-------------------------------------------------------------------------
 	GraphicElement();
 	//-------------------------------------------------------------------------
@@ -38,29 +30,12 @@ protected:
 	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
+	// TODO: draw path method. wich saves the path data on first call
+	// and restores saved data on the others.
+	//-------------------------------------------------------------------------
 	std::string toString() const = 0;
 	//-------------------------------------------------------------------------
 	virtual Ptr clone() const = 0;
-	//-------------------------------------------------------------------------
-	virtual const sambag::com::Matrix & getTransformMatrixDeprecated() const {
-		return tMatrix;
-	}
-	//-------------------------------------------------------------------------
-	virtual void setTransformMatrix(const sambag::com::Matrix &m) {
-		if (m.size1() != 3 || m.size2() != 3)
-			return;
-		tMatrix = m;
-	}
-	//-------------------------------------------------------------------------
-	virtual const Style & getStyle() const { return style; }
-	//-------------------------------------------------------------------------
-	/**
-	 * @see Style.copyFrom()
-	 * @param _style
-	 */
-	virtual void copyStyleFrom( const Style &b ) { style.copyFrom(b); }
-	//-------------------------------------------------------------------------
-	virtual void setStyle( const Style &_style ) { style =_style; }
 	//-------------------------------------------------------------------------
 	virtual ~GraphicElement();
 	//-------------------------------------------------------------------------

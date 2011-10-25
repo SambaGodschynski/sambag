@@ -440,13 +440,11 @@ void Path::drawPath( IDrawContext::Ptr cn ) {
 }
 //-----------------------------------------------------------------------------
 void Path::draw( IDrawContext::Ptr cn ) {
-	if ( style.isFilled() ) {
-		style.setFillStyle(cn);
+	if ( cn->isFilled() ) {
 		drawPath(cn);
 		cn->fill();
 	}
-	if ( style.isStroked() ) {
-		style.setStrokeStyle(cn);
+	if ( cn->isStroked() ) {
 		drawPath(cn);
 		cn->stroke();
 	}

@@ -22,7 +22,7 @@ extern size_t hash_value(const sambag::disco::Font &o);
 //=============================================================================
 // Flyweight Switch
 //=============================================================================
-#define DISCO_USE_FLYWEIGHT
+//#define DISCO_USE_FLYWEIGHT
 #ifdef DISCO_USE_FLYWEIGHT
 #define FLYWEIGHT(type, name) boost::flyweight<type> (name)
 #else
@@ -187,22 +187,7 @@ public:
 		return true;
 	}
 	//-------------------------------------------------------------------------
-	void setStrokeStyle( IDrawContext::Ptr cn ) {
-		cn->setStrokeWidth(strokeWidth());
-		cn->setLineCap(lineCapStyle());
-		if (_dash!=NO_DASH)
-			cn->setDash(dash());
-		ColorRGBA c = strokeColor();
-		c.setA(opacity());
-		cn->setSourceColor(c);
-	}
-	//-------------------------------------------------------------------------
-	void setFillStyle( IDrawContext::Ptr cn ) {
-		cn->setFillRule(fillRule());
-		ColorRGBA c = fillColor();
-		c.setA(opacity());
-		cn->setSourceColor(c);
-	}
+	void intoContext( IDrawContext::Ptr cn ) const;
 	//-------------------------------------------------------------------------
 	Font font() const {
 		// keep cascading effect: check every font value

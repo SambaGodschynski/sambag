@@ -126,9 +126,21 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Number getStrokeWidth() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setSourceColor( const ColorRGBA &val ) = 0;
+	virtual void setFillColor( const ColorRGBA &val ) = 0;
 	//-------------------------------------------------------------------------
-	virtual ColorRGBA getSourceColor() const = 0;
+	virtual ColorRGBA getFillColor() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setStroked(bool isStroked) = 0;
+	//-------------------------------------------------------------------------
+	virtual bool isStroked() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setFilled(bool isFilled) = 0;
+	//-------------------------------------------------------------------------
+	virtual bool isFilled() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setStrokeColor( const ColorRGBA &val ) = 0;
+	//-------------------------------------------------------------------------
+	virtual ColorRGBA getStrokeColor() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void setDash( const Dash &dash ) = 0;
 	//-------------------------------------------------------------------------
