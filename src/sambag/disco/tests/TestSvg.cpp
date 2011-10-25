@@ -31,6 +31,8 @@
 #include "sambag/disco/svg/SvgRoot.hpp"
 #include <list>
 #include "sambag/com/Common.hpp"
+#include <sstream>
+#include <algorithm>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSvg );
@@ -75,6 +77,32 @@ void TestSvg::testSvgFirstElements() {
 	svg::SvgObject::Ptr text = rootObject->getObjectById("#text");
 	CPPUNIT_ASSERT(text);
 	CPPUNIT_ASSERT(text->getGraphicElement());
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> check scenegraph vertex order
+	typedef graphicElements::SceneGraph::OrderNumber OrderNumber;
+	graphicElements::SceneGraph::G bg = g->getGraphImpl();
+	graphicElements::SceneGraph::VertexIterator vi, end;
+	boost::tie(vi, end) = boost::vertices(bg);
+	std::vector<OrderNumber> res;
+	res.reserve( boost::num_vertices(bg) );
+	for (; vi!=end; ++vi) {
+		res.push_back( g->getVertexOrderNumber(*vi) );
+	}
+	OrderNumber soll[] = {-1,0,0,1,2,3,4,5,6,1};
+	const size_t N_SOLL = sizeof(soll) / sizeof(soll[0]);
+	CPPUNIT_ASSERT_EQUAL(N_SOLL, res.size());
+	bool eq = std::equal(res.begin(), res.end(), &soll[0]);
+	if (!eq) {
+		std::stringstream ss1;
+		ss1<<"{";
+		std::stringstream ss2;
+		size_t i = 0;
+		for_each(OrderNumber on, res) {
+			ss1<<on<<", ";
+			ss2<<soll[i++]<<", ";
+		}
+		ss1<<"} is not "<< std::endl <<"{"<<ss2.str()<<"}";
+		CPPUNIT_ASSERT_MESSAGE(ss1.str(), false);
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
 	context.reset();
 	cairo_surface_destroy(surface);

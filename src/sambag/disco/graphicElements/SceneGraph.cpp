@@ -54,6 +54,7 @@ bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
 	const Vertex &u = add_vertex(g);
 	vertexElementMap[u] = ptr;
 	vertexTypeMap[u] = IDRAWABLE;
+	vertexOrderMap[u] = NO_ORDER_NUMBER;
 	it->second = u;
 	return true;
 }

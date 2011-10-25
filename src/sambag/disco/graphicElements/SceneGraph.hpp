@@ -98,7 +98,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IDrawable::Ptr SceneGraphElement;
 	//-------------------------------------------------------------------------
-	typedef size_t OrderNumber;
+	typedef int OrderNumber;
+	//-------------------------------------------------------------------------
+	static const int NO_ORDER_NUMBER = -1;
 	//-------------------------------------------------------------------------
 	enum VertexType {
 		IDRAWABLE
@@ -170,6 +172,11 @@ private:
 		vertexOrderMap  = get( node_order_t(), g );
 	}
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the graph implementation. ( the bgl object )
+	 */
+	const G & getGraphImpl() const { return g; }
 	//-------------------------------------------------------------------------
 	static const Vertex NULL_VERTEX;
 	//-------------------------------------------------------------------------
