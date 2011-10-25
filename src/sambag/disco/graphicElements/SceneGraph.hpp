@@ -329,7 +329,7 @@ template <class T> struct CompareNodeOrder {
 	bool operator() (const T& x, const T& y) const {
 		if (!g)
 			return false;
-		return g->getVertexOrderNumber(x)  <  g->getVertexOrderNumber(y);
+		return g->getVertexOrderNumber(x)  >  g->getVertexOrderNumber(y);
 	}
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
