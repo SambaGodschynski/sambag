@@ -34,6 +34,10 @@ protected:
 	Path();
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+			return "Path";
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * TODO: do this for all graphic elements.
 	 * @param cn

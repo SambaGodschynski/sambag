@@ -92,6 +92,21 @@ public:
 	{
 	}
 	//-------------------------------------------------------------------------
+	bool operator == (const Style &b) const {
+		return _strokeWidth == b._strokeWidth &&
+		_lineCapStyle == b._lineCapStyle &&
+		_fillRule == b._fillRule &&
+		_strokeColor == b._strokeColor &&
+		_fillColor == b._fillColor &&
+		_font == b._font &&
+		_dash == b._dash &&
+		_opacity == b._opacity;
+	}
+	//-------------------------------------------------------------------------
+	bool operator != (const Style &b) const {
+		return !((*this)==b);
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * copy value from b to self. Copies attribute only if not setted to keep
 	 * a cascading effect.

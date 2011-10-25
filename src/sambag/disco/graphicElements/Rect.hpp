@@ -29,6 +29,10 @@ protected:
 	Rect();
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+		return "Rect";
+	}
+	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
 		Ptr neu = create();
 		*neu = *this;

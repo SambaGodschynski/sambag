@@ -28,6 +28,10 @@ protected:
 	Compound(){}
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+			return "Compound";
+	}
+	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const;
 	//-------------------------------------------------------------------------
 	virtual void copyStyleFrom( const Style &b );

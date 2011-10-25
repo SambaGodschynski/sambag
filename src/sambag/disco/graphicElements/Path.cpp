@@ -271,7 +271,6 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_ABS>
 	Point2D cp2 = com::NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x = 0, y = 0;
-		Point2D x0 = cn->getCurrentPoint();
 		tie(x1,y1,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
 		cp2 = Point2D(x1, y1);
 		cn->quadraticCurveTo( Point2D(x1,y1), Point2D(x,y));
@@ -287,7 +286,6 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_REL>
 	Point2D cp2 = com::NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x = 0, y = 0;
-		Point2D x0 = cn->getCurrentPoint();
 		tie(x1,y1,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
 		cp2 = Point2D(x1, y1);
 		cn->relQuadraticCurveTo( Point2D(x1,y1), Point2D(x,y));

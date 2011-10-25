@@ -10,6 +10,7 @@
 
 #include "IDrawContext.hpp"
 #include "sambag/com/Common.hpp"
+#include "string"
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -26,6 +27,11 @@ public:
 	virtual void draw( IDrawContext::Ptr context ) = 0;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * for testing and debugging
+	 */
+	virtual std::string toString() const = 0;
 };
 
 }}

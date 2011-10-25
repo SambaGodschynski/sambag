@@ -31,6 +31,10 @@ protected:
 	std::string uri;
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+		return "Image[" + uri + "]";
+	}
+	//-------------------------------------------------------------------------
 	void setUri(const std::string &_uri) { uri = _uri; }
 	//-------------------------------------------------------------------------
 	const std::string & getUri() const { return uri; }

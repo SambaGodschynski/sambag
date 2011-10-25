@@ -46,7 +46,6 @@ namespace sambag { namespace disco { namespace graphicElements {
 // struct Style
 //=============================================================================
 //-----------------------------------------------------------------------------
-const Style NULL_STYLE;
 const Number Style::NO_NUMBER = NULL_NUMBER;
 const Style::LineCapStyle Style::NO_LINE_CAP_STYLE = IDrawContext::NO_LINE_CAP;
 const Style::FillRule Style::NO_FILL_RULE = IDrawContext::NO_FILL_RULE;
@@ -64,6 +63,11 @@ const Style::Dash Style::DEFAULT_DASH = Style::Dash(NULL, 0, 0);
 const boost::logic::tribool Style::DEFAULT_BOOL = false;
 const Font Style::DEFAULT_FONT;
 const Number Style::DEFAULT_OPACITY = 1.0;
+//------------------------------------------------------------------------------
+// define NULL_STYLE after all const objects above,
+// because a Style object needs them.
+// (otherwise you probably earn a segmentation fault.)
+const Style NULL_STYLE;
 //------------------------------------------------------------------------------
 void Style::copyFrom( const Style &b ) {
 	if (_strokeWidth == NO_NUMBER && b._strokeWidth != NO_NUMBER)

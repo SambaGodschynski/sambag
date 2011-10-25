@@ -25,6 +25,10 @@ protected:
 	Line( const Point2D &p0=NULL_POINT2D, const Point2D &p1=NULL_POINT2D );
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+			return "Line";
+	}
+	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
 		Ptr neu = create();
 		*neu = *this;

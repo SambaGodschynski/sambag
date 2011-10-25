@@ -29,6 +29,10 @@ protected:
 	RefElement(){}
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+		return "RefElement["+ !ref ? "NULL" : ref->toString() +"]";
+	}
+	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
 		Ptr neu = create();
 		*neu = *this;

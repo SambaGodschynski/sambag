@@ -8,7 +8,7 @@
 #include "GraphicElement.hpp"
 #include "SceneGraph.hpp"
 #include "sambag/com/Common.hpp"
-#include <iostream>
+#include <sstream>
 #include <limits.h>
 
 namespace sambag { namespace disco { namespace graphicElements {
@@ -44,6 +44,22 @@ const SceneGraph::Vertex SceneGraph::NULL_VERTEX = UINT_MAX;
 //=============================================================================
 // class SceneGraph
 //=============================================================================
+//-----------------------------------------------------------------------------
+std::string SceneGraph::processListAsString() const {
+	typedef std::list<IProcessListObject::Ptr> L;
+	L l;
+	getProcessList<L>(l);
+	if (l.empty())
+		return "{}";
+	std::stringstream ss;
+	L::const_reverse_iterator it = l.rbegin();
+	ss<<(*it++)->toString();
+	for ( ;it!=l.rend(); ++it) {
+		ss<<", "<<(*it)->toString();
+	}
+	ss<<"}";
+	return ss.str();
+}
 //-----------------------------------------------------------------------------
 bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
 	bool inserted;
@@ -99,6 +115,7 @@ bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m
 		return false;
 	Vertex tv = boost::add_vertex(g);
 	vertexTransformationMap[tv] = m;
+	vertexTypeMap[tv] = TRANSFORM;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
 	return succeed;
@@ -113,6 +130,7 @@ bool SceneGraph::setStyleTo(
 		return false;
 	Vertex tv = boost::add_vertex(g);
 	vertexStyleMap[tv] = s;
+	vertexTypeMap[tv] = STYLE;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
 	return succeed;
@@ -124,7 +142,14 @@ SceneGraph::getTransformationOf(const SceneGraphElement &el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return NULL_MATRIX;
-	return vertexTransformationMap[rv];
+	// find parent transformation node(s)
+	typedef std::list<Vertex> Vertices;
+	Vertices vertices;
+	findParentsWithType(rv, TRANSFORM, vertices);
+	if (vertices.empty())
+		return NULL_MATRIX;
+	// assume only one style node per vertex
+	return vertexTransformationMap[vertices.back()];
 }
 //----------------------------------------------------------------------------
 const graphicElements::Style &
@@ -133,14 +158,21 @@ SceneGraph::getStyleOf(const SceneGraphElement &el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return graphicElements::NULL_STYLE;
-	return vertexStyleMap[rv];
+	// find parent style node(s)
+	typedef std::list<Vertex> Vertices;
+	Vertices vertices;
+	findParentsWithType(rv, STYLE, vertices);
+	if (vertices.empty())
+		return graphicElements::NULL_STYLE;
+	// assume only one style node per vertex
+	return vertexStyleMap[vertices.back()];
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::draw(IDrawContext::Ptr context) const {
-	typedef std::list<ProcessListProcessor::Ptr> Elements;
+	typedef std::list<IProcessListObject::Ptr> Elements;
 	Elements elements;
 	getProcessList<Elements>(elements);
-	reverse_for_each( ProcessListProcessor::Ptr o, elements ) {
+	reverse_for_each( IProcessListObject::Ptr o, elements ) {
 		o->perform(context);
 	}
 }

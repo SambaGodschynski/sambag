@@ -28,6 +28,10 @@ protected:
 	Text();
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const {
+		return "Text[" + text + "]";
+	}
+	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
 		Ptr neu = create();
 		*neu = *this;

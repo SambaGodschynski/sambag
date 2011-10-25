@@ -9,6 +9,7 @@
 #define SCENEGRAPH_HPP_
 
 #include "sambag/disco/IDrawContext.hpp"
+#include "sambag/disco/IDrawable.hpp"
 #include "sambag/disco/graphicElements/Style.hpp"
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
@@ -19,18 +20,23 @@
 #include <boost/graph/copy.hpp>
 
 namespace sambag { namespace disco { namespace graphicElements {
-
 //=============================================================================
 /**
  * @class interface for ProcessListProcessors.
  */
-class ProcessListProcessor {
+class IProcessListObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ProcessListProcessor> Ptr;
+	typedef boost::shared_ptr<IProcessListObject> Ptr;
 	//-------------------------------------------------------------------------
 	virtual void perform(IDrawContext::Ptr context) = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * for debugging and testing
+	 * @return
+	 */
+	virtual std::string toString() const = 0;
 };
 
 
@@ -38,7 +44,7 @@ public:
 /**
  * @class performs a iDrawObject->draw()
  */
-class ProcessDrawable : public ProcessListProcessor {
+class ProcessDrawable : public IProcessListObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -65,6 +71,11 @@ private:
 		transformation(transformation){}
 public:
 	//-------------------------------------------------------------------------
+	virtual std::string toString() const {
+		return (resetContextState ? "DrawAndRestoreContextState(" : "Draw(")
+				+ drawable->toString() + ")";
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create(
 			IDrawable::Ptr drawable,
 			bool resetContextState,
@@ -84,7 +95,7 @@ public:
 /**
  * @class restores context state such as transformations
  */
-class RestoreContextState : public ProcessListProcessor {
+class RestoreContextState : public IProcessListObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -93,6 +104,10 @@ private:
 	//-------------------------------------------------------------------------
 	RestoreContextState(){};
 public:
+	//-------------------------------------------------------------------------
+	virtual std::string toString() const {
+		return "RestoreContextState";
+	}
 	std::string name;
 	//-------------------------------------------------------------------------
 	static Ptr create() {
@@ -158,7 +173,7 @@ public:
 	typedef boost::adjacency_list<
 			boost::listS,
 			boost::vecS, 			// has to be vecS. Otherwise the processlist
-									// creation is getting more complex.
+									// creation and other things getting more complex.
 			boost::bidirectionalS,
 			vertexProperties > G;
 	//-------------------------------------------------------------------------
@@ -294,6 +309,12 @@ public:
 	void getProcessList(Container &out) const;
 	//-------------------------------------------------------------------------
 	/**
+	 * for testing and debugging
+	 * @return
+	 */
+	std::string processListAsString() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * fills Container with all parent vertices which matches to VertexType.
 	 * @param v
 	 * @param out
@@ -325,9 +346,9 @@ private:
 		size_t numOutEdges = boost::out_degree(v, g);
 		container.push_back(
 			ProcessDrawable::create(obj,
-			     	                numOutEdges==0,
-						            sceneGraph.getStyleOf(obj),
-						            sceneGraph.getTransformationOf(obj))
+									numOutEdges==0,
+									sceneGraph.getStyleOf(obj),
+									sceneGraph.getTransformationOf(obj))
 		);
 
 	}
@@ -361,6 +382,9 @@ public:
 			switch (type) {
 				case SceneGraph::IDRAWABLE :
 					discover_drawable(v, g); break;
+				case SceneGraph::TRANSFORM :
+				case SceneGraph::STYLE :
+					break;
 			}
 	}
 	//-------------------------------------------------------------------------
@@ -370,6 +394,9 @@ public:
 		switch (type) {
 			case SceneGraph::IDRAWABLE :
 				finish_drawable(v, g); break;
+			case SceneGraph::TRANSFORM :
+			case SceneGraph::STYLE :
+				break;
 		}
 	}
 	//-------------------------------------------------------------------------
@@ -382,8 +409,8 @@ public:
 	@brief Copies grap src to graph dst. Assumes that dst is empty.
 	Using this because the boost::copy_graph function dosen't works
 	if G2 type is a "vector as graph" type. ( for all I know )
-	Only works if G1 vertex_desc. type is vecS.
-	Otherwise you have create a mapping from G1 to G2 vertex.
+	Only works if G1 vertex_descr. type is vecS.
+	Otherwise there is missing a mapping from G1 to G2 vertex.
 
 	@param src
 	@param dst
@@ -412,7 +439,7 @@ void copyGraph( const G1 &src, G2 &dst, const Comparator &cmp ) {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * @class comparator for set.
- * Compares in order to the node_order_t property.
+ * Compares node_order_t property descending.
  */
 template <class T> struct CompareNodeOrder {
 	const SceneGraph *g; // reference dosen't work
@@ -432,7 +459,7 @@ void SceneGraph::getProcessList (Container &out) const
 	 * @brief copies org. graph into a "vector as graph" graph.
 	 * where the edge container is a set<vertex> to affect in which order
 	 * the depth_first_search alg. selects the out_edges.
-	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph
+	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph#building_process_list
 	 */
 	if (boost::num_vertices(g)==0)
 		return;

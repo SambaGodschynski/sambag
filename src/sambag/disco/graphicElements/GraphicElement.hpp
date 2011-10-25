@@ -38,6 +38,8 @@ protected:
 	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
+	std::string toString() const = 0;
+	//-------------------------------------------------------------------------
 	virtual Ptr clone() const = 0;
 	//-------------------------------------------------------------------------
 	virtual const sambag::com::Matrix & getTransformMatrixDeprecated() const {
