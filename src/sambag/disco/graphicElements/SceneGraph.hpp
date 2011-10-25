@@ -12,7 +12,7 @@
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/depth_first_search.hpp>
+#include "sambag/disco/boost/graph/depth_first_search.hpp"
 #include <boost/unordered_map.hpp>
 #include "sambag/disco/IDrawable.hpp"
 

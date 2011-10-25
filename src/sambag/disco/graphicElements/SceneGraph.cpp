@@ -83,7 +83,7 @@ void SceneGraph::draw(IDrawContext::Ptr context) const {
 	typedef std::list<ProcessListProcessor::Ptr> Elements;
 	Elements elements;
 	getProcessList<Elements>(elements);
-	for_each( ProcessListProcessor::Ptr o, elements ) {
+	reverse_for_each( ProcessListProcessor::Ptr o, elements ) {
 		o->perform(context);
 	}
 }
