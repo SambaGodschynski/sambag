@@ -25,6 +25,7 @@ void SvgUse::solveHRef() {
 		boost::shared_dynamic_cast<GraphicElement>(getRelatedSceneGraph()->getElementById(href) );
 	if (!ref)
 		return;
-	object->setReference(ref, getRelatedSceneGraph());
+	object->setReference(ref);
+	object->completeReferenceGraph(getRelatedSceneGraph());
 }
 }}}

@@ -30,6 +30,13 @@ protected:
 	RefElement(){}
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * Rebuilds graph structure starting with the reference target with
+	 * reference copies. Appends the result to this ref element.
+	 * @param g
+	 */
+	void completeReferenceGraph(SceneGraph::Ptr g);
+	//-------------------------------------------------------------------------
 	std::string toString() const {
 		return "RefElement["+ (!ref ? "NULL" : "&" + ref->toString()) +"]";
 	}
@@ -47,13 +54,18 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setReference(GraphicElement::Ptr r, SceneGraph::Ptr g);
+	void setReference(GraphicElement::Ptr r) {
+		ref = r;
+	}
 	//-------------------------------------------------------------------------
 	GraphicElement::Ptr getReference() const  { return ref; }
 	//-------------------------------------------------------------------------
 	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context ) {}
+	virtual void draw( IDrawContext::Ptr context ) {
+		if (ref)
+			ref->draw(context);
+	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
 		if (!ref) return Rectangle();

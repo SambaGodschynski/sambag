@@ -400,6 +400,34 @@ public:
 	//-------------------------------------------------------------------------
 	template <typename Container>
 	void getElementsByClass(const Class & className, Container &c);
+	//-------------------------------------------------------------------------
+	void adoptStyleEdges(const SceneGraphElement &src,
+			const SceneGraphElement &dst)
+	{
+		Vertex srcV = getRelatedVertex(src);
+		Vertex dstV = getRelatedVertex(dst);
+		if (srcV==NULL_VERTEX || dstV==NULL_VERTEX )
+			return;
+		std::list<Vertex> vertices;
+		findParentsWithType(srcV, SceneGraph::STYLE, vertices);
+		for_each(Vertex v, vertices) {
+			boost::add_edge(v, dstV, g);
+		}
+	}
+	//-------------------------------------------------------------------------
+	void adoptTransformEdges(const SceneGraphElement &src,
+			const SceneGraphElement &dst)
+	{
+		Vertex srcV = getRelatedVertex(src);
+		Vertex dstV = getRelatedVertex(dst);
+		if (srcV==NULL_VERTEX || dstV==NULL_VERTEX )
+			return;
+		std::list<Vertex> vertices;
+		findParentsWithType(srcV, SceneGraph::TRANSFORM, vertices);
+		for_each(const Vertex &v, vertices) {
+			boost::add_edge(v, dstV, g);
+		}
+	}
 };
 //=============================================================================
 /**
@@ -418,56 +446,9 @@ private:
 	const SceneGraph &sceneGraph;
 	//-------------------------------------------------------------------------
 	typedef SceneGraph::Vertex Vertex;
-	//-------------------------------------------------------------------------
-	typedef typename Container::const_iterator Iterator;
-	//-------------------------------------------------------------------------
-	typedef std::list< std::pair<Vertex, Iterator> > RecycleMapBuilderStack;
-	//-------------------------------------------------------------------------
-	/**
-	 * maps from vertex to a range in subProcessingList
-	 * http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph&#svg_s_use_problem
-	 */
-	typedef std::map<Vertex, std::pair<Iterator, Iterator> > RecycleMap;
-	//-------------------------------------------------------------------------
-	RecycleMapBuilderStack stack;
-	//-------------------------------------------------------------------------
-	RecycleMap recycleMap;
-	//-------------------------------------------------------------------------
 	Vertex startVertex;
 	//-------------------------------------------------------------------------
 	bool startVertexFinished;
-	//-------------------------------------------------------------------------
-	void updateRecycleMap(const Vertex &v) {
-		// insert pre-processed entries if available
-		if (stack.back().first == v) { // insert into recMap
-			Iterator startIt = stack.back().second;
-			Iterator endIt = --(container.end()); // current process list position
-			stack.pop_back();
-			std::list<Vertex> vertices;
-			sceneGraph.findParentsWithType(v, SceneGraph::IDRAWABLE, vertices);
-			for_each(const Vertex &iv, vertices) {
-				recycleMap.insert(
-					std::make_pair(iv, std::make_pair(startIt, endIt))
-				);
-			}
-		}
-	}
-	//-------------------------------------------------------------------------
-	void resolveFromRecycleMap(const Vertex &v) {
-		// insert pre-processed entries if available
-		typename RecycleMap::const_iterator mapIt = recycleMap.find(v);
-		if (mapIt==recycleMap.end()) return;
-		Iterator it = mapIt->second.first;
-		Iterator endIt = mapIt->second.second;
-		if (it==container.end()) { // reference to leaf => no startIt
-			container.push_back(*endIt);
-			return;
-		}
-		it++;
-		for (; it!=endIt; ++it) {
-			container.push_back(*it);
-		}
-}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_drawable(const Vertex &v, Graph& g) {
@@ -484,30 +465,17 @@ private:
 				sceneGraph.getStyleOf(obj),
 				tM);
 		container.push_back(cmd);
-		updateRecycleMap(v);
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void discover_drawable(const Vertex &v, Graph &g) {
 		typename SceneGraph::SceneGraphElement obj =
 				sceneGraph.getSceneGraphElement(v);
-		bool isLeaf = false;
 		// only need to restore if has child objects in graph
 		if ( boost::out_degree(v, g) > 0 ) {
 			RestoreContextState::Ptr re = RestoreContextState::create();
 			container.push_back(re);
-		} else {
-			isLeaf = true;
 		}
-		if (sceneGraph.inDegreeOf(v, SceneGraph::IDRAWABLE) > 1) {
-			if (!container.empty()) {
-				if (isLeaf)
-					stack.push_back(std::make_pair(v, container.end() ));
-				else
-					stack.push_back(std::make_pair(v, --(container.end()) ));
-			}
-		}
-		resolveFromRecycleMap(v);
 	}
 public:
 	//-------------------------------------------------------------------------

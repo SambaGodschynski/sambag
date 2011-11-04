@@ -88,6 +88,26 @@ void Style::intoContext( IDrawContext::Ptr cn ) const {
 		cn->setFontWeight(_fontWeight);
 }
 //-----------------------------------------------------------------------------
+#define CHECK_NULL_VAL(member,bmember,nullval) (member)==(nullval)&&(bmember)!=(nullval)
+void Style::add( const Style &b ) {
+	if ( CHECK_NULL_VAL(_strokeColor,b._strokeColor,ColorRGBA::NULL_COLOR) )
+		strokeColor(b.strokeColor());
+	if ( CHECK_NULL_VAL( _strokeWidth, b._strokeWidth, NULL_NUMBER) )
+		strokeWidth(b.strokeWidth());
+	if ( CHECK_NULL_VAL(_dash, b._dash, NO_DASH) )
+		dash(b.dash());
+	if ( CHECK_NULL_VAL(_fillColor, b._fillColor, ColorRGBA::NULL_COLOR) )
+		fillColor(b.fillColor());
+	if (CHECK_NULL_VAL(_fontFace, b._fontFace, NO_FONT.fontFace) )
+		fontFace(b.fontFace());
+	if ( CHECK_NULL_VAL(_fontSize, b._fontSize, NO_FONT.size) )
+		fontSize(b.fontSize());
+	if ( CHECK_NULL_VAL(_fontSlant, b._fontSlant, NO_FONT.slant) )
+		fontSlant(b.fontSlant());
+	if ( CHECK_NULL_VAL(_fontWeight, b._fontWeight, NO_FONT.weight) )
+		fontWeight(b.fontWeight());
+}
+//-----------------------------------------------------------------------------
 const Style & Style::getNullStyle() {
 	if (!NULL_STYLE_SINGLETON) {
 		NULL_STYLE_SINGLETON = Ptr(new Style());

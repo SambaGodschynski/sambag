@@ -50,6 +50,25 @@ void TestSvg::setUp() {
 	setupEnv();
 }
 //-----------------------------------------------------------------------------
+void TestSvg::testStyleAdd() {
+	using namespace sambag::disco::graphicElements;
+	Style nullStyle;
+	Style values;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	values.fillColor(ColorRGBA(0));
+	values.strokeColor(ColorRGBA(1));
+	values.strokeWidth(10);
+	values.font(sambag::disco::Font());
+	values.dash(sambag::disco::IDrawContext::Dash());
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	Style n01;
+	n01.add(values);
+	CPPUNIT_ASSERT(n01==values);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	n01.add(nullStyle);
+	CPPUNIT_ASSERT(n01==values);
+}
+//-----------------------------------------------------------------------------
 void TestSvg::testSvgFirstElements() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file

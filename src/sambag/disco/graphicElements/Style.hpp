@@ -73,6 +73,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const Style & getNullStyle();
 	//-------------------------------------------------------------------------
+	void add(const Style &b);
+	//-------------------------------------------------------------------------
 	Style() :
 		_strokeWidth(NULL_NUMBER),
 		_lineCapStyle(IDrawContext::NO_LINE_CAP),
@@ -190,6 +192,22 @@ public:
 	Style & fontWeight( const Font::Weight & v) {
 		_fontWeight = v;
 		return *this;
+	}
+	//-------------------------------------------------------------------------
+	const Font::FontFace & fontFace() const {
+		return _fontFace;
+	}
+	//-------------------------------------------------------------------------
+	const Font::Size & fontSize() const {
+		return _fontSize;
+	}
+	//-------------------------------------------------------------------------
+	const Font::Slant & fontSlant() const {
+		return _fontSlant;
+	}
+	//-------------------------------------------------------------------------
+	const Font::Weight & fontWeight() const {
+		return _fontWeight;
 	}
 
 };

@@ -17,7 +17,7 @@
         <text x="225" y="145" fill="black">Arc end</text> 
       </g>
     </defs> 
-    <use xlink:href="#baseEllipses" fill="none" stroke="black"/> 
+    <use xlink:href="#baseEllipses" fill="none"/> 
     <use xlink:href="#kaka" transform="translate(100,100) scale(1.5,1.5)" fill="yellow" opacity="100%"/>
     <use xlink:href="#nerd" font-family="monospaced"/>
     <!--defs after use tags-->

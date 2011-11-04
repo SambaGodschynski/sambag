@@ -153,6 +153,13 @@ bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return false;
+	std::list<Vertex> vertices;
+	findParentsWithType(rv, TRANSFORM, vertices);
+	if (!vertices.empty()) { // update
+		Vertex cur = vertices.back();
+		vertexTransformationMap[cur] = m;
+		return true;
+	}
 	Vertex tv = boost::add_vertex(g);
 	vertexTransformationMap[tv] = m;
 	vertexTypeMap[tv] = TRANSFORM;
@@ -168,6 +175,13 @@ bool SceneGraph::setStyleTo(
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return false;
+	std::list<Vertex> vertices;
+	findParentsWithType(rv, STYLE, vertices);
+	if (!vertices.empty()) { // update
+		Vertex cur = vertices.back();
+		vertexStyleMap[cur] = s;
+		return true;
+	}
 	Vertex tv = boost::add_vertex(g);
 	vertexStyleMap[tv] = s;
 	vertexTypeMap[tv] = STYLE;
