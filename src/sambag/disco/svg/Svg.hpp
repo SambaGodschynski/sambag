@@ -78,7 +78,7 @@ protected:
 	graphicElements::SceneGraph::Ptr sceneGraph;
 	//-------------------------------------------------------------------------
 	/**
-	 * called when finishing @see SvgRoot::subObjectCreated.
+	 * called when SceneGraph building completed.
 	 */
 	virtual void init(){}
 	//-------------------------------------------------------------------------

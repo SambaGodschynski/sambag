@@ -8,7 +8,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/signal.hpp>
 #include <boost/function.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <sstream>
+#include <boost/foreach.hpp>
 #include "ticpp/ticpp.h"
 
 namespace sambag { namespace xml {
@@ -128,28 +130,48 @@ private:
 	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
 	AttributeMap attrMap;
 	//-------------------------------------------------------------------------
-	void setAttribute(typename BaseType::Ptr obj, const ticpp::Attribute &attr) {
+	typedef boost::tuple <
+		IAttributeSetter*, // setter object
+		typename BaseType::Ptr, // dest. obj
+		std::string // strValue
+	> SetterData;
+	//-------------------------------------------------------------------------
+	enum {
+		SETTER_DATA_SETTER_OBJECT,
+		SETTER_DATA_DEST_OBJECT,
+		SETTER_DATA_STR_VALUE
+	};
+	//-------------------------------------------------------------------------
+	typedef std::list<SetterData> Setters;
+	//-------------------------------------------------------------------------
+	/*
+	 * store setters to perform the "set" operation when object structure created
+	 */
+	Setters setters;
+	//-------------------------------------------------------------------------
+	void storeAttribute(typename BaseType::Ptr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
 		typedef typename AttributeMap::iterator It;
 		std::pair<It, It> range = attrMap.equal_range(to_lower_copy( attr.Name() ));
 		// try every possible entries (stupid)
 		for ( It it=range.first; it!=range.second; ++it) {
-			it->second->set(obj, attr.Value());
+			//it->second->set(obj, attr.Value());
+			setters.push_back(SetterData(it->second, obj, attr.Value()));
 		}
 	}
 	//-------------------------------------------------------------------------
-	void setAttributes(typename BaseType::Ptr obj, const ticpp::Element &el) {
+	void storeAttributes(typename BaseType::Ptr obj, const ticpp::Element &el) {
 		ticpp::Iterator < ticpp::Attribute > attribute;
 		attribute = attribute.begin(&el);
 		for (; attribute != attribute.end(); attribute++) {
-			setAttribute(obj, *attribute);
+			storeAttribute(obj, *attribute);
 		}
 	}
 	//#########################################################################
 	// building
 	//-------------------------------------------------------------------------
 	/**
-	 *  walks rekursively through xml element structure and creates objects if
+	 *  walks recursively through the XML element structure and creates objects if
 	 *  tagnames are registered.
 	 * @param element: current xml emelment
 	 * @param givenRoot: setted if the root object is already created (opt.)
@@ -171,17 +193,26 @@ private:
 				continue;
 			node->add(app);
 		}
-		setAttributes(node, element);
+		storeAttributes(node, element);
 		node->setXmlText(element.GetTextOrDefault(""));
 		sObjCreated(node, element.Value()); // fire objCreated signal
 		return node;
 	}
 	//-------------------------------------------------------------------------
+	void performSetters() {
+		BOOST_FOREACH(const SetterData &data, setters) {
+			IAttributeSetter *setter;
+			typename BaseType::Ptr obj;
+			std::string strValue;
+			boost::tie(setter, obj, strValue) = data;
+			setter->set(obj, strValue);
+		}
+	}
+	//-------------------------------------------------------------------------
 	/**
-	 * builds object structure. Container has to append ObjectType objects
-	 * with a push_back method.
+	 * builds object structure.
 	 * @param doc
-	 * @param givenRoot setted if the root object is already created (opt.)
+	 * @param givenRoot setted if the root object is already pre-created
 	 * @return root object ptr
 	 */
 	typename BaseType::Ptr build(
@@ -189,7 +220,9 @@ private:
 			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
 	{
 		ticpp::Element* pElem = doc.FirstChildElement();
-		return walk(*pElem, givenRoot);
+		typename BaseType::Ptr neu = walk(*pElem, givenRoot);
+		performSetters();
+		return neu;
 	}
 public:
 	//--------------------------------------------------------------------------

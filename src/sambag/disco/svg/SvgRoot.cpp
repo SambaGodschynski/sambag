@@ -14,8 +14,8 @@ namespace sambag { namespace disco { namespace svg {
 //class SvgRoot
 //=============================================================================
 //-----------------------------------------------------------------------------
-void SvgRoot::init() {
-	boost_for_each(SvgObject::Ptr o, svgs) { // TODO: remove?
+void SvgRoot::initCreatedObjects() {
+	boost_for_each(SvgObject::Ptr o, svgs) {
 		o->init();
 	}
 }
@@ -24,8 +24,7 @@ void SvgRoot::subObjectCreated( SvgObject::Ptr newObject,
 	const std::string &tagName )
 {
 	newObject->setTagName(tagName);
-	if (newObject.get() == this) { // init self
-		init();
+	if (newObject.get() == this) { // don't add self
 		return;
 	}
 	SvgObject::Ptr self = __self.lock();
