@@ -8,7 +8,6 @@
     	
 	<rect x="1" y="1" width="1198" height="398"
         	stroke-width="10" fill="hotpink"/>
-        <rect x="50" y="50" width="150" height="150" fill="yellow" stroke="black" stroke-width="13"/>
     	<line class="line" x1="100" y1="300" x2="300" y2="100"
             stroke-width="5" stroke="yellow" />
     	<line class="line" x1="300" y1="300" x2="500" y2="100"

@@ -37,6 +37,10 @@ private:
 	static void initSetterMap();
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * @param style name
+	 * @return style setter method
+	 */
 	static SetStyleAttributeFunc getSetter(const std::string& str);
 };
 
@@ -45,5 +49,12 @@ public:
 //=============================================================================
 // stream operators
 //=============================================================================
+/**
+ * sets css style properties into a Style object.
+ * e.g.: "stroke: black; fill: yellow; ..."
+ * @param in_stream
+ * @param out_Style
+ * @return stream
+ */
 extern std::istream & operator>>(std::istream&, sambag::disco::graphicElements::Style&);
 #endif /* STYLEPARSER_HPP_ */

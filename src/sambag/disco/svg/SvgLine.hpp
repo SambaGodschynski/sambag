@@ -21,13 +21,13 @@ public:
 	typedef boost::shared_ptr<SvgLine> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X1_tag { typedef Number Type; };
+	struct X1_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Y1_tag { typedef Number Type; };
+	struct Y1_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct X2_tag { typedef Number Type; };
+	struct X2_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Y2_tag { typedef Number Type; };
+	struct Y2_tag { typedef Coordinate Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------

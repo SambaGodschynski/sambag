@@ -27,21 +27,22 @@ namespace {
 using namespace sambag::disco;
 //-----------------------------------------------------------------------------
 /**
- * parses style rules eg.: "stroke: red; stroke-width:2px;"
- * @param rules
+ * parses style properties eg.: "stroke: red; stroke-width:2px;"
+ * @param properties
  * @param outStyle
  */
-void parseStyleRules( const std::string &rules, graphicElements::Style& outStyle) {
+void parseStyleProperties( const std::string &properties, graphicElements::Style& outStyle) {
 	using namespace sambag::disco::svg;
-	if (rules.length()==0) return;
-	std::string inStr = rules;
+	if (properties.length()==0) return;
+	std::string inStr = properties;
 	AttributeParser::prepareString(inStr, false);
 	// extract all matches
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([a-zA-Z-]+)\\s*:\\s*([a-zA-Z0-9#%.\"':/ ]+)\\s*;{0,1}");
 	for ( ;
-		regex_search(begin, end, what, boost::regex("([a-zA-Z-]+)\\s*:\\s*([a-zA-Z0-9#%.\"':/ ]+)\\s*;{0,1}"));
+		regex_search(begin, end, what, re);
 		begin = what[0].second
 	) {
 		std::string attribute = what[1];
@@ -62,7 +63,7 @@ std::istream & operator>>(std::istream& istr, sambag::disco::graphicElements::St
 	using namespace sambag::disco;
 	std::string str;
 	svg::AttributeParser::getWholeString(istr, str);
-	parseStyleRules(str, style);
+	parseStyleProperties(str, style);
 
 	return istr;
 }

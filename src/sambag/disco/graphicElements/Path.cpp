@@ -9,6 +9,7 @@
 #include "sambag/com/Common.hpp"
 #include <boost/tuple/tuple.hpp>
 #include "sambag/com/Helper.hpp"
+#include "sambag/disco/Geometry.hpp"
 #include <boost/geometry/policies/compare.hpp>
 
 
@@ -46,7 +47,7 @@ struct DrawReturn {
 
 	DrawReturn(
 		pathInstruction::InstructionOp prevCommand = pathInstruction::NONE,
-		const Point2D &p=com::NULL_POINT2D
+		const Point2D &p=NULL_POINT2D
 	) : prevPoint(p),
 		prevCommand(prevCommand) {}
 };
@@ -182,7 +183,7 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_ABS>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x2 = 0, y2 = 0, x = 0, y = 0;
 		tie(x1,y1,x2,y2,x,y) =
@@ -198,7 +199,7 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_REL>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x2 = 0, y2 = 0, x = 0, y = 0;
 		tie(x1,y1,x2,y2,x,y) =
@@ -214,12 +215,12 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_SMOOTH_ABS>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x2 = 0, y2 = 0, x = 0, y = 0;
 		Point2D curr = cn->getCurrentPoint();
 		bool validPrevOp = pathInstruction::isCubic(r.prevCommand);
-		Point2D x1 = boost::geometry::equals(r.prevPoint, com::NULL_POINT2D)
+		Point2D x1 = boost::geometry::equals(r.prevPoint, NULL_POINT2D)
 		             && validPrevOp ? curr : r.prevPoint;
 		/*
 		 *  http://www.w3.org/TR/2003/REC-SVG11-20030114/paths.html:
@@ -241,12 +242,12 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_SMOOTH_REL>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x2 = 0, y2 = 0, x = 0, y = 0;
 		Point2D curr = cn->getCurrentPoint();
 		bool validPrevOp = pathInstruction::isCubic(r.prevCommand);
-		Point2D x1 = boost::geometry::equals(r.prevPoint, com::NULL_POINT2D)
+		Point2D x1 = boost::geometry::equals(r.prevPoint, NULL_POINT2D)
 				     && validPrevOp ? curr : r.prevPoint;
 		/*
 		 *  http://www.w3.org/TR/2003/REC-SVG11-20030114/paths.html:
@@ -268,7 +269,7 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_ABS>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x = 0, y = 0;
 		tie(x1,y1,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
@@ -283,7 +284,7 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_REL>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D cp2 = com::NULL_POINT2D;
+	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x = 0, y = 0;
 		tie(x1,y1,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
@@ -298,12 +299,12 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_SMOOTH_ABS>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D x1 = com::NULL_POINT2D;
+	Point2D x1 = NULL_POINT2D;
 	while (it!=end) {
 		Number x = 0, y = 0;
 		Point2D curr = cn->getCurrentPoint();
 		bool validPrevOp = pathInstruction::isQuadratic(r.prevCommand);
-		x1 = boost::geometry::equals(r.prevPoint, com::NULL_POINT2D)
+		x1 = boost::geometry::equals(r.prevPoint, NULL_POINT2D)
 		             && validPrevOp ? curr : r.prevPoint;
 		/*
 		 *  http://www.w3.org/TR/2003/REC-SVG11-20030114/paths.html:
@@ -324,12 +325,12 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_SMOOTH_REL>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
-	Point2D x1 = com::NULL_POINT2D;
+	Point2D x1 = NULL_POINT2D;
 	while (it!=end) {
 		Number x = 0, y = 0;
 		Point2D curr = cn->getCurrentPoint();
 		bool validPrevOp = pathInstruction::isQuadratic(r.prevCommand);
-		x1 = boost::geometry::equals(r.prevPoint, com::NULL_POINT2D)
+		x1 = boost::geometry::equals(r.prevPoint, NULL_POINT2D)
 		             && validPrevOp ? curr : r.prevPoint;
 		/*
 		 *  http://www.w3.org/TR/2003/REC-SVG11-20030114/paths.html:
@@ -454,7 +455,7 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 	if (pathInstructions.empty())
 		return;
 	DrawReturn ret;
-	for_each( const pathInstruction::PathInstruction &pI, pathInstructions ) {
+	boost_for_each( const pathInstruction::PathInstruction &pI, pathInstructions ) {
 		switch (pI.second) {
 		using namespace pathInstruction;
 		case CLOSEPATH                    : //................................

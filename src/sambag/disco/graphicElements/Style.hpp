@@ -9,10 +9,12 @@
 #define STYLE_H_
 
 #include "sambag/disco/IDrawContext.hpp"
+#include "sambag/disco/Geometry.hpp"
+#include "sambag/disco/Coordinate.hpp"
 
 // hash functions first ...
 namespace boost {
-extern size_t hash_value(const sambag::com::ColorRGBA &o);
+extern size_t hash_value(const sambag::disco::ColorRGBA &o);
 extern size_t hash_value(const sambag::disco::IDrawContext::Dash &o);
 extern size_t hash_value(const sambag::disco::Font &o);
 }
@@ -56,13 +58,13 @@ public:
 	static const ColorRGBA NONE_COLOR;
 private:
 	//-------------------------------------------------------------------------
-	FLYWEIGHT(Number, _strokeWidth);
+	FLYWEIGHT(Coordinate, _strokeWidth);
 	FLYWEIGHT(LineCapStyle, _lineCapStyle);
 	FLYWEIGHT(FillRule, _fillRule);
 	FLYWEIGHT(ColorRGBA, _strokeColor);
 	FLYWEIGHT(ColorRGBA, _fillColor);
 	FLYWEIGHT(Font::FontFace, _fontFace);
-	FLYWEIGHT(Font::Size, _fontSize);
+	FLYWEIGHT(Coordinate, _fontSize);
 	FLYWEIGHT(Font::Slant, _fontSlant);
 	FLYWEIGHT(Font::Weight, _fontWeight);
 	Dash _dash; // TODO: make flyweight
@@ -106,11 +108,23 @@ public:
 		return !((*this)==b);
 	}
 	//-------------------------------------------------------------------------
-	const Number & strokeWidth() const {
+	Font font() const {
+		return Font(_fontFace, _fontSize, _fontSlant, _fontWeight);
+	}
+	//-------------------------------------------------------------------------
+	Style & font( const Font& f ) {
+		fontFace(f.fontFace);
+		fontSize(f.size);
+		fontSlant(f.slant);
+		fontWeight(f.weight);
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & strokeWidth() const {
 		return _strokeWidth;
 	}
 	//-------------------------------------------------------------------------
-	Style & strokeWidth(const Number &v) {
+	Style & strokeWidth(const Coordinate &v) {
 		_strokeWidth = v;
 		return *this;
 	}
@@ -162,24 +176,12 @@ public:
 	//-------------------------------------------------------------------------
 	void intoContext( IDrawContext::Ptr cn ) const;
 	//-------------------------------------------------------------------------
-	Font font() const {
-		return Font(_fontFace, _fontSize, _fontSlant, _fontWeight);
-	}
-	//-------------------------------------------------------------------------
-	Style & font( const Font& f ) {
-		fontFace(f.fontFace);
-		fontSize(f.size);
-		fontSlant(f.slant);
-		fontWeight(f.weight);
-		return *this;
-	}
-	//-------------------------------------------------------------------------
 	Style & fontFace( const Font::FontFace & v) {
 		_fontFace = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	Style & fontSize( const Font::Size & v) {
+	Style & fontSize( const Coordinate & v) {
 		_fontSize = v;
 		return *this;
 	}
@@ -198,7 +200,7 @@ public:
 		return _fontFace;
 	}
 	//-------------------------------------------------------------------------
-	const Font::Size & fontSize() const {
+	const Coordinate & fontSize() const {
 		return _fontSize;
 	}
 	//-------------------------------------------------------------------------

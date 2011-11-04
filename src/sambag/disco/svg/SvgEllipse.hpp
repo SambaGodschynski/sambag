@@ -21,13 +21,13 @@ public:
 	typedef boost::shared_ptr<SvgEllipse> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct CX_tag { typedef Number Type; };
+	struct CX_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct CY_tag { typedef Number Type; };
+	struct CY_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct RX_tag { typedef Number Type; };
+	struct RX_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct RY_tag { typedef Number Type; };
+	struct RY_tag { typedef Coordinate Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------

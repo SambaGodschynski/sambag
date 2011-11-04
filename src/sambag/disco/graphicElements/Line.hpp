@@ -22,7 +22,7 @@ protected:
 	//-------------------------------------------------------------------------
 	Point2D p0, p1;
 	//-------------------------------------------------------------------------
-	Line( const Point2D &p0=NULL_POINT2D, const Point2D &p1=NULL_POINT2D );
+	Line();
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
@@ -35,10 +35,9 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create( const Point2D &p0=NULL_POINT2D,
-			           const Point2D &p1=NULL_POINT2D)
+	static Ptr create()
 	{
-		Ptr neu(new Line(p0, p1));
+		Ptr neu(new Line());
 		neu->__setSelf(neu);
 		return neu;
 	}

@@ -14,7 +14,7 @@
 //=============================================================================
 namespace boost {
 //-----------------------------------------------------------------------------
-size_t hash_value(const sambag::com::ColorRGBA &o) {
+size_t hash_value(const sambag::disco::ColorRGBA &o) {
 	std::size_t seed = 0;
 	boost::hash_combine(seed, o.getR());
 	boost::hash_combine(seed, o.getG());

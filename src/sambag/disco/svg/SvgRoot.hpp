@@ -69,7 +69,7 @@ public:
 	 * Will be called whenever a sub object of this root element was created.
 	 * @param newObject
 	 */
-	void subObjectCreated( SvgObject::Ptr newObject );
+	void subObjectCreated( SvgObject::Ptr newObject, const std::string& );
 };
 
 

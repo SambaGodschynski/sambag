@@ -21,13 +21,13 @@ public:
 	typedef boost::shared_ptr<SvgImage> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Number Type; };
+	struct X_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Number Type; };
+	struct Y_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Width_tag { typedef Number Type; };
+	struct Width_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Height_tag { typedef Number Type; };
+	struct Height_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
 	struct HRef_tag { typedef std::string Type; };
 private:

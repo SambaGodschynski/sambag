@@ -73,7 +73,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 	SvgRoot::Ptr root = SvgRoot::create(g.get());
 	xml2Obj.setClosure(g.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
-			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
+			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1, _2 );
 	xml2Obj.addObjectCreatedSlot(f);
 	return xml2Obj.buildWithXmlString(str, root);
 }
@@ -84,7 +84,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
 	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);
 	xml2Obj.setClosure(g.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
-			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1 );
+			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1, _2 );
 	xml2Obj.addObjectCreatedSlot(f);
 	return xml2Obj.buildWithXmlFile(name, root);
 }

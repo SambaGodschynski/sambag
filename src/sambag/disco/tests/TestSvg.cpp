@@ -51,6 +51,7 @@ void TestSvg::setUp() {
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testStyleAdd() {
+	using namespace sambag::disco;
 	using namespace sambag::disco::graphicElements;
 	Style nullStyle;
 	Style values;

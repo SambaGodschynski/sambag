@@ -22,7 +22,6 @@ namespace sambag { namespace xml {
   Every base class has to define a Ptr typedef which is a shared_ptr type.
   Every object class has to implement a static create()
   respective a create(ClosureType*) method dependent whether a ClosureType is setted.
-  Every object class has to implement a setTagName( string txt ) method.
   which returns a Ptr object.
   You can register an attributes with an attributeType a tag class and the
   Object Type which have a set( attributeType value, TagClass ) method.
@@ -47,9 +46,14 @@ template<typename BaseType, typename ClosureType=NoClosureType>
 class XML2Object {
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::signal<void(typename BaseType::Ptr)> CreatedSignal;
+	typedef typename BaseType::Ptr BaseTypePtr;
 	//-------------------------------------------------------------------------
-	typedef boost::function<void(typename BaseType::Ptr)> CreatedSignalFunction;
+	typedef std::string TagName;
+	//-------------------------------------------------------------------------
+	typedef boost::signal<void(BaseTypePtr, const TagName&)> CreatedSignal;
+	//-------------------------------------------------------------------------
+	typedef boost::function<void(BaseTypePtr, const TagName&)>
+		CreatedSignalFunction;
 	//-------------------------------------------------------------------------
 	CreatedSignal sObjCreated;
 private:
@@ -74,7 +78,6 @@ private:
 	};
 	//-------------------------------------------------------------------------
 	// relation from tagname to object factory
-	typedef std::string TagName;
 	typedef boost::unordered_map<TagName, IObjectFactory*> TagMap;
 	TagMap tagMap;
 	//-------------------------------------------------------------------------
@@ -170,7 +173,7 @@ private:
 		}
 		setAttributes(node, element);
 		node->setXmlText(element.GetTextOrDefault(""));
-		sObjCreated(node); // fire objCreated signal
+		sObjCreated(node, element.Value()); // fire objCreated signal
 		return node;
 	}
 	//-------------------------------------------------------------------------

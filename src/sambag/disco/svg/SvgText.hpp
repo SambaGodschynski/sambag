@@ -23,9 +23,9 @@ public:
 	typedef boost::shared_ptr<SvgText> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Number Type; };
+	struct X_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Number Type; };
+	struct Y_tag { typedef Coordinate Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------

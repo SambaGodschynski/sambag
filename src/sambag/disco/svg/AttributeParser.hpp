@@ -8,9 +8,12 @@
 #ifndef ATTRIBUTE_PARSER_HPP_
 #define ATTRIBUTE_PARSER_HPP_
 
+#include "sambag/disco/Geometry.hpp"
 #include "sambag/com/Common.hpp"
 #include "sambag/disco/Font.hpp"
+#include "sambag/disco/ColorRGBA.hpp"
 #include "sambag/disco/graphicElements/PointContainer.hpp"
+#include <map>
 
 namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
@@ -45,6 +48,8 @@ public:
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
 	static void parseTransform(const std::string &str, Matrix&);
+	//-------------------------------------------------------------------------
+	static void parseCoordinate(const std::string &str, Coordinate&);
 	//-------------------------------------------------------------------------
 	static void parsePathInstructions(const std::string &str, PathInstructions&);
 	//-------------------------------------------------------------------------
@@ -102,7 +107,8 @@ public:
 //=============================================================================
 // stream operators
 //=============================================================================
-extern std::istream & operator>>(std::istream&, sambag::com::ColorRGBA&);
+extern std::istream & operator>>(std::istream&, sambag::disco::Coordinate&);
+extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
 extern std::istream & operator>>(std::istream&, sambag::com::Matrix&);

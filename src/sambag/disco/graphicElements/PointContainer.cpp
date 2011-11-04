@@ -69,9 +69,9 @@ extern std::ostream & operator<<(
 	using namespace sambag::disco::graphicElements::pathInstruction;
 	using namespace sambag::com;
 	os<<"<path d=\"";
-	for_each(const PathInstruction &pi, pIs) {
+	boost_for_each(const PathInstruction &pi, pIs) {
 		os<<getInstructionAsString(pi.second);
-		for_each(const Number &v, pi.first) {
+		boost_for_each(const Number &v, pi.first) {
 			os<<v<<", ";
 		}
 		os<<std::endl;

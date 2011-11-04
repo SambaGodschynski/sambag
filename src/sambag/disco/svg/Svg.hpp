@@ -47,7 +47,7 @@ public:
 	typedef std::string ClassType;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct StrokeWidth_tag { typedef Number Type; };
+	struct StrokeWidth_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
 	struct Stroke_tag { typedef ColorRGBA Type; };
 	//-------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
 	//-------------------------------------------------------------------------
 	struct FontFamily_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
-	struct FontSize_tag { typedef Number Type; };
+	struct FontSize_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
 	struct FontWeight_tag { typedef Font::Weight Type; };
 	//-------------------------------------------------------------------------
@@ -146,7 +146,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void setClassName(const std::string & str) {
-		sceneGraph->registerElementClass(getGraphicElement(), str);
+		sceneGraph->registerElementClass(getGraphicElement(), "." + str);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setIdName(const std::string & str) {

@@ -263,6 +263,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<Class, Vertex> Class2Vertex;
 	//-------------------------------------------------------------------------
+	typedef boost::unordered_multimap<Tag, Vertex> Tag2Vertex;
+	//-------------------------------------------------------------------------
 	typedef std::list<IProcessListObject::Ptr> ProcessList;
 private:
 	//-------------------------------------------------------------------------
@@ -320,6 +322,8 @@ private:
 	//-------------------------------------------------------------------------
 	Class2Vertex class2Vertex;
 	//-------------------------------------------------------------------------
+	Tag2Vertex tag2Vertex;
+	//-------------------------------------------------------------------------
 	SceneGraph(){
 		vertexElementMap = get( node_object_t(), g );
 		vertexTypeMap = get( node_vtype_t(), g );
@@ -373,6 +377,13 @@ public:
 	 * @return NULL_VERTEX if not found
 	 */
 	Vertex getRelatedVertex(const SceneGraphElement &el) const;
+	//-------------------------------------------------------------------------
+	SceneGraphElement getRootElement() {
+		if (boost::num_vertices(g) == 0) {
+			return SceneGraphElement();
+		}
+		return getSceneGraphElement(*(boost::vertices(g).first));
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Assumes that graph contains vertex.
@@ -483,6 +494,7 @@ public:
 		if (v==NULL_VERTEX)
 			return;
 		vertexName2Map[v] = tagName;
+		tag2Vertex.insert(std::make_pair(tagName, v));
 	}
 	//-------------------------------------------------------------------------
 	struct AllElements {
@@ -510,7 +522,7 @@ public:
 			using namespace boost::algorithm;
 			std::list<Class> classes;
 			g.getClassNames(el, classes);
-			for_each(const Class &cn, classes) {
+			boost_for_each(const Class &cn, classes) {
 				if (to_lower_copy(_class) == to_lower_copy(cn))
 					return true;
 			}
@@ -534,48 +546,62 @@ public:
 	template <typename Container, typename Filter>
 	void getChildren(const SceneGraphElement & el,
 			Container &c,
-			const Filter &filter)
+			const Filter &filter, bool deep = true )
 	{
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
 			return;
-		BFSVisitor<Container, Filter> bfsVis(*this, c, filter);
-		boost::breadth_first_search(g, v, boost::visitor(bfsVis));
+		if (deep) {
+			BFSVisitor<Container, Filter> bfsVis(*this, c, filter);
+			boost::breadth_first_search(g, v, boost::visitor(bfsVis));
+			return;
+		}
+		AdjacencyIterator it, end;
+		boost::tie(it, end) = boost::adjacent_vertices(v, g);
+		for (; it!=end; ++it) {
+			SceneGraphElement el = getSceneGraphElement(*it);
+			if (filter.filter(el))
+				c.push_back(el);
+		}
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
 	void getChildren(const SceneGraphElement & el,
-			Container &c)
+			Container &c,
+			bool deep = true)
 	{
 		AllElements filter;
-		getChildren(el, c, filter);
+		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
 	void getChildrenByTag(const SceneGraphElement & el,
 			const Tag &tagName,
-			Container &c)
+			Container &c,
+			bool deep = true)
 	{
 		TagFilter filter(tagName, *this);
-		getChildren(el, c, filter);
+		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
 	void getChildrenByClass(const SceneGraphElement & el,
 			const Class &className,
-			Container &c)
+			Container &c,
+			bool deep = true)
 	{
 		ClassFilter filter(className, *this);
-		getChildren(el, c, filter);
+		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
 	void getChildrenById(const SceneGraphElement & el,
 			const Id &id,
-			Container &c)
+			Container &c,
+			bool deep = true)
 	{
 		IdFilter filter(id, *this);
-		getChildren(el, c, filter);
+		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
 	Tag getTagName(const SceneGraphElement & el) const {
@@ -592,7 +618,7 @@ public:
 			return;
 		std::list<Vertex> l;
 		findParentsByType(v, CLASS, l);
-		for_each(const Vertex &it, l) {
+		boost_for_each(const Vertex &it, l) {
 			c.push_back(vertexNameMap[it]);
 		}
 	}
@@ -609,6 +635,9 @@ public:
 	template <typename Container>
 	void getElementsByClass(const Class & className, Container &c);
 	//-------------------------------------------------------------------------
+	template <typename Container>
+	void getElementsByTag(const Tag & tagName, Container &c);
+	//-------------------------------------------------------------------------
 	void adoptStyleEdges(const SceneGraphElement &src,
 			const SceneGraphElement &dst)
 	{
@@ -618,7 +647,7 @@ public:
 			return;
 		std::list<Vertex> vertices;
 		findParentsByType(srcV, SceneGraph::STYLE, vertices);
-		for_each(Vertex v, vertices) {
+		boost_for_each(Vertex v, vertices) {
 			boost::add_edge(v, dstV, g);
 		}
 	}
@@ -632,7 +661,7 @@ public:
 			return;
 		std::list<Vertex> vertices;
 		findParentsByType(srcV, SceneGraph::TRANSFORM, vertices);
-		for_each(const Vertex &v, vertices) {
+		boost_for_each(const Vertex &v, vertices) {
 			boost::add_edge(v, dstV, g);
 		}
 	}
@@ -829,6 +858,16 @@ void SceneGraph::getElementsByClass(const Class & className, Container &c) {
 	boost::tie(it, end) = boost::adjacent_vertices(clVIt->second, g);
 	for (; it!=end; ++it) {
 		c.push_back(getSceneGraphElement(*it));
+	}
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+template <typename Container>
+void SceneGraph::getElementsByTag(const Tag & tagName, Container &c) {
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	Tag2Vertex::const_iterator it, end;
+	boost::tie(it, end) = tag2Vertex.equal_range(tagName);
+	for (; it!=end; ++it) {
+		c.push_back(getSceneGraphElement(it->second));
 	}
 }
 }}} // namespace

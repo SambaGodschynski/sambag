@@ -7,8 +7,11 @@
 >
   <defs>
     <style type="text/css"><![CDATA[
-      #g1 rect, #g1 circle {
-        fill:brown;
+      /** {
+     	fill: black;
+     }*/
+     #g1 rect, #g1 circle {
+        fill:green;
       }
       #g1 > rect, #g1 > circle {
         fill: red;
@@ -16,6 +19,9 @@
       #g1 {
         stroke-width: 5;
         stroke: yellow;
+      }
+      text {
+        stroke: blue;
       }
     ]]></style>
   </defs>
@@ -68,7 +74,7 @@
        sodipodi:role="line"
        id="tspan3021-1"
        x="410.99048"
-       y="400.84103">fill=brown</tspan><tspan
+       y="400.84103">fill=green</tspan><tspan
        sodipodi:role="line"
        x="410.99048"
        y="415.84103"
@@ -83,7 +89,7 @@
        sodipodi:role="line"
        id="tspan3021-5"
        x="585.99048"
-       y="401.90811">fill=brown</tspan><tspan
+       y="401.90811">fill=green</tspan><tspan
        sodipodi:role="line"
        x="585.99048"
        y="416.90811"

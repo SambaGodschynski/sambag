@@ -9,6 +9,7 @@
 #define ISURFACE_HPP_
 
 #include "sambag/com/Common.hpp"
+#include "Geometry.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace sambag { namespace disco {

@@ -81,7 +81,7 @@ void TestSceneGraph::testBuildGraph() {
 		ss1<<"{";
 		std::stringstream ss2;
 		size_t i = 0;
-		for_each(OrderNumber on, res) {
+		boost_for_each(OrderNumber on, res) {
 			ss1<<on<<", ";
 			ss2<<sollO[i++]<<", ";
 		}
@@ -113,6 +113,7 @@ void TestSceneGraph::testTransformNode() {
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testStyleNode() {
+	using namespace sambag::disco;
 	using namespace sambag::disco::graphicElements;
 	using namespace sambag::com;
 	SceneGraph::Ptr g = SceneGraph::create();
@@ -213,6 +214,12 @@ void TestSceneGraph::testGetChildrenOf() {
 	res.remove(i3);
 	res.remove(i4);
 	res.remove(i5);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildren(i1, res, false);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, res.size());
+	res.remove(i2);
+	res.remove(i3);
 	CPPUNIT_ASSERT(res.empty());
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	g->getChildren(i2, res);

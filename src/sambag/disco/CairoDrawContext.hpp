@@ -328,7 +328,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Number getStrokeWidth() const {
-		return (Number)cairo_get_line_width(context);
+		return Number(cairo_get_line_width(context));
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFillColor( const ColorRGBA &val ) {

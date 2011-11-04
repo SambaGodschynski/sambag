@@ -77,7 +77,7 @@ struct Root : public BaseObject {
     return p;
   }
   virtual std::string getClassName() const { return "root"; }
-  void objCreated ( BaseObject::Ptr obj ) {
+  void objCreated ( BaseObject::Ptr obj, const std::string &str ) {
     using namespace std;
     createdSignalPassed = true;
   }
@@ -211,7 +211,7 @@ void XML2ObjectTest::testBuildStructure() {
   xml2Obj.registerObject<Root>("root");
   Root::Ptr root = Root::create();
   XML2Object<BaseObject>::CreatedSignalFunction f =
-		  boost::bind( &Root::objCreated, root.get(), _1 );
+		  boost::bind( &Root::objCreated, root.get(), _1, _2 );
   xml2Obj.addObjectCreatedSlot(f);
   ptr = xml2Obj.buildWithXmlString ( XML01, root );
   CPPUNIT_ASSERT( ptr );

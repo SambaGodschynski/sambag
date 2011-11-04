@@ -9,14 +9,16 @@
 #define IDRAWCONTEXT_H_
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/com/Common.hpp>
 #include <math.h>
 #include <string>
+#include "Geometry.hpp"
+#include "sambag/com/Common.hpp"
 #include "Font.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 #include "ISurface.hpp"
 #include "sambag/com/FileHandler.hpp"
+#include "ColorRGBA.hpp"
 
 namespace sambag { namespace disco {
 
@@ -93,6 +95,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) = 0;
 	//-------------------------------------------------------------------------
+	/*
+	 * @Depreciated
+	 */
 	virtual void rect( const Rectangle &rect, const Number &cornerRadius ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void fill() = 0;

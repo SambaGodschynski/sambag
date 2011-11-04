@@ -11,7 +11,6 @@
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/assign/list_inserter.hpp>
 #include <vector>
-#include "sambag/com/Common.hpp"
 #include <sstream>
 #include <math.h>
 
@@ -142,8 +141,9 @@ void AttributeParser::parseTransform(const std::string &str, Matrix &matrix) {
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([a-zA-Z]+?)\\s*\\(([ 0-9.,-]+)\\)");
 	for ( ;
-		regex_search(begin, end, what, boost::regex("([a-zA-Z]+?)\\s*\\(([ 0-9.,-]+)\\)"));
+		regex_search(begin, end, what, re);
 		begin = what[0].second
 	) {
 	    std::string cmd = what[1];
@@ -162,8 +162,9 @@ void AttributeParser::parsePathInstructions(const std::string &str, PathInstruct
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([a-zA-Z]+)\\s*([ 0-9.,-]*)");
 	for ( ;
-		regex_search(begin, end, what, boost::regex("([a-zA-Z]+)\\s*([ 0-9.,-]*)"));
+		regex_search(begin, end, what, re);
 		begin = what[0].second
 	) {
 		std::string cmd = what[1];
@@ -180,12 +181,49 @@ void AttributeParser::parsePointContainer(const std::string &str, PointContainer
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([0-9.-]+)");
 	for ( ;
-		regex_search(begin, end, what, boost::regex("([0-9.-]+)"));
+		regex_search(begin, end, what, re);
 		begin = what[0].second
 	) {
 		std::string value = what[1];
 		pC.push_back(string2Number(value));
+	}
+}
+//-----------------------------------------------------------------------------
+void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
+	if (str.length()==0) return;
+	std::string::const_iterator begin = str.begin();
+	std::string::const_iterator end = str.end();
+	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([0-9]+)([a-z%])*");
+	regex_search(begin, end, what, re);
+	std::stringstream ss(what[1]); //value
+	ss>>c.value;
+	/*
+	 * enum Type {
+		NONE,
+		PX,
+		IN,
+		CM,
+		MM,
+		PT,
+		EM,
+		EX,
+		PERCENT
+	};
+	 *
+	 */
+	if (what[2].length() > 0) {
+		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
+		if (m=="px") c.type = Coordinate::PX;
+		if (m=="in") c.type = Coordinate::IN;
+		if (m=="cm") c.type = Coordinate::CM;
+		if (m=="mm") c.type = Coordinate::MM;
+		if (m=="pt") c.type = Coordinate::PT;
+		if (m=="pc") c.type = Coordinate::PC;
+		if (m=="em") c.type = Coordinate::EM;
+		if (m=="ex") c.type = Coordinate::EX;
 	}
 }
 //-----------------------------------------------------------------------------
@@ -256,6 +294,7 @@ AttributeParser::getPathInstruction( const std::string &op )
 /**
  * Prepares string for further processing. such as trim, to_lower ...
  * @param inout
+ * @param toLower
  * @return prepared string
  */
 std::string &
@@ -304,7 +343,7 @@ Number AttributeParser::string2Number(const std::string &str) {
  */
 template <typename StrContainer, typename NumberContainer>
 void AttributeParser::strings2Numbers(const StrContainer &in, NumberContainer &out) {
-	for_each( const std::string &str, in ) {
+	boost_for_each( const std::string &str, in ) {
 		std::stringstream ss;
 		ss<<str;
 		Number n;
@@ -325,7 +364,8 @@ template< typename Container >
 void AttributeParser::getValuesFromString( const std::string &_values, Container &out ) {
 	std::string values = boost::algorithm::trim_copy(_values);
 	std::vector<std::string> strs;
-	boost::algorithm::split_regex( strs, values, boost::regex( "\\s*,\\s*|\\s+" ) ) ;
+	boost::regex re( "\\s*,\\s*|\\s+" );
+	boost::algorithm::split_regex( strs, values, re) ;
 	if (strs.empty()) return;
 	strings2Numbers<std::vector<std::string>, Container >(strs, out);
 }
@@ -335,7 +375,15 @@ void AttributeParser::getValuesFromString( const std::string &_values, Container
 // stream operators
 //=============================================================================
 //-----------------------------------------------------------------------------
-std::istream & operator>>(std::istream& istr, sambag::com::ColorRGBA& color) {
+extern std::istream & operator>>(std::istream& istr, sambag::disco::Coordinate &c) {
+	std::string in;
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in);
+	AttributeParser::parseCoordinate(in, c);
+	return istr;
+}
+//-----------------------------------------------------------------------------
+std::istream & operator>>(std::istream& istr, sambag::disco::ColorRGBA& color) {
 	using namespace sambag::disco::svg;
 	std::string str;
 	AttributeParser::getWholeString(istr, str);

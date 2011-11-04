@@ -405,7 +405,7 @@ void TestCairoDrawContext::testSetStrokeWidth() {
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
 	context->setStrokeWidth(5.0);
-	CPPUNIT_ASSERT_EQUAL ( 5.0, context->getStrokeWidth() );
+	CPPUNIT_ASSERT_EQUAL ( (double)5.0, (double)context->getStrokeWidth() );
 	//
 	context.reset();
 	releaseSurface(surface);

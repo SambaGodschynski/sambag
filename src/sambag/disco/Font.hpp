@@ -9,6 +9,7 @@
 #define DISCO_FONT_HPP_
 
 #include <sambag/com/Common.hpp>
+#include "sambag/disco/Geometry.hpp"
 #include <string>
 
 namespace sambag { namespace disco {

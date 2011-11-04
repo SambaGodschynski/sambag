@@ -21,17 +21,17 @@ public:
 	typedef boost::shared_ptr<SvgRect> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Number Type; };
+	struct X_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Number Type; };
+	struct Y_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct WIDTH_tag { typedef Number Type; };
+	struct WIDTH_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct HEIGHT_tag { typedef Number Type; };
+	struct HEIGHT_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct RX_tag { typedef Number Type; };
+	struct RX_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct RY_tag { typedef Number Type; };
+	struct RY_tag { typedef Coordinate Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------

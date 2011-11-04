@@ -226,7 +226,7 @@ SceneGraph::getStyleRef(const SceneGraphElement &el) const
 //-----------------------------------------------------------------------------
 void SceneGraph::draw(IDrawContext::Ptr context) {
 	const ProcessList &pl = getProcessList();
-	reverse_for_each( IProcessListObject::Ptr o, pl ) {
+	boost_reverse_for_each( IProcessListObject::Ptr o, pl ) {
 		o->perform(context);
 	}
 }
