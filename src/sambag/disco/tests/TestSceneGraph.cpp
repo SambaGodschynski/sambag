@@ -132,5 +132,8 @@ void TestSceneGraph::testStyleNode() {
 	CPPUNIT_ASSERT( g->getStyleOf(i1) == s );
 	CPPUNIT_ASSERT( g->getStyleOf(i2) != s );
 }
-
+//-----------------------------------------------------------------------------
+void TestSceneGraph::testIdAndClassRelations() {
+	CPPUNIT_ASSERT_MESSAGE("NOT YET IMPLEMENTED", false);
+}
 } // namespace

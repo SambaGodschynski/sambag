@@ -133,6 +133,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<SceneGraph> WPtr;
 	//-------------------------------------------------------------------------
+	// TODO: cleanup SceneGraphElement / IDrawable confusuion
 	typedef IDrawable::Ptr SceneGraphElement;
 	//-------------------------------------------------------------------------
 	typedef graphicElements::Style StyleNode;
@@ -146,7 +147,8 @@ public:
 	enum VertexType {
 		IDRAWABLE,
 		TRANSFORM,
-		STYLE
+		STYLE,
+		CLASS,
 	};
 	//-------------------------------------------------------------------------
 	struct node_object_t { typedef boost::vertex_property_tag kind; };
@@ -157,6 +159,8 @@ public:
 	//-------------------------------------------------------------------------
 	struct node_vtype_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
+	struct node_vname_t { typedef boost::vertex_property_tag kind; };
+	//-------------------------------------------------------------------------
 	// order number:
 	struct node_order_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
@@ -164,8 +168,9 @@ public:
 			boost::property<node_style_t, StyleNode,
 			boost::property<node_transformation_t, TransformationNode,
 			boost::property<node_vtype_t, VertexType,
-			boost::property<node_order_t, OrderNumber
-			> > > > > vertexProperties;
+			boost::property<node_order_t, OrderNumber,
+			boost::property<node_vname_t, std::string
+			> > > > > > vertexProperties;
 	//-------------------------------------------------------------------------
 	/**
 	 * Graph type
@@ -184,6 +189,8 @@ public:
 	typedef boost::property_map<G, node_object_t>::type VertexElementMap;
 	//-------------------------------------------------------------------------
 	typedef boost::property_map<G, node_vtype_t>::type VertexTypeMap;
+	//-------------------------------------------------------------------------
+	typedef boost::property_map<G, node_vname_t>::type VertexNameMap;
 	//-------------------------------------------------------------------------
 	typedef boost::property_map<G, node_order_t>::type VertexOrderMap;
 	//-------------------------------------------------------------------------
@@ -205,6 +212,10 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<SceneGraphElement, Vertex> Element2Vertex;
 	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<std::string, Vertex> Id2Vertex;
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<std::string, Vertex> Class2Vertex;
+	//-------------------------------------------------------------------------
 private:
 	//-------------------------------------------------------------------------
 	WPtr self;
@@ -215,6 +226,8 @@ private:
 	//-------------------------------------------------------------------------
 	VertexTypeMap vertexTypeMap;
 	//-------------------------------------------------------------------------
+	VertexNameMap vertexNameMap;
+	//-------------------------------------------------------------------------
 	Element2Vertex element2Vertex;
 	//-------------------------------------------------------------------------
 	VertexOrderMap vertexOrderMap;
@@ -223,12 +236,17 @@ private:
 	//-------------------------------------------------------------------------
 	VertexStyleMap vertexStyleMap;
 	//-------------------------------------------------------------------------
+	Id2Vertex id2Vertex;
+	//-------------------------------------------------------------------------
+	Class2Vertex class2Vertex;
+	//-------------------------------------------------------------------------
 	SceneGraph(){
 		vertexElementMap = get( node_object_t(), g );
 		vertexTypeMap = get( node_vtype_t(), g );
 		vertexOrderMap  = get( node_order_t(), g );
 		vertexTransformationMap = get( node_transformation_t(), g );
 		vertexStyleMap = get( node_style_t(), g );
+		vertexNameMap = get( node_vname_t(), g );
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -262,6 +280,10 @@ public:
 		vertexOrderMap[v] = ord;
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @param el
+	 * @return NULL_VERTEX if not found
+	 */
 	Vertex getRelatedVertex(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
 	/**
@@ -286,6 +308,8 @@ public:
 	* @param s a @see Style object
 	*/
 	bool setStyleTo(const SceneGraphElement &el, const graphicElements::Style &s);
+	//-------------------------------------------------------------------------
+	void registerElementClass(const SceneGraphElement &el, const std::string &className );
 	//-------------------------------------------------------------------------
 	const Matrix & getTransformationOf(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
@@ -325,6 +349,15 @@ public:
 	bool addElement( IDrawable::Ptr ptr );
 	//-------------------------------------------------------------------------
 	bool connectElements(IDrawable::Ptr from, IDrawable::Ptr to);
+	//-------------------------------------------------------------------------
+	void registerElementId(const SceneGraphElement & el, const std::string &id) {
+		Vertex v = getRelatedVertex(el);
+		if (v==NULL_VERTEX)
+			return;
+		id2Vertex.insert( std::make_pair(id, v) );
+	}
+	//-------------------------------------------------------------------------
+	IDrawable::Ptr getElementById(const std::string &id) const;
 };
 //=============================================================================
 /**
@@ -387,6 +420,7 @@ public:
 					discover_drawable(v, g); break;
 				case SceneGraph::TRANSFORM :
 				case SceneGraph::STYLE :
+				case SceneGraph::CLASS :
 					break;
 			}
 	}
@@ -399,6 +433,7 @@ public:
 				finish_drawable(v, g); break;
 			case SceneGraph::TRANSFORM :
 			case SceneGraph::STYLE :
+			case SceneGraph::CLASS :
 				break;
 		}
 	}

@@ -20,12 +20,14 @@ private:
 	CPPUNIT_TEST( testBuildGraph );
 	CPPUNIT_TEST( testTransformNode );
 	CPPUNIT_TEST( testStyleNode );
+	CPPUNIT_TEST( testIdAndClassRelations );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testConstructor();
 	void testBuildGraph();
 	void testTransformNode();
 	void testStyleNode();
+	void testIdAndClassRelations();
 };
 
 } // namespace

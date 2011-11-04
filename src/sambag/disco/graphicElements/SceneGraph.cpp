@@ -91,6 +91,28 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 	return connected;
 }
 //-----------------------------------------------------------------------------
+void SceneGraph::registerElementClass(const SceneGraphElement &el,
+		const std::string &className )
+{
+
+	Vertex classVertex = NULL_VERTEX;
+	Vertex elV = getRelatedVertex(el);
+	if (elV == NULL_VERTEX)
+		return;
+	Class2Vertex::iterator it = class2Vertex.find(className);
+	if (it==class2Vertex.end()) { // classname not yet registered
+		// add new class vertex to graph
+		classVertex = boost::add_vertex(g);
+		vertexTypeMap[classVertex] = CLASS;
+		vertexOrderMap[classVertex] = NO_ORDER_NUMBER;
+		class2Vertex.insert(std::make_pair(className, classVertex));
+	} else {
+		classVertex = it->second;
+	}
+	// TODO: is already connected?
+	boost::add_edge(classVertex, elV, g);
+}
+//-----------------------------------------------------------------------------
 const SceneGraph::SceneGraphElement &
 SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
@@ -102,6 +124,13 @@ SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) con
 	if (it==element2Vertex.end())
 		return NULL_VERTEX;
 	return it->second;
+}
+//----------------------------------------------------------------------------
+IDrawable::Ptr SceneGraph::getElementById(const std::string &id) const {
+	Id2Vertex::const_iterator it = id2Vertex.find(id);
+	if (it==id2Vertex.end())
+		return IDrawable::Ptr();
+	return getSceneGraphElement(it->second);
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m) {
