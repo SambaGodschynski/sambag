@@ -21,6 +21,8 @@ private:
 	CPPUNIT_TEST( testTransformNode );
 	CPPUNIT_TEST( testStyleNode );
 	CPPUNIT_TEST( testIdAndClassRelations );
+	CPPUNIT_TEST( testGetChildrenOf );
+	CPPUNIT_TEST( testGetChildrenOfFiltered );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testConstructor();
@@ -28,6 +30,8 @@ public:
 	void testTransformNode();
 	void testStyleNode();
 	void testIdAndClassRelations();
+	void testGetChildrenOf();
+	void testGetChildrenOfFiltered();
 };
 
 } // namespace

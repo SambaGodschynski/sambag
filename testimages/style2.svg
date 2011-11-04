@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1400"
+   height="500"
+   id="svg2"
+   version="1.1"
+>
+  <defs>
+    <style type="text/css"><![CDATA[
+      #g1 rect, #g1 circle {
+        fill:brown;
+      }
+      #g1 > rect, #g1 > circle {
+        fill: red;
+      }
+      #g1 {
+        stroke-width: 5;
+        stroke: yellow;
+      }
+    ]]></style>
+  </defs>
+  <rect width="1400" height="500" fill="white" />
+   <circle
+	       r="28.571426"
+	       cx="120.90213"
+	       cy="358.43723"/>
+	    <rect
+	       width="68.571426"
+	       height="45.357143"
+	       x="174.28572"
+	       y="359.50507"/>
+  <text
+     style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="171.79878"
+     y="225.76219"
+     id="text3019"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3021"
+       x="171.79878"
+       y="225.76219">fill=red</tspan><tspan
+       sodipodi:role="line"
+       x="171.79878"
+       y="240.76219"
+       id="tspan3023">stroke=yellow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="310.68561"
+     y="252.51785"
+     id="text3019-7"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3021-2"
+       x="310.68561"
+       y="252.51785">fill=red</tspan><tspan
+       sodipodi:role="line"
+       x="310.68561"
+       y="267.51785"
+       id="tspan3023-2">stroke=yellow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="410.99048"
+     y="400.84103"
+     id="text3019-6"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3021-1"
+       x="410.99048"
+       y="400.84103">fill=brown</tspan><tspan
+       sodipodi:role="line"
+       x="410.99048"
+       y="415.84103"
+       id="tspan3023-0">stroke=yellow</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="585.99048"
+     y="401.90811"
+     id="text3019-61"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3021-5"
+       x="585.99048"
+       y="401.90811">fill=brown</tspan><tspan
+       sodipodi:role="line"
+       x="585.99048"
+       y="416.90811"
+       id="tspan3023-9">stroke=yellow</tspan></text>
+  <g transform="translate(0, -450) scale(1.7)">
+ 	<g>
+	  <path
+	   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	   d="m 208.09142,321.01174 c -66.16499,28.78935 -66.67006,28.78935 -66.67006,28.78935"/>
+	  <path
+	   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	   d="m 231.90044,327.84406 c -8.22208,27.75161 -8.22208,27.75161 -8.22208,27.75161"/>
+	  <path
+	   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	   d="M 307.79477,403.07441 C 288.19523,440.4745 288.19523,440.4745 288.19523,440.4745"/>
+	  <path
+	   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	   d="m 334.36049,401.82394 c 29.29443,41.41626 29.29443,41.41626 29.29443,41.41626"/>
+	  <path
+	   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+	   d="m 259.10413,317.98128 c 60.10407,47.98225 60.10407,47.98225 60.10407,47.98225"/>
+	<text
+       font-size="50"
+       x="189.28571"
+       y="316.64789">&lt;g1&gt;</text>
+	<text
+	   font-size="50"
+	   x="276.28906"
+	   y="393.03738">&lt;g2&gt;</text>
+
+  	</g>
+    <!-- ###################################################################################################### -->
+    <g id="g1">
+	    <circle
+	       r="28.571426"
+	       cx="120.90213"
+	       cy="358.43723"/>
+	    <rect
+	       width="68.571426"
+	       height="45.357143"
+	       x="174.28572"
+	       y="359.50507"/>
+	    <g id="g2">
+			<circle
+			   r="28.5"
+			   cx="269.85867"
+			   cy="464.12164" />
+			<rect id="myrect"
+			   width="80.714287"
+			   height="45.714287"
+			   x="326.07141"
+			   y="445.57648" />
+      </g>
+    </g>
+  </g>
+</svg>

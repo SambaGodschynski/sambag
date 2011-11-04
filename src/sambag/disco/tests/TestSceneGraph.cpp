@@ -144,15 +144,20 @@ void TestSceneGraph::testIdAndClassRelations() {
 	Image::Ptr i2 = Image::create();
 	i2->setUri("i2.img");
 	Image::Ptr i3 = Image::create();
-	i2->setUri("i3.img");
+	i3->setUri("i3.img");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
 	g->addElement(i1); g->addElement(i2);
 	CPPUNIT_ASSERT( g->registerElementClass(i1, "classA") );
 	CPPUNIT_ASSERT( g->registerElementClass(i2, "classA") );
+	CPPUNIT_ASSERT( g->registerElementClass(i2, "classAmarkII") );
 	CPPUNIT_ASSERT( !g->registerElementClass(i2, "classA") ); // twice registered
 	CPPUNIT_ASSERT( g->registerElementId(i2,"idA") );
 	CPPUNIT_ASSERT( !g->registerElementId(i1, "idA") ); // idA already registerd
 	CPPUNIT_ASSERT( !g->registerElementId(i3, "idA") ); // i3 not in graph
+	g->setTagName(i3, "not in graph");
+	CPPUNIT_ASSERT_EQUAL(std::string(""), g->getTagName(i3));
+	g->setTagName(i2, "i2 Tag");
+	CPPUNIT_ASSERT_EQUAL(std::string("i2 Tag"), g->getTagName(i2));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assert
 	IDrawable::Ptr res = g->getElementById("qwerty");
 	CPPUNIT_ASSERT(!res);
@@ -162,17 +167,122 @@ void TestSceneGraph::testIdAndClassRelations() {
 	std::list<IDrawable::Ptr> resList, resListCopy;
 	g->getElementsByClass("classA", resList);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, resList.size());
-	// we can't test the resList with compare because we don't now the
-	// order of the elements in there.
-	resListCopy = resList; // we wan to remove objects while iterating,
-						   // so we have to copy resList.
-	for_each(IDrawable::Ptr obj, resListCopy) {
-		// remove accepted elements
-		if (obj.get() == i1.get())
-			resList.remove(obj);
-		if (obj.get() == i2.get())
-			resList.remove(obj);
-	}
+	resList.remove(i1);
+	resList.remove(i2);
 	CPPUNIT_ASSERT(resList.empty());
+	g->getElementsByClass("classAmarkII", resList);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, resList.size());
+	resList.remove(i2);
+	CPPUNIT_ASSERT(resList.empty());
+}
+//-----------------------------------------------------------------------------
+/*
+ *			i1
+ *			/ \
+ *		  i2   i3
+ *		 /  \
+ *		i4  i5
+ */
+void TestSceneGraph::testGetChildrenOf() {
+	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco;
+	SceneGraph::Ptr g = SceneGraph::create();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
+	Image::Ptr i1 = Image::create();
+	i1->setUri("i1.img");
+	Image::Ptr i2 = Image::create();
+	i2->setUri("i2.img");
+	Image::Ptr i3 = Image::create();
+	i3->setUri("i3.img");
+	Image::Ptr i4 = Image::create();
+	i4->setUri("i4.img");
+	Image::Ptr i5 = Image::create();
+	i5->setUri("i5.img");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
+	g->addElement(i1); g->addElement(i2); g->addElement(i3);
+	g->addElement(i4); g->addElement(i5);
+	g->connectElements(i1, i2);
+	g->connectElements(i1, i3);
+	g->connectElements(i2, i4);
+	g->connectElements(i2, i5);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	std::list<IDrawable::Ptr> res;
+	g->getChildren(i1, res);
+	CPPUNIT_ASSERT_EQUAL((size_t)4, res.size());
+	res.remove(i2);
+	res.remove(i3);
+	res.remove(i4);
+	res.remove(i5);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildren(i2, res);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, res.size());
+	res.remove(i4);
+	res.remove(i5);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildren(i3, res);
+	CPPUNIT_ASSERT(res.empty());
+}
+//-----------------------------------------------------------------------------
+/*
+ *			i1
+ *			/ \
+ *		  i2   i3
+ *		 /  \
+ *		i4  i5
+ */
+void TestSceneGraph::testGetChildrenOfFiltered() {
+	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco;
+	SceneGraph::Ptr g = SceneGraph::create();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
+	Image::Ptr i1 = Image::create();
+	i1->setUri("i1.img");
+	Image::Ptr i2 = Image::create();
+	i2->setUri("i2.img");
+	Image::Ptr i3 = Image::create();
+	i3->setUri("i3.img");
+	Image::Ptr i4 = Image::create();
+	i4->setUri("i4.img");
+	Image::Ptr i5 = Image::create();
+	i5->setUri("i5.img");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
+	g->addElement(i1); g->addElement(i2); g->addElement(i3);
+	g->addElement(i4); g->addElement(i5);
+	g->connectElements(i1, i2);
+	g->connectElements(i1, i3);
+	g->connectElements(i2, i4);
+	g->connectElements(i2, i5);
+	g->setTagName(i4, "img");
+	g->setTagName(i5, "img");
+	g->registerElementClass(i2, "Klasse 9b");
+	g->registerElementClass(i3, "Klasse 9b");
+	g->registerElementClass(i3, "Klasse 9a");
+	g->registerElementId(i5, "extraNode");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	std::list<IDrawable::Ptr> res;
+	g->getChildrenByTag(i1, "img",res);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, res.size());
+	res.remove(i4);
+	res.remove(i5);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildrenByClass(i1, "Klasse 9b",res);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, res.size());
+	res.remove(i2);
+	res.remove(i3);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildrenByClass(i1, "Klasse 9a",res);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, res.size());
+	res.remove(i3);
+	CPPUNIT_ASSERT(res.empty());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	g->getChildrenById(i1, "extraNode",res);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, res.size());
+	res.remove(i5);
+	CPPUNIT_ASSERT(res.empty());
+
 }
 } // namespace

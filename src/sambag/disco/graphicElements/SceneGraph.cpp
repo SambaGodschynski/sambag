@@ -41,13 +41,12 @@ const SceneGraph::Vertex SceneGraph::NULL_VERTEX = UINT_MAX;
 //=============================================================================
 //-----------------------------------------------------------------------------
 std::string SceneGraph::processListAsString() const {
-	typedef std::list<IProcessListObject::Ptr> L;
-	L l;
-	getProcessList<L>(l);
+	ProcessList l;
+	createProcessList(l);
 	if (l.empty())
 		return "{}";
 	std::stringstream ss;
-	L::const_reverse_iterator it = l.rbegin();
+	ProcessList::const_reverse_iterator it = l.rbegin();
 	ss<<"{"<<(*it++)->toString();
 	for ( ;it!=l.rend(); ++it) {
 		ss<<", "<<(*it)->toString();
@@ -105,6 +104,7 @@ bool SceneGraph::registerElementClass(const SceneGraphElement &el,
 		classVertex = boost::add_vertex(g);
 		vertexTypeMap[classVertex] = CLASS;
 		vertexOrderMap[classVertex] = NO_ORDER_NUMBER;
+		vertexNameMap[classVertex] = className;
 		class2Vertex.insert(std::make_pair(className, classVertex));
 	} else {
 		classVertex = it->second;
@@ -154,7 +154,7 @@ bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m
 	if (rv==NULL_VERTEX)
 		return false;
 	std::list<Vertex> vertices;
-	findParentsWithType(rv, TRANSFORM, vertices);
+	findParentsByType(rv, TRANSFORM, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
 		vertexTransformationMap[cur] = m;
@@ -176,7 +176,7 @@ bool SceneGraph::setStyleTo(
 	if (rv==NULL_VERTEX)
 		return false;
 	std::list<Vertex> vertices;
-	findParentsWithType(rv, STYLE, vertices);
+	findParentsByType(rv, STYLE, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
 		vertexStyleMap[cur] = s;
@@ -199,7 +199,7 @@ SceneGraph::getTransformationOf(const SceneGraphElement &el) const
 	// find parent transformation node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
-	findParentsWithType(rv, TRANSFORM, vertices);
+	findParentsByType(rv, TRANSFORM, vertices);
 	if (vertices.empty())
 		return NULL_MATRIX;
 	// assume only one style node per vertex
@@ -215,18 +215,16 @@ SceneGraph::getStyleOf(const SceneGraphElement &el) const
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
-	findParentsWithType(rv, STYLE, vertices);
+	findParentsByType(rv, STYLE, vertices);
 	if (vertices.empty())
 		return graphicElements::Style::getNullStyle();
 	// assume only one style node per vertex
 	return vertexStyleMap[vertices.back()];
 }
 //-----------------------------------------------------------------------------
-void SceneGraph::createProcessListAndDraw(IDrawContext::Ptr context) const {
-	typedef std::list<IProcessListObject::Ptr> Elements;
-	Elements elements;
-	getProcessList<Elements>(elements);
-	reverse_for_each( IProcessListObject::Ptr o, elements ) {
+void SceneGraph::draw(IDrawContext::Ptr context) {
+	const ProcessList &pl = getProcessList();
+	reverse_for_each( IProcessListObject::Ptr o, pl ) {
 		o->perform(context);
 	}
 }
