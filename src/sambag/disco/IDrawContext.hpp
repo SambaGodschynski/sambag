@@ -18,6 +18,7 @@
 #include <boost/tuple/tuple_comparison.hpp>
 #include "ISurface.hpp"
 #include "sambag/com/FileHandler.hpp"
+#include "Pattern.hpp"
 #include "ColorRGBA.hpp"
 
 namespace sambag { namespace disco {

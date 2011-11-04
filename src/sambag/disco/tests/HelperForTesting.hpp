@@ -10,8 +10,31 @@
 
 #include <cairo.h>
 #include <string>
+#include <boost/shared_ptr.hpp>
+#include "sambag/disco/ISurface.hpp"
+#include "sambag/disco/Geometry.hpp"
 
 namespace tests {
+
+class TestSurface : public sambag::disco::ISurface {
+public:
+	typedef boost::shared_ptr<TestSurface> Ptr;
+private:
+	std::string name;
+	TestSurface(const std::string &name) : name(name) {}
+public:
+	static Ptr create(const std::string &name) {
+		Ptr neu(new TestSurface(name));
+		return neu;
+	}
+	virtual sambag::disco::Rectangle getSize() const {
+		return sambag::disco::Rectangle();
+	}
+	const std::string & getName() const {
+		return name;
+	}
+
+};
 
 extern const std::string OUTPUT_FOLDER;
 extern const std::string REFERENCE_FOLDER;

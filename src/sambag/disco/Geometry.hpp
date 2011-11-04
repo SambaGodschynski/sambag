@@ -25,6 +25,14 @@ using namespace sambag::com;
  * @typedef Point2D.
  */
 typedef boost::geometry::model::d2::point_xy<Coordinate> Point2D;
+//-----------------------------------------------------------------------------
+inline bool operator==(const Point2D &a, const Point2D &b) {
+	return boost::geometry::equals(a,b);
+}
+//-----------------------------------------------------------------------------
+inline bool operator!=(const Point2D &a, const Point2D &b) {
+	return !boost::geometry::equals(a,b);
+}
 //=============================================================================
 extern const Point2D NULL_POINT2D;
 //=============================================================================
