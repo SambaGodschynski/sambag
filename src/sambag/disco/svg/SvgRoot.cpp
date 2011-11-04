@@ -27,20 +27,6 @@ void SvgRoot::subObjectCreated( SvgObject::Ptr newObject ) {
 	}
 	SvgObject::Ptr self = __self.lock();
 	newObject->svgRootObject = self;
-	// register id if exists
-	if (newObject->getIdName() != "") {
-		sceneGraph->registerElementId(
-			newObject->getGraphicElement(),
-			"#"+newObject->getIdName()
-		);
-	}
-	// register class if exists
-	if (newObject->getClassName() != "") {
-		sceneGraph->registerElementClass(
-			newObject->getGraphicElement(),
-			newObject->getClassName()
-		);
-	}
 	svgs.push_back(newObject);
 }
 

@@ -116,10 +116,18 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void relMoveTo( const Point2D &p0 ) {
+		if (!cairo_has_current_point(context)) {
+			cairo_move_to ( context, p0.x(), p0.y() );
+			return;
+		}
 		cairo_rel_move_to ( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
 	virtual void relLineTo( const Point2D &p0 ) {
+		if (!cairo_has_current_point(context)) {
+			cairo_line_to ( context, p0.x(), p0.y() );
+			return;
+		}
 		cairo_rel_line_to ( context, p0.x(), p0.y() );
 	}
 	//-------------------------------------------------------------------------
@@ -133,13 +141,7 @@ public:
 		const Point2D &x3 )
 	{
 		cairo_curve_to(
-			context,
-			x1.x(),
-			x1.y(),
-			x2.x(),
-			x2.y(),
-			x3.x(),
-			x3.y()
+			context, x1.x(), x1.y(), x2.x(), x2.y(), x3.x(), x3.y()
 		);
 	}
 	//-------------------------------------------------------------------------
@@ -148,14 +150,14 @@ public:
 		const Point2D &x2,
 		const Point2D &x3 )
 	{
+		if (!cairo_has_current_point(context)) {
+			cairo_curve_to(
+				context, x1.x(), x1.y(), x2.x(), x2.y(), x3.x(), x3.y()
+			);
+			return;
+		}
 		cairo_rel_curve_to(
-			context,
-			x1.x(),
-			x1.y(),
-			x2.x(),
-			x2.y(),
-			x3.x(),
-			x3.y()
+			context, x1.x(), x1.y(), x2.x(), x2.y(), x3.x(), x3.y()
 		);
 	}
 	//-------------------------------------------------------------------------
@@ -171,6 +173,15 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void relQuadraticCurveTo( const Point2D &x1, const Point2D &x2 ) {
 		Point2D x0 = getCurrentPoint();
+		if (!cairo_has_current_point(context)) {
+			cairo_curve_to (context,
+			                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
+			                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
+			                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x2.x(),
+			                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x2.y(),
+			                x2.x(), x2.y());
+			return;
+		}
 		cairo_rel_curve_to (context,
 		                    2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
 		                    2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
@@ -384,6 +395,9 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const {
+		if (!cairo_has_current_point(context)) {
+			return Point2D(0,0);
+		}
 		Number x=0, y=0;
 		cairo_get_current_point( context, &x, &y );
 		return Point2D(x,y);

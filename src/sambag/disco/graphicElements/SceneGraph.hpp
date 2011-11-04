@@ -83,14 +83,14 @@ private:
 	// will do it later.
 	const bool resetContextState;
 	//-------------------------------------------------------------------------
-	Style style;
+	boost::shared_ptr<Style> style;
 	//-------------------------------------------------------------------------
-	Matrix transformation;
+	boost::shared_ptr<Matrix> transformation;
 	//-------------------------------------------------------------------------
 	ProcessDrawable(IDrawable::Ptr drawable,
 					bool resetContextState,
-					const graphicElements::Style &style,
-					const Matrix &transformation ) :
+					boost::shared_ptr<Style> style,
+					boost::shared_ptr<Matrix> transformation ) :
 		drawable(drawable),
 		resetContextState(resetContextState),
 		style(style),
@@ -105,8 +105,8 @@ public:
 	static Ptr create(
 			IDrawable::Ptr drawable,
 			bool resetContextState,
-			const graphicElements::Style &style,
-			const Matrix &transformation )
+			boost::shared_ptr<Style> style,
+			boost::shared_ptr<Matrix> transformation )
 	{
 		Ptr neu( new ProcessDrawable(drawable,
 									 resetContextState,
@@ -166,9 +166,9 @@ public:
 	// TODO: cleanup SceneGraphElement / IDrawable confusuion
 	typedef IDrawable::Ptr SceneGraphElement;
 	//-------------------------------------------------------------------------
-	typedef graphicElements::Style Style;
+	typedef boost::shared_ptr<graphicElements::Style> StylePtr;
 	//-------------------------------------------------------------------------
-	typedef Matrix Transformation;
+	typedef boost::shared_ptr<Matrix> MatrixPtr;
 	//-------------------------------------------------------------------------
 	typedef int OrderNumber;
 	//-------------------------------------------------------------------------
@@ -209,8 +209,8 @@ public:
 	struct node_order_t { typedef boost::vertex_property_tag kind; };
 	//-------------------------------------------------------------------------
 	typedef boost::property<node_object_t, SceneGraphElement,
-			boost::property<node_style_t, Style,
-			boost::property<node_transformation_t, Transformation,
+			boost::property<node_style_t, StylePtr,
+			boost::property<node_transformation_t, MatrixPtr,
 			boost::property<node_vtype_t, VertexType,
 			boost::property<node_order_t, OrderNumber,
 			boost::property<node_vname_t, std::string,
@@ -404,9 +404,23 @@ public:
 	 */
 	bool registerElementClass(const SceneGraphElement &el, const Class &className );
 	//-------------------------------------------------------------------------
-	const Matrix & getTransformationOf(const SceneGraphElement &el) const;
+	MatrixPtr getTransformationRef(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
-	const graphicElements::Style & getStyleOf(const SceneGraphElement &el) const;
+	Matrix getTransformationOf(const SceneGraphElement &el) const {
+		MatrixPtr res = getTransformationRef(el);
+		if (!res)
+			return NULL_MATRIX;
+		return *(res.get());
+	}
+	//-------------------------------------------------------------------------
+	graphicElements::Style getStyleOf(const SceneGraphElement &el) const {
+		StylePtr res = getStyleRef(el);
+		if (!res)
+			return graphicElements::Style::getNullStyle();
+		return *(res.get());
+	}
+	//-------------------------------------------------------------------------
+	StylePtr getStyleRef(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();
@@ -651,13 +665,11 @@ private:
 		if (!obj)
 			return;
 		size_t numOutEdges = boost::out_degree(v, g);
-		com::Matrix tM = sceneGraph.getTransformationOf(obj);
-		if (tM==com::NULL_MATRIX)
-			tM = com::IDENTITY_MATRIX;
 		ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
 				numOutEdges==0,
-				sceneGraph.getStyleOf(obj),
-				tM);
+				sceneGraph.getStyleRef(obj),
+				sceneGraph.getTransformationRef(obj)
+		);
 		container.push_back(cmd);
 	}
 	//-------------------------------------------------------------------------

@@ -16,7 +16,8 @@
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 /**
- * @class SvgBuilder creates GraphicElement sceneGraph structure.
+ * @class SvgBuilder set Xml2Object up to
+ * create SVGObjects using a xml respectively a svg file.
  */
 class SvgBuilder {
 //=============================================================================
@@ -44,7 +45,7 @@ public:
 	SvgObject::Ptr buildSvgFromString( const std::string & );
 	//-------------------------------------------------------------------------
 	/**
-	*
+	* TODO: handle use case with one stream instead of string or file.
 	* @param  svg filename
 	* @return the root SvgGraphicElement
 	*/

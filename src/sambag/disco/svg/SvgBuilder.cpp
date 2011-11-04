@@ -20,6 +20,7 @@
 #include "sambag/disco/svg/SvgPolyline.hpp"
 #include "sambag/disco/svg/SvgPolygon.hpp"
 #include "sambag/disco/svg/SvgImage.hpp"
+#include "sambag/disco/svg/SvgStyle.hpp"
 #include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
@@ -49,6 +50,7 @@ void SvgBuilder::registerSvgClasses() {
 	 xml2Obj.registerObject<SvgPolyline>("polyline");
 	 xml2Obj.registerObject<SvgPolygon>("polygon");
 	 xml2Obj.registerObject<SvgImage>("image");
+	 xml2Obj.registerObject<SvgStyle>("style");
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgAttributes() {

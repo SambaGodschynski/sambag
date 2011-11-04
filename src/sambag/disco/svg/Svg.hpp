@@ -73,15 +73,9 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	WPtr svgRootObject;
-	//-------------------------------------------------------------------------
-	std::string tagName;
-	//-------------------------------------------------------------------------
-	std::string idName;
-	//-------------------------------------------------------------------------
-	std::string className;
+protected:
 	//-------------------------------------------------------------------------
 	graphicElements::SceneGraph::Ptr sceneGraph;
-protected:
 	//-------------------------------------------------------------------------
 	/**
 	 * called when finishing @see SvgRoot::subObjectCreated.
@@ -112,7 +106,7 @@ public:
 	 * set related Scenegraph to element and add it to graph.
 	 * @param ptr
 	 */
-	void setRelatedSceneGraph(SceneGraph::Ptr ptr) {
+	virtual void setRelatedSceneGraph(SceneGraph::Ptr ptr) {
 		sceneGraph = ptr;
 		if (sceneGraph)
 			sceneGraph->addElement(getGraphicElement());
@@ -147,17 +141,31 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~SvgObject(){}
 	//-------------------------------------------------------------------------
-	virtual void setTagName(const std::string & str) { tagName = str; }
+	virtual void setTagName(const std::string & str) {
+		sceneGraph->setTagName(getGraphicElement(), str);
+	}
 	//-------------------------------------------------------------------------
-	virtual void setClassName(const std::string & str) { className = str; }
+	virtual void setClassName(const std::string & str) {
+		sceneGraph->registerElementClass(getGraphicElement(), str);
+	}
 	//-------------------------------------------------------------------------
-	virtual void setIdName(const std::string & str) { idName = str; }
+	virtual void setIdName(const std::string & str) {
+		sceneGraph->registerElementId(getGraphicElement(), "#" + str);
+	}
 	//-------------------------------------------------------------------------
-	const std::string & getTagName() const { return tagName; }
+	std::string getTagName() const {
+		return sceneGraph->getTagName(getGraphicElement());
+	}
 	//-------------------------------------------------------------------------
-	const std::string & getClassName() const { return className; }
+	std::string getClassName() const {
+		std::list<std::string> l;
+		sceneGraph->getClassNames(getGraphicElement(), l);
+		return l.back();
+	}
 	//-------------------------------------------------------------------------
-	const std::string & getIdName() const { return idName; }
+	std::string getIdName() const {
+		return sceneGraph->getIdName(getGraphicElement());
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeWidth_tag::Type &width, const StrokeWidth_tag&)

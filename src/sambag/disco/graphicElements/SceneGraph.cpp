@@ -18,8 +18,10 @@ namespace sambag { namespace disco { namespace graphicElements {
 //-----------------------------------------------------------------------------
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	context->save();
-	context->transform(transformation);
-	style.intoContext(context);
+	if (transformation)
+		context->transform( *(transformation.get()) );
+	if (style)
+		style->intoContext(context);
 	drawable->draw(context);
 	// only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
@@ -157,11 +159,11 @@ bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m
 	findParentsByType(rv, TRANSFORM, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
-		vertexTransformationMap[cur] = m;
+		*(vertexTransformationMap[cur]) = m;
 		return true;
 	}
 	Vertex tv = boost::add_vertex(g);
-	vertexTransformationMap[tv] = m;
+	vertexTransformationMap[tv] = MatrixPtr(new Matrix(m));
 	vertexTypeMap[tv] = TRANSFORM;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
@@ -179,45 +181,45 @@ bool SceneGraph::setStyleTo(
 	findParentsByType(rv, STYLE, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
-		vertexStyleMap[cur] = s;
+		*(vertexStyleMap[cur]) = s;
 		return true;
 	}
 	Vertex tv = boost::add_vertex(g);
-	vertexStyleMap[tv] = s;
+	vertexStyleMap[tv] = StylePtr(new Style(s));
 	vertexTypeMap[tv] = STYLE;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
 	return succeed;
 }
 //----------------------------------------------------------------------------
-const Matrix &
-SceneGraph::getTransformationOf(const SceneGraphElement &el) const
+SceneGraph::MatrixPtr
+SceneGraph::getTransformationRef(const SceneGraphElement &el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
-		return NULL_MATRIX;
+		return MatrixPtr();
 	// find parent transformation node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
 	findParentsByType(rv, TRANSFORM, vertices);
 	if (vertices.empty())
-		return NULL_MATRIX;
+		return MatrixPtr();
 	// assume only one style node per vertex
 	return vertexTransformationMap[vertices.back()];
 }
 //----------------------------------------------------------------------------
-const graphicElements::Style &
-SceneGraph::getStyleOf(const SceneGraphElement &el) const
+SceneGraph::StylePtr
+SceneGraph::getStyleRef(const SceneGraphElement &el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
-		return graphicElements::Style::getNullStyle();
+		return StylePtr();
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
 	findParentsByType(rv, STYLE, vertices);
 	if (vertices.empty())
-		return graphicElements::Style::getNullStyle();
+		return StylePtr();
 	// assume only one style node per vertex
 	return vertexStyleMap[vertices.back()];
 }

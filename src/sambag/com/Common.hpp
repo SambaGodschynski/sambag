@@ -48,22 +48,15 @@ public:
 		return box.min_corner();
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getX1() const {
-		return box.max_corner();
-	}
-	//-------------------------------------------------------------------------
 	const Box & getBox() const {
 		return box;
 	}
 	//-------------------------------------------------------------------------
 	void setX0(const Point2D & val) {
-		box.min_corner().x(val.x());
-		box.min_corner().y(val.y());
-	}
-	//-------------------------------------------------------------------------
-	void setX1(const Point2D & val) {
-		box.max_corner().x(val.x());
-		box.max_corner().y(val.y());
+		Point2D diff = val;
+		subtract_point(diff, box.min_corner());
+		add_point(box.min_corner(), diff);
+		add_point(box.max_corner(), diff);
 	}
 	//-------------------------------------------------------------------------
 	Number getWidth() const {
