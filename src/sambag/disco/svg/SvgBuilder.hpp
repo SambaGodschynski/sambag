@@ -9,6 +9,7 @@
 #define SVGBUILDER_HPP_
 
 #include "Svg.hpp"
+#include "SvgRoot.hpp"
 #include "sambag/xml/XML2Obj.hpp"
 #include <string>
 

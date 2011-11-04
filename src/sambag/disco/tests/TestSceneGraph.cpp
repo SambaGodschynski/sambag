@@ -14,6 +14,9 @@
 #include "sambag/disco/graphicElements/SceneGraph.hpp"
 #include "sambag/disco/graphicElements/Image.hpp"
 #include "sambag/com/Common.hpp"
+#include "sambag/math/Matrix.hpp"
+#include "sambag/disco/graphicElements/SceneGraphHelper.hpp"
+
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSceneGraph );
 
@@ -93,6 +96,7 @@ void TestSceneGraph::testBuildGraph() {
 void TestSceneGraph::testTransformNode() {
 	using namespace sambag::disco::graphicElements;
 	using namespace sambag::com;
+	using namespace sambag::math;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
 	Image::Ptr i1 = Image::create();
@@ -291,5 +295,76 @@ void TestSceneGraph::testGetChildrenOfFiltered() {
 	res.remove(i5);
 	CPPUNIT_ASSERT(res.empty());
 
+}
+//-----------------------------------------------------------------------------
+/*
+ *			i1
+ *			/ \
+ *		  i2   i3
+ *		 /  \
+ *		i4  i5
+ */
+void TestSceneGraph::testCopySubGraph() {
+	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco;
+	SceneGraph::Ptr g = SceneGraph::create();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
+	Image::Ptr i1 = Image::create();
+	i1->setUri("i1.img");
+	Image::Ptr i2 = Image::create();
+	i2->setUri("i2.img");
+	Image::Ptr i3 = Image::create();
+	i3->setUri("i3.img");
+	Image::Ptr i4 = Image::create();
+	i4->setUri("i4.img");
+	Image::Ptr i5 = Image::create();
+	i5->setUri("i5.img");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
+	g->addElement(i1); g->addElement(i2); g->addElement(i3);
+	g->addElement(i4); g->addElement(i5);
+	g->connectElements(i1, i2);
+	g->connectElements(i1, i3);
+	g->connectElements(i2, i4);
+	g->connectElements(i2, i5);
+	g->setTagName(i4, "img");
+	g->setTagName(i5, "img");
+	g->registerElementClass(i2, "Klasse 9b");
+	g->registerElementClass(i3, "Klasse 9b");
+	g->registerElementClass(i3, "Klasse 9a");
+	g->registerElementId(i5, "extraNode");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<copy
+	SceneGraph::Ptr g2 = SceneGraph::create();
+	copySubGraph(g, g2, g->getRelatedVertex(i2));
+	size_t nodes = 3; // elements
+	nodes+= 1; // class nodes
+	CPPUNIT_ASSERT_EQUAL(nodes, boost::num_vertices(g2->getGraphImpl()));
+	size_t edges = 2; // elements
+	edges+= 1; // class relations
+	CPPUNIT_ASSERT_EQUAL(edges, boost::num_edges(g2->getGraphImpl()));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	std::list<std::string> strList;
+	g2->getClassNames(i2, strList);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, strList.size());
+	CPPUNIT_ASSERT_EQUAL(std::string("Klasse 9b"), strList.back());
+	g2->registerElementId(g2->getRootElement(), "new_path");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<copy back as ref
+	typedef SceneGraph::SceneGraphElement Element;
+	std::map<Element, Element> old2New;
+	nodes = boost::num_vertices(g->getGraphImpl());
+	edges = boost::num_edges(g->getGraphImpl());
+	addToGraphAsReference(g2, g, old2New);
+	g->connectElements(i3, old2New[g2->getRootElement()]);
+	nodes+=3;
+	edges+=4;
+	CPPUNIT_ASSERT_EQUAL(nodes, boost::num_vertices(g->getGraphImpl()));
+	CPPUNIT_ASSERT_EQUAL(edges, boost::num_edges(g->getGraphImpl()));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	std::list<IDrawable::Ptr> res;
+	g->getChildrenByClass(i1, "Klasse 9b",res);
+	CPPUNIT_ASSERT_EQUAL((size_t)3, res.size());
+	res.remove(i2);
+	res.remove(i3);
+	res.remove(g->getElementById("new_path"));
+	CPPUNIT_ASSERT(res.empty());
 }
 } // namespace

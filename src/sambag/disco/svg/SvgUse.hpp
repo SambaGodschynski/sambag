@@ -33,19 +33,28 @@ private:
 	 * gets the element with the given href id and puts into object.
 	 */
 	void solveHRef();
+	//-------------------------------------------------------------------------
+	/**
+	 * Rebuilds graph structure starting with the reference target with
+	 * reference copies.
+	 * @param g
+	 */
+	void completeReferenceGraph();
 protected:
 	//-------------------------------------------------------------------------
 	SvgUse();
+	//-------------------------------------------------------------------------
+	virtual void init() {
+		solveHRef();
+	}
 public:
 	//-------------------------------------------------------------------------
 	virtual ~SvgUse(){}
 	//-------------------------------------------------------------------------
-	static Ptr create(graphicElements::SceneGraph *g = NULL) {
+	static Ptr create( SvgRoot *root = NULL ) {
 		Ptr neu(new SvgUse());
 		neu->__setSelf(neu);
-		if (!g)
-			return neu;
-		neu->setRelatedSceneGraph(g->getPtr());
+		neu->createBase(root);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
@@ -56,7 +65,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const HRef_tag::Type &val, HRef_tag ) {
 		href=val;
-		solveHRef();
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

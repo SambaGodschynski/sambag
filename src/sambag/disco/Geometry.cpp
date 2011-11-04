@@ -8,8 +8,8 @@
 #include "Geometry.hpp"
 
 namespace sambag { namespace disco {
-
-const Point2D   NULL_POINT2D(0,0);
-const Rectangle NULL_RECTANGLE;
+using namespace sambag::com;
+const Point2D   NULL_POINT2D = Point2D(NULL_NUMBER, NULL_NUMBER);
+const Rectangle NULL_RECTANGLE = Rectangle::Base(NULL_POINT2D, NULL_POINT2D);
 
 }} // namespace

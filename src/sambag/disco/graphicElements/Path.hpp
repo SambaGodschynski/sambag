@@ -71,9 +71,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		return Rectangle(); // TODO: implement boundingbox
-	}
+	virtual Rectangle getBoundingBox() const;
 };
 
 }}} // namespace

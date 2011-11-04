@@ -43,7 +43,13 @@ public:
 	//-------------------------------------------------------------------------
 	cairo_path_t * getPath() const { return cpath; }
 };
-
+//-----------------------------------------------------------------------------
+extern void destroyCairoPattern(cairo_pattern_t *p);
+typedef boost::shared_ptr<cairo_pattern_t> CairoPatternRef;
+inline CairoPatternRef createPatternRef(cairo_pattern_t *p) {
+	return CairoPatternRef(p, &destroyCairoPattern);
+}
+//-----------------------------------------------------------------------------
 //=============================================================================
 //  Class CairoDrawContext:
 //    implements IDrawContext with Cairos draw operations.
@@ -54,31 +60,64 @@ public:
 	typedef boost::shared_ptr<CairoDrawContext> Ptr;
 private:
 	//-------------------------------------------------------------------------
+	enum PatternInUse { INVALID, STROKE, FILL };
+	//-------------------------------------------------------------------------
+	PatternInUse patternInUse;
+	//-------------------------------------------------------------------------
 	void _save();
 	//-------------------------------------------------------------------------
 	void _restore();
 	//-------------------------------------------------------------------------
-	typedef boost::tuple<ColorRGBA, ColorRGBA, Font> StateInfo;
+	typedef boost::tuple<
+		CairoPatternRef,
+		CairoPatternRef,
+		Font,
+		Dash::Ptr
+	> StateInfo;
 	//-------------------------------------------------------------------------
 	typedef std::list<StateInfo> StateStack;
 	//-------------------------------------------------------------------------
 	StateStack stack;
 	//-------------------------------------------------------------------------
-	ColorRGBA fillColor;
-	//-------------------------------------------------------------------------
-	ColorRGBA strokeColor;
+	CairoSurface::Ptr surfaceRef;
 	//-------------------------------------------------------------------------
 	cairo_surface_t *surface;
 	//-------------------------------------------------------------------------
 	Font currentFont;
+	//-------------------------------------------------------------------------
+	CairoPatternRef fillPattern;
+	//-------------------------------------------------------------------------
+	CairoPatternRef strokePattern;
+	//-------------------------------------------------------------------------
+	Dash::Ptr currentDash; // exists only to hold ptr
+
 protected:
 	//-------------------------------------------------------------------------
 	cairo_t *context;
 	//-------------------------------------------------------------------------
+	// TODO: depreciated
 	CairoDrawContext( cairo_surface_t *surface );
+	//-------------------------------------------------------------------------
+	CairoDrawContext( CairoSurface::Ptr surface );
+	//-------------------------------------------------------------------------
+	/**
+	 * sets the current fill pattern to cairo context
+	 */
+	void setFillPattern();
+	//-------------------------------------------------------------------------
+	/**
+	 * sets the current stroke pattern to cairo context
+	 */
+	void setStrokePattern();
 public:
 	//-------------------------------------------------------------------------
+	// TODO: depreciated
 	static Ptr create( cairo_surface_t *surface ) {
+		Ptr neu( new CairoDrawContext(surface) );
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	static Ptr create( CairoSurface::Ptr surface ) {
 		Ptr neu( new CairoDrawContext(surface) );
 		return neu;
 	}
@@ -151,10 +190,7 @@ public:
 		const Point2D &x3 )
 	{
 		if (!cairo_has_current_point(context)) {
-			cairo_curve_to(
-				context, x1.x(), x1.y(), x2.x(), x2.y(), x3.x(), x3.y()
-			);
-			return;
+			moveTo(Point2D(0,0));
 		}
 		cairo_rel_curve_to(
 			context, x1.x(), x1.y(), x2.x(), x2.y(), x3.x(), x3.y()
@@ -172,16 +208,10 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void relQuadraticCurveTo( const Point2D &x1, const Point2D &x2 ) {
-		Point2D x0 = getCurrentPoint();
 		if (!cairo_has_current_point(context)) {
-			cairo_curve_to (context,
-			                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
-			                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
-			                2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x2.x(),
-			                2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x2.y(),
-			                x2.x(), x2.y());
-			return;
+			moveTo(Point2D(0,0));
 		}
+		Point2D x0 = Point2D(0,0);
 		cairo_rel_curve_to (context,
 		                    2.0 / 3.0 * x1.x() + 1.0 / 3.0 * x0.x(),
 		                    2.0 / 3.0 * x1.y() + 1.0 / 3.0 * x0.y(),
@@ -223,33 +253,32 @@ public:
 	virtual void stroke() {
 		if (!isStroked())
 			return;
-		cairo_set_source_rgba(context,
-				strokeColor.getR(),
-				strokeColor.getG(),
-				strokeColor.getB(),
-				strokeColor.getA());
+		if (patternInUse != STROKE) {
+			setStrokePattern();
+			patternInUse = STROKE;
+		}
 		cairo_stroke(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fill() {
 		if (!isFilled())
 			return;
-		cairo_set_source_rgba(context,
-				fillColor.getR(),
-				fillColor.getG(),
-				fillColor.getB(),
-				fillColor.getA());
+		if (patternInUse != FILL) {
+			setFillPattern();
+			patternInUse = FILL;
+		}
 		cairo_fill(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fillPreserve() {
 		if (!isFilled())
 			return;
-		cairo_set_source_rgba(context,
-				fillColor.getR(),
-				fillColor.getG(),
-				fillColor.getB(),
-				fillColor.getA());
+		if (!isFilled())
+			return;
+		if (patternInUse != FILL) {
+			setFillPattern();
+			patternInUse = FILL;
+		}
 		cairo_fill_preserve(context);
 	}
 	//-------------------------------------------------------------------------
@@ -313,14 +342,34 @@ public:
 	virtual void textPath( const std::string &text ) {
 		cairo_text_path( context, text.c_str() );
 	}
+	//-------------------------------------------------------------------------
+	virtual void setFillPattern(Pattern::Ptr pattern);
+	//-------------------------------------------------------------------------
+	virtual void setStrokePattern(Pattern::Ptr pattern);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {
-		return strokeColor.getA() > 0.0;
+		if (!strokePattern) {
+			return false;
+		}
+		if (cairo_pattern_get_type(strokePattern.get()) != CAIRO_PATTERN_TYPE_SOLID ) {
+			return true;
+		}
+		Number r,g,b,a;
+		cairo_pattern_get_rgba(strokePattern.get(), &r, &g, &b, &a);
+		return a > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual bool isFilled() const {
-		return fillColor.getA() > 0.0;
+		if (!fillPattern) {
+			return false;
+		}
+		if (cairo_pattern_get_type(fillPattern.get()) != CAIRO_PATTERN_TYPE_SOLID ) {
+			return true;
+		}
+		Number r,g,b,a;
+		cairo_pattern_get_rgba(fillPattern.get(), &r, &g, &b, &a);
+		return a > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Number &val ) {
@@ -332,39 +381,61 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFillColor( const ColorRGBA &val ) {
-		fillColor = val;
+		patternInUse = INVALID;
+		fillPattern = createPatternRef(cairo_pattern_create_rgba(
+				val.getR(),
+				val.getG(),
+				val.getB(),
+				val.getA())
+		);
 	}
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getFillColor() const {
-		return fillColor;
+		if (cairo_pattern_get_type(fillPattern.get()) != CAIRO_PATTERN_TYPE_SOLID )
+			return ColorRGBA::NULL_COLOR;
+		Number r = 0, g = 0, b = 0, a = 0;
+		cairo_pattern_get_rgba(fillPattern.get(), &r, &g, &b, &a);
+		return ColorRGBA(r,g,b,a);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setStrokeColor( const ColorRGBA &val ) {
-		strokeColor = val;
+		patternInUse = INVALID;
+		strokePattern = createPatternRef(cairo_pattern_create_rgba(
+				val.getR(),
+				val.getG(),
+				val.getB(),
+				val.getA())
+		);
 	}
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getStrokeColor() const {
-		return strokeColor;
+		if (cairo_pattern_get_type(strokePattern.get()) != CAIRO_PATTERN_TYPE_SOLID )
+			return ColorRGBA::NULL_COLOR;
+		Number r = 0, g = 0, b = 0, a = 0;
+		cairo_pattern_get_rgba(strokePattern.get(), &r, &g, &b, &a);
+		return ColorRGBA(r,g,b,a);
 	}
 	//-------------------------------------------------------------------------
-	virtual void setDash( const Dash &dash ) {
+	virtual void setDash( Dash::Ptr dash ) {
+		currentDash = dash;
+		if (!dash) {
+			disableDash();
+			return;
+		}
 		cairo_set_dash(
 			context,
-			dash.get<DASH_ARRAY>(),
-			dash.get<DASH_COUNT>(),
-			dash.get<DASH_OFFSET>());
+			dash->values(),
+			dash->size(),
+			dash->offset()
+		);
 	}
 	//-------------------------------------------------------------------------
 	virtual void disableDash() {
 		cairo_set_dash( context, NULL, 0, 0 );
 	}
 	//-------------------------------------------------------------------------
-	virtual Dash getDash() const {
-		Number *dash = NULL, offset = 0;
-		int numDash = 0;
-		cairo_get_dash(context, dash, &offset);
-		numDash = cairo_get_dash_count(context);
-		return boost::make_tuple(dash, numDash, offset);
+	virtual Dash::Ptr getDash() const {
+		return currentDash;
 	}
 	//-------------------------------------------------------------------------
 	virtual void setLineCap ( LineCapStyle style ) {
@@ -431,7 +502,17 @@ public:
 		cairo_new_sub_path(context);
 	}
 	//-------------------------------------------------------------------------
+	virtual ISurface::Ptr getSurface() const {
+		return surfaceRef;
+	}
+	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr createPngSurface(IDataHandler::Ptr handler);
+	//-------------------------------------------------------------------------
+	virtual Rectangle pathExtends() const {
+		Number x,y,x1,y1;
+		cairo_path_extents(context, &x, &y, &x1, &y1);
+		return Rectangle(Point2D(x,y), Point2D(x1, y1));
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) {

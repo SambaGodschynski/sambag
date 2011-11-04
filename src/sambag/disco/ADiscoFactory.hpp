@@ -11,6 +11,8 @@
 #include "sambag/com/Common.hpp"
 #include <boost/shared_ptr.hpp>
 #include <string>
+#include "IDrawContext.hpp"
+#include "ISurface.hpp"
 
 namespace sambag { namespace disco {
 
@@ -30,7 +32,9 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr getFactory();
 	//-------------------------------------------------------------------------
-	// TODO: create context
+	virtual IDrawContext::Ptr createContext( ISurface::Ptr surface ) const = 0;
+	//-------------------------------------------------------------------------
+	virtual IDrawContext::Ptr createContext() const = 0;
 	//-------------------------------------------------------------------------
 	// TODO: create surface
 	//-------------------------------------------------------------------------

@@ -21,28 +21,26 @@ void TestPattern::testConstruction() {
 	using namespace sambag::disco;
 	using namespace boost::tuples;
 	// solid
-	Pattern::Ptr pattern = Pattern::createSolid(ColorRGBA(1));
-	CPPUNIT_ASSERT_EQUAL(pattern->getType(), Pattern::SOLID);
-	CPPUNIT_ASSERT(pattern->getSolidColor() == ColorRGBA(1));
+	SolidPattern::Ptr spattern = SolidPattern::create(ColorRGBA(1));
+	CPPUNIT_ASSERT_EQUAL(spattern->getType(), Pattern::SOLID);
+	CPPUNIT_ASSERT(spattern->getSolidColor() == ColorRGBA(1));
 	// linear
-	pattern = Pattern::createLinear(Point2D(1,2), Point2D(3,4));
-	CPPUNIT_ASSERT_EQUAL(pattern->getType(), Pattern::LINEAR);
-	CPPUNIT_ASSERT(pattern->getLinearPoints() ==
-		Pattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
+	LinearPattern::Ptr lpattern = LinearPattern::create(Point2D(1,2), Point2D(3,4));
+	CPPUNIT_ASSERT_EQUAL(lpattern->getType(), Pattern::LINEAR);
+	CPPUNIT_ASSERT(lpattern->getLinearPoints() ==
+			LinearPattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
 	);
 	// radial
-	pattern = Pattern::createRadial(Point2D(0,1), 1.0, Point2D(2,3), 23.0);
-	CPPUNIT_ASSERT_EQUAL(pattern->getType(), Pattern::RADIAL);
-	CPPUNIT_ASSERT(pattern->getRadialCircles() ==
-		Pattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
+	RadialPattern::Ptr rpattern = RadialPattern::create(Point2D(0,1), 1.0, Point2D(2,3), 23.0);
+	CPPUNIT_ASSERT_EQUAL(rpattern->getType(), Pattern::RADIAL);
+	CPPUNIT_ASSERT(rpattern->getRadialCircles() ==
+		RadialPattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
 	);
 	// surface
 	ISurface::Ptr surface = TestSurface::create("testSurface");
-	pattern = Pattern::createSurface(surface);
-	CPPUNIT_ASSERT_EQUAL(pattern->getType(), Pattern::SURFACE);
-	CPPUNIT_ASSERT_EQUAL(pattern->getSurface().get(), surface.get());
-	// force error
-	CPPUNIT_ASSERT_THROW(pattern->getRadialCircles(), Pattern::TypeMismatch);
+	SurfacePattern::Ptr fpattern = SurfacePattern::create(surface);
+	CPPUNIT_ASSERT_EQUAL(fpattern->getType(), Pattern::SURFACE);
+	CPPUNIT_ASSERT_EQUAL(fpattern->getSurface().get(), surface.get());
 
 }
 } // namespace

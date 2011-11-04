@@ -42,13 +42,13 @@ void setFillColor( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setOpacity( Style &style, const std::string &value ) {
-	Number v=1.0;
+	/*Number v=1.0;
 	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
 	ColorRGBA fill = style.fillColor();
 	ColorRGBA stroke = style.strokeColor();
 	fill.setA(v); stroke.setA(v);
 	style.fillColor(fill);
-	style.strokeColor(stroke);
+	style.strokeColor(stroke);*/
 }
 //-----------------------------------------------------------------------------
 void setFontSize( Style &style, const std::string &value ) {

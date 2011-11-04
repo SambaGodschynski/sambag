@@ -25,6 +25,11 @@ private:
 	CPPUNIT_TEST( testSvgPath );
 	CPPUNIT_TEST( testSvgPath02 );
 	CPPUNIT_TEST( testSvgPath03 );
+	CPPUNIT_TEST( testSvgPath04 );
+	CPPUNIT_TEST( testSvgPath04b );
+	CPPUNIT_TEST( testSvgPath05 );
+	CPPUNIT_TEST( testSvgPath05b );
+	CPPUNIT_TEST( testSvgPath06 );
 	CPPUNIT_TEST( testSvgPolyline );
 	CPPUNIT_TEST( testSvgPolygon );
 	CPPUNIT_TEST( testSvgArc );
@@ -35,6 +40,8 @@ private:
 	CPPUNIT_TEST( testSvgStyle );
 	CPPUNIT_TEST( testSvgStyle2 );
 	CPPUNIT_TEST( testStyleAdd );
+	CPPUNIT_TEST( testSvgGradient );
+	CPPUNIT_TEST( testBoundingBoxes );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -47,6 +54,11 @@ public:
 	void testSvgPath();
 	void testSvgPath02();
 	void testSvgPath03();
+	void testSvgPath04();
+	void testSvgPath04b();
+	void testSvgPath05();
+	void testSvgPath05b();
+	void testSvgPath06();
 	void testSvgPolyline();
 	void testSvgPolygon();
 	void testSvgUse();
@@ -56,6 +68,8 @@ public:
 	void testSvgImage();
 	void testSvgStyle();
 	void testSvgStyle2();
+	void testSvgGradient();
+	void testBoundingBoxes();
 	void testStyleAdd();
 };
 

@@ -23,6 +23,8 @@ protected:
 	Point2D c;
 	//-------------------------------------------------------------------------
 	Point2D r;
+	//-------------------------------------------------------------------------
+	Arc(){}
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
@@ -54,9 +56,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		return Rectangle(); // Todo
-	}
+	virtual Rectangle getBoundingBox() const ;
 };
 
 }}} // namespace

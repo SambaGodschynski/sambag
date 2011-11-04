@@ -22,6 +22,9 @@
 	} \
 
 #include <string>
+#include <assert.h>
+
+#define SAMBA_ASSERT(x) assert((x))
 
 namespace sambag { namespace com {
 //=============================================================================

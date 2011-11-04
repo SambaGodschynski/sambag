@@ -11,6 +11,9 @@
 #include <string>
 #include <boost/algorithm/string_regex.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/graph/breadth_first_search.hpp>
+#include <sambag/com/Exception.hpp>
+#include "RefElement.hpp"
 
 namespace {
 using namespace sambag::disco::graphicElements;
@@ -76,7 +79,7 @@ void getGraphElements(const std::string &a,
 }
 } // namespace
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco {
 //=============================================================================
 // SceneGraph Helper
 //=============================================================================
@@ -113,7 +116,87 @@ void getGraphElementsBySelector(const std::string &selector,
 	}
 
 }
+//-----------------------------------------------------------------------------
+/**
+ * copies 'el' from 'src' to 'dst' including traits such as class, id, order ...
+ * @param src
+ * @param dst
+ */
+extern void copyElement(SceneGraph::Ptr src,
+	SceneGraph::Ptr dst,
+	SceneGraph::SceneGraphElement el);
+//-----------------------------------------------------------------------------
+/**
+ * copies 'srcEl`s' traits from 'src' SceneGraph to 'dstEl' SceneGraph 'dst'
+ * @param src
+ * @param dst
+ * @param srcEl
+ * @param dstEl
+ */
+extern void copyElementTraits(SceneGraph::Ptr src,
+	SceneGraph::Ptr dst,
+	SceneGraph::SceneGraphElement srcEl,
+	SceneGraph::SceneGraphElement dstEl
+);
+//-----------------------------------------------------------------------------
+/**
+ * copies subgraph 'src' starting with vertex 'start' into 'dst'.
+ * Assumes that start!=dst
+ * @param scr
+ * @param dst
+ * @param start
+ * @param newElements
+ */
+extern void copySubGraph(SceneGraph::Ptr src,
+	SceneGraph::Ptr dst,
+	const SceneGraph::Vertex &start);
+//-----------------------------------------------------------------------------
+/**
+ * cpies 'src' to 'dst' using RefElement as new SceneGraphElement
+ * which refers src's elements. Assumes that start!=dst
+ * @param src
+ * @param dst
+ * @param outMap
+ */
+template <typename Old2NewMap>
+extern void addToGraphAsReference( SceneGraph::Ptr src,
+	SceneGraph::Ptr dst,
+	Old2NewMap &outMap)
+{
+	SAMBA_ASSERT(src!=dst);
+	SAMBA_ASSERT(src && dst);
+	typedef SceneGraph::SceneGraphElement Element;
+	typedef SceneGraph::Vertex Vertex;
+	// copy vertices
+	SceneGraph::VertexIterator vIt, vEnd;
+	boost::tie(vIt, vEnd) = boost::vertices(src->getGraphImpl());
+	for(; vIt!=vEnd; ++vIt) {
+		Element old = src->getSceneGraphElement(*vIt);
+		if (!old)
+			continue;
+		RefElement::Ptr neu = RefElement::create();
+		neu->setReference(old);
+		dst->addElement(neu);
+		outMap[old] = neu;
+		copyElementTraits(src, dst, old, neu);
+	}
+	// copy edges
+	SceneGraph::EdgeIterator eIt, eEnd;
+	boost::tie(eIt, eEnd) = boost::edges(src->getGraphImpl());
+	for(; eIt!=eEnd; ++eIt) {
+		Vertex sv = boost::source(*eIt, src->getGraphImpl());
+		Vertex tv = boost::target(*eIt, src->getGraphImpl());
+		Element sse = src->getSceneGraphElement(sv);
+		Element ste = src->getSceneGraphElement(tv);
+		if (!sse || !ste)
+			continue;
+		dst->connectElements(
+			outMap[sse],
+			outMap[ste]
+		);
+	}
+}
 
-}}}
+}} // namespace
 
 #endif /* SCENEGRAPHHELPER_HPP_ */

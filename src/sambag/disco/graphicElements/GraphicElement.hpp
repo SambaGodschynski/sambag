@@ -31,7 +31,7 @@ protected:
 	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
-	// TODO: draw path method. wich saves the path data on first call
+	// TODO: draw path method. which saves the path data on first call
 	// and restores saved data on the others.
 	//-------------------------------------------------------------------------
 	std::string toString() const = 0;

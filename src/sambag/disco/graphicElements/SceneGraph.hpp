@@ -324,7 +324,7 @@ private:
 	//-------------------------------------------------------------------------
 	Tag2Vertex tag2Vertex;
 	//-------------------------------------------------------------------------
-	SceneGraph(){
+	void initMaps() {
 		vertexElementMap = get( node_object_t(), g );
 		vertexTypeMap = get( node_vtype_t(), g );
 		vertexOrderMap  = get( node_order_t(), g );
@@ -332,6 +332,10 @@ private:
 		vertexStyleMap = get( node_style_t(), g );
 		vertexNameMap = get( node_vname_t(), g );
 		vertexName2Map = get( node_vname2_t(), g );
+	}
+	//-------------------------------------------------------------------------
+	SceneGraph(){
+		initMaps();
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -407,6 +411,20 @@ public:
 	* @param s a @see Style object
 	*/
 	bool setStyleTo(const SceneGraphElement &el, const graphicElements::Style &s);
+	//-------------------------------------------------------------------------
+	/**
+	 * creates a transformation node and relates it to el
+	 * @param el a SceneGraphElement of this graph object
+	 * @param m a transformation matrix
+	 */
+	bool setTransfomationRefTo(const SceneGraphElement &el, MatrixPtr m);
+	//-------------------------------------------------------------------------
+	/**
+	* creates a style node and relates it to el
+	* @param el a SceneGraphElement of this graph object
+	* @param s a @see Style object
+	*/
+	bool setStyleRefTo(const SceneGraphElement &el, StylePtr s);
 	//-------------------------------------------------------------------------
 	/**
 	 * @param el
@@ -546,7 +564,7 @@ public:
 	template <typename Container, typename Filter>
 	void getChildren(const SceneGraphElement & el,
 			Container &c,
-			const Filter &filter, bool deep = true )
+			const Filter &filter, bool deep = true ) const
 	{
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
@@ -568,7 +586,7 @@ public:
 	template <typename Container>
 	void getChildren(const SceneGraphElement & el,
 			Container &c,
-			bool deep = true)
+			bool deep = true) const
 	{
 		AllElements filter;
 		getChildren(el, c, filter, deep);
@@ -578,7 +596,7 @@ public:
 	void getChildrenByTag(const SceneGraphElement & el,
 			const Tag &tagName,
 			Container &c,
-			bool deep = true)
+			bool deep = true) const
 	{
 		TagFilter filter(tagName, *this);
 		getChildren(el, c, filter, deep);
@@ -588,7 +606,7 @@ public:
 	void getChildrenByClass(const SceneGraphElement & el,
 			const Class &className,
 			Container &c,
-			bool deep = true)
+			bool deep = true) const
 	{
 		ClassFilter filter(className, *this);
 		getChildren(el, c, filter, deep);
@@ -598,7 +616,7 @@ public:
 	void getChildrenById(const SceneGraphElement & el,
 			const Id &id,
 			Container &c,
-			bool deep = true)
+			bool deep = true) const
 	{
 		IdFilter filter(id, *this);
 		getChildren(el, c, filter, deep);
@@ -638,6 +656,11 @@ public:
 	template <typename Container>
 	void getElementsByTag(const Tag & tagName, Container &c);
 	//-------------------------------------------------------------------------
+	/**
+	 * appends edge from src's style node to dst
+	 * @param src
+	 * @param dst
+	 */
 	void adoptStyleEdges(const SceneGraphElement &src,
 			const SceneGraphElement &dst)
 	{
@@ -652,6 +675,11 @@ public:
 		}
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * appends edge from src's transformation node to dst
+	 * @param src
+	 * @param dst
+	 */
 	void adoptTransformEdges(const SceneGraphElement &src,
 			const SceneGraphElement &dst)
 	{
@@ -665,6 +693,13 @@ public:
 			boost::add_edge(v, dstV, g);
 		}
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 *
+	 * @param obj
+	 * @return a union rectangle of objects bounding box and it's sub objects.
+	 */
+	Rectangle getBoundingBox(const SceneGraphElement &obj) const;
 };
 //=============================================================================
 /**

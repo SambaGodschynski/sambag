@@ -11,6 +11,7 @@
 #include "Svg.hpp"
 #include "SvgCompound.hpp"
 #include "sambag/com/Common.hpp"
+#include <boost/function.hpp>
 #include <map>
 
 namespace sambag { namespace disco { namespace svg {
@@ -28,15 +29,68 @@ public:
 	typedef std::list<SvgObject::Ptr> Svgs;
 	// created svg objects
 	Svgs svgs;
+	//-------------------------------------------------------------------------
+	typedef boost::function<void(SvgObject::Ptr)> ObjectRequestFunction;
 private:
+	//-------------------------------------------------------------------------
+	typedef std::map<std::string, SvgObject::Ptr> IdMap;
+	//-------------------------------------------------------------------------
+	IdMap idMap;
+	//-------------------------------------------------------------------------
+	/**
+	 * is true when object structure is completely created.
+	 */
+	bool creationCompleted;
+	//-------------------------------------------------------------------------
+	typedef std::pair<std::string, ObjectRequestFunction> ObjectRequest;
+	//-------------------------------------------------------------------------
+	typedef std::list<ObjectRequest> ObjectRequests;
+	//-------------------------------------------------------------------------
+	ObjectRequests requests;
+	//-------------------------------------------------------------------------
+	void handleRequests();
 protected:
 	//-------------------------------------------------------------------------
-	SvgRoot(){}
+	SvgRoot() : creationCompleted(false) {}
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * calls callBk when id's object is available.
+	 * @param url
+	 * @param callBk
+	 */
+	void requestForObject(const std::string &id, ObjectRequestFunction callBk) {
+		requests.push_back(std::make_pair(id, callBk));
+		if (creationCompleted)
+			handleRequests();
+	}
 	//-------------------------------------------------------------------------
 	void initCreatedObjects();
 	//-------------------------------------------------------------------------
 	virtual ~SvgRoot(){}
+	//-------------------------------------------------------------------------
+	/**
+	 *
+	 * @param root
+	 * @param firstElement true if first element in tree
+	 * @return
+	 */
+	static Ptr create(
+			SvgRoot *root = NULL,
+			bool firstElement = false)
+	{
+		Ptr neu(new SvgRoot());
+		neu->__setSelf(neu);
+		if (!root || root == neu.get())
+			return neu;
+		neu->createBase(root);
+		// set default style if first element
+		if (firstElement) {
+			root->getRelatedSceneGraph()->setStyleTo(neu->getGraphicElement(),
+			graphicElements::Style::DEFAULT_STYLE);
+		}
+		return neu;
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 *

@@ -34,7 +34,7 @@ public:
 	/**
 	 * needed for registerAttributes()
 	 */
-	typedef sambag::xml::XML2Object<SvgObject, SceneGraph> BuilderType;
+	typedef sambag::xml::XML2Object<SvgObject, SvgRoot> BuilderType;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<SvgObject> Ptr;
 	//-------------------------------------------------------------------------
@@ -49,15 +49,15 @@ public:
 	//-------------------------------------------------------------------------
 	struct StrokeWidth_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Stroke_tag { typedef ColorRGBA Type; };
+	struct Stroke_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
-	struct Fill_tag { typedef ColorRGBA Type; };
+	struct Fill_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
 	struct Id_tag { typedef IdType Type; };
 	//-------------------------------------------------------------------------
 	struct Class_tag { typedef ClassType Type; };
 	//-------------------------------------------------------------------------
-	struct Transform_tag { typedef sambag::com::Matrix Type; };
+	struct Transform_tag { typedef sambag::math::Matrix Type; };
 	//-------------------------------------------------------------------------
 	struct FontFamily_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
@@ -72,13 +72,27 @@ public:
 	struct Style_tag { typedef disco::graphicElements::Style Type; };
 private:
 	//-------------------------------------------------------------------------
+	/**
+	 * will be called on fill object request (by url).
+	 * @param obj
+	 */
+	void onFillObject(SvgObject::Ptr obj);
+	//-------------------------------------------------------------------------
+	/**
+	* will be called on stroke object request (by url).
+	* @param obj
+	*/
+	void onStrokeObject(SvgObject::Ptr obj);
+	//-------------------------------------------------------------------------
 	WPtr svgRootObject;
 protected:
+	//-------------------------------------------------------------------------
+	void createBase(SvgRoot *root = NULL);
 	//-------------------------------------------------------------------------
 	graphicElements::SceneGraph::Ptr sceneGraph;
 	//-------------------------------------------------------------------------
 	/**
-	 * called when SceneGraph building completed.
+	 * called when SceneGraph building is completed.
 	 */
 	virtual void init(){}
 	//-------------------------------------------------------------------------
@@ -130,13 +144,17 @@ public:
 	/**
 	 * @param m
 	 */
-	void setTransformMatrix( const sambag::com::Matrix &m ) {
+	void setTransformMatrix( const sambag::math::Matrix &m ) {
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj)
 			return;
 		getRelatedSceneGraph()->setTransfomationTo(obj, m);
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * called by @see sambag::xml::XML2Object
+	 * @param obj
+	 */
 	virtual void add(Ptr obj);
 	//-------------------------------------------------------------------------
 	virtual ~SvgObject(){}
@@ -178,25 +196,9 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const Stroke_tag::Type &color, const Stroke_tag & ) {
-		using sambag::disco::graphicElements::Style;
-		if (color==ColorRGBA::NULL_COLOR) return;
-		GraphicElement::Ptr obj = getGraphicElement();
-		if (!obj) return;
-		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-		neu.strokeColor(color);
-		copyStyleToGraphicElement(neu);
-	}
+	virtual void set( const Stroke_tag::Type &color, const Stroke_tag & );
 	//-------------------------------------------------------------------------
-	virtual void set( const Fill_tag::Type &color, const Fill_tag & ) {
-		using sambag::disco::graphicElements::Style;
-		if (color==ColorRGBA::NULL_COLOR) return;
-		GraphicElement::Ptr obj = getGraphicElement();
-		if (!obj) return;
-		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-		neu.fillColor(color);
-		copyStyleToGraphicElement(neu);
-	}
+	virtual void set( const Fill_tag::Type &color, const Fill_tag & );
 	//-------------------------------------------------------------------------
 	virtual void set( const Id_tag::Type &v, const Id_tag&)
 	{
@@ -215,7 +217,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const OpacityStyle_tag::Type &strV, const OpacityStyle_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		/*using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -226,7 +228,7 @@ public:
 		fill.setA(v); stroke.setA(v);
 		neu.fillColor(fill);
 		neu.strokeColor(stroke);
-		copyStyleToGraphicElement(neu);
+		copyStyleToGraphicElement(neu);*/
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Style_tag::Type &style, const Style_tag&)
@@ -276,6 +278,7 @@ public:
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder );
 };
+//=============================================================================
 }}} // namespace
 
 #endif /* SVGGRAPHICELEMENT_HPP_ */

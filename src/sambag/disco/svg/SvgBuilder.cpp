@@ -21,6 +21,9 @@
 #include "sambag/disco/svg/SvgPolygon.hpp"
 #include "sambag/disco/svg/SvgImage.hpp"
 #include "sambag/disco/svg/SvgStyle.hpp"
+#include "sambag/disco/svg/SvgLinearGradient.hpp"
+#include "sambag/disco/svg/SvgRadialGradient.hpp"
+#include "sambag/disco/svg/SvgColorStop.hpp"
 #include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
@@ -51,6 +54,9 @@ void SvgBuilder::registerSvgClasses() {
 	 xml2Obj.registerObject<SvgPolygon>("polygon");
 	 xml2Obj.registerObject<SvgImage>("image");
 	 xml2Obj.registerObject<SvgStyle>("style");
+	 xml2Obj.registerObject<SvgLinearGradient>("linearGradient");
+	 xml2Obj.registerObject<SvgRadialGradient>("radialGradient");
+	 xml2Obj.registerObject<SvgColorStop>("stop");
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgAttributes() {
@@ -65,13 +71,16 @@ void SvgBuilder::registerSvgAttributes() {
 	SvgPolyline::registerAttributes(xml2Obj);
 	SvgPolygon::registerAttributes(xml2Obj);
 	SvgImage::registerAttributes(xml2Obj);
+	SvgLinearGradient::registerAttributes(xml2Obj);
+	SvgRadialGradient::registerAttributes(xml2Obj);
+	SvgColorStop::registerAttributes(xml2Obj);
 }
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get());
-	xml2Obj.setClosure(g.get());
+	xml2Obj.setClosure(root.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1, _2 );
 	xml2Obj.addObjectCreatedSlot(f);
@@ -84,7 +93,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);
-	xml2Obj.setClosure(g.get());
+	xml2Obj.setClosure(root.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1, _2 );
 	xml2Obj.addObjectCreatedSlot(f);

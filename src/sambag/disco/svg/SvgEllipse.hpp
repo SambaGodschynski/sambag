@@ -11,7 +11,6 @@
 #include "Svg.hpp"
 #include "sambag/disco/graphicElements/Arc.hpp"
 
-
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 class SvgEllipse : public SvgObject {
@@ -40,12 +39,10 @@ public:
 		return ellipse;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create(graphicElements::SceneGraph *g = NULL) {
+	static Ptr create( SvgRoot *root = NULL ) {
 		Ptr neu(new SvgEllipse());
 		neu->__setSelf(neu);
-		if (!g)
-			return neu;
-		neu->setRelatedSceneGraph(g->getPtr());
+		neu->createBase(root);
 		return neu;
 	}
 	//-------------------------------------------------------------------------

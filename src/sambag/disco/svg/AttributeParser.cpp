@@ -15,9 +15,11 @@
 #include <math.h>
 
 
+
 namespace {
 using namespace sambag::disco;
 using namespace sambag::disco::svg;
+using namespace sambag::math;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>transfomation
 //-----------------------------------------------------------------------------
 void transformTransl(const std::vector<Number> &values, Matrix& m) {
@@ -224,6 +226,7 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 		if (m=="pc") c.type = Coordinate::PC;
 		if (m=="em") c.type = Coordinate::EM;
 		if (m=="ex") c.type = Coordinate::EX;
+		if (m=="%") c.type = Coordinate::PERCENT;
 	}
 }
 //-----------------------------------------------------------------------------
@@ -239,19 +242,32 @@ void AttributeParser::parseColor(const std::string &in, ColorRGBA &color) {
 		color.setValues(c.getR(), c.getG(), c.getB(), c.getA());
 		return;
 	}
-	if ( !boost::regex_match(str, colorval) ) return;
+	if ( !boost::regex_match(str, colorval) ) { // doesn't match as value
+		color = ColorRGBA::NULL_COLOR;
+		return;
+	}
 	// is color html value
 	std::string expr = boost::algorithm::trim_copy(str);
-	size_t num = expr.length();
-	while (num++<7) { // append missing zeros
-		expr.append("0");
+	if (expr.length() == 7) {// #rrggbb
+		Number r = hex2Int(expr.substr(1,2)) / 255.0;
+		Number g = hex2Int(expr.substr(3,2)) / 255.0;
+		Number b = hex2Int(expr.substr(5,2)) / 255.0;
+		Number a = 1.0;
+		color.setValues(r,g,b,a);
+		return;
 	}
-	Number r = hex2Int(expr.substr(1,2)) / 255.0;
-	Number g = hex2Int(expr.substr(3,2)) / 255.0;
-	Number b = hex2Int(expr.substr(5,2)) / 255.0;
-	Number a = 1.0;
-
-	color.setValues(r,g,b,a);
+	if (expr.length() == 4) {// #rgb => #rrggbb
+		Number r = hex2Int(expr.substr(1,1)) / 255.0;
+		r+= 16 * r;
+		Number g = hex2Int(expr.substr(2,1)) / 255.0;
+		g+= 16 * g;
+		Number b = hex2Int(expr.substr(3,1)) / 255.0;
+		b+= 16 * b;
+		Number a = 1.0;
+		color.setValues(r,g,b,a);
+		return;
+	}
+	color = ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
 void AttributeParser::parseOpacity(const std::string &in, Number &v) {
@@ -369,6 +385,20 @@ void AttributeParser::getValuesFromString( const std::string &_values, Container
 	if (strs.empty()) return;
 	strings2Numbers<std::vector<std::string>, Container >(strs, out);
 }
+//-----------------------------------------------------------------------------
+std::string AttributeParser::getUrl(const std::string &url) {
+	std::string inStr = url;
+	prepareString(inStr, false);
+	// extract all matches
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("url\\(([a-zA-Z0-9_#-]*)\\)");
+	if(regex_search(begin, end, what, re)) {
+		return what[1];
+	}
+	return "";
+}
 }}} // namespaces
 
 //=============================================================================
@@ -413,7 +443,7 @@ std::istream & operator>>(std::istream& istr, sambag::disco::Font::Slant &slant)
 	return istr;
 }
 //-----------------------------------------------------------------------------
-std::istream & operator>>(std::istream& istr, sambag::com::Matrix &m) {
+std::istream & operator>>(std::istream& istr, sambag::math::Matrix &m) {
 	using namespace sambag::disco::svg;
 	std::string str;
 	AttributeParser::getWholeString(istr, str);

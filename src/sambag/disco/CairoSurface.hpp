@@ -22,6 +22,19 @@ protected:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * surface;
 	//-------------------------------------------------------------------------
+	Rectangle & getImageSurfaceRect(Rectangle &res) const {
+		res.setWidth((Number)cairo_image_surface_get_width(surface));
+		res.setHeight((Number)cairo_image_surface_get_height(surface));
+		return res;
+	}
+	//-------------------------------------------------------------------------
+	Rectangle & getRecordingSurfaceRect(Rectangle &res) const {
+		Number x, y, w, h;
+		cairo_recording_surface_ink_extents (surface, &x, &y, &w, &h);
+		res = Rectangle(Point2D(x,y), w, h);
+		return res;
+	}
+	//-------------------------------------------------------------------------
 	CairoSurface(cairo_surface_t *s) : surface(s) {}
 public:
 	//-------------------------------------------------------------------------
@@ -43,8 +56,16 @@ public:
 		Rectangle res(0,0,0,0);
 		if (!surface)
 			return res;
-		res.setWidth((Number)cairo_image_surface_get_width(surface));
-		res.setHeight((Number)cairo_image_surface_get_height(surface));
+		switch (cairo_surface_get_type(surface)) {
+			case CAIRO_SURFACE_TYPE_IMAGE :
+				return getImageSurfaceRect(res);
+			case CAIRO_SURFACE_TYPE_RECORDING :
+				return getRecordingSurfaceRect(res);
+			case CAIRO_SURFACE_TYPE_QUARTZ: // TODO
+			case CAIRO_SURFACE_TYPE_WIN32:  // TODO
+			default:
+				break;
+		}
 		return res;
 	}
 	//-------------------------------------------------------------------------

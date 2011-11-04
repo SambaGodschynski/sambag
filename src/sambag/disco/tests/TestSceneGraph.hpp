@@ -23,6 +23,7 @@ private:
 	CPPUNIT_TEST( testIdAndClassRelations );
 	CPPUNIT_TEST( testGetChildrenOf );
 	CPPUNIT_TEST( testGetChildrenOfFiltered );
+	CPPUNIT_TEST( testCopySubGraph );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testConstructor();
@@ -32,6 +33,7 @@ public:
 	void testIdAndClassRelations();
 	void testGetChildrenOf();
 	void testGetChildrenOfFiltered();
+	void testCopySubGraph();
 };
 
 } // namespace

@@ -8,6 +8,7 @@
 #include "Style.hpp"
 #include "sambag/com/Common.hpp"
 #include <float.h>
+#include <boost/static_assert.hpp>
 
 //=============================================================================
 // hash functions
@@ -23,13 +24,11 @@ size_t hash_value(const sambag::disco::ColorRGBA &o) {
 	return seed;
 }
 //-----------------------------------------------------------------------------
-size_t hash_value(const sambag::disco::IDrawContext::Dash &o) {
+/*size_t hash_value(const Dash &o) {
 	using namespace sambag::disco;
 	std::size_t seed = 0;
-	boost::hash_combine(seed, o.get<IDrawContext::DASH_OFFSET>());
-	boost::hash_combine(seed, o.get<IDrawContext::DASH_COUNT>());
 	return seed;
-}
+}*/
 //-----------------------------------------------------------------------------
 size_t hash_value(const sambag::disco::Font &o) {
 	using namespace sambag::disco;
@@ -59,7 +58,6 @@ Style createDefaultStyle() {
 //-----------------------------------------------------------------------------
 // consider def. order while referencing each other
 const ColorRGBA Style::NONE_COLOR = ColorRGBA(-1.0, -1.0, -1.0, -1.0);
-const Style::Dash Style::NO_DASH = Style::Dash(NULL, 0, DBL_MAX);
 const Font::FontFace Style::NO_FONT_FACE = "undefined-disco-font";
 const Font Style::NO_FONT = Font(Style::NO_FONT_FACE, NULL_NUMBER, Font::SLANT_UNDEFINED, Font::WEIGHT_UNDEFINED);
 //-----------------------------------------------------------------------------
@@ -70,14 +68,14 @@ Style::Ptr Style::NULL_STYLE_SINGLETON;
 const Style Style::DEFAULT_STYLE = createDefaultStyle();
 //-----------------------------------------------------------------------------
 void Style::intoContext( IDrawContext::Ptr cn ) const {
-	if (_strokeColor!=ColorRGBA::NULL_COLOR)
-		cn->setStrokeColor(_strokeColor);
+	if (_strokePattern)
+		cn->setStrokePattern(_strokePattern);
 	if (_strokeWidth!=NULL_NUMBER)
 		cn->setStrokeWidth(_strokeWidth);
-	if (_dash!=NO_DASH)
+	if (_dash!=Dash::Ptr())
 		cn->setDash(_dash);
-	if (_fillColor!=ColorRGBA::NULL_COLOR)
-		cn->setFillColor(_fillColor);
+	if (_fillPattern)
+		cn->setFillPattern(_fillPattern);
 	if (_fontFace != NO_FONT.fontFace)
 		cn->setFontFace(_fontFace);
 	if (_fontSize != NO_FONT.size)
@@ -90,14 +88,14 @@ void Style::intoContext( IDrawContext::Ptr cn ) const {
 //-----------------------------------------------------------------------------
 #define CHECK_NULL_VAL(member,bmember,nullval) (member)==(nullval)&&(bmember)!=(nullval)
 void Style::add( const Style &b ) {
-	if ( CHECK_NULL_VAL(_strokeColor,b._strokeColor,ColorRGBA::NULL_COLOR) )
-		strokeColor(b.strokeColor());
+	if ( !_strokePattern && b._strokePattern )
+		strokePattern(b.strokePattern());
 	if ( CHECK_NULL_VAL( _strokeWidth, b._strokeWidth, NULL_NUMBER) )
 		strokeWidth(b.strokeWidth());
-	if ( CHECK_NULL_VAL(_dash, b._dash, NO_DASH) )
+	if ( !_dash &&  b._dash )
 		dash(b.dash());
-	if ( CHECK_NULL_VAL(_fillColor, b._fillColor, ColorRGBA::NULL_COLOR) )
-		fillColor(b.fillColor());
+	if ( !_fillPattern && b._fillPattern )
+		fillPattern(b.fillPattern());
 	if (CHECK_NULL_VAL(_fontFace, b._fontFace, NO_FONT.fontFace) )
 		fontFace(b.fontFace());
 	if ( CHECK_NULL_VAL(_fontSize, b._fontSize, NO_FONT.size) )

@@ -13,6 +13,7 @@
 #include <string>
 #include "Geometry.hpp"
 #include "sambag/com/Common.hpp"
+#include "sambag/math/Matrix.hpp"
 #include "Font.hpp"
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
@@ -20,10 +21,12 @@
 #include "sambag/com/FileHandler.hpp"
 #include "Pattern.hpp"
 #include "ColorRGBA.hpp"
+#include "Dash.hpp"
 
 namespace sambag { namespace disco {
 
 using namespace sambag::com;
+using namespace sambag::math;
 
 //=============================================================================
 // Class Path
@@ -45,15 +48,6 @@ struct Path { // TODO: change to interface
 //=============================================================================
 class IDrawContext {
 public:
-	//-------------------------------------------------------------------------
-	// < array of dashes, number of dashes, offset >
-	typedef boost::tuple<Number*, int, Number> Dash;
-	//-------------------------------------------------------------------------
-	enum {
-		 DASH_ARRAY,
-		 DASH_COUNT,
-		 DASH_OFFSET
-	};
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IDrawContext> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>drawing
@@ -159,9 +153,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getStrokeColor() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setDash( const Dash &dash ) = 0;
+	virtual void setDash( Dash::Ptr dash ) = 0;
 	//-------------------------------------------------------------------------
-	virtual Dash getDash() const = 0;
+	virtual Dash::Ptr getDash() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void disableDash() = 0;
 	//-------------------------------------------------------------------------
@@ -171,7 +165,11 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setFillRule( FillRule rule ) = 0;
 	//-------------------------------------------------------------------------
-	virtual FillRule getFillRule() const =0;
+	virtual FillRule getFillRule() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setFillPattern(Pattern::Ptr pattern) = 0;
+	//-------------------------------------------------------------------------
+	virtual void setStrokePattern(Pattern::Ptr pattern) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual void save() = 0;
@@ -194,7 +192,10 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr createPngSurface(IDataHandler::Ptr handler) = 0;
 	//-------------------------------------------------------------------------
-	//virtual IDataHandler
+	virtual ISurface::Ptr getSurface() const = 0;
+	//-------------------------------------------------------------------------
+	virtual Rectangle pathExtends() const = 0;
+	//-------------------------------------------------------------------------
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) = 0;
@@ -209,56 +210,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void getMatrix( Matrix &m ) = 0;
 };
-//=============================================================================
-/**
-*  Helper class which sets transformation of given Matrix and
-*  automatically resets when object is destroying.
-*  Usage:
-*
-*    draw(IContext::Ptr cn) {
-*      AutoTransform at(matrix, cn) // set transformation of object on cn
-*      // ... do your drawing stuff
-*      // ...
-*      // transformation will be automatically reseted on the end of scope
-*    }
-*/
-class AutoTransform {
-//=============================================================================
-private:
-	//-------------------------------------------------------------------------
-	const sambag::com::Matrix &matrix;
-	//-------------------------------------------------------------------------
-	IDrawContext::Ptr cn;
-	//-------------------------------------------------------------------------
-	sambag::com::Matrix tmp;
-public:
-	//-------------------------------------------------------------------------
-	/**
-	 * reset manually
-	 */
-	void reset() {
-		cn->identityMatrix();
-		cn->transform(tmp);
-		cn.reset();
-	}
-	// TODO: translate(), rotate(), scale()
-	//-------------------------------------------------------------------------
-	AutoTransform( const sambag::com::Matrix &matrix, IDrawContext::Ptr cn ) :
-		matrix(matrix), cn(cn), tmp( sambag::com::Matrix(3,3) )
-	{
-		if (!cn)
-			return;
-		cn->getMatrix(tmp);
-		cn->transform(matrix);
-	}
-	//-------------------------------------------------------------------------
-	~AutoTransform() {
-		if (cn)
-			reset();
-	}
-};
-
-
 }} // namespaces
 
 #endif /* IDRAWCONTEXT_H_ */

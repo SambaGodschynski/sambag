@@ -38,7 +38,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const  { return Rectangle(); } // TODO: calc. bounding box
+	virtual Rectangle getBoundingBox() const;
 	//-------------------------------------------------------------------------
 	static Ptr create() {
 		Ptr neu(new Compound());

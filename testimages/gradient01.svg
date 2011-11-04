@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="8cm" height="4cm" viewBox="0 0 800 400" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <rect fill="white" width="800" height="400"/>
+  <desc>Example lingrad01 - fill a rectangle using a 
+           linear gradient paint server</desc>
+  <g>
+    <defs>
+      <linearGradient id="grad1">
+        <stop offset="5%" stop-color="#F60" />
+        <stop offset="95%" stop-color="#FF6" />
+      </linearGradient>
+      <radialGradient id="grad2">
+        <stop offset="0%" stop-color="#f00"/>
+	<stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Outline the drawing area in blue -->
+    <rect fill="none" stroke="blue" 
+          x="1" y="1" width="798" height="398"/>
+
+    <!-- The rectangle is filled using a linear gradient paint server -->
+    <rect fill="url(#grad1)" stroke="black" stroke-width="5"  
+          x="100" y="100" width="600" height="200"/>
+    <ellipse cx="400" cy="200" rx="85" ry="55" fill="url(#grad2)" />
+    <rect x="490" y="180" width="100" height="50" fill="url(#grad2)" />
+    <rect x="490" y="180" width="100" height="50" fill="url(#grad2)" transform="translate(-280)" />
+    <ellipse cx="400" cy="200" rx="85" ry="55" fill="url(#grad2)" 
+     transform="translate(0,-80)" />
+    <ellipse cx="400" cy="200" rx="85" ry="55" fill="url(#grad2)"
+     transform="translate(0,80)" />
+ </g>
+</svg>

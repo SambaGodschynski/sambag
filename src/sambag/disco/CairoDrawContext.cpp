@@ -27,17 +27,123 @@ cairo_status_t read_handler (
 		return CAIRO_STATUS_READ_ERROR;
 	return CAIRO_STATUS_SUCCESS;
 }
+//-----------------------------------------------------------------------------
+CairoPatternRef createPattern(SolidPattern::Ptr pt) {
+	if (!pt)
+		return CairoPatternRef();
+	const ColorRGBA &col = pt->getSolidColor();
+	CairoPatternRef neu = createPatternRef(
+		cairo_pattern_create_rgba(col.getR(), col.getG(), col.getB(), col.getA())
+	);
+	return neu;
+}
+//-----------------------------------------------------------------------------
+void copyGradient(const Gradient &src, cairo_pattern_t *dst) {
+	boost_for_each( const Gradient::ColorStop &st, src.getStops() ) {
+		ColorRGBA col;
+		Number offset;
+		boost::tie(col, offset) = st;
+		cairo_pattern_add_color_stop_rgba(dst,
+			offset,
+			col.getR(),
+			col.getG(),
+			col.getB(),
+			col.getA()
+		);
+	}
+}
+//-----------------------------------------------------------------------------
+CairoPatternRef createPattern(LinearPattern::Ptr pt) {
+	if (!pt)
+		return CairoPatternRef();
+	Point2D p0, p1;
+	boost::tie(p0, p1) = pt->getLinearPoints();
+	CairoPatternRef neu = createPatternRef(
+		cairo_pattern_create_linear(p0.x(), p0.y(), p1.x(), p1.y())
+	);
+	copyGradient(*(pt.get()), neu.get());
+	return neu;
+}
+//-----------------------------------------------------------------------------
+CairoPatternRef createPattern(RadialPattern::Ptr pt) {
+	if (!pt)
+		return CairoPatternRef();
+	Point2D c0, c1;
+	Number r0, r1;
+	boost::tie(c0, r0, c1, r1) = pt->getRadialCircles();
+	CairoPatternRef neu = createPatternRef(
+		cairo_pattern_create_radial(c0.x(), c0.y(), r0, c1.x(), c1.y(), r1)
+	);
+	copyGradient(*(pt.get()), neu.get());
+	return neu;
+}
+//-----------------------------------------------------------------------------
+CairoPatternRef createPattern(SurfacePattern::Ptr pt) {
+	if (!pt)
+		return CairoPatternRef();
+	CairoSurface::Ptr surface =
+		boost::shared_dynamic_cast<CairoSurface>(pt->getSurface());
+	if (!surface)
+		return CairoPatternRef();
+
+	CairoPatternRef neu = createPatternRef(
+		cairo_pattern_create_for_surface(surface->getCairoSurface())
+	);
+	return neu;
+}
+//-----------------------------------------------------------------------------
+CairoPatternRef createPattern(Pattern::Ptr pattern) {
+	if (!pattern)
+		return CairoPatternRef();
+	CairoPatternRef pat;
+	switch (pattern->getType()) {
+		case Pattern::SOLID :
+			pat =
+				createPattern( boost::shared_dynamic_cast<SolidPattern>(pattern) );
+			break;
+		case Pattern::LINEAR :
+			pat =
+				createPattern( boost::shared_dynamic_cast<LinearPattern>(pattern) );
+			break;
+		case Pattern::RADIAL :
+			pat =
+				createPattern( boost::shared_dynamic_cast<RadialPattern>(pattern) );
+			break;
+		case Pattern::SURFACE :
+			pat =
+				createPattern( boost::shared_dynamic_cast<SurfacePattern>(pattern) );
+			break;
+	}
+	cairo_matrix_t cm;
+	CairoDrawContext::discoMatrixToCairoMatrix(pattern->getMatrix(), cm);
+	cairo_pattern_set_matrix(pat.get(), &cm);
+	return pat;
+}
+
 } // namespace
 
 namespace sambag { namespace disco {
+//-----------------------------------------------------------------------------
+extern void destroyCairoPattern(cairo_pattern_t *p) {
+	cairo_pattern_destroy(p);
+}
 //=============================================================================
 //  Class CairoDrawContext:
 //    implements IDrawContext with Cairos draw operations.
 //=============================================================================
 //-----------------------------------------------------------------------------
 CairoDrawContext::CairoDrawContext(cairo_surface_t *surface)
-: surface(surface), context(NULL)
+: patternInUse(INVALID), surface(surface), context(NULL)
 {
+	context = cairo_create(surface);
+	setFont(currentFont);
+
+}
+//-----------------------------------------------------------------------------
+CairoDrawContext::CairoDrawContext(CairoSurface::Ptr _surface)
+: patternInUse(INVALID), surfaceRef(_surface), context(NULL)
+{
+	surface = surfaceRef->getCairoSurface();
 	context = cairo_create(surface);
 	setFont(currentFont);
 
@@ -49,15 +155,16 @@ CairoDrawContext::~CairoDrawContext() {
 //-----------------------------------------------------------------------------
 void CairoDrawContext::_save() {
 	stack.push_back(
-			StateInfo(strokeColor, fillColor, currentFont)
+			StateInfo(strokePattern, fillPattern, currentFont, currentDash)
 	);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::_restore() {
 	if (stack.empty())
 		return;
-	boost::tie(strokeColor, fillColor, currentFont) = stack.back();
+	boost::tie(strokePattern, fillPattern, currentFont, currentDash) = stack.back();
 	stack.pop_back();
+	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {
@@ -76,6 +183,16 @@ void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {
 	cairo_arc (context, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
 	cairo_close_path (context);
 
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::setFillPattern(Pattern::Ptr pattern) {
+	fillPattern = createPattern(pattern);
+	patternInUse = INVALID;
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::setStrokePattern(Pattern::Ptr pattern) {
+	strokePattern = createPattern(pattern);
+	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::drawSurface(ISurface::Ptr _surface, const Number &alpha) {
@@ -103,6 +220,18 @@ ISurface::Ptr CairoDrawContext::createPngSurface(IDataHandler::Ptr handler) {
 		return ISurface::Ptr();
 	CairoSurface::Ptr neu = CairoSurface::create(surface);
 	return neu;
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::setFillPattern() {
+	if (!fillPattern)
+		return;
+	cairo_set_source(context, fillPattern.get());
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::setStrokePattern() {
+	if (!strokePattern)
+		return;
+	cairo_set_source(context, strokePattern.get());
 }
 
 }} // namespaces

@@ -24,18 +24,11 @@ public:
 	typedef boost::shared_ptr<RefElement> Ptr;
 private:
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr ref;
+	IDrawable::Ptr ref;
 protected:
 	//-------------------------------------------------------------------------
 	RefElement(){}
 public:
-	//-------------------------------------------------------------------------
-	/**
-	 * Rebuilds graph structure starting with the reference target with
-	 * reference copies. Appends the result to this ref element.
-	 * @param g
-	 */
-	void completeReferenceGraph(SceneGraph::Ptr g);
 	//-------------------------------------------------------------------------
 	std::string toString() const {
 		return "RefElement["+ (!ref ? "NULL" : "&" + ref->toString()) +"]";
@@ -54,11 +47,11 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setReference(GraphicElement::Ptr r) {
+	void setReference(IDrawable::Ptr r) {
 		ref = r;
 	}
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getReference() const  { return ref; }
+	IDrawable::Ptr getReference() const  { return ref; }
 	//-------------------------------------------------------------------------
 	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
@@ -68,8 +61,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
-		if (!ref) return Rectangle();
-		return ref->getBoundingBox();;
+		if (!ref) return NULL_RECTANGLE;
+		return ref->getBoundingBox();
 	}
 };
 

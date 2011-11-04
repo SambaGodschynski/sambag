@@ -29,7 +29,7 @@
 #include <fstream>
 #include <sambag/com/Common.hpp>
 #include "HelperForTesting.hpp"
-
+#include <boost/assign/std/vector.hpp>
 using namespace sambag::com;
 
 // Registers the fixture into the 'registry'
@@ -336,19 +336,36 @@ void TestCairoDrawContext::testMatrixConv() {
 	CPPUNIT_ASSERT( m == dm );
 }
 //-----------------------------------------------------------------------------
+void TestCairoDrawContext::testDash() {
+	using namespace sambag::disco;
+	using namespace boost::assign;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>test creation
+	std::vector<Number> dashes;
+	dashes += 5.0, 5.0;
+	Dash::Ptr dash = Dash::create(dashes);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, dash->size());
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>test comparison
+	Dash::Ptr dash2 = Dash::create(dashes);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, dash2->size());
+	CPPUNIT_ASSERT(*(dash.get()) == *(dash2.get()));
+	dash2->offset(2.);
+	CPPUNIT_ASSERT(*(dash.get()) != *(dash2.get()));
+	dash2->offset(0);
+	CPPUNIT_ASSERT(*(dash.get()) == *(dash2.get()));
+	dash2->values()[0] = 0.;
+	CPPUNIT_ASSERT(*(dash.get()) != *(dash2.get()));
+}
+//-----------------------------------------------------------------------------
 void TestCairoDrawContext::testLineStyle() {
 	using namespace sambag::disco;
+	using namespace boost::assign;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
 	IDrawContext::Ptr context = CairoDrawContext::create( surface );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
-	IDrawContext::Dash dash;
-	{
-		Number dashes[] = {5.0, 5.0, 10.0, 5.0};
-		int numDash = sizeof(dashes)/sizeof(dashes[0]);
-		Number offset = 0.0;
-		dash = IDrawContext::Dash(dashes, numDash, offset);
-	}
+	std::vector<Number> dashes;
+	dashes += 5.0, 5.0, 10.0, 5.0;
+	Dash::Ptr dash = Dash::create(dashes);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 
 	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -380,13 +397,9 @@ void TestCairoDrawContext::testLineStyle() {
 	context->moveTo( Point2D(700, 300)); context->lineTo( Point2D(900, 100) );
 	context->stroke();
 
-	{
-		Number dashes[] = { 50.0, 50.0 };
-		int numDash = sizeof(dashes)/sizeof(dashes[0]);
-		Number offset = 0.0;
-		dash = IDrawContext::Dash(dashes, numDash, offset);
-	}
-
+	dashes.clear();
+	dashes += 50.0, 50.0;
+	dash = Dash::create(dashes);
 	context->setDash(dash);
 	context->setStrokeWidth(50.0);
 	context->moveTo( Point2D(900, 300)); context->lineTo( Point2D(1100, 100) );
@@ -411,6 +424,58 @@ void TestCairoDrawContext::testSetStrokeWidth() {
 	releaseSurface(surface);
 }
 //-----------------------------------------------------------------------------
+void drawGradients(sambag::disco::IDrawContext::Ptr context,
+	const sambag::math::Matrix trans = sambag::math::IDENTITY_MATRIX)
+{
+	using namespace sambag::disco;
+	context->save();
+	// linear gradient
+	context->rect(Rectangle(0,0,100,50));
+	context->setStrokeColor(ColorRGBA());
+	context->stroke();
+	context->rect(Rectangle(0,0,100,50));
+	LinearPattern::Ptr sol = LinearPattern::create(Point2D(0,0), Point2D(100,0));
+	sol->addColorStop(ColorRGBA(1,0,0), 0);
+	sol->addColorStop(ColorRGBA(0,1,0), .5);
+	sol->addColorStop(ColorRGBA(0,0,1), 1.0);
+	sol->setMatrix(trans);
+	context->setFillPattern(sol);
+	context->fill();
+	// radial gradinet
+	context->translate(Point2D(130, 100));
+	context->arc(Point2D(), 50, 0, 2 * M_PI);
+	context->stroke();
+	context->arc(Point2D(), 50, 0, 2 * M_PI);
+	RadialPattern::Ptr rad = RadialPattern::create(Point2D(0,0), 0, Point2D(0,0), 45);
+	rad->addColorStop(ColorRGBA(1,0,0), 0);
+	rad->addColorStop(ColorRGBA(0,1,0), .5);
+	rad->addColorStop(ColorRGBA(0,0,1), 1.0);
+	rad->setMatrix(trans);
+	context->setFillPattern(rad);
+	context->fill();
+	context->restore();
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testGradient() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
+	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
+	// fill bk
+	context->rect(Rectangle(0,0,1200,400));
+	context->setFillPattern(SolidPattern::create(ColorRGBA(1,1,1)));
+	context->fill();
+	drawGradients(context);
+	context->translate(Point2D(200,10));
+	context->scale(Point2D(2.0, 2.0));
+	drawGradients(context, scale2D(1., 2.));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testPattern", surface);
+	context.reset();
+	releaseSurface(surface);
+}
+//-----------------------------------------------------------------------------
 void TestCairoDrawContext::testSetColor() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -420,8 +485,8 @@ void TestCairoDrawContext::testSetColor() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
 	context->setFillColor( ColorRGBA( 0.5, 0.25, 0.125 ) );
 	CPPUNIT_ASSERT ( ColorRGBA( 0.5, 0.25, 0.125 ) == context->getFillColor() );
-	context->setStrokeColor( ColorRGBA( 1.5, 0.25, 0.125 ) );
-	CPPUNIT_ASSERT ( ColorRGBA( 1.5, 0.25, 0.125 ) == context->getStrokeColor() );
+	context->setStrokeColor( ColorRGBA( 1.0, 0.25, 0.125 ) );
+	CPPUNIT_ASSERT ( ColorRGBA( 1.0, 0.25, 0.125 ) == context->getStrokeColor() );
 
 	//
 	context.reset();

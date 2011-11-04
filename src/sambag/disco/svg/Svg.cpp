@@ -8,12 +8,23 @@
 #include "Svg.hpp"
 #include "SvgDefs.hpp"
 #include "sambag/com/Common.hpp"
+#include "SvgRoot.hpp"
+#include "SvgPattern.hpp"
+#include "sambag/com/Exception.hpp"
+#include <boost/bind.hpp>
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 // class SvgObject
 //=============================================================================
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void SvgObject::createBase(SvgRoot* root) {
+	if (!root)
+		return;
+	svgRootObject = root->getPtr();
+	setRelatedSceneGraph(root->getRelatedSceneGraph());
+}
+//-----------------------------------------------------------------------------
 void SvgObject::add(Ptr obj) {
 	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
 	if (!g)
@@ -22,6 +33,81 @@ void SvgObject::add(Ptr obj) {
 		return;
 	graphicElements::GraphicElement::Ptr gO = obj->getGraphicElement();
 	g->connectElements(getGraphicElement(), gO);
+}
+//-----------------------------------------------------------------------------
+void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
+	SvgPattern::Ptr svgPattern = boost::shared_dynamic_cast<SvgPattern>(fillObj);
+	if (!svgPattern)
+		return;
+	GraphicElement::Ptr obj = getGraphicElement();
+	if (!obj) return;
+	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+	Rectangle bBox = getRelatedSceneGraph()->getBoundingBox(obj);
+	neu.fillPattern(svgPattern->createPattern(bBox));
+	copyStyleToGraphicElement(neu);
+}
+//-----------------------------------------------------------------------------
+void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj) {
+	SvgPattern::Ptr svgPattern = boost::shared_dynamic_cast<SvgPattern>(strokeObj);
+	if (!svgPattern)
+		return;
+	GraphicElement::Ptr obj = getGraphicElement();
+	if (!obj) return;
+	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+	Rectangle bBox = getRelatedSceneGraph()->getBoundingBox(obj);
+	neu.strokePattern(svgPattern->createPattern(bBox));
+	copyStyleToGraphicElement(neu);
+}
+//-----------------------------------------------------------------------------
+void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,
+	const SvgObject::Stroke_tag & )
+{
+	using sambag::disco::graphicElements::Style;
+
+	// check whether referenced by id
+	std::string id = AttributeParser::getUrl(colorStr);
+	if (id.length()>0) { // get object by id (via recall)
+		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
+		SAMBA_ASSERT(root);
+		SvgRoot::ObjectRequestFunction callBk =
+			boost::bind(&SvgObject::onStrokeObject, this, _1);
+		root->requestForObject(id, callBk);
+		return;
+	}
+
+	ColorRGBA color;
+	AttributeParser::parseColor(colorStr, color);
+	if (color==ColorRGBA::NULL_COLOR) return;
+	GraphicElement::Ptr obj = getGraphicElement();
+	if (!obj) return;
+	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+	neu.strokeColor(color);
+	copyStyleToGraphicElement(neu);
+}
+//-----------------------------------------------------------------------------
+void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
+	const SvgObject::Fill_tag & )
+{
+	// check whether referenced by id
+	std::string id = AttributeParser::getUrl(colorStr);
+	if (id.length()>0) { // get object by id (via recall)
+		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
+		SAMBA_ASSERT(root);
+		SvgRoot::ObjectRequestFunction callBk =
+			boost::bind(&SvgObject::onFillObject, this, _1);
+		root->requestForObject(id, callBk);
+		return;
+	}
+
+	using sambag::disco::graphicElements::Style;
+	ColorRGBA color;
+	AttributeParser::parseColor(colorStr, color);
+	if (color==ColorRGBA::NULL_COLOR) return;
+	GraphicElement::Ptr obj = getGraphicElement();
+	if (!obj) return;
+	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+	neu.fillColor(color);
+	copyStyleToGraphicElement(neu);
 }
 //-----------------------------------------------------------------------------
 void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {

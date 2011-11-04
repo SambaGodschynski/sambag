@@ -10,6 +10,7 @@
 #include "sambag/com/Common.hpp"
 #include <sstream>
 #include <limits.h>
+#include <limits>
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -123,6 +124,8 @@ bool SceneGraph::registerElementClass(const SceneGraphElement &el,
 const SceneGraph::SceneGraphElement &
 SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
+	if (getVertexType(v)!=IDRAWABLE)
+		return SceneGraphElement();
 	return vertexElementMap[v];
 }
 //-----------------------------------------------------------------------------
@@ -152,6 +155,12 @@ IDrawable::Ptr SceneGraph::getElementById(const SceneGraph::Id &id) const {
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m) {
+	return setTransfomationRefTo(el, MatrixPtr(new Matrix(m)));
+}
+//----------------------------------------------------------------------------
+bool SceneGraph::setTransfomationRefTo(const SceneGraphElement &el, MatrixPtr m) {
+	if (!m)
+		return false;
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return false;
@@ -159,11 +168,11 @@ bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m
 	findParentsByType(rv, TRANSFORM, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
-		*(vertexTransformationMap[cur]) = m;
+		*(vertexTransformationMap[cur]) = *m;
 		return true;
 	}
 	Vertex tv = boost::add_vertex(g);
-	vertexTransformationMap[tv] = MatrixPtr(new Matrix(m));
+	vertexTransformationMap[tv] = m;
 	vertexTypeMap[tv] = TRANSFORM;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
@@ -174,6 +183,15 @@ bool SceneGraph::setStyleTo(
 	const SceneGraphElement &el,
 	const graphicElements::Style &s)
 {
+	return setStyleRefTo(el, StylePtr(new Style(s)));
+}
+//----------------------------------------------------------------------------
+bool SceneGraph::setStyleRefTo(
+	const SceneGraphElement &el,
+	StylePtr s)
+{
+	if (!s)
+		return false;
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return false;
@@ -181,11 +199,11 @@ bool SceneGraph::setStyleTo(
 	findParentsByType(rv, STYLE, vertices);
 	if (!vertices.empty()) { // update
 		Vertex cur = vertices.back();
-		*(vertexStyleMap[cur]) = s;
+		*(vertexStyleMap[cur]) = *s;
 		return true;
 	}
 	Vertex tv = boost::add_vertex(g);
-	vertexStyleMap[tv] = StylePtr(new Style(s));
+	vertexStyleMap[tv] = s;
 	vertexTypeMap[tv] = STYLE;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
@@ -229,5 +247,29 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 	boost_reverse_for_each( IProcessListObject::Ptr o, pl ) {
 		o->perform(context);
 	}
+}
+//-----------------------------------------------------------------------------
+Rectangle SceneGraph::getBoundingBox(const SceneGraphElement &obj) const {
+	// TODO: concern transformations
+	Rectangle res = obj->getBoundingBox();
+	if (res==NULL_RECTANGLE) {
+		typedef std::numeric_limits<Number> L;
+		res = Rectangle::Base(
+			Point2D(L::max(), L::max()),
+			Point2D(L::min(), L::min())
+		);
+	}
+	std::list<SceneGraphElement> l;
+	getChildren(obj, l, true);
+	boost_for_each(SceneGraphElement o, l) {
+		Rectangle r = o->getBoundingBox();
+		if (r==NULL_RECTANGLE)
+			continue;
+		res = Rectangle::Base(
+			minimize(res.min_corner(), r.min_corner()),
+			maximize(res.max_corner(), r.max_corner())
+		);
+	}
+	return res;
 }
 }}} // namespaces

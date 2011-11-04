@@ -14,6 +14,7 @@
 #include "sambag/disco/ColorRGBA.hpp"
 #include "sambag/disco/graphicElements/PointContainer.hpp"
 #include <map>
+#include "sambag/math/Matrix.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
@@ -40,14 +41,21 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	/**
+	 * @param url
+	 * @return content of "url(CONTENT)" respectively an empty string.
+	 */
+	static std::string getUrl(const std::string &url);
+	//-------------------------------------------------------------------------
+	/**
 	 * Parses html string color to ColorRGBA.
-	 * Can be color name or "#rrggbb" hex string
+	 * Can be color name or "#rrggbb" or "#rgb" hex string.
+	 * (see: see http://www.w3.org/TR/CSS2/syndata.html#color-units )
 	 * @param str
 	 * @param out_color
 	 */
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
-	static void parseTransform(const std::string &str, Matrix&);
+	static void parseTransform(const std::string &str, sambag::math::Matrix&);
 	//-------------------------------------------------------------------------
 	static void parseCoordinate(const std::string &str, Coordinate&);
 	//-------------------------------------------------------------------------
@@ -111,7 +119,7 @@ extern std::istream & operator>>(std::istream&, sambag::disco::Coordinate&);
 extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
-extern std::istream & operator>>(std::istream&, sambag::com::Matrix&);
+extern std::istream & operator>>(std::istream&, sambag::math::Matrix&);
 extern std::istream & operator>>(
 		std::istream&,
 		sambag::disco::graphicElements::pathInstruction::PathInstructions &

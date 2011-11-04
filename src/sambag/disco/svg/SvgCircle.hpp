@@ -38,12 +38,10 @@ public:
 		return circle;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create(graphicElements::SceneGraph *g = NULL) {
+	static Ptr create( SvgRoot *root = NULL ) {
 		Ptr neu(new SvgCircle());
 		neu->__setSelf(neu);
-		if (!g)
-			return neu;
-		neu->setRelatedSceneGraph(g->getPtr());
+		neu->createBase(root);
 		return neu;
 	}
 	//-------------------------------------------------------------------------

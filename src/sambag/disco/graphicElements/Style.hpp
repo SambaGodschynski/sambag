@@ -11,11 +11,12 @@
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/Geometry.hpp"
 #include "sambag/disco/Coordinate.hpp"
+#include "sambag/disco/Pattern.hpp"
 
 // hash functions first ...
 namespace boost {
 extern size_t hash_value(const sambag::disco::ColorRGBA &o);
-extern size_t hash_value(const sambag::disco::IDrawContext::Dash &o);
+extern size_t hash_value(const sambag::disco::Dash &o);
 extern size_t hash_value(const sambag::disco::Font &o);
 }
 // .. then boost flyweight
@@ -43,11 +44,9 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>typedefs
 	typedef IDrawContext::LineCapStyle LineCapStyle;
 	typedef IDrawContext::FillRule FillRule;
-	typedef IDrawContext::Dash Dash;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>properties
 	//-------------------------------------------------------------------------
 	// NO_VALUES are for recognize whether a value is setted or not.
-	static const Dash NO_DASH;
 	static const Font::FontFace NO_FONT_FACE;
 	static const Font NO_FONT;
 	//-------------------------------------------------------------------------
@@ -61,13 +60,13 @@ private:
 	FLYWEIGHT(Coordinate, _strokeWidth);
 	FLYWEIGHT(LineCapStyle, _lineCapStyle);
 	FLYWEIGHT(FillRule, _fillRule);
-	FLYWEIGHT(ColorRGBA, _strokeColor);
-	FLYWEIGHT(ColorRGBA, _fillColor);
+	FLYWEIGHT(Pattern::Ptr, _strokePattern);
+	FLYWEIGHT(Pattern::Ptr, _fillPattern);
 	FLYWEIGHT(Font::FontFace, _fontFace);
 	FLYWEIGHT(Coordinate, _fontSize);
 	FLYWEIGHT(Font::Slant, _fontSlant);
 	FLYWEIGHT(Font::Weight, _fontWeight);
-	Dash _dash; // TODO: make flyweight
+	Dash::Ptr _dash; // TODO: make flyweight
 	typedef boost::shared_ptr<Style> Ptr;
 	static Ptr NULL_STYLE_SINGLETON;
 public:
@@ -81,13 +80,13 @@ public:
 		_strokeWidth(NULL_NUMBER),
 		_lineCapStyle(IDrawContext::NO_LINE_CAP),
 		_fillRule(IDrawContext::NO_FILL_RULE),
-		_strokeColor(ColorRGBA::NULL_COLOR),
-		_fillColor(ColorRGBA::NULL_COLOR),
+		_strokePattern(SolidPattern::Ptr()),
+		_fillPattern(SolidPattern::Ptr()),
 		_fontFace(NO_FONT.fontFace),
 		_fontSize(NO_FONT.size),
 		_fontSlant(NO_FONT.slant),
 		_fontWeight(NO_FONT.weight),
-		_dash(NO_DASH)
+		_dash(Dash::Ptr())
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -95,8 +94,8 @@ public:
 		return _strokeWidth == b._strokeWidth &&
 		_lineCapStyle == b._lineCapStyle &&
 		_fillRule == b._fillRule &&
-		_strokeColor == b._strokeColor &&
-		_fillColor == b._fillColor &&
+		_strokePattern == b._strokePattern &&
+		_fillPattern == b._fillPattern &&
 		_fontFace == b._fontFace &&
 		_fontSize == b._fontSize &&
 		_fontSlant == b._fontSlant &&
@@ -147,29 +146,39 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	const ColorRGBA & strokeColor() const {
-		return _strokeColor;
+	Pattern::Ptr strokePattern() const {
+		return _strokePattern;
 	}
 	//-------------------------------------------------------------------------
-	Style & strokeColor(const ColorRGBA &v) {
-		_strokeColor = v;
+	Style & strokePattern(Pattern::Ptr v) {
+		_strokePattern = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	const ColorRGBA & fillColor() const {
-		return _fillColor;
+	Pattern::Ptr fillPattern() const {
+		return _fillPattern;
 	}
 	//-------------------------------------------------------------------------
-	Style & fillColor(const ColorRGBA &v) {
-		_fillColor = v;
+	Style & fillColor(const ColorRGBA &col) {
+		_fillPattern = SolidPattern::create(col);
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	const Dash & dash() const {
+	Style & strokeColor(const ColorRGBA &col) {
+		_strokePattern = SolidPattern::create(col);
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & fillPattern(Pattern::Ptr v) {
+		_fillPattern = v;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Dash::Ptr dash() const {
 		return _dash;
 	}
 	//-------------------------------------------------------------------------
-	Style & dash(const Dash &v) {
+	Style & dash(Dash::Ptr v) {
 		_dash = v;
 		return *this;
 	}

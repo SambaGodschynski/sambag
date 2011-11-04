@@ -11,6 +11,7 @@
 #include "sambag/com/Helper.hpp"
 #include "sambag/disco/Geometry.hpp"
 #include <boost/geometry/policies/compare.hpp>
+#include "sambag/disco/ADiscoFactory.hpp"
 
 
 namespace sambag { namespace disco { namespace graphicElements { namespace pathHelper {
@@ -42,7 +43,7 @@ typedef boost::tuple<Number, Number, Number, Number, Number, Number, Number> Tup
  * the following draw command as parameter.
  */
 struct DrawReturn {
-	Point2D prevPoint;
+	Point2D prevPoint; // has to be absolute
 	pathInstruction::InstructionOp prevCommand;
 
 	DrawReturn(
@@ -200,6 +201,7 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_REL>
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
 	Point2D cp2 = NULL_POINT2D;
+	Point2D curr = cn->getCurrentPoint();
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x2 = 0, y2 = 0, x = 0, y = 0;
 		tie(x1,y1,x2,y2,x,y) =
@@ -207,6 +209,7 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_REL>
 		cp2 = Point2D(x2, y2);
 		cn->relCurveTo(Point2D(x1,y1), cp2, Point2D(x,y));
 	}
+	boost::geometry::add_point(cp2, curr);
 	return DrawReturn(pathInstruction::CURVETO_CUBIC_REL, cp2);
 }
 //-----------------------------------------------------------------------------
@@ -241,6 +244,9 @@ template <>
 DrawReturn _draw<pathInstruction::CURVETO_CUBIC_SMOOTH_REL>
 	( IDrawContext::Ptr cn, const PointContainer &c, const DrawReturn &r )
 {
+	/*
+	 * for simplification: all point are absolute
+	 */
 	PointContainer::const_iterator it = c.begin(), end=c.end();
 	Point2D cp2 = NULL_POINT2D;
 	while (it!=end) {
@@ -258,10 +264,10 @@ DrawReturn _draw<pathInstruction::CURVETO_CUBIC_SMOOTH_REL>
 		 */
 		x1 = Point2D( curr.x() - ( x1.x() - curr.x() ), curr.y() - ( x1.y() - curr.y() ) );
 		tie(x2,y2,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
-		cp2 = Point2D(x2, y2);
-		cn->relCurveTo(x1, cp2, Point2D(x,y));
+		cp2 = Point2D(x2+curr.x(), y2+curr.y());
+		cn->curveTo(x1, cp2, Point2D(x+curr.x(),y+curr.y()));
 	}
-	return DrawReturn(pathInstruction::CURVETO_CUBIC_SMOOTH_ABS, cp2);
+	return DrawReturn(pathInstruction::CURVETO_CUBIC_SMOOTH_REL, cp2);
 }
 //-----------------------------------------------------------------------------
 template <>
@@ -285,12 +291,14 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_REL>
 {
 	PointContainer::const_iterator it = c.begin(), end=c.end();
 	Point2D cp2 = NULL_POINT2D;
+	Point2D curr = cn->getCurrentPoint();
 	while (it!=end) {
 		Number x1 = 0, y1 = 0, x = 0, y = 0;
 		tie(x1,y1,x,y) = com::extractContainer<Tuple4, PointContainer>(it, end);
 		cp2 = Point2D(x1, y1);
 		cn->relQuadraticCurveTo( Point2D(x1,y1), Point2D(x,y));
 	}
+	boost::geometry::add_point(cp2, curr);
 	return DrawReturn(pathInstruction::CURVETO_QUADRATIC_REL, cp2);
 }
 //-----------------------------------------------------------------------------
@@ -341,7 +349,7 @@ DrawReturn _draw<pathInstruction::CURVETO_QUADRATIC_SMOOTH_REL>
 		 */
 		x1 = Point2D( curr.x() - ( x1.x() - curr.x() ), curr.y() - ( x1.y() - curr.y() ) );
 		tie(x,y) = com::extractContainer<Tuple2, PointContainer>(it, end);
-		cn->relQuadraticCurveTo( x1, Point2D(x,y));
+		cn->quadraticCurveTo( x1, Point2D(x+curr.x(),y+curr.y()));
 	}
 	return DrawReturn(pathInstruction::CURVETO_QUADRATIC_SMOOTH_REL, x1);
 }
@@ -520,6 +528,14 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 			continue;
 		}
 	}
+}
+//-----------------------------------------------------------------------------
+Rectangle Path::getBoundingBox() const {
+	ADiscoFactory::Ptr fac = ADiscoFactory::getFactory();
+	IDrawContext::Ptr context = fac->createContext();
+	SAMBA_ASSERT(context);
+	drawInstructions(context);
+	return context->pathExtends();
 }
 
 }}}
