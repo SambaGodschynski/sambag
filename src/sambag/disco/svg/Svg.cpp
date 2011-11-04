@@ -6,6 +6,7 @@
  */
 
 #include "Svg.hpp"
+#include "SvgDefs.hpp"
 #include "sambag/com/Common.hpp"
 
 namespace sambag { namespace disco { namespace svg {
@@ -16,6 +17,8 @@ namespace sambag { namespace disco { namespace svg {
 void SvgObject::add(Ptr obj) {
 	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
 	if (!g)
+		return;
+	if(dynamic_cast<SvgDefs*>(obj.get())) // a def is invisible so we doesn't hook it in.
 		return;
 	graphicElements::GraphicElement::Ptr gO = obj->getGraphicElement();
 	g->connectElements(getGraphicElement(), gO);

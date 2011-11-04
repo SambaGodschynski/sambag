@@ -38,8 +38,32 @@ public:
 	 */
 	virtual std::string toString() const = 0;
 };
-
-
+//=============================================================================
+/**
+ * @class restores context state such as transformations
+ */
+class DoNothing : public IProcessListObject {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<DoNothing> Ptr;
+private:
+	//-------------------------------------------------------------------------
+	DoNothing(){};
+public:
+	//-------------------------------------------------------------------------
+	virtual std::string toString() const {
+		return "DoNothing";
+	}
+	std::string name;
+	//-------------------------------------------------------------------------
+	static Ptr create() {
+		Ptr neu(new DoNothing());
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual void perform(IDrawContext::Ptr context) {}
+};
 //=============================================================================
 /**
  * @class performs a iDrawObject->draw()
@@ -129,6 +153,10 @@ class SceneGraph {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef boost::vecS EdgeContainerType;
+	//-------------------------------------------------------------------------
+	typedef boost::vecS VertexContainerType;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<SceneGraph> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<SceneGraph> WPtr;
@@ -148,7 +176,7 @@ public:
 		IDRAWABLE,
 		TRANSFORM,
 		STYLE,
-		CLASS,
+		CLASS
 	};
 	//-------------------------------------------------------------------------
 	struct node_object_t { typedef boost::vertex_property_tag kind; };
@@ -170,14 +198,14 @@ public:
 			boost::property<node_vtype_t, VertexType,
 			boost::property<node_order_t, OrderNumber,
 			boost::property<node_vname_t, std::string
-			> > > > > > vertexProperties;
+			> > > > > >vertexProperties;
 	//-------------------------------------------------------------------------
 	/**
 	 * Graph type
 	 */
 	typedef boost::adjacency_list<
-			boost::listS,
-			boost::vecS, 			// has to be vecS. Otherwise the processlist
+			EdgeContainerType,
+			VertexContainerType, 			// has to be vecS. Otherwise the processlist
 									// creation and other things getting more complex.
 			boost::bidirectionalS,
 			vertexProperties > G;
@@ -212,9 +240,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<SceneGraphElement, Vertex> Element2Vertex;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<std::string, Vertex> Id2Vertex;
+	typedef std::string Id;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<std::string, Vertex> Class2Vertex;
+	typedef std::string Class;
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<Id, Vertex> Id2Vertex;
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<Class, Vertex> Class2Vertex;
 	//-------------------------------------------------------------------------
 private:
 	//-------------------------------------------------------------------------
@@ -293,7 +325,7 @@ public:
 	*/
 	const SceneGraphElement & getSceneGraphElement(const Vertex &v) const;
 	//-------------------------------------------------------------------------
-	void draw(IDrawContext::Ptr) const;
+	void createProcessListAndDraw(IDrawContext::Ptr) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * creates a transformation node and relates it to el
@@ -309,7 +341,12 @@ public:
 	*/
 	bool setStyleTo(const SceneGraphElement &el, const graphicElements::Style &s);
 	//-------------------------------------------------------------------------
-	void registerElementClass(const SceneGraphElement &el, const std::string &className );
+	/**
+	 * @param el
+	 * @param className
+	 * @return true when element registration was successfull
+	 */
+	bool registerElementClass(const SceneGraphElement &el, const Class &className );
 	//-------------------------------------------------------------------------
 	const Matrix & getTransformationOf(const SceneGraphElement &el) const;
 	//-------------------------------------------------------------------------
@@ -346,29 +383,91 @@ public:
 	template<typename Container>
 	void findParentsWithType(const Vertex& v, VertexType type, Container &out) const;
 	//-------------------------------------------------------------------------
+	size_t inDegreeOf(const Vertex& v, VertexType type) const;
+	//-------------------------------------------------------------------------
 	bool addElement( IDrawable::Ptr ptr );
 	//-------------------------------------------------------------------------
 	bool connectElements(IDrawable::Ptr from, IDrawable::Ptr to);
 	//-------------------------------------------------------------------------
-	void registerElementId(const SceneGraphElement & el, const std::string &id) {
+	bool registerElementId(const SceneGraphElement & el, const Id &id) {
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
-			return;
-		id2Vertex.insert( std::make_pair(id, v) );
+			return false;
+		return (id2Vertex.insert( std::make_pair(id, v) )).second;
 	}
 	//-------------------------------------------------------------------------
-	IDrawable::Ptr getElementById(const std::string &id) const;
+	IDrawable::Ptr getElementById(const Id &id) const;
+	//-------------------------------------------------------------------------
+	template <typename Container>
+	void getElementsByClass(const Class & className, Container &c);
 };
 //=============================================================================
 /**
  *  @class DFSVisitor
  *  fills a container with @see ProcessListProcessor objects, topological sorted.
+ *  http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph&#building_process_list
  */
 //=============================================================================
 using namespace boost;
 template <typename Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:
+	//-------------------------------------------------------------------------
+	Container &container;
+	//-------------------------------------------------------------------------
+	const SceneGraph &sceneGraph;
+	//-------------------------------------------------------------------------
+	typedef SceneGraph::Vertex Vertex;
+	//-------------------------------------------------------------------------
+	typedef typename Container::const_iterator Iterator;
+	//-------------------------------------------------------------------------
+	typedef std::list< std::pair<Vertex, Iterator> > RecycleMapBuilderStack;
+	//-------------------------------------------------------------------------
+	/**
+	 * maps from vertex to a range in subProcessingList
+	 * http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph&#svg_s_use_problem
+	 */
+	typedef std::map<Vertex, std::pair<Iterator, Iterator> > RecycleMap;
+	//-------------------------------------------------------------------------
+	RecycleMapBuilderStack stack;
+	//-------------------------------------------------------------------------
+	RecycleMap recycleMap;
+	//-------------------------------------------------------------------------
+	Vertex startVertex;
+	//-------------------------------------------------------------------------
+	bool startVertexFinished;
+	//-------------------------------------------------------------------------
+	void updateRecycleMap(const Vertex &v) {
+		// insert pre-processed entries if available
+		if (stack.back().first == v) { // insert into recMap
+			Iterator startIt = stack.back().second;
+			Iterator endIt = --(container.end()); // current process list position
+			stack.pop_back();
+			std::list<Vertex> vertices;
+			sceneGraph.findParentsWithType(v, SceneGraph::IDRAWABLE, vertices);
+			for_each(const Vertex &iv, vertices) {
+				recycleMap.insert(
+					std::make_pair(iv, std::make_pair(startIt, endIt))
+				);
+			}
+		}
+	}
+	//-------------------------------------------------------------------------
+	void resolveFromRecycleMap(const Vertex &v) {
+		// insert pre-processed entries if available
+		typename RecycleMap::const_iterator mapIt = recycleMap.find(v);
+		if (mapIt==recycleMap.end()) return;
+		Iterator it = mapIt->second.first;
+		Iterator endIt = mapIt->second.second;
+		if (it==container.end()) { // reference to leaf => no startIt
+			container.push_back(*endIt);
+			return;
+		}
+		it++;
+		for (; it!=endIt; ++it) {
+			container.push_back(*it);
+		}
+}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_drawable(const Vertex &v, Graph& g) {
@@ -380,40 +479,53 @@ private:
 		com::Matrix tM = sceneGraph.getTransformationOf(obj);
 		if (tM==com::NULL_MATRIX)
 			tM = com::IDENTITY_MATRIX;
-		container.push_back(
-			ProcessDrawable::create(obj,
-									numOutEdges==0,
-									sceneGraph.getStyleOf(obj),
-									tM)
-		);
-
+		ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
+				numOutEdges==0,
+				sceneGraph.getStyleOf(obj),
+				tM);
+		container.push_back(cmd);
+		updateRecycleMap(v);
 	}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void discover_drawable(const Vertex &v, Graph &g) {
-		// only need to restore if has child objects in graph
-		if ( boost::out_degree(v, g) == 0 )
-			return;
-
 		typename SceneGraph::SceneGraphElement obj =
-					sceneGraph.getSceneGraphElement(v);
-		RestoreContextState::Ptr re = RestoreContextState::create();
-		container.push_back(re);
+				sceneGraph.getSceneGraphElement(v);
+		bool isLeaf = false;
+		// only need to restore if has child objects in graph
+		if ( boost::out_degree(v, g) > 0 ) {
+			RestoreContextState::Ptr re = RestoreContextState::create();
+			container.push_back(re);
+		} else {
+			isLeaf = true;
+		}
+		if (sceneGraph.inDegreeOf(v, SceneGraph::IDRAWABLE) > 1) {
+			if (!container.empty()) {
+				if (isLeaf)
+					stack.push_back(std::make_pair(v, container.end() ));
+				else
+					stack.push_back(std::make_pair(v, --(container.end()) ));
+			}
+		}
+		resolveFromRecycleMap(v);
 	}
 public:
 	//-------------------------------------------------------------------------
-	Container &container;
-	//-------------------------------------------------------------------------
-	const SceneGraph &sceneGraph;
-	//-------------------------------------------------------------------------
-	DFSVisitor(const SceneGraph &sc, Container &container) :
-		container(container), sceneGraph(sc) {}
+	DFSVisitor(const SceneGraph &sc, Container &container, Vertex startVertex) :
+		container(container),
+		sceneGraph(sc),
+		startVertex(startVertex),
+		startVertexFinished(false)
+	{
+	}
 	//-------------------------------------------------------------------------
 	template <class Edge, class Graph>
 	void back_edge(Edge, Graph&) const {}
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void discover_vertex(const Vertex &v, Graph &g) {
+		if (startVertexFinished)
+			return;
 		SceneGraph::VertexType type = sceneGraph.getVertexType(v);
 			switch (type) {
 				case SceneGraph::IDRAWABLE :
@@ -427,6 +539,11 @@ public:
 	//-------------------------------------------------------------------------
 	template <class Vertex, class Graph>
 	void finish_vertex(const Vertex &v, Graph &g) {
+		if (startVertexFinished)
+			return;
+		if (v==startVertex) {
+			startVertexFinished = true;
+		}
 		SceneGraph::VertexType type = sceneGraph.getVertexType(v);
 		switch (type) {
 			case SceneGraph::IDRAWABLE :
@@ -501,7 +618,8 @@ void SceneGraph::getProcessList (Container &out) const
 	 */
 	if (boost::num_vertices(g)==0)
 		return;
-	DFSVisitor<Container> vis(*this, out);
+	Vertex startVertex =  *(boost::vertices(g).first);
+	DFSVisitor<Container> vis(*this, out, startVertex);
 	typedef CompareNodeOrder<Vertex> Comparator;
 	typedef std::set<Vertex, Comparator > Set;
 	typedef std::vector<Set> G2;
@@ -524,6 +642,19 @@ void SceneGraph::findParentsWithType(const Vertex& v, VertexType type, Container
 	for(; it!=end; ++it) {
 		if (getVertexType(*it) == type)
 			out.push_back(*it);
+	}
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+template <typename Container>
+void SceneGraph::getElementsByClass(const Class & className, Container &c) {
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	Class2Vertex::iterator clVIt = class2Vertex.find(className);
+	if (clVIt==class2Vertex.end())
+		return;
+	AdjacencyIterator it, end;
+	boost::tie(it, end) = boost::adjacent_vertices(clVIt->second, g);
+	for (; it!=end; ++it) {
+		c.push_back(getSceneGraphElement(*it));
 	}
 }
 }}} // namespace

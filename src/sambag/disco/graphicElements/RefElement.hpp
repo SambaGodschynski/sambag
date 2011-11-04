@@ -9,6 +9,7 @@
 #define REFELEMENT_HPP_
 
 #include "sambag/disco/graphicElements/GraphicElement.hpp"
+#include "SceneGraph.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -30,7 +31,7 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
-		return "RefElement["+ !ref ? "NULL" : ref->toString() +"]";
+		return "RefElement["+ (!ref ? "NULL" : "&" + ref->toString()) +"]";
 	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -46,15 +47,13 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setReference(GraphicElement::Ptr r)  { ref = r; }
+	void setReference(GraphicElement::Ptr r, SceneGraph::Ptr g);
 	//-------------------------------------------------------------------------
 	GraphicElement::Ptr getReference() const  { return ref; }
 	//-------------------------------------------------------------------------
 	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context ) {
-		ref->draw(context);
-	}
+	virtual void draw( IDrawContext::Ptr context ) {}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
 		if (!ref) return Rectangle();

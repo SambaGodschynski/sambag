@@ -21,14 +21,10 @@ SvgUse::SvgUse() {
 void SvgUse::solveHRef() {
 	using namespace sambag::disco::graphicElements;
 	SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(getRoot());
-	SvgObject::Ptr refSvg = root->getObjectById(href);
-	if (!refSvg) return;
-	object->setReference(refSvg->getGraphicElement()->clone());
-
-	// TODO: don't copy style => add a new edge from refStyle to newGEl.
-	getRelatedSceneGraph()->setStyleTo(
-			object->getReference(),
-			getRelatedSceneGraph()->getStyleOf(refSvg->getGraphicElement())
-	);
+	GraphicElement::Ptr ref =
+		boost::shared_dynamic_cast<GraphicElement>(getRelatedSceneGraph()->getElementById(href) );
+	if (!ref)
+		return;
+	object->setReference(ref, getRelatedSceneGraph());
 }
 }}}

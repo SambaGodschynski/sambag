@@ -15,13 +15,13 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void SvgRoot::init() {
-	for_each(SvgObject::Ptr o, svgs) {
+	for_each(SvgObject::Ptr o, svgs) { // TODO: remove?
 		o->init();
 	}
 }
 //-----------------------------------------------------------------------------
 void SvgRoot::subObjectCreated( SvgObject::Ptr newObject ) {
-	if (newObject.get() == this) { // init self the last element
+	if (newObject.get() == this) { // init self
 		init();
 		return;
 	}
@@ -29,11 +29,17 @@ void SvgRoot::subObjectCreated( SvgObject::Ptr newObject ) {
 	newObject->svgRootObject = self;
 	// register id if exists
 	if (newObject->getIdName() != "") {
-		idMap.insert( std::make_pair("#" + newObject->getIdName(), newObject));
+		sceneGraph->registerElementId(
+			newObject->getGraphicElement(),
+			"#"+newObject->getIdName()
+		);
 	}
 	// register class if exists
 	if (newObject->getClassName() != "") {
-		classMap.insert( std::make_pair(newObject->getClassName(), newObject));
+		sceneGraph->registerElementClass(
+			newObject->getGraphicElement(),
+			newObject->getClassName()
+		);
 	}
 	svgs.push_back(newObject);
 }

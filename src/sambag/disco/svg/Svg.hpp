@@ -108,6 +108,10 @@ public:
 		return __self.lock();
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * set related Scenegraph to element and add it to graph.
+	 * @param ptr
+	 */
 	void setRelatedSceneGraph(SceneGraph::Ptr ptr) {
 		sceneGraph = ptr;
 		if (sceneGraph)

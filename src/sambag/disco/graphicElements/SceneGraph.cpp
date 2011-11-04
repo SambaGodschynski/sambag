@@ -48,7 +48,7 @@ std::string SceneGraph::processListAsString() const {
 		return "{}";
 	std::stringstream ss;
 	L::const_reverse_iterator it = l.rbegin();
-	ss<<(*it++)->toString();
+	ss<<"{"<<(*it++)->toString();
 	for ( ;it!=l.rend(); ++it) {
 		ss<<", "<<(*it)->toString();
 	}
@@ -91,14 +91,14 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 	return connected;
 }
 //-----------------------------------------------------------------------------
-void SceneGraph::registerElementClass(const SceneGraphElement &el,
-		const std::string &className )
+bool SceneGraph::registerElementClass(const SceneGraphElement &el,
+		const SceneGraph::Class &className )
 {
 
 	Vertex classVertex = NULL_VERTEX;
 	Vertex elV = getRelatedVertex(el);
 	if (elV == NULL_VERTEX)
-		return;
+		return false;
 	Class2Vertex::iterator it = class2Vertex.find(className);
 	if (it==class2Vertex.end()) { // classname not yet registered
 		// add new class vertex to graph
@@ -109,14 +109,30 @@ void SceneGraph::registerElementClass(const SceneGraphElement &el,
 	} else {
 		classVertex = it->second;
 	}
-	// TODO: is already connected?
+	Edge e; bool exists;
+	// edge already exist
+	boost::tie(e, exists) = boost::edge(classVertex, elV, g);
+	if (exists)
+		return false;
 	boost::add_edge(classVertex, elV, g);
+	return true;
 }
 //-----------------------------------------------------------------------------
 const SceneGraph::SceneGraphElement &
 SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
 	return vertexElementMap[v];
+}
+//-----------------------------------------------------------------------------
+size_t SceneGraph::inDegreeOf(const Vertex& v, VertexType type) const {
+	size_t result = 0;
+	InvAdjacencyIterator it, end;
+	boost::tie(it, end) = boost::inv_adjacent_vertices(v,g);
+	for(; it!=end; ++it) {
+		if (getVertexType(*it) == type)
+			++result;
+	}
+	return result;
 }
 //-----------------------------------------------------------------------------
 SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) const {
@@ -126,7 +142,7 @@ SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) con
 	return it->second;
 }
 //----------------------------------------------------------------------------
-IDrawable::Ptr SceneGraph::getElementById(const std::string &id) const {
+IDrawable::Ptr SceneGraph::getElementById(const SceneGraph::Id &id) const {
 	Id2Vertex::const_iterator it = id2Vertex.find(id);
 	if (it==id2Vertex.end())
 		return IDrawable::Ptr();
@@ -181,18 +197,18 @@ SceneGraph::getStyleOf(const SceneGraphElement &el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
-		return graphicElements::Style::NULL_STYLE;
+		return graphicElements::Style::getNullStyle();
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
 	findParentsWithType(rv, STYLE, vertices);
 	if (vertices.empty())
-		return graphicElements::Style::NULL_STYLE;
+		return graphicElements::Style::getNullStyle();
 	// assume only one style node per vertex
 	return vertexStyleMap[vertices.back()];
 }
 //-----------------------------------------------------------------------------
-void SceneGraph::draw(IDrawContext::Ptr context) const {
+void SceneGraph::createProcessListAndDraw(IDrawContext::Ptr context) const {
 	typedef std::list<IProcessListObject::Ptr> Elements;
 	Elements elements;
 	getProcessList<Elements>(elements);

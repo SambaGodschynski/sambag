@@ -50,7 +50,6 @@ public:
 	static const Font NO_FONT;
 	//-------------------------------------------------------------------------
 	static const Style DEFAULT_STYLE;
-	static const Style NULL_STYLE;
 	//-------------------------------------------------------------------------
 	// special case color none: its not the same like NO_COLOR.
 	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
@@ -67,8 +66,12 @@ private:
 	FLYWEIGHT(Font::Slant, _fontSlant);
 	FLYWEIGHT(Font::Weight, _fontWeight);
 	Dash _dash; // TODO: make flyweight
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
+	typedef boost::shared_ptr<Style> Ptr;
+	static Ptr NULL_STYLE_SINGLETON;
 public:
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods
+	//-------------------------------------------------------------------------
+	static const Style & getNullStyle();
 	//-------------------------------------------------------------------------
 	Style() :
 		_strokeWidth(NULL_NUMBER),

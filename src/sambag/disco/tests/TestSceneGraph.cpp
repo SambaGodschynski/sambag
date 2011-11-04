@@ -58,7 +58,7 @@ void TestSceneGraph::testBuildGraph() {
 	g->connectElements(i2, i4);
 	g->connectElements(i2, i5);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<compare
-	std::string soll = "Draw(Image[i1.img]), Draw(Image[i2.img]), DrawAndRestoreContextState"
+	std::string soll = "{Draw(Image[i1.img]), Draw(Image[i2.img]), DrawAndRestoreContextState"
 			"(Image[i4.img]), DrawAndRestoreContextState(Image[i5.img]), RestoreContextState"
 			", DrawAndRestoreContextState(Image[i3.img]), RestoreContextState}";
 	CPPUNIT_ASSERT_EQUAL(soll, g->processListAsString());
@@ -134,6 +134,45 @@ void TestSceneGraph::testStyleNode() {
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testIdAndClassRelations() {
-	CPPUNIT_ASSERT_MESSAGE("NOT YET IMPLEMENTED", false);
+	using namespace sambag::disco::graphicElements;
+	using namespace sambag::com;
+	using namespace sambag::disco;
+	SceneGraph::Ptr g = SceneGraph::create();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
+	Image::Ptr i1 = Image::create();
+	i1->setUri("i1.img");
+	Image::Ptr i2 = Image::create();
+	i2->setUri("i2.img");
+	Image::Ptr i3 = Image::create();
+	i2->setUri("i3.img");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
+	g->addElement(i1); g->addElement(i2);
+	CPPUNIT_ASSERT( g->registerElementClass(i1, "classA") );
+	CPPUNIT_ASSERT( g->registerElementClass(i2, "classA") );
+	CPPUNIT_ASSERT( !g->registerElementClass(i2, "classA") ); // twice registered
+	CPPUNIT_ASSERT( g->registerElementId(i2,"idA") );
+	CPPUNIT_ASSERT( !g->registerElementId(i1, "idA") ); // idA already registerd
+	CPPUNIT_ASSERT( !g->registerElementId(i3, "idA") ); // i3 not in graph
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assert
+	IDrawable::Ptr res = g->getElementById("qwerty");
+	CPPUNIT_ASSERT(!res);
+	res = g->getElementById("idA");
+	CPPUNIT_ASSERT(res);
+	CPPUNIT_ASSERT_EQUAL((void*)res.get(), (void*)i2.get()); // compare object identity
+	std::list<IDrawable::Ptr> resList, resListCopy;
+	g->getElementsByClass("classA", resList);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, resList.size());
+	// we can't test the resList with compare because we don't now the
+	// order of the elements in there.
+	resListCopy = resList; // we wan to remove objects while iterating,
+						   // so we have to copy resList.
+	for_each(IDrawable::Ptr obj, resListCopy) {
+		// remove accepted elements
+		if (obj.get() == i1.get())
+			resList.remove(obj);
+		if (obj.get() == i2.get())
+			resList.remove(obj);
+	}
+	CPPUNIT_ASSERT(resList.empty());
 }
 } // namespace

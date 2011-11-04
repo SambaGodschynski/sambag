@@ -151,6 +151,10 @@ struct ColorRGBA: public sambag::math::VectorN<Number, 4> {
 	ColorRGBA(Number r = 0.0, Number g = 0.0, Number b = 0.0, Number a = 1.0) {
 		setValues(r, g, b, a);
 	}
+	typedef boost::tuple<Number, Number, Number, Number> Tuple;
+	Tuple asTuple() const {
+		return Tuple(getR(), getG(), getB(), getA());
+	}
 	static const ColorRGBA NULL_COLOR;
 };
 //#############################################################################

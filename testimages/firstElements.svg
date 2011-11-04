@@ -24,8 +24,8 @@
 	   Hello, out there
         </text>
 	<text x="550" y="250" font-family="Verdana"
-         font-size="25" stroke="none" fill="black" font-weight="bold" font-style="italic">
-           I'am invisible!
+         font-size="25" stroke="none" fill="none" font-weight="bold" font-style="italic">
+           I'am invisible! If u can see me something went wrong.
         </text>
     </g>
  

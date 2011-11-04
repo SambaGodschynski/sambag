@@ -35,17 +35,6 @@ public:
 		neu->setRelatedSceneGraph(g->getPtr());
 		return neu;
 	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @return null because all elements in in a <defs> will not be drawn
-	 *         directly.
-	 */
-	GraphicElement::Ptr getGraphicElement() const {
-		using sambag::disco::graphicElements::GraphicElement;
-		return GraphicElement::Ptr(); // return null
-	}
-
-
 };
 
 }}} // namespaces

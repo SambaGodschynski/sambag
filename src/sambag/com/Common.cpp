@@ -20,9 +20,8 @@ namespace {
 }
 const Point2D   NULL_POINT2D(0,0);
 const Rectangle NULL_RECTANGLE;
-const ColorRGBA ColorRGBA::NULL_COLOR = ColorRGBA(NULL_NUMBER,NULL_NUMBER,NULL_NUMBER,NULL_NUMBER);
 const Number NULL_NUMBER = DBL_MAX;
 const Matrix IDENTITY_MATRIX = identity_matrix<Number> (3,3);
 const Matrix NULL_MATRIX = createNullMatrix();
-
+const ColorRGBA ColorRGBA::NULL_COLOR = ColorRGBA(NULL_NUMBER,NULL_NUMBER,NULL_NUMBER,NULL_NUMBER);
 }}
