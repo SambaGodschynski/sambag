@@ -11,7 +11,8 @@
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/Geometry.hpp"
 #include "sambag/disco/Coordinate.hpp"
-#include "sambag/disco/Pattern.hpp"
+#include "sambag/disco/IPattern.hpp"
+#include "sambag/disco/IDiscoFactory.hpp"
 
 // hash functions first ...
 namespace boost {
@@ -60,12 +61,14 @@ private:
 	FLYWEIGHT(Coordinate, _strokeWidth);
 	FLYWEIGHT(LineCapStyle, _lineCapStyle);
 	FLYWEIGHT(FillRule, _fillRule);
-	FLYWEIGHT(APattern::Ptr, _strokePattern);
-	FLYWEIGHT(APattern::Ptr, _fillPattern);
+	FLYWEIGHT(IPattern::Ptr, _strokePattern);
+	FLYWEIGHT(IPattern::Ptr, _fillPattern);
 	FLYWEIGHT(Font::FontFace, _fontFace);
 	FLYWEIGHT(Coordinate, _fontSize);
 	FLYWEIGHT(Font::Slant, _fontSlant);
 	FLYWEIGHT(Font::Weight, _fontWeight);
+	FLYWEIGHT(Coordinate, _fillOpacity);
+	FLYWEIGHT(Coordinate, _strokeOpacity);
 	Dash::Ptr _dash; // TODO: make flyweight
 	typedef boost::shared_ptr<Style> Ptr;
 	static Ptr NULL_STYLE_SINGLETON;
@@ -80,12 +83,14 @@ public:
 		_strokeWidth(NULL_NUMBER),
 		_lineCapStyle(IDrawContext::NO_LINE_CAP),
 		_fillRule(IDrawContext::NO_FILL_RULE),
-		_strokePattern(SolidPattern::Ptr()),
-		_fillPattern(SolidPattern::Ptr()),
+		_strokePattern(ASolidPattern::Ptr()),
+		_fillPattern(ASolidPattern::Ptr()),
 		_fontFace(NO_FONT.fontFace),
 		_fontSize(NO_FONT.size),
 		_fontSlant(NO_FONT.slant),
 		_fontWeight(NO_FONT.weight),
+		_fillOpacity(NULL_NUMBER),
+		_strokeOpacity(NULL_NUMBER),
 		_dash(Dash::Ptr())
 	{
 	}
@@ -100,6 +105,8 @@ public:
 		_fontSize == b._fontSize &&
 		_fontSlant == b._fontSlant &&
 		_fontWeight == b._fontWeight &&
+		_fillOpacity == b._fillOpacity &&
+		_strokeOpacity == b._strokeOpacity &&
 		_dash == b._dash;
 	}
 	//-------------------------------------------------------------------------
@@ -124,23 +131,21 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Style & strokeOpacity(const Coordinate &v) {
-		// TODO
+		_strokeOpacity = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Coordinate strokeOpacity() const {
-		// TODO
-		return 0;
+		return _strokeOpacity;
 	}
 	//-------------------------------------------------------------------------
 	Style & fillOpacity(const Coordinate &v) {
-		// TODO
+		_fillOpacity = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Coordinate fillOpacity() const {
-		// TODO
-		return 0;
+		return _fillOpacity;
 	}
 	//-------------------------------------------------------------------------
 	Style & strokeWidth(const Coordinate &v) {
@@ -166,30 +171,30 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	APattern::Ptr strokePattern() const {
+	IPattern::Ptr strokePattern() const {
 		return _strokePattern;
 	}
 	//-------------------------------------------------------------------------
-	Style & strokePattern(APattern::Ptr v) {
+	Style & strokePattern(IPattern::Ptr v) {
 		_strokePattern = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	APattern::Ptr fillPattern() const {
+	IPattern::Ptr fillPattern() const {
 		return _fillPattern;
 	}
 	//-------------------------------------------------------------------------
 	Style & fillColor(const ColorRGBA &col) {
-		_fillPattern = SolidPattern::create(col);
+		_fillPattern = getDiscoFactory()->createSolidPattern(col);
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & strokeColor(const ColorRGBA &col) {
-		_strokePattern = SolidPattern::create(col);
+		_strokePattern = getDiscoFactory()->createSolidPattern(col);
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	Style & fillPattern(APattern::Ptr v) {
+	Style & fillPattern(IPattern::Ptr v) {
 		_fillPattern = v;
 		return *this;
 	}

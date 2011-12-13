@@ -14,9 +14,10 @@ namespace sambag { namespace disco { namespace graphicElements {
 // class Image
 //=============================================================================
 //-----------------------------------------------------------------------------
-void Image::loadImage(IDrawContext::Ptr cn) {
+void Image::loadImage() {
 	com::FileHandler::Ptr fh = com::FileHandler::create(uri);
 	image = getDiscoFactory()->createImageSurface(fh);
+	image->setOpacity(opacity);
 }
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
@@ -27,7 +28,7 @@ void Image::drawPlaceholder(IDrawContext::Ptr cn) {
 //-----------------------------------------------------------------------------
 void Image::draw( IDrawContext::Ptr cn ) {
 	if (!image) {
-		loadImage(cn);
+		loadImage();
 		if (!image) { // loading failed
 			drawPlaceholder(cn);
 			return;

@@ -15,6 +15,10 @@ namespace sambag { namespace disco { namespace svg {
 //class SvgRoot
 //=============================================================================
 //-----------------------------------------------------------------------------
+void SvgRoot::init() {
+
+}
+//-----------------------------------------------------------------------------
 void SvgRoot::initCreatedObjects() {
 	boost_for_each(SvgObject::Ptr o, svgs) {
 		o->init();

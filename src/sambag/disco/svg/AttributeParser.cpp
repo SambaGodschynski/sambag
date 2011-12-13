@@ -193,6 +193,51 @@ void AttributeParser::parsePointContainer(const std::string &str, PointContainer
 	}
 }
 //-----------------------------------------------------------------------------
+Dash::Ptr AttributeParser::parseDashArray(const std::string &str) {
+	if (str.length()==0) return Dash::Ptr();
+	std::string inStr = str;
+	prepareString(inStr, false);
+	// extract all matches
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([a-z0-9.-]+)");
+	std::list<Coordinate> l;
+	for ( ;
+		regex_search(begin, end, what, re);
+		begin = what[0].second
+	) {
+		Coordinate c;
+		parseCoordinate(what[1], c);
+		l.push_back(c);
+	}
+	return Dash::create(l);
+}
+//-----------------------------------------------------------------------------
+void AttributeParser::parseViewBox(const std::string &str, Rectangle& pC) {
+	if (str.length()==0) return;
+	std::string inStr = str;
+	prepareString(inStr, false);
+	// extract all matches
+	std::string::const_iterator begin = inStr.begin();
+	std::string::const_iterator end = inStr.end();
+	boost::match_results<std::string::const_iterator> what;
+	std::string d = "([a-z0-9.-]+)";
+	boost::regex re(d + "\\s+" + d + "\\s+" + d +"\\s+" + d);
+	if (!regex_search(begin, end, what, re))
+		return;
+	Coordinate x, y, x1, y1;
+	parseCoordinate(what[1], x);
+	parseCoordinate(what[2], y);
+	parseCoordinate(what[3], x1);
+	parseCoordinate(what[4], y1);
+	if (x < 0 || y < 0 || x1 < 0 || y1 < 0)
+		return;
+	if (x1 < x || y1 < y)
+		return;
+	pC = Rectangle(Point2D(x,y), Point2D(x1, y1));
+}
+//-----------------------------------------------------------------------------
 void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	if (str.length()==0) return;
 	std::string::const_iterator begin = str.begin();

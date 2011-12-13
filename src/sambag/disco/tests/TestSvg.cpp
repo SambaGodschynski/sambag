@@ -1,22 +1,6 @@
 /**
  * TestCairoDrawContext.cpp
  *
- *
- *                                            Test Suite for CairoDraw Context
- *
- *                This test creates png files. For comparing it uses perceptualdiff (http://pdiff.sourceforge.net/)
- *                The Comparing is initiated via a system call to this script: outputfolder/comparepng.script
- *                Edit this script to adjust perecputaldiff. Or use another program to compare.
- *                Use "#define DISCO_CONTEXT_MAKE_REFERENCES" if you want create compare reference files.
- *
- *
- *                !Perceptualdiff converts png transparency to black, so use a background color to compare correctly!
- *
- *
- *
- *
- *
- *
  *  Created on: 20.09.2011
  *      Author: samba
  */
@@ -63,6 +47,7 @@ tests::TestSuiteHtmlOutput::Ptr openDoc() {
 	neu->doc().p().id("timestamp");
 	neu->doc().text("These tests ran on " + tests::getTimeStampAsStr() + ":").end();
 	// prepare index
+	neu->index().a().name("index");
 	neu->index().table();
 	// prepare content
 	neu->content().h1().text("Input/Output in detail:").end();
@@ -121,6 +106,8 @@ void TestSvg::testSvgFirstElements() {
 	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
+	CPPUNIT_ASSERT_EQUAL(1200., (Number)rootObject->getSize().getWidth());
+	CPPUNIT_ASSERT_EQUAL(400., (Number)rootObject->getSize().getHeight());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	IDiscoFactory::Ptr fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
@@ -135,7 +122,8 @@ void TestSvg::testSvgFirstElements() {
 	textStyle->fillColor(ColorRGBA(0,1,0));
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	testSvg("testSvgFirstElements",TEST_SVG, surface, html);
+	testSvg("testSvgFirstElements",TEST_SVG, surface, html,
+		"the green text is only in the output image.");
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform01() {
@@ -516,7 +504,9 @@ void TestSvg::testSvgOpacity() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testSvg("testSvgOpacity", TEST_SVG,  surface, html);
+	testSvg("testSvgOpacity", TEST_SVG,  surface, html,
+		"can't draw correctly the second circle pair on the bottom left."
+		" Chromium can't handle the opacity value of the upper right cirlce.");
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgImage() {

@@ -14,6 +14,7 @@
 #include <string>
 #include "IDrawContext.hpp"
 #include "ISurface.hpp"
+#include "IPattern.hpp"
 
 namespace sambag { namespace disco {
 
@@ -38,6 +39,17 @@ public:
 	//-------------------------------------------------------------------------
 	virtual IImageSurface::Ptr
 	createImageSurface(IDataHandler::Ptr) const = 0;
+	//-------------------------------------------------------------------------
+	virtual ASolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const = 0;
+	//-------------------------------------------------------------------------
+	virtual ALinearPattern::Ptr
+	createLinearPattern(Point2D p0, Point2D p1) const = 0;
+	//-------------------------------------------------------------------------
+	virtual ARadialPattern::Ptr
+	createRadialPattern(Point2D c0, Number r0,  Point2D c1, Number r1) const = 0;
+	//-------------------------------------------------------------------------
+	virtual ASurfacePattern::Ptr
+	createSurfacePattern(ISurface::Ptr surf) const = 0;
 };
 //=============================================================================
 //-----------------------------------------------------------------------------

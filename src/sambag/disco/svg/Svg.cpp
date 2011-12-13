@@ -141,9 +141,16 @@ void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	binder.registerAttribute
 		<Style_tag::Type, Style_tag, SvgObject>
 			("style");
+	binder.registerAttribute
+		<DashOffsetStyle_tag::Type, DashOffsetStyle_tag, SvgObject>
+			("stroke-dashoffset");
+	binder.registerAttribute
+		<DashArrayStyle_tag::Type, DashArrayStyle_tag, SvgObject>
+			("stroke-dasharray");
 	binder.registerAttribute<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");
 	binder.registerAttribute<FontSize_tag::Type, FontSize_tag, SvgObject>("font-size");
 	binder.registerAttribute<FontWeight_tag::Type, FontWeight_tag, SvgObject>("font-weight");
+	binder.registerAttribute<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
 	binder.registerAttribute<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
 	// TODO: register more style tags
 }

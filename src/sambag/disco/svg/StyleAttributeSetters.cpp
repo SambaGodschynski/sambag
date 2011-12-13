@@ -42,13 +42,22 @@ void setFillColor( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setOpacity( Style &style, const std::string &value ) {
-	/*Number v=1.0;
+	Number v=1.0;
 	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
-	ColorRGBA fill = style.fillColor();
-	ColorRGBA stroke = style.strokeColor();
-	fill.setA(v); stroke.setA(v);
-	style.fillColor(fill);
-	style.strokeColor(stroke);*/
+	style.strokeOpacity(v);
+	style.fillOpacity(v);
+}
+//-----------------------------------------------------------------------------
+void setStrokeOpacity( Style &style, const std::string &value ) {
+	Number v=1.0;
+	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
+	style.strokeOpacity(v);
+}
+//-----------------------------------------------------------------------------
+void setFillOpacity( Style &style, const std::string &value ) {
+	Number v=1.0;
+	sambag::disco::svg::AttributeParser::parseOpacity(value, v);
+	style.fillOpacity(v);
 }
 //-----------------------------------------------------------------------------
 void setFontSize( Style &style, const std::string &value ) {
@@ -104,6 +113,8 @@ void StyleParser::initSetterMap() {
 	("stroke", &setStrokeColor)
 	("stroke-width", &setStrokeWitdh)
 	("opacity", &setOpacity)
+	("stroke-opacity", &setStrokeOpacity)
+	("fill-opacity", &setFillOpacity)
 	("font-size", &setFontSize)
 	("font-family", &setFontFace)
 	("font-weight", &setFontWeight)

@@ -1,36 +1,37 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
-  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="12cm" height="4cm" viewBox="0 0 1200 400"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1200px" height="400px" viewBox="0 0 1200 400"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
+  
+  <g stroke="lightblue">
+    <rect x="1" y="1" width="1198" height="398"
+	  stroke-width="10" fill="hotpink"/>
+    <line class="line" x1="100" y1="300" x2="300" y2="100"
+	  stroke-width="5" stroke="yellow" 
+	  stroke-dasharray="10 10"/>
+    <line class="line" x1="300" y1="300" x2="500" y2="100"
+	  stroke-width="10" stroke="saddlebrown" 
+	  stroke-dasharray="10" stroke-dashoffset="10"/>
+    <line class="line" x1="500" y1="300" x2="700" y2="100"
+	  stroke-width="15" stroke="#FF0000"/>
+    <line class="line" x1="700" y1="300" x2="900" y2="100"
+	  stroke-width="20" />
+    <line class="line" x1="900" y1="300" x2="1100" y2="100"
+	  stroke-width="25" stroke="#0000FF" />
     
-    <g stroke="lightblue">
-    	
-	<rect x="1" y="1" width="1198" height="398"
-        	stroke-width="10" fill="hotpink"/>
-    	<line class="line" x1="100" y1="300" x2="300" y2="100"
-            stroke-width="5" stroke="yellow" />
-    	<line class="line" x1="300" y1="300" x2="500" y2="100"
-            stroke-width="10" stroke="saddlebrown" />
-    	<line class="line" x1="500" y1="300" x2="700" y2="100"
-            stroke-width="15" stroke="#FF0000"/>
-    	<line class="line" x1="700" y1="300" x2="900" y2="100"
-            stroke-width="20" />
-    	<line class="line" x1="900" y1="300" x2="1100" y2="100"
-            stroke-width="25" stroke="#0000FF" />
-    
-        <text id="text" x="150" y="200" font-family="Verdana" 
-         font-size="35" stroke="black" stroke-opacity=".2" stroke-width="5" fill="white" font-weight="bold" font-style="italic"> 
-	   Even though I am declared as white, I am green.  
-        </text>
-	<text x="250" y="250" font-family="Verdana"
-         font-size="25" stroke="none" fill="none" font-weight="bold" font-style="italic">
-           I'am invisible! If u can see me something went wrong.
-        </text>
-    </g>
- 
-    <!-- line without min. of needed attributes-->
-    <line y1="200" x2="1200" y2="200" 
-          stroke="black"/>    
-	
+    <text id="text" x="150" y="200" font-family="Verdana" 
+	  font-size="35" stroke="black" stroke-opacity=".2" stroke-width="5" fill="white" font-weight="bold" font-style="italic"> 
+      Even though I am declared as white, I am green.  
+    </text>
+    <text x="250" y="250" font-family="Verdana"
+	  font-size="25" stroke="none" fill="none" font-weight="bold" font-style="italic">
+      I'am invisible! If u can see me something went wrong.
+    </text>
+  </g>
+  
+  <!-- line without min. of needed attributes-->
+  <line y1="200" x2="1200" y2="200" 
+	stroke="black"/>    
+  
 </svg>

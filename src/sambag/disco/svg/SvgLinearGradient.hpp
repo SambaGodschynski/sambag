@@ -43,7 +43,7 @@ public:
 	 * @param rect
 	 * @return
 	 */
-	APattern::Ptr createPattern(const Rectangle &rect) const;
+	IPattern::Ptr createPattern(const Rectangle &rect) const;
 	//-------------------------------------------------------------------------
 	virtual ~SvgLinearGradient(){}
 	//-------------------------------------------------------------------------

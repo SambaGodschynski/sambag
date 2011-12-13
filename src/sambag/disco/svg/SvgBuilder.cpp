@@ -60,6 +60,7 @@ void SvgBuilder::registerSvgClasses() {
 }
 //-----------------------------------------------------------------------------
 void SvgBuilder::registerSvgAttributes() {
+	SvgRoot::registerAttributes(xml2Obj);
 	SvgObject::registerAttributes(xml2Obj);
 	SvgLine::registerAttributes(xml2Obj);
 	SvgRect::registerAttributes(xml2Obj);

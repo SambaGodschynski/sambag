@@ -12,6 +12,7 @@
 #include "sambag/com/Common.hpp"
 #include "sambag/disco/Font.hpp"
 #include "sambag/disco/ColorRGBA.hpp"
+#include "sambag/disco/Dash.hpp"
 #include "sambag/disco/graphicElements/PointContainer.hpp"
 #include <map>
 #include "sambag/math/Matrix.hpp"
@@ -64,6 +65,10 @@ public:
 	static void parseOpacity(const std::string &str, Number &v);
 	//-------------------------------------------------------------------------
 	static void parsePointContainer(const std::string &str, PointContainer&);
+	//-------------------------------------------------------------------------
+	static void parseViewBox(const std::string &str, Rectangle&);
+	//-------------------------------------------------------------------------
+	static Dash::Ptr parseDashArray(const std::string &str);
 	//-------------------------------------------------------------------------
 	/**
 	 * Maps from a string to PathInstruction enum.
@@ -128,6 +133,5 @@ extern std::istream & operator>>(
 		std::istream&,
 		sambag::disco::graphicElements::pathInstruction::PointContainer &
 );
-
 
 #endif /* ATTRIBUTE_PARSER_HPP_ */

@@ -9,7 +9,7 @@
 #define SVGPATTERN_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/Pattern.hpp"
+#include "sambag/disco/IPattern.hpp"
 #include "SvgColorStop.hpp"
 
 namespace sambag { namespace disco { namespace svg {
@@ -34,7 +34,7 @@ public:
 	 * @param rect
 	 * @return
 	 */
-	virtual APattern::Ptr createPattern(const Rectangle &rect) const = 0;
+	virtual IPattern::Ptr createPattern(const Rectangle &rect) const = 0;
 	//-------------------------------------------------------------------------
 	virtual ~SvgPattern(){}
 };
@@ -51,13 +51,13 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
 	//-------------------------------------------------------------------------
-	Gradient::ColorStops stops;
+	IGradient::ColorStops stops;
 protected:
 	//-------------------------------------------------------------------------
 	SvgGradient(){}
 public:
 	//-------------------------------------------------------------------------
-	const Gradient::ColorStops & getColorStops() const {
+	const IGradient::ColorStops & getColorStops() const {
 		return stops;
 	}
 	//-------------------------------------------------------------------------
@@ -66,7 +66,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void addColorStop(const ColorRGBA &col, const Number &offset) {
-		stops.push_back(Gradient::ColorStop(col, offset));
+		stops.push_back(IGradient::ColorStop(col, offset));
 	}
 	//-------------------------------------------------------------------------
 	virtual ~SvgGradient(){}

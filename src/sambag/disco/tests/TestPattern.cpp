@@ -9,7 +9,7 @@
 #include "sambag/com/Common.hpp"
 #include <boost/tuple/tuple_comparison.hpp>
 #include "HelperForTesting.hpp"
-
+#include "sambag/disco/IDiscoFactory.hpp"
 using namespace sambag::com;
 
 // Registers the fixture into the 'registry'
@@ -21,26 +21,29 @@ void TestPattern::testConstruction() {
 	using namespace sambag::disco;
 	using namespace boost::tuples;
 	// solid
-	SolidPattern::Ptr spattern = SolidPattern::create(ColorRGBA(1));
-	CPPUNIT_ASSERT_EQUAL(spattern->getType(), APattern::SOLID);
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	ASolidPattern::Ptr spattern = fac->createSolidPattern(ColorRGBA(1));
+	CPPUNIT_ASSERT_EQUAL(spattern->getType(), IPattern::SOLID);
 	CPPUNIT_ASSERT(spattern->getSolidColor() == ColorRGBA(1));
 	// linear
-	LinearPattern::Ptr lpattern = LinearPattern::create(Point2D(1,2), Point2D(3,4));
-	CPPUNIT_ASSERT_EQUAL(lpattern->getType(), APattern::LINEAR);
+	ALinearPattern::Ptr lpattern =
+		fac->createLinearPattern(Point2D(1,2), Point2D(3,4));
+	CPPUNIT_ASSERT_EQUAL(lpattern->getType(), IPattern::LINEAR);
 	CPPUNIT_ASSERT(lpattern->getLinearPoints() ==
-			LinearPattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
+			ALinearPattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
 	);
 	// radial
-	RadialPattern::Ptr rpattern = RadialPattern::create(Point2D(0,1), 1.0, Point2D(2,3), 23.0);
-	CPPUNIT_ASSERT_EQUAL(rpattern->getType(), APattern::RADIAL);
+	ARadialPattern::Ptr rpattern =
+		fac->createRadialPattern(Point2D(0,1), 1.0, Point2D(2,3), 23.0);
+	CPPUNIT_ASSERT_EQUAL(rpattern->getType(), IPattern::RADIAL);
 	CPPUNIT_ASSERT(rpattern->getRadialCircles() ==
-		RadialPattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
+		ARadialPattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
 	);
 	// surface
-	ISurface::Ptr surface = TestSurface::create("testSurface");
-	SurfacePattern::Ptr fpattern = SurfacePattern::create(surface);
-	CPPUNIT_ASSERT_EQUAL(fpattern->getType(), APattern::SURFACE);
-	CPPUNIT_ASSERT_EQUAL(fpattern->getSurface().get(), surface.get());
+	ISurface::Ptr surface = fac->createImageSurface(300, 200);
+	ASurfacePattern::Ptr fpattern = fac->createSurfacePattern(surface);
+	CPPUNIT_ASSERT_EQUAL(fpattern->getType(), IPattern::SURFACE);
+	CPPUNIT_ASSERT(fpattern->getSurface());
 
 }
 } // namespace

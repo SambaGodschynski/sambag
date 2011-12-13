@@ -79,7 +79,10 @@ public:
 		return getSelf();
 	}
 	//-------------------------------------------------------------------------
-	/*virtual std::string escapeMarkup(const std::string & sSrc) const {
+	virtual std::string escapeMarkup(const std::string & sSrc) const {
+		// TODO: implement html escape
+		return sSrc;
+		/*
 		ostringstream sRet;
 		for( string::const_iterator iter = sSrc.begin(); iter!=sSrc.end(); iter++ )
 		{
@@ -99,8 +102,8 @@ public:
 				}
 			}
 		}
-		return sRet.str();
-	}*/
+		return sRet.str();*/
+	}
 
 };
 }}}

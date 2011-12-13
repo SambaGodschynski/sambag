@@ -311,10 +311,10 @@ void TestCairoDrawContext::testMatrixConv() {
 	m(2,0) = 0;  m(2,1) = 0; m(2,2) = 0; // unused by cairo matrix
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>to cairo matrix
 	cairo_matrix_t cm;
-	CairoDrawContext::discoMatrixToCairoMatrix(m, cm);
+	discoMatrixToCairoMatrix(m, cm);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>and back
 	Matrix dm(3,3);
-	CairoDrawContext::cairoMatrixToDiscoMatrix(cm, dm);
+	cairoMatrixToDiscoMatrix(cm, dm);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compare
 	CPPUNIT_ASSERT( m == dm );
 }
@@ -362,6 +362,15 @@ void TestCairoDrawContext::testLineStyle() {
 	context->moveTo( Point2D(100, 300) ); context->lineTo( Point2D(300, 100) );
 	context->stroke();
 	context->disableDash();
+
+	CairoDrawContext::Ptr cr = boost::shared_dynamic_cast<CairoDrawContext>(context);
+
+	// ensure that cairo_set_dash make deep copies.
+	Number *ddash = new Number[2];
+	ddash[0] = 10;
+	ddash[1] = 10;
+	cairo_set_dash(cr->getCairoContext(), ddash, 2, 0.);
+	delete[] ddash;
 
 	context->setLineCap( IDrawContext::LINE_CAP_SQUARE );
 	context->setStrokeWidth(10.0);
@@ -414,7 +423,8 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 	context->setStrokeColor(ColorRGBA());
 	context->stroke();
 	context->rect(Rectangle(0,0,100,50));
-	LinearPattern::Ptr sol = LinearPattern::create(Point2D(0,0), Point2D(100,0));
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	ALinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(100,0));
 	sol->addColorStop(ColorRGBA(1,0,0), 0);
 	sol->addColorStop(ColorRGBA(0,1,0), .5);
 	sol->addColorStop(ColorRGBA(0,0,1), 1.0);
@@ -426,7 +436,7 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 	context->arc(Point2D(), 50, 0, 2 * M_PI);
 	context->stroke();
 	context->arc(Point2D(), 50, 0, 2 * M_PI);
-	RadialPattern::Ptr rad = RadialPattern::create(Point2D(0,0), 0, Point2D(0,0), 45);
+	ARadialPattern::Ptr rad = fac->createRadialPattern(Point2D(0,0), 0, Point2D(0,0), 45);
 	rad->addColorStop(ColorRGBA(1,0,0), 0);
 	rad->addColorStop(ColorRGBA(0,1,0), .5);
 	rad->addColorStop(ColorRGBA(0,0,1), 1.0);
@@ -445,7 +455,7 @@ void TestCairoDrawContext::testGradient() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
 	// fill bk
 	context->rect(Rectangle(0,0,1200,400));
-	context->setFillPattern(SolidPattern::create(ColorRGBA(1,1,1)));
+	context->setFillPattern(fac->createSolidPattern(ColorRGBA(1,1,1)));
 	context->fill();
 	drawGradients(context);
 	context->translate(Point2D(200,10));

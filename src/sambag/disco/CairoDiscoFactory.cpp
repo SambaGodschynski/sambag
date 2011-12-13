@@ -31,8 +31,37 @@ IImageSurface::Ptr CairoDiscoFactory::createImageSurface(const Integer &width,
 	return CairoImageSurface::create(width, height);
 }
 //-----------------------------------------------------------------------------
-IImageSurface::Ptr CairoDiscoFactory::createImageSurface(IDataHandler::Ptr handler) const {
+IImageSurface::Ptr
+CairoDiscoFactory::createImageSurface(IDataHandler::Ptr handler) const {
 	return CairoImageSurface::create(handler);
+}
+//-------------------------------------------------------------------------
+ASolidPattern::Ptr
+CairoDiscoFactory::createSolidPattern(const ColorRGBA &col) const {
+	return CairoSolidPattern::create(col);
+}
+//-------------------------------------------------------------------------
+ALinearPattern::Ptr
+CairoDiscoFactory::
+createLinearPattern(Point2D p0, Point2D p1) const
+{
+	return CairoLinearPattern::create(
+		ALinearPattern::LinearPoints(p0, p1)
+	);
+}
+//-------------------------------------------------------------------------
+ARadialPattern::Ptr
+CairoDiscoFactory::
+createRadialPattern(Point2D c0, Number r0,  Point2D c1, Number r1) const
+{
+	return CairoRadialPattern::create(
+		ARadialPattern::RadialCircles(c0, r0, c1, r1)
+	);
+}
+//-------------------------------------------------------------------------
+ASurfacePattern::Ptr
+CairoDiscoFactory::createSurfacePattern(ISurface::Ptr surf) const {
+	return CairoSurfacePattern::create(surf);
 }
 
 }} // namespace

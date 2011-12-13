@@ -5,5 +5,5 @@
  *      Author: samba
  */
 
-#include "Pattern.hpp"
+#include "IPattern.hpp"
 

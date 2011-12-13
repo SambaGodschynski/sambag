@@ -12,6 +12,7 @@
 #include "SvgCompound.hpp"
 #include "sambag/com/Common.hpp"
 #include <boost/function.hpp>
+#include "AttributeParser.hpp"
 #include <map>
 
 namespace sambag { namespace disco { namespace svg {
@@ -31,7 +32,12 @@ public:
 	Svgs svgs;
 	//-------------------------------------------------------------------------
 	typedef boost::function<void(SvgObject::Ptr)> ObjectRequestFunction;
-private:
+	//-------------------------------------------------------------------------
+	struct Width_tag { typedef Coordinate Type; };
+	//-------------------------------------------------------------------------
+	struct Height_tag { typedef Coordinate Type; };
+	//-------------------------------------------------------------------------
+	struct Viewbox_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
 	typedef std::map<std::string, SvgObject::Ptr> IdMap;
 	//-------------------------------------------------------------------------
@@ -52,7 +58,20 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	SvgRoot() : creationCompleted(false) {}
+	//-------------------------------------------------------------------------
+	virtual void init();
+private:
+	//-------------------------------------------------------------------------
+	Rectangle size, viewBox;
 public:
+	//-------------------------------------------------------------------------
+	const Rectangle & getSize() const {
+		return size;
+	}
+	//-------------------------------------------------------------------------
+	const Rectangle & getViewBox() const {
+		return viewBox;
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * calls callBk when id's object is available.
@@ -121,6 +140,27 @@ public:
 	 * @param newObject
 	 */
 	void subObjectCreated( SvgObject::Ptr newObject, const std::string& );
+	//-------------------------------------------------------------------------
+	virtual void set(const Width_tag::Type &v, const Width_tag &) {
+		size.setWidth(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set(const Height_tag::Type &v, const Height_tag &) {
+		size.setHeight(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set(const Viewbox_tag::Type &v, const Viewbox_tag &) {
+		AttributeParser::parseViewBox(v, viewBox);
+	}
+	//-------------------------------------------------------------------------
+	static void registerAttributes( SvgObject::BuilderType &binder ) {
+		binder.
+		registerAttribute<Width_tag::Type, Width_tag, SvgRoot>("width");
+		binder.
+		registerAttribute<Height_tag::Type, Height_tag, SvgRoot>("height");
+		binder.
+		registerAttribute<Viewbox_tag::Type, Viewbox_tag, SvgRoot>("viewBox");
+	}
 };
 
 

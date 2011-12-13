@@ -8,7 +8,7 @@
 #ifndef TESTPATTERN_H_
 #define TESTPATTERN_H_
 
-#include "sambag/disco/Pattern.hpp"
+#include "sambag/disco/IPattern.hpp"
 #include <cppunit/extensions/HelperMacros.h>
 
 namespace tests {

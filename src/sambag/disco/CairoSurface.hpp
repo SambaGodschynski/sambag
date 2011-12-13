@@ -10,6 +10,7 @@
 
 #include "cairo.h"
 #include "ISurface.hpp"
+#include "sambag/com/IDataHandler.hpp"
 
 namespace {
 using namespace sambag::disco;
@@ -33,7 +34,7 @@ cairo_status_t read_handler (
 
 namespace sambag { namespace disco {
 //=============================================================================
-class CairoSurface : public ISurface {
+class CairoSurface : public virtual ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -42,7 +43,9 @@ protected:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * surface;
 	//-------------------------------------------------------------------------
-	CairoSurface(cairo_surface_t *s) : surface(s) {}
+	CairoSurface(cairo_surface_t *s) : surface(s), opacity(1.) {}
+	//-------------------------------------------------------------------------
+	Number opacity;
 public:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * getCairoSurface() const {
@@ -56,6 +59,14 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		opacity = v;
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return opacity;
+	}
 };
 //=============================================================================
 class CairoImageSurface : public CairoSurface, public IImageSurface {

@@ -20,25 +20,6 @@
 
 namespace tests {
 
-class TestSurface : public sambag::disco::ISurface {
-public:
-	typedef boost::shared_ptr<TestSurface> Ptr;
-private:
-	std::string name;
-	TestSurface(const std::string &name) : name(name) {}
-public:
-	static Ptr create(const std::string &name) {
-		Ptr neu(new TestSurface(name));
-		return neu;
-	}
-	virtual sambag::disco::Rectangle getSize() const {
-		return sambag::disco::Rectangle();
-	}
-	const std::string & getName() const {
-		return name;
-	}
-
-};
 /**
  * @struct TestSuiteHtmlOutput
  * creates TestSuite HTML page.
@@ -79,7 +60,7 @@ extern void testSvg( const std::string &testName,
 		const std::string &inSvg,
 		sambag::disco::IImageSurface::Ptr surface,
 		TestSuiteHtmlOutput::Ptr html,
-		const std::string &comment = std::string() );
+		const std::string &comment = std::string("-") );
 //-----------------------------------------------------------------------------
 extern void setupEnv();
 //-----------------------------------------------------------------------------

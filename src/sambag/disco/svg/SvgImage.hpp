@@ -10,6 +10,7 @@
 
 #include "Svg.hpp"
 #include "sambag/disco/graphicElements/Image.hpp"
+#include "AttributeParser.hpp"
 
 
 namespace sambag { namespace disco { namespace svg {
@@ -33,11 +34,9 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	ISurface::Ptr data;
-	//-------------------------------------------------------------------------
 	sambag::disco::graphicElements::Image::Ptr image;
 	//-------------------------------------------------------------------------
-	SvgImage(){
+	SvgImage() {
 		image = sambag::disco::graphicElements::Image::create();
 	}
 public:
@@ -87,6 +86,19 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const HRef_tag::Type &v, const HRef_tag& ) {
 		image->setUri(v);
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 * @param strV
+	 * @param
+	 */
+	virtual void set( const OpacityStyle_tag::Type &strV, const OpacityStyle_tag&)
+	{
+		using namespace sambag::disco;
+		Number v;
+		AttributeParser::parseOpacity(strV, v);
+		image->setOpacity(v);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

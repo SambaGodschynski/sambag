@@ -9,7 +9,7 @@
 #define SVGCOLORSTOP_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/Pattern.hpp"
+#include "sambag/disco/IPattern.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -27,16 +27,16 @@ public:
 	struct Opacity_tag { typedef Number Type; };
 private:
 	//-------------------------------------------------------------------------
-	Gradient::ColorStop stop;
+	IGradient::ColorStop stop;
 protected:
 	//-------------------------------------------------------------------------
 	SvgColorStop(){
-		ColorRGBA &col = boost::get<Gradient::COLOR>(stop);
+		ColorRGBA &col = boost::get<IGradient::COLOR>(stop);
 		col.setA(1.0);
 	}
 public:
 	//-------------------------------------------------------------------------
-	const Gradient::ColorStop & getStop() const {
+	const IGradient::ColorStop & getStop() const {
 		return stop;
 	}
 	//-------------------------------------------------------------------------
@@ -55,18 +55,18 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const Offset_tag::Type &val, Offset_tag ) {
-		boost::get<Gradient::OFFSET>(stop) = val/100.0;
+		boost::get<IGradient::OFFSET>(stop) = val/100.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Color_tag::Type &val, Color_tag ) {
-		ColorRGBA &col = boost::get<Gradient::COLOR>(stop);
+		ColorRGBA &col = boost::get<IGradient::COLOR>(stop);
 		col.setR(val.getR());
 		col.setG(val.getG());
 		col.setB(val.getB());
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Opacity_tag::Type &val, Opacity_tag ) {
-		ColorRGBA &col = boost::get<Gradient::COLOR>(stop);
+		ColorRGBA &col = boost::get<IGradient::COLOR>(stop);
 		col.setA(val);
 	}
 	//-------------------------------------------------------------------------

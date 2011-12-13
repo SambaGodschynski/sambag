@@ -45,10 +45,12 @@ namespace sambag { namespace disco { namespace graphicElements {
 namespace {
 Style createDefaultStyle() {
 	Style neu;
-	neu.strokeColor(Style::NONE_COLOR);
+	//neu.strokeColor(Style::NONE_COLOR);
 	neu.fillColor(ColorRGBA(0,0,0,1.0));
 	neu.font(Font());
 	neu.strokeWidth(1.0);
+	neu.fillOpacity(1.0);
+	neu.strokeOpacity(1.0);
 	return neu;
 }
 } // namespace
@@ -68,14 +70,20 @@ Style::Ptr Style::NULL_STYLE_SINGLETON;
 const Style Style::DEFAULT_STYLE = createDefaultStyle();
 //-----------------------------------------------------------------------------
 void Style::intoContext( IDrawContext::Ptr cn ) const {
-	if (_strokePattern)
+	if (_strokePattern) {
+		if (_strokeOpacity!=NULL_NUMBER)
+			_strokePattern->setOpacity(strokeOpacity());
 		cn->setStrokePattern(_strokePattern);
+	}
+	if (_fillPattern) {
+		if (_fillOpacity!=NULL_NUMBER)
+			_fillPattern->setOpacity(fillOpacity());
+		cn->setFillPattern(_fillPattern);
+	}
 	if (_strokeWidth!=NULL_NUMBER)
 		cn->setStrokeWidth(_strokeWidth);
 	if (_dash!=Dash::Ptr())
 		cn->setDash(_dash);
-	if (_fillPattern)
-		cn->setFillPattern(_fillPattern);
 	if (_fontFace != NO_FONT.fontFace)
 		cn->setFontFace(_fontFace);
 	if (_fontSize != NO_FONT.size)
@@ -104,6 +112,10 @@ void Style::add( const Style &b ) {
 		fontSlant(b.fontSlant());
 	if ( CHECK_NULL_VAL(_fontWeight, b._fontWeight, NO_FONT.weight) )
 		fontWeight(b.fontWeight());
+	if ( CHECK_NULL_VAL(_strokeOpacity, b._strokeOpacity, NULL_NUMBER) )
+		strokeOpacity(b.strokeOpacity());
+	if ( CHECK_NULL_VAL(_fillOpacity, b._fillOpacity, NULL_NUMBER) )
+		fillOpacity(b.fillOpacity());
 }
 //-----------------------------------------------------------------------------
 const Style & Style::getNullStyle() {

@@ -138,6 +138,9 @@ void testSvg( const std::string &testName,
 	html->content().text("$(function(){$('#" + id + "').beforeAfter();});");
 	html->content().end();
 	// end
+	html->content().p().classAttr("test-notes").text("Notes: " + comment).end();
+	html->content().br().end();
+	html->content().center().a().href("#index").text("&#8593; back to top").end(2);
 	html->content().end();
 }
 //-----------------------------------------------------------------------------

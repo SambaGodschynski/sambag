@@ -16,7 +16,10 @@ namespace sambag { namespace disco {
 //=============================================================================
 /**
  * @class Dash
- * Container for dash information
+ * Container for dash information.
+ * Implement Dash with @see Coordinate container and create
+ * Number array dynamic (with IDrawContext) to support svg's coordinate
+ * values.
  */
 class Dash {
 //=============================================================================
@@ -57,7 +60,7 @@ public:
 			delete[] vals;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create(size_t count) {
+	static Ptr create(size_t count = 0) {
 		Ptr neu(new Dash(count));
 		return neu;
 	}

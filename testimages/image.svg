@@ -7,7 +7,7 @@
   </desc>
   <rect width="1200" height="400" fill="white"/>
   <image x="200" y="200" width="100px" height="100px"
-         xlink:href="disco-floor.png" >
+         xlink:href="disco-floor.png">
     <title>My image</title>
   </image>
   <image x="0" y="0" width="100px" height="100px"

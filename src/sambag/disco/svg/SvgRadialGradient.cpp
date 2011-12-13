@@ -6,6 +6,7 @@
  */
 
 #include "SvgRadialGradient.hpp"
+#include "sambag/disco/IDiscoFactory.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 
@@ -13,7 +14,7 @@ namespace sambag { namespace disco { namespace svg {
 // class SvgLinearGradient
 //=============================================================================
 //-----------------------------------------------------------------------------
-APattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
+IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
 	// cal. rect mid point
 	Point2D c0 = rect.min_corner();
 	Point2D tmp = rect.max_corner();
@@ -22,7 +23,8 @@ APattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
 	boost::geometry::add_point(c0, tmp);
 
 	// create pattern at (0,0) with r=witdh/2
-	RadialPattern::Ptr pattern = RadialPattern::create(Point2D(0,0), 0, Point2D(0,0), rect.getWidth()/2.0);
+	ARadialPattern::Ptr pattern = getDiscoFactory()->
+		createRadialPattern(Point2D(0,0), 0, Point2D(0,0), rect.getWidth()/2.0);
 
 	// translate and scale pattern space to fit
 	Number ratio = rect.getWidth() / rect.getHeight();

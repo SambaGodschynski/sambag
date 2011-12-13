@@ -19,7 +19,7 @@
 #include <boost/tuple/tuple_comparison.hpp>
 #include "ISurface.hpp"
 #include "sambag/com/FileHandler.hpp"
-#include "Pattern.hpp"
+#include "IPattern.hpp"
 #include "ColorRGBA.hpp"
 #include "Dash.hpp"
 
@@ -167,9 +167,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual FillRule getFillRule() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setFillPattern(APattern::Ptr pattern) = 0;
+	virtual void setFillPattern(IPattern::Ptr pattern) = 0;
 	//-------------------------------------------------------------------------
-	virtual void setStrokePattern(APattern::Ptr pattern) = 0;
+	virtual void setStrokePattern(IPattern::Ptr pattern) = 0;
 	//-------------------------------------------------------------------------
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------

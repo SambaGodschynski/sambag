@@ -13,9 +13,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "CairoSurface.hpp"
+#include "CairoHelper.hpp"
+#include "CairoPattern.hpp"
 #include <list>
 namespace sambag { namespace disco {
-
 //=============================================================================
 // Class CairoPath
 // a wrapper for cairo_path_t
@@ -44,12 +45,6 @@ public:
 	cairo_path_t * getPath() const { return cpath; }
 };
 //-----------------------------------------------------------------------------
-extern void destroyCairoPattern(cairo_pattern_t *p);
-typedef boost::shared_ptr<cairo_pattern_t> CairoPatternRef;
-inline CairoPatternRef createPatternRef(cairo_pattern_t *p) {
-	return CairoPatternRef(p, &destroyCairoPattern);
-}
-//-----------------------------------------------------------------------------
 //=============================================================================
 //  Class CairoDrawContext:
 //    implements IDrawContext with Cairos draw operations.
@@ -69,8 +64,8 @@ private:
 	void _restore();
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<
-		CairoPatternRef,
-		CairoPatternRef,
+		CairoPatternBase::Ptr,
+		CairoPatternBase::Ptr,
 		Font,
 		Dash::Ptr
 	> StateInfo;
@@ -85,18 +80,15 @@ private:
 	//-------------------------------------------------------------------------
 	Font currentFont;
 	//-------------------------------------------------------------------------
-	CairoPatternRef fillPattern;
+	CairoPatternBase::Ptr fillPattern;
 	//-------------------------------------------------------------------------
-	CairoPatternRef strokePattern;
+	CairoPatternBase::Ptr strokePattern;
 	//-------------------------------------------------------------------------
 	Dash::Ptr currentDash; // exists only to hold ptr
 
 protected:
 	//-------------------------------------------------------------------------
 	cairo_t *context;
-	//-------------------------------------------------------------------------
-	// TODO: depreciated
-	CairoDrawContext( cairo_surface_t *surface );
 	//-------------------------------------------------------------------------
 	CairoDrawContext( CairoSurface::Ptr surface );
 	//-------------------------------------------------------------------------
@@ -111,12 +103,6 @@ protected:
 	void setStrokePattern();
 public:
 	//-------------------------------------------------------------------------
-	// TODO: depreciated
-	static Ptr create( cairo_surface_t *surface ) {
-		Ptr neu( new CairoDrawContext(surface) );
-		return neu;
-	}
-	//-------------------------------------------------------------------------
 	static Ptr create( CairoSurface::Ptr surface ) {
 		Ptr neu( new CairoDrawContext(surface) );
 		return neu;
@@ -126,23 +112,6 @@ public:
 	//-------------------------------------------------------------------------
 	cairo_t * getCairoContext() const {
 		return context;
-	}
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>helper
-	//-------------------------------------------------------------------------
-	// assumes a 3x3 matrix
-	static void discoMatrixToCairoMatrix ( const Matrix &dM, cairo_matrix_t &cM ) {
-		if ( dM.size1() != 3 || dM.size2() != 3 ) return;
-		cM.xx = dM(0,0); cM.yx = dM(1,0);
-		cM.xy = dM(0,1); cM.yy = dM(1,1);
-		cM.x0 = dM(0,2); cM.y0 = dM(1,2);
-	}
-	//-------------------------------------------------------------------------
-	// assumes a 3x3 matrix
-	static void cairoMatrixToDiscoMatrix ( const cairo_matrix_t &cM, Matrix &dM ) {
-		if ( dM.size1() != 3 || dM.size2() != 3 ) return;
-		dM(0,0) = cM.xx; dM(0,1) = cM.xy; dM(0,2) = cM.x0;
-		dM(1,0) = cM.yx; dM(1,1) = cM.yy; dM(1,2) = cM.y0;
-		dM(2,0) = 0;     dM(2,1) = 0    ; dM(2,2) = 0;
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>drawing
 	//-------------------------------------------------------------------------
@@ -343,33 +312,37 @@ public:
 		cairo_text_path( context, text.c_str() );
 	}
 	//-------------------------------------------------------------------------
-	virtual void setFillPattern(APattern::Ptr pattern);
+	virtual void setFillPattern(IPattern::Ptr pattern);
 	//-------------------------------------------------------------------------
-	virtual void setStrokePattern(APattern::Ptr pattern);
+	virtual void setStrokePattern(IPattern::Ptr pattern);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {
 		if (!strokePattern) {
 			return false;
 		}
-		if (cairo_pattern_get_type(strokePattern.get()) != CAIRO_PATTERN_TYPE_SOLID ) {
+		if (strokePattern->getType()!=IPattern::SOLID) {
 			return true;
 		}
-		Number r,g,b,a;
-		cairo_pattern_get_rgba(strokePattern.get(), &r, &g, &b, &a);
-		return a > 0.0;
+		CairoSolidPattern::Ptr sPt =
+				boost::shared_dynamic_cast<CairoSolidPattern>(strokePattern);
+		if (!sPt)
+			return false;
+		return sPt->getSolidColor().getA() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual bool isFilled() const {
 		if (!fillPattern) {
 			return false;
 		}
-		if (cairo_pattern_get_type(fillPattern.get()) != CAIRO_PATTERN_TYPE_SOLID ) {
+		if (fillPattern->getType()!=IPattern::SOLID) {
 			return true;
 		}
-		Number r,g,b,a;
-		cairo_pattern_get_rgba(fillPattern.get(), &r, &g, &b, &a);
-		return a > 0.0;
+		CairoSolidPattern::Ptr sPt =
+				boost::shared_dynamic_cast<CairoSolidPattern>(fillPattern);
+		if (!sPt)
+			return false;
+		return sPt->getSolidColor().getA() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Number &val ) {
@@ -380,40 +353,52 @@ public:
 		return Number(cairo_get_line_width(context));
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO: depreciated use setFillPattern
+	 * @param val
+	 */
 	virtual void setFillColor( const ColorRGBA &val ) {
 		patternInUse = INVALID;
-		fillPattern = createPatternRef(cairo_pattern_create_rgba(
-				val.getR(),
-				val.getG(),
-				val.getB(),
-				val.getA())
-		);
+		fillPattern = CairoSolidPattern::create(val);
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO: depreciated use getFillPattern
+	 * @return
+	 */
 	virtual ColorRGBA getFillColor() const {
-		if (cairo_pattern_get_type(fillPattern.get()) != CAIRO_PATTERN_TYPE_SOLID )
+		if (fillPattern->getType()!=IPattern::SOLID) {
 			return ColorRGBA::NULL_COLOR;
-		Number r = 0, g = 0, b = 0, a = 0;
-		cairo_pattern_get_rgba(fillPattern.get(), &r, &g, &b, &a);
-		return ColorRGBA(r,g,b,a);
+		}
+		CairoSolidPattern::Ptr sPt =
+				boost::shared_dynamic_cast<CairoSolidPattern>(fillPattern);
+		if (!sPt)
+			return false;
+		return sPt->getSolidColor();
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO: depreciated use setStrokePattern
+	 * @param val
+	 */
 	virtual void setStrokeColor( const ColorRGBA &val ) {
 		patternInUse = INVALID;
-		strokePattern = createPatternRef(cairo_pattern_create_rgba(
-				val.getR(),
-				val.getG(),
-				val.getB(),
-				val.getA())
-		);
+		strokePattern = CairoSolidPattern::create(val);
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO: depreciated use getStrokePattern
+	 * @param val
+	 */
 	virtual ColorRGBA getStrokeColor() const {
-		if (cairo_pattern_get_type(strokePattern.get()) != CAIRO_PATTERN_TYPE_SOLID )
+		if (strokePattern->getType()!=IPattern::SOLID) {
 			return ColorRGBA::NULL_COLOR;
-		Number r = 0, g = 0, b = 0, a = 0;
-		cairo_pattern_get_rgba(strokePattern.get(), &r, &g, &b, &a);
-		return ColorRGBA(r,g,b,a);
+		}
+		CairoSolidPattern::Ptr sPt =
+				boost::shared_dynamic_cast<CairoSolidPattern>(strokePattern);
+		if (!sPt)
+			return false;
+		return sPt->getSolidColor();
 	}
 	//-------------------------------------------------------------------------
 	virtual void setDash( Dash::Ptr dash ) {

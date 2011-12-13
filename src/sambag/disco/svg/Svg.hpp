@@ -73,6 +73,10 @@ public:
 	//-------------------------------------------------------------------------
 	struct FillOpacityStyle_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
+	struct DashArrayStyle_tag { typedef std::string Type; };
+	//-------------------------------------------------------------------------
+	struct DashOffsetStyle_tag { typedef Coordinate Type; };
+	//-------------------------------------------------------------------------
 	struct Style_tag { typedef disco::graphicElements::Style Type; };
 private:
 	//-------------------------------------------------------------------------
@@ -254,8 +258,7 @@ public:
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
-		APattern::Ptr pat = neu.fillPattern();
-		pat->setOpacity(v);
+		neu.fillOpacity(v);
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
@@ -302,6 +305,32 @@ public:
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		neu.fontSlant(v);
 		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const DashArrayStyle_tag::Type &v, DashArrayStyle_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		Dash::Ptr dash = AttributeParser::parseDashArray(v);
+		if (!dash)
+			return;
+		if (neu.dash()) { // copy offset
+			dash->offset(neu.dash()->offset());
+		}
+		neu.dash(dash);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const DashOffsetStyle_tag::Type &v, DashOffsetStyle_tag ) {
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		Dash::Ptr dash = neu.dash();
+		if (!dash)
+			dash = Dash::create();
+		dash->offset(v);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder );
