@@ -133,6 +133,12 @@ void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 		<OpacityStyle_tag::Type, OpacityStyle_tag, SvgObject>
 			("opacity");
 	binder.registerAttribute
+		<StrokeOpacityStyle_tag::Type, StrokeOpacityStyle_tag, SvgObject>
+			("stroke-opacity");
+	binder.registerAttribute
+		<FillOpacityStyle_tag::Type, FillOpacityStyle_tag, SvgObject>
+			("fill-opacity");
+	binder.registerAttribute
 		<Style_tag::Type, Style_tag, SvgObject>
 			("style");
 	binder.registerAttribute<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");

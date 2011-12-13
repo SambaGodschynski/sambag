@@ -7,6 +7,7 @@
 
 #include "Image.hpp"
 #include "sambag/com/FileHandler.hpp"
+#include "sambag/disco/IDiscoFactory.hpp"
 
 namespace sambag { namespace disco { namespace graphicElements {
 //=============================================================================
@@ -15,7 +16,7 @@ namespace sambag { namespace disco { namespace graphicElements {
 //-----------------------------------------------------------------------------
 void Image::loadImage(IDrawContext::Ptr cn) {
 	com::FileHandler::Ptr fh = com::FileHandler::create(uri);
-	image = cn->createPngSurface(fh);
+	image = getDiscoFactory()->createImageSurface(fh);
 }
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
@@ -41,7 +42,7 @@ void Image::draw( IDrawContext::Ptr cn ) {
 		outline.getWidth()/orgSz.getWidth(),
 		outline.getHeight()/orgSz.getHeight()
 	));
-	cn->drawSurface(image, cn->getFillColor().getA());
+	cn->drawSurface(image);
 
 	cn->identityMatrix();
 	cn->transform(tmp);

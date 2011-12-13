@@ -17,13 +17,15 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
-
+#include <string>
 namespace sambag { namespace com {
 using namespace boost;
 //#############################################################################
 // metrics
 //#############################################################################
+typedef int Integer;
 typedef double Number;
+extern const Integer NULL_INTEGER;
 extern const Number NULL_NUMBER;
 #ifndef M_PI
 #define M_PI 3.14159265358979323846

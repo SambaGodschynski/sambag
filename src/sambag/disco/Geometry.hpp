@@ -13,8 +13,7 @@
 #include "sambag/com/Common.hpp"
 #include <math.h>
 
-namespace sambag {
-namespace disco {
+namespace sambag { namespace disco {
 //#############################################################################
 // geometry
 //#############################################################################
@@ -85,14 +84,14 @@ public:
 		geometry::add_point(max_corner(), diff);
 	}
 	//-------------------------------------------------------------------------
-	Number getWidth() const {
+	Coordinate getWidth() const {
 		Point2D result = max_corner();
 		geometry::subtract_point(result, min_corner());
 		return result.x();
 
 	}
 	//-------------------------------------------------------------------------
-	Number getHeight() const {
+	Coordinate getHeight() const {
 		Point2D result = max_corner();
 		geometry::subtract_point(result, min_corner());
 		return result.y();

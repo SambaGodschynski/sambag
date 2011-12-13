@@ -9,6 +9,8 @@
 #define TESTSVG_HPP_
 #include "sambag/disco/CairoDrawContext.hpp"
 #include <cppunit/extensions/HelperMacros.h>
+#include "sambag/xml/cpAtl/Html.hpp"
+#include <fstream>
 
 namespace tests {
 //=============================================================================
@@ -44,7 +46,10 @@ private:
 	CPPUNIT_TEST( testBoundingBoxes );
 	CPPUNIT_TEST_SUITE_END();
 public:
+	TestSvg();
+	~TestSvg();
 	void setUp();
+	void tearDown();
 	void testSvgFirstElements();
 	void testSvgTransform01();
 	void testSvgTransform02();

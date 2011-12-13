@@ -11,7 +11,7 @@
 #include "sambag/com/Helper.hpp"
 #include "sambag/disco/Geometry.hpp"
 #include <boost/geometry/policies/compare.hpp>
-#include "sambag/disco/ADiscoFactory.hpp"
+#include "sambag/disco/IDiscoFactory.hpp"
 
 
 namespace sambag { namespace disco { namespace graphicElements { namespace pathHelper {
@@ -531,7 +531,7 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 }
 //-----------------------------------------------------------------------------
 Rectangle Path::getBoundingBox() const {
-	ADiscoFactory::Ptr fac = ADiscoFactory::getFactory();
+	IDiscoFactory::Ptr fac = getDiscoFactory();
 	IDrawContext::Ptr context = fac->createContext();
 	SAMBA_ASSERT(context);
 	drawInstructions(context);

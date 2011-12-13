@@ -69,6 +69,10 @@ public:
 	//-------------------------------------------------------------------------
 	struct OpacityStyle_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
+	struct StrokeOpacityStyle_tag { typedef std::string Type; };
+	//-------------------------------------------------------------------------
+	struct FillOpacityStyle_tag { typedef std::string Type; };
+	//-------------------------------------------------------------------------
 	struct Style_tag { typedef disco::graphicElements::Style Type; };
 private:
 	//-------------------------------------------------------------------------
@@ -223,11 +227,34 @@ public:
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
-		ColorRGBA fill = neu.fillColor();
-		ColorRGBA stroke = neu.strokeColor();
-		fill.setA(v); stroke.setA(v);
-		neu.fillColor(fill);
-		neu.strokeColor(stroke);
+		neu.strokeOpacity(v);
+		neu.fillOpacity(v);
+		copyStyleToGraphicElement(neu);*/
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const StrokeOpacityStyle_tag::Type &strV,
+			const StrokeOpacityStyle_tag&)
+	{
+		/*using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		Number v;
+		AttributeParser::parseOpacity(strV, v);
+		neu.strokeOpacity(v);
+		copyStyleToGraphicElement(neu);*/
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const FillOpacityStyle_tag::Type &strV,
+			const FillOpacityStyle_tag&)
+	{
+		/*using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		Number v;
+		AttributeParser::parseOpacity(strV, v);
+		neu.fillOpacity(v);
 		copyStyleToGraphicElement(neu);*/
 	}
 	//-------------------------------------------------------------------------

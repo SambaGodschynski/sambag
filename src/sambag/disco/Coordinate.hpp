@@ -9,6 +9,8 @@
 #define COORDINATE_HPP_
 
 #include "sambag/com/Common.hpp"
+#include <string>
+
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -47,6 +49,8 @@ struct Coordinate {
 	operator sambag::com::Number() const {
 		return value;
 	}
+	//-------------------------------------------------------------------------
+	std::string toString() const;
 };
 
 }} // namespaces

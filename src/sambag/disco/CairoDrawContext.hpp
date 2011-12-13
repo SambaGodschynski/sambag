@@ -286,7 +286,7 @@ public:
 	 * draws an surface.
 	 * 	 * @param a CairoSurface all others will be ignored.
 	 */
-	virtual void drawSurface(ISurface::Ptr surface, const Number &alpha = 1.0);
+	virtual void drawSurface(ISurface::Ptr surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) {
@@ -505,8 +505,6 @@ public:
 	virtual ISurface::Ptr getSurface() const {
 		return surfaceRef;
 	}
-	//-------------------------------------------------------------------------
-	virtual ISurface::Ptr createPngSurface(IDataHandler::Ptr handler);
 	//-------------------------------------------------------------------------
 	virtual Rectangle pathExtends() const {
 		Number x,y,x1,y1;

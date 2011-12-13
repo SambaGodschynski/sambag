@@ -14,10 +14,25 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 IDrawContext::Ptr CairoDiscoFactory::createContext() const {
-	CairoSurface::Ptr surf = CairoSurface::create(
-		cairo_recording_surface_create(CAIRO_CONTENT_COLOR_ALPHA, NULL)
-	);
+	CairoSurface::Ptr surf = CairoRecordingSurface::create();
+	return createContext(surf);
+}
+//-----------------------------------------------------------------------------
+IDrawContext::Ptr CairoDiscoFactory::createContext(ISurface::Ptr surface) const {
+	CairoSurface::Ptr surf = boost::shared_dynamic_cast<CairoSurface>(surface);
+	if (!surf)
+		return CairoDrawContext::Ptr();
 	return CairoDrawContext::create(surf);
+}
+//-----------------------------------------------------------------------------
+IImageSurface::Ptr CairoDiscoFactory::createImageSurface(const Integer &width,
+		const Integer &height) const
+{
+	return CairoImageSurface::create(width, height);
+}
+//-----------------------------------------------------------------------------
+IImageSurface::Ptr CairoDiscoFactory::createImageSurface(IDataHandler::Ptr handler) const {
+	return CairoImageSurface::create(handler);
 }
 
 }} // namespace

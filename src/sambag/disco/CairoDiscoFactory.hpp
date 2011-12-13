@@ -8,23 +8,21 @@
 #ifndef CAIRODISCOFACTORY_HPP_
 #define CAIRODISCOFACTORY_HPP_
 
-#include "ADiscoFactory.hpp"
+#include "IDiscoFactory.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
 /**
  * Concrete Cairo Disco Factory.
  */
-class CairoDiscoFactory : public ADiscoFactory {
+class CairoDiscoFactory : public IDiscoFactory {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<CairoDiscoFactory> Ptr;
 public:
 	//-------------------------------------------------------------------------
-	virtual IDrawContext::Ptr createContext( ISurface::Ptr surface ) const {
-		return IDrawContext::Ptr(); // TODO: implement
-	}
+	virtual IDrawContext::Ptr createContext( ISurface::Ptr surface ) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * creates context with ciaro record surface
@@ -33,8 +31,11 @@ public:
 	 */
 	virtual IDrawContext::Ptr createContext() const;
 	//-------------------------------------------------------------------------
-	// TODO: create surface
+	virtual IImageSurface::Ptr
+	createImageSurface(const Integer &width, const Integer &height) const;
 	//-------------------------------------------------------------------------
+	virtual IImageSurface::Ptr
+	createImageSurface(IDataHandler::Ptr handler) const;
 
 };
 //=============================================================================

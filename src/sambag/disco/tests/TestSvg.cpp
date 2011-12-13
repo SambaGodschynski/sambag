@@ -35,20 +35,57 @@
 #include <algorithm>
 #include <boost/assign/std/vector.hpp>
 #include "sambag/disco/graphicElements/RefElement.hpp"
+#include "sambag/disco/IDiscoFactory.hpp"
+
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSvg );
 
 using namespace sambag::com;
 
 static const std::string IN_FOLDER = "testimages/";
+static const std::string DOC_TITLE = "D.I.S.C.O. testSvg::output";
 
+void includeJs(tests::TestSuiteHtmlOutput::Ptr obj) {
+	static const std::string URI = "js/";
+	obj->doc().script().type("text/javascript").src(URI + "jquery.min.js").end();
+	obj->doc().script().type("text/javascript").src(URI + "jquery-ui.min.js").end();
+	obj->doc().script().type("text/javascript").src(URI + "jquery.beforeafter-1.4.js").end();
+}
+
+tests::TestSuiteHtmlOutput::Ptr openDoc() {
+	tests::TestSuiteHtmlOutput::Ptr neu=
+		tests::TestSuiteHtmlOutput::create("svgTestSuite.html");
+	// prepend doc
+	neu->doc().html().head().title().text(DOC_TITLE).end(2).body();
+	includeJs(neu);
+	neu->doc().link().rel("stylesheet").type("text/css").href("htmlOut.css").end();
+	neu->doc().h1().text(DOC_TITLE).end();
+	neu->doc().p().id("timestamp");
+	neu->doc().text("These tests ran on " + tests::getTimeStampAsStr() + ":").end();
+	// prepend index
+	neu->index().ul();
+	return neu;
+}
+
+
+tests::TestSuiteHtmlOutput::Ptr html = openDoc();
 
 namespace tests {
 //=============================================================================
 // TestSvg::setUp
 //=============================================================================
-void TestSvg::setUp() {
+//-----------------------------------------------------------------------------
+TestSvg::TestSvg() {
 	setupEnv();
+}
+//-----------------------------------------------------------------------------
+TestSvg::~TestSvg() {
+}
+//-----------------------------------------------------------------------------
+void TestSvg::setUp() {
+}
+//-----------------------------------------------------------------------------
+void TestSvg::tearDown() {
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testStyleAdd() {
@@ -83,8 +120,9 @@ void TestSvg::testSvgFirstElements() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
@@ -95,10 +133,7 @@ void TestSvg::testSvgFirstElements() {
 	textStyle->fillColor(ColorRGBA(0,1,0));
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	testPng("testSvgFirstElements", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgFirstElements",TEST_SVG, surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform01() {
@@ -112,15 +147,13 @@ void TestSvg::testSvgTransform01() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgTransform01", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgTransform01", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform02() {
@@ -134,15 +167,13 @@ void TestSvg::testSvgTransform02() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgTransform02", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgTransform02", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform03() {
@@ -156,15 +187,13 @@ void TestSvg::testSvgTransform03() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgTransform03", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgTransform03", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgTransform04() {
@@ -178,15 +207,13 @@ void TestSvg::testSvgTransform04() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 150);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 150);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgTransform04", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgTransform04", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath() {
@@ -200,16 +227,14 @@ void TestSvg::testSvgPath() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	g->draw(context); // draw 2 times: drawInstructions, drawPath
-	testPng("testSvgPath01", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath01", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath02() {
@@ -223,15 +248,13 @@ void TestSvg::testSvgPath02() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath02", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath02", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath03() {
@@ -245,15 +268,13 @@ void TestSvg::testSvgPath03() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath03", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath03", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath04() {
@@ -267,15 +288,13 @@ void TestSvg::testSvgPath04() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 500, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath04", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath04", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath04b() {
@@ -289,15 +308,13 @@ void TestSvg::testSvgPath04b() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 500, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath04b", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath04b", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath05() {
@@ -311,15 +328,13 @@ void TestSvg::testSvgPath05() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 600);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath05", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath05", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath05b() {
@@ -333,15 +348,13 @@ void TestSvg::testSvgPath05b() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 600);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath05b", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath05b", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPath06() {
@@ -355,15 +368,13 @@ void TestSvg::testSvgPath06() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1000, 1000);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1000, 1000);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPath06", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPath06", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPolyline() {
@@ -377,15 +388,13 @@ void TestSvg::testSvgPolyline() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPolyline", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPolyline", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgPolygon() {
@@ -399,15 +408,13 @@ void TestSvg::testSvgPolygon() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgPolygon", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgPolygon", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgStdFill() {
@@ -421,15 +428,13 @@ void TestSvg::testSvgStdFill() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 400, 120);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgStdFill", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgStdFill", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgArc() {
@@ -443,15 +448,13 @@ void TestSvg::testSvgArc() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgArc", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgArc", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgUse() {
@@ -465,15 +468,13 @@ void TestSvg::testSvgUse() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 525);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgUse", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgUse", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgFont() {
@@ -487,15 +488,13 @@ void TestSvg::testSvgFont() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgFont", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgFont", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgOpacity() {
@@ -509,15 +508,13 @@ void TestSvg::testSvgOpacity() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 350);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 350);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgOpacity", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgOpacity", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgImage() {
@@ -531,15 +528,13 @@ void TestSvg::testSvgImage() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgImage", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgImage", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgStyle() {
@@ -553,15 +548,13 @@ void TestSvg::testSvgStyle() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgStyle", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgStyle", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgStyle2() {
@@ -575,15 +568,13 @@ void TestSvg::testSvgStyle2() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 500);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 500);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgStyle2", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgStyle2", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgGradient() {
@@ -597,15 +588,13 @@ void TestSvg::testSvgGradient() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 800, 400);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(800, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testPng("testSvgGradient01", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgGradient01", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testBoundingBoxes() {
@@ -620,8 +609,9 @@ void TestSvg::testBoundingBoxes() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1200, 900);
-	IDrawContext::Ptr context = CairoDrawContext::create( surface );
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 900);
+	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
@@ -645,9 +635,6 @@ void TestSvg::testBoundingBoxes() {
 		context->stroke();
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	testPng("testSvgBoundingBoxes", surface);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> release
-	context.reset();
-	cairo_surface_destroy(surface);
+	testSvg("testSvgBoundingBoxes", TEST_SVG,  surface, html);
 }
 } //namespaces

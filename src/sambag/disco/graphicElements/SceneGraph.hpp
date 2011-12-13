@@ -380,7 +380,7 @@ public:
 	 * @param el
 	 * @return NULL_VERTEX if not found
 	 */
-	Vertex getRelatedVertex(const SceneGraphElement &el) const;
+	Vertex getRelatedVertex(SceneGraphElement el) const;
 	//-------------------------------------------------------------------------
 	SceneGraphElement getRootElement() {
 		if (boost::num_vertices(g) == 0) {
@@ -394,7 +394,7 @@ public:
 	* @param v
 	* @return
 	*/
-	const SceneGraphElement & getSceneGraphElement(const Vertex &v) const;
+	SceneGraphElement getSceneGraphElement(const Vertex &v) const;
 	//-------------------------------------------------------------------------
 	void draw(IDrawContext::Ptr);
 	//-------------------------------------------------------------------------
@@ -403,53 +403,53 @@ public:
 	 * @param el a SceneGraphElement of this graph object
 	 * @param m a transformation matrix
 	 */
-	bool setTransfomationTo(const SceneGraphElement &el, const Matrix &m);
+	bool setTransfomationTo(SceneGraphElement el, const Matrix &m);
 	//-------------------------------------------------------------------------
 	/**
 	* creates a style node and relates it to el
 	* @param el a SceneGraphElement of this graph object
 	* @param s a @see Style object
 	*/
-	bool setStyleTo(const SceneGraphElement &el, const graphicElements::Style &s);
+	bool setStyleTo(SceneGraphElement el, const graphicElements::Style &s);
 	//-------------------------------------------------------------------------
 	/**
 	 * creates a transformation node and relates it to el
 	 * @param el a SceneGraphElement of this graph object
 	 * @param m a transformation matrix
 	 */
-	bool setTransfomationRefTo(const SceneGraphElement &el, MatrixPtr m);
+	bool setTransfomationRefTo(SceneGraphElement el, MatrixPtr m);
 	//-------------------------------------------------------------------------
 	/**
 	* creates a style node and relates it to el
 	* @param el a SceneGraphElement of this graph object
 	* @param s a @see Style object
 	*/
-	bool setStyleRefTo(const SceneGraphElement &el, StylePtr s);
+	bool setStyleRefTo(SceneGraphElement el, StylePtr s);
 	//-------------------------------------------------------------------------
 	/**
 	 * @param el
 	 * @param className
 	 * @return true when element registration was successfull
 	 */
-	bool registerElementClass(const SceneGraphElement &el, const Class &className );
+	bool registerElementClass(SceneGraphElement el, const Class &className );
 	//-------------------------------------------------------------------------
-	MatrixPtr getTransformationRef(const SceneGraphElement &el) const;
+	MatrixPtr getTransformationRef(SceneGraphElement el) const;
 	//-------------------------------------------------------------------------
-	Matrix getTransformationOf(const SceneGraphElement &el) const {
+	Matrix getTransformationOf(SceneGraphElement el) const {
 		MatrixPtr res = getTransformationRef(el);
 		if (!res)
 			return NULL_MATRIX;
 		return *(res.get());
 	}
 	//-------------------------------------------------------------------------
-	graphicElements::Style getStyleOf(const SceneGraphElement &el) const {
+	graphicElements::Style getStyleOf(SceneGraphElement el) const {
 		StylePtr res = getStyleRef(el);
 		if (!res)
 			return graphicElements::Style::getNullStyle();
 		return *(res.get());
 	}
 	//-------------------------------------------------------------------------
-	StylePtr getStyleRef(const SceneGraphElement &el) const;
+	StylePtr getStyleRef(SceneGraphElement el) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();
@@ -494,11 +494,11 @@ public:
 	//-------------------------------------------------------------------------
 	size_t inDegreeOf(const Vertex& v, VertexType type) const;
 	//-------------------------------------------------------------------------
-	bool addElement( IDrawable::Ptr ptr );
+	bool addElement( SceneGraphElement ptr );
 	//-------------------------------------------------------------------------
-	bool connectElements(IDrawable::Ptr from, IDrawable::Ptr to);
+	bool connectElements(SceneGraphElement from, SceneGraphElement to);
 	//-------------------------------------------------------------------------
-	bool registerElementId(const SceneGraphElement & el, const Id &id) {
+	bool registerElementId(SceneGraphElement el, const Id &id) {
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
 			return false;
@@ -507,7 +507,7 @@ public:
 
 	}
 	//-------------------------------------------------------------------------
-	void setTagName(const SceneGraphElement & el, const Tag &tagName) {
+	void setTagName(SceneGraphElement el, const Tag &tagName) {
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
 			return;
@@ -516,14 +516,14 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	struct AllElements {
-		bool filter(const SceneGraphElement & el) const { return true; }
+		bool filter(SceneGraphElement el) const { return true; }
 	};
 	//-------------------------------------------------------------------------
 	struct TagFilter {
 		Tag tag;
 		const SceneGraph &g;
 		TagFilter(const Tag &tag, const SceneGraph &g) : tag(tag), g(g) {}
-		bool filter(const SceneGraphElement & el) const {
+		bool filter(SceneGraphElement el) const {
 			using namespace boost::algorithm;
 			if (to_lower_copy(tag) == to_lower_copy(g.getTagName(el)))
 				return true;
@@ -536,7 +536,7 @@ public:
 		const SceneGraph &g;
 		ClassFilter(const Class &_class, const SceneGraph &g) :
 			_class(_class), g(g) {}
-		bool filter(const SceneGraphElement & el) const {
+		bool filter(SceneGraphElement el) const {
 			using namespace boost::algorithm;
 			std::list<Class> classes;
 			g.getClassNames(el, classes);
@@ -553,7 +553,7 @@ public:
 		const SceneGraph &g;
 		IdFilter(const Id &id, const SceneGraph &g) :
 			id(id), g(g) {}
-		bool filter(const SceneGraphElement & el) const {
+		bool filter(SceneGraphElement el) const {
 			using namespace boost::algorithm;
 			if (to_lower_copy(id) == to_lower_copy(g.getIdName(el)))
 				return true;
@@ -562,7 +562,7 @@ public:
 	};
 	//-------------------------------------------------------------------------
 	template <typename Container, typename Filter>
-	void getChildren(const SceneGraphElement & el,
+	void getChildren(SceneGraphElement el,
 			Container &c,
 			const Filter &filter, bool deep = true ) const
 	{
@@ -584,7 +584,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
-	void getChildren(const SceneGraphElement & el,
+	void getChildren(SceneGraphElement el,
 			Container &c,
 			bool deep = true) const
 	{
@@ -593,7 +593,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
-	void getChildrenByTag(const SceneGraphElement & el,
+	void getChildrenByTag(SceneGraphElement el,
 			const Tag &tagName,
 			Container &c,
 			bool deep = true) const
@@ -603,7 +603,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
-	void getChildrenByClass(const SceneGraphElement & el,
+	void getChildrenByClass(SceneGraphElement el,
 			const Class &className,
 			Container &c,
 			bool deep = true) const
@@ -613,7 +613,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
-	void getChildrenById(const SceneGraphElement & el,
+	void getChildrenById(SceneGraphElement el,
 			const Id &id,
 			Container &c,
 			bool deep = true) const
@@ -622,7 +622,7 @@ public:
 		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
-	Tag getTagName(const SceneGraphElement & el) const {
+	Tag getTagName(SceneGraphElement el) const {
 		Vertex v = getRelatedVertex(el);
 		if (v == NULL_VERTEX)
 			return "";
@@ -630,7 +630,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	template <typename Container>
-	void getClassNames(const SceneGraphElement & el, Container &c) const {
+	void getClassNames(SceneGraphElement el, Container &c) const {
 		Vertex v = getRelatedVertex(el);
 		if (v == NULL_VERTEX)
 			return;
@@ -641,7 +641,7 @@ public:
 		}
 	}
 	//-------------------------------------------------------------------------
-	Id getIdName(const SceneGraphElement & el) const {
+	Id getIdName(SceneGraphElement el) const {
 		Vertex v = getRelatedVertex(el);
 		if (v == NULL_VERTEX)
 			return "";
@@ -661,8 +661,8 @@ public:
 	 * @param src
 	 * @param dst
 	 */
-	void adoptStyleEdges(const SceneGraphElement &src,
-			const SceneGraphElement &dst)
+	void adoptStyleEdges(SceneGraphElement src,
+			SceneGraphElement dst)
 	{
 		Vertex srcV = getRelatedVertex(src);
 		Vertex dstV = getRelatedVertex(dst);
@@ -680,8 +680,8 @@ public:
 	 * @param src
 	 * @param dst
 	 */
-	void adoptTransformEdges(const SceneGraphElement &src,
-			const SceneGraphElement &dst)
+	void adoptTransformEdges(SceneGraphElement src,
+			SceneGraphElement dst)
 	{
 		Vertex srcV = getRelatedVertex(src);
 		Vertex dstV = getRelatedVertex(dst);
@@ -699,7 +699,7 @@ public:
 	 * @param obj
 	 * @return a union rectangle of objects bounding box and it's sub objects.
 	 */
-	Rectangle getBoundingBox(const SceneGraphElement &obj) const;
+	Rectangle getBoundingBox(SceneGraphElement obj) const;
 };
 //=============================================================================
 /**

@@ -5,19 +5,15 @@
  *      Author: samba
  */
 
-#include "ADiscoFactory.hpp"
+#include "IDiscoFactory.hpp"
 #include "CairoDiscoFactory.hpp"
 namespace sambag { namespace disco {
-
-//=============================================================================
-// ADiscoFactory
-//=============================================================================
 //-----------------------------------------------------------------------------
-ADiscoFactory::Ptr ADiscoFactory::singleton;
+IDiscoFactory::Ptr singleton;
 //-----------------------------------------------------------------------------
-ADiscoFactory::Ptr ADiscoFactory::getFactory() {
+IDiscoFactory::Ptr getDiscoFactory() {
 	if (!singleton) {
-		singleton = Ptr(new CairoDiscoFactory());
+		singleton = IDiscoFactory::Ptr(new CairoDiscoFactory());
 	}
 	return singleton;
 }

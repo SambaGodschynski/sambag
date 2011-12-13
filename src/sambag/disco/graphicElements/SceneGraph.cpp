@@ -93,7 +93,7 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 	return connected;
 }
 //-----------------------------------------------------------------------------
-bool SceneGraph::registerElementClass(const SceneGraphElement &el,
+bool SceneGraph::registerElementClass(SceneGraphElement el,
 		const SceneGraph::Class &className )
 {
 
@@ -121,7 +121,7 @@ bool SceneGraph::registerElementClass(const SceneGraphElement &el,
 	return true;
 }
 //-----------------------------------------------------------------------------
-const SceneGraph::SceneGraphElement &
+SceneGraph::SceneGraphElement
 SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 {
 	if (getVertexType(v)!=IDRAWABLE)
@@ -140,7 +140,7 @@ size_t SceneGraph::inDegreeOf(const Vertex& v, VertexType type) const {
 	return result;
 }
 //-----------------------------------------------------------------------------
-SceneGraph::Vertex SceneGraph::getRelatedVertex(const SceneGraphElement &el) const {
+SceneGraph::Vertex SceneGraph::getRelatedVertex(SceneGraphElement el) const {
 	Element2Vertex::const_iterator it = element2Vertex.find(el);
 	if (it==element2Vertex.end())
 		return NULL_VERTEX;
@@ -154,11 +154,11 @@ IDrawable::Ptr SceneGraph::getElementById(const SceneGraph::Id &id) const {
 	return getSceneGraphElement(it->second);
 }
 //----------------------------------------------------------------------------
-bool SceneGraph::setTransfomationTo(const SceneGraphElement &el, const Matrix &m) {
+bool SceneGraph::setTransfomationTo(SceneGraphElement el, const Matrix &m) {
 	return setTransfomationRefTo(el, MatrixPtr(new Matrix(m)));
 }
 //----------------------------------------------------------------------------
-bool SceneGraph::setTransfomationRefTo(const SceneGraphElement &el, MatrixPtr m) {
+bool SceneGraph::setTransfomationRefTo(SceneGraphElement el, MatrixPtr m) {
 	if (!m)
 		return false;
 	Vertex rv = getRelatedVertex(el);
@@ -180,14 +180,14 @@ bool SceneGraph::setTransfomationRefTo(const SceneGraphElement &el, MatrixPtr m)
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setStyleTo(
-	const SceneGraphElement &el,
+	SceneGraphElement el,
 	const graphicElements::Style &s)
 {
 	return setStyleRefTo(el, StylePtr(new Style(s)));
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setStyleRefTo(
-	const SceneGraphElement &el,
+	SceneGraphElement el,
 	StylePtr s)
 {
 	if (!s)
@@ -211,7 +211,7 @@ bool SceneGraph::setStyleRefTo(
 }
 //----------------------------------------------------------------------------
 SceneGraph::MatrixPtr
-SceneGraph::getTransformationRef(const SceneGraphElement &el) const
+SceneGraph::getTransformationRef(SceneGraphElement el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
@@ -227,7 +227,7 @@ SceneGraph::getTransformationRef(const SceneGraphElement &el) const
 }
 //----------------------------------------------------------------------------
 SceneGraph::StylePtr
-SceneGraph::getStyleRef(const SceneGraphElement &el) const
+SceneGraph::getStyleRef(SceneGraphElement el) const
 {
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
@@ -249,7 +249,7 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 	}
 }
 //-----------------------------------------------------------------------------
-Rectangle SceneGraph::getBoundingBox(const SceneGraphElement &obj) const {
+Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
 	// TODO: concern transformations
 	Rectangle res = obj->getBoundingBox();
 	if (res==NULL_RECTANGLE) {

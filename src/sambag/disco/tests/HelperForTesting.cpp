@@ -15,6 +15,45 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 namespace tests {
+//=============================================================================
+// class TestSuiteHtmlOutput
+//=============================================================================
+//-----------------------------------------------------------------------------
+TestSuiteHtmlOutput::TestSuiteHtmlOutput(const std::string &outfile) :
+outfile(outfile)
+{
+
+	_doc = new sambag::xml::cpAtl::Html(sDoc);
+	_index = new sambag::xml::cpAtl::Html(sIndex);
+	_content = new sambag::xml::cpAtl::Html(sContent);
+}
+TestSuiteHtmlOutput::Ptr TestSuiteHtmlOutput::create(const std::string &outfile){
+	return Ptr(new TestSuiteHtmlOutput(outfile));
+}
+sambag::xml::cpAtl::Html & TestSuiteHtmlOutput::doc() {
+	return *_doc;
+}
+sambag::xml::cpAtl::Html & TestSuiteHtmlOutput::index() {
+	return *_index;
+}
+sambag::xml::cpAtl::Html & TestSuiteHtmlOutput::content() {
+	return *_content;
+}
+TestSuiteHtmlOutput::~TestSuiteHtmlOutput() {
+	_index->endAll();
+	_content->endAll();
+	std::fstream outStream;
+	outStream.open(outfile.c_str(), std::ios_base::out);
+	outStream<<sDoc.str();
+	outStream<<sIndex.str()<<sContent.str();
+	sDoc.str(""); sDoc.flush();
+	_doc->endAll();
+	outStream<<sDoc.str();
+	delete _doc;
+	delete _index;
+	delete _content;
+	outStream.close();
+}
 
 
 const std::string OUTPUT_FOLDER = "output/";
@@ -30,11 +69,14 @@ bool comparePng( const std::string &f1, const std::string &f2) {
 	return r == 0;
 }
 //-----------------------------------------------------------------------------
-void writePng(cairo_surface_t *surface, const std::string name) {
-	cairo_surface_write_to_png(surface, name.c_str() );
+void writePng(sambag::disco::IImageSurface::Ptr surface, const std::string name)
+{
+	surface->writeToFile(name);
 }
 //-----------------------------------------------------------------------------
-void testPng( const std::string &testName, cairo_surface_t *surface ) {
+void testPng( const std::string &testName,
+		sambag::disco::IImageSurface::Ptr surface )
+{
 	const std::string f1( OUTPUT_FOLDER + REFERENCE_FOLDER + testName + ".png" );
 	const std::string f2( OUTPUT_FOLDER + testName + ".png" );
 
@@ -44,6 +86,48 @@ void testPng( const std::string &testName, cairo_surface_t *surface ) {
 	writePng(surface, f2);
 	CPPUNIT_ASSERT ( comparePng(f1, f2) );
 #endif
+}
+//-----------------------------------------------------------------------------
+void testSvg( const std::string &testName,
+		const std::string &inSvg,
+		sambag::disco::IImageSurface::Ptr surface,
+		TestSuiteHtmlOutput::Ptr html,
+		const std::string &comment )
+{
+	// write file
+	const std::string f1( OUTPUT_FOLDER + testName + ".png" );
+	writePng(surface, f1);
+	// index
+	html->index().li().a().href("#"+testName).text(testName).end(2);
+	// content
+	// input
+	html->content().div().classAttr("testCase");
+	html->content().h3().a().name(testName);
+	html->content().text(testName).end(2);
+	html->content().p().classAttr("imageDescr").text(inSvg + " // ");
+	html->content().text(f1).end();
+	// before/after
+	std::string id = "before-after-" + testName;
+	html->content().div().id(id);
+	// svg
+	std::string w = surface->getSize().getWidth().toString();
+	std::string h = surface->getSize().getHeight().toString();
+	html->content().div();
+	html->content().object().data(inSvg).type("image/svg+xml");
+	html->content().width(w).height(h).param().name("src").value(inSvg).end(2);
+	html->content().end();
+	// img
+	html->content().div();
+	html->content().img().src(f1).width(w).height(h).end();
+	html->content().end();
+	// before/after
+	html->content().end();
+	// script
+	html->content().script().type("text/javascript");
+	html->content().text("$(function(){$('#" + id + "').beforeAfter();});");
+	html->content().end();
+	// end
+	html->content().end();
 }
 //-----------------------------------------------------------------------------
 void setupEnv() {
