@@ -211,7 +211,7 @@ Dash::Ptr AttributeParser::parseDashArray(const std::string &str) {
 		parseCoordinate(what[1], c);
 		l.push_back(c);
 	}
-	return Dash::create(l);
+	return Dash::createWithValues(l);
 }
 //-----------------------------------------------------------------------------
 void AttributeParser::parseViewBox(const std::string &str, Rectangle& pC) {

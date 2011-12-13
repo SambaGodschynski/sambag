@@ -16,6 +16,8 @@
 #include "CairoHelper.hpp"
 #include "CairoPattern.hpp"
 #include <list>
+#include <boost/scoped_array.hpp>
+
 namespace sambag { namespace disco {
 //=============================================================================
 // Class CairoPath
@@ -191,18 +193,18 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void arc(
 		const Point2D &c,
-		const Number &r,
-		const Number &angle1 = 0,
-		const Number &angle2 = M_PI *2.0 )
+		const Coordinate &r,
+		const Coordinate &angle1 = 0,
+		const Coordinate &angle2 = M_PI *2.0 )
 	{
 		cairo_arc( context, c.x(), c.y(), r, angle1, angle2 );
 	}
 	//-------------------------------------------------------------------------
 	virtual void arcNegative(
 		const Point2D &c,
-		const Number &r,
-		const Number &angle1 = 0,
-		const Number &angle2 = M_PI *2.0 )
+		const Coordinate &r,
+		const Coordinate &angle1 = 0,
+		const Coordinate &angle2 = M_PI *2.0 )
 	{
 		cairo_arc_negative( context, c.x(), c.y(), r, angle1, angle2 );
 	}
@@ -315,6 +317,14 @@ public:
 	virtual void setFillPattern(IPattern::Ptr pattern);
 	//-------------------------------------------------------------------------
 	virtual void setStrokePattern(IPattern::Ptr pattern);
+	//-------------------------------------------------------------------------
+	virtual Rectangle textExtends(const std::string &str) const {
+		cairo_text_extents_t ex;
+		cairo_text_extents(context, str.c_str(), &ex);
+		Point2D p = getCurrentPoint();
+		boost::geometry::add_point(p, Point2D(ex.x_bearing, ex.y_bearing));
+		return Rectangle(p, ex.width, ex.height);
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {
@@ -345,12 +355,12 @@ public:
 		return sPt->getSolidColor().getA() > 0.0;
 	}
 	//-------------------------------------------------------------------------
-	virtual void setStrokeWidth( const Number &val ) {
+	virtual void setStrokeWidth( const Coordinate &val ) {
 		cairo_set_line_width(context, val);
 	}
 	//-------------------------------------------------------------------------
-	virtual Number getStrokeWidth() const {
-		return Number(cairo_get_line_width(context));
+	virtual Coordinate getStrokeWidth() const {
+		return Coordinate(cairo_get_line_width(context));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -407,9 +417,14 @@ public:
 			disableDash();
 			return;
 		}
+		// copy dashes to plain array
+		boost::scoped_array<Number> bff(new Number[dash->size()]);
+		for(size_t i=0; i<dash->size(); ++i) {
+			bff[i] = (*dash)[i];
+		}
 		cairo_set_dash(
 			context,
-			dash->values(),
+			bff.get(),
 			dash->size(),
 			dash->offset()
 		);

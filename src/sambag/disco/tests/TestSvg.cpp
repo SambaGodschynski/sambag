@@ -85,7 +85,7 @@ void TestSvg::testStyleAdd() {
 	values.strokeColor(ColorRGBA(1));
 	values.strokeWidth(10);
 	std::vector<Number> v; v.push_back(1);
-	values.dash(Dash::create(v));
+	values.dash(Dash::createWithValues(v));
 	values.font(sambag::disco::Font());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	Style n01;
@@ -617,7 +617,7 @@ void TestSvg::testBoundingBoxes() {
 	context->setStrokeColor(ColorRGBA(1,0,0,0.6));
 	std::vector<Number> dashes;
 	dashes+=5., 5.;
-	context->setDash(Dash::create(dashes));
+	context->setDash(Dash::createWithValues(dashes));
 	context->setStrokeWidth(2);
 	// draw
 	boost_for_each(IDrawable::Ptr obj, l) {

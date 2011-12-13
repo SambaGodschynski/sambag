@@ -78,15 +78,15 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void arc(
 		const Point2D &c,
-		const Number &r,
-		const Number &angle1 = 0,
-		const Number &angle2 = M_PI *2.0 ) = 0;
+		const Coordinate &r,
+		const Coordinate &angle1 = 0,
+		const Coordinate &angle2 = M_PI *2.0 ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void arcNegative(
 		const Point2D &c,
-		const Number &r,
-		const Number &angle1 = 0,
-		const Number &angle2 = M_PI *2.0 ) = 0;
+		const Coordinate &r,
+		const Coordinate &angle1 = 0,
+		const Coordinate &angle2 = M_PI *2.0 ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) = 0;
 	//-------------------------------------------------------------------------
@@ -131,9 +131,9 @@ public:
 	   FILL_RULE_EVEN_ODD
 	};
 	//-------------------------------------------------------------------------
-	virtual void setStrokeWidth( const Number &val ) = 0;
+	virtual void setStrokeWidth( const Coordinate &val ) = 0;
 	//-------------------------------------------------------------------------
-	virtual Number getStrokeWidth() const = 0;
+	virtual Coordinate getStrokeWidth() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void setFillColor( const ColorRGBA &val ) = 0;
 	//-------------------------------------------------------------------------
@@ -184,6 +184,8 @@ public:
 	virtual void clip() = 0;
 	//-------------------------------------------------------------------------
 	virtual void newSubPath() = 0;
+	//-------------------------------------------------------------------------
+	virtual Rectangle textExtends(const std::string &str) const = 0;
 	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPath() const = 0;
 	//-------------------------------------------------------------------------

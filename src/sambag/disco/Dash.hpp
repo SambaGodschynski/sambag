@@ -17,36 +17,40 @@ namespace sambag { namespace disco {
 /**
  * @class Dash
  * Container for dash information.
- * Implement Dash with @see Coordinate container and create
- * Number array dynamic (with IDrawContext) to support svg's coordinate
- * values.
  */
 class Dash {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Dash> Ptr;
+	//-------------------------------------------------------------------------
+	typedef std::vector<Coordinate> Dashes;
 private:
 	//-------------------------------------------------------------------------
-	Number *vals;
+	Dashes dashes;
 	//-------------------------------------------------------------------------
-	size_t count;
-	//-------------------------------------------------------------------------
-	Number _offset;
+	Coordinate _offset;
 protected:
 	//-------------------------------------------------------------------------
-	Dash( size_t count ) : count(count), _offset(0.) {
-		vals = count > 0 ? new Number[count] : NULL;
+	Dash( size_t count ) : dashes(count, 0.), _offset(0.) {
 	}
 public:
+	//-------------------------------------------------------------------------
+	Coordinate & operator[] (size_t index) {
+		return dashes.at(index);
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & operator[] (size_t index) const {
+		return dashes.at(index);
+	}
 	//-------------------------------------------------------------------------
 	bool operator==(const Dash &b) const {
 		if (size() != b.size()) return false;
 		if (offset() != b.offset()) return false;
 		return std::equal(
-			values(),
-			&(values()[size()-1]),
-			b.values()
+			dashes.begin(),
+			dashes.end(),
+			b.dashes.begin()
 		);
 		return true;
 	}
@@ -55,21 +59,18 @@ public:
 		return !(*this==b);
 	}
 	//-------------------------------------------------------------------------
-	~Dash() {
-		if (vals)
-			delete[] vals;
-	}
+	~Dash() {}
 	//-------------------------------------------------------------------------
 	static Ptr create(size_t count = 0) {
 		Ptr neu(new Dash(count));
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Number & offset() const {
+	const Coordinate & offset() const {
 		return _offset;
 	}
 	//-------------------------------------------------------------------------
-	void offset( const Number & v) {
+	void offset( const Coordinate & v) {
 		_offset = v;
 	}
 	//-------------------------------------------------------------------------
@@ -80,22 +81,22 @@ public:
 	 * @return
 	 */
 	template <typename Container>
-	static Ptr create(const Container &c) {
+	static Ptr createWithValues(const Container &c) {
 		using namespace sambag::com;
 		Ptr neu(new Dash(c.size()));
 		size_t index = 0;
 		boost_for_each( const typename Container::value_type &val, c ) {
-			neu->values()[index++] = val;
+			(*neu)[index++] = val;
 		}
 		return neu;
 	}
 	//-------------------------------------------------------------------------
 	size_t size() const {
-		return count;
+		return dashes.size();
 	}
 	//-------------------------------------------------------------------------
-	Number * values() const {
-		return vals;
+	void size(size_t v) {
+		dashes.resize(v);
 	}
 };
 

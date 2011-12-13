@@ -60,6 +60,23 @@ void setFillOpacity( Style &style, const std::string &value ) {
 	style.fillOpacity(v);
 }
 //-----------------------------------------------------------------------------
+void setStrokeDashArray( Style &style, const std::string &value ) {
+	Dash::Ptr dash = svg::AttributeParser::parseDashArray(value);
+	if (style.dash()) {
+		dash->offset(style.dash()->offset());
+	}
+	style.dash(dash);
+}
+//-----------------------------------------------------------------------------
+void setStrokeDashOffset( Style &style, const std::string &value ) {
+	if (!style.dash()) {
+		style.dash(Dash::create(0));
+	}
+	Coordinate c;
+	svg::AttributeParser::parseCoordinate(value, c);
+	style.dash()->offset(c);
+}
+//-----------------------------------------------------------------------------
 void setFontSize( Style &style, const std::string &value ) {
 	std::stringstream is;
 	is<<value;
@@ -114,6 +131,8 @@ void StyleParser::initSetterMap() {
 	("stroke-width", &setStrokeWitdh)
 	("opacity", &setOpacity)
 	("stroke-opacity", &setStrokeOpacity)
+	("stroke-dasharray", &setStrokeDashArray)
+	("stroke-dashoffset", &setStrokeDashOffset)
 	("fill-opacity", &setFillOpacity)
 	("font-size", &setFontSize)
 	("font-family", &setFontFace)

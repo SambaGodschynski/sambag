@@ -325,17 +325,17 @@ void TestCairoDrawContext::testDash() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>test creation
 	std::vector<Number> dashes;
 	dashes += 5.0, 5.0;
-	Dash::Ptr dash = Dash::create(dashes);
+	Dash::Ptr dash = Dash::createWithValues(dashes);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, dash->size());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>test comparison
-	Dash::Ptr dash2 = Dash::create(dashes);
+	Dash::Ptr dash2 = Dash::createWithValues(dashes);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, dash2->size());
 	CPPUNIT_ASSERT(*(dash.get()) == *(dash2.get()));
 	dash2->offset(2.);
 	CPPUNIT_ASSERT(*(dash.get()) != *(dash2.get()));
 	dash2->offset(0);
 	CPPUNIT_ASSERT(*(dash.get()) == *(dash2.get()));
-	dash2->values()[0] = 0.;
+	(*dash2)[0] = 0.;
 	CPPUNIT_ASSERT(*(dash.get()) != *(dash2.get()));
 }
 //-----------------------------------------------------------------------------
@@ -349,7 +349,7 @@ void TestCairoDrawContext::testLineStyle() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
 	std::vector<Number> dashes;
 	dashes += 5.0, 5.0, 10.0, 5.0;
-	Dash::Ptr dash = Dash::create(dashes);
+	Dash::Ptr dash = Dash::createWithValues(dashes);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 
 	context->setFillColor( ColorRGBA(1.0, 1.0, 1.0) );
@@ -392,7 +392,7 @@ void TestCairoDrawContext::testLineStyle() {
 
 	dashes.clear();
 	dashes += 50.0, 50.0;
-	dash = Dash::create(dashes);
+	dash = Dash::createWithValues(dashes);
 	context->setDash(dash);
 	context->setStrokeWidth(50.0);
 	context->moveTo( Point2D(900, 300)); context->lineTo( Point2D(1100, 100) );

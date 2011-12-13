@@ -13,6 +13,7 @@
 #include <sambag/com/Common.hpp>
 #include <cairo.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include "sambag/disco/IDiscoFactory.hpp"
 
 namespace tests {
 //=============================================================================
@@ -71,6 +72,25 @@ bool comparePng( const std::string &f1, const std::string &f2) {
 //-----------------------------------------------------------------------------
 void writePng(sambag::disco::IImageSurface::Ptr surface, const std::string name)
 {
+	// draw timestamp
+	using namespace sambag::disco;
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext(surface);
+	std::string tstmp("timestamp: " + getTimeStampAsStr());
+	// draw text bg
+	Font f;
+	Point2D pos(10,10);
+	cn->setFont(f);
+	cn->setFillColor(ColorRGBA(0));
+	cn->moveTo(pos);
+	Rectangle rbg = cn->textExtends(tstmp);
+	cn->rect(rbg);
+	cn->fill();
+	// draw text
+	cn->moveTo(pos);
+	cn->setFillColor(ColorRGBA(1,1,1));
+	cn->textPath(tstmp);
+	cn->fill();
+	// write file
 	surface->writeToFile(name);
 }
 //-----------------------------------------------------------------------------
