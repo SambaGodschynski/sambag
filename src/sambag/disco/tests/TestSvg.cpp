@@ -55,15 +55,17 @@ void includeJs(tests::TestSuiteHtmlOutput::Ptr obj) {
 tests::TestSuiteHtmlOutput::Ptr openDoc() {
 	tests::TestSuiteHtmlOutput::Ptr neu=
 		tests::TestSuiteHtmlOutput::create("svgTestSuite.html");
-	// prepend doc
+	// prepare doc
 	neu->doc().html().head().title().text(DOC_TITLE).end(2).body();
 	includeJs(neu);
 	neu->doc().link().rel("stylesheet").type("text/css").href("htmlOut.css").end();
 	neu->doc().h1().text(DOC_TITLE).end();
 	neu->doc().p().id("timestamp");
 	neu->doc().text("These tests ran on " + tests::getTimeStampAsStr() + ":").end();
-	// prepend index
-	neu->index().ul();
+	// prepare index
+	neu->index().table();
+	// prepare content
+	neu->content().h1().text("Input/Output in detail:").end();
 	return neu;
 }
 

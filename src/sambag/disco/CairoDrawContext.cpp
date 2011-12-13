@@ -76,24 +76,24 @@ CairoPatternRef createPattern(SurfacePattern::Ptr pt) {
 	return neu;
 }
 //-----------------------------------------------------------------------------
-CairoPatternRef createPattern(Pattern::Ptr pattern) {
+CairoPatternRef createPattern(APattern::Ptr pattern) {
 	if (!pattern)
 		return CairoPatternRef();
 	CairoPatternRef pat;
 	switch (pattern->getType()) {
-		case Pattern::SOLID :
+		case APattern::SOLID :
 			pat =
 				createPattern( boost::shared_dynamic_cast<SolidPattern>(pattern) );
 			break;
-		case Pattern::LINEAR :
+		case APattern::LINEAR :
 			pat =
 				createPattern( boost::shared_dynamic_cast<LinearPattern>(pattern) );
 			break;
-		case Pattern::RADIAL :
+		case APattern::RADIAL :
 			pat =
 				createPattern( boost::shared_dynamic_cast<RadialPattern>(pattern) );
 			break;
-		case Pattern::SURFACE :
+		case APattern::SURFACE :
 			pat =
 				createPattern( boost::shared_dynamic_cast<SurfacePattern>(pattern) );
 			break;
@@ -169,12 +169,12 @@ void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {
 
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::setFillPattern(Pattern::Ptr pattern) {
+void CairoDrawContext::setFillPattern(APattern::Ptr pattern) {
 	fillPattern = createPattern(pattern);
 	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::setStrokePattern(Pattern::Ptr pattern) {
+void CairoDrawContext::setStrokePattern(APattern::Ptr pattern) {
 	strokePattern = createPattern(pattern);
 	patternInUse = INVALID;
 }

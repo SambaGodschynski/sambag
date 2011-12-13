@@ -60,8 +60,8 @@ private:
 	FLYWEIGHT(Coordinate, _strokeWidth);
 	FLYWEIGHT(LineCapStyle, _lineCapStyle);
 	FLYWEIGHT(FillRule, _fillRule);
-	FLYWEIGHT(Pattern::Ptr, _strokePattern);
-	FLYWEIGHT(Pattern::Ptr, _fillPattern);
+	FLYWEIGHT(APattern::Ptr, _strokePattern);
+	FLYWEIGHT(APattern::Ptr, _fillPattern);
 	FLYWEIGHT(Font::FontFace, _fontFace);
 	FLYWEIGHT(Coordinate, _fontSize);
 	FLYWEIGHT(Font::Slant, _fontSlant);
@@ -123,6 +123,26 @@ public:
 		return _strokeWidth;
 	}
 	//-------------------------------------------------------------------------
+	Style & strokeOpacity(const Coordinate &v) {
+		// TODO
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Coordinate strokeOpacity() const {
+		// TODO
+		return 0;
+	}
+	//-------------------------------------------------------------------------
+	Style & fillOpacity(const Coordinate &v) {
+		// TODO
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Coordinate fillOpacity() const {
+		// TODO
+		return 0;
+	}
+	//-------------------------------------------------------------------------
 	Style & strokeWidth(const Coordinate &v) {
 		_strokeWidth = v;
 		return *this;
@@ -146,16 +166,16 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	Pattern::Ptr strokePattern() const {
+	APattern::Ptr strokePattern() const {
 		return _strokePattern;
 	}
 	//-------------------------------------------------------------------------
-	Style & strokePattern(Pattern::Ptr v) {
+	Style & strokePattern(APattern::Ptr v) {
 		_strokePattern = v;
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	Pattern::Ptr fillPattern() const {
+	APattern::Ptr fillPattern() const {
 		return _fillPattern;
 	}
 	//-------------------------------------------------------------------------
@@ -169,7 +189,7 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	Style & fillPattern(Pattern::Ptr v) {
+	Style & fillPattern(APattern::Ptr v) {
 		_fillPattern = v;
 		return *this;
 	}

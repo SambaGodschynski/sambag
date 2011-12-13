@@ -343,9 +343,9 @@ public:
 		cairo_text_path( context, text.c_str() );
 	}
 	//-------------------------------------------------------------------------
-	virtual void setFillPattern(Pattern::Ptr pattern);
+	virtual void setFillPattern(APattern::Ptr pattern);
 	//-------------------------------------------------------------------------
-	virtual void setStrokePattern(Pattern::Ptr pattern);
+	virtual void setStrokePattern(APattern::Ptr pattern);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {

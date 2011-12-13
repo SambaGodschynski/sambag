@@ -25,13 +25,13 @@ namespace sambag { namespace disco {
  * A pattern is the basic fill structure for every drawing operation.
  * Its structure is similar to Cairos cairo_pattern_t
  */
-class Pattern {
+class APattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Pattern> Ptr;
+	typedef boost::shared_ptr<APattern> Ptr;
 	//-------------------------------------------------------------------------
-	enum Type { SOLID, LINEAR, RADIAL, SURFACE };
+	enum Type { SOLID, LINEAR, RADIAL, SURFACE, PROXY };
 	//-------------------------------------------------------------------------
 	typedef std::pair<ColorRGBA, double> ColorStop;
 	//-------------------------------------------------------------------------
@@ -41,16 +41,46 @@ public:
 	//-------------------------------------------------------------------------
 	typedef std::vector<ColorStop> ColorStops;
 	//-------------------------------------------------------------------------
+	Number opacity;
+	//-------------------------------------------------------------------------
 protected:
+	//-------------------------------------------------------------------------
+	// will be called if a pattern value changed.
+	// used by CairoProxyPattern to re-build cairo pattern.
+	virtual void resetPattern() {}
 	//-------------------------------------------------------------------------
 	sambag::math::Matrix matrix;
 	//-------------------------------------------------------------------------
-	Type type;
-	//-------------------------------------------------------------------------
-	Pattern() : matrix(sambag::math::IDENTITY_MATRIX) {}
+	APattern() :
+		opacity(1.),
+		matrix(sambag::math::IDENTITY_MATRIX) {}
 public:
 	//-------------------------------------------------------------------------
-	virtual ~Pattern(){}
+	/**
+	 * copies all common pattern values from a to b.
+	 * @param a
+	 * @param b
+	 */
+	static void copyValues(const APattern &a, APattern &b) {
+		b.setOpacity(a.getOpacity());
+		b.setMatrix(a.getMatrix());
+	}
+	//-------------------------------------------------------------------------
+	// TODO: pattern comparison
+	//-------------------------------------------------------------------------
+	/**
+	 * @param v
+	 */
+	virtual void setOpacity(const Number &v) {
+		opacity = v;
+		resetPattern();
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return opacity;
+	}
+	//-------------------------------------------------------------------------
+	virtual ~APattern(){}
 	//-------------------------------------------------------------------------
 	/**
 	 * Note that all values have to be inverted.
@@ -58,22 +88,21 @@ public:
 	 * http://cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-set-matrix
 	 * @param m
 	 */
-	void setMatrix (const sambag::math::Matrix &m) {
+	virtual void setMatrix (const sambag::math::Matrix &m) {
 		if (m.size1() != 3 || m.size2() !=3)
 			return;
 		matrix = m;
+		resetPattern();
 	}
 	//-------------------------------------------------------------------------
-	const sambag::math::Matrix & getMatrix() const {
+	virtual const sambag::math::Matrix & getMatrix() const {
 		return matrix;
 	}
 	//-------------------------------------------------------------------------
-	Type getType() const {
-		return type;
-	}
+	virtual Type getType() const = 0;
 };
 //=============================================================================
-class SolidPattern : public Pattern {
+class SolidPattern : public APattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -87,13 +116,16 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create (const ColorRGBA &col) {
 		Ptr neu(new SolidPattern());
-		neu->type = SOLID;
 		neu->solidColor = col;
 		return neu;
 	}
 	//-------------------------------------------------------------------------
 	const ColorRGBA & getSolidColor() const {
 		return solidColor;
+	}
+	//-------------------------------------------------------------------------
+	virtual Type getType() const {
+		return SOLID;
 	}
 };
 //=============================================================================
@@ -112,6 +144,8 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	ColorStops stops;
+protected:
+	virtual void resetGradient() {};
 public:
 	//-------------------------------------------------------------------------
 	const ColorStops & getStops() const {
@@ -120,10 +154,12 @@ public:
 	//-------------------------------------------------------------------------
 	void addColorStops(const ColorStops &newStops) {
 		stops = newStops;
+		resetGradient();
 	}
 	//-------------------------------------------------------------------------
 	void addColorStop ( const ColorStop &col ) {
 		stops.push_back(col);
+		resetGradient();
 	}
 	//-------------------------------------------------------------------------
 	void addColorStop ( const ColorRGBA &col, const Number &offset ) {
@@ -139,7 +175,7 @@ public:
 	}
 };
 //=============================================================================
-class LinearPattern : public Pattern, public Gradient {
+class LinearPattern : public APattern, public Gradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -149,11 +185,14 @@ private:
 	LinearPoints linearPoints;
 	//-------------------------------------------------------------------------
 	LinearPattern() {}
+	//-------------------------------------------------------------------------
+	virtual void resetGradient() {
+		resetPattern();
+	};
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create (const Point2D &p0, const Point2D &p1 ) {
 		Ptr neu(new LinearPattern());
-		neu->type = LINEAR;
 		neu->linearPoints = LinearPoints(p0, p1);
 		return neu;
 	}
@@ -161,9 +200,13 @@ public:
 	const LinearPoints & getLinearPoints() const {
 		return linearPoints;
 	}
+	//-------------------------------------------------------------------------
+	virtual Type getType() const {
+		return LINEAR;
+	}
 };
 //=============================================================================
-class RadialPattern : public Pattern, public Gradient {
+class RadialPattern : public APattern, public Gradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -175,13 +218,16 @@ private:
 	RadialCircles radialCirlces;
 	//-------------------------------------------------------------------------
 	RadialPattern() {}
+	//-------------------------------------------------------------------------
+	virtual void resetGradient() {
+		resetPattern();
+	};
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create (const Point2D &c0, Number radius,
 					   const Point2D &c1, Number radius2)
 	{
 		Ptr neu(new RadialPattern());
-		neu->type = RADIAL;
 		neu->radialCirlces = RadialCircles(c0, radius, c1, radius2);
 		return neu;
 	}
@@ -189,9 +235,13 @@ public:
 	const RadialCircles & getRadialCircles() const {
 		return radialCirlces;
 	}
+	//-------------------------------------------------------------------------
+	virtual Type getType() const {
+		return RADIAL;
+	}
 };
 //=============================================================================
-class SurfacePattern : public Pattern {
+class SurfacePattern : public APattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -205,13 +255,85 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create (ISurface::Ptr _surface) {
 		Ptr neu(new SurfacePattern());
-		neu->type = SURFACE;
 		neu->surface = _surface;
 		return neu;
 	}
 	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {
 		return surface;
+	}
+	//-------------------------------------------------------------------------
+	virtual Type getType() const {
+		return SURFACE;
+	}
+};
+//=============================================================================
+/**
+ * @ProxyPattern
+ * to have a pattern object before a concrete pattern object was created.
+ */
+class ProxyPattern : public APattern {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<ProxyPattern> Ptr;
+protected:
+	//-------------------------------------------------------------------------
+	ProxyPattern() {}
+	//-------------------------------------------------------------------------
+	APattern::Ptr target;
+public:
+	//-------------------------------------------------------------------------
+	enum AdaptionPolicy {
+		PROXY_TO_TARGET,
+		TARGET_TO_PROXY
+	};
+	//-------------------------------------------------------------------------
+	static Ptr create () {
+		Ptr neu(new ProxyPattern());
+		return neu;
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @param _target
+	 * @param pol decides whether all proxy values are copied to target or
+	 * 		  all target values to proxy.
+	 */
+	virtual void setTarget(APattern::Ptr _target,
+			AdaptionPolicy pol = TARGET_TO_PROXY)
+	{
+		target = _target;
+		if (!target)
+			return;
+		switch (pol) {
+		case PROXY_TO_TARGET:
+			copyValues(*this, *(target.get()));
+			break;
+		case TARGET_TO_PROXY:
+			copyValues(*(target.get()), *this);
+			break;
+		}
+		resetPattern();
+	}
+	//-------------------------------------------------------------------------
+	virtual APattern::Ptr getTarget() const {
+		return target;
+	}
+	//-------------------------------------------------------------------------
+	virtual Type getType() const {
+		return PROXY;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		APattern::setOpacity(v);
+		if (target)
+			target->setOpacity(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMatrix (const sambag::math::Matrix &m) {
+		APattern::setMatrix(m);
+		if (target)
+			target->setMatrix(m);
 	}
 };
 }} // namespace

@@ -33,9 +33,6 @@ void Image::draw( IDrawContext::Ptr cn ) {
 			return;
 		}
 	}
-
-	Matrix tmp;
-	cn->getMatrix(tmp);
 	cn->translate(outline.getX0());
 	Rectangle orgSz = image->getSize();
 	cn->scale( Point2D(
@@ -43,8 +40,5 @@ void Image::draw( IDrawContext::Ptr cn ) {
 		outline.getHeight()/orgSz.getHeight()
 	));
 	cn->drawSurface(image);
-
-	cn->identityMatrix();
-	cn->transform(tmp);
 }
 }}}

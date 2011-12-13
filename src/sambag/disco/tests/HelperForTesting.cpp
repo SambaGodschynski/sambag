@@ -94,11 +94,22 @@ void testSvg( const std::string &testName,
 		TestSuiteHtmlOutput::Ptr html,
 		const std::string &comment )
 {
+	using namespace sambag::disco;
 	// write file
 	const std::string f1( OUTPUT_FOLDER + testName + ".png" );
 	writePng(surface, f1);
 	// index
-	html->index().li().a().href("#"+testName).text(testName).end(2);
+	html->index().tr();
+	html->index().td().a().href("#"+testName).text(testName).end(2);
+	// preview image:
+	Number dstW = 100.;
+	if (surface->getSize().getWidth() == 0. )
+		return;
+	Number scal = dstW / surface->getSize().getWidth();
+	std::string w = Coordinate(dstW).toString();
+	std::string h = Coordinate(surface->getSize().getHeight() * scal).toString();
+	html->index().td().img().src(f1).width(w).height(h).end(2);
+	html->index().end();
 	// content
 	// input
 	html->content().div().classAttr("testCase");
@@ -110,8 +121,8 @@ void testSvg( const std::string &testName,
 	std::string id = "before-after-" + testName;
 	html->content().div().id(id);
 	// svg
-	std::string w = surface->getSize().getWidth().toString();
-	std::string h = surface->getSize().getHeight().toString();
+	w = surface->getSize().getWidth().toString();
+	h = surface->getSize().getHeight().toString();
 	html->content().div();
 	html->content().object().data(inSvg).type("image/svg+xml");
 	html->content().width(w).height(h).param().name("src").value(inSvg).end(2);

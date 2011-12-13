@@ -221,7 +221,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const OpacityStyle_tag::Type &strV, const OpacityStyle_tag&)
 	{
-		/*using sambag::disco::graphicElements::Style;
+		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -229,33 +229,34 @@ public:
 		AttributeParser::parseOpacity(strV, v);
 		neu.strokeOpacity(v);
 		neu.fillOpacity(v);
-		copyStyleToGraphicElement(neu);*/
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeOpacityStyle_tag::Type &strV,
 			const StrokeOpacityStyle_tag&)
 	{
-		/*using sambag::disco::graphicElements::Style;
+		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
 		neu.strokeOpacity(v);
-		copyStyleToGraphicElement(neu);*/
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const FillOpacityStyle_tag::Type &strV,
 			const FillOpacityStyle_tag&)
 	{
-		/*using sambag::disco::graphicElements::Style;
+		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
 		Number v;
 		AttributeParser::parseOpacity(strV, v);
-		neu.fillOpacity(v);
-		copyStyleToGraphicElement(neu);*/
+		APattern::Ptr pat = neu.fillPattern();
+		pat->setOpacity(v);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Style_tag::Type &style, const Style_tag&)

@@ -167,9 +167,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual FillRule getFillRule() const = 0;
 	//-------------------------------------------------------------------------
-	virtual void setFillPattern(Pattern::Ptr pattern) = 0;
+	virtual void setFillPattern(APattern::Ptr pattern) = 0;
 	//-------------------------------------------------------------------------
-	virtual void setStrokePattern(Pattern::Ptr pattern) = 0;
+	virtual void setStrokePattern(APattern::Ptr pattern) = 0;
 	//-------------------------------------------------------------------------
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
