@@ -6,6 +6,11 @@
   margin-bottom: 5.5em;
 }
 
+table, table td {
+  border-style: solid;
+  border-width: 1px;
+}
+
 .testCase img, .testCase object {
   border-style:dashed;
   border-width: 1px;
