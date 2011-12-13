@@ -92,6 +92,12 @@ void Style::intoContext( IDrawContext::Ptr cn ) const {
 		cn->setFontSlant(_fontSlant);
 	if (_fontWeight != NO_FONT.weight)
 		cn->setFontWeight(_fontWeight);
+	if (_lineCapStyle != IDrawContext::NO_LINE_CAP)
+		cn->setLineCap(_lineCapStyle);
+	if (_miterLimit != NULL_NUMBER)
+		cn->setMiterLimit(_miterLimit);
+	if (_lineJoin != IDrawContext::NO_LINE_JOIN)
+		cn->setLineJoin(_lineJoin);
 }
 //-----------------------------------------------------------------------------
 #define CHECK_NULL_VAL(member,bmember,nullval) (member)==(nullval)&&(bmember)!=(nullval)
@@ -116,6 +122,12 @@ void Style::add( const Style &b ) {
 		strokeOpacity(b.strokeOpacity());
 	if ( CHECK_NULL_VAL(_fillOpacity, b._fillOpacity, NULL_NUMBER) )
 		fillOpacity(b.fillOpacity());
+	if ( CHECK_NULL_VAL(_lineCapStyle, b._lineCapStyle, IDrawContext::NO_LINE_CAP) )
+		lineCapStyle(b.lineCapStyle());
+	if ( CHECK_NULL_VAL(_miterLimit, b._miterLimit, NULL_NUMBER) )
+		miterLimit(b.miterLimit());
+	if ( CHECK_NULL_VAL(_lineJoin, b._lineJoin, IDrawContext::NO_LINE_JOIN ) )
+		lineJoin(b.lineJoin());
 }
 //-----------------------------------------------------------------------------
 const Style & Style::getNullStyle() {

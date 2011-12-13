@@ -75,7 +75,7 @@ void writePng(sambag::disco::IImageSurface::Ptr surface, const std::string name)
 	// draw timestamp
 	using namespace sambag::disco;
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext(surface);
-	std::string tstmp("timestamp: " + getTimeStampAsStr());
+	std::string tstmp(getTimeStampAsStr());
 	// draw text bg
 	Font f;
 	Point2D pos(10,10);

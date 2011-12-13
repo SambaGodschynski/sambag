@@ -125,6 +125,12 @@ public:
 		 LINE_CAP_ROUND,
 		 LINE_CAP_SQUARE
 	};
+	enum LineJoin {
+		NO_LINE_JOIN = -1,
+		LINE_JOIN_MITER,
+		LINE_JOIN_ROUND,
+		LINE_JOIN_BEVEL
+	};
 	enum FillRule {
 	   NO_FILL_RULE = -1,
 	   FILL_RULE_WINDING,
@@ -171,6 +177,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setStrokePattern(IPattern::Ptr pattern) = 0;
 	//-------------------------------------------------------------------------
+	virtual void setLineJoin(LineJoin join) = 0;
+	//-------------------------------------------------------------------------
+	virtual LineJoin getLineJoin() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setMiterLimit(const Number &v) = 0;
+	//-------------------------------------------------------------------------
+	virtual Number getMiterLimit() const = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual void save() = 0;

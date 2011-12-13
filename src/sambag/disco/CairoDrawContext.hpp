@@ -453,6 +453,22 @@ public:
 	virtual FillRule getFillRule() const {
 		return (FillRule)cairo_get_fill_rule(context);
 	}
+	//-------------------------------------------------------------------------
+	virtual void setLineJoin(LineJoin join) {
+		cairo_set_line_join(context, (cairo_line_join_t)join);
+	}
+	//-------------------------------------------------------------------------
+	virtual LineJoin getLineJoin() const {
+		return (LineJoin)cairo_get_line_join(context);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMiterLimit(const Number &v) {
+		cairo_set_miter_limit(context, v);
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getMiterLimit() const {
+		return cairo_get_miter_limit(context);
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Misc.
 	//-------------------------------------------------------------------------
 	virtual void save() {

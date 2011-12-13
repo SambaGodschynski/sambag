@@ -44,6 +44,7 @@ class Style {
 public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>typedefs
 	typedef IDrawContext::LineCapStyle LineCapStyle;
+	typedef IDrawContext::LineJoin LineJoin;
 	typedef IDrawContext::FillRule FillRule;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>properties
 	//-------------------------------------------------------------------------
@@ -70,6 +71,9 @@ private:
 	FLYWEIGHT(Coordinate, _fillOpacity);
 	FLYWEIGHT(Coordinate, _strokeOpacity);
 	Dash::Ptr _dash; // TODO: make flyweight
+	FLYWEIGHT(Number, _miterLimit);
+	FLYWEIGHT(LineJoin, _lineJoin);
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Style> Ptr;
 	static Ptr NULL_STYLE_SINGLETON;
 public:
@@ -91,7 +95,9 @@ public:
 		_fontWeight(NO_FONT.weight),
 		_fillOpacity(NULL_NUMBER),
 		_strokeOpacity(NULL_NUMBER),
-		_dash(Dash::Ptr())
+		_dash(Dash::Ptr()),
+		_miterLimit(NULL_NUMBER),
+		_lineJoin(IDrawContext::NO_LINE_JOIN)
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -107,7 +113,9 @@ public:
 		_fontWeight == b._fontWeight &&
 		_fillOpacity == b._fillOpacity &&
 		_strokeOpacity == b._strokeOpacity &&
-		_dash == b._dash;
+		_dash == b._dash &&
+		_miterLimit == b._miterLimit &&
+		_lineJoin == b._lineJoin;
 	}
 	//-------------------------------------------------------------------------
 	bool operator != (const Style &b) const {
@@ -157,9 +165,27 @@ public:
 		return _lineCapStyle;
 	}
 	//-------------------------------------------------------------------------
-	Style lineCapStyle(const LineCapStyle &v) {
+	Style & lineCapStyle(const LineCapStyle &v) {
 		_lineCapStyle = v;
 		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Style & miterLimit(const Number &v) {
+		_miterLimit = v;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	Number miterLimit() const {
+		return _miterLimit;
+	}
+	//-------------------------------------------------------------------------
+	Style & lineJoin(LineJoin join) {
+		_lineJoin = join;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	LineJoin lineJoin() const {
+		return _lineJoin;
 	}
 	//-------------------------------------------------------------------------
 	const FillRule & fillRule() const {

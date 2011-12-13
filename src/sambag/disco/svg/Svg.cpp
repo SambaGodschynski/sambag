@@ -112,47 +112,45 @@ void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
 //-----------------------------------------------------------------------------
 void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	binder.registerAttribute
-		<StrokeWidth_tag::Type, StrokeWidth_tag, SvgObject>
-			("stroke-width");
+	<StrokeWidth_tag::Type, StrokeWidth_tag, SvgObject> ("stroke-width");
 	binder.registerAttribute
-		<Stroke_tag::Type, Stroke_tag, SvgObject>
-			("stroke");
+	<Stroke_tag::Type, Stroke_tag, SvgObject>("stroke");
 	binder.registerAttribute
-		<Fill_tag::Type, Fill_tag, SvgObject>
-			("fill");
+	<Fill_tag::Type, Fill_tag, SvgObject>("fill");
 	binder.registerAttribute
-		<Id_tag::Type, Id_tag, SvgObject>
-			("id");
+	<Id_tag::Type, Id_tag, SvgObject>("id");
 	binder.registerAttribute
-		<Class_tag::Type, Class_tag, SvgObject>
-			("class");
+	<Class_tag::Type, Class_tag, SvgObject>("class");
 	binder.registerAttribute
-		<Transform_tag::Type, Transform_tag, SvgObject>
-			("transform");
+	<Transform_tag::Type, Transform_tag, SvgObject>("transform");
 	binder.registerAttribute
-		<OpacityStyle_tag::Type, OpacityStyle_tag, SvgObject>
-			("opacity");
+	<OpacityStyle_tag::Type, OpacityStyle_tag, SvgObject>("opacity");
 	binder.registerAttribute
-		<StrokeOpacityStyle_tag::Type, StrokeOpacityStyle_tag, SvgObject>
-			("stroke-opacity");
+	<StrokeOpacityStyle_tag::Type, StrokeOpacityStyle_tag, SvgObject>("stroke-opacity");
 	binder.registerAttribute
-		<FillOpacityStyle_tag::Type, FillOpacityStyle_tag, SvgObject>
-			("fill-opacity");
+	<FillOpacityStyle_tag::Type, FillOpacityStyle_tag, SvgObject>("fill-opacity");
 	binder.registerAttribute
-		<Style_tag::Type, Style_tag, SvgObject>
-			("style");
+	<Style_tag::Type, Style_tag, SvgObject>("style");
 	binder.registerAttribute
-		<DashOffsetStyle_tag::Type, DashOffsetStyle_tag, SvgObject>
-			("stroke-dashoffset");
+	<DashOffsetStyle_tag::Type, DashOffsetStyle_tag, SvgObject>("stroke-dashoffset");
 	binder.registerAttribute
-		<DashArrayStyle_tag::Type, DashArrayStyle_tag, SvgObject>
-			("stroke-dasharray");
-	binder.registerAttribute<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");
-	binder.registerAttribute<FontSize_tag::Type, FontSize_tag, SvgObject>("font-size");
-	binder.registerAttribute<FontWeight_tag::Type, FontWeight_tag, SvgObject>("font-weight");
-	binder.registerAttribute<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
-	binder.registerAttribute<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
-	// TODO: register more style tags
+	<DashArrayStyle_tag::Type, DashArrayStyle_tag, SvgObject>("stroke-dasharray");
+	binder.registerAttribute
+	<FontFamily_tag::Type, FontFamily_tag, SvgObject>("font-family");
+	binder.registerAttribute
+	<FontSize_tag::Type, FontSize_tag, SvgObject>("font-size");
+	binder.registerAttribute
+	<FontWeight_tag::Type, FontWeight_tag, SvgObject>("font-weight");
+	binder.registerAttribute
+	<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
+	binder.registerAttribute
+	<FontStyle_tag::Type, FontStyle_tag, SvgObject>("font-style");
+	binder.registerAttribute
+	<StrokeLineCap_tag::Type, StrokeLineCap_tag, SvgObject>("stroke-linecap");
+	binder.registerAttribute
+	<StrokeLineJoin_tag::Type, StrokeLineJoin_tag, SvgObject>("stroke-linejoin");
+	binder.registerAttribute
+	<StrokeMiterLimit::Type, StrokeMiterLimit, SvgObject>("stroke-miterlimit");
 }
 
 }}} // namespaces

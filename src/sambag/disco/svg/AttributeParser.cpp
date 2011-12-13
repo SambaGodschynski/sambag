@@ -243,7 +243,7 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	std::string::const_iterator begin = str.begin();
 	std::string::const_iterator end = str.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([0-9]+)([a-z%])*");
+	boost::regex re("([0-9.-]+)([a-z%])*");
 	regex_search(begin, end, what, re);
 	std::stringstream ss(what[1]); //value
 	ss>>c.value;
@@ -516,5 +516,39 @@ std::istream & operator>>(
 	std::string str;
 	AttributeParser::getWholeString(istr, str);
 	AttributeParser::parsePointContainer(str, pC);
+	return istr;
+}
+//-----------------------------------------------------------------------------
+extern std::istream & operator>>(
+	std::istream &istr,
+	sambag::disco::IDrawContext::LineCapStyle &v
+)
+{
+	std::string in;
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in, true);
+	if (in=="butt")
+		v = sambag::disco::IDrawContext::LINE_CAP_BUTT;
+	if (in=="square")
+		v = sambag::disco::IDrawContext::LINE_CAP_SQUARE;
+	if (in=="round")
+		v = sambag::disco::IDrawContext::LINE_CAP_ROUND;
+	return istr;
+}
+//-----------------------------------------------------------------------------
+extern std::istream & operator>>(
+	std::istream &istr,
+	sambag::disco::IDrawContext::LineJoin &v
+)
+{
+	std::string in;
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in, true);
+	if (in=="miter")
+		v = sambag::disco::IDrawContext::LINE_JOIN_MITER;
+	if (in=="round")
+		v = sambag::disco::IDrawContext::LINE_JOIN_ROUND;
+	if (in=="bevel")
+		v = sambag::disco::IDrawContext::LINE_JOIN_BEVEL;
 	return istr;
 }

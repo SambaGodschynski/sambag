@@ -14,7 +14,7 @@
 	  stroke-width="10" stroke="saddlebrown" 
 	  stroke-dasharray="10" stroke-dashoffset="10"/>
     <line class="line" x1="500" y1="300" x2="700" y2="100"
-	  stroke-width="15" stroke="#FF0000"/>
+	  stroke-width="15" stroke="#FF0000" />
     <line class="line" x1="700" y1="300" x2="900" y2="100"
 	  stroke-width="20" />
     <line class="line" x1="900" y1="300" x2="1100" y2="100"

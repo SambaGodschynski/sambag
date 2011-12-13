@@ -44,6 +44,8 @@ private:
 	CPPUNIT_TEST( testStyleAdd );
 	CPPUNIT_TEST( testSvgGradient );
 	CPPUNIT_TEST( testBoundingBoxes );
+	CPPUNIT_TEST( testLineCapStyle );
+	CPPUNIT_TEST( testLineJoinStyle );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	TestSvg();
@@ -73,6 +75,8 @@ public:
 	void testSvgImage();
 	void testSvgStyle();
 	void testSvgStyle2();
+	void testLineCapStyle();
+	void testLineJoinStyle();
 	void testSvgGradient();
 	void testBoundingBoxes();
 	void testStyleAdd();

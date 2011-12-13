@@ -112,6 +112,27 @@ void setFontWeight( Style &style, const std::string &value ) {
 		v = Font::WEIGHT_BOLD;
 	style.fontWeight(v);
 }
+//-----------------------------------------------------------------------------
+void setLineCapStyle( Style &style, const std::string &value ) {
+	std::stringstream ss(value);
+	IDrawContext::LineCapStyle v = IDrawContext::NO_LINE_CAP;
+	ss>>v;
+	style.lineCapStyle(v);
+}
+//-----------------------------------------------------------------------------
+void setLineJoinStyle( Style &style, const std::string &value ) {
+	std::stringstream ss(value);
+	IDrawContext::LineJoin v = IDrawContext::NO_LINE_JOIN;
+	ss>>v;
+	style.lineJoin(v);
+}
+//-----------------------------------------------------------------------------
+void setMiterLimit( Style &style, const std::string &value ) {
+	std::stringstream ss(value);
+	Number v = 0.;
+	ss>>v;
+	style.miterLimit(v);
+}
 
 
 }//namespace
@@ -138,7 +159,10 @@ void StyleParser::initSetterMap() {
 	("font-family", &setFontFace)
 	("font-weight", &setFontWeight)
 	("font-style", &setFontSlant)
-	("fill", &setFillColor);
+	("fill", &setFillColor)
+	("stroke-linecap", &setLineCapStyle)
+	("stroke-linejoin", &setLineJoinStyle)
+	("stroke-miterlimit", &setMiterLimit);
 }
 //-----------------------------------------------------------------------------
 StyleParser::SetStyleAttributeFunc StyleParser::getSetter(const std::string& str) {

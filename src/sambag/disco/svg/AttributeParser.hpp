@@ -14,6 +14,7 @@
 #include "sambag/disco/ColorRGBA.hpp"
 #include "sambag/disco/Dash.hpp"
 #include "sambag/disco/graphicElements/PointContainer.hpp"
+#include "sambag/disco/IDrawContext.hpp"
 #include <map>
 #include "sambag/math/Matrix.hpp"
 
@@ -130,8 +131,16 @@ extern std::istream & operator>>(
 		sambag::disco::graphicElements::pathInstruction::PathInstructions &
 );
 extern std::istream & operator>>(
-		std::istream&,
-		sambag::disco::graphicElements::pathInstruction::PointContainer &
+	std::istream&,
+	sambag::disco::graphicElements::pathInstruction::PointContainer &
+);
+extern std::istream & operator>>(
+	std::istream&,
+	sambag::disco::IDrawContext::LineCapStyle &v
+);
+extern std::istream & operator>>(
+	std::istream&,
+	sambag::disco::IDrawContext::LineJoin &v
 );
 
 #endif /* ATTRIBUTE_PARSER_HPP_ */

@@ -78,6 +78,12 @@ public:
 	struct DashOffsetStyle_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
 	struct Style_tag { typedef disco::graphicElements::Style Type; };
+	//-------------------------------------------------------------------------
+	struct StrokeLineCap_tag { typedef IDrawContext::LineCapStyle Type; };
+	//-------------------------------------------------------------------------
+	struct StrokeLineJoin_tag { typedef IDrawContext::LineJoin Type; };
+	//-------------------------------------------------------------------------
+	struct StrokeMiterLimit { typedef Number Type; };
 private:
 	//-------------------------------------------------------------------------
 	/**
@@ -271,7 +277,7 @@ public:
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
 	//-------------------------------------------------------------------------
-	virtual void set( const FontFamily_tag::Type &v, FontFamily_tag ) {
+	virtual void set( const FontFamily_tag::Type &v, const FontFamily_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -280,7 +286,7 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const FontSize_tag::Type &v, FontSize_tag ) {
+	virtual void set( const FontSize_tag::Type &v, const FontSize_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -289,7 +295,7 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const FontWeight_tag::Type &v, FontWeight_tag ) {
+	virtual void set( const FontWeight_tag::Type &v, const FontWeight_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -298,7 +304,7 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const FontStyle_tag::Type &v, FontStyle_tag ) {
+	virtual void set( const FontStyle_tag::Type &v, const FontStyle_tag & ) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -307,7 +313,7 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const DashArrayStyle_tag::Type &v, DashArrayStyle_tag ) {
+	virtual void set( const DashArrayStyle_tag::Type &v, const DashArrayStyle_tag &) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -322,7 +328,7 @@ public:
 		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void set( const DashOffsetStyle_tag::Type &v, DashOffsetStyle_tag ) {
+	virtual void set( const DashOffsetStyle_tag::Type &v, const DashOffsetStyle_tag &) {
 		using sambag::disco::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
@@ -331,6 +337,39 @@ public:
 		if (!dash)
 			dash = Dash::create();
 		dash->offset(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const StrokeLineCap_tag::Type &v,
+			const StrokeLineCap_tag &)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		neu.lineCapStyle(v);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const StrokeLineJoin_tag::Type &v,
+			const StrokeLineJoin_tag &)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		neu.lineJoin(v);
+		copyStyleToGraphicElement(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const StrokeMiterLimit::Type &v,
+			const StrokeMiterLimit &)
+	{
+		using sambag::disco::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
+		neu.miterLimit(v);
+		copyStyleToGraphicElement(neu);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder );
