@@ -243,24 +243,11 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	std::string::const_iterator begin = str.begin();
 	std::string::const_iterator end = str.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([0-9.-]+)([a-z%])*");
+	boost::regex re("([0-9.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
 	std::stringstream ss(what[1]); //value
 	ss>>c.value;
-	/*
-	 * enum Type {
-		NONE,
-		PX,
-		IN,
-		CM,
-		MM,
-		PT,
-		EM,
-		EX,
-		PERCENT
-	};
-	 *
-	 */
+
 	if (what[2].length() > 0) {
 		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
 		if (m=="px") c.type = Coordinate::PX;

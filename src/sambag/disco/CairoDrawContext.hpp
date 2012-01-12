@@ -257,7 +257,7 @@ public:
 	 * draws an surface.
 	 * 	 * @param a CairoSurface all others will be ignored.
 	 */
-	virtual void drawSurface(ISurface::Ptr surface);
+	virtual void drawSurface(ISurface::Ptr surface, Number opacity = 1.0);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) {

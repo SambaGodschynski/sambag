@@ -106,8 +106,9 @@ void TestSvg::testSvgFirstElements() {
 	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
-	CPPUNIT_ASSERT_EQUAL(1200., (Number)rootObject->getSize().getWidth());
-	CPPUNIT_ASSERT_EQUAL(400., (Number)rootObject->getSize().getHeight());
+	CPPUNIT_ASSERT_EQUAL(Coordinate::CM, rootObject->getSize().getWidth().type);
+	CPPUNIT_ASSERT_EQUAL(12., (Number)rootObject->getSize().getWidth());
+	CPPUNIT_ASSERT_EQUAL(4., (Number)rootObject->getSize().getHeight());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	IDiscoFactory::Ptr fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);

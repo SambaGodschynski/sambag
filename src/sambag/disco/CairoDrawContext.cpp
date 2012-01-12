@@ -69,7 +69,7 @@ void CairoDrawContext::setStrokePattern(IPattern::Ptr pattern) {
 	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::drawSurface(ISurface::Ptr _surface) {
+void CairoDrawContext::drawSurface(ISurface::Ptr _surface, Number opacity) {
 	CairoSurface::Ptr surface = boost::shared_dynamic_cast<CairoSurface>(_surface);
 	if (!_surface)
 		return;
@@ -77,10 +77,10 @@ void CairoDrawContext::drawSurface(ISurface::Ptr _surface) {
 	if (!png)
 		return;
 	cairo_set_source_surface (context, png, 0, 0);
-	if (_surface->getOpacity() == 1.0) {
+	if (opacity == 1.0) {
 		cairo_paint (context);
 	} else {
-		cairo_paint_with_alpha(context, _surface->getOpacity());
+		cairo_paint_with_alpha(context, opacity);
 	}
 }
 //-----------------------------------------------------------------------------

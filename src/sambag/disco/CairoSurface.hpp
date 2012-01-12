@@ -11,6 +11,8 @@
 #include "cairo.h"
 #include "ISurface.hpp"
 #include "sambag/com/IDataHandler.hpp"
+#include "sambag/com/Exception.hpp"
+#include <string>
 
 namespace {
 using namespace sambag::disco;
@@ -39,13 +41,19 @@ class CairoSurface : public virtual ISurface {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<CairoSurface> Ptr;
+	//-------------------------------------------------------------------------
+	EXCEPTION_CLASS(SurfaceCreationFailed);
 protected:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * surface;
 	//-------------------------------------------------------------------------
-	CairoSurface(cairo_surface_t *s) : surface(s), opacity(1.) {}
-	//-------------------------------------------------------------------------
-	Number opacity;
+	CairoSurface(cairo_surface_t *s) : surface(s) {
+		cairo_status_t stat = cairo_surface_status(s);
+		if (stat!=CAIRO_STATUS_SUCCESS) {
+			std::string what(cairo_status_to_string (stat));
+			RAISE_ERROR(SurfaceCreationFailed, what);
+		}
+	}
 public:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * getCairoSurface() const {
@@ -59,14 +67,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const = 0;
-	//-------------------------------------------------------------------------
-	virtual void setOpacity(const Number &v) {
-		opacity = v;
-	}
-	//-------------------------------------------------------------------------
-	virtual Number getOpacity() const {
-		return opacity;
-	}
 };
 //=============================================================================
 class CairoImageSurface : public CairoSurface, public IImageSurface {

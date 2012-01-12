@@ -45,9 +45,6 @@ public:
 	//-------------------------------------------------------------------------
 	void setOpacity(const Coordinate &_opacity) {
 		opacity = _opacity;
-		if (!image)
-			return;
-		image->setOpacity(opacity);
 	}
 	//-------------------------------------------------------------------------
 	const Number & getOpacity() const {

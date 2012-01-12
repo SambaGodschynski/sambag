@@ -97,11 +97,11 @@ public:
 		return result.y();
 	}
 	//-------------------------------------------------------------------------
-	void setWidth(const Number &w) {
+	void setWidth(const Coordinate &w) {
 		max_corner().x(min_corner().x() + w);
 	}
 	//-------------------------------------------------------------------------
-	void setHeight(const Number &h) {
+	void setHeight(const Coordinate &h) {
 		max_corner().y(min_corner().y() + h);
 	}
 	//-------------------------------------------------------------------------
@@ -113,7 +113,7 @@ public:
 		Base(x0, x1) {
 	}
 	//-------------------------------------------------------------------------
-	Rectangle(Point2D _x0, const Number &width, const Number &height)
+	Rectangle(Point2D _x0, const Coordinate &width, const Coordinate &height)
 
 	{
 		Point2D x0(_x0), x1(width, height);
@@ -121,8 +121,8 @@ public:
 		*this = Base(x0, x1);
 	}
 	//-------------------------------------------------------------------------
-	Rectangle(const Number &x, const Number &y, const Number &width,
-			const Number &height) {
+	Rectangle(const Coordinate &x, const Coordinate &y, const Coordinate &width,
+			const Coordinate &height) {
 		Point2D x0(x, y), x1(width, height);
 		geometry::add_point(x1, x0);
 		*this = Base(x0, x1);

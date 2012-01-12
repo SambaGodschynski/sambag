@@ -17,7 +17,6 @@ namespace sambag { namespace disco { namespace graphicElements {
 void Image::loadImage() {
 	com::FileHandler::Ptr fh = com::FileHandler::create(uri);
 	image = getDiscoFactory()->createImageSurface(fh);
-	image->setOpacity(opacity);
 }
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
@@ -40,6 +39,6 @@ void Image::draw( IDrawContext::Ptr cn ) {
 		outline.getWidth()/orgSz.getWidth(),
 		outline.getHeight()/orgSz.getHeight()
 	));
-	cn->drawSurface(image);
+	cn->drawSurface(image, opacity);
 }
 }}}

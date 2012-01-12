@@ -8,7 +8,7 @@
 #ifndef EXCEPTION_HPP_
 #define EXCEPTION_HPP_
 
-#define RAISE_ERROR(obj, what) throw obj((what), sambag::com::Exception::ERROR, std::string(__FILE__),  std::string(__LINE__))
+#define RAISE_ERROR(obj, what) throw obj((what), sambag::com::Exception::ERROR)
 #define RAISE_WARNING(obj, what) throw obj((what), sambag::com::Exception::WARNING)
 #define RAISE_CRITICAL(obj, what) throw obj((what), sambag::com::Exception::CRITICAL,  std::string(__FILE__), std::string( __LINE__)
 
@@ -33,7 +33,6 @@ class Exception {
 public:
 	//-------------------------------------------------------------------------
 	enum Type {UNKOWN, WARNING, ERROR, CRITICAL};
-private:
 	std::string line;
 	std::string where;
 	std::string what;
