@@ -37,7 +37,7 @@ public:
 	{
 		cairo_surface_t *s = cairo_xlib_surface_create(dpy,
 				drawable,
-				visual,
+				DefaultVisual(dpy, 0),
 				width,
 				height);
 		Ptr neu = Ptr(new X11Surface(s));
