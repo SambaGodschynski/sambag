@@ -23,6 +23,7 @@ private:
 	CPPUNIT_TEST( testSvgTransform02 );
 	CPPUNIT_TEST( testSvgTransform03 );
 	CPPUNIT_TEST( testSvgTransform04 );
+	CPPUNIT_TEST( testSvgTransform05 );
 	CPPUNIT_TEST( testSvgStdFill );
 	CPPUNIT_TEST( testSvgPath );
 	CPPUNIT_TEST( testSvgPath02 );
@@ -57,6 +58,7 @@ public:
 	void testSvgTransform02();
 	void testSvgTransform03();
 	void testSvgTransform04();
+	void testSvgTransform05();
 	void testSvgStdFill();
 	void testSvgPath();
 	void testSvgPath02();

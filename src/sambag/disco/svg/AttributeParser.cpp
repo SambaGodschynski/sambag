@@ -33,21 +33,21 @@ void transformTransl(const std::vector<Number> &values, Matrix& m) {
 }
 //-----------------------------------------------------------------------------
 void transformRot(const std::vector<Number> &values, Matrix& m) {
+	using namespace sambag::math;
 	if (values.size()<1) return;
-	Number _cos = cos(values[0] * M_PI / 180.0);
-	Number _sin = sin(values[0] * M_PI / 180.0);
-	m(0,0) = _cos;
-	m(1,0) = _sin;
-	m(0,1) = -_sin;
-	m(1,1) = _cos;
-	if (values.size()<2) return;
-	// rotation around a specific point
-	m(0,2) = values[0];
-	if (values.size()<3) {
-		m(1,2) = 0;
+	Number angle = values[0];
+	if (values.size()<2) {
+		m = rotate2D(angle);
 		return;
 	}
-	m(1,2) = values[1];
+	// rotation around a specific point
+	Number x = values[1], y = 0.;
+	if (values.size() < 3) {
+		m = rotate2D(angle, x, y);
+		return;
+	}
+	y = values[2];
+	m = rotate2D(angle, x, y);
 }
 //-----------------------------------------------------------------------------
 void transformScal(const std::vector<Number> &values, Matrix& m) {

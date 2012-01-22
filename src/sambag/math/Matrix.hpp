@@ -64,15 +64,9 @@ inline Matrix rotate2D(sambag::com::Number r) {
 }
 inline Matrix rotate2D(sambag::com::Number r, sambag::com::Number x, sambag::com::Number y) {
 	using namespace sambag::com;
-	Matrix m = IDENTITY_MATRIX;
-	Number _cos = cos(r * M_PI / 180.0);
-	Number _sin = sin(r * M_PI / 180.0);
-	m(0,0) = _cos;
-	m(1,0) = _sin;
-	m(0,1) = -_sin;
-	m(1,1) = _cos;
-	m(0,2) = x;
-	m(1,2) = y;
+	Matrix m = translate2D(x,y);
+	m = boost::numeric::ublas::prod(m, rotate2D(r));
+	m = boost::numeric::ublas::prod(m, translate2D(-x, -y));
 	return m;
 }
 inline Matrix scale2D(sambag::com::Number x, sambag::com::Number y) {
