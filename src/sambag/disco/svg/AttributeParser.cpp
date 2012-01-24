@@ -143,7 +143,7 @@ void AttributeParser::parseTransform(const std::string &str, Matrix &matrix) {
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([a-zA-Z]+?)\\s*\\(([ 0-9.,-]+)\\)");
+	boost::regex re("([a-zA-Z]+?)\\s*\\(([ 0-9e.,-]+)\\)");
 	for ( ;
 		regex_search(begin, end, what, re);
 		begin = what[0].second
@@ -164,7 +164,7 @@ void AttributeParser::parsePathInstructions(const std::string &str, PathInstruct
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([a-zA-Z]+)\\s*([ 0-9.,-]*)");
+	boost::regex re("([a-zA-Z]+)\\s*([ 0-9e.,-]*)");
 	for ( ;
 		regex_search(begin, end, what, re);
 		begin = what[0].second
@@ -183,7 +183,7 @@ void AttributeParser::parsePointContainer(const std::string &str, PointContainer
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([0-9.-]+)");
+	boost::regex re("([0-9e.-]+)");
 	for ( ;
 		regex_search(begin, end, what, re);
 		begin = what[0].second
@@ -201,7 +201,7 @@ Dash::Ptr AttributeParser::parseDashArray(const std::string &str) {
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([a-z0-9.-]+)");
+	boost::regex re("([a-z0-9e.-]+)");
 	std::list<Coordinate> l;
 	for ( ;
 		regex_search(begin, end, what, re);
@@ -222,7 +222,7 @@ void AttributeParser::parseViewBox(const std::string &str, Rectangle& pC) {
 	std::string::const_iterator begin = inStr.begin();
 	std::string::const_iterator end = inStr.end();
 	boost::match_results<std::string::const_iterator> what;
-	std::string d = "([a-z0-9.-]+)";
+	std::string d = "([a-z0-9e.-]+)";
 	boost::regex re(d + "\\s+" + d + "\\s+" + d +"\\s+" + d);
 	if (!regex_search(begin, end, what, re))
 		return;
@@ -243,10 +243,9 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	std::string::const_iterator begin = str.begin();
 	std::string::const_iterator end = str.end();
 	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([0-9.-]+)([a-z%]*)");
+	boost::regex re("([0-9e.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
-	std::stringstream ss(what[1]); //value
-	ss>>c.value;
+	c.value = string2Number(what[1]); //value
 
 	if (what[2].length() > 0) {
 		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
@@ -268,7 +267,7 @@ void AttributeParser::parseColor(const std::string &in, ColorRGBA &color) {
 	std::string str=in;
 	prepareString(str);
 	static const boost::regex colorname("[a-zA-Z]+");
-	static const boost::regex colorval("#[0-9a-fA-F]+");
+	static const boost::regex colorval("#[0-9ea-fA-F]+");
 	if ( boost::regex_match(str, colorname) ) { // is colorname
 		const ColorRGBA &c = getColorByHtmlName(str);
 		color.setValues(c.getR(), c.getG(), c.getB(), c.getA());
@@ -306,8 +305,8 @@ void AttributeParser::parseOpacity(const std::string &in, Number &v) {
 	if (in.length()==0) return;
 	std::string str=in;
 	prepareString(str);
-	static const boost::regex single("[0-9.]+");
-	static const boost::regex percent("[0-9.]+%");
+	static const boost::regex single("[0-9e.]+");
+	static const boost::regex percent("[0-9e.]+%");
 	if ( boost::regex_match(str, single) ) { // is a single number
 		v = string2Number(str);
 	}

@@ -33,6 +33,7 @@ private:
 	CPPUNIT_TEST( testSvgPath05 );
 	CPPUNIT_TEST( testSvgPath05b );
 	CPPUNIT_TEST( testSvgPath06 );
+	CPPUNIT_TEST( testSvgPathValues );
 	CPPUNIT_TEST( testSvgPolyline );
 	CPPUNIT_TEST( testSvgPolygon );
 	CPPUNIT_TEST( testSvgArc );
@@ -68,6 +69,7 @@ public:
 	void testSvgPath05();
 	void testSvgPath05b();
 	void testSvgPath06();
+	void testSvgPathValues();
 	void testSvgPolyline();
 	void testSvgPolygon();
 	void testSvgUse();

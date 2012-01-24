@@ -388,6 +388,26 @@ void TestSvg::testSvgPath06() {
 	testSvg("testSvgPath06", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
+void TestSvg::testSvgPathValues() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "pathValues.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
+	testSvg("testPathValues", TEST_SVG,  surface, html);
+}
+//-----------------------------------------------------------------------------
 void TestSvg::testSvgPolyline() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
