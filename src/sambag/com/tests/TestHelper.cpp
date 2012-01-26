@@ -18,7 +18,7 @@ using namespace sambag;
 
 namespace tests {
 //=============================================================================
-void TestHelper::testExtractContainer() {
+void TestHelper::testFromContainer() {
 //=============================================================================
 	using namespace boost;
 	using namespace sambag::com;
@@ -30,20 +30,20 @@ void TestHelper::testExtractContainer() {
 	typedef tuple<double, double, double> Tuple;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert
 	double a=0, b=0, c=0;
-	tie(a, b, c) = extractContainer<Tuple, Container>(l);
+	tie(a, b, c) = fromContainer<Tuple, Container>(l);
 	CPPUNIT_ASSERT_EQUAL( 0.5,  a );
 	CPPUNIT_ASSERT_EQUAL( 0.6,  b );
 	CPPUNIT_ASSERT_EQUAL( 0.7,  c );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert: N(container) < N(tuple)
 	l.remove(0.7);
 	a = b = c = 0;
-	tie(a, b, c) = extractContainer<Tuple, Container>(l);
+	tie(a, b, c) = fromContainer<Tuple, Container>(l);
 	CPPUNIT_ASSERT_EQUAL( 0.5,  a );
 	CPPUNIT_ASSERT_EQUAL( 0.6,  b );
 	CPPUNIT_ASSERT_EQUAL( 0.0,  c );
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert: N(container) > N(tuple)
 	a = b = c = 0;
-	tie(a, b) = extractContainer<tuple<double, double>, Container>(l);
+	tie(a, b) = fromContainer<tuple<double, double>, Container>(l);
 	CPPUNIT_ASSERT_EQUAL( 0.5,  a );
 	CPPUNIT_ASSERT_EQUAL( 0.6,  b );
 	CPPUNIT_ASSERT_EQUAL( 0.0,  c );

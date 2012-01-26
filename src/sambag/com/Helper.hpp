@@ -51,7 +51,7 @@ struct _CopyToTuple<Tuple, Container, 0> {
  * All tuple types has fit to Container type.
  * purpose:
  * Number x0=0, x1=0, z=0;
- * tie(x0, x1, z) extractPointContainer<Tuple<Number, Number, Number>, Container<Number> > (container);
+ * tie(x0, x1, z) = fromContainer<Tuple<Number, Number, Number>, Container<Number> > (container);
  *
  * !! Urgent Advice:
  *    don't forget to initialize the tuple values. Otherwise you have foobar in it when
@@ -60,7 +60,7 @@ struct _CopyToTuple<Tuple, Container, 0> {
  * @return a tuple with containing N(tuple) container values.
  */
 template <typename Tuple, typename Container>
-Tuple extractContainer(const Container &c) {
+Tuple fromContainer(const Container &c) {
 	Tuple t;
 	enum {N = boost::tuples::length<Tuple>::value};
 	typename Container::const_iterator it = c.begin();
@@ -69,14 +69,14 @@ Tuple extractContainer(const Container &c) {
 	return t;
 }
 /**
- * Such as extractContainer(const Container &c) but with to copy range, setted by
+ * Such as fromContainer(const Container &c) but with to copy range, setted by
  * iterators.
  * @param it: iterator of container. will be increased for every copied value.
  * @param end: iterator of container. points to end of copy range.
  * @return a tuple with containing N(tuple) container values.
  */
 template <typename Tuple, typename Container>
-Tuple extractContainer(
+Tuple fromContainer(
 	 typename Container::const_iterator &it,
 	 const typename Container::const_iterator &end)
 {

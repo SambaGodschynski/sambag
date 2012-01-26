@@ -10,11 +10,9 @@
    width="1200"
    height="400"
    viewBox="0 0 1200 400"
-   version="1.1"
-   id="svg3070"
-   inkscape:version="0.48.2 r9819"
-   sodipodi:docname="firstElementsX.svg">
+   version="1.1">
   <rect width="1200" height="400" fill="white"/>
+  <path d="m50,50 100,0 m20,0 100,0" stroke="black" stroke-width="3"/>
   <g id="text" fill="black">
       <path
          d="m 175.32715,174.55322 -1.11084,4.81934 -11.87744,0 -1.05957,4.5459 11.02295,0 -1.12793,4.83642 -11.02295,0 -1.48682,6.42578 11.87744,0 -1.09375,4.81934 -18.43994,0 5.87891,-25.44678 18.43994,0"

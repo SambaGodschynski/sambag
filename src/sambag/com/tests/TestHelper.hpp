@@ -15,11 +15,11 @@ namespace tests {
 class TestHelper : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 	CPPUNIT_TEST_SUITE( TestHelper );
-	CPPUNIT_TEST( testExtractContainer );
+	CPPUNIT_TEST( testFromContainer );
 	CPPUNIT_TEST_SUITE_END();
 private:
 public:
-	void testExtractContainer();
+	void testFromContainer();
 };
 } // namespace tests
 
