@@ -59,7 +59,7 @@ public:
 		// first point is a move_to
 		Number x=0,y=0;
 		boost::tie(x,y) =
-				com::extractContainer<boost::tuple<Number, Number>, Points_tag::Type >(v);
+				com::fromContainer<boost::tuple<Number, Number>, Points_tag::Type >(v);
 		p0.push_back(x); p0.push_back(y);
 		pI.push_back(std::make_pair(p0, MOVETO_ABS));
 		// the rest

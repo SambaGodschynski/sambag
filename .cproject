@@ -27,7 +27,7 @@
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.939265245" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
 <builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.687174341" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.1449163758" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
 <option id="gnu.cpp.compiler.exe.debug.option.optimization.level.483506187" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
@@ -54,6 +54,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2110725256" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 <option id="gnu.cpp.link.option.libs.337670248" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="dl"/>
+<listOptionValue builtIn="false" value="lua"/>
 <listOptionValue builtIn="false" value="boost_regex"/>
 <listOptionValue builtIn="false" value="boost_system"/>
 <listOptionValue builtIn="false" value="cairo"/>
@@ -547,6 +548,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.475737200" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 <option id="gnu.cpp.link.option.libs.654778496" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="dl"/>
+<listOptionValue builtIn="false" value="lua"/>
 <listOptionValue builtIn="false" value="boost_regex"/>
 <listOptionValue builtIn="false" value="boost_system"/>
 <listOptionValue builtIn="false" value="cairo"/>
