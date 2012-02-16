@@ -11,6 +11,7 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
+#include <boost/static_assert.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -22,7 +23,6 @@ namespace sambag { namespace lua {
  */
 template <typename T>
 bool check(lua_State *L, int index) {
-	//TODO static assert
 	return false;
 }
 //-----------------------------------------------------------------------------
@@ -56,46 +56,37 @@ bool check<ILuaTable>(lua_State *L, int index) {
 	return lua_istable(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-template <typename T>
-bool __get(T &out, lua_State *L, int index) {
-	//TODO static assert
-	return false;
-}
+namespace {
 //-----------------------------------------------------------------------------
-template <>
-bool __get<int>(int &out, lua_State *L, int index) {
+bool __get(int &out, lua_State *L, int index) {
 	out = (int)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-template <>
-bool __get<unsigned int>(unsigned int &out, lua_State *L, int index) {
+bool __get(unsigned int &out, lua_State *L, int index) {
 	out = (unsigned int)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-template <>
-bool __get<float>(float &out, lua_State *L, int index) {
+bool __get(float &out, lua_State *L, int index) {
 	out = (float)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-template <>
-bool __get<double>(double &out, lua_State *L, int index) {
+bool __get(double &out, lua_State *L, int index) {
 	out = (double)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-template <>
-bool __get<std::string>(std::string &out, lua_State *L, int index) {
+bool __get(std::string &out, lua_State *L, int index) {
 	out = std::string(lua_tostring(L, index));
 	return true;
 }
 //-----------------------------------------------------------------------------
-template <>
-bool __get<ILuaTable>(ILuaTable &out, lua_State *L, int index) {
+bool __get(ILuaTable &out, lua_State *L, int index) {
 	return out.getFromStack(L, index);
 }
+} // namespace
 /**
  * @param out destination value
  * @param L lua state
@@ -107,7 +98,7 @@ template <typename T>
 bool get(T &out, lua_State *L, int index) {
 	if (!check<T>(L, index))
 		return false;
-	return __get<T>(out, L, index);
+	return __get(out, L, index);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -131,7 +122,7 @@ int get(T0 &o0,
 	int res = 0;
 	if (!get<T0>(o0, L, index--))
 		res = 1;
-	if (!get<T0>(o1, L, index--))
+	if (!get<T1>(o1, L, index))
 		res |= 1<<2;
 	return res;
 }
@@ -169,9 +160,34 @@ int get(T0 &o0,
 {
 	int res = get<T0, T1, T2>(o0, o1, o2, L, index);
 	index-= 3;
-	if (!get<T2>(o2, L, index))
+	if (!get<T3>(o3, L, index))
 		res |= 1<<4;
 	return res;
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+size_t getLen(lua_State *L, int index) {
+	lua_len(L, index);
+	size_t s;
+	if (!get(s, L, -1))
+		return 0;
+	lua_pop(L, 1);
+	return s;
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+struct ExecutionFailed {
+	std::string errMsg;
+	ExecutionFailed(const std::string &errMsg) : errMsg(errMsg) {}
+};
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+inline void executeString(lua_State *L,
+		const std::string &str,
+		int nargs=0,
+		int nres=0)
+{
+	luaL_loadstring (L, str.c_str());
+	if (lua_pcall(L, nargs, nres, 0)) {
+		throw ExecutionFailed(std::string(lua_tostring(L, -1)));
+	}
 }
 }} //namespaces
 

@@ -31,32 +31,6 @@ public:
 	 */
 	virtual bool pushIntoStack(lua_State *L) = 0;
 };
-//=============================================================================
-/**
- * Implements ILuaTable using a simple array. Assumes that lua table keys are
- * index numbers.
- */
-template <typename T>
-class LuaTableArray : public ILuaTable {
-//=============================================================================
-private:
-	//-------------------------------------------------------------------------
-	size_t size;
-	//-------------------------------------------------------------------------
-	T *data;
-public:
-	//-------------------------------------------------------------------------
-	LuaTableArray() : size(0), data(NULL) {}
-	//-------------------------------------------------------------------------
-	virtual bool getFromStack(lua_State *L, int index) {
-
-	}
-	//-------------------------------------------------------------------------
-	virtual bool pushIntoStack(lua_State *L) {
-
-	}
-};
-
 }} //namespaces
 
 #endif /* ILUATABLE_HPP_ */

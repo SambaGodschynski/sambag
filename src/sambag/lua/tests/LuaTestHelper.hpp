@@ -13,13 +13,7 @@
 #include <string>
 
 namespace tests {
-inline void executeString(lua_State *L, const std::string &str) {
-	luaL_loadstring (L, str.c_str());
-	if (lua_pcall(L, 0, 0, 0)) {
-		// call lua_tostring
-		CPPUNIT_ASSERT_MESSAGE(lua_tostring(L, -1), false);
-	}
-}
+
 }// namespace
 
 
