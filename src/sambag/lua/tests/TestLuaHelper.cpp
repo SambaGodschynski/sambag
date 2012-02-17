@@ -70,7 +70,7 @@ void TestLuaHelper::testGet() {
 	}
 	LuaSequence<int> arr;
 	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
-	CPPUNIT_ASSERT(get<ILuaTable>(arr, L, -1));
+	CPPUNIT_ASSERT(get(arr, L, -1));
 	for (size_t i=0; i<arr.getSize(); ++i) {
 		CPPUNIT_ASSERT_EQUAL((int)i*10, arr[i]);
 	}

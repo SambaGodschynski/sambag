@@ -11,18 +11,20 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
-#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
- * returns true if value at index type T
+ * returns true if type at index
  * @param L
  * @param index
  * @return
  */
 template <typename T>
 bool check(lua_State *L, int index) {
+	if (boost::is_convertible<T*, ILuaTable*>::value)
+		return check<ILuaTable>(L, index);
 	return false;
 }
 //-----------------------------------------------------------------------------
@@ -58,32 +60,32 @@ bool check<ILuaTable>(lua_State *L, int index) {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
 //-----------------------------------------------------------------------------
-bool __get(int &out, lua_State *L, int index) {
+inline bool __get(int &out, lua_State *L, int index) {
 	out = (int)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool __get(unsigned int &out, lua_State *L, int index) {
+inline bool __get(unsigned int &out, lua_State *L, int index) {
 	out = (unsigned int)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool __get(float &out, lua_State *L, int index) {
+inline bool __get(float &out, lua_State *L, int index) {
 	out = (float)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool __get(double &out, lua_State *L, int index) {
+inline bool __get(double &out, lua_State *L, int index) {
 	out = (double)lua_tonumber(L, index);
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool __get(std::string &out, lua_State *L, int index) {
+inline bool __get(std::string &out, lua_State *L, int index) {
 	out = std::string(lua_tostring(L, index));
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool __get(ILuaTable &out, lua_State *L, int index) {
+inline bool __get(ILuaTable &out, lua_State *L, int index) {
 	return out.getFromStack(L, index);
 }
 } // namespace
