@@ -25,6 +25,24 @@ void TestLuaHelper::tearDown() {
 	lua_close(L);
 }
 //-----------------------------------------------------------------------------
+void TestLuaHelper::testLuaSequence() {
+	using namespace sambag::lua;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<test reference counter
+	LuaSequence<int> seq;
+	{ // extra scope
+		LuaSequence<int> seq2;
+		seq2.alloc(10);
+		for (int i=0; i<10;++i) seq2[i] = i;
+		seq = seq2;
+	}
+	CPPUNIT_ASSERT_EQUAL((size_t)10, seq.getSize());
+	for (int i=0; i<10;++i) {
+		CPPUNIT_ASSERT_EQUAL(i, seq[i]); // test read and
+		seq[i] = i*2; // write
+		CPPUNIT_ASSERT_EQUAL(i*2, seq[i]);
+	}
+}
+//-----------------------------------------------------------------------------
 void TestLuaHelper::testGet() {
 	using namespace sambag::lua;
 	lua_pushstring(L, "abc");
@@ -42,20 +60,20 @@ void TestLuaHelper::testGet() {
 	std::string c;
 	CPPUNIT_ASSERT(get<std::string>(c, L, -1));
 	CPPUNIT_ASSERT_EQUAL(std::string("2.5"), c);
-	LuaTableArray<float> d;
+	LuaSequence<float> d;
 	CPPUNIT_ASSERT(!get(d, L, -2));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<checktable
-	lua_newtable(L);
-	int top = lua_gettop(L);
-	for (int i=0; i<10; ++i) {
-		lua_pushnumber(L, i);
-	    lua_pushnumber(L, i*10);
-	    lua_settable(L, top);
+	{ // extra scope
+		LuaSequence<int> arr(10);
+		for (size_t i=0; i<arr.getSize(); ++i) arr[i] = i*10;
+		push(arr,L);
 	}
-	LuaTableArray<float> arr;
-	CPPUNIT_ASSERT_EQUAL((size_t)9, getLen(L, -1));
+	LuaSequence<int> arr;
 	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(get<ILuaTable>(arr, L, -1));
+	for (size_t i=0; i<arr.getSize(); ++i) {
+		CPPUNIT_ASSERT_EQUAL((int)i*10, arr[i]);
+	}
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testGet02() {

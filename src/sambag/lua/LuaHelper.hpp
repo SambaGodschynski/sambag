@@ -189,6 +189,31 @@ inline void executeString(lua_State *L,
 		throw ExecutionFailed(std::string(lua_tostring(L, -1)));
 	}
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+inline void push(int v, lua_State *L) {
+	lua_pushnumber(L, v);
+}
+//-----------------------------------------------------------------------------
+inline void push(unsigned int v, lua_State *L) {
+	lua_pushnumber(L, v);
+}
+//-----------------------------------------------------------------------------
+inline void push(float v, lua_State *L) {
+	lua_pushnumber(L, v);
+}
+//-----------------------------------------------------------------------------
+inline void push(const double &v, lua_State *L) {
+	lua_pushnumber(L, v);
+}
+//-----------------------------------------------------------------------------
+inline void push(const std::string &v, lua_State *L) {
+	lua_pushstring(L, v.c_str());
+}
+//-----------------------------------------------------------------------------
+inline void push(const ILuaTable &v, lua_State *L) {
+	v.pushIntoStack(L);
+}
 }} //namespaces
 
 

@@ -11,36 +11,60 @@
 #include "ILuaTable.hpp"
 #include "LuaHelper.hpp"
 #include <lua.hpp>
+#include <boost/shared_array.hpp>
 
 namespace sambag { namespace lua {
 //=============================================================================
 /**
- * Implements ILuaTable using a simple array. Assumes that lua table keys are
- * index numbers.
+ * Implements ILuaTable using a boost::shared_array<T>.
+ * Transforms between a Lua-sequence(index:1..n) and a C-array(index:0..n).
  */
 template <typename T>
-class LuaTableArray : public ILuaTable {
+class LuaSequence : public ILuaTable {
 //=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	struct NoSequenceEx {};
+	//-------------------------------------------------------------------------
+	struct OutOfBoundsEx {};
+	//-------------------------------------------------------------------------
+	typedef T Type;
 private:
 	//-------------------------------------------------------------------------
 	size_t size;
 	//-------------------------------------------------------------------------
-	T *data;
+	typedef boost::shared_array<T> Data;
 	//-------------------------------------------------------------------------
-	void alloc(size_t size) {
-		if (data) {
-			delete[] data;
-			data = NULL;
-		}
-		data = new T[size];
-	}
+	Data data;
 public:
 	//-------------------------------------------------------------------------
-	LuaTableArray() : size(0), data(NULL) {}
+	/**
+	 * allocates new table data.
+	 * @param size
+	 */
+	void alloc(size_t _size) {
+		size = _size;
+		data = Data(new T[size]);
+	}
 	//-------------------------------------------------------------------------
-	virtual ~LuaTableArray() {
-		delete[] data;
-		data = NULL;
+	LuaSequence(size_t size = 0) : size(size) {
+		if (size>0)
+			alloc(size);
+	}
+	//-------------------------------------------------------------------------
+	virtual ~LuaSequence() {
+	}
+	//-------------------------------------------------------------------------
+	T & operator[](size_t i) {
+		if (i>size)
+			throw OutOfBoundsEx();
+		return data[i];
+	}
+	//-------------------------------------------------------------------------
+	const T & operator[](size_t i) const {
+		if (i>size)
+			throw OutOfBoundsEx();
+		return data[i];
 	}
 	//-------------------------------------------------------------------------
 	size_t getSize() const {
@@ -54,9 +78,10 @@ public:
 		--index;
 		bool res = true;
 		while (lua_next(L, index) != 0) {
+			// TODO: check sequence
 			// uses 'key' (at index -2) and 'value' (at index -1)
 			size_t i;
-			if (get(i, L, -2) && i<size) {
+			if (get(i, L, -2) && --i/*lua sequence starts with 1*/<size) {
 				res = get<T>(data[i], L, -1);
 			} else { // invalid index value
 				std::cout<<i<<"; ";
@@ -67,8 +92,14 @@ public:
 		return res;
 	}
 	//-------------------------------------------------------------------------
-	virtual bool pushIntoStack(lua_State *L) {
-
+	virtual void pushIntoStack(lua_State *L) const {
+		lua_newtable(L);
+		int top = lua_gettop(L);
+		for (size_t i=0; i<size; ++i) {
+			lua_pushnumber(L, i+1); //lua sequence starts with 1
+			push(data[i], L);
+			lua_settable(L, top);
+		}
 	}
 };
 

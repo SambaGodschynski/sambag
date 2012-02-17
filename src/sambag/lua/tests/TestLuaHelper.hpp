@@ -18,6 +18,7 @@ class TestLuaHelper : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestLuaHelper );
+	CPPUNIT_TEST( testLuaSequence );
 	CPPUNIT_TEST( testGet );
 	CPPUNIT_TEST( testGet02 );
 	CPPUNIT_TEST( testCheckType );
@@ -26,6 +27,7 @@ private:
 public:
 	virtual void setUp();
 	virtual void tearDown();
+	void testLuaSequence();
 	void testGet();
 	void testGet02();
 	void testCheckType();

@@ -27,9 +27,8 @@ public:
 	/**
 	 * pushs ILuaTable object into lua stack
 	 * @param L lua state
-	 * @return true if suceed
 	 */
-	virtual bool pushIntoStack(lua_State *L) = 0;
+	virtual void pushIntoStack(lua_State *L) const = 0;
 };
 }} //namespaces
 
