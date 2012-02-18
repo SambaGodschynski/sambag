@@ -8,7 +8,7 @@
 #include "TestLuaHelper.hpp"
 #include "LuaTestHelper.hpp"
 #include "sambag/lua/LuaHelper.hpp"
-#include "sambag/lua/LuaTable.hpp"
+#include "sambag/lua/LuaSequence.hpp"
 #include <string>
 
 // Registers the fixture into the 'registry'
@@ -41,6 +41,12 @@ void TestLuaHelper::testLuaSequence() {
 		seq[i] = i*2; // write
 		CPPUNIT_ASSERT_EQUAL(i*2, seq[i]);
 	}
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<bounds
+	LuaSequence<int> r;
+	CPPUNIT_ASSERT_THROW(r[0], OutOfBoundsEx);
+	r.alloc(1);
+	CPPUNIT_ASSERT_THROW(r[1], OutOfBoundsEx);
+
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testGet() {
@@ -103,13 +109,9 @@ void TestLuaHelper::testCheckType() {
 	CPPUNIT_ASSERT(check<double>(L, -1));
 	CPPUNIT_ASSERT(check<std::string>(L, -1)); // number is string convertible
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<checktable
-	lua_newtable(L);
-	int top = lua_gettop(L);
-	for (int i=0; i<10; ++i) {
-		lua_pushnumber(L, i);
-	    lua_pushnumber(L, 1./((float)i+1));
-	    lua_settable(L, top);
-	}
+	LuaSequence<int> seq(10);
+	for (int i=0; i<10;++i) seq[i] = i;
+	push(seq,L);
 	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(!check<ILuaTable>(L, -2));
 }

@@ -14,6 +14,10 @@
 #include <boost/shared_array.hpp>
 
 namespace sambag { namespace lua {
+//-------------------------------------------------------------------------
+struct NoSequenceEx {};
+//-------------------------------------------------------------------------
+struct OutOfBoundsEx {};
 //=============================================================================
 /**
  * Implements ILuaTable using a boost::shared_array<T>.
@@ -23,10 +27,6 @@ template <typename T>
 class LuaSequence : public ILuaTable {
 //=============================================================================
 public:
-	//-------------------------------------------------------------------------
-	struct NoSequenceEx {};
-	//-------------------------------------------------------------------------
-	struct OutOfBoundsEx {};
 	//-------------------------------------------------------------------------
 	typedef T Type;
 private:
@@ -56,13 +56,13 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	T & operator[](size_t i) {
-		if (i>size)
+		if (i>=size || !data)
 			throw OutOfBoundsEx();
 		return data[i];
 	}
 	//-------------------------------------------------------------------------
 	const T & operator[](size_t i) const {
-		if (i>size)
+		if (i>=size || !data)
 			throw OutOfBoundsEx();
 		return data[i];
 	}
@@ -72,6 +72,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual bool getFromStack(lua_State *L, int index) {
+		//TODO: throw no sequence
 		size = getLen(L, index);
 		alloc(size);
 		lua_pushnil(L);  /* first key */

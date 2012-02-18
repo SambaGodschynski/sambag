@@ -24,38 +24,15 @@ namespace sambag { namespace lua {
 template <typename T>
 bool check(lua_State *L, int index) {
 	if (boost::is_convertible<T*, ILuaTable*>::value)
-		return check<ILuaTable>(L, index);
+		return lua_istable(L, index) == 1;
+	if (boost::is_arithmetic<T>::value)
+		return lua_isnumber(L, index) == 1;
 	return false;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool check<int>(lua_State *L, int index) {
-	return lua_isnumber(L, index) == 1;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool check<unsigned int>(lua_State *L, int index) {
-	return lua_isnumber(L, index) == 1;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool check<float>(lua_State *L, int index) {
-	return lua_isnumber(L, index) == 1;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool check<double>(lua_State *L, int index) {
-	return lua_isnumber(L, index) == 1;
 }
 //-----------------------------------------------------------------------------
 template <>
 bool check<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
-}
-//-----------------------------------------------------------------------------
-template <>
-bool check<ILuaTable>(lua_State *L, int index) {
-	return lua_istable(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
