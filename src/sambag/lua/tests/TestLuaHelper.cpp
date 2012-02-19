@@ -117,19 +117,48 @@ void TestLuaHelper::testGet() {
 	}
 }
 //-----------------------------------------------------------------------------
-void TestLuaHelper::testGet02() {
+void TestLuaHelper::testMultiPushGet() {
 	using namespace sambag::lua;
-	lua_pushstring(L, "abc");
-	lua_pushnumber(L, 10);
-	lua_pushnumber(L, 2);
-	lua_pushnumber(L, 1);
-	std::string a;
-	int b = 0, c = 0, d = 0;
-	CPPUNIT_ASSERT_EQUAL((int)0, get(d,c,b,a,L,-1));
-	CPPUNIT_ASSERT_EQUAL((int)1, d);
-	CPPUNIT_ASSERT_EQUAL((int)2, c);
-	CPPUNIT_ASSERT_EQUAL((int)10, b);
-	CPPUNIT_ASSERT_EQUAL(std::string("abc"), a);
+	typedef LuaMap<std::string, int> Map;
+	{ // extra scope
+		int a = 1;
+		double b = 2.0;
+		std::string c = "abc";
+		LuaSequence<int> d(10);
+		for (size_t i=0; i<d.getSize(); ++i) d[i] = i*10;
+		Map e;
+		e["1"] = 10;
+		e["2"] = 20;
+		e["3"] = 30;
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push content
+		push(a,b,c,d,e,L);
+	}
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get content
+	int a; double b; std::string c; LuaSequence<int> d; Map e;
+	CPPUNIT_ASSERT(get(e,d,c,b,a,L,-1));
+	CPPUNIT_ASSERT_EQUAL((int)1, a);
+	CPPUNIT_ASSERT_EQUAL((double)2.0, b);
+	CPPUNIT_ASSERT_EQUAL(std::string("abc"), c);
+	for (size_t i=0; i<d.getSize(); ++i) {
+		CPPUNIT_ASSERT_EQUAL((int)i*10, d[i]);
+	}
+	BOOST_FOREACH(const Map::value_type &it, e) {
+		std::stringstream ss;
+		ss << it.first;
+		int i;
+		ss >> i;
+		CPPUNIT_ASSERT_EQUAL(i * 10, it.second);
+	}
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<test failure
+	CPPUNIT_ASSERT(!get(a,d,c,b,a,L,-1)); // 1st wrong
+	CPPUNIT_ASSERT(!get(e,a,c,b,a,L,-1)); // 2nd wrong
+	CPPUNIT_ASSERT(!get(a,d,e,b,a,L,-1)); // 3th wrong
+	CPPUNIT_ASSERT(!get(a,d,c,e,a,L,-1)); // 4th wrong
+	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-1)); // 5th wrong
+	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-2)); // wrong index
+	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-3)); // wrong index
+	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-4)); // wrong index
+	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-5)); // wrong index
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCheckType() {

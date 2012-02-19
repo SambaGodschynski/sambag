@@ -86,24 +86,22 @@ bool get(T &out, lua_State *L, int index) {
  * @param o1
  * @param L
  * @param index
- * @return flag shows the value index which get-operation failed:
- * 0 - succeed, 1 first value failed, 10 second value failed, 11 ..., 100 ...
+ * @return true if succeed
  */
 template <
 	typename T0,
 	typename T1
 >
-int get(T0 &o0,
+bool get(T0 &o0,
 		T1 &o1,
 		lua_State *L,
 		int index)
 {
-	int res = 0;
 	if (!get<T0>(o0, L, index--))
-		res = 1;
+		return false;
 	if (!get<T1>(o1, L, index))
-		res |= 1<<2;
-	return res;
+		return false;
+	return true;
 }
 //-----------------------------------------------------------------------------
 template <
@@ -111,17 +109,18 @@ template <
 	typename T1,
 	typename T2
 >
-int get(T0 &o0,
+bool get(T0 &o0,
 		T1 &o1,
 		T2 &o2,
 		lua_State *L,
 		int index)
 {
-	int res = get<T0, T1>(o0, o1, L, index);
+	if (!get<T0, T1>(o0, o1, L, index))
+		return false;
 	index-= 2;
 	if (!get<T2>(o2, L, index))
-		res |= 1<<3;
-	return res;
+		return false;
+	return true;
 }
 //-----------------------------------------------------------------------------
 template <
@@ -130,18 +129,42 @@ template <
 	typename T2,
 	typename T3
 >
-int get(T0 &o0,
+bool get(T0 &o0,
 		T1 &o1,
 		T2 &o2,
 		T3 &o3,
 		lua_State *L,
 		int index)
 {
-	int res = get<T0, T1, T2>(o0, o1, o2, L, index);
+	if (!get<T0, T1, T2>(o0, o1, o2, L, index))
+		return false;
 	index-= 3;
 	if (!get<T3>(o3, L, index))
-		res |= 1<<4;
-	return res;
+		return false;
+	return true;
+}
+//-----------------------------------------------------------------------------
+template <
+	typename T0,
+	typename T1,
+	typename T2,
+	typename T3,
+	typename T4
+>
+bool get(T0 &o0,
+		T1 &o1,
+		T2 &o2,
+		T3 &o3,
+		T4 &o4,
+		lua_State *L,
+		int index)
+{
+	if (!get<T0, T1, T2, T3>(o0, o1, o2, o3, L, index))
+		return false;
+	index-= 4;
+	if (!get<T4>(o4, L, index))
+		return false;
+	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 size_t getLen(lua_State *L, int index) {
@@ -192,6 +215,73 @@ inline void push(const std::string &v, lua_State *L) {
 //-----------------------------------------------------------------------------
 inline void push(const ILuaTable &v, lua_State *L) {
 	v.pushIntoStack(L);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+/**
+ * pushs o0 up to oN into lua stack.
+ * @param o0
+ * @param o1
+ * @param L
+ */
+template <
+	typename T0,
+	typename T1
+>
+int push(const T0 &o0,
+		const T1 &o1,
+		lua_State *L)
+{
+	push(o0,L);
+	push(o1,L);
+}
+//-----------------------------------------------------------------------------
+template <
+	typename T0,
+	typename T1,
+	typename T2
+>
+int push(const T0 &o0,
+		const T1 &o1,
+		const T2 &o2,
+		lua_State *L)
+{
+	push(o0, o1 ,L);
+	push(o2, L);
+}
+//-----------------------------------------------------------------------------
+template <
+	typename T0,
+	typename T1,
+	typename T2,
+	typename T3
+>
+int push(const T0 &o0,
+		const T1 &o1,
+		const T2 &o2,
+		const T3 &o3,
+		lua_State *L)
+{
+	push(o0, o1 ,o2, L);
+	push(o3, L);
+}
+//-----------------------------------------------------------------------------
+template <
+	typename T0,
+	typename T1,
+	typename T2,
+	typename T3,
+	typename T4
+>
+int push(const T0 &o0,
+		const T1 &o1,
+		const T2 &o2,
+		const T3 &o3,
+		const T4 &o4,
+		lua_State *L)
+{
+	push(o0, o1 ,o2, o3, L);
+	push(o4, L);
 }
 }} //namespaces
 

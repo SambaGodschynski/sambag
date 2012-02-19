@@ -21,8 +21,8 @@ private:
 	CPPUNIT_TEST( testLuaSequence );
 	CPPUNIT_TEST( testLuaMap );
 	CPPUNIT_TEST( testGet );
-	CPPUNIT_TEST( testGet02 );
 	CPPUNIT_TEST( testCheckType );
+	CPPUNIT_TEST( testMultiPushGet );
 	CPPUNIT_TEST_SUITE_END();
 	lua_State *L;
 public:
@@ -31,7 +31,7 @@ public:
 	void testLuaSequence();
 	void testLuaMap();
 	void testGet();
-	void testGet02();
+	void testMultiPushGet();
 	void testCheckType();
 };
 
