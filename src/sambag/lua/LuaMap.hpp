@@ -1,88 +1,72 @@
 /*
- * LuaSequence.hpp
+ * LuaMap.hpp
  *
  *  Created on: 15 Feb 2012
  *      Author: samba
  */
 
-#ifndef LUATABLE_HPP_
-#define LUATABLE_HPP_
+#ifndef LUAMAP_HPP_
+#define LUAMAP_HPP_
 
 #include "ILuaTable.hpp"
 #include "LuaHelper.hpp"
 #include <lua.hpp>
 #include <boost/shared_array.hpp>
+#include <boost/foreach.hpp>
 
 namespace sambag { namespace lua {
-//-----------------------------------------------------------------------------
-struct NoSequenceEx {};
-//-----------------------------------------------------------------------------
-struct OutOfBoundsEx {};
 //=============================================================================
 /**
- * Implements ILuaTable using a boost::shared_array<T>.
- * Transforms between a Lua-sequence(index:1..n) and a C-array(index:0..n).
+ * Implements ILuaTable using std::map<Key, Value>.
  */
-template <typename T>
-class LuaSequence : public ILuaTable {
+template <typename Key, typename Value>
+class LuaMap : public ILuaTable {
 //=============================================================================
-private:
-	//-------------------------------------------------------------------------
-	size_t size;
-	//-------------------------------------------------------------------------
-	typedef boost::shared_array<T> Data;
-	//-------------------------------------------------------------------------
-	Data data;
 public:
 	//-------------------------------------------------------------------------
-	/**
-	 * allocates new table data.
-	 * @param size
-	 */
-	void alloc(size_t _size) {
-		size = _size;
-		data = Data(new T[size]);
+	typedef std::map<Key, Value> Map;
+private:
+	//-------------------------------------------------------------------------
+	Map map;
+public:
+	//-------------------------------------------------------------------------
+	Map & getContainer() {
+		return map;
 	}
 	//-------------------------------------------------------------------------
-	LuaSequence(size_t size = 0) : size(size) {
-		if (size>0)
-			alloc(size);
+	const Map & getContainer() const {
+		return map;
 	}
 	//-------------------------------------------------------------------------
-	virtual ~LuaSequence() {
+	virtual ~LuaMap() {
 	}
 	//-------------------------------------------------------------------------
-	T & operator[](size_t i) {
-		if (i>=size || !data)
-			throw OutOfBoundsEx();
-		return data[i];
+	Value & operator[](const Key &k) {
+		return map[k];
 	}
 	//-------------------------------------------------------------------------
-	const T & operator[](size_t i) const {
-		if (i>=size || !data)
-			throw OutOfBoundsEx();
-		return data[i];
+	const Value & operator[](const Key &k) const {
+		return map[k];
 	}
 	//-------------------------------------------------------------------------
 	size_t getSize() const {
-		return size;
+		return map.size;
 	}
 	//-------------------------------------------------------------------------
 	virtual bool getFromStack(lua_State *L, int index) {
-		//TODO: throw no sequence
-		size = getLen(L, index);
-		alloc(size);
 		lua_pushnil(L);  /* first key */
 		--index;
 		bool res = true;
 		while (lua_next(L, index) != 0) {
 			// TODO: check sequence
 			// uses 'key' (at index -2) and 'value' (at index -1)
-			size_t i;
-			if (get(i, L, -2) && --i/*lua sequence starts with 1*/<size) {
-				if( !get<T>(data[i], L, -1) )
+			Key k;
+			if (get(k, L, -2)) {
+				Value v;
+				if (!get(v, L, -1))
 					return false;
-			} else { // invalid index value
+				map[k] = v;
+			} else { // invalid key
 				return false;
 			}
 			lua_pop(L, 1);
@@ -93,9 +77,9 @@ public:
 	virtual void pushIntoStack(lua_State *L) const {
 		lua_newtable(L);
 		int top = lua_gettop(L);
-		for (size_t i=0; i<size; ++i) {
-			lua_pushnumber(L, i+1); //lua sequence starts with 1
-			push(data[i], L);
+		BOOST_FOREACH(const typename Map::value_type &it, map) {
+			push(it.first, L);
+			push(it.second, L);
 			lua_settable(L, top);
 		}
 	}
@@ -103,4 +87,5 @@ public:
 
 }} //namespaces
 
-#endif /* LUATABLE_HPP_ */
+#endif /* LUAMAP_HPP_ */
+

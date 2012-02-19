@@ -9,7 +9,10 @@
 #include "LuaTestHelper.hpp"
 #include "sambag/lua/LuaHelper.hpp"
 #include "sambag/lua/LuaSequence.hpp"
+#include "sambag/lua/LuaMap.hpp"
+#include <boost/foreach.hpp>
 #include <string>
+#include <sstream>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaHelper );
@@ -23,6 +26,38 @@ void TestLuaHelper::setUp() {
 //-----------------------------------------------------------------------------
 void TestLuaHelper::tearDown() {
 	lua_close(L);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testLuaMap() {
+	using namespace sambag::lua;
+	typedef LuaMap<std::string, int> Map;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<insert values
+	{ // extra scope
+		Map map;
+		map["1"] = 10;
+		map["2"] = 20;
+		map["3"] = 30;
+		BOOST_FOREACH(const Map::Map::value_type &it, map.getContainer()) {
+			std::stringstream ss;
+			ss << it.first;
+			int i;
+			ss >> i;
+			CPPUNIT_ASSERT_EQUAL(i * 10, it.second);
+		}
+		push(map, L);
+	}
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get Values
+	Map map;
+	CPPUNIT_ASSERT(get(map, L, -1));
+	BOOST_FOREACH(const Map::Map::value_type &it, map.getContainer()) {
+		std::stringstream ss;
+		ss << it.first;
+		int i;
+		ss >> i;
+		CPPUNIT_ASSERT_EQUAL(i * 10, it.second);
+	}
+
+
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testLuaSequence() {
