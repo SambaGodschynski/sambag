@@ -37,7 +37,7 @@ void TestLuaHelper::testLuaMap() {
 		map["1"] = 10;
 		map["2"] = 20;
 		map["3"] = 30;
-		BOOST_FOREACH(const Map::Map::value_type &it, map.getContainer()) {
+		BOOST_FOREACH(const Map::value_type &it, map) {
 			std::stringstream ss;
 			ss << it.first;
 			int i;
@@ -49,7 +49,7 @@ void TestLuaHelper::testLuaMap() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get Values
 	Map map;
 	CPPUNIT_ASSERT(get(map, L, -1));
-	BOOST_FOREACH(const Map::Map::value_type &it, map.getContainer()) {
+	BOOST_FOREACH(const Map::value_type &it, map) {
 		std::stringstream ss;
 		ss << it.first;
 		int i;

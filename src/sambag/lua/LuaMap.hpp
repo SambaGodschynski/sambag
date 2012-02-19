@@ -20,37 +20,17 @@ namespace sambag { namespace lua {
  * Implements ILuaTable using std::map<Key, Value>.
  */
 template <typename Key, typename Value>
-class LuaMap : public ILuaTable {
+class LuaMap : public ILuaTable, public std::map<Key, Value> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef std::map<Key, Value> Map;
-private:
-	//-------------------------------------------------------------------------
-	Map map;
-public:
-	//-------------------------------------------------------------------------
-	Map & getContainer() {
-		return map;
-	}
-	//-------------------------------------------------------------------------
-	const Map & getContainer() const {
-		return map;
-	}
 	//-------------------------------------------------------------------------
 	virtual ~LuaMap() {
 	}
 	//-------------------------------------------------------------------------
-	Value & operator[](const Key &k) {
-		return map[k];
-	}
-	//-------------------------------------------------------------------------
-	const Value & operator[](const Key &k) const {
-		return map[k];
-	}
-	//-------------------------------------------------------------------------
 	size_t getSize() const {
-		return map.size;
+		return typename Map::size();
 	}
 	//-------------------------------------------------------------------------
 	virtual bool getFromStack(lua_State *L, int index) {
@@ -65,7 +45,7 @@ public:
 				Value v;
 				if (!get(v, L, -1))
 					return false;
-				map[k] = v;
+				(*this)[k] = v;
 			} else { // invalid key
 				return false;
 			}
@@ -77,7 +57,7 @@ public:
 	virtual void pushIntoStack(lua_State *L) const {
 		lua_newtable(L);
 		int top = lua_gettop(L);
-		BOOST_FOREACH(const typename Map::value_type &it, map) {
+		BOOST_FOREACH(const typename Map::value_type &it, *this) {
 			push(it.first, L);
 			push(it.second, L);
 			lua_settable(L, top);
