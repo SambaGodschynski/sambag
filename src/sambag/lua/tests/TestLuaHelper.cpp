@@ -60,27 +60,28 @@ void TestLuaHelper::testLuaMap() {
 
 }
 //-----------------------------------------------------------------------------
-void TestLuaHelper::testLuaSequence() {
+void TestLuaHelper::testLuaSequenceEx() {
 	using namespace sambag::lua;
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<test reference counter
-	LuaSequence<int> seq;
 	{ // extra scope
-		LuaSequence<int> seq2;
-		seq2.alloc(10);
-		for (int i=0; i<10;++i) seq2[i] = i;
-		seq = seq2;
+		float data[] = {1.f, 2.f, 3.f, 4.f};
+		LuaSequenceEx<float> seq(&data[0], 4);
+		CPPUNIT_ASSERT_EQUAL((size_t)4, seq.size());
+		for (int i=0; i<4;++i) {
+			CPPUNIT_ASSERT_EQUAL((float)i+1.f, seq[i]);
+		}
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<bounds
+		CPPUNIT_ASSERT_THROW(seq[4], OutOfBoundsEx);
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push
+		push(seq, L);
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get
 	}
-	CPPUNIT_ASSERT_EQUAL((size_t)10, seq.getSize());
-	for (int i=0; i<10;++i) {
-		CPPUNIT_ASSERT_EQUAL(i, seq[i]); // test read and
-		seq[i] = i*2; // write
-		CPPUNIT_ASSERT_EQUAL(i*2, seq[i]);
+	float *data = new float[4];
+	LuaSequenceEx<float> seq(&data[0], 4);
+	CPPUNIT_ASSERT(get(seq, L, -1));
+	for (int i=0; i<4;++i) {
+		CPPUNIT_ASSERT_EQUAL((float)i+1.f, seq[i]);
 	}
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<bounds
-	LuaSequence<int> r;
-	CPPUNIT_ASSERT_THROW(r[0], OutOfBoundsEx);
-	r.alloc(1);
-	CPPUNIT_ASSERT_THROW(r[1], OutOfBoundsEx);
+	delete[] data;
 
 }
 //-----------------------------------------------------------------------------
@@ -106,13 +107,13 @@ void TestLuaHelper::testGet() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<checktable
 	{ // extra scope
 		LuaSequence<int> arr(10);
-		for (size_t i=0; i<arr.getSize(); ++i) arr[i] = i*10;
+		for (size_t i=0; i<arr.size(); ++i) arr[i] = i*10;
 		push(arr,L);
 	}
 	LuaSequence<int> arr;
 	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(get(arr, L, -1));
-	for (size_t i=0; i<arr.getSize(); ++i) {
+	for (size_t i=0; i<arr.size(); ++i) {
 		CPPUNIT_ASSERT_EQUAL((int)i*10, arr[i]);
 	}
 }
@@ -125,7 +126,7 @@ void TestLuaHelper::testMultiPushGet() {
 		double b = 2.0;
 		std::string c = "abc";
 		LuaSequence<int> d(10);
-		for (size_t i=0; i<d.getSize(); ++i) d[i] = i*10;
+		for (size_t i=0; i<d.size(); ++i) d[i] = i*10;
 		Map e;
 		e["1"] = 10;
 		e["2"] = 20;
@@ -139,7 +140,7 @@ void TestLuaHelper::testMultiPushGet() {
 	CPPUNIT_ASSERT_EQUAL((int)1, a);
 	CPPUNIT_ASSERT_EQUAL((double)2.0, b);
 	CPPUNIT_ASSERT_EQUAL(std::string("abc"), c);
-	for (size_t i=0; i<d.getSize(); ++i) {
+	for (size_t i=0; i<d.size(); ++i) {
 		CPPUNIT_ASSERT_EQUAL((int)i*10, d[i]);
 	}
 	BOOST_FOREACH(const Map::value_type &it, e) {
