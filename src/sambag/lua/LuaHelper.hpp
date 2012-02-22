@@ -176,20 +176,34 @@ size_t getLen(lua_State *L, int index) {
 	return s;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// executation helper
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct ExecutionFailed {
 	std::string errMsg;
 	ExecutionFailed(const std::string &errMsg) : errMsg(errMsg) {}
 };
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-inline void executeString(lua_State *L,
-		const std::string &str,
-		int nargs=0,
-		int nres=0)
-{
-	luaL_loadstring (L, str.c_str());
-	if (lua_pcall(L, nargs, nres, 0)) {
-		throw ExecutionFailed(std::string(lua_tostring(L, -1)));
+struct NoFunction {};
+//-----------------------------------------------------------------------------
+namespace {
+	inline void __getF(lua_State *L, const std::string &fName)
+	{
+		lua_getglobal(L, fName.c_str());
+		if (!lua_isfunction(L, -1)==1)
+			throw NoFunction();
 	}
+	inline void __callF(lua_State *L,
+			int narg=0,
+			int nret=0)
+	{
+		if (lua_pcall(L, narg, nret, 0)!=0) {
+			throw ExecutionFailed(std::string(lua_tostring(L, -1)));
+		}
+	}
+} // namespace
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+inline void executeString(lua_State *L, const std::string &str) {
+	luaL_loadstring (L, str.c_str());
+	__callF(L);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -228,7 +242,7 @@ template <
 	typename T0,
 	typename T1
 >
-int push(const T0 &o0,
+void push(const T0 &o0,
 		const T1 &o1,
 		lua_State *L)
 {
@@ -241,7 +255,7 @@ template <
 	typename T1,
 	typename T2
 >
-int push(const T0 &o0,
+void push(const T0 &o0,
 		const T1 &o1,
 		const T2 &o2,
 		lua_State *L)
@@ -256,7 +270,7 @@ template <
 	typename T2,
 	typename T3
 >
-int push(const T0 &o0,
+void push(const T0 &o0,
 		const T1 &o1,
 		const T2 &o2,
 		const T3 &o3,
@@ -273,7 +287,7 @@ template <
 	typename T3,
 	typename T4
 >
-int push(const T0 &o0,
+void push(const T0 &o0,
 		const T1 &o1,
 		const T2 &o2,
 		const T3 &o3,
@@ -282,6 +296,21 @@ int push(const T0 &o0,
 {
 	push(o0, o1 ,o2, o3, L);
 	push(o4, L);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+/**
+ * calls lua function. throws NoFunction when function not exists,
+ * or ExecutionFailed when Lua error occurs.
+ * @param L
+ * @param fName function name
+ * @param nResult number of results
+ */
+inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult = 0)
+{
+	__getF(L, fName);
+	__callF(L, 0, nResult);
+
 }
 }} //namespaces
 

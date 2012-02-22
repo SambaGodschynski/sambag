@@ -23,6 +23,7 @@ private:
 	CPPUNIT_TEST( testGet );
 	CPPUNIT_TEST( testCheckType );
 	CPPUNIT_TEST( testMultiPushGet );
+	CPPUNIT_TEST( testCallF );
 	CPPUNIT_TEST_SUITE_END();
 	lua_State *L;
 public:
@@ -33,6 +34,7 @@ public:
 	void testGet();
 	void testMultiPushGet();
 	void testCheckType();
+	void testCallF();
 };
 
 } // namespace

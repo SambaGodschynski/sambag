@@ -180,4 +180,23 @@ void TestLuaHelper::testCheckType() {
 	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(!check<ILuaTable>(L, -2));
 }
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A()\n"
+			"	return 2\n"
+			"end\n";
+	executeString(L, LCODE);
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	try {
+		callLuaFunc(L, "A",1);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	int ret = 0;
+	get(ret, L, -1);
+	CPPUNIT_ASSERT_EQUAL((int)2, ret);
+}
 } // namespace
