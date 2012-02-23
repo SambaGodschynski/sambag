@@ -24,6 +24,13 @@ private:
 	CPPUNIT_TEST( testCheckType );
 	CPPUNIT_TEST( testMultiPushGet );
 	CPPUNIT_TEST( testCallF );
+	CPPUNIT_TEST( testNestedSequences );
+	CPPUNIT_TEST( testNestedSequencesEx );
+	CPPUNIT_TEST( testCallF01 );
+	CPPUNIT_TEST( testCallF02 );
+	CPPUNIT_TEST( testCallF03 );
+	CPPUNIT_TEST( testCallF04 );
+	CPPUNIT_TEST( testCallF05 );
 	CPPUNIT_TEST_SUITE_END();
 	lua_State *L;
 public:
@@ -31,10 +38,17 @@ public:
 	virtual void tearDown();
 	void testLuaSequenceEx();
 	void testLuaMap();
+	void testNestedSequences();
+	void testNestedSequencesEx();
 	void testGet();
 	void testMultiPushGet();
 	void testCheckType();
 	void testCallF();
+	void testCallF01();
+	void testCallF02();
+	void testCallF03();
+	void testCallF04();
+	void testCallF05();
 };
 
 } // namespace

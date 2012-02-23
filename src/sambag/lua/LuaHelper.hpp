@@ -306,10 +306,90 @@ void push(const T0 &o0,
  * @param fName function name
  * @param nResult number of results
  */
-inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult = 0)
+inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult)
 {
 	__getF(L, fName);
 	__callF(L, 0, nResult);
+
+}
+//-----------------------------------------------------------------------------
+template <typename T>
+void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		int nResult,
+		const T &o1)
+{
+	__getF(L, fName);
+	push(o1,L);
+	__callF(L, 1, nResult);
+
+}
+//-----------------------------------------------------------------------------
+template <typename T1,
+	typename T2>
+void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		int nResult,
+		const T1 &o1,
+		const T2 &o2)
+{
+	__getF(L, fName);
+	push(o1,o2,L);
+	__callF(L, 2, nResult);
+
+}
+//-----------------------------------------------------------------------------
+template <typename T1,
+	typename T2,
+	typename T3>
+void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		int nResult,
+		const T1 &o1,
+		const T2 &o2,
+		const T3 &o3)
+{
+	__getF(L, fName);
+	push(o1,o2,o3,L);
+	__callF(L, 3, nResult);
+
+}
+//-----------------------------------------------------------------------------
+template <typename T1,
+	typename T2,
+	typename T3,
+	typename T4>
+void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		int nResult,
+		const T1 &o1,
+		const T2 &o2,
+		const T3 &o3,
+		const T4 &o4)
+{
+	__getF(L, fName);
+	push(o1,o2,o3,o4,L);
+	__callF(L, 4, nResult);
+
+}
+//-----------------------------------------------------------------------------
+template <typename T1,
+	typename T2,
+	typename T3,
+	typename T4,
+	typename T5>
+void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		int nResult,
+		const T1 &o1,
+		const T2 &o2,
+		const T3 &o3,
+		const T4 &o4,
+		const T5 &o5)
+{
+	__getF(L, fName);
+	push(o1,o2,o3,o4,o5,L);
+	__callF(L, 5, nResult);
 
 }
 }} //namespaces

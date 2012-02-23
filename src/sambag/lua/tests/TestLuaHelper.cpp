@@ -181,6 +181,58 @@ void TestLuaHelper::testCheckType() {
 	CPPUNIT_ASSERT(!check<ILuaTable>(L, -2));
 }
 //-----------------------------------------------------------------------------
+void TestLuaHelper::testNestedSequences() {
+	using namespace sambag::lua;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<nested sequences
+	{ // extra scope
+		LuaSequence<float> l(3, 1.);
+		LuaSequence<float> r(3, -1);
+		LuaSequence< LuaSequence<float> > nSeq;
+		nSeq.push_back(l); nSeq.push_back(r);
+		push(nSeq, L);
+	}
+	LuaSequence< LuaSequence<float> > nSeq;
+	CPPUNIT_ASSERT(get(nSeq, L, -1));
+	CPPUNIT_ASSERT_EQUAL((size_t)2, nSeq.size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, nSeq[0].size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, nSeq[1].size());
+	for (size_t i=0; i<3; ++i) {
+		CPPUNIT_ASSERT_EQUAL((float)1., nSeq[0][i]);
+		CPPUNIT_ASSERT_EQUAL((float)-1., nSeq[1][i]);
+	}
+
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testNestedSequencesEx() {
+	using namespace sambag::lua;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<nested sequences
+	{ // extra scope
+		float datal[] = {1., 2., 3.};
+		float datar[] = {-1., -2., -3.};
+		LuaSequenceEx<float> rl[] = {
+				LuaSequenceEx<float>(&datal[0], 3),
+				LuaSequenceEx<float>(&datar[0], 3)
+		};
+		LuaSequenceEx< LuaSequenceEx<float> > nSeq(&rl[0],2);
+		push(nSeq, L);
+	}
+	float datal[3] = {0};
+	float datar[3] = {0};
+	LuaSequenceEx<float> rl[] = {
+			LuaSequenceEx<float>(&datal[0], 3),
+			LuaSequenceEx<float>(&datar[0], 3)
+	};
+	LuaSequenceEx< LuaSequenceEx<float> > nSeq(&rl[0],2);
+	CPPUNIT_ASSERT(get(nSeq, L, -1));
+	CPPUNIT_ASSERT_EQUAL((size_t)2, nSeq.size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, nSeq[0].size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, nSeq[1].size());
+	for (size_t i=0; i<3; ++i) {
+		CPPUNIT_ASSERT_EQUAL((float)(i+1), nSeq[0][i]);
+		CPPUNIT_ASSERT_EQUAL(-(float)(i+1), nSeq[1][i]);
+	}
+}
+//-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF() {
 	using namespace sambag::lua;
 	static const std::string LCODE = "function A()\n"
@@ -196,7 +248,135 @@ void TestLuaHelper::testCallF() {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
 	int ret = 0;
-	get(ret, L, -1);
+	CPPUNIT_ASSERT(get(ret, L, -1));
 	CPPUNIT_ASSERT_EQUAL((int)2, ret);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF01() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A(x)\n"
+			"	return x+1\n"
+			"end\n";
+	executeString(L, LCODE);
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	try {
+		callLuaFunc(L, "A", 1, 9);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	int ret = 0;
+	CPPUNIT_ASSERT(get(ret, L, -1));
+	CPPUNIT_ASSERT_EQUAL((int)10, ret);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF02() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A(x,y)\n"
+			"	return x-y\n"
+			"end\n";
+	executeString(L, LCODE);
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	try {
+		callLuaFunc(L, "A", 1, 3, 2);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	int ret = 0;
+	CPPUNIT_ASSERT(get(ret, L, -1));
+	CPPUNIT_ASSERT_EQUAL((int)1, ret);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF03() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A(x,y,z)\n"
+			"   res={}\n"
+			"	for i = 1, z, 1 do \n"
+			"       res[x[i]] = y[i] * 2\n"
+			"   end\n"
+			"   return res\n"
+			"end\n";
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	int idata[] = {100,101,102};
+	std::string sdata[] = {"a", "b", "c"};
+	LuaSequenceEx<int> iseq(&idata[0],3);
+	LuaSequenceEx<std::string> sseq(&sdata[0],3);
+	try {
+		executeString(L, LCODE);
+		callLuaFunc(L, "A", 1, sseq, iseq, 3);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	LuaMap<std::string, int> ret;
+	CPPUNIT_ASSERT(get(ret, L, -1));
+	CPPUNIT_ASSERT_EQUAL((size_t)3, ret.size());
+	CPPUNIT_ASSERT_EQUAL((int)200, ret["a"]);
+	CPPUNIT_ASSERT_EQUAL((int)202, ret["b"]);
+	CPPUNIT_ASSERT_EQUAL((int)204, ret["c"]);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF04() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A(table1,table2,fak,num)\n"
+			"   res={table1, table2}\n"
+			"	for i = 1, num, 1 do \n"
+			"       res[1][i] = res[1][i] * fak \n"
+			"       res[2][i] = res[2][i] * fak \n"
+			"   end\n"
+			"   return res\n"
+			"end\n";
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	int dtable1[] = {100,101,102};
+	int dtable2[] = {-100,-101,-102};
+	LuaSequenceEx<int> t1(&dtable1[0],3);
+	LuaSequenceEx<int> t2(&dtable2[0],3);
+	try {
+		executeString(L, LCODE);
+		callLuaFunc(L, "A", 1, t1, t2, 2, 3);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	LuaSequence<LuaSequence<int> > ret;
+	CPPUNIT_ASSERT(get(ret, L, -1));
+	CPPUNIT_ASSERT_EQUAL((size_t)2, ret.size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, ret[0].size());
+	CPPUNIT_ASSERT_EQUAL((size_t)3, ret[1].size());
+
+	CPPUNIT_ASSERT_EQUAL((int)200, ret[0][0]);
+	CPPUNIT_ASSERT_EQUAL((int)-200, ret[1][0]);
+	CPPUNIT_ASSERT_EQUAL((int)202, ret[0][1]);
+	CPPUNIT_ASSERT_EQUAL((int)-202, ret[1][1]);
+	CPPUNIT_ASSERT_EQUAL((int)204, ret[0][2]);
+	CPPUNIT_ASSERT_EQUAL((int)-204, ret[1][2]);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testCallF05() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "function A(a,b,c,d,e)\n"
+			"   return a+1, b+2, c+3, d+4, e+5 \n"
+			"end\n";
+	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	try {
+		executeString(L, LCODE);
+		callLuaFunc(L, "A", 5, 1,2,3,4,5);
+	} catch (const NoFunction &ex) {
+		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
+	} catch (const ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+	int a,b,c,d,e;
+	CPPUNIT_ASSERT(get(e,d,c,b,a,L,-1));
+	CPPUNIT_ASSERT_EQUAL((int)2, a);
+	CPPUNIT_ASSERT_EQUAL((int)4, b);
+	CPPUNIT_ASSERT_EQUAL((int)6, c);
+	CPPUNIT_ASSERT_EQUAL((int)8, d);
+	CPPUNIT_ASSERT_EQUAL((int)10, e);
 }
 } // namespace
