@@ -593,7 +593,7 @@ void TestSvg::testSvgStyle() {
 void TestSvg::testSvgStyle2() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
-	static const std::string TEST_SVG = IN_FOLDER + "style.svg";
+	static const std::string TEST_SVG = IN_FOLDER + "style2.svg";
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
@@ -605,9 +605,9 @@ void TestSvg::testSvgStyle2() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 500);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	//graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
-	//g->draw(context);
-	//testSvg("testSvgStyle2", TEST_SVG,  surface, html);
+	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
+	testSvg("testSvgStyle2", TEST_SVG,  surface, html);
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testLineCapStyle() {

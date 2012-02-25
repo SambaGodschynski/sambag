@@ -24,6 +24,30 @@ inline CairoPatternRef createPatternRef(cairo_pattern_t *p) {
 	return CairoPatternRef(p, &destroyCairoPattern);
 }
 //=============================================================================
+namespace gradient {
+//=============================================================================
+//-----------------------------------------------------------------------------
+void getStops( CairoPatternRef ref,
+	IGradient::ColorStops &out,
+		size_t startIndex = 0,
+		size_t _endIndex = INT_MAX);
+//-----------------------------------------------------------------------------
+void addColorStops(CairoPatternRef ref, 
+	const IGradient::ColorStops &newStops);
+//-----------------------------------------------------------------------------
+void addColorStop ( CairoPatternRef ref,
+	const IGradient::ColorStop &colStop );
+//-----------------------------------------------------------------------------
+void addColorStop ( CairoPatternRef ref,
+	const ColorRGBA &col, 
+	const Number &offset );
+//-----------------------------------------------------------------------------
+size_t getNumStop(CairoPatternRef ref);
+//-----------------------------------------------------------------------------
+IGradient::ColorStop getColorStop ( CairoPatternRef ref, 
+	size_t index );
+} // namespace
+//=============================================================================
 /**
  * A pattern is the basic fill structure for every drawing operation.
  * Its structure is similar to Cairos cairo_pattern_t
@@ -45,11 +69,10 @@ public:
 		return cairoPatternRef;
 	}
 	//-------------------------------------------------------------------------
-	CairoPatternBase(CairoPatternRef ref) : cairoPatternRef(ref) {}
+	CairoPatternBase(CairoPatternRef ref) : 
+		opacity(1.0), cairoPatternRef(ref) {}
 	//-------------------------------------------------------------------------
 	virtual void setOpacityValue(const Number &v) {
-		if (opacity==v)
-			return;
 		opacity = v;
 	}
 	//-------------------------------------------------------------------------
@@ -134,75 +157,8 @@ public:
 	}
 };
 //=============================================================================
-class CairoGradient {
-//=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoGradient> Ptr;
-protected:
-	//-------------------------------------------------------------------------
-	const CairoPatternRef ref;
-	//-------------------------------------------------------------------------
-	CairoGradient(CairoPatternRef ref) : ref(ref) {}
-public:
-	//-------------------------------------------------------------------------
-	void getStops( IGradient::ColorStops &out,
-			size_t startIndex = 0,
-			size_t _endIndex = INT_MAX) const
-	{
-		int endIndex = _endIndex;
-		if (endIndex==INT_MAX) {
-			cairo_pattern_get_color_stop_count(ref.get(),
-					&endIndex);
-		}
-		if (startIndex>_endIndex) // important for vector.reserve()
-			return;
-		out.reserve(endIndex-startIndex);
-		for(int i=startIndex; i<endIndex; ++i) {
-			out.push_back(getColorStop(i));
-		}
-	}
-	//-------------------------------------------------------------------------
-	void addColorStops(const IGradient::ColorStops &newStops) {
-		boost_for_each(const IGradient::ColorStop &col, newStops) {
-			addColorStop(col);
-		}
-	}
-	//-------------------------------------------------------------------------
-	void addColorStop ( const IGradient::ColorStop &colStop ) {
-		ColorRGBA col;
-		Number offset;
-		boost::tie(col, offset) = colStop;
-		cairo_pattern_add_color_stop_rgba( ref.get(),
-			offset,
-			col.getR(),
-			col.getG(),
-			col.getB(),
-			col.getA()
-		);
-	}
-	//-------------------------------------------------------------------------
-	void addColorStop ( const ColorRGBA &col, const Number &offset ) {
-		addColorStop(IGradient::ColorStop(col, offset));
-	}
-	//-------------------------------------------------------------------------
-	size_t getNumStop() const {
-		int res;
-		cairo_pattern_get_color_stop_count(ref.get(), &res);
-		return res;
-	}
-	//-------------------------------------------------------------------------
-	IGradient::ColorStop getColorStop ( size_t index ) const {
-		Number offset, r, g, b, a;
-		cairo_pattern_get_color_stop_rgba(ref.get(), index,
-			&offset, &r, &g, &b, &a);
-		return IGradient::ColorStop(ColorRGBA(r,g,b,a), offset);
-	}
-};
-//=============================================================================
 class CairoLinearPattern :
 	public CairoPatternBase,
-	public CairoGradient,
 	public ILinearPattern
 {
 //=============================================================================
@@ -214,14 +170,14 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	CairoLinearPattern(CairoPatternRef ref) :
-		CairoPatternBase(ref), CairoGradient(ref) {}
+		CairoPatternBase(ref){}
 protected:
 	//-------------------------------------------------------------------------
 	virtual void _setOpacity() {
 		// there is no way to set the solid color, so we have to
 		// re-create the pattern
 		ColorStops stops;
-		getStops(stops);
+		gradient::getStops(cairoPatternRef, stops);
 		cairo_matrix_t cm;
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
 		boost_for_each(ColorStop &s, stops) {
@@ -234,7 +190,7 @@ protected:
 			cairo_pattern_create_linear(p0.x(), p0.y(), p1.x(), p1.y())
 		);
 		cairo_pattern_set_matrix(cairoPatternRef.get(), &cm);
-		addColorStops(stops);
+		gradient::addColorStops(cairoPatternRef, stops);
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -242,30 +198,32 @@ public:
 			size_t startIndex = 0,
 			size_t endIndex = INT_MAX) const
 	{
-		CairoGradient::getStops(out, startIndex, endIndex);
+		gradient::getStops(cairoPatternRef, out, startIndex, endIndex);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStops(const ColorStops &newStops) {
-		CairoGradient::addColorStops(newStops);
+		gradient::addColorStops(cairoPatternRef, newStops);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStop ( const ColorStop &col ) {
-		CairoGradient::addColorStop(col);
+		gradient::addColorStop(cairoPatternRef, col);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStop ( const ColorRGBA &col, const Number &offset ) {
-		CairoGradient::addColorStop(col, offset);
+		gradient::addColorStop(cairoPatternRef, col, offset);
 	}
 	//-------------------------------------------------------------------------
 	virtual size_t getNumStop() const {
-		return CairoGradient::getNumStop();
+		return gradient::getNumStop(cairoPatternRef);
 	}
 	//-------------------------------------------------------------------------
 	virtual ColorStop getColorStop ( size_t index ) const {
-		return CairoGradient::getColorStop(index);
+		return gradient::getColorStop(cairoPatternRef, index);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setOpacity(const Number &v) {
+		if (v==getOpacityValue())
+			return;
 		setOpacityValue(v);
 		_setOpacity();
 	}
@@ -302,7 +260,6 @@ public:
 //=============================================================================
 class CairoRadialPattern :
 	public CairoPatternBase,
-	public CairoGradient,
 	public IRadialPattern
 {
 //=============================================================================
@@ -314,14 +271,14 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	CairoRadialPattern(CairoPatternRef ref) :
-		CairoPatternBase(ref), CairoGradient(ref ) {}
+		CairoPatternBase(ref) {}
 protected:
 	//-------------------------------------------------------------------------
 	virtual void _setOpacity() {
 		// there is no way to set the solid color, so we have to
 		// re-create the pattern
 		ColorStops stops;
-		getStops(stops);
+		gradient::getStops(cairoPatternRef, stops);
 		cairo_matrix_t cm;
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
 		boost_for_each(ColorStop &s, stops) {
@@ -335,7 +292,7 @@ protected:
 			cairo_pattern_create_radial(c0.x(), c0.y(), r0, c1.x(), c1.y(), r1)
 		);
 		cairo_pattern_set_matrix(cairoPatternRef.get(), &cm);
-		addColorStops(stops);
+		gradient::addColorStops(cairoPatternRef, stops);
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -343,30 +300,32 @@ public:
 			size_t startIndex = 0,
 			size_t endIndex = INT_MAX) const
 	{
-		CairoGradient::getStops(out, startIndex, endIndex);
+		gradient::getStops(cairoPatternRef, out, startIndex, endIndex);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStops(const ColorStops &newStops) {
-		CairoGradient::addColorStops(newStops);
+		gradient::addColorStops(cairoPatternRef, newStops);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStop ( const ColorStop &col ) {
-		CairoGradient::addColorStop(col);
+		gradient::addColorStop(cairoPatternRef, col);
 	}
 	//-------------------------------------------------------------------------
 	virtual void addColorStop ( const ColorRGBA &col, const Number &offset ) {
-		CairoGradient::addColorStop(col, offset);
+		gradient::addColorStop(cairoPatternRef, col, offset);
 	}
 	//-------------------------------------------------------------------------
 	virtual size_t getNumStop() const {
-		return CairoGradient::getNumStop();
+		return gradient::getNumStop(cairoPatternRef);
 	}
 	//-------------------------------------------------------------------------
 	virtual ColorStop getColorStop ( size_t index ) const {
-		return CairoGradient::getColorStop(index);
+		return gradient::getColorStop(cairoPatternRef, index);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setOpacity(const Number &v) {
+		if (v==getOpacityValue())
+			return;
 		CairoPatternBase::setOpacityValue(v);
 		_setOpacity();
 	}

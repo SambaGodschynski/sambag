@@ -34,14 +34,14 @@ void SvgRoot::handleRequests() {
 		IdMap::iterator it = idMap.find(rq.first);
 		if (it==idMap.end())
 			continue;
-		rq.second(it->second);
+		// call function
+		rq.second(it->second.lock());
 	}
 }
 //-----------------------------------------------------------------------------
 void SvgRoot::subObjectCreated( SvgObject::Ptr newObject,
 	const std::string &tagName )
 {
-	
 	newObject->setTagName(tagName);
 	if (newObject->getIdName().length() > 0) { // append object to idmap
 		idMap.insert(std::make_pair(newObject->getIdName(), newObject));
