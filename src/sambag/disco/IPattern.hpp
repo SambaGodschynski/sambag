@@ -32,8 +32,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IPattern> Ptr;
 	//-------------------------------------------------------------------------
-	enum Type { SOLID, LINEAR, RADIAL, SURFACE };
-	//-------------------------------------------------------------------------
 	// TODO: pattern comparison
 	//-------------------------------------------------------------------------
 	/**
@@ -54,21 +52,15 @@ public:
 	virtual void setMatrix (const sambag::math::Matrix &m) = 0;
 	//-------------------------------------------------------------------------
 	virtual sambag::math::Matrix getMatrix() const = 0;
-	//-------------------------------------------------------------------------
-	virtual Type getType() const = 0;
 };
 //=============================================================================
-class ASolidPattern : public virtual IPattern {
+class ISolidPattern : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ASolidPattern> Ptr;
+	typedef boost::shared_ptr<ISolidPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getSolidColor() const = 0;
-	//-------------------------------------------------------------------------
-	virtual Type getType() const {
-		return SOLID;
-	}
 };
 //=============================================================================
 class IGradient {
@@ -96,47 +88,35 @@ public:
 	virtual ColorStop getColorStop ( size_t index ) const = 0;
 };
 //=============================================================================
-class ALinearPattern : public virtual IPattern, public virtual IGradient {
+class ILinearPattern : public virtual IPattern, public virtual IGradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ALinearPattern> Ptr;
+	typedef boost::shared_ptr<ILinearPattern> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Point2D> LinearPoints;
 	//-------------------------------------------------------------------------
 	virtual LinearPoints getLinearPoints() const = 0;
-	//-------------------------------------------------------------------------
-	virtual Type getType() const {
-		return LINEAR;
-	}
 };
 //=============================================================================
-class ARadialPattern : public virtual IPattern, public virtual IGradient {
+class IRadialPattern : public virtual IPattern, public virtual IGradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Number, Point2D, Number> RadialCircles;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ARadialPattern> Ptr;
+	typedef boost::shared_ptr<IRadialPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual RadialCircles getRadialCircles() const = 0;
-	//-------------------------------------------------------------------------
-	virtual Type getType() const {
-		return RADIAL;
-	}
 };
 //=============================================================================
-class ASurfacePattern : public virtual IPattern {
+class ISurfacePattern : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ASurfacePattern> Ptr;
+	typedef boost::shared_ptr<ISurfacePattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr getSurface() const = 0;
-	//-------------------------------------------------------------------------
-	virtual Type getType() const {
-		return SURFACE;
-	}
 };
 }} // namespace
 #endif /* PATTERN_HPP_ */

@@ -331,9 +331,6 @@ public:
 		if (!strokePattern) {
 			return false;
 		}
-		if (strokePattern->getType()!=IPattern::SOLID) {
-			return true;
-		}
 		CairoSolidPattern::Ptr sPt =
 				boost::shared_dynamic_cast<CairoSolidPattern>(strokePattern);
 		if (!sPt)
@@ -344,9 +341,6 @@ public:
 	virtual bool isFilled() const {
 		if (!fillPattern) {
 			return false;
-		}
-		if (fillPattern->getType()!=IPattern::SOLID) {
-			return true;
 		}
 		CairoSolidPattern::Ptr sPt =
 				boost::shared_dynamic_cast<CairoSolidPattern>(fillPattern);
@@ -364,7 +358,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * TODO: depreciated use setFillPattern
+	 * TODO: @deprecated use setFillPattern
 	 * @param val
 	 */
 	virtual void setFillColor( const ColorRGBA &val ) {
@@ -373,13 +367,10 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * TODO: depreciated use getFillPattern
+	 * TODO:  @deprecated use getFillPattern
 	 * @return
 	 */
 	virtual ColorRGBA getFillColor() const {
-		if (fillPattern->getType()!=IPattern::SOLID) {
-			return ColorRGBA::NULL_COLOR;
-		}
 		CairoSolidPattern::Ptr sPt =
 				boost::shared_dynamic_cast<CairoSolidPattern>(fillPattern);
 		if (!sPt)
@@ -388,7 +379,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * TODO: depreciated use setStrokePattern
+	 * TODO: @deprecated use setStrokePattern
 	 * @param val
 	 */
 	virtual void setStrokeColor( const ColorRGBA &val ) {
@@ -401,9 +392,6 @@ public:
 	 * @param val
 	 */
 	virtual ColorRGBA getStrokeColor() const {
-		if (strokePattern->getType()!=IPattern::SOLID) {
-			return ColorRGBA::NULL_COLOR;
-		}
 		CairoSolidPattern::Ptr sPt =
 				boost::shared_dynamic_cast<CairoSolidPattern>(strokePattern);
 		if (!sPt)

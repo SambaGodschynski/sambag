@@ -22,27 +22,23 @@ void TestPattern::testConstruction() {
 	using namespace boost::tuples;
 	// solid
 	IDiscoFactory::Ptr fac = getDiscoFactory();
-	ASolidPattern::Ptr spattern = fac->createSolidPattern(ColorRGBA(1));
-	CPPUNIT_ASSERT_EQUAL(spattern->getType(), IPattern::SOLID);
+	ISolidPattern::Ptr spattern = fac->createSolidPattern(ColorRGBA(1));
 	CPPUNIT_ASSERT(spattern->getSolidColor() == ColorRGBA(1));
 	// linear
-	ALinearPattern::Ptr lpattern =
+	ILinearPattern::Ptr lpattern =
 		fac->createLinearPattern(Point2D(1,2), Point2D(3,4));
-	CPPUNIT_ASSERT_EQUAL(lpattern->getType(), IPattern::LINEAR);
 	CPPUNIT_ASSERT(lpattern->getLinearPoints() ==
-			ALinearPattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
+			ILinearPattern::LinearPoints( Point2D(1,2), Point2D(3,4) )
 	);
 	// radial
-	ARadialPattern::Ptr rpattern =
+	IRadialPattern::Ptr rpattern =
 		fac->createRadialPattern(Point2D(0,1), 1.0, Point2D(2,3), 23.0);
-	CPPUNIT_ASSERT_EQUAL(rpattern->getType(), IPattern::RADIAL);
 	CPPUNIT_ASSERT(rpattern->getRadialCircles() ==
-		ARadialPattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
+		IRadialPattern::RadialCircles(Point2D(0,1), 1.0, Point2D(2,3), 23.0)
 	);
 	// surface
 	ISurface::Ptr surface = fac->createImageSurface(300, 200);
-	ASurfacePattern::Ptr fpattern = fac->createSurfacePattern(surface);
-	CPPUNIT_ASSERT_EQUAL(fpattern->getType(), IPattern::SURFACE);
+	ISurfacePattern::Ptr fpattern = fac->createSurfacePattern(surface);
 	CPPUNIT_ASSERT(fpattern->getSurface());
 
 }

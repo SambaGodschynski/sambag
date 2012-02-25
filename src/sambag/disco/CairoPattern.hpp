@@ -28,7 +28,7 @@ inline CairoPatternRef createPatternRef(cairo_pattern_t *p) {
  * A pattern is the basic fill structure for every drawing operation.
  * Its structure is similar to Cairos cairo_pattern_t
  */
-class CairoPatternBase : public virtual IPattern {
+class CairoPatternBase : public IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -39,8 +39,6 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	CairoPatternRef cairoPatternRef;
-	//-------------------------------------------------------------------------
-	virtual void _setOpacity() {}
 public:
 	//-------------------------------------------------------------------------
 	CairoPatternRef getCairoPatternRef() const {
@@ -49,18 +47,17 @@ public:
 	//-------------------------------------------------------------------------
 	CairoPatternBase(CairoPatternRef ref) : cairoPatternRef(ref) {}
 	//-------------------------------------------------------------------------
-	virtual void setOpacity(const Number &v) {
+	virtual void setOpacityValue(const Number &v) {
 		if (opacity==v)
 			return;
 		opacity = v;
-		_setOpacity();
 	}
 	//-------------------------------------------------------------------------
-	virtual Number getOpacity() const {
+	virtual Number getOpacityValue() const {
 		return opacity;
 	}
 	//-------------------------------------------------------------------------
-	virtual void setMatrix (const sambag::math::Matrix &m) {
+	virtual void setMatrixValue (const sambag::math::Matrix &m) {
 		if (m.size1() != 3 && m.size2() != 3)
 			return;
 		cairo_matrix_t cm;
@@ -68,7 +65,7 @@ public:
 		cairo_pattern_set_matrix(cairoPatternRef.get(), &cm);
 	}
 	//-------------------------------------------------------------------------
-	virtual sambag::math::Matrix getMatrix() const {
+	virtual sambag::math::Matrix getMatrixValue() const {
 		cairo_matrix_t cm;
 		Matrix res(3,3);
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
@@ -77,7 +74,7 @@ public:
 	}
 };
 //=============================================================================
-class CairoSolidPattern : public CairoPatternBase, public ASolidPattern {
+class CairoSolidPattern : public CairoPatternBase, public ISolidPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -87,7 +84,7 @@ private:
 	CairoSolidPattern(CairoPatternRef ref) : CairoPatternBase(ref) {}
 protected:
 	//-------------------------------------------------------------------------
-	virtual void _setOpacity() {
+	void _setOpacity() {
 		ColorRGBA col = getSolidColor();
 		// there is no way to set the solid color, so we have to
 		// re-create the pattern
@@ -95,10 +92,29 @@ protected:
 				cairo_pattern_create_rgba(col.getR(),
 							col.getG(),
 							col.getB(),
-							getOpacity())
+							getOpacityValue())
 				);
 	}
 public:
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		CairoPatternBase::setOpacityValue(v);
+		_setOpacity();
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return CairoPatternBase::getOpacityValue();
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMatrix (const sambag::math::Matrix &m) {
+		CairoPatternBase::setMatrixValue(m);
+	}
+	//-------------------------------------------------------------------------
+	virtual sambag::math::Matrix getMatrix() const {
+		return CairoPatternBase::getMatrixValue();
+	}
+	//-------------------------------------------------------------------------
+	virtual ~CairoSolidPattern(){}
 	//-------------------------------------------------------------------------
 	ColorRGBA getSolidColor() const {
 		Number r,g,b,a;
@@ -118,25 +134,25 @@ public:
 	}
 };
 //=============================================================================
-class CairoGradient : public virtual IGradient {
+class CairoGradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<CairoGradient> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	const CairoPatternBase &base;
+	const CairoPatternRef ref;
 	//-------------------------------------------------------------------------
-	CairoGradient(const CairoPatternBase &base) : base(base) {}
+	CairoGradient(CairoPatternRef ref) : ref(ref) {}
 public:
 	//-------------------------------------------------------------------------
-	void getStops( ColorStops &out,
+	void getStops( IGradient::ColorStops &out,
 			size_t startIndex = 0,
 			size_t _endIndex = INT_MAX) const
 	{
 		int endIndex = _endIndex;
 		if (endIndex==INT_MAX) {
-			cairo_pattern_get_color_stop_count(base.getCairoPatternRef().get(),
+			cairo_pattern_get_color_stop_count(ref.get(),
 					&endIndex);
 		}
 		if (startIndex>_endIndex) // important for vector.reserve()
@@ -147,17 +163,17 @@ public:
 		}
 	}
 	//-------------------------------------------------------------------------
-	void addColorStops(const ColorStops &newStops) {
-		boost_for_each(const ColorStop &col, newStops) {
+	void addColorStops(const IGradient::ColorStops &newStops) {
+		boost_for_each(const IGradient::ColorStop &col, newStops) {
 			addColorStop(col);
 		}
 	}
 	//-------------------------------------------------------------------------
-	void addColorStop ( const ColorStop &colStop ) {
+	void addColorStop ( const IGradient::ColorStop &colStop ) {
 		ColorRGBA col;
 		Number offset;
 		boost::tie(col, offset) = colStop;
-		cairo_pattern_add_color_stop_rgba( base.getCairoPatternRef().get(),
+		cairo_pattern_add_color_stop_rgba( ref.get(),
 			offset,
 			col.getR(),
 			col.getG(),
@@ -167,27 +183,27 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void addColorStop ( const ColorRGBA &col, const Number &offset ) {
-		addColorStop(ColorStop(col, offset));
+		addColorStop(IGradient::ColorStop(col, offset));
 	}
 	//-------------------------------------------------------------------------
 	size_t getNumStop() const {
 		int res;
-		cairo_pattern_get_color_stop_count(base.getCairoPatternRef().get(), &res);
+		cairo_pattern_get_color_stop_count(ref.get(), &res);
 		return res;
 	}
 	//-------------------------------------------------------------------------
-	ColorStop getColorStop ( size_t index ) const {
+	IGradient::ColorStop getColorStop ( size_t index ) const {
 		Number offset, r, g, b, a;
-		cairo_pattern_get_color_stop_rgba(base.getCairoPatternRef().get(), index,
+		cairo_pattern_get_color_stop_rgba(ref.get(), index,
 			&offset, &r, &g, &b, &a);
-		return ColorStop(ColorRGBA(r,g,b,a), offset);
+		return IGradient::ColorStop(ColorRGBA(r,g,b,a), offset);
 	}
 };
 //=============================================================================
 class CairoLinearPattern :
 	public CairoPatternBase,
 	public CairoGradient,
-	public ALinearPattern
+	public ILinearPattern
 {
 //=============================================================================
 public:
@@ -198,7 +214,7 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	CairoLinearPattern(CairoPatternRef ref) :
-		CairoPatternBase(ref), CairoGradient((CairoPatternBase&)*this) {}
+		CairoPatternBase(ref), CairoGradient(ref) {}
 protected:
 	//-------------------------------------------------------------------------
 	virtual void _setOpacity() {
@@ -210,7 +226,7 @@ protected:
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
 		boost_for_each(ColorStop &s, stops) {
 			Number a = s.get<IGradient::COLOR>().getA();
-			s.get<IGradient::COLOR>().setA(a*getOpacity());
+			s.get<IGradient::COLOR>().setA(a*getOpacityValue());
 		}
 		Point2D p0, p1;
 		boost::tie(p0, p1) = getLinearPoints();
@@ -221,6 +237,50 @@ protected:
 		addColorStops(stops);
 	}
 public:
+	//-------------------------------------------------------------------------
+	virtual void getStops( ColorStops &out,
+			size_t startIndex = 0,
+			size_t endIndex = INT_MAX) const
+	{
+		CairoGradient::getStops(out, startIndex, endIndex);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStops(const ColorStops &newStops) {
+		CairoGradient::addColorStops(newStops);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStop ( const ColorStop &col ) {
+		CairoGradient::addColorStop(col);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStop ( const ColorRGBA &col, const Number &offset ) {
+		CairoGradient::addColorStop(col, offset);
+	}
+	//-------------------------------------------------------------------------
+	virtual size_t getNumStop() const {
+		return CairoGradient::getNumStop();
+	}
+	//-------------------------------------------------------------------------
+	virtual ColorStop getColorStop ( size_t index ) const {
+		return CairoGradient::getColorStop(index);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		setOpacityValue(v);
+		_setOpacity();
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return CairoPatternBase::getOpacityValue();
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMatrix (const sambag::math::Matrix &m) {
+		CairoPatternBase::setMatrixValue(m);
+	}
+	//-------------------------------------------------------------------------
+	virtual sambag::math::Matrix getMatrix() const {
+		return CairoPatternBase::getMatrixValue();
+	}
 	//-------------------------------------------------------------------------
 	LinearPoints getLinearPoints() const {
 		Number x0, y0, x1, y1;
@@ -243,7 +303,7 @@ public:
 class CairoRadialPattern :
 	public CairoPatternBase,
 	public CairoGradient,
-	public ARadialPattern
+	public IRadialPattern
 {
 //=============================================================================
 public:
@@ -254,7 +314,7 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	CairoRadialPattern(CairoPatternRef ref) :
-		CairoPatternBase(ref), CairoGradient((CairoPatternBase&)*this) {}
+		CairoPatternBase(ref), CairoGradient(ref ) {}
 protected:
 	//-------------------------------------------------------------------------
 	virtual void _setOpacity() {
@@ -266,7 +326,7 @@ protected:
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
 		boost_for_each(ColorStop &s, stops) {
 			Number a = s.get<IGradient::COLOR>().getA();
-			s.get<IGradient::COLOR>().setA(a*getOpacity());
+			s.get<IGradient::COLOR>().setA(a*getOpacityValue());
 		}
 		Point2D c0, c1;
 		Number r0, r1;
@@ -278,6 +338,50 @@ protected:
 		addColorStops(stops);
 	}
 public:
+	//-------------------------------------------------------------------------
+	virtual void getStops( ColorStops &out,
+			size_t startIndex = 0,
+			size_t endIndex = INT_MAX) const
+	{
+		CairoGradient::getStops(out, startIndex, endIndex);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStops(const ColorStops &newStops) {
+		CairoGradient::addColorStops(newStops);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStop ( const ColorStop &col ) {
+		CairoGradient::addColorStop(col);
+	}
+	//-------------------------------------------------------------------------
+	virtual void addColorStop ( const ColorRGBA &col, const Number &offset ) {
+		CairoGradient::addColorStop(col, offset);
+	}
+	//-------------------------------------------------------------------------
+	virtual size_t getNumStop() const {
+		return CairoGradient::getNumStop();
+	}
+	//-------------------------------------------------------------------------
+	virtual ColorStop getColorStop ( size_t index ) const {
+		return CairoGradient::getColorStop(index);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		CairoPatternBase::setOpacityValue(v);
+		_setOpacity();
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return CairoPatternBase::getOpacityValue();
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMatrix (const sambag::math::Matrix &m) {
+		CairoPatternBase::setMatrixValue(m);
+	}
+	//-------------------------------------------------------------------------
+	virtual sambag::math::Matrix getMatrix() const {
+		return CairoPatternBase::getMatrixValue();
+	}
 	//-------------------------------------------------------------------------
 	RadialCircles getRadialCircles() const {
 		Number cx0, cy0, cx1, cy1, r0, r1;
@@ -301,7 +405,7 @@ public:
 //=============================================================================
 class CairoSurfacePattern :
 	public CairoPatternBase,
-	public ASurfacePattern
+	public ISurfacePattern
 {
 //=============================================================================
 public:
@@ -314,6 +418,22 @@ private:
 	CairoSurfacePattern(CairoPatternRef ref) :
 		CairoPatternBase(ref) {}
 public:
+	//-------------------------------------------------------------------------
+	virtual void setOpacity(const Number &v) {
+		CairoPatternBase::setOpacityValue(v);
+	}
+	//-------------------------------------------------------------------------
+	virtual Number getOpacity() const {
+		return CairoPatternBase::getOpacityValue();
+	}
+	//-------------------------------------------------------------------------
+	virtual void setMatrix (const sambag::math::Matrix &m) {
+		CairoPatternBase::setMatrixValue(m);
+	}
+	//-------------------------------------------------------------------------
+	virtual sambag::math::Matrix getMatrix() const {
+		return CairoPatternBase::getMatrixValue();
+	}
 	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {
 		return surface;
