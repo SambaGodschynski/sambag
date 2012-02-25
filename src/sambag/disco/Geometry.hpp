@@ -8,10 +8,10 @@
 #ifndef DISCO_GEOMETRY_HPP_
 #define DISCO_GEOMETRY_HPP_
 
-#include <boost/geometry.hpp>
 #include "Coordinate.hpp"
 #include "sambag/com/Common.hpp"
 #include <math.h>
+#include <boost/geometry.hpp>
 
 namespace sambag { namespace disco {
 //#############################################################################

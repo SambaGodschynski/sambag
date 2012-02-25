@@ -256,7 +256,7 @@ public:
 	 */
 	typename BaseType::Ptr buildWithXmlString(
 			const std::string &xml,
-			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+			typename BaseType::Ptr givenRoot = BaseType::Ptr())
 	{
 		ticpp::Document doc;
 		doc.Parse(xml);

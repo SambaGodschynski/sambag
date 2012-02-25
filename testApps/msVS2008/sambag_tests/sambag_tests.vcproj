@@ -42,12 +42,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="1"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -118,7 +118,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -225,6 +225,14 @@
 					RelativePath="..\..\..\src\sambag\com\tests\FileSystemTest.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\tests\TestHelper.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\tests\TestHelper.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="xml"
@@ -266,6 +274,14 @@
 				Name="math"
 				>
 				<File
+					RelativePath="..\..\..\src\sambag\math\Matrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\math\Matrix.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\math\VectorN.hpp"
 					>
 				</File>
@@ -286,11 +302,35 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\com\Exception.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Exception.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileHandler.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileHandler.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\src\sambag\com\FileSystem.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Helper.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
 					>
 				</File>
 			</Filter>
@@ -330,6 +370,14 @@
 				Name="disco"
 				>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoDiscoFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoDiscoFactory.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\CairoDrawContext.cpp"
 					>
 				</File>
@@ -338,22 +386,114 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoHelper.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoPattern.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoPattern.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoSurface.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\ColorRGBA.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\ColorRGBA.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Coordinate.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Coordinate.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Dash.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\Font.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Geometry.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\Geometry.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IDiscoFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IDiscoFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IDrawable.hpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\src\sambag\disco\IDrawContext.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IPattern.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\IPattern.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\ISurface.hpp"
+					>
+				</File>
 				<Filter
 					Name="graphicElements"
 					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Arc.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Arc.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Compound.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Compound.hpp"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Image.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Image.hpp"
 						>
 					</File>
 					<File
@@ -365,13 +505,93 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Path.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Path.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\PathHelper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\PointContainer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\PointContainer.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Rect.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Rect.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\RefElement.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\RefElement.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraph.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraph.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraphHelper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraphHelper.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Style.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\graphicElements\Style.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Text.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\graphicElements\Text.hpp"
 						>
 					</File>
 				</Filter>
 				<Filter
 					Name="tests"
 					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\HelperForTesting.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\HelperForTesting.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestAttributeParser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestAttributeParser.hpp"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\tests\TestCairoDrawContext.cpp"
 						>
@@ -381,11 +601,27 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\tests\TestHelper.cpp"
+						RelativePath="..\..\..\src\sambag\disco\tests\TestGeometrics.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\tests\TestHelper.hpp"
+						RelativePath="..\..\..\src\sambag\disco\tests\TestGeometrics.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestPattern.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestPattern.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestSceneGraph.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\tests\TestSceneGraph.hpp"
 						>
 					</File>
 					<File
@@ -400,6 +636,34 @@
 				<Filter
 					Name="svg"
 					>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\AttributeParser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\AttributeParser.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\HtmlColors.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\PathInstructions.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\StyleAttributeSetters.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\StyleParser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\StyleParser.hpp"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\svg\Svg.cpp"
 						>
@@ -417,6 +681,54 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgCircle.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgCircle.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgColorStop.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgCompound.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgCompound.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgDefs.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgDefs.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgEllipse.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgEllipse.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgGroup.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgGroup.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgImage.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\svg\SvgLine.cpp"
 						>
 					</File>
@@ -424,7 +736,83 @@
 						RelativePath="..\..\..\src\sambag\disco\svg\SvgLine.hpp"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgLinearGradient.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgLinearGradient.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgPath.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgPath.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgPattern.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgPolygon.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgPolyline.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgRadialGradient.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgRadialGradient.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgRect.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgRoot.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgRoot.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgStyle.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgStyle.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgText.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgText.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgUse.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\SvgUse.hpp"
+						>
+					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="lua"
+				>
 			</Filter>
 		</Filter>
 	</Files>

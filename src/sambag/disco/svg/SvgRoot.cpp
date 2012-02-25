@@ -41,11 +41,13 @@ void SvgRoot::handleRequests() {
 void SvgRoot::subObjectCreated( SvgObject::Ptr newObject,
 	const std::string &tagName )
 {
+	
 	newObject->setTagName(tagName);
 	if (newObject->getIdName().length() > 0) { // append object to idmap
 		idMap.insert(std::make_pair(newObject->getIdName(), newObject));
 	}
-	svgs.push_back(newObject);
+	if (newObject.get() != this) // don't add self, ocurrs memory leak otherwise
+		svgs.push_back(newObject);
 }
 
 }}}
