@@ -37,15 +37,15 @@ public:
 	virtual IImageSurface::Ptr
 	createImageSurface(IDataHandler::Ptr handler) const;
 	//-------------------------------------------------------------------------
-	ASolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const;
+	ISolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const;
 	//-------------------------------------------------------------------------
-	ALinearPattern::Ptr
+	ILinearPattern::Ptr
 	createLinearPattern(Point2D p0, Point2D p1) const;
 	//-------------------------------------------------------------------------
-	ARadialPattern::Ptr
+	IRadialPattern::Ptr
 	createRadialPattern(Point2D c0, Number r0,  Point2D c1, Number r1) const;
 	//-------------------------------------------------------------------------
-	ASurfacePattern::Ptr
+	ISurfacePattern::Ptr
 	createSurfacePattern(ISurface::Ptr surf) const;
 
 };

@@ -36,30 +36,30 @@ CairoDiscoFactory::createImageSurface(IDataHandler::Ptr handler) const {
 	return CairoImageSurface::create(handler);
 }
 //-------------------------------------------------------------------------
-ASolidPattern::Ptr
+ISolidPattern::Ptr
 CairoDiscoFactory::createSolidPattern(const ColorRGBA &col) const {
 	return CairoSolidPattern::create(col);
 }
 //-------------------------------------------------------------------------
-ALinearPattern::Ptr
+ILinearPattern::Ptr
 CairoDiscoFactory::
 createLinearPattern(Point2D p0, Point2D p1) const
 {
 	return CairoLinearPattern::create(
-		ALinearPattern::LinearPoints(p0, p1)
+		ILinearPattern::LinearPoints(p0, p1)
 	);
 }
 //-------------------------------------------------------------------------
-ARadialPattern::Ptr
+IRadialPattern::Ptr
 CairoDiscoFactory::
 createRadialPattern(Point2D c0, Number r0,  Point2D c1, Number r1) const
 {
 	return CairoRadialPattern::create(
-		ARadialPattern::RadialCircles(c0, r0, c1, r1)
+		IRadialPattern::RadialCircles(c0, r0, c1, r1)
 	);
 }
 //-------------------------------------------------------------------------
-ASurfacePattern::Ptr
+ISurfacePattern::Ptr
 CairoDiscoFactory::createSurfacePattern(ISurface::Ptr surf) const {
 	return CairoSurfacePattern::create(surf);
 }

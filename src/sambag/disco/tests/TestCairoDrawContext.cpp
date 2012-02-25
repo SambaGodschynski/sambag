@@ -424,7 +424,7 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 	context->stroke();
 	context->rect(Rectangle(0,0,100,50));
 	IDiscoFactory::Ptr fac = getDiscoFactory();
-	ALinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(100,0));
+	ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(100,0));
 	sol->addColorStop(ColorRGBA(1,0,0), 0);
 	sol->addColorStop(ColorRGBA(0,1,0), .5);
 	sol->addColorStop(ColorRGBA(0,0,1), 1.0);
@@ -436,7 +436,7 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 	context->arc(Point2D(), 50, 0, 2 * M_PI);
 	context->stroke();
 	context->arc(Point2D(), 50, 0, 2 * M_PI);
-	ARadialPattern::Ptr rad = fac->createRadialPattern(Point2D(0,0), 0, Point2D(0,0), 45);
+	IRadialPattern::Ptr rad = fac->createRadialPattern(Point2D(0,0), 0, Point2D(0,0), 45);
 	rad->addColorStop(ColorRGBA(1,0,0), 0);
 	rad->addColorStop(ColorRGBA(0,1,0), .5);
 	rad->addColorStop(ColorRGBA(0,0,1), 1.0);

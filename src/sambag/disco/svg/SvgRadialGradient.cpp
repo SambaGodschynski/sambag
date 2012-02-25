@@ -23,7 +23,7 @@ IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
 	boost::geometry::add_point(c0, tmp);
 
 	// create pattern at (0,0) with r=witdh/2
-	ARadialPattern::Ptr pattern = getDiscoFactory()->
+	IRadialPattern::Ptr pattern = getDiscoFactory()->
 		createRadialPattern(Point2D(0,0), 0, Point2D(0,0), rect.getWidth()/2.0);
 
 	// translate and scale pattern space to fit

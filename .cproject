@@ -39,6 +39,7 @@
 </option>
 <option id="gnu.cpp.compiler.option.preprocessor.def.2122029999" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="BOOST_FILESYSTEM_VERSION=2"/>
+<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
@@ -533,6 +534,7 @@
 </option>
 <option id="gnu.cpp.compiler.option.preprocessor.def.757212955" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="BOOST_FILESYSTEM_VERSION=2"/>
+<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
