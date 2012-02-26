@@ -36,7 +36,7 @@ cairo_status_t read_handler (
 
 namespace sambag { namespace disco {
 //=============================================================================
-class CairoSurface : public virtual ISurface {
+class CairoSurface : public ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
