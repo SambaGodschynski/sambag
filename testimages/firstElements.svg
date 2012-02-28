@@ -24,10 +24,10 @@
 	  font-size="35" stroke="black" stroke-opacity=".2" stroke-width="5" fill="white" font-weight="bold" font-style="italic"> 
       Even though I am declared as white, I am green.  
     </text>
-    <text x="250" y="250" font-family="Verdana"
+    <!--text x="250" y="250" font-family="Verdana"
 	  font-size="25" stroke="none" fill="none" font-weight="bold" font-style="italic">
       I'am invisible! If u can see me something went wrong.
-    </text>
+    </text-->
   </g>
   
   <!-- line without min. of needed attributes-->
