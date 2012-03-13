@@ -31,7 +31,7 @@ bool check(lua_State *L, int index) {
 }
 //-----------------------------------------------------------------------------
 template <>
-bool check<std::string>(lua_State *L, int index) {
+inline bool check<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
