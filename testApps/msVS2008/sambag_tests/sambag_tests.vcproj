@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -251,45 +251,241 @@
 			Name="EXT"
 			>
 			<Filter
-				Name="cpsqlite"
+				Name="lua"
 				>
 				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\DataBase.cpp"
+					RelativePath="..\..\..\..\lua-5.2.0\src\lapi.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\DataBase.hpp"
+					RelativePath="..\..\..\..\lua-5.2.0\src\lapi.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\Parameter.hpp"
+					RelativePath="..\..\..\..\lua-5.2.0\src\lauxlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\sambag_sqlite.c"
+					RelativePath="..\..\..\..\lua-5.2.0\src\lauxlib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lbaselib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lbitlib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lcode.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lcode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lcorolib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lctype.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lctype.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldblib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldebug.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldebug.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldo.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldo.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ldump.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lfunc.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lfunc.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lgc.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lgc.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\linit.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\liolib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\llex.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\llex.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\llimits.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lmathlib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lmem.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lmem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\loadlib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lobject.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lobject.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lopcodes.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lopcodes.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\loslib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lparser.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lparser.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lstate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lstate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lstring.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lstring.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lstrlib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ltable.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ltable.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ltablib.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ltm.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\ltm.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lua.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lua.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\luaconf.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lualib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lundump.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lundump.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lvm.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lvm.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lzio.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\lua-5.2.0\src\lzio.h"
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="math"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\math\Matrix.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\math\Matrix.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\math\VectorN.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\math\VectorNCreator.hpp"
-					>
-				</File>
-			</Filter>
+		</Filter>
+		<Filter
+			Name="sambag"
+			>
 			<Filter
 				Name="com"
 				>
@@ -335,34 +531,22 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="xml"
+				Name="cpsqlite"
 				>
 				<File
-					RelativePath="..\..\..\src\sambag\xml\XML2Obj.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ticpp"
-				>
-				<File
-					RelativePath="..\..\..\..\tinyxml\ticpp\ticpp.cpp"
+					RelativePath="..\..\..\src\sambag\cpsqlite\DataBase.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\tinyxml\ticpp\tinystr.cpp"
+					RelativePath="..\..\..\src\sambag\cpsqlite\DataBase.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxml.cpp"
+					RelativePath="..\..\..\src\sambag\cpsqlite\Parameter.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxmlerror.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxmlparser.cpp"
+					RelativePath="..\..\..\src\sambag\cpsqlite\sambag_sqlite.c"
 					>
 				</File>
 			</Filter>
@@ -813,6 +997,90 @@
 			<Filter
 				Name="lua"
 				>
+				<File
+					RelativePath="..\..\..\src\sambag\lua\ILuaTable.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\lua\LuaHelper.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\lua\LuaMap.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\lua\LuaSequence.hpp"
+					>
+				</File>
+				<Filter
+					Name="test"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\lua\tests\LuaTestHelper.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\lua\tests\TestLuaHelper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\lua\tests\TestLuaHelper.hpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="math"
+				>
+				<File
+					RelativePath="..\..\..\src\sambag\math\Matrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\math\Matrix.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\math\VectorN.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\math\VectorNCreator.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ticpp"
+				>
+				<File
+					RelativePath="..\..\..\..\tinyxml\ticpp\ticpp.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\tinyxml\ticpp\tinystr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxml.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxmlerror.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\tinyxml\ticpp\tinyxmlparser.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="xml"
+				>
+				<File
+					RelativePath="..\..\..\src\sambag\xml\XML2Obj.hpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

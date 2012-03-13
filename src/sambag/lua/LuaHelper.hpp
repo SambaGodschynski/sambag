@@ -167,7 +167,7 @@ bool get(T0 &o0,
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-size_t getLen(lua_State *L, int index) {
+inline size_t getLen(lua_State *L, int index) {
 	lua_len(L, index);
 	size_t s;
 	if (!get(s, L, -1))
