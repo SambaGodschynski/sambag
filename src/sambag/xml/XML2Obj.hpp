@@ -251,12 +251,27 @@ public:
 	 * TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
 	 *
 	 * @param xml:  a valid xml document as string
+	 * @return the root object containing a object representation of the xml structure.
+	 */
+	typename BaseType::Ptr buildWithXmlString(
+			const std::string &xml /*default value dosent work with MVSC
+									 (complaining about typename) so we use overload*/)
+	{
+		ticpp::Document doc;
+		doc.Parse(xml);
+		return build(doc, typename BaseType::Ptr());
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * TODO: replace buildWithXmlString and buildWithXmlFile with buildWithXmlStream(istream)
+	 *
+	 * @param xml:  a valid xml document as string
 	 * @param givenRoot: you are able to use a already created root element.
 	 * @return the root object containing a object representation of the xml structure.
 	 */
 	typename BaseType::Ptr buildWithXmlString(
 			const std::string &xml,
-			typename BaseType::Ptr givenRoot = BaseType::Ptr())
+			typename BaseType::Ptr givenRoot)
 	{
 		ticpp::Document doc;
 		doc.Parse(xml);
