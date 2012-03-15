@@ -12,31 +12,14 @@
 #include "ILuaTable.hpp"
 #include <string>
 #include <boost/type_traits.hpp>
-
-
-/**
-	TODO: Script class
-	Usage:
-
-	LuaScript script("file.lua");
-	// alternative: LuaScript script(scriptString);
-	
-	// register function (boost function style)
-	script.registerFunction<bool(int, int)>(
-		boost::bind(&Dummy::foo, &dummy, _1, _2)
-	);
-	
-	// execute script
-	script.exec();
-	
-	// get global script variable, throws:
-	int g1 = script.getGlobal<int>("g1");
-	// with alternative error value, nothrow:
-	string g2 = script.getGlobal<string>("g2", "errorString");
-*/
-
+#include <boost/shared_ptr.hpp>
 
 namespace sambag { namespace lua {
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+typedef boost::shared_ptr<lua_State> LuaStateRef;
+inline LuaStateRef createLuaStateRef() {
+	return LuaStateRef(luaL_newstate(), &lua_close);
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct LuaException {
 	std::string errMsg;
@@ -230,6 +213,10 @@ namespace {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 inline void executeString(lua_State *L, const std::string &str) {
 	luaL_loadstring (L, str.c_str());
+	__callF(L);
+}
+inline void executeFile(lua_State *L, const std::string &filename) {
+	luaL_loadfile(L, filename.c_str());
 	__callF(L);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

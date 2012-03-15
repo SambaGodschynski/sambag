@@ -36,6 +36,7 @@ private:
 public:
 	virtual void setUp();
 	virtual void tearDown();
+	void testLuaStateRef();
 	void testLuaSequenceEx();
 	void testLuaMap();
 	void testNestedSequences();

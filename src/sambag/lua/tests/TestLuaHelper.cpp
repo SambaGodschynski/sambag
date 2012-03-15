@@ -6,13 +6,13 @@
  */
 
 #include "TestLuaHelper.hpp"
-#include "LuaTestHelper.hpp"
 #include "sambag/lua/LuaHelper.hpp"
 #include "sambag/lua/LuaSequence.hpp"
 #include "sambag/lua/LuaMap.hpp"
 #include <boost/foreach.hpp>
 #include <string>
 #include <sstream>
+
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaHelper );
@@ -26,6 +26,20 @@ void TestLuaHelper::setUp() {
 //-----------------------------------------------------------------------------
 void TestLuaHelper::tearDown() {
 	lua_close(L);
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testLuaStateRef() {
+	using namespace sambag::lua;
+	LuaStateRef ref = createLuaStateRef();
+	CPPUNIT_ASSERT(ref);
+	{ // extra scope
+		LuaStateRef neu = ref;
+		CPPUNIT_ASSERT(neu);
+		CPPUNIT_ASSERT_EQUAL(neu.get(), ref.get());
+	}
+	CPPUNIT_ASSERT(ref);
+	ref.reset();
+	CPPUNIT_ASSERT(!ref);
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testLuaMap() {

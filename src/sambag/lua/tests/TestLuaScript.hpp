@@ -9,20 +9,26 @@
 #define TESTLUASCRIPT_H_
 #include <cppunit/extensions/HelperMacros.h>
 
-struct lua_State;
-
 namespace tests {
 //=============================================================================
 class TestLuaScript : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestLuaScript );
-	CPPUNIT_TEST( testLuaScript );
-
+	CPPUNIT_TEST( testLuaScriptConstruction );
+	CPPUNIT_TEST( testRegisterFunction );
+	CPPUNIT_TEST( testRegisterFunction02 );
+	CPPUNIT_TEST( testRegisterFunction03 );
+	CPPUNIT_TEST( testRegisterFunction04 );
+	CPPUNIT_TEST( testRegisterFunction05 );
 	CPPUNIT_TEST_SUITE_END();
-	lua_State *L;
 public:
-	void testLuaScript();
+	void testLuaScriptConstruction();
+	void testRegisterFunction();
+	void testRegisterFunction02();
+	void testRegisterFunction03();
+	void testRegisterFunction04();
+	void testRegisterFunction05();
 };
-
+} // namespace
 #endif /* TESTLUASCRIPT_H_ */
