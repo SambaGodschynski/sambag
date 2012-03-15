@@ -9,6 +9,7 @@
 #include <sambag/lua/Lua.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include "Helper.hpp"
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaScript );
@@ -34,12 +35,12 @@ struct SetIntFunction_Tag {
 };
 typedef std::string Str;
 
-struct FooMonster {
+struct FooGodMonster {
 	bool wasCalled;
 	int intValue;
 	typedef Str S;
 	S stringValue;
-	FooMonster() : wasCalled(false), intValue(0) {}
+	FooGodMonster() : wasCalled(false), intValue(0) {}
 	//-------------------------------------------------------------------------
 	// 0..1 args
 	void foo() { wasCalled = true; }
@@ -58,15 +59,11 @@ struct FooMonster {
 	// 4args
 	S sum(S a, S b, S c, S d) { return a+b+c+d; }
 	void add(S a, S b, S c, S d) { stringValue+= a+b+c+d; }
+	//-------------------------------------------------------------------------
+	// 5args
+	S sum(S a, S b, S c, S d, S e) { return a+b+c+d+e; }
+	void add(S a, S b, S c, S d, S e) { stringValue+= a+b+c+d+e; }
 };
-
-static void executeLuaString(lua_State *L, const std::string &str) {
-	try {
-		sambag::lua::executeString(L, str);
-	} catch (const sambag::lua::ExecutionFailed &ex) {
-		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
-	}
-}
 
 namespace tests {
 //-----------------------------------------------------------------------------
@@ -81,34 +78,47 @@ void TestLuaScript::tearDown() {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction() {
 	using namespace sambag::lua;
-	FooMonster foo;
+	FooGodMonster foo, foo2;
+	LuaStateRef parallel = createLuaStateRef();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<FooFunction_Tag>(
 		L,
-		boost::bind(&FooMonster::foo, &foo)
+		boost::bind(&FooGodMonster::foo, &foo)
+	);
+	registerFunction<FooFunction_Tag>( // parallel luastate
+		parallel.get(),
+		boost::bind(&FooGodMonster::foo, &foo2)
 	);
 	registerFunction<StrLenFunction_Tag>(
 		L,
-		boost::bind(&FooMonster::strLen, &foo, _1)
+		boost::bind(&FooGodMonster::strLen, &foo, _1)
 	);
 	registerFunction<SetIntFunction_Tag>(
 		L,
-		boost::bind(&FooMonster::setInt, &foo, _1)
+		boost::bind(&FooGodMonster::setInt, &foo, _1)
 	);
 	registerFunction<WhoAmIFunction_Tag>(
 		L,
-		boost::bind(&FooMonster::whoAmI, &foo)
+		boost::bind(&FooGodMonster::whoAmI, &foo)
 	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<foo
 	executeLuaString(L, "");
 	CPPUNIT_ASSERT(!foo.wasCalled);
 	executeLuaString(L, "foo()");
 	CPPUNIT_ASSERT(foo.wasCalled);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<parafoo
+	CPPUNIT_ASSERT(!foo2.wasCalled);
+	executeLuaString(parallel.get(), "foo()");
+	CPPUNIT_ASSERT(foo2.wasCalled);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<strLen
 	CPPUNIT_ASSERT_EQUAL((int)0, foo.intValue);
 	executeLuaString(L, "setInt( strLen('hippelpisse') )");
 	CPPUNIT_ASSERT_EQUAL((int)11, foo.intValue);
-}/*
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<force argument exception
+	CPPUNIT_ASSERT_THROW( executeString(L, "strLen()"), // no arguments
+		ExecutionFailed
+	);
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
 struct Sum02Function_Tag {
@@ -122,18 +132,19 @@ struct Add02Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction02() {
 	using namespace sambag::lua;
-	LuaScript script;
-	FooMonster foo;
+	FooGodMonster foo;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	script.registerFunction<Sum02Function_Tag>(
-		boost::bind(&FooMonster::sum, &foo, _1, _2)
+	registerFunction<Sum02Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::sum, &foo, _1, _2)
 	);
-	script.registerFunction<Add02Function_Tag>(
-		boost::bind(&FooMonster::add, &foo, _1, _2)
+	registerFunction<Add02Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::add, &foo, _1, _2)
 	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
-	script.execString("add( sum('a', 'b' ), 'c' )");
+	executeLuaString(L, "add( sum('a', 'b' ), 'c' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abc"), foo.stringValue);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -149,18 +160,19 @@ struct Add03Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction03() {
 	using namespace sambag::lua;
-	LuaScript script;
-	FooMonster foo;
+	FooGodMonster foo;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	script.registerFunction<Sum03Function_Tag>(
-		boost::bind(&FooMonster::sum, &foo, _1, _2, _3)
+	registerFunction<Sum03Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3)
 	);
-	script.registerFunction<Add03Function_Tag>(
-		boost::bind(&FooMonster::add, &foo, _1, _2, _3)
+	registerFunction<Add03Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::add, &foo, _1, _2, _3)
 	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
-	script.execString("add( sum('a', 'b', 'c' ), 'd', 'e' )");
+	executeLuaString(L, "add( sum('a', 'b', 'c' ), 'd', 'e' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abcde"), foo.stringValue);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -176,22 +188,47 @@ struct Add04Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction04() {
 	using namespace sambag::lua;
-	LuaScript script;
-	FooMonster foo;
+	FooGodMonster foo;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	//script.registerFunction<Sum04Function_Tag>(
-	//	boost::bind(&FooMonster::sum, &foo, _1, _2, _3, _4)
-	//);
-	//script.registerFunction<Add04Function_Tag>(
-	//	boost::bind(&FooMonster::add, &foo, _1, _2, _3, _4)
-	//);
+	registerFunction<Sum04Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4)
+	);
+	registerFunction<Add04Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
+	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
-	//CPPUNIT_ASSERT_EQUAL((int)0, foo.intValue);
-	//script.execString("add( sum(1, -2, 5, -6), -10, 11 )");
-	//CPPUNIT_ASSERT_EQUAL((int)-1, foo.intValue);
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "add( sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
+	CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+struct Sum05Function_Tag {
+	typedef boost::function<Str(Str, Str, Str, Str, Str)> Function;
+	static const char * name() { return "sum"; }
+};
+struct Add05Function_Tag {
+	typedef boost::function<void(Str, Str, Str, Str, Str)> Function;
+	static const char * name() { return "add"; }
+};
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction05() {
-
-}*/
+	using namespace sambag::lua;
+	FooGodMonster foo;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	registerFunction<Sum05Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4, _5)
+	);
+	registerFunction<Add05Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4, _5)
+	);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "add( sum('a', 'b', 'c', 'd', 'e' ), 'f', 'g', 'h', 'i' )");
+	CPPUNIT_ASSERT_EQUAL( Str("abcdefghi"), foo.stringValue);
+}
 } // namespace

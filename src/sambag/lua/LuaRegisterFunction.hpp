@@ -17,16 +17,17 @@
 namespace sambag { namespace lua {
 //=============================================================================
 /**
- *  registerFunction
+ *  @brief registerFunction
  *
  *	Usage:
+ *	// Template parameter FunctionTag concept example 01:
  *	struct FooFunction_tag {
- *		typedef boost::function< void ( int, float ) > Function;
- *		static const char * { return "foo"; }
+ *		typedef boost::function< void ( int, float ) > Function; // Function Type
+ *		static const char * { return "foo"; } // lua function name to register
  *	};
- *
+ *	// example 02
  *	struct BarFunction_tag {
- *		typedef boost::function< int ( string ) > Function;
+ *		typedef boost::function< void () > Function;
  *		static const char * { return "bar"; }
  *	};
  *
@@ -44,15 +45,12 @@ namespace sambag { namespace lua {
  *		boost::bind(&Dummy::bar, &dummy, _1, _2)
  *	);
  *
- */
-//-------------------------------------------------------------------------
-/**
- * Template parameter FunctionTag concept:
- * 		struct Function_tag {
- * 			typedef boost::function< void () > Function; // Function Type
- * 			static const char * { return "foo"; } // lua function name to register
- * 		};
- * 	Note: a FunctionTagType can be registered once.
+ *
+ * 	Notes:
+ * 		- a FunctionTagType can be registered once.
+ * 		- Lua callback can throw ExecutionFailed
+ * 		  while getting arguments from lua stack.
+ * 		- max. number of Function args = 5
  * @param f boost::function object
  */
 template <class FunctionTag>
@@ -78,9 +76,15 @@ template <>
 struct IsVoid<void> {
 	enum {Value=1};
 };
-//===================================================================
+//=============================================================================
+//-----------------------------------------------------------------------------
+template <typename Function>
+void throwArgumentsMismatch(lua_State *L) {
+	throw ExecutionFailed("function arguments mismatch");
+}
+//=============================================================================
 // NumArgs: 0
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -90,7 +94,7 @@ void callF(const Function &f,
 	typename Function::result_type r = f();
 	push(r, L); // return value into lua stack
 }
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -99,9 +103,9 @@ void callF(const Function &f,
 {
 	f();
 }
-//===================================================================
+//=============================================================================
 // NumArgs: 1
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -110,13 +114,14 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	get(a1, L, -1);
+	if (!get(a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	typename Function::result_type r = f(a1);
 	// return value into lua stack
 	push(r, L);
 }
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -125,13 +130,14 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	get(a1, L, -1);
+	if (!get(a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	f(a1);
 }
-//===================================================================
+//=============================================================================
 // NumArgs: 2
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -140,14 +146,15 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	typename Function::arg1_type a2;
-	get(a2, a1, L, -1);
+	typename Function::arg2_type a2;
+	if (!get(a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	typename Function::result_type r = f(a1, a2);
 	// return value into lua stack
 	push(r, L);
 }
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -156,14 +163,15 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	typename Function::arg1_type a2;
-	get(a2, a1, L, -1);
+	typename Function::arg2_type a2;
+	if (!get(a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	f(a1, a2);
 }
-//===================================================================
+//=============================================================================
 // NumArgs: 3
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -172,15 +180,16 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	typename Function::arg1_type a2;
-	typename Function::arg1_type a3;
-	get(a3, a2, a1, L, -1);
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	if (!get(a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	typename Function::result_type r = f(a1, a2, a3);
 	// return value into lua stack
 	push(r, L);
 }
-//-------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
@@ -189,11 +198,90 @@ void callF(const Function &f,
 {
 	// get argument(s) from stack
 	typename Function::arg1_type a1;
-	typename Function::arg1_type a2;
-	typename Function::arg1_type a3;
-	get(a3, a2, a1, L, -1);
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	if (!get(a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
 	// call
 	f(a1, a2, a3);
+}
+//=============================================================================
+// NumArgs: 4
+//-----------------------------------------------------------------------------
+template <typename Function>
+void callF(const Function &f,
+		lua_State *L,
+		Int2Type<4>, // num args
+		Int2Type<0>) // is void?
+{
+	// get argument(s) from stack
+	typename Function::arg1_type a1;
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	typename Function::arg4_type a4;
+	if (!get(a4, a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
+	// call
+	typename Function::result_type r = f(a1, a2, a3, a4);
+	// return value into lua stack
+	push(r, L);
+}
+//-----------------------------------------------------------------------------
+template <typename Function>
+void callF(const Function &f,
+		lua_State *L,
+		Int2Type<4>, // num args
+		Int2Type<1>) // is void?
+{
+	// get argument(s) from stack
+	typename Function::arg1_type a1;
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	typename Function::arg4_type a4;
+	if (!get(a4, a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
+	// call
+	f(a1, a2, a3, a4);
+}
+//=============================================================================
+// NumArgs: 5
+//-----------------------------------------------------------------------------
+template <typename Function>
+void callF(const Function &f,
+		lua_State *L,
+		Int2Type<5>, // num args
+		Int2Type<0>) // is void?
+{
+	// get argument(s) from stack
+	typename Function::arg1_type a1;
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	typename Function::arg4_type a4;
+	typename Function::arg5_type a5;
+	if (!get(a5, a4, a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
+	// call
+	typename Function::result_type r = f(a1, a2, a3, a4, a5);
+	// return value into lua stack
+	push(r, L);
+}
+//-----------------------------------------------------------------------------
+template <typename Function>
+void callF(const Function &f,
+		lua_State *L,
+		Int2Type<5>, // num args
+		Int2Type<1>) // is void?
+{
+	// get argument(s) from stack
+	typename Function::arg1_type a1;
+	typename Function::arg2_type a2;
+	typename Function::arg3_type a3;
+	typename Function::arg4_type a4;
+	typename Function::arg5_type a5;
+	if (!get(a5, a4, a3, a2, a1, L, -1))
+		throwArgumentsMismatch<Function>(L);
+	// call
+	f(a1, a2, a3, a4, a5);
 }
 //=============================================================================
 template <class FunctionTag>

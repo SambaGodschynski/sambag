@@ -17,8 +17,12 @@
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 typedef boost::shared_ptr<lua_State> LuaStateRef;
-inline LuaStateRef createLuaStateRef() {
-	return LuaStateRef(luaL_newstate(), &lua_close);
+inline LuaStateRef createLuaStateRef(bool openLibs = true) {
+	LuaStateRef lRef(luaL_newstate(), &lua_close);
+	if (!openLibs)
+		return lRef;
+	luaL_openlibs(lRef.get());
+	return lRef;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct LuaException {
