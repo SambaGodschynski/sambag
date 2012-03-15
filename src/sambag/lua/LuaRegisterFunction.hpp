@@ -17,7 +17,7 @@
 namespace sambag { namespace lua {
 //=============================================================================
 /**
- * @class LuaScript
+ *  registerFunction
  *
  *	Usage:
  *	struct FooFunction_tag {
@@ -30,74 +30,35 @@ namespace sambag { namespace lua {
  *		static const char * { return "bar"; }
  *	};
  *
- *	LuaScript script;
+ *	lua_State *L;
  *
- *	script.registerFunction<FooFunction_tag>(
+ *	// init lua
+ *
+ *	registerFunction<FooFunction_tag>(
+ *		L,
  *		boost::bind(&Dummy::foo, &dummy, _1, _2)
  *	);
  *
- *	script.registerFunction<BarFunction_tag>(
+ *	registerFunction<BarFunction_tag>(
+ *		L,
  *		boost::bind(&Dummy::bar, &dummy, _1, _2)
  *	);
  *
- *	// execute script
- *	script.execFile("luaScriptFile.lua");
- *	script.execString(luaScriptString);
- *
- *	// get global script variable, throws
- *	int g1 = script.getGlobal<int>("g1");
- * // with alternative error value, nothrow:
- *	string g2 = script.getGlobal<string>("g2", "errorString");
- *
  */
-class LuaScript {
-//=============================================================================
-public:
-private:
-	//-------------------------------------------------------------------------
-	LuaStateRef luaState;
-public:
-	//-------------------------------------------------------------------------
-	LuaScript();
-	//-------------------------------------------------------------------------
-	~LuaScript();
-	//-------------------------------------------------------------------------
-	LuaStateRef getL() const {
-		return luaState;
-	}
-	//-------------------------------------------------------------------------
-	void execFile(const std::string &filename);
-	//-------------------------------------------------------------------------
-	void execString(const std::string &script);
-	//-------------------------------------------------------------------------
-	/**
-	 * @param name
-	 * @return value of global lua variable 'name'
-	 * @throw ExecutionFailed
-	 */
-	template <typename T>
-	T getGlobal(const std::string &name);
-	//-------------------------------------------------------------------------
-	/**
-	 * @param name
-	 * @param errValue return value when 'name' not accessible
-	 * @return value of global lua variable 'name'
-	 */
-	template <typename T>
-	T getGlobal(const std::string &name, const T &errValue);
-	//-------------------------------------------------------------------------
-	/**
-	 * Template parameter FunctionTag concept:
-	 * 		struct Function_tag {
-	 * 			typedef boost::function< void () > Function; // Function Type
-	 * 			static const char * { return "foo"; } // lua function name to register
-	 * 		};
-	 * 	Note: a FunctionTagType can be registered once.
-	 * @param f boost::function object
-	 */
-	template <class FunctionTag>
-	void registerFunction(const typename FunctionTag::Function &f);
-};
+//-------------------------------------------------------------------------
+/**
+ * Template parameter FunctionTag concept:
+ * 		struct Function_tag {
+ * 			typedef boost::function< void () > Function; // Function Type
+ * 			static const char * { return "foo"; } // lua function name to register
+ * 		};
+ * 	Note: a FunctionTagType can be registered once.
+ * @param f boost::function object
+ */
+template <class FunctionTag>
+void registerFunction( lua_State *L,
+	const typename FunctionTag::Function &f);
+
 
 namespace {
 //=============================================================================
@@ -267,9 +228,11 @@ RegisterHelperClass<FunctionTag>::fMap;
 //=============================================================================
 //-----------------------------------------------------------------------------
 template <class FunctionTag>
-void LuaScript::registerFunction(const typename FunctionTag::Function &f) {
+void registerFunction(
+	lua_State *L,
+	const typename FunctionTag::Function &f)
+{
 	typedef RegisterHelperClass<FunctionTag> Helper;
-	lua_State *L = luaState.get();
 	Helper::fMap[L] = f;
 	lua_register(L, FunctionTag::name(), &Helper::luaCallback);
 }

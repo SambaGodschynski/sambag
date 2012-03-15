@@ -1,12 +1,12 @@
 /*
- * TestLuaScript.cpp
+ * TestLuaRegisterFunction.cpp
  *
  *  Created on: Mar 15, 2012
  *      Author: samba
  */
 
-#include "TestLuaScript.hpp"
-#include <sambag/lua/LuaScript.hpp>
+#include "TestLuaRegisterFunction.hpp"
+#include <sambag/lua/Lua.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
@@ -60,41 +60,55 @@ struct FooMonster {
 	void add(S a, S b, S c, S d) { stringValue+= a+b+c+d; }
 };
 
+static void executeLuaString(lua_State *L, const std::string &str) {
+	try {
+		sambag::lua::executeString(L, str);
+	} catch (const sambag::lua::ExecutionFailed &ex) {
+		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
+	}
+}
 
 namespace tests {
 //-----------------------------------------------------------------------------
-void TestLuaScript::testLuaScriptConstruction() {
-	using namespace sambag::lua;
-	LuaScript script;
+void TestLuaScript::setUp() {
+	L = luaL_newstate();
+	luaL_openlibs(L);
+}
+//-----------------------------------------------------------------------------
+void TestLuaScript::tearDown() {
+	lua_close(L);
 }
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction() {
 	using namespace sambag::lua;
-	LuaScript script;
 	FooMonster foo;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	script.registerFunction<FooFunction_Tag>(
+	registerFunction<FooFunction_Tag>(
+		L,
 		boost::bind(&FooMonster::foo, &foo)
 	);
-	script.registerFunction<StrLenFunction_Tag>(
+	registerFunction<StrLenFunction_Tag>(
+		L,
 		boost::bind(&FooMonster::strLen, &foo, _1)
 	);
-	script.registerFunction<SetIntFunction_Tag>(
+	registerFunction<SetIntFunction_Tag>(
+		L,
 		boost::bind(&FooMonster::setInt, &foo, _1)
 	);
-	script.registerFunction<WhoAmIFunction_Tag>(
+	registerFunction<WhoAmIFunction_Tag>(
+		L,
 		boost::bind(&FooMonster::whoAmI, &foo)
 	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<foo
-	script.execString("");
+	executeLuaString(L, "");
 	CPPUNIT_ASSERT(!foo.wasCalled);
-	script.execString("foo()");
+	executeLuaString(L, "foo()");
 	CPPUNIT_ASSERT(foo.wasCalled);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<strLen
 	CPPUNIT_ASSERT_EQUAL((int)0, foo.intValue);
-	script.execString("setInt( strLen('hippelpisse') )");
+	executeLuaString(L, "setInt( strLen('hippelpisse') )");
 	CPPUNIT_ASSERT_EQUAL((int)11, foo.intValue);
-}
+}/*
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
 struct Sum02Function_Tag {
@@ -179,5 +193,5 @@ void TestLuaScript::testRegisterFunction04() {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction05() {
 
-}
+}*/
 } // namespace
