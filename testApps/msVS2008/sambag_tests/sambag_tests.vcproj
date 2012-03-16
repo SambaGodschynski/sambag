@@ -188,66 +188,6 @@
 			>
 		</Filter>
 		<Filter
-			Name="tests"
-			>
-			<Filter
-				Name="cpsqlite"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\tests\DBTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\cpsqlite\tests\DBTest.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="math"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\math\tests\VectorNTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\math\tests\VectorNTest.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="com"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\com\tests\FileSystemTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\tests\FileSystemTest.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\tests\TestHelper.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\tests\TestHelper.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="xml"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\xml\tests\XML2ObjTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\xml\tests\XML2ObjTest.hpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="EXT"
 			>
 			<Filter
@@ -529,6 +469,26 @@
 					RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
 					>
 				</File>
+				<Filter
+					Name="tests"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\FileSystemTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\FileSystemTest.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestHelper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestHelper.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="cpsqlite"
@@ -549,6 +509,18 @@
 					RelativePath="..\..\..\src\sambag\cpsqlite\sambag_sqlite.c"
 					>
 				</File>
+				<Filter
+					Name="tests"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\cpsqlite\tests\DBTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\cpsqlite\tests\DBTest.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="disco"
@@ -1028,6 +1000,14 @@
 						RelativePath="..\..\..\src\sambag\lua\tests\TestLuaHelper.hpp"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\lua\tests\TestLuaRegisterFunction.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\lua\tests\TestLuaRegisterFunction.hpp"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
@@ -1049,6 +1029,18 @@
 					RelativePath="..\..\..\src\sambag\math\VectorNCreator.hpp"
 					>
 				</File>
+				<Filter
+					Name="tests"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\math\tests\VectorNTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\math\tests\VectorNTest.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="ticpp"
@@ -1081,6 +1073,18 @@
 					RelativePath="..\..\..\src\sambag\xml\XML2Obj.hpp"
 					>
 				</File>
+				<Filter
+					Name="tests"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\xml\tests\XML2ObjTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\xml\tests\XML2ObjTest.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>
