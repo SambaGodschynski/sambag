@@ -10,6 +10,7 @@
 #include "sambag/lua/LuaSequence.hpp"
 #include "sambag/lua/LuaMap.hpp"
 #include <boost/foreach.hpp>
+#include "helper.hpp"
 #include <string>
 #include <sstream>
 
@@ -245,6 +246,27 @@ void TestLuaHelper::testNestedSequencesEx() {
 		CPPUNIT_ASSERT_EQUAL((float)(i+1), nSeq[0][i]);
 		CPPUNIT_ASSERT_EQUAL(-(float)(i+1), nSeq[1][i]);
 	}
+}
+//-----------------------------------------------------------------------------
+void TestLuaHelper::testGetGlobal() {
+	using namespace sambag::lua;
+	static const std::string LCODE = "x=100; y='fritze'; z={1,2,3}";
+	executeLuaString(L, LCODE);
+	int x;
+	std::string y;
+	LuaSequence<int> z;
+	CPPUNIT_ASSERT( getGlobal(x, L, "x") );
+	CPPUNIT_ASSERT_EQUAL((int)100, x);
+	CPPUNIT_ASSERT( getGlobal(y, L, "y") );
+	CPPUNIT_ASSERT_EQUAL(std::string("fritze"), y);
+	CPPUNIT_ASSERT( getGlobal(z, L, "z") );
+	CPPUNIT_ASSERT_EQUAL(int(1), z[0]);
+	CPPUNIT_ASSERT_EQUAL(int(2), z[1]);
+	CPPUNIT_ASSERT_EQUAL(int(3), z[2]);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<failures
+	CPPUNIT_ASSERT( !getGlobal(x, L, "z") ); // incompatible type
+	CPPUNIT_ASSERT( !getGlobal(x, L, "nope") ); // no variable
+	
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF() {

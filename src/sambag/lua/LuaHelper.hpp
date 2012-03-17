@@ -198,6 +198,11 @@ struct ExecutionFailed : public LuaException {
 };
 struct NoFunction {};
 //-----------------------------------------------------------------------------
+inline bool hasFunction(lua_State *L, const std::string &fName) {
+	lua_getglobal(L, fName.c_str());
+	return lua_isfunction(L, -1)==1;
+}
+//-----------------------------------------------------------------------------
 namespace {
 	inline void __getF(lua_State *L, const std::string &fName)
 	{
@@ -410,7 +415,21 @@ void callLuaFunc(lua_State *L,
 	__callF(L, 5, nResult);
 
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+/**
+ * @param L the lua state objekt
+ * @param name the name of the global variable
+ * @param outValue value of global lua variable
+ * @return true when succeed
+ */
+template <typename T>
+bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
+	lua_getglobal(L, name.c_str());
+	if (!check<T>(L, -1))
+		return false;
+	get(outValue, L, -1);
+	return true;
+}
 }} //namespaces
-
-
 #endif /* LUAHELPER_HPP_ */
