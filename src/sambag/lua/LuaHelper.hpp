@@ -13,6 +13,8 @@
 #include <string>
 #include <boost/type_traits.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <sambag/com/Helper.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -81,6 +83,7 @@ inline bool __get(ILuaTable &out, lua_State *L, int index) {
 	return out.getFromStack(L, index);
 }
 } // namespace
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * @param out destination value
  * @param L lua state
@@ -198,11 +201,6 @@ struct ExecutionFailed : public LuaException {
 };
 struct NoFunction {};
 //-----------------------------------------------------------------------------
-inline bool hasFunction(lua_State *L, const std::string &fName) {
-	lua_getglobal(L, fName.c_str());
-	return lua_isfunction(L, -1)==1;
-}
-//-----------------------------------------------------------------------------
 namespace {
 	inline void __getF(lua_State *L, const std::string &fName)
 	{
@@ -220,6 +218,11 @@ namespace {
 	}
 } // namespace
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+inline bool hasFunction(lua_State *L, const std::string &fName) {
+	lua_getglobal(L, fName.c_str());
+	return lua_isfunction(L, -1)==1;
+}
 inline void executeString(lua_State *L, const std::string &str) {
 	luaL_loadstring (L, str.c_str());
 	__callF(L);
@@ -252,6 +255,44 @@ inline void push(const std::string &v, lua_State *L) {
 //-----------------------------------------------------------------------------
 inline void push(const ILuaTable &v, lua_State *L) {
 	v.pushIntoStack(L);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+	struct _IntoTuple {
+		lua_State *L;
+		bool succeed;
+		int index;
+		template <typename T>
+		void operator()(T &value) {
+			if (!succeed)
+				return;
+			if (!get(value, L, index--))
+				succeed = false;
+		}
+		_IntoTuple(lua_State *L) : L(L), succeed(true), index(-1) {}
+	};
+}
+//-----------------------------------------------------------------------------
+template <typename Tuple>
+bool get(lua_State *L, Tuple &t) {
+	_IntoTuple into(L);
+	sambag::com::foreach(t, into);
+	return into.succeed;
+}
+//-----------------------------------------------------------------------------
+/**
+ * put values from stack into tuple and pop it from stack.
+ * If operation failed nothing will be popped.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
+template <typename Tuple>
+bool pop(lua_State *L, Tuple &t) {
+	if(!get(L, t))
+		return false;
+	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
+	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -415,21 +456,7 @@ void callLuaFunc(lua_State *L,
 	__callF(L, 5, nResult);
 
 }
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//-----------------------------------------------------------------------------
-/**
- * @param L the lua state objekt
- * @param name the name of the global variable
- * @param outValue value of global lua variable
- * @return true when succeed
- */
-template <typename T>
-bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
-	lua_getglobal(L, name.c_str());
-	if (!check<T>(L, -1))
-		return false;
-	get(outValue, L, -1);
-	return true;
-}
 }} //namespaces
+
+
 #endif /* LUAHELPER_HPP_ */

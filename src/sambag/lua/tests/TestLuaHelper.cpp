@@ -10,7 +10,6 @@
 #include "sambag/lua/LuaSequence.hpp"
 #include "sambag/lua/LuaMap.hpp"
 #include <boost/foreach.hpp>
-#include "helper.hpp"
 #include <string>
 #include <sstream>
 
@@ -248,25 +247,25 @@ void TestLuaHelper::testNestedSequencesEx() {
 	}
 }
 //-----------------------------------------------------------------------------
-void TestLuaHelper::testGetGlobal() {
-	using namespace sambag::lua;
-	static const std::string LCODE = "x=100; y='fritze'; z={1,2,3}";
-	executeLuaString(L, LCODE);
-	int x;
-	std::string y;
-	LuaSequence<int> z;
-	CPPUNIT_ASSERT( getGlobal(x, L, "x") );
-	CPPUNIT_ASSERT_EQUAL((int)100, x);
-	CPPUNIT_ASSERT( getGlobal(y, L, "y") );
-	CPPUNIT_ASSERT_EQUAL(std::string("fritze"), y);
-	CPPUNIT_ASSERT( getGlobal(z, L, "z") );
-	CPPUNIT_ASSERT_EQUAL(int(1), z[0]);
-	CPPUNIT_ASSERT_EQUAL(int(2), z[1]);
-	CPPUNIT_ASSERT_EQUAL(int(3), z[2]);
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<failures
-	CPPUNIT_ASSERT( !getGlobal(x, L, "z") ); // incompatible type
-	CPPUNIT_ASSERT( !getGlobal(x, L, "nope") ); // no variable
-	
+void TestLuaHelper::testPop() {
+	using namespace sambag;
+	lua::push(10, L);
+	boost::tuple<int> t01;
+	// assume value;
+	CPPUNIT_ASSERT(lua::check<int>(L, -1));
+	CPPUNIT_ASSERT(lua::pop(L, t01));
+	CPPUNIT_ASSERT_EQUAL((int)10, boost::get<0>(t01));
+	// assume that value is removed
+	CPPUNIT_ASSERT(!lua::check<int>(L, -1));
+
+
+	lua::push(1.0f, 100, "no", L);
+	boost::tuple<std::string, int, float> t02;
+	CPPUNIT_ASSERT(lua::pop(L, t02));
+	CPPUNIT_ASSERT_EQUAL(std::string("no"), boost::get<0>(t02));
+	CPPUNIT_ASSERT_EQUAL((int)100, boost::get<1>(t02));
+	CPPUNIT_ASSERT_EQUAL(1.0f, boost::get<2>(t02));
+
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF() {
