@@ -113,11 +113,15 @@ void callF(const Function &f,
 		Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	if (!get(a1, L, -1))
+	boost::tuple<
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(a1);
+	typename Function::result_type r = f(
+		boost::get<0>(args)
+	);
 	// return value into lua stack
 	push(r, L);
 }
@@ -129,11 +133,15 @@ void callF(const Function &f,
 		Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	if (!get(a1, L, -1))
+	boost::tuple<
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	f(a1);
+	f(
+		boost::get<0>(args)
+	);
 }
 //=============================================================================
 // NumArgs: 2
@@ -145,12 +153,17 @@ void callF(const Function &f,
 		Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	if (!get(a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(a1, a2);
+	typename Function::result_type r = f(
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 	// return value into lua stack
 	push(r, L);
 }
@@ -162,12 +175,17 @@ void callF(const Function &f,
 		Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	if (!get(a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	f(a1, a2);
+	f(
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 }
 //=============================================================================
 // NumArgs: 3
@@ -179,13 +197,19 @@ void callF(const Function &f,
 		Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	if (!get(a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(a1, a2, a3);
+	typename Function::result_type r = f(
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 	// return value into lua stack
 	push(r, L);
 }
@@ -197,13 +221,19 @@ void callF(const Function &f,
 		Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	if (!get(a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	f(a1, a2, a3);
+	f(
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 }
 //=============================================================================
 // NumArgs: 4
@@ -215,14 +245,21 @@ void callF(const Function &f,
 		Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	typename Function::arg4_type a4;
-	if (!get(a4, a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg4_type,
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(a1, a2, a3, a4);
+	typename Function::result_type r = f(
+		boost::get<3>(args),
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 	// return value into lua stack
 	push(r, L);
 }
@@ -234,14 +271,21 @@ void callF(const Function &f,
 		Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	typename Function::arg4_type a4;
-	if (!get(a4, a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg4_type,
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	f(a1, a2, a3, a4);
+	f(
+		boost::get<3>(args),
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 }
 //=============================================================================
 // NumArgs: 5
@@ -253,15 +297,23 @@ void callF(const Function &f,
 		Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	typename Function::arg4_type a4;
-	typename Function::arg5_type a5;
-	if (!get(a5, a4, a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg5_type,
+		typename Function::arg4_type,
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(a1, a2, a3, a4, a5);
+	typename Function::result_type r = f(
+		boost::get<4>(args),
+		boost::get<3>(args),
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 	// return value into lua stack
 	push(r, L);
 }
@@ -273,15 +325,23 @@ void callF(const Function &f,
 		Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	typename Function::arg1_type a1;
-	typename Function::arg2_type a2;
-	typename Function::arg3_type a3;
-	typename Function::arg4_type a4;
-	typename Function::arg5_type a5;
-	if (!get(a5, a4, a3, a2, a1, L, -1))
+	boost::tuple<
+		typename Function::arg5_type,
+		typename Function::arg4_type,
+		typename Function::arg3_type,
+		typename Function::arg2_type,
+		typename Function::arg1_type
+	> args;
+	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	f(a1, a2, a3, a4, a5);
+	f(
+		boost::get<4>(args),
+		boost::get<3>(args),
+		boost::get<2>(args),
+		boost::get<1>(args),
+		boost::get<0>(args)
+	);
 }
 //=============================================================================
 template <class FunctionTag>

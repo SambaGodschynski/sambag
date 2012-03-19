@@ -146,17 +146,19 @@ void TestLuaHelper::testMultiPushGet() {
 		e["2"] = 20;
 		e["3"] = 30;
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push content
-		push(a,b,c,d,e,L);
+		push(L, boost::make_tuple(a,b,c,d,e));
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get content
-	int a; double b; std::string c; LuaSequence<int> d; Map e;
-	CPPUNIT_ASSERT(get(e,d,c,b,a,L,-1));
-	CPPUNIT_ASSERT_EQUAL((int)1, a);
-	CPPUNIT_ASSERT_EQUAL((double)2.0, b);
-	CPPUNIT_ASSERT_EQUAL(std::string("abc"), c);
+	boost::tuple<Map, LuaSequence<int>, std::string, double, int> ret;
+	CPPUNIT_ASSERT(get(L, ret));
+	CPPUNIT_ASSERT_EQUAL((int)1, boost::get<4>(ret));
+	CPPUNIT_ASSERT_EQUAL((double)2.0, boost::get<3>(ret));
+	CPPUNIT_ASSERT_EQUAL(std::string("abc"), boost::get<2>(ret));
+	const LuaSequence<int> &d = boost::get<1>(ret);
 	for (size_t i=0; i<d.size(); ++i) {
 		CPPUNIT_ASSERT_EQUAL((int)i*10, d[i]);
 	}
+	const Map &e = boost::get<0>(ret);
 	BOOST_FOREACH(const Map::value_type &it, e) {
 		std::stringstream ss;
 		ss << it.first;
@@ -165,15 +167,15 @@ void TestLuaHelper::testMultiPushGet() {
 		CPPUNIT_ASSERT_EQUAL(i * 10, it.second);
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<test failure
-	CPPUNIT_ASSERT(!get(a,d,c,b,a,L,-1)); // 1st wrong
+	/*CPPUNIT_ASSERT(!get(a,d,c,b,a,L,-1)); // 1st wrong
 	CPPUNIT_ASSERT(!get(e,a,c,b,a,L,-1)); // 2nd wrong
 	CPPUNIT_ASSERT(!get(a,d,e,b,a,L,-1)); // 3th wrong
 	CPPUNIT_ASSERT(!get(a,d,c,e,a,L,-1)); // 4th wrong
 	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-1)); // 5th wrong
-	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-2)); // wrong index
-	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-3)); // wrong index
-	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-4)); // wrong index
-	CPPUNIT_ASSERT(!get(a,d,c,b,e,L,-5)); // wrong index
+	CPPUNIT_ASSERT(!get(L,ret, -2)); // wrong index
+	CPPUNIT_ASSERT(!get(L,ret, -3)); // wrong index
+	CPPUNIT_ASSERT(!get(L,ret, -4)); // wrong index
+	CPPUNIT_ASSERT(!get(L,ret, -5)); // wrong index*/
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCheckType() {
@@ -294,16 +296,15 @@ void TestLuaHelper::testCallF01() {
 			"end\n";
 	executeString(L, LCODE);
 	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	boost::tuple<int> ret;
 	try {
-		callLuaFunc(L, "A", 1, 9);
+		callLuaFunc(L, "A", boost::make_tuple(9), ret);
 	} catch (const NoFunction &ex) {
 		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
 	} catch (const ExecutionFailed &ex) {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
-	int ret = 0;
-	CPPUNIT_ASSERT(get(ret, L, -1));
-	CPPUNIT_ASSERT_EQUAL((int)10, ret);
+	CPPUNIT_ASSERT_EQUAL((int)10, boost::get<0>(ret));
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF02() {
@@ -313,16 +314,15 @@ void TestLuaHelper::testCallF02() {
 			"end\n";
 	executeString(L, LCODE);
 	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	boost::tuple<int> ret;
 	try {
-		callLuaFunc(L, "A", 1, 3, 2);
+		callLuaFunc(L, "A", boost::make_tuple(3, 2), ret);
 	} catch (const NoFunction &ex) {
 		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
 	} catch (const ExecutionFailed &ex) {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
-	int ret = 0;
-	CPPUNIT_ASSERT(get(ret, L, -1));
-	CPPUNIT_ASSERT_EQUAL((int)1, ret);
+	CPPUNIT_ASSERT_EQUAL((int)1, boost::get<0>(ret));
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF03() {
@@ -339,20 +339,21 @@ void TestLuaHelper::testCallF03() {
 	std::string sdata[] = {"a", "b", "c"};
 	LuaSequenceEx<int> iseq(&idata[0],3);
 	LuaSequenceEx<std::string> sseq(&sdata[0],3);
+	typedef LuaMap<std::string, int> Map;
+	boost::tuple<Map> ret;
 	try {
 		executeString(L, LCODE);
-		callLuaFunc(L, "A", 1, sseq, iseq, 3);
+		callLuaFunc(L, "A", boost::make_tuple(sseq, iseq, 3), ret);
 	} catch (const NoFunction &ex) {
 		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
 	} catch (const ExecutionFailed &ex) {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
-	LuaMap<std::string, int> ret;
-	CPPUNIT_ASSERT(get(ret, L, -1));
-	CPPUNIT_ASSERT_EQUAL((size_t)3, ret.size());
-	CPPUNIT_ASSERT_EQUAL((int)200, ret["a"]);
-	CPPUNIT_ASSERT_EQUAL((int)202, ret["b"]);
-	CPPUNIT_ASSERT_EQUAL((int)204, ret["c"]);
+	Map &m = boost::get<0>(ret);
+	CPPUNIT_ASSERT_EQUAL((size_t)3, m.size());
+	CPPUNIT_ASSERT_EQUAL((int)200, m["a"]);
+	CPPUNIT_ASSERT_EQUAL((int)202, m["b"]);
+	CPPUNIT_ASSERT_EQUAL((int)204, m["c"]);
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testCallF04() {
@@ -370,16 +371,17 @@ void TestLuaHelper::testCallF04() {
 	int dtable2[] = {-100,-101,-102};
 	LuaSequenceEx<int> t1(&dtable1[0],3);
 	LuaSequenceEx<int> t2(&dtable2[0],3);
+	typedef LuaSequence<LuaSequence<int> > RetType;
+	boost::tuple<RetType> retvalue;
 	try {
 		executeString(L, LCODE);
-		callLuaFunc(L, "A", 1, t1, t2, 2, 3);
+		callLuaFunc(L, "A", boost::make_tuple(t1, t2, 2, 3), retvalue);
 	} catch (const NoFunction &ex) {
 		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
 	} catch (const ExecutionFailed &ex) {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
-	LuaSequence<LuaSequence<int> > ret;
-	CPPUNIT_ASSERT(get(ret, L, -1));
+	RetType &ret = boost::get<0>(retvalue);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, ret.size());
 	CPPUNIT_ASSERT_EQUAL((size_t)3, ret[0].size());
 	CPPUNIT_ASSERT_EQUAL((size_t)3, ret[1].size());
@@ -398,20 +400,19 @@ void TestLuaHelper::testCallF05() {
 			"   return a+1, b+2, c+3, d+4, e+5 \n"
 			"end\n";
 	CPPUNIT_ASSERT_THROW(callLuaFunc(L, "NoF", 1), NoFunction);
+	boost::tuple<int, int, int, int, int> ret;
 	try {
 		executeString(L, LCODE);
-		callLuaFunc(L, "A", 5, 1,2,3,4,5);
+		callLuaFunc(L, "A", boost::make_tuple(1,2,3,4,5), ret);
 	} catch (const NoFunction &ex) {
 		CPPUNIT_ASSERT_MESSAGE("function assertion.", false);
 	} catch (const ExecutionFailed &ex) {
 		CPPUNIT_ASSERT_MESSAGE(ex.errMsg, false);
 	}
-	int a,b,c,d,e;
-	CPPUNIT_ASSERT(get(e,d,c,b,a,L,-1));
-	CPPUNIT_ASSERT_EQUAL((int)2, a);
-	CPPUNIT_ASSERT_EQUAL((int)4, b);
-	CPPUNIT_ASSERT_EQUAL((int)6, c);
-	CPPUNIT_ASSERT_EQUAL((int)8, d);
-	CPPUNIT_ASSERT_EQUAL((int)10, e);
+	CPPUNIT_ASSERT_EQUAL((int)2, boost::get<4>(ret));
+	CPPUNIT_ASSERT_EQUAL((int)4, boost::get<3>(ret));
+	CPPUNIT_ASSERT_EQUAL((int)6, boost::get<2>(ret));
+	CPPUNIT_ASSERT_EQUAL((int)8, boost::get<1>(ret));
+	CPPUNIT_ASSERT_EQUAL((int)10, boost::get<0>(ret));
 }
 } // namespace

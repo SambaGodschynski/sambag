@@ -51,6 +51,7 @@ struct FooGodMonster {
 	// 2args
 	S sum(S a, S b) { return a+b; }
 	void add(S a, S b) { stringValue+= a+b; }
+	int diffArgs(int a, S b) { return b.length() + a; }
 	//-------------------------------------------------------------------------
 	// 3args
 	S sum(S a, S b, S c) { return a+b+c; }
@@ -129,6 +130,10 @@ struct Add02Function_Tag {
 	typedef boost::function<void(Str, Str)> Function;
 	static const char * name() { return "add"; }
 };
+struct DiffArgsFunction_Tag {
+	typedef boost::function<int(int, Str)> Function;
+	static const char * name() { return "diffArgs"; }
+};
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction02() {
 	using namespace sambag::lua;
@@ -142,10 +147,22 @@ void TestLuaScript::testRegisterFunction02() {
 		L,
 		boost::bind(&FooGodMonster::add, &foo, _1, _2)
 	);
+	registerFunction<DiffArgsFunction_Tag>(
+		L,
+		boost::bind(&FooGodMonster::diffArgs, &foo, _1, _2)
+	);
+	registerFunction<SetIntFunction_Tag>(
+		L,
+		boost::bind(&FooGodMonster::setInt, &foo, _1)
+	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
 	executeLuaString(L, "add( sum('a', 'b' ), 'c' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abc"), foo.stringValue);
+
+	CPPUNIT_ASSERT_EQUAL( (int)0, foo.intValue);
+	executeLuaString(L, "setInt( diffArgs(-1, 'ab') )");
+	CPPUNIT_ASSERT_EQUAL( (int)1, foo.intValue);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
