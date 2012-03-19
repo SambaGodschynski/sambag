@@ -247,9 +247,9 @@ void TestLuaHelper::testNestedSequencesEx() {
 	}
 }
 //-----------------------------------------------------------------------------
-void TestLuaHelper::testPop() {
+void TestLuaHelper::testPushPop() {
 	using namespace sambag;
-	lua::push(10, L);
+	lua::push(L, boost::make_tuple(10));
 	boost::tuple<int> t01;
 	// assume value;
 	CPPUNIT_ASSERT(lua::check<int>(L, -1));
@@ -259,7 +259,7 @@ void TestLuaHelper::testPop() {
 	CPPUNIT_ASSERT(!lua::check<int>(L, -1));
 
 
-	lua::push(1.0f, 100, "no", L);
+	lua::push(L, boost::make_tuple(1.0f, 100, "no"));
 	boost::tuple<std::string, int, float> t02;
 	CPPUNIT_ASSERT(lua::pop(L, t02));
 	CPPUNIT_ASSERT_EQUAL(std::string("no"), boost::get<0>(t02));

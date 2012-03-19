@@ -25,7 +25,7 @@ private:
 	CPPUNIT_TEST( testMultiPushGet );
 	CPPUNIT_TEST( testCallF );
 	CPPUNIT_TEST( testNestedSequences );
-	CPPUNIT_TEST( testPop );
+	CPPUNIT_TEST( testPushPop );
 	CPPUNIT_TEST( testNestedSequencesEx );
 	CPPUNIT_TEST( testCallF01 );
 	CPPUNIT_TEST( testCallF02 );
@@ -46,7 +46,7 @@ public:
 	void testMultiPushGet();
 	void testCheckType();
 	void testCallF();
-	void testPop();
+	void testPushPop();
 	void testCallF01();
 	void testCallF02();
 	void testCallF03();

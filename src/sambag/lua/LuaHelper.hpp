@@ -271,6 +271,14 @@ namespace {
 		}
 		_IntoTuple(lua_State *L) : L(L), succeed(true), index(-1) {}
 	};
+	struct _PushFromTuple {
+		lua_State *L;
+		template <typename T>
+		void operator()(const T &value) {
+			push(value, L);
+		}
+		_PushFromTuple(lua_State *L) : L(L) {}
+	};
 }
 //-----------------------------------------------------------------------------
 template <typename Tuple>
@@ -293,6 +301,18 @@ bool pop(lua_State *L, Tuple &t) {
 		return false;
 	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
 	return true;
+}
+//-----------------------------------------------------------------------------
+/**
+ * push tuple values into stack.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
+template <typename Tuple>
+void push(lua_State *L, const Tuple &t) {
+	_PushFromTuple pft(L);
+	sambag::com::foreach(t, pft);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
