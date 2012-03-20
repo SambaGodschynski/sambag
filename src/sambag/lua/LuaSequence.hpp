@@ -91,7 +91,7 @@ public:
 	 * @param size
 	 * @return
 	 */
-	LuaSequenceEx(T *data, size_t size = 0) : _size(size), data(data) {}
+	LuaSequenceEx(T *data=NULL, size_t size = 0) : _size(size), data(data) {}
 	//-------------------------------------------------------------------------
 	virtual ~LuaSequenceEx() {
 	}
