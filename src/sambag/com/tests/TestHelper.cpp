@@ -10,6 +10,7 @@
 #include "boost/tuple/tuple.hpp"
 #include <cppunit/config/SourcePrefix.h>
 #include <list>
+#include <sstream>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestHelper );
@@ -17,6 +18,31 @@ CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestHelper );
 using namespace sambag;
 
 namespace tests {
+namespace {
+	struct ToString {
+		std::stringstream ss;
+		int index;
+		template <typename T>
+		void operator()(const T &value) {
+			ss<<index++<<": "<<value<<"; ";
+		}
+		ToString() : index(0) {}
+	};
+}
+//=============================================================================
+void TestHelper::testTupleForeach() {
+//=============================================================================
+	using namespace boost;
+	using namespace sambag::com;
+	using namespace std;
+	ToString tStr;
+	tuple<int, float, string> tpl(10, 1.1f, "inhaltslosabernichtleer");
+	foreach(tpl, tStr);
+	CPPUNIT_ASSERT_EQUAL(
+			string("0: 10; 1: 1.1; 2: inhaltslosabernichtleer; "),
+			tStr.ss.str()
+	);
+}
 //=============================================================================
 void TestHelper::testFromContainer() {
 //=============================================================================

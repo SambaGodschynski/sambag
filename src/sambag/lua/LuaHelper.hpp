@@ -13,6 +13,8 @@
 #include <string>
 #include <boost/type_traits.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <sambag/com/Helper.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -81,6 +83,7 @@ inline bool __get(ILuaTable &out, lua_State *L, int index) {
 	return out.getFromStack(L, index);
 }
 } // namespace
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * @param out destination value
  * @param L lua state
@@ -93,93 +96,6 @@ bool get(T &out, lua_State *L, int index) {
 	if (!check<T>(L, index))
 		return false;
 	return __get(out, L, index);
-}
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//-----------------------------------------------------------------------------
-/**
- * @param o0
- * @param o1
- * @param L
- * @param index
- * @return true if succeed
- */
-template <
-	typename T0,
-	typename T1
->
-bool get(T0 &o0,
-		T1 &o1,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0>(o0, L, index--))
-		return false;
-	if (!get<T1>(o1, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1>(o0, o1, L, index))
-		return false;
-	index-= 2;
-	if (!get<T2>(o2, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		T3 &o3,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1, T2>(o0, o1, o2, L, index))
-		return false;
-	index-= 3;
-	if (!get<T3>(o3, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3,
-	typename T4
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		T3 &o3,
-		T4 &o4,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1, T2, T3>(o0, o1, o2, o3, L, index))
-		return false;
-	index-= 4;
-	if (!get<T4>(o4, L, index))
-		return false;
-	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 inline size_t getLen(lua_State *L, int index) {
@@ -198,11 +114,6 @@ struct ExecutionFailed : public LuaException {
 };
 struct NoFunction {};
 //-----------------------------------------------------------------------------
-inline bool hasFunction(lua_State *L, const std::string &fName) {
-	lua_getglobal(L, fName.c_str());
-	return lua_isfunction(L, -1)==1;
-}
-//-----------------------------------------------------------------------------
 namespace {
 	inline void __getF(lua_State *L, const std::string &fName)
 	{
@@ -220,6 +131,11 @@ namespace {
 	}
 } // namespace
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+inline bool hasFunction(lua_State *L, const std::string &fName) {
+	lua_getglobal(L, fName.c_str());
+	return lua_isfunction(L, -1)==1;
+}
 inline void executeString(lua_State *L, const std::string &str) {
 	luaL_loadstring (L, str.c_str());
 	__callF(L);
@@ -254,71 +170,62 @@ inline void push(const ILuaTable &v, lua_State *L) {
 	v.pushIntoStack(L);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+	struct _IntoTuple {
+		lua_State *L;
+		bool succeed;
+		int index;
+		template <typename T>
+		void operator()(T &value) {
+			if (!succeed)
+				return;
+			if (!get(value, L, index--))
+				succeed = false;
+		}
+		_IntoTuple(lua_State *L, int startIndex = -1) : L(L), succeed(true), index(startIndex) {}
+	};
+	struct _PushFromTuple {
+		lua_State *L;
+		template <typename T>
+		void operator()(const T &value) {
+			push(value, L);
+		}
+		_PushFromTuple(lua_State *L) : L(L) {}
+	};
+}
+//-----------------------------------------------------------------------------
+template <typename Tuple>
+bool get(lua_State *L, Tuple &t, int index = -1) {
+	_IntoTuple into(L, index);
+	sambag::com::foreach(t, into);
+	return into.succeed;
+}
 //-----------------------------------------------------------------------------
 /**
- * pushs o0 up to oN into lua stack.
- * @param o0
- * @param o1
+ * put values from stack into tuple and pop it from stack.
+ * If operation failed nothing will be popped.
  * @param L
+ * @param t
+ * @return true, when succeed.
  */
-template <
-	typename T0,
-	typename T1
->
-void push(const T0 &o0,
-		const T1 &o1,
-		lua_State *L)
-{
-	push(o0,L);
-	push(o1,L);
+template <typename Tuple>
+bool pop(lua_State *L, Tuple &t) {
+	if(!get(L, t))
+		return false;
+	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
+	return true;
 }
 //-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2
->
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		lua_State *L)
-{
-	push(o0, o1 ,L);
-	push(o2, L);
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3
->
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		lua_State *L)
-{
-	push(o0, o1 ,o2, L);
-	push(o3, L);
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3,
-	typename T4
->
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4,
-		lua_State *L)
-{
-	push(o0, o1 ,o2, o3, L);
-	push(o4, L);
+/**
+ * push tuple values into stack.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
+template <typename Tuple>
+void push(lua_State *L, const Tuple &t) {
+	_PushFromTuple pft(L);
+	sambag::com::foreach(t, pft);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -336,100 +243,49 @@ inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult)
 
 }
 //-----------------------------------------------------------------------------
-template <typename T>
-void callLuaFunc(lua_State *L,
+/**
+ * calls lua function. throws NoFunction when function not exists,
+ * or ExecutionFailed when Lua error occurs.
+ * @param L
+ * @param fName function name
+ * @param args Lua function arguments
+ */
+template <typename ArgTuple>
+inline void callLuaFunc(lua_State *L,
 		const std::string &fName,
-		int nResult,
-		const T &o1)
+		const ArgTuple &args)
 {
 	__getF(L, fName);
-	push(o1,L);
-	__callF(L, 1, nResult);
-
+	push(L, args);
+	__callF(L,
+		(int)boost::tuples::length<ArgTuple>::value, // num args
+		0
+	);
 }
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2)
-{
-	__getF(L, fName);
-	push(o1,o2,L);
-	__callF(L, 2, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,L);
-	__callF(L, 3, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3,
-	typename T4>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,o4,L);
-	__callF(L, 4, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3,
-	typename T4,
-	typename T5>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4,
-		const T5 &o5)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,o4,o5,L);
-	__callF(L, 5, nResult);
-
-}
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
 /**
- * @param L the lua state objekt
- * @param name the name of the global variable
- * @param outValue value of global lua variable
- * @return true when succeed
+ * calls lua function. throws NoFunction when function not exists,
+ * or ExecutionFailed when Lua error occurs.
+ * @param L
+ * @param fName function name
+ * @param return Lua function retrun values
+ * @param args Lua function arguments
  */
-template <typename T>
-bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
-	lua_getglobal(L, name.c_str());
-	if (!check<T>(L, -1))
-		return false;
-	get(outValue, L, -1);
-	return true;
+template <typename RetTuple, typename ArgTuple>
+inline void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		const ArgTuple &args,
+		RetTuple &ret)
+{
+	__getF(L, fName);
+	push(L, args);
+	__callF(L,
+		(int)boost::tuples::length<ArgTuple>::value, // num args
+		(int)boost::tuples::length<RetTuple>::value // num rets
+	);
+	pop(L, ret);
 }
 }} //namespaces
+
+
 #endif /* LUAHELPER_HPP_ */
