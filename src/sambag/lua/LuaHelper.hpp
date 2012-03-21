@@ -285,6 +285,23 @@ inline void callLuaFunc(lua_State *L,
 	);
 	pop(L, ret);
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+/**
+ * @param L the lua state objekt
+ * @param name the name of the global variable
+ * @param outValue value of global lua variable
+ * @return true when succeed
+ */
+template <typename T>
+bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
+	lua_getglobal(L, name.c_str());
+	if (!check<T>(L, -1))
+		return false;
+	get(outValue, L, -1);
+	lua_pop(L, 1);
+	return true;
+}
 }} //namespaces
 
 

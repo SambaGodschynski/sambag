@@ -34,7 +34,9 @@ namespace sambag { namespace lua {
  *	lua_State *L;
  *
  *	// init lua
- *
+ *  // ...
+ *	
+ *  // register c/c++ function 
  *	registerFunction<FooFunction_tag>(
  *		L,
  *		boost::bind(&Dummy::foo, &dummy, _1, _2)
@@ -47,7 +49,6 @@ namespace sambag { namespace lua {
  *
  *
  * 	Notes:
- * 		- a FunctionTagType can be registered once.
  * 		- Lua callback can throw ExecutionFailed
  * 		  while getting arguments from lua stack.
  * 		- max. number of Function args = 5
