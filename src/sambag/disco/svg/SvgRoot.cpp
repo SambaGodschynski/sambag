@@ -34,7 +34,8 @@ void SvgRoot::handleRequests() {
 		IdMap::iterator it = idMap.find(rq.first);
 		if (it==idMap.end())
 			continue;
-		rq.second(it->second);
+		// call function
+		rq.second(it->second.lock());
 	}
 }
 //-----------------------------------------------------------------------------
@@ -45,7 +46,8 @@ void SvgRoot::subObjectCreated( SvgObject::Ptr newObject,
 	if (newObject->getIdName().length() > 0) { // append object to idmap
 		idMap.insert(std::make_pair(newObject->getIdName(), newObject));
 	}
-	svgs.push_back(newObject);
+	if (newObject.get() != this) // don't add self, ocurrs memory leak otherwise
+		svgs.push_back(newObject);
 }
 
 }}}

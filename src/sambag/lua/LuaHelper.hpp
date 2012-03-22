@@ -13,7 +13,35 @@
 #include <string>
 #include <boost/type_traits.hpp>
 
+
+/**
+	TODO: Script class
+	Usage:
+
+	LuaScript script("file.lua");
+	// alternative: LuaScript script(scriptString);
+	
+	// register function (boost function style)
+	script.registerFunction<bool(int, int)>(
+		boost::bind(&Dummy::foo, &dummy, _1, _2)
+	);
+	
+	// execute script
+	script.exec();
+	
+	// get global script variable, throws:
+	int g1 = script.getGlobal<int>("g1");
+	// with alternative error value, nothrow:
+	string g2 = script.getGlobal<string>("g2", "errorString");
+*/
+
+
 namespace sambag { namespace lua {
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+struct LuaException {
+	std::string errMsg;
+	LuaException(const std::string &errMsg) : errMsg(errMsg) {}
+};
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * returns true if type at index
@@ -31,7 +59,7 @@ bool check(lua_State *L, int index) {
 }
 //-----------------------------------------------------------------------------
 template <>
-bool check<std::string>(lua_State *L, int index) {
+inline bool check<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -167,7 +195,7 @@ bool get(T0 &o0,
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-size_t getLen(lua_State *L, int index) {
+inline size_t getLen(lua_State *L, int index) {
 	lua_len(L, index);
 	size_t s;
 	if (!get(s, L, -1))
@@ -178,9 +206,8 @@ size_t getLen(lua_State *L, int index) {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // executation helper
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-struct ExecutionFailed {
-	std::string errMsg;
-	ExecutionFailed(const std::string &errMsg) : errMsg(errMsg) {}
+struct ExecutionFailed : public LuaException {
+	ExecutionFailed(const std::string &errMsg) : LuaException(errMsg) {}
 };
 struct NoFunction {};
 //-----------------------------------------------------------------------------

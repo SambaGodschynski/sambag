@@ -331,22 +331,14 @@ public:
 		if (!strokePattern) {
 			return false;
 		}
-		CairoSolidPattern::Ptr sPt =
-				boost::shared_dynamic_cast<CairoSolidPattern>(strokePattern);
-		if (!sPt)
-			return false;
-		return sPt->getSolidColor().getA() > 0.0;
+		return strokePattern->getOpacity() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual bool isFilled() const {
 		if (!fillPattern) {
 			return false;
 		}
-		CairoSolidPattern::Ptr sPt =
-				boost::shared_dynamic_cast<CairoSolidPattern>(fillPattern);
-		if (!sPt)
-			return false;
-		return sPt->getSolidColor().getA() > 0.0;
+		return fillPattern->getOpacity() > 0.0;
 	}
 	//-------------------------------------------------------------------------
 	virtual void setStrokeWidth( const Coordinate &val ) {

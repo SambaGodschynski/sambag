@@ -9,8 +9,8 @@
 #define MATRIX_HPP_
 
 #include <math.h>
-#include <boost/numeric/ublas/matrix.hpp>
 #include "sambag/com/Common.hpp"
+#include <boost/numeric/ublas/matrix.hpp>
 
 namespace sambag { namespace math {
 using namespace boost;
