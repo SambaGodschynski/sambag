@@ -61,12 +61,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd.lib libcairo.lib"
-				LinkIncremental="2"
+				AdditionalDependencies="cppunitd.lib libcairo.lib pixman-1.lib libpng.lib"
 				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_47_0\stage\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\pixman\pixman\release&quot;"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -162,6 +158,69 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Library|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0;DISCO_MAKE_LIBRARY=1"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
