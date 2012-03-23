@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunitd.lib libcairo.lib pixman-1.lib libpng.lib"
-				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_47_0\stage\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\pixman\pixman\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\lib&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0\stage\lib&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\pixman\pixman\release&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -113,7 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -134,7 +134,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunitd.lib libcairo.lib pixman-1.lib libpng.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\cppunit-1.12.1\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\boost_1_47_0\stage\lib&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\pixman\pixman\release&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\msvcProject\Release&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\lib&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0\stage\lib&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\libpng\projects\visualc71\Win32_LIB_Release&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\pixman\pixman\release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -190,7 +190,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\lua-5.2.0\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_47_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=2;BOOST_UBLAS_TYPE_CHECK=0;DISCO_MAKE_LIBRARY=1"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
