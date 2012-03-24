@@ -12,6 +12,7 @@
 #include "sambag/com/Common.hpp"
 #include <math.h>
 #include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
 
 namespace sambag { namespace disco {
 //#############################################################################
