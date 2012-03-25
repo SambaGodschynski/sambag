@@ -16,7 +16,7 @@ namespace sambag { namespace disco { namespace graphicElements {
 
 //=============================================================================
 /**
- * Base class for all compounded SVG elements.
+ * Dummyclass for compound elements in SceneGraph.
  */
 class Compound : public GraphicElement {
 //=============================================================================
