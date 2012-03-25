@@ -18,6 +18,15 @@
 #include <map>
 #include "sambag/math/Matrix.hpp"
 
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/regex.hpp>
+#include <boost/assign/list_inserter.hpp>
+#include <vector>
+#include <sstream>
+#include <math.h>
+#include <algorithm>
+
 namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
 using namespace sambag::disco::graphicElements;
@@ -97,7 +106,12 @@ public:
 	 */
 	static void getWholeString( std::istream& istr, std::string &out );
 	//-------------------------------------------------------------------------
-	static Number string2Number(const std::string &str);
+	/**
+	 * @param str
+	 * @param errVal
+	 * @return numbervalue of str or errVal if conversion fails.
+	 */
+	static Number string2Number(const std::string &str, const Number &errVal);
 	//-------------------------------------------------------------------------
 	/**
 	 * Converts Container<string>:in to Container<Number>:out.
@@ -142,5 +156,46 @@ extern std::istream & operator>>(
 	std::istream&,
 	sambag::disco::IDrawContext::LineJoin &v
 );
+
+namespace sambag { namespace disco { namespace svg {
+//=============================================================================
+// template impl.
+//=============================================================================
+//-----------------------------------------------------------------------------
+template <typename StrContainer, typename NumberContainer>
+void AttributeParser::strings2Numbers(const StrContainer &in, NumberContainer &out) {
+	boost_for_each( const std::string &str, in ) {
+		if (str.length()==0)
+			continue;
+		std::stringstream ss;
+		ss<<str;
+		Number n;
+		ss>>n;
+		if (ss.fail() || !ss.eof()) {
+			out.clear();
+			return;
+		}
+		out.push_back(n);
+	}
+}
+template< typename Container >
+void AttributeParser::getValuesFromString( const std::string &_values, Container &out ) {
+	std::stringstream ss;
+	ss<<_values;
+	while(!ss.eof()) {
+		typename Container::value_type value;
+		ss>>value;
+		if (ss.fail()) { // no number character
+			char dump;
+			ss.clear(); // clear flags
+			ss>>dump; // remove no number character
+			continue;
+		}
+		out.push_back(value);
+	}
+
+}
+}}} // namespaces
+
 
 #endif /* ATTRIBUTE_PARSER_HPP_ */
