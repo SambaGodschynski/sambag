@@ -29,7 +29,7 @@ private:
 //	CPPUNIT_TEST( testGetWholeString );
 //	CPPUNIT_TEST( testString2Number );
 //	CPPUNIT_TEST( testStrings2Numbers );
-//	CPPUNIT_TEST( testGetValuesFromString );
+	CPPUNIT_TEST( testGetValuesFromString );
 
 	CPPUNIT_TEST_SUITE_END();
 public:

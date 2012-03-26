@@ -15,7 +15,7 @@ using namespace sambag;
 
 const std::string FILENAME = boost::algorithm::erase_all_copy( std::string(__FILE__), std::string("../") );
 
-const com::Location TEST_FOLDERS = boost::filesystem::complete(
+const com::Location TEST_FOLDERS = boost::filesystem::absolute(
 		com::Location(FILENAME).parent_path().string() + std::string("/TestFolders")
 	);
 
