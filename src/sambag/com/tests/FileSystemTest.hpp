@@ -14,7 +14,7 @@ class ComTests : public CPPUNIT_NS::TestFixture {
 	CPPUNIT_TEST_SUITE_END();
 private:
 public:
-	void setUp(){}
+	void setUp();
 	void tearDown(){}
 	void testDirWalker();
 	void testDirWalkerAbort();

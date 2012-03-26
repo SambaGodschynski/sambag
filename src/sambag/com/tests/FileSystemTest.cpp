@@ -15,9 +15,7 @@ using namespace sambag;
 
 const std::string FILENAME = boost::algorithm::erase_all_copy( std::string(__FILE__), std::string("../") );
 
-const com::Location TEST_FOLDERS = boost::filesystem::absolute(
-		com::Location(FILENAME).parent_path().string() + std::string("/TestFolders")
-	);
+static com::Location testFolders;
 
 //=============================================================================
 // compares directory iteration with ExpectedTree;
@@ -49,12 +47,22 @@ struct WalkerVis : public com::IWalkerVisitor {
 
 namespace tests {
 //=============================================================================
+void ComTests::setUp() {
+	static bool init = false;
+	if (init)
+		return;
+	init = true;
+	testFolders = boost::filesystem::absolute(
+		com::Location(FILENAME).parent_path().string() + std::string("/TestFolders")
+	);
+}
+//=============================================================================
 void ComTests::testDirWalker() {
 //=============================================================================
 	using namespace sambag;	
 	WalkerVis vis;
-	CPPUNIT_ASSERT_MESSAGE ( "TestFolder tree expected.", exists(TEST_FOLDERS) );
-	com::dirWalker ( TEST_FOLDERS, vis );
+	CPPUNIT_ASSERT_MESSAGE ( "TestFolder tree expected.", exists(testFolders) );
+	com::dirWalker ( testFolders, vis );
 	CPPUNIT_ASSERT_EQUAL ( (size_t)4, vis.numDirs );
 	CPPUNIT_ASSERT_EQUAL ( (size_t)10, vis.numFiles );
 }
@@ -63,8 +71,8 @@ void ComTests::testDirWalkerAbort() {
 //=============================================================================
 	using namespace sambag;	
 	WalkerVis vis(true);
-	CPPUNIT_ASSERT_MESSAGE ( "TestFolder tree expected.", exists(TEST_FOLDERS) );
-	com::dirWalker ( TEST_FOLDERS, vis, &vis.abort/*switches to true after 2 files passed*/ );
+	CPPUNIT_ASSERT_MESSAGE ( "TestFolder tree expected.", exists(testFolders) );
+	com::dirWalker ( testFolders, vis, &vis.abort/*switches to true after 2 files passed*/);
 	CPPUNIT_ASSERT_EQUAL ( (size_t)2, vis.numFiles );
 }
 } // namespace tests

@@ -20,7 +20,7 @@
 //                       CPPUnit TestApp fuer cpsqlite
 //=============================================================================
 int main ( const int argc, char **argv ) {
-/*	ONLY_WIN(
+	ONLY_WIN(
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)
 	using namespace std;
@@ -51,6 +51,6 @@ int main ( const int argc, char **argv ) {
 
 
 	// Return error code 1 if the one of test failed.
-	return collectedresults.wasSuccessful() ? 0 : 1;*/
+	return collectedresults.wasSuccessful() ? 0 : 1;
 	return 0;
 }
