@@ -39,7 +39,7 @@ struct LuaException {
  * @return
  */
 template <typename T>
-bool check(lua_State *L, int index) {
+bool isType(lua_State *L, int index) {
 	if (boost::is_convertible<T*, ILuaTable*>::value)
 		return lua_istable(L, index) == 1;
 	if (boost::is_arithmetic<T>::value)
@@ -48,7 +48,7 @@ bool check(lua_State *L, int index) {
 }
 //-----------------------------------------------------------------------------
 template <>
-inline bool check<std::string>(lua_State *L, int index) {
+inline bool isType<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -93,7 +93,7 @@ inline bool __get(ILuaTable &out, lua_State *L, int index) {
 //-----------------------------------------------------------------------------
 template <typename T>
 bool get(T &out, lua_State *L, int index) {
-	if (!check<T>(L, index))
+	if (!isType<T>(L, index))
 		return false;
 	return __get(out, L, index);
 }
@@ -296,7 +296,7 @@ inline void callLuaFunc(lua_State *L,
 template <typename T>
 bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
 	lua_getglobal(L, name.c_str());
-	if (!check<T>(L, -1))
+	if (!isType<T>(L, -1))
 		return false;
 	get(outValue, L, -1);
 	lua_pop(L, 1);
