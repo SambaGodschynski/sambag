@@ -259,7 +259,7 @@ bool pop(lua_State *L, Tuple &t) {
  * @return true, when succeed.
  */
 template <typename Tuple>
-void push(lua_State *L, const Tuple &t) {
+void pushTupleValues(lua_State *L, const Tuple &t) {
 	_PushFromTuple pft(L);
 	sambag::com::foreach(t, pft);
 }
@@ -314,7 +314,7 @@ inline void callLuaFunc(lua_State *L,
 		RetTuple &ret)
 {
 	__getF(L, fName);
-	push(L, args);
+	pushTupleValues(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		(int)boost::tuples::length<RetTuple>::value // num rets
