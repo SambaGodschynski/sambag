@@ -11,10 +11,18 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
-#include <boost/type_traits.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
+
+// 'declaration does not declare anything' issue on mac. see:
+// http://stackoverflow.com/questions/8173620/c-boost-1-48-type-traits-and-cocoa-inclusion-weirdness
+#ifdef __APPLE__
+	#ifdef check
+	#undef check
+	#endif
+#endif
+#include <boost/type_traits.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -259,7 +267,7 @@ bool pop(lua_State *L, Tuple &t) {
  * @return true, when succeed.
  */
 template <typename Tuple>
-void push(lua_State *L, const Tuple &t) {
+void pushTupleValues(lua_State *L, const Tuple &t) {
 	_PushFromTuple pft(L);
 	sambag::com::foreach(t, pft);
 }
@@ -292,7 +300,7 @@ inline void callLuaFunc(lua_State *L,
 		const ArgTuple &args)
 {
 	__getF(L, fName);
-	push(L, args);
+	pushTupleValues(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		0
@@ -314,7 +322,7 @@ inline void callLuaFunc(lua_State *L,
 		RetTuple &ret)
 {
 	__getF(L, fName);
-	push(L, args);
+	pushTupleValues(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		(int)boost::tuples::length<RetTuple>::value // num rets
@@ -339,6 +347,4 @@ bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
 	return true;
 }
 }} //namespaces
-
-
 #endif /* LUAHELPER_HPP_ */
