@@ -10,6 +10,7 @@
 #include <map>
 #include <boost/function.hpp>
 #include <lua.hpp>
+#include <sambag/com/Helper.hpp>
 
 #ifndef LUASCRIPT_HPP_
 #define LUASCRIPT_HPP_
@@ -61,13 +62,6 @@ void registerFunction( lua_State *L,
 
 namespace {
 //=============================================================================
-// Int2Value
-//=============================================================================
-template <int I>
-struct Int2Type {
-	enum {Value=I};
-};
-//=============================================================================
 template <typename ReturnType>
 struct IsVoid {
 //=============================================================================
@@ -89,8 +83,8 @@ void throwArgumentsMismatch(lua_State *L) {
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<0>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<0>, // num args
+		com::Int2Type<0>) // is void?
 {
 	typename Function::result_type r = f();
 	push(r, L); // return value into lua stack
@@ -99,8 +93,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<0>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<0>, // num args
+		com::Int2Type<1>) // is void?
 {
 	f();
 }
@@ -110,8 +104,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<1>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<1>, // num args
+		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -130,8 +124,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<1>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<1>, // num args
+		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -150,8 +144,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<2>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<2>, // num args
+		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -172,8 +166,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<2>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<2>, // num args
+		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -194,8 +188,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<3>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<3>, // num args
+		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -218,8 +212,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<3>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<3>, // num args
+		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -242,8 +236,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<4>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<4>, // num args
+		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -268,8 +262,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<4>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<4>, // num args
+		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -294,8 +288,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<5>, // num args
-		Int2Type<0>) // is void?
+		com::Int2Type<5>, // num args
+		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -322,8 +316,8 @@ void callF(const Function &f,
 template <typename Function>
 void callF(const Function &f,
 		lua_State *L,
-		Int2Type<5>, // num args
-		Int2Type<1>) // is void?
+		com::Int2Type<5>, // num args
+		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
 	boost::tuple<
@@ -361,8 +355,8 @@ struct RegisterHelperClass {
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
 		callF<Function>( it->second,
 			L,
-			Int2Type<Function::arity>(), // num args
-			Int2Type<IsVoidValue>() // isVoid
+			com::Int2Type<Function::arity>(), // num args
+			com::Int2Type<IsVoidValue>() // isVoid
 		);
 		return IsVoidValue == 1 ? 0 : 1;
 	}

@@ -125,7 +125,7 @@ void TestLuaHelper::testGet() {
 		push(arr,L);
 	}
 	LuaSequence<int> arr;
-	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
+	CPPUNIT_ASSERT(isType<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(get(arr, L, -1));
 	for (size_t i=0; i<arr.size(); ++i) {
 		CPPUNIT_ASSERT_EQUAL((int)i*10, arr[i]);
@@ -146,7 +146,7 @@ void TestLuaHelper::testMultiPushGet() {
 		e["2"] = 20;
 		e["3"] = 30;
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push content
-		push(L, boost::make_tuple(a,b,c,d,e));
+		pushTupleValues(L, boost::make_tuple(a,b,c,d,e));
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get content
 	boost::tuple<Map, LuaSequence<int>, std::string, double, int> ret;
@@ -183,18 +183,18 @@ void TestLuaHelper::testCheckType() {
 	lua_pushstring(L, "abc");
 	lua_pushnumber(L, 0.5);
 	// abc
-	CPPUNIT_ASSERT(!check<int>(L, -2));
-	CPPUNIT_ASSERT(check<std::string>(L, -2));
+	CPPUNIT_ASSERT(!isType<int>(L, -2));
+	CPPUNIT_ASSERT(isType<std::string>(L, -2));
 	// 0.5
-	CPPUNIT_ASSERT(check<int>(L, -1));
-	CPPUNIT_ASSERT(check<double>(L, -1));
-	CPPUNIT_ASSERT(check<std::string>(L, -1)); // number is string convertible
+	CPPUNIT_ASSERT(isType<int>(L, -1));
+	CPPUNIT_ASSERT(isType<double>(L, -1));
+	CPPUNIT_ASSERT(isType<std::string>(L, -1)); // number is string convertible
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<checktable
 	LuaSequence<int> seq(10);
 	for (int i=0; i<10;++i) seq[i] = i;
 	push(seq,L);
-	CPPUNIT_ASSERT(check<ILuaTable>(L, -1));
-	CPPUNIT_ASSERT(!check<ILuaTable>(L, -2));
+	CPPUNIT_ASSERT(isType<ILuaTable>(L, -1));
+	CPPUNIT_ASSERT(!isType<ILuaTable>(L, -2));
 }
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testNestedSequences() {
@@ -251,17 +251,17 @@ void TestLuaHelper::testNestedSequencesEx() {
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testPushPop() {
 	using namespace sambag;
-	lua::push(L, boost::make_tuple(10));
+	lua::pushTupleValues(L, boost::make_tuple(10));
 	boost::tuple<int> t01;
 	// assume value;
-	CPPUNIT_ASSERT(lua::check<int>(L, -1));
+	CPPUNIT_ASSERT(lua::isType<int>(L, -1));
 	CPPUNIT_ASSERT(lua::pop(L, t01));
 	CPPUNIT_ASSERT_EQUAL((int)10, boost::get<0>(t01));
 	// assume that value is removed
-	CPPUNIT_ASSERT(!lua::check<int>(L, -1));
+	CPPUNIT_ASSERT(!lua::isType<int>(L, -1));
 
 
-	lua::push(L, boost::make_tuple(1.0f, 100, "no"));
+	lua::pushTupleValues(L, boost::make_tuple(1.0f, 100, "no"));
 	boost::tuple<std::string, int, float> t02;
 	CPPUNIT_ASSERT(lua::pop(L, t02));
 	CPPUNIT_ASSERT_EQUAL(std::string("no"), boost::get<0>(t02));

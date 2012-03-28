@@ -11,10 +11,18 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
-#include <boost/type_traits.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
+
+// 'declaration does not declare anything' issue on mac. see:
+// http://stackoverflow.com/questions/8173620/c-boost-1-48-type-traits-and-cocoa-inclusion-weirdness
+#ifdef __APPLE__
+	#ifdef check
+	#undef check
+	#endif
+#endif
+#include <boost/type_traits.hpp>
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -39,7 +47,7 @@ struct LuaException {
  * @return
  */
 template <typename T>
-bool check(lua_State *L, int index) {
+bool isType(lua_State *L, int index) {
 	if (boost::is_convertible<T*, ILuaTable*>::value)
 		return lua_istable(L, index) == 1;
 	if (boost::is_arithmetic<T>::value)
@@ -48,39 +56,36 @@ bool check(lua_State *L, int index) {
 }
 //-----------------------------------------------------------------------------
 template <>
-inline bool check<std::string>(lua_State *L, int index) {
+inline bool isType<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
+typedef com::Int2Type<0> NoImpl;
+typedef com::Int2Type<1> Impl;
 //-----------------------------------------------------------------------------
-inline bool __get(int &out, lua_State *L, int index) {
-	out = (int)lua_tonumber(L, index);
-	return true;
+template <typename T>
+inline void __getNumber(T &outValue, lua_State *L, int index, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T>
+inline void  __getNumber(T &outValue, lua_State *L, int index, Impl) {
+	outValue = (T)lua_tonumber(L, index);
 }
 //-----------------------------------------------------------------------------
-inline bool __get(unsigned int &out, lua_State *L, int index) {
-	out = (unsigned int)lua_tonumber(L, index);
-	return true;
+template <typename T> // template needed to be usable for get().
+inline void __getILuaTable(T &outValue, lua_State *L, int index, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __getILuaTable(T &outValue, lua_State *L, int index, Impl) {
+	outValue.getFromStack(L, index);
 }
 //-----------------------------------------------------------------------------
-inline bool __get(float &out, lua_State *L, int index) {
-	out = (float)lua_tonumber(L, index);
-	return true;
-}
+template <typename T> // template needed to be usable for get().
+inline void __getString(T &outValue, lua_State *L, int index, NoImpl) {}
 //-----------------------------------------------------------------------------
-inline bool __get(double &out, lua_State *L, int index) {
-	out = (double)lua_tonumber(L, index);
-	return true;
-}
-//-----------------------------------------------------------------------------
-inline bool __get(std::string &out, lua_State *L, int index) {
-	out = std::string(lua_tostring(L, index));
-	return true;
-}
-//-----------------------------------------------------------------------------
-inline bool __get(ILuaTable &out, lua_State *L, int index) {
-	return out.getFromStack(L, index);
+template <typename T> // template needed to be usable for get().
+inline void __getString(T &outValue, lua_State *L, int index, Impl) {
+	outValue = std::string(lua_tostring(L, index));
 }
 } // namespace
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -90,12 +95,20 @@ inline bool __get(ILuaTable &out, lua_State *L, int index) {
  * @param index lua stack index
  * @return true if succeed
  */
-//-----------------------------------------------------------------------------
 template <typename T>
 bool get(T &out, lua_State *L, int index) {
-	if (!check<T>(L, index))
+	if (!isType<T>(L, index))
 		return false;
-	return __get(out, L, index);
+	// if T is Number
+	enum {isNumber = boost::is_arithmetic<T>::value};
+	__getNumber(out, L, index, com::Int2Type<isNumber>());
+	// if T is instance of ILuaTable
+	enum {isILuaTable=boost::is_convertible<T*, ILuaTable*>::value};
+	__getILuaTable(out, L, index, com::Int2Type<isILuaTable>());
+	// if T is instance of ILuaTable
+	enum {isString=boost::is_convertible<T*, std::string*>::value};
+	__getString(out, L, index, com::Int2Type<isString>());
+	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 inline size_t getLen(lua_State *L, int index) {
@@ -145,29 +158,60 @@ inline void executeFile(lua_State *L, const std::string &filename) {
 	__callF(L);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+typedef com::Int2Type<0> NoImpl;
+typedef com::Int2Type<1> Impl;
 //-----------------------------------------------------------------------------
-inline void push(int v, lua_State *L) {
-	lua_pushnumber(L, v);
+template <typename T>
+inline void __pushNumber(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T>
+inline void  __pushNumber(const T &value, lua_State *L, Impl) {
+	lua_pushnumber(L, value);
 }
 //-----------------------------------------------------------------------------
-inline void push(unsigned int v, lua_State *L) {
-	lua_pushnumber(L, v);
+template <typename T> // template needed to be usable for get().
+inline void __pushILuaTable(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushILuaTable(const T &value, lua_State *L, Impl) {
+	value.pushIntoStack(L);
 }
 //-----------------------------------------------------------------------------
-inline void push(float v, lua_State *L) {
-	lua_pushnumber(L, v);
+template <typename T> // template needed to be usable for get().
+inline void __pushString(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushString(const T &value, lua_State *L, Impl) {
+	lua_pushstring(L, value.c_str());
+}
+} // namespace
+//-----------------------------------------------------------------------------
+/**
+ * push value into lua stack
+ * @param value
+ * @param L
+ */
+template <typename T>
+void push(const T &value, lua_State *L) {
+	// if T is Number
+	enum {isNumber = boost::is_arithmetic<T>::value};
+	__pushNumber(value, L, com::Int2Type<isNumber>());
+	// if T is instance of ILuaTable
+	enum {isILuaTable=boost::is_convertible<T*, ILuaTable*>::value};
+	__pushILuaTable(value, L, com::Int2Type<isILuaTable>());
+	// if T is instance of ILuaTable
+	enum {isString=boost::is_convertible<T*, std::string*>::value};
+	__pushString(value, L, com::Int2Type<isString>());
 }
 //-----------------------------------------------------------------------------
-inline void push(const double &v, lua_State *L) {
-	lua_pushnumber(L, v);
-}
-//-----------------------------------------------------------------------------
-inline void push(const std::string &v, lua_State *L) {
-	lua_pushstring(L, v.c_str());
-}
-//-----------------------------------------------------------------------------
-inline void push(const ILuaTable &v, lua_State *L) {
-	v.pushIntoStack(L);
+/**
+ * overload used for implicit string construction.
+ * @param cStr
+ * @param L
+ */
+inline void push(const char * cStr, lua_State *L) {
+	__pushString(std::string(cStr), L, com::Int2Type<1>());
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
@@ -223,7 +267,7 @@ bool pop(lua_State *L, Tuple &t) {
  * @return true, when succeed.
  */
 template <typename Tuple>
-void push(lua_State *L, const Tuple &t) {
+void pushTupleValues(lua_State *L, const Tuple &t) {
 	_PushFromTuple pft(L);
 	sambag::com::foreach(t, pft);
 }
@@ -256,7 +300,7 @@ inline void callLuaFunc(lua_State *L,
 		const ArgTuple &args)
 {
 	__getF(L, fName);
-	push(L, args);
+	pushTupleValues(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		0
@@ -278,7 +322,7 @@ inline void callLuaFunc(lua_State *L,
 		RetTuple &ret)
 {
 	__getF(L, fName);
-	push(L, args);
+	pushTupleValues(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		(int)boost::tuples::length<RetTuple>::value // num rets
@@ -296,13 +340,11 @@ inline void callLuaFunc(lua_State *L,
 template <typename T>
 bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
 	lua_getglobal(L, name.c_str());
-	if (!check<T>(L, -1))
+	if (!isType<T>(L, -1))
 		return false;
 	get(outValue, L, -1);
 	lua_pop(L, 1);
 	return true;
 }
 }} //namespaces
-
-
 #endif /* LUAHELPER_HPP_ */
