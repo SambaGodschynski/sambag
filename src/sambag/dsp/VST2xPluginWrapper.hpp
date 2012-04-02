@@ -10,44 +10,8 @@
 #include <AudioEffectX.h>
 #include <string>
 #include <sstream>
-
+#include "DspPlugin.hpp"
 namespace sambag { namespace dsp { namespace vst {
-//=============================================================================
-struct StdParameterAcessor {
-	template <class Plugin, typename T>
-	void setParameterValue(const Plugin &plugin, int index, const T &value){}
-	template <class Plugin, typename T>
-	void getParameterValue(const Plugin &plugin, int index, T &value){}
-	template <class Plugin, class String>
-	void getParameterName (const Plugin &plugin, int index, String &outStr){}
-	template <class Plugin, class String>
-	void getParameterLabel(const Plugin &plugin, int index, String &outStr){}
-	template <class Plugin, class String>
-	void getParameterDisplay(const Plugin &plugin, int index, String &outStr){}
-};
-//=============================================================================
-template <int _NumInputs,
-	int _NumOutputs,
-	bool _IsSynth,
-	int _NumParameter = 0>
-struct StdPluginTraits {
-	enum { 
-		NumInputs = _NumInputs,
-		NumOutputs = _NumOutputs,
-		NumProgram = 0,
-		NumParameter = _NumParameter,
-		IsSynth = _IsSynth
-	};
-	typedef float ParameterType;
-	typedef std::string StringType;
-};
-
-//=============================================================================
-struct CreateNoEditor {
-	template <class Editor, class T>
-	Editor * createEditor(T*) { return NULL; }
-};
-
 //=============================================================================
 /**
  * @class VST2xPluginWrapper
@@ -61,17 +25,14 @@ template <
 	class _PluginProcessor,
 	int _UniqueId,
 	class _PluginTraits = StdPluginTraits<2,2,false>,
-	class _ParameterAcessor = StdParameterAcessor,
 	class _CreateEditorPolicy = CreateNoEditor > 
 class VST2xPluginWrapper :
 	public AudioEffectX, 
 	public _PluginProcessor,
 	public _PluginTraits,
-	public _CreateEditorPolicy,
-	public _ParameterAcessor
+	public _CreateEditorPolicy
 {
 //=============================================================================
-friend typename _ParameterAcessor;
 public:
 	//-------------------------------------------------------------------------
 	typedef _PluginProcessor PluginProcessor;
@@ -80,38 +41,44 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _CreateEditorPolicy CreateEditorPolicy;
 	//-------------------------------------------------------------------------
-	typedef _ParameterAcessor ParameterAcessor;
-	//-------------------------------------------------------------------------
 	enum {UniqueId = _UniqueId};
 protected:
 private:	
 public:
 	//-------------------------------------------------------------------------
+	VstInt32 canDo (char *text ) {
+		if (!strcmp (text, "receiveVstEvents") )
+			return 1;
+		if (!strcmp (text, "receiveVstMidiEvent") )
+			return 1;
+		return -1;	// explicitly can't do; 0 => don't know
+	}
+	//-------------------------------------------------------------------------
 	void setParameter (VstInt32 index, float value) {
-		typename ParameterAcessor::setParameterValue(*this, index, value);
+		typename PluginProcessor::setParameterValue(index, value);
 	}
 	//-------------------------------------------------------------------------
 	float getParameter (VstInt32 index) {
 		PluginTraits::ParameterType value = 0;
-		typename ParameterAcessor::getParameterValue(*this, index, value);
+		typename PluginProcessor::getParameterValue(index, value);
 		return value;
 	}
 	//-------------------------------------------------------------------------
 	void getParameterLabel(VstInt32 index, char * outLabel) {
 		PluginTraits::StringType label;
-		typename ParameterAcessor::getParameterLabel(*this, index, label);
+		typename PluginProcessor::getParameterLabel(index, label);
 		vst_strncpy ( outLabel , label.c_str(), label.length() );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterDisplay(VstInt32 index, char * outDisplay) {
 		PluginTraits::StringType display;
-		typename ParameterAcessor::getParameterDisplay(*this, index, display);
+		typename PluginProcessor::getParameterDisplay(index, display);
 		vst_strncpy ( outDisplay , display.c_str(), display.length() );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterName(VstInt32 index, char * outName) {
 		PluginTraits::StringType name;
-		typename ParameterAcessor::getParameterName(*this, index, name);
+		typename PluginProcessor::getParameterName(index, name);
 		vst_strncpy ( outName , name.c_str(), name.length() );
 	}
 	//-------------------------------------------------------------------------
@@ -139,6 +106,38 @@ public:
 	//-------------------------------------------------------------------------
 	void processReplacing(float **in, float **out, VstInt32 numSamples) {
 		typename PluginProcessor::process(in, out, numSamples);
+	}
+	//-------------------------------------------------------------------------
+	void setSampleRate(float sampleRate) {
+		PluginProcessor::setSampleRate(sampleRate);
+	}
+	//-------------------------------------------------------------------------
+	void setBlockSize (VstInt32 blockSize) {
+		PluginProcessor::setBlockSize(blockSize);
+	}
+	//-------------------------------------------------------------------------
+	void open() {
+		PluginProcessor::open();
+	}
+	//-------------------------------------------------------------------------
+	void close() {
+		AudioEffectX::close();
+		PluginProcessor::close();
+	}
+	//-------------------------------------------------------------------------
+	VstInt32 processEvents(VstEvents * events) {
+		PluginProcessor::processEvents(events);
+		return 1;
+	}
+	//-------------------------------------------------------------------------
+	void suspend(){
+		AudioEffectX::suspend();
+		PluginProcessor::suspend();
+	}
+	//-------------------------------------------------------------------------
+	void resume(){
+		AudioEffectX::resume();
+		PluginProcessor::resume();
 	}
 };
 //#############################################################################
