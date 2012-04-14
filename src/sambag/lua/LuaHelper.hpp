@@ -280,7 +280,7 @@ void pushTupleValues(lua_State *L, const Tuple &t) {
  * @param fName function name
  * @param nResult number of results
  */
-inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult)
+inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult = 0)
 {
 	__getF(L, fName);
 	__callF(L, 0, nResult);
