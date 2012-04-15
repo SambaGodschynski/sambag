@@ -58,8 +58,8 @@ public:
 		lua_newtable(L);
 		int top = lua_gettop(L);
 		BOOST_FOREACH(const typename Map::value_type &it, *this) {
-			push(it.first, L);
-			push(it.second, L);
+			push(L, it.first);
+			push(L, it.second);
 			lua_settable(L, top);
 		}
 	}

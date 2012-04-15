@@ -13,26 +13,42 @@
 #include "DspPlugin.hpp"
 namespace sambag { namespace dsp { namespace vst {
 //=============================================================================
+struct StdConstructPlolicy {
+	template <class VSTPlugin, class PluginTraits>
+	void construct(VSTPlugin &plug) {
+		plug.setNumInputs (typename PluginTraits::NumInputs); 
+		plug.setNumOutputs (typename PluginTraits::NumOutputs); 
+		plug.canProcessReplacing ();
+		plug.programsAreChunks(true);
+		plug.noTail (false);
+		plug.isSynth(typename PluginTraits::IsSynth);
+	}
+};
+//=============================================================================
 /**
  * @class VST2xPluginWrapper
  * is a wrapper for AudioEffectX classes. 
 
- * Main purpose of this pattern: use a universal Pluginclass 
-  * - PluginProcessor - which can be used
- * by different wrapper classes such as VST2xPluginWrapper or AUPluginWrapper.
+ * Main purpose of this pattern: use a independent Pluginclass - PluginProcessor - 
+ * which can be used by different wrapper classes 
+ * such as VST2xPluginWrapper or AUPluginWrapper.
  */
 template <
 	class _PluginProcessor,
 	int _UniqueId,
 	class _PluginTraits = StdPluginTraits<2,2,false>,
-	class _CreateEditorPolicy = CreateNoEditor > 
+	class _CreateEditorPolicy = CreateNoEditor,
+	class _ConstructorPolicy = StdConstructPlolicy> 
 class VST2xPluginWrapper :
 	public AudioEffectX, 
 	public _PluginProcessor,
 	public _PluginTraits,
-	public _CreateEditorPolicy
+	public _CreateEditorPolicy,
+	public _ConstructorPolicy,
+	public IHost
 {
 //=============================================================================
+friend typename _ConstructorPolicy;
 public:
 	//-------------------------------------------------------------------------
 	typedef _PluginProcessor PluginProcessor;
@@ -40,6 +56,8 @@ public:
 	typedef _PluginTraits PluginTraits;
 	//-------------------------------------------------------------------------
 	typedef _CreateEditorPolicy CreateEditorPolicy;
+	//-------------------------------------------------------------------------
+	typedef _ConstructorPolicy ConstructorPolicy;
 	//-------------------------------------------------------------------------
 	enum {UniqueId = _UniqueId};
 protected:
@@ -86,15 +104,9 @@ public:
 	  AudioEffectX(audioMaster, 
 		typename PluginTraits::NumProgram,
 		typename PluginTraits::NumParameter
-	) {
-
-		setNumInputs (typename PluginTraits::NumInputs); 
-		setNumOutputs (typename PluginTraits::NumOutputs); 
-		canProcessReplacing ();
-		programsAreChunks(true);
-		noTail (false);
-		isSynth(typename PluginTraits::IsSynth);
-
+	){
+		PluginProcessor::setHost(this);
+		ConstructorPolicy::construct<AudioEffectX, PluginTraits>(*this);
 		setEditor (
 			typename CreateEditorPolicy::createEditor<AEffEditor>(this)
 		);
@@ -138,6 +150,19 @@ public:
 	void resume(){
 		AudioEffectX::resume();
 		PluginProcessor::resume();
+	}
+	//-------------------------------------------------------------------------
+	// host impl.
+	//-------------------------------------------------------------------------
+	virtual void configurationChanged() {
+		AudioEffectX::setInitialDelay( PluginProcessor::getLatency() );
+		AudioEffectX::ioChanged();
+	}
+	//-------------------------------------------------------------------------
+	virtual void parameterChanged(int index) {
+		ParameterType value;
+		getParameterValue(index, value);
+		setParameterAutomated(index, value);
 	}
 };
 //#############################################################################
