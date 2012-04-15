@@ -6,14 +6,6 @@
  */
 
 #include "AttributeParser.hpp"
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/regex.hpp>
-#include <boost/assign/list_inserter.hpp>
-#include <vector>
-#include <sstream>
-#include <math.h>
-
 
 
 namespace {
@@ -189,7 +181,7 @@ void AttributeParser::parsePointContainer(const std::string &str, PointContainer
 		begin = what[0].second
 	) {
 		std::string value = what[1];
-		pC.push_back(string2Number(value));
+		pC.push_back(string2Number(value, 0.f));
 	}
 }
 //-----------------------------------------------------------------------------
@@ -245,7 +237,7 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	boost::match_results<std::string::const_iterator> what;
 	boost::regex re("([0-9e.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
-	c.value = string2Number(what[1]); //value
+	c.value = string2Number(what[1], 0.f); //value
 
 	if (what[2].length() > 0) {
 		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
@@ -308,12 +300,12 @@ void AttributeParser::parseOpacity(const std::string &in, Number &v) {
 	static const boost::regex single("[0-9e.]+");
 	static const boost::regex percent("[0-9e.]+%");
 	if ( boost::regex_match(str, single) ) { // is a single number
-		v = string2Number(str);
+		v = string2Number(str, 0.f);
 	}
 	if ( !boost::regex_match(str, percent) ) return;
 
-	v = string2Number(str);
-	v /= 100; // percent to 0.0 .. 1.0
+	v = string2Number(str, 0.f);
+	v /= 100.; // percent to 0.0 .. 1.0
 }
 //-----------------------------------------------------------------------------
 const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name ) {
@@ -374,47 +366,16 @@ void AttributeParser::getWholeString( std::istream& istr, std::string &out ) {
 	}
 }
 //-----------------------------------------------------------------------------
-Number AttributeParser::string2Number(const std::string &str) {
+Number AttributeParser::string2Number(const std::string &str,
+		const Number &errVal)
+{
 	std::stringstream ss;
 	ss<<str;
 	Number n;
 	ss>>n;
+	if (ss.fail())
+		return errVal;
 	return n;
-}
-//-----------------------------------------------------------------------------
-/**
- * Converts Container<string>:in to Container<Number>:out.
- * out will be empty if one convertion failed.
- * @param in
- * @param out
- */
-template <typename StrContainer, typename NumberContainer>
-void AttributeParser::strings2Numbers(const StrContainer &in, NumberContainer &out) {
-	boost_for_each( const std::string &str, in ) {
-		std::stringstream ss;
-		ss<<str;
-		Number n;
-		ss>>n;
-		if (ss.fail() || !ss.eof()) {
-			out.clear();
-			return;
-		}
-		out.push_back(n);
-	}
-}
-/**
- * gets values string such as "3, 4.5, 3" into Container of Numbers
- * @param values
- * @param out
- */
-template< typename Container >
-void AttributeParser::getValuesFromString( const std::string &_values, Container &out ) {
-	std::string values = boost::algorithm::trim_copy(_values);
-	std::vector<std::string> strs;
-	boost::regex re( "\\s*,\\s*|\\s+" );
-	boost::algorithm::split_regex( strs, values, re) ;
-	if (strs.empty()) return;
-	strings2Numbers<std::vector<std::string>, Container >(strs, out);
 }
 //-----------------------------------------------------------------------------
 std::string AttributeParser::getUrl(const std::string &url) {

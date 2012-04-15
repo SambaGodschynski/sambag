@@ -39,7 +39,6 @@ extern const Number NULL_NUMBER;
 //=============================================================================
 using namespace boost::logic;
 typedef tribool TriBool;
-
 }} // namespaces
 
 #endif /* COMMON_HPP_ */

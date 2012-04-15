@@ -258,3 +258,4 @@ void XML2ObjectTest::testBuildStructure() {
 
 
 } // namespace tests
+

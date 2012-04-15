@@ -16,9 +16,11 @@ class TestHelper : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 	CPPUNIT_TEST_SUITE( TestHelper );
 	CPPUNIT_TEST( testFromContainer );
+	CPPUNIT_TEST( testTupleForeach );
 	CPPUNIT_TEST_SUITE_END();
 private:
 public:
+	void testTupleForeach();
 	void testFromContainer();
 };
 } // namespace tests

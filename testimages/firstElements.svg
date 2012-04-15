@@ -21,7 +21,7 @@
 	  stroke-width="25" stroke="#0000FF" />
     
     <text id="text" x="150" y="200" font-family="Verdana" 
-	  font-size="35" stroke="black" stroke-opacity=".2" stroke-width="5" fill="white" font-weight="bold" font-style="italic"> 
+	  font-size="35" stroke="black" stroke-opacity=".2" stroke-width="5" fill="white" font-weight="bold" font-style="italic">
       Even though I am declared as white, I am green.  
     </text>
     <!--text x="250" y="250" font-family="Verdana"

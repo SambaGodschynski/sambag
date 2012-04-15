@@ -11,7 +11,63 @@
 #include <boost/tuple/tuple.hpp>
 
 namespace sambag { namespace com {
+//=============================================================================
+/**
+ * Helper: TupleForeach
+ * Visitor synopsis:
+ * struct Visitor {
+ * 		template<typename T>
+ * 		void operator()(const T &t);
+ * };
+ *
+ */
+//=============================================================================
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+	template <typename Tuple, class Visitor, int N>
+	struct _TupleForeach {
+		enum {
+			SIZE = boost::tuples::length<Tuple>::value,
+			INDEX = SIZE-N
+		};
+		static void visit(const Tuple &t, Visitor &v) {
+			v(boost::get<INDEX>(t));
+			_TupleForeach<Tuple, Visitor, N-1>::visit(t, v);
+		}
+		static void visit(Tuple &t, Visitor &v) {
+			v(boost::get<INDEX>(t));
+			_TupleForeach<Tuple, Visitor, N-1>::visit(t, v);
+		}
+	};
+	template <typename Tuple, class Visitor>
+	struct _TupleForeach<Tuple, Visitor, 0> {
+		static void visit(const Tuple &t, Visitor &v) {}
+		static void visit(Tuple &t, Visitor &v) {}
+	};
+}
+//-----------------------------------------------------------------------------
+/**
+ * put values from stack into tuple and pop it from stack.
+ * @param L
+ * @param t
+ */
+template <typename Tuple, class Visitor>
+void foreach(const Tuple &t, Visitor &v) {
+	enum {N = boost::tuples::length<Tuple>::value};
+	_TupleForeach<Tuple, Visitor, N>::visit(t, v);
 
+}
+/**
+ * put values from stack into tuple and pop it from stack.
+ * @param L
+ * @param t
+ */
+template <typename Tuple, class Visitor>
+void foreach(Tuple &t, Visitor &v) {
+	enum {N = boost::tuples::length<Tuple>::value};
+	_TupleForeach<Tuple, Visitor, N>::visit(t, v);
+
+}
 //=============================================================================
 // Helper: extractPointContainer
 //=============================================================================
@@ -86,7 +142,13 @@ Tuple fromContainer(
 	return t;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
+//=============================================================================
+// Int2Value
+//=============================================================================
+template <int I>
+struct Int2Type {
+	enum {Value=I};
+};
 }}
 
 #endif /* HELPER_HPP_ */

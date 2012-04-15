@@ -11,32 +11,29 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
+#include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <sambag/com/Helper.hpp>
+
+// 'declaration does not declare anything' issue on mac. see:
+// http://stackoverflow.com/questions/8173620/c-boost-1-48-type-traits-and-cocoa-inclusion-weirdness
+#ifdef __APPLE__
+	#ifdef check
+	#undef check
+	#endif
+#endif
 #include <boost/type_traits.hpp>
 
-
-/**
-	TODO: Script class
-	Usage:
-
-	LuaScript script("file.lua");
-	// alternative: LuaScript script(scriptString);
-	
-	// register function (boost function style)
-	script.registerFunction<bool(int, int)>(
-		boost::bind(&Dummy::foo, &dummy, _1, _2)
-	);
-	
-	// execute script
-	script.exec();
-	
-	// get global script variable, throws:
-	int g1 = script.getGlobal<int>("g1");
-	// with alternative error value, nothrow:
-	string g2 = script.getGlobal<string>("g2", "errorString");
-*/
-
-
 namespace sambag { namespace lua {
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+typedef boost::shared_ptr<lua_State> LuaStateRef;
+inline LuaStateRef createLuaStateRef(bool openLibs = true) {
+	LuaStateRef lRef(luaL_newstate(), &lua_close);
+	if (!openLibs)
+		return lRef;
+	luaL_openlibs(lRef.get());
+	return lRef;
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct LuaException {
 	std::string errMsg;
@@ -50,7 +47,7 @@ struct LuaException {
  * @return
  */
 template <typename T>
-bool check(lua_State *L, int index) {
+bool isType(lua_State *L, int index) {
 	if (boost::is_convertible<T*, ILuaTable*>::value)
 		return lua_istable(L, index) == 1;
 	if (boost::is_arithmetic<T>::value)
@@ -59,139 +56,58 @@ bool check(lua_State *L, int index) {
 }
 //-----------------------------------------------------------------------------
 template <>
-inline bool check<std::string>(lua_State *L, int index) {
+inline bool isType<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
+typedef com::Int2Type<0> NoImpl;
+typedef com::Int2Type<1> Impl;
 //-----------------------------------------------------------------------------
-inline bool __get(int &out, lua_State *L, int index) {
-	out = (int)lua_tonumber(L, index);
-	return true;
+template <typename T>
+inline void __getNumber(T &outValue, lua_State *L, int index, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T>
+inline void  __getNumber(T &outValue, lua_State *L, int index, Impl) {
+	outValue = (T)lua_tonumber(L, index);
 }
 //-----------------------------------------------------------------------------
-inline bool __get(unsigned int &out, lua_State *L, int index) {
-	out = (unsigned int)lua_tonumber(L, index);
-	return true;
+template <typename T> // template needed to be usable for get().
+inline void __getILuaTable(T &outValue, lua_State *L, int index, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __getILuaTable(T &outValue, lua_State *L, int index, Impl) {
+	outValue.getFromStack(L, index);
 }
 //-----------------------------------------------------------------------------
-inline bool __get(float &out, lua_State *L, int index) {
-	out = (float)lua_tonumber(L, index);
-	return true;
-}
+template <typename T> // template needed to be usable for get().
+inline void __getString(T &outValue, lua_State *L, int index, NoImpl) {}
 //-----------------------------------------------------------------------------
-inline bool __get(double &out, lua_State *L, int index) {
-	out = (double)lua_tonumber(L, index);
-	return true;
-}
-//-----------------------------------------------------------------------------
-inline bool __get(std::string &out, lua_State *L, int index) {
-	out = std::string(lua_tostring(L, index));
-	return true;
-}
-//-----------------------------------------------------------------------------
-inline bool __get(ILuaTable &out, lua_State *L, int index) {
-	return out.getFromStack(L, index);
+template <typename T> // template needed to be usable for get().
+inline void __getString(T &outValue, lua_State *L, int index, Impl) {
+	outValue = std::string(lua_tostring(L, index));
 }
 } // namespace
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * @param out destination value
  * @param L lua state
  * @param index lua stack index
  * @return true if succeed
  */
-//-----------------------------------------------------------------------------
 template <typename T>
 bool get(T &out, lua_State *L, int index) {
-	if (!check<T>(L, index))
+	if (!isType<T>(L, index))
 		return false;
-	return __get(out, L, index);
-}
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//-----------------------------------------------------------------------------
-/**
- * @param o0
- * @param o1
- * @param L
- * @param index
- * @return true if succeed
- */
-template <
-	typename T0,
-	typename T1
->
-bool get(T0 &o0,
-		T1 &o1,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0>(o0, L, index--))
-		return false;
-	if (!get<T1>(o1, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1>(o0, o1, L, index))
-		return false;
-	index-= 2;
-	if (!get<T2>(o2, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		T3 &o3,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1, T2>(o0, o1, o2, L, index))
-		return false;
-	index-= 3;
-	if (!get<T3>(o3, L, index))
-		return false;
-	return true;
-}
-//-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3,
-	typename T4
->
-bool get(T0 &o0,
-		T1 &o1,
-		T2 &o2,
-		T3 &o3,
-		T4 &o4,
-		lua_State *L,
-		int index)
-{
-	if (!get<T0, T1, T2, T3>(o0, o1, o2, o3, L, index))
-		return false;
-	index-= 4;
-	if (!get<T4>(o4, L, index))
-		return false;
+	// if T is Number
+	enum {isNumber = boost::is_arithmetic<T>::value};
+	__getNumber(out, L, index, com::Int2Type<isNumber>());
+	// if T is instance of ILuaTable
+	enum {isILuaTable=boost::is_convertible<T*, ILuaTable*>::value};
+	__getILuaTable(out, L, index, com::Int2Type<isILuaTable>());
+	// if T is instance of ILuaTable
+	enum {isString=boost::is_convertible<T*, std::string*>::value};
+	__getString(out, L, index, com::Int2Type<isString>());
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -228,101 +144,138 @@ namespace {
 	}
 } // namespace
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+inline bool hasFunction(lua_State *L, const std::string &fName) {
+	lua_getglobal(L, fName.c_str());
+	return lua_isfunction(L, -1)==1;
+}
 inline void executeString(lua_State *L, const std::string &str) {
 	luaL_loadstring (L, str.c_str());
 	__callF(L);
 }
-//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//-----------------------------------------------------------------------------
-inline void push(int v, lua_State *L) {
-	lua_pushnumber(L, v);
-}
-//-----------------------------------------------------------------------------
-inline void push(unsigned int v, lua_State *L) {
-	lua_pushnumber(L, v);
-}
-//-----------------------------------------------------------------------------
-inline void push(float v, lua_State *L) {
-	lua_pushnumber(L, v);
-}
-//-----------------------------------------------------------------------------
-inline void push(const double &v, lua_State *L) {
-	lua_pushnumber(L, v);
-}
-//-----------------------------------------------------------------------------
-inline void push(const std::string &v, lua_State *L) {
-	lua_pushstring(L, v.c_str());
-}
-//-----------------------------------------------------------------------------
-inline void push(const ILuaTable &v, lua_State *L) {
-	v.pushIntoStack(L);
+inline void executeFile(lua_State *L, const std::string &filename) {
+	luaL_loadfile(L, filename.c_str());
+	__callF(L);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+typedef com::Int2Type<0> NoImpl;
+typedef com::Int2Type<1> Impl;
+//-----------------------------------------------------------------------------
+template <typename T>
+inline void __pushNumber(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T>
+inline void  __pushNumber(const T &value, lua_State *L, Impl) {
+	lua_pushnumber(L, value);
+}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushILuaTable(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushILuaTable(const T &value, lua_State *L, Impl) {
+	value.pushIntoStack(L);
+}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushString(const T &value, lua_State *L, NoImpl) {}
+//-----------------------------------------------------------------------------
+template <typename T> // template needed to be usable for get().
+inline void __pushString(const T &value, lua_State *L, Impl) {
+	lua_pushstring(L, value.c_str());
+}
+} // namespace
 //-----------------------------------------------------------------------------
 /**
- * pushs o0 up to oN into lua stack.
- * @param o0
- * @param o1
+ * push value into lua stack
+ * @param value
  * @param L
  */
-template <
-	typename T0,
-	typename T1
->
-void push(const T0 &o0,
-		const T1 &o1,
-		lua_State *L)
-{
-	push(o0,L);
-	push(o1,L);
+template <typename T>
+void push(lua_State *L, const T &value) {
+	// if T is Number
+	enum {isNumber = boost::is_arithmetic<T>::value};
+	__pushNumber(value, L, com::Int2Type<isNumber>());
+	// if T is instance of ILuaTable
+	enum {isILuaTable=boost::is_convertible<T*, ILuaTable*>::value};
+	__pushILuaTable(value, L, com::Int2Type<isILuaTable>());
+	// if T is instance of ILuaTable
+	enum {isString=boost::is_convertible<T*, std::string*>::value};
+	__pushString(value, L, com::Int2Type<isString>());
 }
 //-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2
->
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		lua_State *L)
-{
-	push(o0, o1 ,L);
-	push(o2, L);
+/**
+ * overload used for implicit string construction.
+ * @param cStr
+ * @param L
+ */
+inline void push(lua_State *L, const char * cStr) {
+	__pushString(std::string(cStr), L, com::Int2Type<1>());
 }
 //-----------------------------------------------------------------------------
+/**
+ * push boost::tuple values into stack.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
 template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3
+	class T0, class T1, class T2,
+	class T3, class T4, class T5,
+	class T6, class T7, class T8, class T9
 >
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		lua_State *L)
+void push(lua_State *L, 
+		  const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> &t) 
 {
-	push(o0, o1 ,o2, L);
-	push(o3, L);
+	_PushFromTuple pft(L);
+	sambag::com::foreach(t, pft);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+namespace {
+	struct _IntoTuple {
+		lua_State *L;
+		bool succeed;
+		int index;
+		template <typename T>
+		void operator()(T &value) {
+			if (!succeed)
+				return;
+			if (!get(value, L, index--))
+				succeed = false;
+		}
+		_IntoTuple(lua_State *L, int startIndex = -1) : L(L), succeed(true), index(startIndex) {}
+	};
+	struct _PushFromTuple {
+		lua_State *L;
+		template <typename T>
+		void operator()(const T &value) {
+			push(L, value);
+		}
+		_PushFromTuple(lua_State *L) : L(L) {}
+	};
 }
 //-----------------------------------------------------------------------------
-template <
-	typename T0,
-	typename T1,
-	typename T2,
-	typename T3,
-	typename T4
->
-void push(const T0 &o0,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4,
-		lua_State *L)
-{
-	push(o0, o1 ,o2, o3, L);
-	push(o4, L);
+template <typename Tuple>
+bool get(lua_State *L, Tuple &t, int index = -1) {
+	_IntoTuple into(L, index);
+	sambag::com::foreach(t, into);
+	return into.succeed;
+}
+//-----------------------------------------------------------------------------
+/**
+ * put values from stack into tuple and pop it from stack.
+ * If operation failed nothing will be popped.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
+template <typename Tuple>
+bool pop(lua_State *L, Tuple &t) {
+	if(!get(L, t))
+		return false;
+	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
+	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -333,93 +286,71 @@ void push(const T0 &o0,
  * @param fName function name
  * @param nResult number of results
  */
-inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult)
+inline void callLuaFunc(lua_State *L, const std::string &fName, int nResult = 0)
 {
 	__getF(L, fName);
 	__callF(L, 0, nResult);
 
 }
 //-----------------------------------------------------------------------------
+/**
+ * calls lua function. throws NoFunction when function not exists,
+ * or ExecutionFailed when Lua error occurs.
+ * @param L
+ * @param fName function name
+ * @param args Lua function arguments
+ */
+template <typename ArgTuple>
+inline void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		const ArgTuple &args)
+{
+	__getF(L, fName);
+	pushTupleValues(L, args);
+	__callF(L,
+		(int)boost::tuples::length<ArgTuple>::value, // num args
+		0
+	);
+}
+//-----------------------------------------------------------------------------
+/**
+ * calls lua function. throws NoFunction when function not exists,
+ * or ExecutionFailed when Lua error occurs.
+ * @param L
+ * @param fName function name
+ * @param return Lua function retrun values
+ * @param args Lua function arguments
+ */
+template <typename RetTuple, typename ArgTuple>
+inline void callLuaFunc(lua_State *L,
+		const std::string &fName,
+		const ArgTuple &args,
+		RetTuple &ret)
+{
+	__getF(L, fName);
+	push(L, args);
+	__callF(L,
+		(int)boost::tuples::length<ArgTuple>::value, // num args
+		(int)boost::tuples::length<RetTuple>::value // num rets
+	);
+	pop(L, ret);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+/**
+ * @param L the lua state objekt
+ * @param name the name of the global variable
+ * @param outValue value of global lua variable
+ * @return true when succeed
+ */
 template <typename T>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T &o1)
-{
-	__getF(L, fName);
-	push(o1,L);
-	__callF(L, 1, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2)
-{
-	__getF(L, fName);
-	push(o1,o2,L);
-	__callF(L, 2, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,L);
-	__callF(L, 3, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3,
-	typename T4>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,o4,L);
-	__callF(L, 4, nResult);
-
-}
-//-----------------------------------------------------------------------------
-template <typename T1,
-	typename T2,
-	typename T3,
-	typename T4,
-	typename T5>
-void callLuaFunc(lua_State *L,
-		const std::string &fName,
-		int nResult,
-		const T1 &o1,
-		const T2 &o2,
-		const T3 &o3,
-		const T4 &o4,
-		const T5 &o5)
-{
-	__getF(L, fName);
-	push(o1,o2,o3,o4,o5,L);
-	__callF(L, 5, nResult);
-
+bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
+	lua_getglobal(L, name.c_str());
+	if (!isType<T>(L, -1))
+		return false;
+	get(outValue, L, -1);
+	lua_pop(L, 1);
+	return true;
 }
 }} //namespaces
-
-
 #endif /* LUAHELPER_HPP_ */

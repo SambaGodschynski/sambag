@@ -62,7 +62,7 @@ public:
 		int top = lua_gettop(L);
 		for (size_t i=0; i<Vector::size(); ++i) {
 			lua_pushnumber(L, i+1); //lua sequence starts with 1
-			push(Vector::at(i), L);
+			push(L, Vector::at(i));
 			lua_settable(L, top);
 		}
 	}
@@ -91,7 +91,7 @@ public:
 	 * @param size
 	 * @return
 	 */
-	LuaSequenceEx(T *data, size_t size = 0) : _size(size), data(data) {}
+	LuaSequenceEx(T *data=NULL, size_t size = 0) : _size(size), data(data) {}
 	//-------------------------------------------------------------------------
 	virtual ~LuaSequenceEx() {
 	}
@@ -139,7 +139,7 @@ public:
 		int top = lua_gettop(L);
 		for (size_t i=0; i<_size; ++i) {
 			lua_pushnumber(L, i+1); //lua sequence starts with 1
-			push(data[i], L);
+			push(L, data[i]);
 			lua_settable(L, top);
 		}
 	}
