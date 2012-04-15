@@ -146,7 +146,7 @@ void TestLuaHelper::testMultiPushGet() {
 		e["2"] = 20;
 		e["3"] = 30;
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push content
-		pushTupleValues(L, boost::make_tuple(a,b,c,d,e));
+		push(L, boost::make_tuple(a,b,c,d,e));
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get content
 	boost::tuple<Map, LuaSequence<int>, std::string, double, int> ret;
@@ -251,7 +251,7 @@ void TestLuaHelper::testNestedSequencesEx() {
 //-----------------------------------------------------------------------------
 void TestLuaHelper::testPushPop() {
 	using namespace sambag;
-	lua::pushTupleValues(L, boost::make_tuple(10));
+	lua::push(L, boost::make_tuple(10));
 	boost::tuple<int> t01;
 	// assume value;
 	CPPUNIT_ASSERT(lua::isType<int>(L, -1));
@@ -261,7 +261,7 @@ void TestLuaHelper::testPushPop() {
 	CPPUNIT_ASSERT(!lua::isType<int>(L, -1));
 
 
-	lua::pushTupleValues(L, boost::make_tuple(1.0f, 100, "no"));
+	lua::push(L, boost::make_tuple(1.0f, 100, "no"));
 	boost::tuple<std::string, int, float> t02;
 	CPPUNIT_ASSERT(lua::pop(L, t02));
 	CPPUNIT_ASSERT_EQUAL(std::string("no"), boost::get<0>(t02));
