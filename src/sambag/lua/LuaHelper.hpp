@@ -213,6 +213,24 @@ void push(lua_State *L, const T &value) {
 inline void push(lua_State *L, const char * cStr) {
 	__pushString(std::string(cStr), L, com::Int2Type<1>());
 }
+//-----------------------------------------------------------------------------
+/**
+ * push tuple values into stack.
+ * @param L
+ * @param t
+ * @return true, when succeed.
+ */
+template <
+	class T0, class T1, class T2,
+	class T3, class T4, class T5,
+	class T6, class T7, class T8, class T9
+>
+void push(lua_State *L, 
+		  const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> &t) 
+{
+	_PushFromTuple pft(L);
+	sambag::com::foreach(t, pft);
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
 	struct _IntoTuple {
@@ -258,18 +276,6 @@ bool pop(lua_State *L, Tuple &t) {
 		return false;
 	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
 	return true;
-}
-//-----------------------------------------------------------------------------
-/**
- * push tuple values into stack.
- * @param L
- * @param t
- * @return true, when succeed.
- */
-template <typename Tuple>
-void pushTupleValues(lua_State *L, const Tuple &t) {
-	_PushFromTuple pft(L);
-	sambag::com::foreach(t, pft);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -322,7 +328,7 @@ inline void callLuaFunc(lua_State *L,
 		RetTuple &ret)
 {
 	__getF(L, fName);
-	pushTupleValues(L, args);
+	push(L, args);
 	__callF(L,
 		(int)boost::tuples::length<ArgTuple>::value, // num args
 		(int)boost::tuples::length<RetTuple>::value // num rets
