@@ -21,6 +21,7 @@ private:
 	CPPUNIT_TEST( testRegisterFunction03 );
 	CPPUNIT_TEST( testRegisterFunction04 );
 	CPPUNIT_TEST( testRegisterFunction05 );
+	CPPUNIT_TEST( testReturnTuple01 );
 	CPPUNIT_TEST_SUITE_END();
 	lua_State *L;
 public:
@@ -31,6 +32,7 @@ public:
 	void testRegisterFunction03();
 	void testRegisterFunction04();
 	void testRegisterFunction05();
+	void testReturnTuple01();
 };
 } // namespace
 #endif /* TESTLUAREGISTERFUNCTION_H_ */

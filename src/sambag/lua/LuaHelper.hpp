@@ -215,7 +215,7 @@ inline void push(lua_State *L, const char * cStr) {
 }
 //-----------------------------------------------------------------------------
 /**
- * push tuple values into stack.
+ * push boost::tuple values into stack.
  * @param L
  * @param t
  * @return true, when succeed.

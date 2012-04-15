@@ -9,6 +9,7 @@
 #include <sambag/lua/Lua.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/tuple/tuple.hpp>
 #include "Helper.hpp"
 
 // Registers the fixture into the 'registry'
@@ -64,6 +65,13 @@ struct FooGodMonster {
 	// 5args
 	S sum(S a, S b, S c, S d, S e) { return a+b+c+d+e; }
 	void add(S a, S b, S c, S d, S e) { stringValue+= a+b+c+d+e; }
+	//-------------------------------------------------------------------------
+	// return tuple
+	boost::tuple<int> returnTuple01() { return boost::make_tuple(100); }
+	//-------------------------------------------------------------------------
+	boost::tuple<int, std::string> returnTuple02() { 
+		return boost::make_tuple(11, "yezz02!"); 
+	}
 };
 
 namespace tests {
@@ -247,5 +255,48 @@ void TestLuaScript::testRegisterFunction05() {
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
 	executeLuaString(L, "add( sum('a', 'b', 'c', 'd', 'e' ), 'f', 'g', 'h', 'i' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abcdefghi"), foo.stringValue);
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+struct RTuple01_Tag {
+	typedef boost::function<boost::tuple<int>()> Function;
+	static const char * name() { return "returnTuple01"; }
+};
+//-----------------------------------------------------------------------------
+struct RTuple02_Tag {
+	typedef boost::function<boost::tuple<int, std::string>()> Function;
+	static const char * name() { return "returnTuple02"; }
+};
+//-----------------------------------------------------------------------------
+void TestLuaScript::testReturnTuple01() {
+	using namespace sambag::lua;
+	FooGodMonster foo;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	registerFunction<RTuple01_Tag>(
+		L,
+		boost::bind(&FooGodMonster::returnTuple01, &foo)
+	);
+	registerFunction<RTuple02_Tag>(
+		L,
+		boost::bind(&FooGodMonster::returnTuple02, &foo)
+	);
+	registerFunction<SetIntFunction_Tag>(
+		L,
+		boost::bind(&FooGodMonster::setInt, &foo, _1)
+	);
+	registerFunction<Add02Function_Tag>(
+		L,
+		boost::bind(&FooGodMonster::add, &foo, _1, _2)
+	);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+	// 01
+	CPPUNIT_ASSERT_EQUAL( (int)0, foo.intValue);
+	executeLuaString(L, "setInt( returnTuple01() )");
+	CPPUNIT_ASSERT_EQUAL( (int)100, foo.intValue);
+	// 02
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "a, b = returnTuple02(); add(a, b)");
+	CPPUNIT_ASSERT_EQUAL( std::string("11yezz02!"), foo.stringValue);
+	
 }
 } // namespace

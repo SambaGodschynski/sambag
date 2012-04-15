@@ -9,6 +9,7 @@
 #include <string>
 #include <map>
 #include <boost/function.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <lua.hpp>
 #include <sambag/com/Helper.hpp>
 
@@ -70,6 +71,31 @@ enum {Value=0};
 template <>
 struct IsVoid<void> {
 	enum {Value=1};
+};
+//=============================================================================
+template <typename ReturnType>
+struct NumReturnValues {
+//=============================================================================
+enum {Value=1};
+};
+template <>
+struct NumReturnValues<void> {
+	enum {Value=0};
+};
+template <
+	class T0, class T1, class T2,
+	class T3, class T4, class T5,
+	class T6, class T7, class T8, class T9
+>
+struct NumReturnValues<
+	boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
+> 
+{
+	enum {Value=
+		boost::tuples::length< 
+			boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
+		>::value
+	};
 };
 //=============================================================================
 //-----------------------------------------------------------------------------
@@ -347,7 +373,7 @@ struct RegisterHelperClass {
 			com::Int2Type<Function::arity>(), // num args
 			com::Int2Type<IsVoidValue>() // isVoid
 		);
-		return IsVoidValue == 1 ? 0 : 1;
+		return NumReturnValues<typename Function::result_type>::Value;
 	}
 };
 template <class FunctionTag>

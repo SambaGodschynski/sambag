@@ -1052,7 +1052,7 @@
 					Name="test"
 					>
 					<File
-						RelativePath="..\..\..\src\sambag\lua\tests\LuaTestHelper.hpp"
+						RelativePath="..\..\..\src\sambag\lua\tests\Helper.hpp"
 						>
 					</File>
 					<File
