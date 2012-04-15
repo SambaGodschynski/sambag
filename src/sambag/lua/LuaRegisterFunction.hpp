@@ -86,8 +86,7 @@ void callF(const Function &f,
 		com::Int2Type<0>, // num args
 		com::Int2Type<0>) // is void?
 {
-	typename Function::result_type r = f();
-	push(r, L); // return value into lua stack
+	push(L, f());
 }
 //-----------------------------------------------------------------------------
 template <typename Function>
@@ -114,11 +113,9 @@ void callF(const Function &f,
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(
+	push(L, f(
 		boost::get<0>(args)
-	);
-	// return value into lua stack
-	push(r, L);
+	));
 }
 //-----------------------------------------------------------------------------
 template <typename Function>
@@ -155,12 +152,10 @@ void callF(const Function &f,
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(
+	push(L, f(
 		boost::get<1>(args),
 		boost::get<0>(args)
-	);
-	// return value into lua stack
-	push(r, L);
+	));
 }
 //-----------------------------------------------------------------------------
 template <typename Function>
@@ -200,13 +195,11 @@ void callF(const Function &f,
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(
+	push(L, f(
 		boost::get<2>(args),
 		boost::get<1>(args),
 		boost::get<0>(args)
-	);
-	// return value into lua stack
-	push(r, L);
+	));
 }
 //-----------------------------------------------------------------------------
 template <typename Function>
@@ -249,14 +242,12 @@ void callF(const Function &f,
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(
+	push(L, f(
 		boost::get<3>(args),
 		boost::get<2>(args),
 		boost::get<1>(args),
 		boost::get<0>(args)
-	);
-	// return value into lua stack
-	push(r, L);
+	));
 }
 //-----------------------------------------------------------------------------
 template <typename Function>
@@ -302,15 +293,13 @@ void callF(const Function &f,
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
-	typename Function::result_type r = f(
+	push(L, f(
 		boost::get<4>(args),
 		boost::get<3>(args),
 		boost::get<2>(args),
 		boost::get<1>(args),
 		boost::get<0>(args)
-	);
-	// return value into lua stack
-	push(r, L);
+	));
 }
 //-----------------------------------------------------------------------------
 template <typename Function>

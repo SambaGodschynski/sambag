@@ -58,7 +58,7 @@ void TestLuaHelper::testLuaMap() {
 			ss >> i;
 			CPPUNIT_ASSERT_EQUAL(i * 10, it.second);
 		}
-		push(map, L);
+		push(L, map);
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get Values
 	Map map;
@@ -86,7 +86,7 @@ void TestLuaHelper::testLuaSequenceEx() {
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<bounds
 		CPPUNIT_ASSERT_THROW(seq[4], OutOfBoundsEx);
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<push
-		push(seq, L);
+		push(L, seq);
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<get
 	}
 	float *data = new float[4];
@@ -122,7 +122,7 @@ void TestLuaHelper::testGet() {
 	{ // extra scope
 		LuaSequence<int> arr(10);
 		for (size_t i=0; i<arr.size(); ++i) arr[i] = i*10;
-		push(arr,L);
+		push(L, arr);
 	}
 	LuaSequence<int> arr;
 	CPPUNIT_ASSERT(isType<ILuaTable>(L, -1));
@@ -192,7 +192,7 @@ void TestLuaHelper::testCheckType() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<checktable
 	LuaSequence<int> seq(10);
 	for (int i=0; i<10;++i) seq[i] = i;
-	push(seq,L);
+	push(L, seq);
 	CPPUNIT_ASSERT(isType<ILuaTable>(L, -1));
 	CPPUNIT_ASSERT(!isType<ILuaTable>(L, -2));
 }
@@ -205,7 +205,7 @@ void TestLuaHelper::testNestedSequences() {
 		LuaSequence<float> r(3, -1);
 		LuaSequence< LuaSequence<float> > nSeq;
 		nSeq.push_back(l); nSeq.push_back(r);
-		push(nSeq, L);
+		push(L, nSeq);
 	}
 	LuaSequence< LuaSequence<float> > nSeq;
 	CPPUNIT_ASSERT(get(nSeq, L, -1));
@@ -230,7 +230,7 @@ void TestLuaHelper::testNestedSequencesEx() {
 				LuaSequenceEx<float>(&datar[0], 3)
 		};
 		LuaSequenceEx< LuaSequenceEx<float> > nSeq(&rl[0],2);
-		push(nSeq, L);
+		push(L, nSeq);
 	}
 	float datal[3] = {0};
 	float datar[3] = {0};

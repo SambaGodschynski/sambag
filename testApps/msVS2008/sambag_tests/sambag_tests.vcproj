@@ -1041,6 +1041,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\lua\LuaRegisterFunction.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\lua\LuaSequence.hpp"
 					>
 				</File>

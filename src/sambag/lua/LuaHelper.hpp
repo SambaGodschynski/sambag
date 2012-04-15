@@ -193,7 +193,7 @@ inline void __pushString(const T &value, lua_State *L, Impl) {
  * @param L
  */
 template <typename T>
-void push(const T &value, lua_State *L) {
+void push(lua_State *L, const T &value) {
 	// if T is Number
 	enum {isNumber = boost::is_arithmetic<T>::value};
 	__pushNumber(value, L, com::Int2Type<isNumber>());
@@ -210,7 +210,7 @@ void push(const T &value, lua_State *L) {
  * @param cStr
  * @param L
  */
-inline void push(const char * cStr, lua_State *L) {
+inline void push(lua_State *L, const char * cStr) {
 	__pushString(std::string(cStr), L, com::Int2Type<1>());
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -232,7 +232,7 @@ namespace {
 		lua_State *L;
 		template <typename T>
 		void operator()(const T &value) {
-			push(value, L);
+			push(L, value);
 		}
 		_PushFromTuple(lua_State *L) : L(L) {}
 	};
