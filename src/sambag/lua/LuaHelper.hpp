@@ -344,13 +344,28 @@ inline void callLuaFunc(lua_State *L,
  * @return true when succeed
  */
 template <typename T>
-bool getGlobal(T &outValue, lua_State *L, const std::string &name) {
+bool getGlobal(lua_State *L, T &outValue, const std::string &name) {
 	lua_getglobal(L, name.c_str());
 	if (!isType<T>(L, -1))
 		return false;
 	get(outValue, L, -1);
 	lua_pop(L, 1);
 	return true;
+}
+//-----------------------------------------------------------------------------
+/**
+ * Like bool getGlobal(), but it uses the failed value when
+ * operation was unsuccessfull instead returning a boolean.
+ * @param outValue value of global lua variable
+ * @param failed value when operation was unsuccessfull
+ * @param L the lua state objekt
+ * @param name the name of the global variable
+ */
+template <typename T>
+void getGlobal(lua_State *L, T &outValue, const T &failed, const std::string &name) {
+	if (!getGlobal(L, outValue, name)) {
+		outValue = failed;
+	}
 }
 }} //namespaces
 #endif /* LUAHELPER_HPP_ */
