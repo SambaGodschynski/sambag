@@ -7,6 +7,14 @@
 #ifndef VST2XPLUGIN_WRAPPER_HPP_
 #define VST2XPLUGIN_WRAPPER_HPP_
 
+namespace {
+	/**
+	 * gcc template as friend workaround.
+	 */
+	template <typename T>
+	struct FriendBuilder { typedef T Type; }; 
+}
+
 #include <AudioEffectX.h>
 #include <string>
 #include <sstream>
@@ -16,12 +24,12 @@ namespace sambag { namespace dsp { namespace vst {
 struct StdConstructPlolicy {
 	template <class VSTPlugin, class PluginTraits>
 	void construct(VSTPlugin &plug) {
-		plug.setNumInputs (typename PluginTraits::NumInputs); 
-		plug.setNumOutputs (typename PluginTraits::NumOutputs); 
+		plug.setNumInputs (PluginTraits::NumInputs); 
+		plug.setNumOutputs (PluginTraits::NumOutputs); 
 		plug.canProcessReplacing ();
 		plug.programsAreChunks(true);
 		plug.noTail (false);
-		plug.isSynth(typename PluginTraits::IsSynth);
+		plug.isSynth(PluginTraits::IsSynth);
 	}
 };
 //=============================================================================
@@ -48,7 +56,7 @@ class VST2xPluginWrapper :
 	public IHost
 {
 //=============================================================================
-friend typename _ConstructorPolicy;
+friend struct FriendBuilder<_ConstructorPolicy>::Type;
 public:
 	//-------------------------------------------------------------------------
 	typedef _PluginProcessor PluginProcessor;
@@ -73,42 +81,42 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void setParameter (VstInt32 index, float value) {
-		typename PluginProcessor::setParameterValue(index, value);
+		PluginProcessor::setParameterValue(index, value);
 	}
 	//-------------------------------------------------------------------------
 	float getParameter (VstInt32 index) {
-		PluginTraits::ParameterType value = 0;
-		typename PluginProcessor::getParameterValue(index, value);
+		typename PluginTraits::ParameterType value = 0;
+		PluginProcessor::getParameterValue(index, value);
 		return value;
 	}
 	//-------------------------------------------------------------------------
 	void getParameterLabel(VstInt32 index, char * outLabel) {
-		PluginTraits::StringType label;
-		typename PluginProcessor::getParameterLabel(index, label);
+		typename PluginTraits::StringType label;
+		PluginProcessor::getParameterLabel(index, label);
 		vst_strncpy ( outLabel , label.c_str(), label.length() );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterDisplay(VstInt32 index, char * outDisplay) {
-		PluginTraits::StringType display;
-		typename PluginProcessor::getParameterDisplay(index, display);
+		typename PluginTraits::StringType display;
+		PluginProcessor::getParameterDisplay(index, display);
 		vst_strncpy ( outDisplay , display.c_str(), display.length() );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterName(VstInt32 index, char * outName) {
-		PluginTraits::StringType name;
-		typename PluginProcessor::getParameterName(index, name);
+		typename PluginTraits::StringType name;
+		PluginProcessor::getParameterName(index, name);
 		vst_strncpy ( outName , name.c_str(), name.length() );
 	}
 	//-------------------------------------------------------------------------
 	VST2xPluginWrapper(audioMasterCallback audioMaster) : 
 	  AudioEffectX(audioMaster, 
-		typename PluginTraits::NumProgram,
-		typename PluginTraits::NumParameter
+		PluginTraits::NumProgram,
+		PluginTraits::NumParameter
 	){
 		PluginProcessor::setHost(this);
-		ConstructorPolicy::construct<AudioEffectX, PluginTraits>(*this);
+		ConstructorPolicy::template construct<AudioEffectX, PluginTraits>(*this);
 		setEditor (
-			typename CreateEditorPolicy::createEditor<AEffEditor>(this)
+			CreateEditorPolicy::template createEditor<AEffEditor>(this)
 		);
 		setUniqueID(UniqueId);
 		resume();
@@ -117,7 +125,7 @@ public:
 	~VST2xPluginWrapper() {}
 	//-------------------------------------------------------------------------
 	void processReplacing(float **in, float **out, VstInt32 numSamples) {
-		typename PluginProcessor::process(in, out, numSamples);
+		PluginProcessor::process(in, out, numSamples);
 	}
 	//-------------------------------------------------------------------------
 	void setSampleRate(float sampleRate) {
@@ -160,7 +168,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void parameterChanged(int index) {
-		ParameterType value;
+		typename PluginTraits::ParameterType value;
 		getParameterValue(index, value);
 		setParameterAutomated(index, value);
 	}
