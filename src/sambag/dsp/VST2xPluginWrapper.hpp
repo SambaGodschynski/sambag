@@ -15,6 +15,13 @@ namespace {
 	struct FriendBuilder { typedef T Type; }; 
 }
 
+// TODO: find a better way (maybe cancel friend approach)
+#ifdef _MSC_VER
+#define SAMBAG_FRIEND_OF_T(_class) friend typename _class
+#else
+#define SAMBAG_FRIEND_OF_T(_class) friend class FriendBuilder<_class>::Type
+#endif
+
 #include <AudioEffectX.h>
 #include <string>
 #include <sstream>
@@ -56,7 +63,7 @@ class VST2xPluginWrapper :
 	public IHost
 {
 //=============================================================================
-friend struct FriendBuilder<_ConstructorPolicy>::Type;
+SAMBAG_FRIEND_OF_T(_ConstructorPolicy);
 public:
 	//-------------------------------------------------------------------------
 	typedef _PluginProcessor PluginProcessor;
