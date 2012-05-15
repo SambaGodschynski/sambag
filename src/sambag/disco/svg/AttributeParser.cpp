@@ -8,6 +8,11 @@
 #include "AttributeParser.hpp"
 
 
+/*
+ * TODO: replace regex with boost::spirit
+ * http://www.boost.org/doc/libs/1_49_0/libs/spirit/doc/html/index.html
+ */
+
 namespace {
 using namespace sambag::disco;
 using namespace sambag::disco::svg;

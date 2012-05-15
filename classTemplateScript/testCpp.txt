@@ -1,0 +1,19 @@
+/*
+ * $$$NAME$$$.cpp
+ *
+ *  Created on: $$$DATE$$$
+ *      Author: $$$AUTHOR$$$
+ */
+
+#include "$$$NAME$$$.hpp"
+#include <cppunit/config/SourcePrefix.h>
+
+// Registers the fixture into the 'registry'
+CPPUNIT_TEST_SUITE_REGISTRATION( tests::$$$NAME$$$ );
+
+namespace tests {
+//=============================================================================
+//  Class $$$NAME$$$
+//=============================================================================
+//-----------------------------------------------------------------------------
+} //namespace

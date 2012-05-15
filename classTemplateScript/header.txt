@@ -1,0 +1,30 @@
+/*
+ * $$$NAME$$$.hpp
+ *
+ *  Created on: $$$DATE$$$
+ *      Author: $$$AUTHOR$$$
+ */
+
+#ifndef $$$ONCE$$$
+#define $$$ONCE$$$
+
+#include <boost/shared_ptr.hpp>
+
+namespace sambag {
+
+//=============================================================================
+/** 
+  * @class $$$NAME$$$.
+  */
+class $$$NAME$$$ {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<$$$NAME$$$> Ptr;
+protected:
+private:
+public:
+}; // $$$NAME$$$
+}} // namespaces
+
+#endif /* $$$ONCE$$$ */
