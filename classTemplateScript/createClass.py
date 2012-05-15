@@ -1,3 +1,4 @@
+#!/usr/bin/python
 '''
 purpose:
     creates new .h and .cpp file using .txt
