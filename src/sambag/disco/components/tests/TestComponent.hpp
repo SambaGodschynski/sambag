@@ -17,7 +17,7 @@ class TestComponent : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestComponent );
 	// TODO: perform tests
-	//CPPUNIT_TEST( testConstructor );
+	//CPPUNIT_TEST( testXY );
 
 	CPPUNIT_TEST_SUITE_END();
 public:

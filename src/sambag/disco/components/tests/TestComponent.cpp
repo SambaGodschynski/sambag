@@ -7,6 +7,7 @@
 
 #include "TestComponent.hpp"
 #include <sambag/disco/components/AComponent.hpp>
+#include <sambag/disco/components/AContainer.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestComponent );
@@ -15,5 +16,4 @@ namespace tests {
 //=============================================================================
 // TestComponent
 //=============================================================================
-//-----------------------------------------------------------------------------
 } // namespace

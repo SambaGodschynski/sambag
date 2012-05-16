@@ -25,6 +25,6 @@ protected:
 private:
 public:
 }; // $$$NAME$$$
-}} // namespace(s)
+} // namespace(s)
 
 #endif /* $$$ONCE$$$ */

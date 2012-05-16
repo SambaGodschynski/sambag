@@ -18,6 +18,14 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <string>
+#include <sstream>
+
+#define SAMBA_LOG_NOT_YET_IMPL() {								\
+		std::stringstream ss;									\
+		ss<<__FUNCTION__<< " not yet implemented."<<std::endl;	\
+		sambag::com::log(ss.str());								\
+	}
+
 namespace sambag { namespace com {
 using namespace boost;
 //#############################################################################
@@ -39,6 +47,8 @@ extern const Number NULL_NUMBER;
 //=============================================================================
 using namespace boost::logic;
 typedef tribool TriBool;
+//=============================================================================
+extern void log(const std::string &str);
 }} // namespaces
 
 #endif /* COMMON_HPP_ */

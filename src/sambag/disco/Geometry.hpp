@@ -163,6 +163,61 @@ public:
 		return !(*this==b);
 	}
 };
+//=============================================================================
+/**
+ * @class Insets.
+ * An Insets object is a representation of the borders of a container.
+ * It specifies the space that a container must leave at each of its edges.
+ * The space can be a border, a blank space, or a title.
+ */
+class Insets : Rectangle {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::geometry::model::box<Point2D> Base;
+private:
+public:
+	//-------------------------------------------------------------------------
+	void left(Coordinate &v) {
+		min_corner().x(v);
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & left() const {
+		return min_corner().x();
+	}
+	//-------------------------------------------------------------------------
+	void top(Coordinate &v) {
+		min_corner().y(v);
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & top() const {
+		return min_corner().y();
+	}
+	//-------------------------------------------------------------------------
+	void right(Coordinate &v) {
+		max_corner().x(v);
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & right() const {
+		return max_corner().x();
+	}
+	//-------------------------------------------------------------------------
+	void bottom(Coordinate &v) {
+		max_corner().y(v);
+	}
+	//-------------------------------------------------------------------------
+	const Coordinate & bottom() const {
+		return max_corner().y();
+	}
+	//-------------------------------------------------------------------------
+	Insets(const Coordinate &left = 0,
+			const Coordinate &top = 0,
+			const Coordinate &right = 0,
+			const Coordinate &bottom = 0) :
+		Rectangle(Point2D(left, top), Point2D(right, bottom))
+	{
+	}
+};
 extern const Rectangle NULL_RECTANGLE;
 }
 } // namespaces
