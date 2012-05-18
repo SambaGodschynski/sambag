@@ -602,7 +602,7 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 Rectangle Path::getBoundingBox() const {
 	IDiscoFactory::Ptr fac = getDiscoFactory();
 	IDrawContext::Ptr context = fac->createContext();
-	SAMBA_ASSERT(context);
+	SAMBAG_ASSERT(context);
 	drawInstructions(context);
 	return context->pathExtends();
 }

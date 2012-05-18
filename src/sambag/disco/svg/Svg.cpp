@@ -68,7 +68,7 @@ void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
 		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
-		SAMBA_ASSERT(root);
+		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onStrokeObject, this, _1);
 		root->requestForObject(id, callBk);
@@ -92,7 +92,7 @@ void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
 		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
-		SAMBA_ASSERT(root);
+		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onFillObject, this, _1);
 		root->requestForObject(id, callBk);

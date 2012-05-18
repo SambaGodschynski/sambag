@@ -43,8 +43,8 @@ public:
 	const Vertex &startVertex)
 	: sceneGraph(srcSceneGraph), dst(dstSceneGraph)
 	{
-		SAMBA_ASSERT(sceneGraph);
-		SAMBA_ASSERT(dst);
+		SAMBAG_ASSERT(sceneGraph);
+		SAMBAG_ASSERT(dst);
 		copy(startVertex);
 	}
 	//-------------------------------------------------------------------------
@@ -117,8 +117,8 @@ void copySubGraph(SceneGraph::Ptr src,
 	SceneGraph::Ptr dst,
 	const SceneGraph::Vertex &start)
 {
-	SAMBA_ASSERT(src!=dst);
-	SAMBA_ASSERT(src && dst);
+	SAMBAG_ASSERT(src!=dst);
+	SAMBAG_ASSERT(src && dst);
 	CopyVisitor vis(src, dst, start);
 	boost::breadth_first_search(src->getGraphImpl(), start, boost::visitor(vis));
 }

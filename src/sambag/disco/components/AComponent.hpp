@@ -9,12 +9,16 @@
 #define SAMBAG_COMPONENT_HPP_
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/com/Events.hpp>
+#include <sambag/com/events/Events.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/Font.hpp>
 #include <sambag/disco/IDrawable.hpp>
 #include "ActionMap.hpp"
 #include "IBorder.hpp"
+#include <sambag/com/ArithmeticWrapper.hpp>
+#include <sambag/com/Thread.hpp>
+#include <sambag/com/events/PropertyChanged.hpp>
+
 /**
  *  +++
  *  ActionMap
@@ -37,20 +41,32 @@
  *  DropTarget
  */
 
-namespace sambag { namespace disco { namespace components {
+namespace sambag {
+namespace disco {
+namespace components {
+using namespace sambag::com::events;
+//=============================================================================
+// Forwards
+//=============================================================================
+//-----------------------------------------------------------------------------
+class AContainer;
+typedef boost::shared_ptr<AContainer> AContainerPtr;
 //=============================================================================
 /**
  * @class AComponent
  * A component is an object having a graphical representation that can be
  * displayed on the screen and that can interact with the user.
  */
-class AComponent : public IDrawable {
-//=============================================================================
+class AComponent: public IDrawable,
+		public EventSender<PropertyChanged> {
+	//=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AComponent> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<AComponent> WPtr;
+	//-------------------------------------------------------------------------
+	typedef sambag::com::Mutex Lock;
 protected:
 	//-------------------------------------------------------------------------
 	/*
@@ -59,7 +75,183 @@ protected:
 	WPtr self;
 	//-------------------------------------------------------------------------
 	AComponent();
+	//-------------------------------------------------------------------------
+	/**
+	 * The parent of the object. It may be null.
+	 * for top-level components.
+	 */
+	AContainerPtr parent;
+	//-------------------------------------------------------------------------
+	/**
+	 * The bounds of this Component
+	 */
+	Rectangle bounds;
+	//-------------------------------------------------------------------------
+	/**
+	 * The foreground color for this component.
+	 * foreground can be null.
+	 * @see getForeground
+	 * @see setForeground
+	 */
+	ColorRGBA foreground;
+	//-------------------------------------------------------------------------
+	/**
+	 * The background color for this component.
+	 * background can be null.
+	 * @see getBackground
+	 * @see setBackground
+	 */
+	ColorRGBA background;
+	/**
+	 * True when the object should ignore all repaint events.
+	 * @see setIgnoreRepaint
+	 * @see getIgnoreRepaint
+	 */
+	sambag::com::ArithmeticWrapper<bool> ignoreRepaint;
+	//-------------------------------------------------------------------------
+	/**
+	 * True when the object is visible. An object that is not
+	 * visible is not drawn on the screen.
+	 * @see isVisible
+	 * @see setVisible
+	 */
+	sambag::com::ArithmeticWrapper<bool, true> visible;
+	//-------------------------------------------------------------------------
+	/**
+	 * True when the object is enabled. An object that is not
+	 * enabled does not interact with the user.
+	 * @see isEnabled
+	 * @see setEnabled
+	 */
+	sambag::com::ArithmeticWrapper<bool, true> enabled;
 private:
+	//-------------------------------------------------------------------------
+	/**
+	 * True when the object is valid. An invalid object needs to
+	 * be layed out. This flag is set to false when the object
+	 * size is changed.
+	 * @see isValid
+	 * @see validate
+	 * @see invalidate
+	 */
+	sambag::com::ArithmeticWrapper<bool> valid;
+	//-------------------------------------------------------------------------
+	/**
+	 * A component's name.
+	 * @see getName
+	 * @see setName(String)
+	 */
+	std::string name;
+	//-------------------------------------------------------------------------
+	/**
+	 * A bool to determine whether the name has
+	 * been set explicitly. <code>nameExplicitlySet</code> will
+	 * be false if the name has not been set and
+	 * true if it has.
+	 * @see getName
+	 * @see setName(String)
+	 */
+	sambag::com::ArithmeticWrapper<bool> nameExplicitlySet;
+	//-------------------------------------------------------------------------
+	/**
+	 * Indicates whether this Component can be focused.
+	 * @see setFocusable
+	 * @see isFocusable
+	 */
+	sambag::com::ArithmeticWrapper<bool, true> focusable;
+	//-------------------------------------------------------------------------
+	/**
+	 * The locking object for component-tree and layout operations.
+	 * @see getTreeLock
+	 */
+	Lock treeLock;
+	//-------------------------------------------------------------------------
+	/*
+	 * In some cases using "this" as an object to synchronize by
+	 * can lead to a deadlock if client code also uses synchronization
+	 * by a component object. For every such situation revealed we should
+	 * consider possibility of replacing "this" with the package private.
+	 */
+	Lock objectLock;
+	//-------------------------------------------------------------------------
+	Lock & getObjectLock();
+	//-------------------------------------------------------------------------
+	/**
+	 * Minimum size.
+	 * (This field perhaps should have been transient).
+	 */
+	Dimension minSize;
+	//-------------------------------------------------------------------------
+	/**
+	 * Whether or not setMinimumSize has been invoked with a non-null value.
+	 */
+	sambag::com::ArithmeticWrapper<bool> minSizeSet;
+	//-------------------------------------------------------------------------
+	/**
+	 * Preferred size.
+	 * (This field perhaps should have been transient).
+	 */
+	Dimension prefSize;
+	//-------------------------------------------------------------------------
+	/**
+	 * Whether or not setPreferredSize has been invoked with a non-null value.
+	 */
+	sambag::com::ArithmeticWrapper<bool> prefSizeSet;
+	//-------------------------------------------------------------------------
+	/**
+	 * Maximum size
+	 */
+	Dimension maxSize;
+	//-------------------------------------------------------------------------
+	/**
+	 * Whether or not setMaximumSize has been invoked with a non-null value.
+	 */
+	sambag::com::ArithmeticWrapper<bool> maxSizeSet;
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<bool> isPacked;
+protected:
+	//-------------------------------------------------------------------------
+	void enable();
+	//-------------------------------------------------------------------------
+	void disable();
+public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Ease-of-use constant for <code>getAlignmentY()</code>.
+	 * Specifies an alignment to the top of the component.
+	 * @see     getAlignmentY
+	 */
+	static const float TOP_ALIGNMENT = 0.0f;
+	//-------------------------------------------------------------------------
+	/**
+	 * Ease-of-use constant for <code>getAlignmentY</code> and
+	 * <code>getAlignmentX</code>. Specifies an alignment to
+	 * the center of the component
+	 * @see     getAlignmentX
+	 * @see     getAlignmentY
+	 */
+	static const float CENTER_ALIGNMENT = 0.5f;
+	//-------------------------------------------------------------------------
+	/**
+	 * Ease-of-use constant for <code>getAlignmentY</code>.
+	 * Specifies an alignment to the bottom of the component.
+	 * @see     getAlignmentY
+	 */
+	static const float BOTTOM_ALIGNMENT = 1.0f;
+	//-------------------------------------------------------------------------
+	/**
+	 * Ease-of-use constant for <code>getAlignmentX</code>.
+	 * Specifies an alignment to the left side of the component.
+	 * @see     getAlignmentX
+	 */
+	static const float LEFT_ALIGNMENT = 0.0f;
+	//-------------------------------------------------------------------------
+	/**
+	 * Ease-of-use constant for <code>getAlignmentX</code>.
+	 * Specifies an alignment to the right side of the component.
+	 * @see     getAlignmentX
+	 */
+	static const float RIGHT_ALIGNMENT = 1.0f;
 public:
 	//-------------------------------------------------------------------------
 	virtual Ptr getPtr() const {
@@ -132,7 +324,7 @@ public:
 	/**
 	 * @return the parent of this component.
 	 */
-	virtual Ptr getParent() const;
+	virtual AContainerPtr getParent() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the preferred size of this component.
@@ -186,7 +378,8 @@ public:
 	 * @param height
 	 * @return the baseline or < 0 indicating there is no reasonable baseline
 	 */
-	virtual Coordinate getBaseLine(const Coordinate &width, const Coordinate &height);
+	virtual Coordinate getBaseLine(const Coordinate &width,
+			const Coordinate &height);
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the border of this component or null if no border is currently set.
@@ -206,7 +399,22 @@ public:
 	 * displayable.
 	 * @return a graphics context for this component, or null
 	 */
-	IDrawContext::Ptr getIDrawContext() const;
+	virtual IDrawContext::Ptr getIDrawContext() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the Background color
+	 */
+	virtual ColorRGBA getBackground() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the Foreground color
+	 */
+	virtual ColorRGBA getForeground() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the Lock (mutex) object
+	 */
+	virtual Lock & getTreeLock();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return true if this AComponent is the focus owner.
@@ -248,12 +456,24 @@ public:
 	virtual bool isOpaque() const;
 	//-------------------------------------------------------------------------
 	/**
-	 *
-	 * @return whether this component is showing on screen.
+	 * Determines whether this component is showing on screen. This means
+	 * that the component must be visible, and it must be in a container
+	 * that is visible and showing.
+	 * <p>
+	 * <strong>Note:</strong> sometimes there is no way to detect whether the
+	 * {@code Component} is actually visible to the user.  This can happen when:
+	 * <ul>
+	 * <li>the component has been added to a visible {@code ScrollPane} but
+	 * the {@code Component} is not currently in the scroll pane's view port.
+	 * <li>the {@code Component} is obscured by another {@code Component} or
+	 * {@code Container}.
+	 * </ul>
+	 * @return <code>true</code> if the component is showing,
+	 *          <code>false</code> otherwise
 	 */
-	virtual bool isShowing() const;
-	//-------------------------------------------------------------------------
-	/**
+	 virtual bool isShowing() const;
+	 //-------------------------------------------------------------------------
+	 /**
 	 * Determines whether this component is valid. A component is valid when it
 	 * is correctly sized and positioned within its parent container and all
 	 * its children are also valid. Components are invalidated when they are
@@ -275,8 +495,17 @@ public:
 	/**
 	 * @return whether minimum size is set
 	 */
+	virtual bool isMinimumSizeSet() const;
 	//-------------------------------------------------------------------------
-	virtual Dimension isMinimumSizeSet() const;
+	/**
+	 * @return whether Background color is set
+	 */
+	virtual bool isBackgroundSet() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return whether Foreground color is set
+	 */
+	virtual bool isForegroundSet() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Draw this component
@@ -294,7 +523,6 @@ public:
 	 *  Redraws this component.
 	 */
 	virtual void redraw();
-	//-------------------------------------------------------------------------
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -322,13 +550,22 @@ protected:
 	 * @param
 	 */
 	virtual void drawComponent(IDrawContext::Ptr context);
+	//-------------------------------------------------------------------------
+	/**
+	 * Determines whether this component will be displayed on the screen.
+	 * @return <code>true</code> if the component and all of its ancestors
+	 *          until a toplevel window or null parent are visible,
+	 *          <code>false</code> otherwise
+	 */
+	virtual bool isRecursivelyVisible() const;
 public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Prompts the layout manager to lay out this component.
 	 * This method is primarily intended to operate on instances of Container.
 	 */
-	virtual void doLayout() {}
+	virtual void doLayout() {
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 *  Requests that this AComponent get the input focus, and that this
@@ -343,12 +580,9 @@ public:
 	 * @param width
 	 * @param height
 	 */
-	virtual void setBounds(const Coordinate &x,
-			const Coordinate & y,
-			const Coordinate & width,
-			const Coordinate & height)
-	{
-		setBounds(Rectangle(Point2D(x,y), width, height));
+	virtual void setBounds(const Coordinate &x, const Coordinate & y,
+			const Coordinate & width, const Coordinate & height) {
+		setBounds(Rectangle(Point2D(x, y), width, height));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -383,7 +617,7 @@ public:
 	 * @param y
 	 */
 	virtual void setLocation(const Coordinate &x, const Coordinate &y) {
-		setLocation(Point2D(x,y));
+		setLocation(Point2D(x, y));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -437,6 +671,20 @@ public:
 	virtual void setBorder(IBorder::Ptr br) const;
 	//-------------------------------------------------------------------------
 	/**
+	 * Sets the background color of this component.
+	 * The background color affects each component differently and the parts
+	 * of the component that are affected by the background color.
+	 * @param c
+	 */
+	virtual void setBackground(const ColorRGBA &c);
+	//-------------------------------------------------------------------------
+	/**
+	 * Sets the foreground color of this component.
+	 * @param c
+	 */
+	virtual void setForeground(const ColorRGBA &c);
+	//-------------------------------------------------------------------------
+	/**
 	 * Transfers the focus to the next component,
 	 * as though this AComponent were the focus owner.
 	 */
@@ -461,6 +709,8 @@ public:
 	virtual void update(IDrawContext::Ptr cn);
 };
 
-}}}
+}
+}
+}
 
 #endif /* COMPONENT_HPP_ */

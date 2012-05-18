@@ -6,12 +6,14 @@
  */
 
 #include "AComponent.hpp"
+#include "AContainer.hpp"
 #include <sambag/com/Common.hpp> // for SAMBA_LOG_NOT_YET_IMPL
-
 // (\w+\(.*?\)) -> fname()
 // /\*\*(\R.*?)*\*/\R -> doxycomment
 
-namespace sambag { namespace disco { namespace components {
+namespace sambag {
+namespace disco {
+namespace components {
 //=============================================================================
 // class AComponent
 //=============================================================================
@@ -45,8 +47,7 @@ Coordinate AComponent::getAlignmentY() const {
 }
 //-----------------------------------------------------------------------------
 AComponent::Ptr AComponent::getComponentAt(const Coordinate & x,
-	const Coordinate & y) const
-{
+		const Coordinate & y) const {
 	SAMBA_LOG_NOT_YET_IMPL();
 	return Ptr();
 }
@@ -76,9 +77,8 @@ std::string AComponent::getName() const {
 	return std::string();
 }
 //-----------------------------------------------------------------------------
-AComponent::Ptr AComponent::getParent() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Ptr();
+AContainerPtr AComponent::getParent() const {
+	return parent;
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getPreferredSize() const {
@@ -111,6 +111,20 @@ IDrawContext::Ptr AComponent::getIDrawContext() const {
 	return IDrawContext::Ptr();
 }
 //-----------------------------------------------------------------------------
+ColorRGBA AComponent::getBackground() const {
+	SAMBA_LOG_NOT_YET_IMPL();
+	return ColorRGBA::NULL_COLOR;
+}
+//-----------------------------------------------------------------------------
+ColorRGBA AComponent::getForeground() const {
+	SAMBA_LOG_NOT_YET_IMPL();
+	return ColorRGBA::NULL_COLOR;
+}
+//-----------------------------------------------------------------------------
+AComponent::Lock & AComponent::getTreeLock() {
+	return treeLock;
+}
+//-----------------------------------------------------------------------------
 bool AComponent::hasFocus() const {
 	SAMBA_LOG_NOT_YET_IMPL();
 	return false;
@@ -126,8 +140,7 @@ bool AComponent::isDisplayable() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isEnabled() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return enabled;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isFocusable() const {
@@ -146,18 +159,24 @@ bool AComponent::isOpaque() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isShowing() const {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (visible) {
+		return (parent) || parent->isShowing();
+	}
 	return false;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isValid() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return valid;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isVisible() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return visible;
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isRecursivelyVisible() const {
+	if (!parent)
+		return visible;
+	return visible && parent->isRecursivelyVisible();
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isMaximumSizeSet() const {
@@ -165,9 +184,17 @@ bool AComponent::isMaximumSizeSet() const {
 	return false;
 }
 //-----------------------------------------------------------------------------
-Dimension AComponent::isMinimumSizeSet() const {
+bool AComponent::isMinimumSizeSet() const {
 	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+	return false;
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isBackgroundSet() const {
+	return background != ColorRGBA::NULL_COLOR;
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isForegroundSet() const {
+	return foreground != ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
 void AComponent::draw(IDrawContext::Ptr context) {
@@ -190,8 +217,28 @@ void AComponent::setBounds(const Rectangle &r) {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
+void AComponent::enable() {
+	if (enabled)
+		return;
+	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
+		enabled = true;
+	SAMBAG_END_SYNCHRONIZED
+}
+//-----------------------------------------------------------------------------
+void AComponent::disable() {
+	if (!enabled)
+		return;
+	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
+		enabled = false;
+	SAMBAG_END_SYNCHRONIZED
+}
+//-----------------------------------------------------------------------------
 void AComponent::setEnabled(bool b) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (b) {
+		enable();
+	} else {
+		disable();
+	}
 }
 //-----------------------------------------------------------------------------
 void AComponent::setFocusable(bool b) {
@@ -207,7 +254,13 @@ void AComponent::setLocation(const Point2D &p) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setName(const std::string &name) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	std::string old = name;
+	SAMBAG_BEGIN_SYNCHRONIZED(getObjectLock())
+		AComponent::name = name;
+		nameExplicitlySet = true;
+	SAMBAG_END_SYNCHRONIZED
+	EventSender<PropertyChanged>::notifyListeners(this,
+			PropertyChanged("name", old, name));
 }
 //-----------------------------------------------------------------------------
 void AComponent::setSize(const Dimension &d) {
@@ -215,6 +268,14 @@ void AComponent::setSize(const Dimension &d) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setVisible(bool b) {
+	SAMBA_LOG_NOT_YET_IMPL();
+}
+//-----------------------------------------------------------------------------
+void AComponent::setBackground(const ColorRGBA &c) {
+	SAMBA_LOG_NOT_YET_IMPL();
+}
+//-----------------------------------------------------------------------------
+void AComponent::setForeground(const ColorRGBA &c) {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
@@ -245,8 +306,7 @@ bool AComponent::getAutoscrolls() const {
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getBaseLine(const Coordinate &width,
-		const Coordinate &height)
-{
+		const Coordinate &height) {
 	SAMBA_LOG_NOT_YET_IMPL();
 	return Coordinate();
 }
@@ -258,6 +318,10 @@ IBorder::Ptr AComponent::getBorder() const {
 //-----------------------------------------------------------------------------
 void AComponent::grabFocus() {
 	SAMBA_LOG_NOT_YET_IMPL();
+}
+//-------------------------------------------------------------------------
+AComponent::Lock & AComponent::getObjectLock() {
+	return objectLock;
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawBorder(IDrawContext::Ptr context) {
@@ -280,4 +344,6 @@ void AComponent::setBorder(IBorder::Ptr br) const {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 
-}}} // namespace(s)
+}
+}
+} // namespace(s)

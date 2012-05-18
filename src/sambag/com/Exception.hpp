@@ -5,14 +5,17 @@
  *      Author: samba
  */
 
+
+/* TODO: consider approach!!*/
+
 #ifndef EXCEPTION_HPP_
 #define EXCEPTION_HPP_
 
-#define RAISE_ERROR(obj, what) throw obj((what), sambag::com::Exception::ERROR)
-#define RAISE_WARNING(obj, what) throw obj((what), sambag::com::Exception::WARNING)
-#define RAISE_CRITICAL(obj, what) throw obj((what), sambag::com::Exception::CRITICAL,  std::string(__FILE__), std::string( __LINE__)
+#define SAMBAG_RAISE_ERROR(obj, what) throw obj((what), sambag::com::Exception::ERROR)
+#define SAMBAG_RAISE_WARNING(obj, what) throw obj((what), sambag::com::Exception::WARNING)
+#define SAMBAG_RAISE_CRITICAL(obj, what) throw obj((what), sambag::com::Exception::CRITICAL,  std::string(__FILE__), std::string( __LINE__)
 
-#define EXCEPTION_CLASS(name) \
+#define SAMBAG_EXCEPTION_CLASS(name) \
 	struct name : public sambag::com::Exception { \
 		name(const std::string &what = "unknown reason", \
 			 sambag::com::Exception::Type type = sambag::com::Exception::UNKOWN, \
@@ -24,13 +27,12 @@
 #include <string>
 #include <assert.h>
 
-#define SAMBA_ASSERT(x) assert((x))
+#define SAMBAG_ASSERT(x) assert((x))
 
 namespace sambag { namespace com {
 //=============================================================================
-class Exception {
+struct Exception {
 //=============================================================================
-public:
 	//-------------------------------------------------------------------------
 	enum Type {UNKOWN, WARNING, ERROR, CRITICAL};
 	std::string line;
@@ -44,8 +46,6 @@ public:
 			  const std::string &where = "unknown location",
 			  const std::string &line = "unknown line number")
 	: line(line), where(where), what(what), type(type) {}
-	//-------------------------------------------------------------------------
-	virtual ~Exception() {}
 };
 }}
 #endif /* EXCEPTION_HPP_ */

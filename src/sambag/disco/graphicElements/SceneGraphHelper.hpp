@@ -163,8 +163,8 @@ extern void addToGraphAsReference( SceneGraph::Ptr src,
 	SceneGraph::Ptr dst,
 	Old2NewMap &outMap)
 {
-	SAMBA_ASSERT(src!=dst);
-	SAMBA_ASSERT(src && dst);
+	SAMBAG_ASSERT(src!=dst);
+	SAMBAG_ASSERT(src && dst);
 	typedef SceneGraph::SceneGraphElement Element;
 	typedef SceneGraph::Vertex Vertex;
 	// copy vertices

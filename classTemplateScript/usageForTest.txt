@@ -1,0 +1,1 @@
+python createClass.py -n testPropertyChanged -o ../src/sambag/com/tests/ --inHeader testHpp.txt --inCpp testCpp.txt

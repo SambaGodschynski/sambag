@@ -42,7 +42,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<CairoSurface> Ptr;
 	//-------------------------------------------------------------------------
-	EXCEPTION_CLASS(SurfaceCreationFailed);
+	SAMBAG_EXCEPTION_CLASS(SurfaceCreationFailed);
 protected:
 	//-------------------------------------------------------------------------
 	cairo_surface_t * surface;
@@ -51,7 +51,7 @@ protected:
 		cairo_status_t stat = cairo_surface_status(s);
 		if (stat!=CAIRO_STATUS_SUCCESS) {
 			std::string what(cairo_status_to_string (stat));
-			RAISE_ERROR(SurfaceCreationFailed, what);
+			SAMBAG_RAISE_ERROR(SurfaceCreationFailed, what);
 		}
 	}
 public:

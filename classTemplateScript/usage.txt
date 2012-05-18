@@ -1,0 +1,1 @@
+python createClass.py -n ArithmeticWrapper -o ../src/sambag/com/

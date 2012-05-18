@@ -9,6 +9,7 @@ purpose:
 import sys
 import argparse
 import time
+import os.path
 
 name = ""
 inh = ''
@@ -40,6 +41,9 @@ def readFile(name):
     return txt
 def writeFile(name, txt):
     #writes txt into name
+    if os.path.exists(name):
+	print name + " already exists"
+	return
     print "writing " + name + "."
     f = open(name, 'w')
     f.write(txt)
