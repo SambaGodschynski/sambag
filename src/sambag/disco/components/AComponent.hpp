@@ -67,6 +67,14 @@ public:
 	typedef boost::weak_ptr<AComponent> WPtr;
 	//-------------------------------------------------------------------------
 	typedef sambag::com::Mutex Lock;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_NAME;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_FOREGROUND;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_BACKGROUND;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_PREFERREDSIZE;
 protected:
 	//-------------------------------------------------------------------------
 	/*
@@ -209,11 +217,43 @@ private:
 	sambag::com::ArithmeticWrapper<bool> maxSizeSet;
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<bool> isPacked;
-protected:
 	//-------------------------------------------------------------------------
 	void enable();
 	//-------------------------------------------------------------------------
 	void disable();
+	//-------------------------------------------------------------------------
+	void show();
+	//-------------------------------------------------------------------------
+	void hide();
+protected:
+	//-------------------------------------------------------------------------
+	/**
+	 * Fetches the root container somewhere higher up in the component
+	 * tree that contains this component.
+	 */
+	AContainerPtr getRootContainer() const;
+	//-------------------------------------------------------------------------
+	void clearMostRecentFocusOwnerOnHide();
+	//-------------------------------------------------------------------------
+	/**
+	 * Transfers the focus to the next component, as though this Component were
+	 * the focus owner.
+	 * @see       #requestFocus()
+	 */
+	void transferFocus(bool clearOnFailure = false);
+	//-------------------------------------------------------------------------
+	void repaintParentIfNeeded(const Rectangle &r);
+	//-------------------------------------------------------------------------
+	/**
+	 * Invalidates the parent of this component if any.
+	 * This method MUST BE invoked under the TreeLock.
+	 */
+	void invalidateParent();
+	//-------------------------------------------------------------------------
+	/**
+	 * Invalidates the component unless it is already invalid.
+	 */
+	void invalidateIfValid();
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -450,8 +490,19 @@ public:
 	virtual bool isFocusOwner() const;
 	//-------------------------------------------------------------------------
 	/**
-	 * @return true if this component is completely opaque,
-	 * returns false by default.
+	 * Returns true if this component is completely opaque, returns
+	 * false by default.
+	 * <p>
+	 * An opaque component paints every pixel within its
+	 * rectangular region. A non-opaque component paints only some of
+	 * its pixels, allowing the pixels underneath it to "show through".
+	 * A component that does not fully paint its pixels therefore
+	 * provides a degree of transparency.
+	 * <p>
+	 * Subclasses that guarantee to always completely paint their
+	 * contents should override this method and return true.
+	 *
+	 * @return true if this component is completely opaque
 	 */
 	virtual bool isOpaque() const;
 	//-------------------------------------------------------------------------
@@ -471,9 +522,9 @@ public:
 	 * @return <code>true</code> if the component is showing,
 	 *          <code>false</code> otherwise
 	 */
-	 virtual bool isShowing() const;
-	 //-------------------------------------------------------------------------
-	 /**
+	virtual bool isShowing() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * Determines whether this component is valid. A component is valid when it
 	 * is correctly sized and positioned within its parent container and all
 	 * its children are also valid. Components are invalidated when they are
@@ -506,6 +557,15 @@ public:
 	 * @return whether Foreground color is set
 	 */
 	virtual bool isForegroundSet() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns true if the preferred size has been set to a
+	 * non-<code>null</code> value otherwise returns false.
+	 *
+	 * @return true if <code>setPreferredSize</code> has been invoked
+	 *         with a non-null value.
+	 */
+	virtual bool isPreferredSizeSet() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Draw this component
@@ -572,6 +632,20 @@ public:
 	 *  AComponent's top-level ancestor become the focused Window.
 	 */
 	virtual void requestFocus();
+	//-------------------------------------------------------------------------
+	/**
+	 * Repaints the specified rectangle of this component.
+	 * @param     x    the <i>x</i> coordinate
+	 * @param     y    the <i>y</i> coordinate
+	 * @param     width    the width
+	 * @param     height   the height
+	 * @see       #update(Graphics)
+	 */
+	virtual void repaint(const Rectangle &r);
+	//-------------------------------------------------------------------------
+	void repaint() {
+		repaint(bounds);
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Moves and resizes this component.
@@ -683,6 +757,18 @@ public:
 	 * @param c
 	 */
 	virtual void setForeground(const ColorRGBA &c);
+	//-------------------------------------------------------------------------
+	/**
+	 * Sets the preferred size of this component to a constant
+	 * value.  Subsequent calls to <code>getPreferredSize</code> will always
+	 * return this value.  Setting the preferred size to <code>null</code>
+	 * restores the default behavior.
+	 *
+	 * @param preferredSize The new preferred size, or null
+	 * @see #getPreferredSize
+	 * @see #isPreferredSizeSet
+	 */
+	virtual void setPreferredSize(const Dimension &preferredSize);
 	//-------------------------------------------------------------------------
 	/**
 	 * Transfers the focus to the next component,

@@ -212,8 +212,8 @@ public:
 	virtual void rect( const Rectangle &rect ) {
 		cairo_rectangle(
 			context,
-			rect.getX0().x(),
-			rect.getX0().y(),
+			rect.x0().x(),
+			rect.x0().y(),
 			rect.getWidth(),
 			rect.getHeight()
 		);

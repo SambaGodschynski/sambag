@@ -33,7 +33,7 @@ void Image::draw( IDrawContext::Ptr cn ) {
 			return;
 		}
 	}
-	cn->translate(outline.getX0());
+	cn->translate(outline.x0());
 	Rectangle orgSz = image->getSize();
 	cn->scale( Point2D(
 		outline.getWidth()/orgSz.getWidth(),

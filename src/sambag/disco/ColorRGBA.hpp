@@ -69,5 +69,4 @@ struct ColorRGBA: public sambag::math::VectorN<sambag::com::Number, 4> {
 };
 }} // namespaces
 
-
 #endif /* COLORRGBA_HPP_ */

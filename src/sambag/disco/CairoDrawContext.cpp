@@ -47,8 +47,8 @@ void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {
 
 	Number width = rect.getWidth();
 	Number height = rect.getHeight();
-	Number x = rect.getX0().x();
-	Number y = rect.getX0().y();
+	Number x = rect.x0().x();
+	Number y = rect.x0().y();
 
 	cairo_new_sub_path (context);
 	cairo_arc (context, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);

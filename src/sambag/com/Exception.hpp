@@ -11,21 +11,25 @@
 #ifndef EXCEPTION_HPP_
 #define EXCEPTION_HPP_
 
-#define SAMBAG_RAISE_ERROR(obj, what) throw obj((what), sambag::com::Exception::ERROR)
-#define SAMBAG_RAISE_WARNING(obj, what) throw obj((what), sambag::com::Exception::WARNING)
-#define SAMBAG_RAISE_CRITICAL(obj, what) throw obj((what), sambag::com::Exception::CRITICAL,  std::string(__FILE__), std::string( __LINE__)
+#include <string>
+#include <iostream>
+#include <assert.h>
+#include "Common.hpp"
+
+#define SAMBAG_RAISE_ERROR(obj, what) {		\
+		std::stringstream ss;				\
+		ss<<__LINE__;						\
+		throw obj((what), std::string(__FILE__), ss.str()); \
+	}
+#define SAMBAG_WARN(what) sambag::com::warn((what))
 
 #define SAMBAG_EXCEPTION_CLASS(name) \
 	struct name : public sambag::com::Exception { \
 		name(const std::string &what = "unknown reason", \
-			 sambag::com::Exception::Type type = sambag::com::Exception::UNKOWN, \
 			 const std::string &where = "unknown location", \
 			 const std::string &line = "unknown line number") \
-		 : sambag::com::Exception(what, type, where, line) {}\
+		 : sambag::com::Exception(what, where, line) {}\
 	} \
-
-#include <string>
-#include <assert.h>
 
 #define SAMBAG_ASSERT(x) assert((x))
 
@@ -34,18 +38,19 @@ namespace sambag { namespace com {
 struct Exception {
 //=============================================================================
 	//-------------------------------------------------------------------------
-	enum Type {UNKOWN, WARNING, ERROR, CRITICAL};
 	std::string line;
 	std::string where;
 	std::string what;
-	Type type;
 public:
 	//-------------------------------------------------------------------------
 	Exception(const std::string &what = "unknown reason",
-			  Type type = UNKOWN,
 			  const std::string &where = "unknown location",
 			  const std::string &line = "unknown line number")
-	: line(line), where(where), what(what), type(type) {}
+	: line(line), where(where), what(what) {}
 };
+//-----------------------------------------------------------------------------
+inline void warn(const std::string &msg) {
+	log("warning: " + msg);
+}
 }}
 #endif /* EXCEPTION_HPP_ */

@@ -59,18 +59,18 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, X_tag ) {
 		Rectangle r = rect->getRectangle();
-		Point2D p = r.getX0();
+		Point2D p = r.x0();
 		p.x(coord);
-		r.setX0(p);
+		r.translate(p);
 		rect->setRectangle(r);
 
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y_tag::Type &coord, Y_tag ) {
 		Rectangle r = rect->getRectangle();
-		Point2D p = r.getX0();
+		Point2D p = r.x0();
 		p.y(coord);
-		r.setX0(p);
+		r.translate(p);
 		rect->setRectangle(r);
 	}
 	//-------------------------------------------------------------------------

@@ -5,77 +5,108 @@
  *      Author: Johannes Unger
  */
 
-#include <string>
-#include <sstream>
-
+#include <sambag/com/Exception.hpp>
 #ifndef SAMBAG_PROPERTYCHANGED_H
 #define SAMBAG_PROPERTYCHANGED_H
 
-namespace sambag { namespace com { namespace events {
+namespace sambag {
+namespace com {
+namespace events {
+
+//=============================================================================
+struct PropertyContainerBase {
+	virtual ~PropertyContainerBase() {
+	}
+};
+//=============================================================================
+template<typename T>
+struct PropertyContainer: public PropertyContainerBase {
+	T oldValue;
+	T newValue;
+	PropertyContainer(const T&o, const T&n) :
+		oldValue(o), newValue(n) {
+	}
+};
 
 //=============================================================================
 /** 
-  * @class PropertyChanged.
-  */
-struct PropertyChanged {
+ * @class PropertyChanged.
+ */
+class PropertyChanged {
 //=============================================================================
-	std::string name, oldValue, newValue;
+private:
 	//-------------------------------------------------------------------------
-	/**
-	 * uses stringstream to convert between T and string
-	 * @param v
-	 * @param name
-	 * @param oldValue
-	 * @param newValue
-	 */
-	template <typename T>
-	PropertyChanged(const std::string &name,
-			const T &oldValue,
-			const T &newValue) : name(name)
-	{
-		std::stringstream old, _new;
-		old<<oldValue;
-		_new << newValue;
-		PropertyChanged::oldValue = old.str();
-		PropertyChanged::newValue = _new.str();
+	std::string name;
+	//-------------------------------------------------------------------------
+	PropertyContainerBase *content;
+public:
+	//-------------------------------------------------------------------------
+	SAMBAG_EXCEPTION_CLASS(IncompatibleType);
+	//-------------------------------------------------------------------------
+	const std::string & getPropertyName() const {
+		return name;
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * uses stringstream to convert between T and string
 	 * @param v
 	 * @param name
 	 * @param oldValue
 	 * @param newValue
 	 */
-	PropertyChanged(const std::string &name,
-			const std::string &oldValue,
-			const std::string &newValue) :
-				name(name), oldValue(oldValue), newValue(newValue)
-	{
+	template<typename T>
+	PropertyChanged(const std::string &name, const T &oldValue,
+			const T &newValue) :
+		name(name), content(NULL) {
+		content = new PropertyContainer<T> (oldValue, newValue);
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @param v
+	 * @param name
+	 * @param oldValue
+	 * @param newValue
+	 */
+	PropertyChanged(const std::string &name, const char *oldValue,
+			const char *newValue) :
+		name(name), content(NULL) {
+		content = new PropertyContainer<std::string> (oldValue, newValue);
+	}
+	//-------------------------------------------------------------------------
+	virtual ~PropertyChanged() {
+		if (content)
+			delete content;
 	}
 	//-------------------------------------------------------------------------
 	/**
 	 * uses stringstream to convert between T and string
 	 * @return oldValue converted to T
+	 * @throw IncompatibleType
 	 */
-	template <typename T>
+	template<typename T>
 	void getOldValue(T &outVal) const {
-		std::stringstream ss;
-		ss << oldValue;
-		ss >> outVal;
+		typedef PropertyContainer<T> DestT;
+		DestT * cn = dynamic_cast<DestT*> (content);
+		if (!cn)
+			SAMBAG_RAISE_ERROR(IncompatibleType, "cannot convert newValue to T");
+		outVal = cn->oldValue;
 	}
 	//-------------------------------------------------------------------------
 	/**
 	 * uses stringstream to convert between T and string
 	 * @return newValue converted to T
+	 * @throw IncompatibleType
 	 */
-	template <typename T>
+	template<typename T>
 	void getNewValue(T &outVal) const {
-		std::stringstream ss;
-		ss << newValue;
-		ss >> outVal;
+		typedef PropertyContainer<T> DestT;
+		DestT * cn = dynamic_cast<DestT*> (content);
+		if (!cn)
+			SAMBAG_RAISE_ERROR(IncompatibleType, "cannot convert newValue to T");
+		outVal = cn->newValue;
 	}
 }; // PropertyChanged
-}}} // namespace(s)
+}
+}
+} // namespace(s)
 
 #endif /* SAMBAG_PROPERTYCHANGED_H */

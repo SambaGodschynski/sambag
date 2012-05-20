@@ -58,17 +58,17 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, const X_tag& ) {
 		Rectangle r = image->getOutline();
-		Point2D p = r.getX0();
+		Point2D p = r.x0();
 		p.x(coord);
-		r.setX0(p);
+		r.translate(p);
 		image->setOutline(r);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y_tag::Type &coord, const Y_tag& ) {
 		Rectangle r = image->getOutline();
-		Point2D p = r.getX0();
+		Point2D p = r.x0();
 		p.y(coord);
-		r.setX0(p);
+		r.translate(p);
 		image->setOutline(r);
 	}
 	//-------------------------------------------------------------------------

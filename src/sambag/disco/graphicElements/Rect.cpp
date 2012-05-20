@@ -32,8 +32,8 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 	/*
 	  Mathematically, a 'rect' element can be mapped to an equivalent 'path' element as follows:
 	 */
-	Number x = rect.getX0().x();
-	Number y = rect.getX0().y();
+	Number x = rect.x0().x();
+	Number y = rect.x0().y();
 	Number w = rect.getWidth();
 	Number h = rect.getHeight();
 	Number rx = r.x();

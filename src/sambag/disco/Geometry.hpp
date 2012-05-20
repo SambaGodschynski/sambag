@@ -100,11 +100,27 @@ public:
 private:
 public:
 	//-------------------------------------------------------------------------
-	const Point2D & getX0() const {
+	const Point2D & x0() const {
 		return min_corner();
 	}
 	//-------------------------------------------------------------------------
-	void setX0(const Point2D & val) {
+	Point2D & x0() {
+		return min_corner();
+	}
+	//-------------------------------------------------------------------------
+	const Point2D & x1() const {
+		return max_corner();
+	}
+	//-------------------------------------------------------------------------
+	Point2D & x1() {
+		return max_corner();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * translates whole rectangle to x0
+	 * @param val
+	 */
+	void translate(const Point2D & val) {
 		Point2D diff = val;
 		geometry::subtract_point(diff, min_corner());
 		geometry::add_point(min_corner(), diff);
