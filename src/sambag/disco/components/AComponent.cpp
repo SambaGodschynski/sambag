@@ -8,6 +8,7 @@
 #include "AComponent.hpp"
 #include "AContainer.hpp"
 #include <sambag/com/Common.hpp> // for SAMBA_LOG_NOT_YET_IMPL
+#include <sambag/com/exceptions/IllegalArgumentException.hpp>
 // (\w+\(.*?\)) -> fname()
 // /\*\*(\R.*?)*\*/\R -> doxycomment
 
@@ -26,12 +27,43 @@ const std::string AComponent::PROPERTY_BACKGROUND = "background";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_PREFERREDSIZE = "preferredSize";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_MAXIMUMSIZE = "maximumSize";
+//-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_MINIMUMSIZE = "minimumSize";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() {
 
 }
 //-----------------------------------------------------------------------------
 AComponent::~AComponent() {
 
+}
+//-----------------------------------------------------------------------------
+bool AComponent::contains(Point2D p) const {
+	const Coordinate &width = bounds.getWidth();
+	const Coordinate &height = bounds.getHeight();
+	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);
+}
+//-----------------------------------------------------------------------------
+int AComponent::dispatchHierarchyEvents(HierarchyEvent::Type id,
+		AComponentPtr changed, AContainerPtr changedParent, long changeFlags) {
+	switch (id) {
+	case HierarchyEvent::HIERARCHY_CHANGED: {
+		HierarchyEvent e(self.lock(), id, changed, changedParent, changeFlags);
+		dispatchEvent(e);
+		return 1;
+	}
+	case HierarchyEvent::ANCESTOR_MOVED:
+	case HierarchyEvent::ANCESTOR_RESIZED: {
+		HierarchyEvent e(self.lock(), id, changed, changedParent);
+		dispatchEvent(e);
+		return 1;
+	}
+	default:
+		SAMBAG_ASSERT(false);
+		break;
+	}
+	return 0;
 }
 //-----------------------------------------------------------------------------
 Rectangle AComponent::getBoundingBox() const {
@@ -45,19 +77,15 @@ std::string AComponent::toString() const {
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getAlignmentX() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Coordinate();
+	return CENTER_ALIGNMENT;
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getAlignmentY() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Coordinate();
+	return CENTER_ALIGNMENT;
 }
 //-----------------------------------------------------------------------------
-AComponent::Ptr AComponent::getComponentAt(const Coordinate & x,
-		const Coordinate & y) const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Ptr();
+AComponent::Ptr AComponent::getComponentAt(const Point2D &p) const {
+	return contains(p) ? getPtr() : AComponent::Ptr();
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getHeight() const {
@@ -68,14 +96,26 @@ Point2D AComponent::getLocation() const {
 	return bounds.x0();
 }
 //-----------------------------------------------------------------------------
-Dimension AComponent::getMaximumSize() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+Dimension AComponent::getMaximumSize() {
+	Dimension dim = maxSize;
+	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
+		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+			maxSize = getSize();
+			dim = maxSize;
+		SAMBAG_END_SYNCHRONIZED
+	}
+	return dim;
 }
 //-----------------------------------------------------------------------------
-Dimension AComponent::getMinimumSize() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+Dimension AComponent::getMinimumSize() {
+	Dimension dim = minSize;
+	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
+		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+			minSize = getSize();
+			dim = minSize;
+		SAMBAG_END_SYNCHRONIZED
+	}
+	return dim;
 }
 //-----------------------------------------------------------------------------
 std::string AComponent::getName() const {
@@ -87,8 +127,15 @@ AContainerPtr AComponent::getParent() const {
 	return parent;
 }
 //-----------------------------------------------------------------------------
-Dimension AComponent::getPreferredSize() const {
-	return prefSize;
+Dimension AComponent::getPreferredSize() {
+	Dimension dim = prefSize;
+	if (dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid())) {
+		SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
+			prefSize = getMinimumSize();
+			dim = prefSize;
+		SAMBAG_END_SYNCHRONIZED
+	}
+	return dim;
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getSize() const {
@@ -107,9 +154,18 @@ Coordinate AComponent::getY() const {
 	return bounds.x0().y();
 }
 //-----------------------------------------------------------------------------
-IDrawContext::Ptr AComponent::getIDrawContext() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return IDrawContext::Ptr();
+IDrawContext::Ptr AComponent::getDrawContext() const {
+	// need to translate coordinate spaces and clip relative
+	// to the parent.
+	if (!parent)
+		return IDrawContext::Ptr();
+	IDrawContext::Ptr cn = parent->getDrawContext();
+	if (!cn)
+		return IDrawContext::Ptr();
+	cn->translate(bounds.x0());
+	cn->setClip(Rectangle(0, 0, bounds.getWidth(), bounds.getHeight()));
+	return cn;
+
 }
 //-----------------------------------------------------------------------------
 ColorRGBA AComponent::getBackground() const {
@@ -148,7 +204,23 @@ bool AComponent::hasFocus() const {
 }
 //-----------------------------------------------------------------------------
 void AComponent::invalidate() {
-	SAMBA_LOG_NOT_YET_IMPL();
+	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
+		/* Nullify cached layout and size information.
+		 * For efficiency, propagate invalidate() upwards only if
+		 * some other component hasn't already done so first.
+		 */
+		valid = false;
+		if (!isPreferredSizeSet()) {
+			prefSize = NULL_DIMENSION;
+		}
+		if (!isMinimumSizeSet()) {
+			minSize = NULL_DIMENSION;
+		}
+		if (!isMaximumSizeSet()) {
+			maxSize = NULL_DIMENSION;
+		}
+		invalidateParent();
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isDisplayable() const {
@@ -196,13 +268,11 @@ bool AComponent::isRecursivelyVisible() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isMaximumSizeSet() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return maxSizeSet;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isMinimumSizeSet() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return minSizeSet;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isBackgroundSet() const {
@@ -211,10 +281,6 @@ bool AComponent::isBackgroundSet() const {
 //-----------------------------------------------------------------------------
 bool AComponent::isForegroundSet() const {
 	return foreground != ColorRGBA::NULL_COLOR;
-}
-//-----------------------------------------------------------------------------
-void AComponent::draw(IDrawContext::Ptr context) {
-	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawAll(IDrawContext::Ptr context) {
@@ -287,6 +353,26 @@ void AComponent::repaint(const Rectangle &r) {
 
 }
 //-----------------------------------------------------------------------------
+void AComponent::revalidate() {
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		invalidate();
+		AContainer::Ptr root = getContainer();
+		if (!root) {
+			// There's no parents. Just validate itself.
+			validate();
+		} else {
+			while (!root->isValidateRoot()) {
+				if (!root->getContainer()) {
+					// If there's no validate roots, we'll validate the
+					// topmost container
+					break;
+				}
+				root = root->getContainer();
+			}
+			root->validate();
+		}SAMBAG_END_SYNCHRONIZED
+}
+//-----------------------------------------------------------------------------
 void AComponent::setBounds(const Rectangle &r) {
 	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
 		bool resized = (bounds.getWidth() != r.getWidth())
@@ -317,8 +403,21 @@ void AComponent::setPreferredSize(const Dimension &preferredSize) {
 	// size.
 	prefSize = preferredSize;
 	prefSizeSet = true;
-	EventSender<PropertyChanged>::notifyListeners(this,
-			PropertyChanged(PROPERTY_PREFERREDSIZE, old, preferredSize));
+	dispatchEvent(PropertyChanged(PROPERTY_PREFERREDSIZE, old, preferredSize));
+}
+//-----------------------------------------------------------------------------
+void AComponent::setMaximumSize(const Dimension &s) {
+	Dimension old = maxSize;
+	maxSize = s;
+	maxSizeSet = true;
+	dispatchEvent(PropertyChanged(PROPERTY_MAXIMUMSIZE, old, s));
+}
+//-----------------------------------------------------------------------------
+void AComponent::setMinimumSize(const Dimension &s) {
+	Dimension old = minSize;
+	minSize = s;
+	minSizeSet = true;
+	dispatchEvent(PropertyChanged(PROPERTY_MINIMUMSIZE, old, s));
 }
 //-----------------------------------------------------------------------------
 void AComponent::clearMostRecentFocusOwnerOnHide() {
@@ -365,10 +464,8 @@ void AComponent::show() {
 		//TODO:
 		//mixOnShowing();
 
-		//TODO: EVENT
-		/*createHierarchyEvents(HierarchyEvent.HIERARCHY_CHANGED, this,
-		 parent, HierarchyEvent.SHOWING_CHANGED,
-		 Toolkit.enabledOnToolkit(AWTEvent.HIERARCHY_EVENT_MASK));*/
+		dispatchHierarchyEvents(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
+				parent, HierarchyEvent::SHOWING_CHANGED);
 
 		repaint();
 		//TODO: EVENT
@@ -395,12 +492,8 @@ void AComponent::hide() {
 		 if (containsFocus() && KeyboardFocusManager.isAutoFocusTransferEnabled()) {
 		 transferFocus(true);
 		 }*/
-		/* TODO: Events
-		 createHierarchyEvents(HierarchyEvent.HIERARCHY_CHANGED,
-		 this, parent,
-		 HierarchyEvent.SHOWING_CHANGED,
-		 Toolkit.enabledOnToolkit(AWTEvent.HIERARCHY_EVENT_MASK));
-		 */
+		dispatchHierarchyEvents(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
+				parent, HierarchyEvent::SHOWING_CHANGED);
 		repaint();
 		/* TODO: Events
 		 * if (componentListener != null ||
@@ -431,7 +524,7 @@ void AComponent::setFocusable(bool b) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setIgnoreRepaint(bool b) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	ignoreRepaint = b;
 }
 //-----------------------------------------------------------------------------
 void AComponent::setLocation(const Point2D &p) {
@@ -446,8 +539,7 @@ void AComponent::setName(const std::string &name) {
 		AComponent::name = name;
 		nameExplicitlySet = true;
 	SAMBAG_END_SYNCHRONIZED
-	EventSender<PropertyChanged>::notifyListeners(this,
-			PropertyChanged(PROPERTY_NAME, old, name));
+	dispatchEvent(PropertyChanged(PROPERTY_NAME, old, name));
 }
 //-----------------------------------------------------------------------------
 void AComponent::setSize(const Dimension &d) {
@@ -466,8 +558,7 @@ void AComponent::setBackground(const ColorRGBA &c) {
 	background = c;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	EventSender<PropertyChanged>::notifyListeners(this,
-			PropertyChanged(PROPERTY_BACKGROUND, oldColor, c));
+	dispatchEvent(PropertyChanged(PROPERTY_BACKGROUND, oldColor, c));
 }
 //-----------------------------------------------------------------------------
 void AComponent::setForeground(const ColorRGBA &c) {
@@ -475,8 +566,7 @@ void AComponent::setForeground(const ColorRGBA &c) {
 	foreground = c;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	EventSender<PropertyChanged>::notifyListeners(this,
-			PropertyChanged(PROPERTY_FOREGROUND, oldColor, c));
+	dispatchEvent(PropertyChanged(PROPERTY_FOREGROUND, oldColor, c));
 }
 //-----------------------------------------------------------------------------
 void AComponent::transferFocus() {
@@ -488,11 +578,15 @@ void AComponent::transferFocusBackward() {
 }
 //-----------------------------------------------------------------------------
 void AComponent::validate() {
-	SAMBA_LOG_NOT_YET_IMPL();
-}
-//-----------------------------------------------------------------------------
-void AComponent::update(IDrawContext::Ptr cn) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		bool wasValid = isValid();
+		if (!wasValid) {
+			doLayout();
+		}
+		valid = true;
+		if (!wasValid) {
+			//TODO: mixOnValidating();
+		}SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 ActionMap::Ptr AComponent::getActionMap() const {
@@ -507,13 +601,21 @@ bool AComponent::getAutoscrolls() const {
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getBaseLine(const Coordinate &width,
 		const Coordinate &height) {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Coordinate();
+	if (width < 0 || height < 0) {
+		SAMBAG_THROW( sambag::com::exceptions::IllegalArgumentException,
+				"Width and height must be >= 0"
+		);
+	}
+	return -1;
 }
 //-----------------------------------------------------------------------------
 IBorder::Ptr AComponent::getBorder() const {
 	SAMBA_LOG_NOT_YET_IMPL();
 	return IBorder::Ptr();
+}
+//-------------------------------------------------------------------------
+bool AComponent::getIgnoreRepaint() const {
+	return ignoreRepaint;
 }
 //-----------------------------------------------------------------------------
 void AComponent::grabFocus() {

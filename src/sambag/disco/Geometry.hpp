@@ -14,6 +14,10 @@
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 
+#define NULL_POINT2D sambag::disco::getNullPoint2D()
+#define NULL_DIMENSION sambag::disco::getNullDimension()
+#define NULL_RECTANGLE sambag::disco::getNullRectangle()
+
 namespace sambag { namespace disco {
 //#############################################################################
 // geometry
@@ -59,7 +63,9 @@ inline Point2D maximize(const Point2D &a, const Point2D &b) {
 	);
 }
 //=============================================================================
-extern const Point2D NULL_POINT2D;
+inline Point2D getNullPoint2D() {
+	return Point2D(NULL_NUMBER, NULL_NUMBER);
+}
 
 //=============================================================================
 /**
@@ -87,6 +93,9 @@ struct Dimension : public Point2D {
 		Point2D::y(v);
 	}
 };
+inline Dimension getNullDimension() {
+	return Dimension(NULL_NUMBER, NULL_NUMBER);
+}
 //=============================================================================
 /**
  * @class Rectangle.
@@ -234,7 +243,9 @@ public:
 	{
 	}
 };
-extern const Rectangle NULL_RECTANGLE;
+inline Rectangle getNullRectangle() {
+	return Rectangle(NULL_NUMBER, NULL_NUMBER, NULL_NUMBER, NULL_NUMBER);
+}
 }
 } // namespaces
 

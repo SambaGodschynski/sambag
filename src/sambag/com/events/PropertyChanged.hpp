@@ -87,7 +87,7 @@ public:
 		typedef PropertyContainer<T> DestT;
 		DestT * cn = dynamic_cast<DestT*> (content);
 		if (!cn)
-			SAMBAG_RAISE_ERROR(IncompatibleType, "cannot convert newValue to T");
+			SAMBAG_THROW(IncompatibleType, "cannot convert newValue to T");
 		outVal = cn->oldValue;
 	}
 	//-------------------------------------------------------------------------
@@ -101,7 +101,7 @@ public:
 		typedef PropertyContainer<T> DestT;
 		DestT * cn = dynamic_cast<DestT*> (content);
 		if (!cn)
-			SAMBAG_RAISE_ERROR(IncompatibleType, "cannot convert newValue to T");
+			SAMBAG_THROW(IncompatibleType, "cannot convert newValue to T");
 		outVal = cn->newValue;
 	}
 }; // PropertyChanged

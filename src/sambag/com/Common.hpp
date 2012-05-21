@@ -17,6 +17,8 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+#include <float.h>
+#include <limits.h>
 #include <string>
 #include <sstream>
 
@@ -33,8 +35,8 @@ using namespace boost;
 //#############################################################################
 typedef int Integer;
 typedef double Number;
-extern const Integer NULL_INTEGER;
-extern const Number NULL_NUMBER;
+#define NULL_INTEGER sambag::com::getNullInteger()
+#define NULL_NUMBER sambag::com::getNullNumber()
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -49,6 +51,15 @@ using namespace boost::logic;
 typedef tribool TriBool;
 //=============================================================================
 extern void log(const std::string &str);
+//-----------------------------------------------------------------------------
+inline Integer getNullNumber() {
+	return INT_MAX;
+}
+//-----------------------------------------------------------------------------
+inline Number getNullInteger() {
+	return DBL_MAX;
+}
+//-----------------------------------------------------------------------------
 }} // namespaces
 
 #endif /* COMMON_HPP_ */

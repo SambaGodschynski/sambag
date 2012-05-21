@@ -410,6 +410,8 @@ public:
 		);
 	}
 	//-------------------------------------------------------------------------
+	virtual void setClip(const Rectangle &r);
+	//-------------------------------------------------------------------------
 	virtual void disableDash() {
 		cairo_set_dash( context, NULL, 0, 0 );
 	}

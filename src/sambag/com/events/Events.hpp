@@ -73,7 +73,7 @@ public:
 		);
 	}
 	//--------------------------------------------------------------------------------------------------------
-	void notifyListeners ( void *src, const T &value ) {
+	void notifyListeners ( void *src, const T &value ) const {
 		signal( src, value );
 	}
 };

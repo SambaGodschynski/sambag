@@ -19,8 +19,8 @@ using namespace boost;
 //#############################################################################
 //=============================================================================
 typedef boost::numeric::ublas::matrix<sambag::com::Number> Matrix;
-extern const Matrix IDENTITY_MATRIX;
-extern const Matrix NULL_MATRIX;
+#define IDENTITY_MATRIX identity_matrix<sambag::com::Number> (3,3)
+#define NULL_MATRIX createNullMatrix()
 //=============================================================================
 using namespace boost::numeric::ublas;
 //=============================================================================
@@ -84,6 +84,16 @@ inline Matrix skew2D(sambag::com::Number x, sambag::com::Number y) {
 	m(1,0) = _tanY;
 	return m;
 }
+//-----------------------------------------------------------------------------
+inline Matrix createNullMatrix() {
+	Matrix m(3,3);
+	m(0,0) = NULL_NUMBER; m(0,1) = NULL_NUMBER; m(0,2) = NULL_NUMBER;
+	m(1,0) = NULL_NUMBER; m(1,1) = NULL_NUMBER; m(1,2) = NULL_NUMBER;
+	m(2,0) = NULL_NUMBER; m(2,1) = NULL_NUMBER; m(2,2) = NULL_NUMBER;
+	return m;
+}
+//-----------------------------------------------------------------------------
+
 //=============================================================================
 }} // namespaces
 

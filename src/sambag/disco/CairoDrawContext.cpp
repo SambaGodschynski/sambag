@@ -95,5 +95,9 @@ void CairoDrawContext::setStrokePattern() {
 		return;
 	cairo_set_source(context, strokePattern->getCairoPatternRef().get());
 }
-
+//-----------------------------------------------------------------------------
+void CairoDrawContext::setClip(const Rectangle &r) {
+	rect(r);
+	clip();
+}
 }} // namespaces

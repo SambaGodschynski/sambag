@@ -18,6 +18,9 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/events/PropertyChanged.hpp>
+#include "MouseEvent.hpp"
+#include "HierarchyEvent.hpp"
+#include "Forward.hpp"
 
 /**
  *  +++
@@ -46,20 +49,17 @@ namespace disco {
 namespace components {
 using namespace sambag::com::events;
 //=============================================================================
-// Forwards
-//=============================================================================
-//-----------------------------------------------------------------------------
-class AContainer;
-typedef boost::shared_ptr<AContainer> AContainerPtr;
-//=============================================================================
 /**
  * @class AComponent
  * A component is an object having a graphical representation that can be
  * displayed on the screen and that can interact with the user.
  */
 class AComponent: public IDrawable,
-		public EventSender<PropertyChanged> {
-	//=============================================================================
+		public EventSender<PropertyChanged>,
+		public EventSender<MouseEvent>,
+		public EventSender<HierarchyEvent>
+{
+//=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AComponent> Ptr;
@@ -75,6 +75,10 @@ public:
 	static const std::string PROPERTY_BACKGROUND;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_PREFERREDSIZE;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_MAXIMUMSIZE;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_MINIMUMSIZE;
 protected:
 	//-------------------------------------------------------------------------
 	/*
@@ -227,33 +231,42 @@ private:
 	void hide();
 protected:
 	//-------------------------------------------------------------------------
+	template<class Event>
+	void dispatchEvent(const Event &ev) {
+		EventSender<Event>::notifyListeners(this, ev);
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * Fetches the root container somewhere higher up in the component
 	 * tree that contains this component.
 	 */
-	AContainerPtr getRootContainer() const;
+	virtual	 AContainerPtr getRootContainer() const;
 	//-------------------------------------------------------------------------
-	void clearMostRecentFocusOwnerOnHide();
+	virtual void clearMostRecentFocusOwnerOnHide();
 	//-------------------------------------------------------------------------
 	/**
 	 * Transfers the focus to the next component, as though this Component were
 	 * the focus owner.
 	 * @see       #requestFocus()
 	 */
-	void transferFocus(bool clearOnFailure = false);
+	virtual void transferFocus(bool clearOnFailure = false);
 	//-------------------------------------------------------------------------
-	void repaintParentIfNeeded(const Rectangle &r);
+	virtual void repaintParentIfNeeded(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	/**
 	 * Invalidates the parent of this component if any.
 	 * This method MUST BE invoked under the TreeLock.
 	 */
-	void invalidateParent();
+	virtual void invalidateParent();
 	//-------------------------------------------------------------------------
 	/**
 	 * Invalidates the component unless it is already invalid.
 	 */
-	void invalidateIfValid();
+	virtual void invalidateIfValid();
+	//-------------------------------------------------------------------------
+	// Should only be called while holding the tree lock
+	virtual int dispatchHierarchyEvents(HierarchyEvent::Type id,
+			AComponentPtr changed, AContainerPtr changedParent, long changeFlags);
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -293,6 +306,19 @@ public:
 	 */
 	static const float RIGHT_ALIGNMENT = 1.0f;
 public:
+	//-----------------------------------------------------------------------------
+	virtual bool contains(Point2D p) const;
+	//-----------------------------------------------------------------------------
+	/**
+	 * Checks whether this component "contains" the specified point,
+	 * where the point's <i>x</i> and <i>y</i> coordinates are defined
+	 * to be relative to the coordinate system of this component.
+	 * @param     p     the point
+	 * @see       #getComponentAt(Point)
+	 */
+	virtual bool contains(const Coordinate &x, const Coordinate &y) const {
+		return contains(Point2D(x, y));
+	}
 	//-------------------------------------------------------------------------
 	virtual Ptr getPtr() const {
 		return self.lock();
@@ -333,7 +359,11 @@ public:
 	 * @param y
 	 * @return
 	 */
-	virtual Ptr getComponentAt(const Coordinate & x, const Coordinate & y) const;
+	virtual Ptr getComponentAt(const Coordinate & x, const Coordinate & y) const {
+		return getComponentAt(Point2D(x, y));
+	}
+	//-------------------------------------------------------------------------
+	virtual Ptr getComponentAt(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the current height of this component.
@@ -348,13 +378,15 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the maximum size of this component.
+	 * @note call can change minSize
 	 */
-	virtual Dimension getMaximumSize() const;
+	virtual Dimension getMaximumSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the mininimum size of this component.
+	 * @note call can change minSize
 	 */
-	virtual Dimension getMinimumSize() const;
+	virtual Dimension getMinimumSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the name of the component.
@@ -368,8 +400,9 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the preferred size of this component.
+	 * @note call can change prefSize
 	 */
-	virtual Dimension getPreferredSize() const;
+	virtual Dimension getPreferredSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the size of this component.
@@ -439,7 +472,7 @@ public:
 	 * displayable.
 	 * @return a graphics context for this component, or null
 	 */
-	virtual IDrawContext::Ptr getIDrawContext() const;
+	virtual IDrawContext::Ptr getDrawContext() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the Background color
@@ -455,6 +488,11 @@ public:
 	 * @return the Lock (mutex) object
 	 */
 	virtual Lock & getTreeLock();
+	//-------------------------------------------------------------------------
+	/**
+	 * @return whether or not paint messages received.
+	 */
+	virtual bool getIgnoreRepaint() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return true if this AComponent is the focus owner.
@@ -571,7 +609,8 @@ public:
 	 * Draw this component
 	 * @param
 	 */
-	virtual void draw(IDrawContext::Ptr context);
+	virtual void draw(IDrawContext::Ptr context) {
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Draws this component and all of its subcomponents.
@@ -584,6 +623,10 @@ public:
 	 */
 	virtual void redraw();
 protected:
+	//-------------------------------------------------------------------------
+	virtual AContainerPtr getContainer() const {
+		return getParent();
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Draw this component's border
@@ -643,9 +686,26 @@ public:
 	 */
 	virtual void repaint(const Rectangle &r);
 	//-------------------------------------------------------------------------
-	void repaint() {
+	virtual void repaint() {
 		repaint(bounds);
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Revalidates the component hierarchy up to the nearest validate root.
+	 * <p>
+	 * This method first invalidates the component hierarchy starting from this
+	 * component up to the nearest validate root. Afterwards, the component
+	 * hierarchy is validated starting from the nearest validate root.
+	 * <p>
+	 * This is a convenience method supposed to help application developers
+	 * avoid looking for validate roots manually. Basically, it's equivalent to
+	 * first calling the {@link #invalidate()} method on this component, and
+	 * then calling the {@link #validate()} method on the nearest validate
+	 * root.
+	 *
+	 * @see Container#isValidateRoot
+	 */
+	virtual void revalidate();
 	//-------------------------------------------------------------------------
 	/**
 	 * Moves and resizes this component.
@@ -771,6 +831,29 @@ public:
 	virtual void setPreferredSize(const Dimension &preferredSize);
 	//-------------------------------------------------------------------------
 	/**
+	 * Sets the minimum size of this component to a constant
+	 * value.  Subsequent calls to <code>getMinimumSize</code> will always
+	 * return this value.  Setting the minimum size to <code>null</code>
+	 * restores the default behavior.
+	 * @param minimumSize the new minimum size of this component
+	 * @see #getMinimumSize
+	 * @see #isMinimumSizeSet
+	 */
+	virtual void setMinimumSize(const Dimension &s);
+	//-------------------------------------------------------------------------
+	/**
+	 * Sets the maximum size of this component to a constant
+	 * value.  Subsequent calls to <code>getMaximumSize</code> will always
+	 * return this value.  Setting the maximum size to <code>null</code>
+	 * restores the default behavior.
+	 * @param maximumSize a <code>Dimension</code> containing the
+	 *          desired maximum allowable size
+	 * @see #getMaximumSize
+	 * @see #isMaximumSizeSet
+	 */
+	virtual void setMaximumSize(const Dimension &s);
+	//-------------------------------------------------------------------------
+	/**
 	 * Transfers the focus to the next component,
 	 * as though this AComponent were the focus owner.
 	 */
@@ -792,7 +875,9 @@ public:
 	 * Updates the container.
 	 * @param cn
 	 */
-	virtual void update(IDrawContext::Ptr cn);
+	virtual void update(IDrawContext::Ptr cn) {
+		draw(cn);
+	}
 };
 
 }

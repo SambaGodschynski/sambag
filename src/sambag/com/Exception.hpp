@@ -16,7 +16,7 @@
 #include <assert.h>
 #include "Common.hpp"
 
-#define SAMBAG_RAISE_ERROR(obj, what) {		\
+#define SAMBAG_THROW(obj, what) {		\
 		std::stringstream ss;				\
 		ss<<__LINE__;						\
 		throw obj((what), std::string(__FILE__), ss.str()); \

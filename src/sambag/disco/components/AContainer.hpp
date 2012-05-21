@@ -13,20 +13,22 @@
 #include "ALayoutManager.hpp"
 #include <vector>
 
-namespace sambag { namespace disco { namespace components {
+namespace sambag {
+namespace disco {
+namespace components {
 
 //=============================================================================
 /** 
-  * @class AContainer.
-  * A generic container object is a component that can contain other Components.
-  * Components added to a container are tracked in a list.
-  * The order of the list will define the components' front-to-back stacking
-  * order within the container. If no index is specified when adding a component
-  * to a container, it will be added to the end of the list (and hence to the
-  * bottom of the stacking order).
-  */
-class AContainer : public AComponent {
-//=============================================================================
+ * @class AContainer.
+ * A generic container object is a component that can contain other Components.
+ * Components added to a container are tracked in a list.
+ * The order of the list will define the components' front-to-back stacking
+ * order within the container. If no index is specified when adding a component
+ * to a container, it will be added to the end of the list (and hence to the
+ * bottom of the stacking order).
+ */
+class AContainer: public AComponent {
+	//=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AContainer> Ptr;
@@ -66,9 +68,8 @@ public:
 	 * @return the visible child component that contains the specified position.
 	 */
 	virtual AComponent::Ptr getComponentAt(const Coordinate &x,
-			const Coordinate & y) const
-	{
-		return getComponentAt(Point2D(x,y));
+			const Coordinate & y) const {
+		return getComponentAt(Point2D(x, y));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -151,6 +152,31 @@ public:
 	virtual bool isAncestorOf(AComponent::Ptr c) const;
 	//-------------------------------------------------------------------------
 	/**
+	 * Indicates if this container is a <i>validate root</i>.
+	 * <p>
+	 * Layout-related changes, such as bounds of the validate root descendants,
+	 * do not affect the layout of the validate root parent. This peculiarity
+	 * enables the {@code invalidate()} method to stop invalidating the
+	 * component hierarchy when the method encounters a validate root. However,
+	 * to preserve backward compatibility this new optimized behavior is
+	 * enabled only when the {@code java.awt.smartInvalidate} system property
+	 * value is set to {@code true}.
+	 * <p>
+	 * If a component hierarchy contains validate roots and the new optimized
+	 * {@code invalidate()} behavior is enabled, the {@code validate()} method
+	 * must be invoked on the validate root of a previously invalidated
+	 * component to restore the validity of the hierarchy later. Otherwise,
+	 * calling the {@code validate()} method on the top-level container (such
+	 * as a {@code Frame} object) should be used to restore the validity of the
+	 * component hierarchy.
+	 * <p>
+	 * @return whether this container is a validate root
+	 * @see #invalidate
+	 * @see AComponent#invalidate
+	 */
+	virtual bool isValidateRoot() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * Draw this component
 	 * @param
 	 */
@@ -205,6 +231,8 @@ public:
 	 */
 	virtual void validateTree();
 }; // AContainer
-}}} // namespace(s)
+}
+}
+} // namespace(s)
 
 #endif /* SAMBAG_ACONTAINER_H */

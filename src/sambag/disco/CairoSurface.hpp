@@ -51,7 +51,7 @@ protected:
 		cairo_status_t stat = cairo_surface_status(s);
 		if (stat!=CAIRO_STATUS_SUCCESS) {
 			std::string what(cairo_status_to_string (stat));
-			SAMBAG_RAISE_ERROR(SurfaceCreationFailed, what);
+			SAMBAG_THROW(SurfaceCreationFailed, what);
 		}
 	}
 public:

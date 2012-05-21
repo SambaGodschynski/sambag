@@ -12,8 +12,8 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 const ColorRGBA ColorRGBA::NULL_COLOR = ColorRGBA(
-		sambag::com::NULL_NUMBER,
-		sambag::com::NULL_NUMBER,
-		sambag::com::NULL_NUMBER,
-		sambag::com::NULL_NUMBER);
+		NULL_NUMBER,
+		NULL_NUMBER,
+		NULL_NUMBER,
+		NULL_NUMBER);
 }} // namespaces

@@ -91,6 +91,10 @@ bool AContainer::isAncestorOf(AComponent::Ptr c) const {
 	return false;
 }
 //-----------------------------------------------------------------------------
+bool AContainer::isValidateRoot() const {
+	return false;
+}
+//-----------------------------------------------------------------------------
 void AContainer::draw(IDrawContext::Ptr context) {
 }
 //-----------------------------------------------------------------------------
