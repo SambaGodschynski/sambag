@@ -79,6 +79,8 @@ public:
 	static const std::string PROPERTY_MAXIMUMSIZE;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_MINIMUMSIZE;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_FOCUSABLE;
 protected:
 	//-------------------------------------------------------------------------
 	/*
@@ -326,11 +328,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~AComponent();
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBounds() const {
-		return getBoundingBox();
-	}
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const;
+	virtual const Rectangle & getBounds() const;
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const;
 	//-------------------------------------------------------------------------
@@ -374,7 +372,7 @@ public:
 	 * @return the location of this component in the form of a point
 	 * specifying the component's top-left corner.
 	 */
-	virtual Point2D getLocation() const;
+	virtual const Point2D & getLocation() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the maximum size of this component.
@@ -391,7 +389,7 @@ public:
 	/**
 	 * @return the name of the component.
 	 */
-	virtual std::string getName() const;
+	virtual const std::string & getName() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the parent of this component.
@@ -417,12 +415,12 @@ public:
 	/**
 	 * @return the current x coordinate of the components origin.
 	 */
-	virtual Coordinate getX() const;
+	virtual const Coordinate & getX() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the current y coordinate of the components origin.
 	 */
-	virtual Coordinate getY() const;
+	virtual const Coordinate & getY() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the ActionMap used to determine what Action to fire for
@@ -508,6 +506,7 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return true if this component is displayable.
+	 * @note checks parents recursively onto top whether displayable
 	 */
 	virtual bool isDisplayable() const;
 	//-------------------------------------------------------------------------

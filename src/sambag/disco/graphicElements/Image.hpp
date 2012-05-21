@@ -70,7 +70,7 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return representing rectangle of image.
-	 * Its the same like @see getBoundingBox
+	 * Its the same like @see getBounds
 	 */
 	const Rectangle & getOutline() const { return outline; }
 	//-------------------------------------------------------------------------

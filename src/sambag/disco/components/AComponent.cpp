@@ -31,6 +31,8 @@ const std::string AComponent::PROPERTY_MAXIMUMSIZE = "maximumSize";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_MINIMUMSIZE = "minimumSize";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_FOCUSABLE = "focusable";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() {
 
 }
@@ -66,14 +68,24 @@ int AComponent::dispatchHierarchyEvents(HierarchyEvent::Type id,
 	return 0;
 }
 //-----------------------------------------------------------------------------
-Rectangle AComponent::getBoundingBox() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Rectangle();
+const Rectangle & AComponent::getBounds() const {
+	return bounds;
 }
 //-----------------------------------------------------------------------------
 std::string AComponent::toString() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return std::string();
+	std::stringstream ss;
+	ss << getName() << "," << bounds.x0().x() << "," << bounds.x0().y();
+	ss << "," << bounds.getWidth() << "x" << bounds.getHeight();
+	if (!isValid()) {
+		ss << ",invalid";
+	}
+	if (!visible) {
+		ss << ",hidden";
+	}
+	if (!enabled) {
+		ss << ",disabled";
+	}
+	return "[" + ss.str() + "]";
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getAlignmentX() const {
@@ -92,7 +104,7 @@ Coordinate AComponent::getHeight() const {
 	return bounds.getHeight();
 }
 //-----------------------------------------------------------------------------
-Point2D AComponent::getLocation() const {
+const Point2D & AComponent::getLocation() const {
 	return bounds.x0();
 }
 //-----------------------------------------------------------------------------
@@ -118,9 +130,8 @@ Dimension AComponent::getMinimumSize() {
 	return dim;
 }
 //-----------------------------------------------------------------------------
-std::string AComponent::getName() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return std::string();
+const std::string & AComponent::getName() const {
+	return name;
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getParent() const {
@@ -146,11 +157,11 @@ Coordinate AComponent::getWidth() const {
 	return bounds.getWidth();
 }
 //-----------------------------------------------------------------------------
-Coordinate AComponent::getX() const {
+const Coordinate & AComponent::getX() const {
 	return bounds.x0().x();
 }
 //-----------------------------------------------------------------------------
-Coordinate AComponent::getY() const {
+const Coordinate & AComponent::getY() const {
 	return bounds.x0().y();
 }
 //-----------------------------------------------------------------------------
@@ -224,8 +235,10 @@ void AComponent::invalidate() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isDisplayable() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	AContainer::Ptr p = parent;
+	if (!p)
+		return false;
+	return p->isDisplayable();
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isEnabled() const {
@@ -520,7 +533,21 @@ void AComponent::setEnabled(bool b) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setFocusable(bool b) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	bool oldFocusable;
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		oldFocusable = focusable;
+		focusable = b;
+	SAMBAG_END_SYNCHRONIZED
+	//isFocusTraversableOverridden = FOCUS_TRAVERSABLE_SET;
+	dispatchEvent(
+			PropertyChanged(PROPERTY_FOCUSABLE, oldFocusable, (bool) focusable));
+	/* TODO: Focus
+	 * if (oldFocusable && !focusable) {
+	 if (isFocusOwner() && KeyboardFocusManager.isAutoFocusTransferEnabled()) {
+	 transferFocus(true);
+	 }
+	 KeyboardFocusManager.clearMostRecentFocusOwner(this);
+	 }*/
 }
 //-----------------------------------------------------------------------------
 void AComponent::setIgnoreRepaint(bool b) {

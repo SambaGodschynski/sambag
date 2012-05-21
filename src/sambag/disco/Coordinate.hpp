@@ -20,7 +20,7 @@ namespace sambag { namespace disco {
  * To get a final pixel value it is necessary to have access to a IDrawContext
  * Object an its metadata.
  * !!Decided to always use px as unit. It is to expensive to implement the
- * relative unit types. Trigger for this decision was that getBoundingBox()
+ * relative unit types. Trigger for this decision was that getBounds()
  * will need a IDrawContextObject to resolve value.
  *
  */
