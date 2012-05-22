@@ -6,8 +6,12 @@
  */
 
 #include "AContainer.hpp"
+#include <sambag/com/exceptions/IllegalArgumentException.hpp>
+#include <sambag/com/Helper.hpp>
 
-namespace sambag { namespace disco { namespace components {
+namespace sambag {
+namespace disco {
+namespace components {
 //=============================================================================
 //  Class AContainer
 //=============================================================================
@@ -18,6 +22,18 @@ AContainer::AContainer() {
 //-----------------------------------------------------------------------------
 AContainer::~AContainer() {
 
+}
+//-----------------------------------------------------------------------------
+void AContainer::checkAddToSelf(AComponent::Ptr comp) const {
+	AContainer::Ptr tmp = boost::shared_dynamic_cast<AContainer>(comp);
+	if (!tmp)
+		return;
+	for (AContainer::Ptr cn = getPtr(); cn; cn = cn->parent) {
+		if (cn == comp) {
+			SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+					"adding container's parent to itself");
+		}
+	}
 }
 //-----------------------------------------------------------------------------
 AComponent::Ptr AContainer::add(AComponent::Ptr comp, int index) {
@@ -45,8 +61,7 @@ Coordinate AContainer::getAlignmentY() const {
 }
 //-----------------------------------------------------------------------------
 AComponent::Ptr AContainer::getComponent(size_t n) const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return AComponent::Ptr();
+	return components.at(n);
 }
 //-----------------------------------------------------------------------------
 size_t AContainer::getComponentCount() const {
@@ -61,8 +76,33 @@ const AContainer::Components & AContainer::getComponents() const {
 	return components;
 }
 //-----------------------------------------------------------------------------
+int AContainer::getComponentZOrder(AComponent::Ptr comp) {
+	if (!comp) {
+		return -1;
+	}
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		// Quick check - container should be immediate parent of the component
+		if (comp->getParent() != getPtr()) {
+			return -1;
+		}
+		return sambag::com::indexOf(components, comp);SAMBAG_END_SYNCHRONIZED
+}
+//-----------------------------------------------------------------------------
+void AContainer::adjustDescendants(int num) {
+	if (num == 0)
+		return;
+
+	descendantsCount += num;
+	adjustDecendantsOnParent(num);
+}
+//-----------------------------------------------------------------------------
+void AContainer::adjustDecendantsOnParent(int num) {
+	if (!parent)
+		return;
+	parent->adjustDescendants(num);
+}
+//-----------------------------------------------------------------------------
 Insets AContainer::getInsets() const {
-	SAMBA_LOG_NOT_YET_IMPL();
 	return Insets();
 }
 //-----------------------------------------------------------------------------
@@ -133,4 +173,6 @@ void AContainer::validateTree() {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 
-}}} // namespace(s)
+}
+}
+} // namespace(s)

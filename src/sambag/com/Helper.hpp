@@ -149,6 +149,18 @@ template <int I>
 struct Int2Type {
 	enum {Value=I};
 };
+//=============================================================================
+// IndexOf
+//=============================================================================
+template <class Container>
+inline int indexOf(const Container &c,
+		const typename Container::value_type &v)
+{
+	typename Container::const_iterator it = std::find(c.begin(), c.end(), v);
+	if (it != c.end())
+		return std::distance(c.begin(), it);
+	return -1;
+}
 }}
 
 #endif /* HELPER_HPP_ */

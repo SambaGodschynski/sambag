@@ -55,11 +55,10 @@ using namespace sambag::com::events;
  * displayed on the screen and that can interact with the user.
  */
 class AComponent: public IDrawable,
-		public EventSender<PropertyChanged>,
-		public EventSender<MouseEvent>,
-		public EventSender<HierarchyEvent>
-{
-//=============================================================================
+		public EventSender<PropertyChanged> ,
+		public EventSender<MouseEvent> ,
+		public EventSender<HierarchyEvent> {
+	//=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AComponent> Ptr;
@@ -233,6 +232,10 @@ private:
 	void hide();
 protected:
 	//-------------------------------------------------------------------------
+	bool isTreeLocked();
+	//-------------------------------------------------------------------------
+	void checkTreeLock();
+	//-------------------------------------------------------------------------
 	template<class Event>
 	void dispatchEvent(const Event &ev) {
 		EventSender<Event>::notifyListeners(this, ev);
@@ -242,7 +245,7 @@ protected:
 	 * Fetches the root container somewhere higher up in the component
 	 * tree that contains this component.
 	 */
-	virtual	 AContainerPtr getRootContainer() const;
+	virtual AContainerPtr getRootContainer() const;
 	//-------------------------------------------------------------------------
 	virtual void clearMostRecentFocusOwnerOnHide();
 	//-------------------------------------------------------------------------
@@ -268,7 +271,8 @@ protected:
 	//-------------------------------------------------------------------------
 	// Should only be called while holding the tree lock
 	virtual int dispatchHierarchyEvents(HierarchyEvent::Type id,
-			AComponentPtr changed, AContainerPtr changedParent, long changeFlags);
+			AComponentPtr changed, AContainerPtr changedParent,
+			long changeFlags);
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -322,7 +326,7 @@ public:
 		return contains(Point2D(x, y));
 	}
 	//-------------------------------------------------------------------------
-	virtual Ptr getPtr() const {
+	Ptr getPtr() const {
 		return self.lock();
 	}
 	//-------------------------------------------------------------------------

@@ -38,10 +38,37 @@ protected:
 	//-------------------------------------------------------------------------
 	AContainer();
 	//-------------------------------------------------------------------------
+	void adjustDescendants(int num);
+	//-------------------------------------------------------------------------
+	// Should only be called while holding tree lock
+	void adjustDecendantsOnParent(int num);
+	//-------------------------------------------------------------------------
 private:
+	//--------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<int> descendantsCount;
+	//-------------------------------------------------------------------------
+	/**
+	 * Checks that the component
+	 * isn't supposed to be added into itself.
+	 */
+	//-------------------------------------------------------------------------
+	void checkAddToSelf(AComponent::Ptr c) const;
 	//-------------------------------------------------------------------------
 	Components components;
+protected:
+	/**
+	 * Layout manager for this container.
+	 * @see #doLayout
+	 * @see #setLayout
+	 * @see #getLayout
+	 */
+	ALayoutManager::Ptr layoutMgr;
 public:
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		Ptr s = boost::shared_dynamic_cast<AContainer>(self.lock());
+		return s;
+	}
 	//-------------------------------------------------------------------------
 	virtual ~AContainer();
 	//-------------------------------------------------------------------------
@@ -98,6 +125,7 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @param n
+	 * @note This method should be called under tree lock.
 	 * @return the nth component in this container.
 	 */
 	virtual AComponent::Ptr getComponent(size_t n) const;
@@ -117,6 +145,19 @@ public:
 	 * @return all the components in this container.
 	 */
 	virtual const Components & getComponents() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the z-order index of the component inside the container.
+	 * The higher a component is in the z-order hierarchy, the lower
+	 * its index.  The component with the lowest z-order index is
+	 * painted last, above all other child components.
+	 *
+	 * @param comp the component being queried
+	 * @return  the z-order index of the component; otherwise
+	 *          returns -1 if the component is <code>null</code>
+	 *          or doesn't belong to the container
+	 */
+	int getComponentZOrder(AComponent::Ptr comp);
 	//-------------------------------------------------------------------------
 	/**
 	 * Determines the insets of this container, which indicate the size of the

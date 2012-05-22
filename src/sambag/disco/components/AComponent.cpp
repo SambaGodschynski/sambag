@@ -9,6 +9,7 @@
 #include "AContainer.hpp"
 #include <sambag/com/Common.hpp> // for SAMBA_LOG_NOT_YET_IMPL
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
 // (\w+\(.*?\)) -> fname()
 // /\*\*(\R.*?)*\*/\R -> doxycomment
 
@@ -39,6 +40,18 @@ AComponent::AComponent() {
 //-----------------------------------------------------------------------------
 AComponent::~AComponent() {
 
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isTreeLocked() {
+	if (getTreeLock().try_lock())
+		return false;
+	return true;
+}
+//-----------------------------------------------------------------------------
+void AComponent::checkTreeLock() {
+	if (!isTreeLocked())
+		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
+				"This function should be called while holding treeLock");
 }
 //-----------------------------------------------------------------------------
 bool AComponent::contains(Point2D p) const {

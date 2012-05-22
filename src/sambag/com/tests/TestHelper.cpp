@@ -9,7 +9,9 @@
 #include "sambag/com/Helper.hpp"
 #include "boost/tuple/tuple.hpp"
 #include <cppunit/config/SourcePrefix.h>
+#include <boost/assign/std/vector.hpp>
 #include <list>
+#include <vector>
 #include <sstream>
 
 // Registers the fixture into the 'registry'
@@ -73,5 +75,16 @@ void TestHelper::testFromContainer() {
 	CPPUNIT_ASSERT_EQUAL( 0.5,  a );
 	CPPUNIT_ASSERT_EQUAL( 0.6,  b );
 	CPPUNIT_ASSERT_EQUAL( 0.0,  c );
+}
+//-----------------------------------------------------------------------------
+void TestHelper::testIndexOf() {
+	using namespace boost::assign;
+	using namespace sambag::com;
+	std::vector<int> v;
+	v += 1,2,3,4,5,6,7,8,9;
+	CPPUNIT_ASSERT_EQUAL((int)0, indexOf(v, 1));
+	CPPUNIT_ASSERT_EQUAL((int)8, indexOf(v, 9));
+	CPPUNIT_ASSERT_EQUAL((int)4, indexOf(v, 5));
+	CPPUNIT_ASSERT_EQUAL((int)-1, indexOf(v, 10));
 }
 } // namespace tests
