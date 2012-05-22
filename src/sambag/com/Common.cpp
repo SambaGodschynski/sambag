@@ -12,8 +12,9 @@ namespace sambag { namespace com {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void log(const std::string &str) {
+#ifdef SAMBAG_USE_LOG
 	using namespace std;
 	clog<<str<<endl;
+#endif
 }
-
 }}

@@ -5,29 +5,15 @@
  *      Author: Johannes Unger
  */
 
-#include <sambag/com/Exception.hpp>
 #ifndef SAMBAG_PROPERTYCHANGED_H
 #define SAMBAG_PROPERTYCHANGED_H
 
-namespace sambag {
-namespace com {
-namespace events {
+#include <sambag/com/Exception.hpp>
+#include <sambag/com/AbstractType.hpp>
+#include <utility>
+#include <string>
 
-//=============================================================================
-struct PropertyContainerBase {
-	virtual ~PropertyContainerBase() {
-	}
-};
-//=============================================================================
-template<typename T>
-struct PropertyContainer: public PropertyContainerBase {
-	T oldValue;
-	T newValue;
-	PropertyContainer(const T&o, const T&n) :
-		oldValue(o), newValue(n) {
-	}
-};
-
+namespace sambag { namespace com { namespace events {
 //=============================================================================
 /** 
  * @class PropertyChanged.
@@ -38,10 +24,8 @@ private:
 	//-------------------------------------------------------------------------
 	std::string name;
 	//-------------------------------------------------------------------------
-	PropertyContainerBase *content;
+	AbstractType::Ptr content;
 public:
-	//-------------------------------------------------------------------------
-	SAMBAG_EXCEPTION_CLASS(IncompatibleType);
 	//-------------------------------------------------------------------------
 	const std::string & getPropertyName() const {
 		return name;
@@ -55,9 +39,11 @@ public:
 	 */
 	template<typename T>
 	PropertyChanged(const std::string &name, const T &oldValue,
-			const T &newValue) :
-		name(name), content(NULL) {
-		content = new PropertyContainer<T> (oldValue, newValue);
+			const T &newValue) : name(name)
+	{
+		typedef std::pair<T, T> Content;
+		content =
+			ConcreteType<Content>::create(std::make_pair(oldValue, newValue));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -67,14 +53,13 @@ public:
 	 * @param newValue
 	 */
 	PropertyChanged(const std::string &name, const char *oldValue,
-			const char *newValue) :
-		name(name), content(NULL) {
-		content = new PropertyContainer<std::string> (oldValue, newValue);
-	}
-	//-------------------------------------------------------------------------
-	virtual ~PropertyChanged() {
-		if (content)
-			delete content;
+			const char *newValue) : name(name)
+	{
+		typedef std::pair<std::string, std::string> Content;
+		content =
+			ConcreteType<Content>::create(
+					std::make_pair(std::string(oldValue), std::string(newValue))
+		);
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -84,11 +69,10 @@ public:
 	 */
 	template<typename T>
 	void getOldValue(T &outVal) const {
-		typedef PropertyContainer<T> DestT;
-		DestT * cn = dynamic_cast<DestT*> (content);
-		if (!cn)
-			SAMBAG_THROW(IncompatibleType, "cannot convert newValue to T");
-		outVal = cn->oldValue;
+		typedef std::pair<T, T> Content;
+		Content cn;
+		get(content, cn);
+		outVal = cn.first;
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -98,15 +82,12 @@ public:
 	 */
 	template<typename T>
 	void getNewValue(T &outVal) const {
-		typedef PropertyContainer<T> DestT;
-		DestT * cn = dynamic_cast<DestT*> (content);
-		if (!cn)
-			SAMBAG_THROW(IncompatibleType, "cannot convert newValue to T");
-		outVal = cn->newValue;
+		typedef std::pair<T, T> Content;
+		Content cn;
+		get(content, cn);
+		outVal = cn.second;
 	}
 }; // PropertyChanged
-}
-}
-} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_PROPERTYCHANGED_H */

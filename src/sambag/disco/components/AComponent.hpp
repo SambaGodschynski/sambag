@@ -18,9 +18,14 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/events/PropertyChanged.hpp>
-#include "MouseEvent.hpp"
-#include "HierarchyEvent.hpp"
+#include "events/MouseEvent.hpp"
+#include "events/HierarchyEvent.hpp"
 #include "Forward.hpp"
+#include "IBorder.hpp"
+#include <boost/unordered_map.hpp>
+#include <sambag/com/AbstractType.hpp>
+#include <sstream>
+
 
 /**
  *  +++
@@ -29,7 +34,7 @@
  *  KeyStroke
  *  KeyEvent
  *  MouseEvent
- *  ComponentUI
+ *  AComponentUI
  *  LayoutManager
  *  FocusListener
  *  ---
@@ -44,9 +49,7 @@
  *  DropTarget
  */
 
-namespace sambag {
-namespace disco {
-namespace components {
+namespace sambag { namespace disco { namespace components {
 using namespace sambag::com::events;
 //=============================================================================
 /**
@@ -55,10 +58,13 @@ using namespace sambag::com::events;
  * displayed on the screen and that can interact with the user.
  */
 class AComponent: public IDrawable,
-		public EventSender<PropertyChanged> ,
-		public EventSender<MouseEvent> ,
-		public EventSender<HierarchyEvent> {
-	//=============================================================================
+		public EventSender<PropertyChanged>,
+		public EventSender<events::MouseEvent>,
+		public EventSender<events::HierarchyEvent> {
+//=============================================================================
+friend class RedrawManager;
+friend class RootPane;
+friend class AContainer;
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AComponent> Ptr;
@@ -66,6 +72,8 @@ public:
 	typedef boost::weak_ptr<AComponent> WPtr;
 	//-------------------------------------------------------------------------
 	typedef sambag::com::Mutex Lock;
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<std::string, AbstractType::Ptr> PropertyMap;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_NAME;
 	//-------------------------------------------------------------------------
@@ -80,6 +88,16 @@ public:
 	static const std::string PROPERTY_MINIMUMSIZE;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_FOCUSABLE;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_UI;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_BORDER;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ENABLED;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_CLIENTPROPERTY;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_SIZE;
 protected:
 	//-------------------------------------------------------------------------
 	/*
@@ -137,7 +155,22 @@ protected:
 	 * @see setEnabled
 	 */
 	sambag::com::ArithmeticWrapper<bool, true> enabled;
+	//-------------------------------------------------------------------------
+	/**
+	 * Whether or not autoscroll has been enabled.
+	 */
+	sambag::com::ArithmeticWrapper<bool, true> autoScrolls;
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<bool, false> uiSettedByUser;
+	//-------------------------------------------------------------------------
+	ui::AComponentUIPtr ui;
+	//-------------------------------------------------------------------------
+	IBorder::Ptr border;
+	//-------------------------------------------------------------------------
+	virtual std::string parameterString() const;
 private:
+	//-------------------------------------------------------------------------
+	PropertyMap propertyMap;
 	//-------------------------------------------------------------------------
 	/**
 	 * True when the object is valid. An invalid object needs to
@@ -177,7 +210,7 @@ private:
 	 * The locking object for component-tree and layout operations.
 	 * @see getTreeLock
 	 */
-	Lock treeLock;
+	mutable Lock treeLock;
 	//-------------------------------------------------------------------------
 	/*
 	 * In some cases using "this" as an object to synchronize by
@@ -185,15 +218,9 @@ private:
 	 * by a component object. For every such situation revealed we should
 	 * consider possibility of replacing "this" with the package private.
 	 */
-	Lock objectLock;
+	mutable Lock objectLock;
 	//-------------------------------------------------------------------------
-	Lock & getObjectLock();
-	//-------------------------------------------------------------------------
-	/**
-	 * Minimum size.
-	 * (This field perhaps should have been transient).
-	 */
-	Dimension minSize;
+	Lock & getObjectLock() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Whether or not setMinimumSize has been invoked with a non-null value.
@@ -201,20 +228,9 @@ private:
 	sambag::com::ArithmeticWrapper<bool> minSizeSet;
 	//-------------------------------------------------------------------------
 	/**
-	 * Preferred size.
-	 * (This field perhaps should have been transient).
-	 */
-	Dimension prefSize;
-	//-------------------------------------------------------------------------
-	/**
 	 * Whether or not setPreferredSize has been invoked with a non-null value.
 	 */
 	sambag::com::ArithmeticWrapper<bool> prefSizeSet;
-	//-------------------------------------------------------------------------
-	/**
-	 * Maximum size
-	 */
-	Dimension maxSize;
 	//-------------------------------------------------------------------------
 	/**
 	 * Whether or not setMaximumSize has been invoked with a non-null value.
@@ -232,13 +248,58 @@ private:
 	void hide();
 protected:
 	//-------------------------------------------------------------------------
+	/**
+	 * Gets ComponentUI by look and feel. Every concrete Component needs
+	 * to impl. this method because the look and feel component relation
+	 * is type dependent.
+	 *
+	 * @param c
+	 */
+	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * installs specific component ui. Every Component has to impl. its own version.
+	 *
+	 * @param c
+	 */
+	virtual void installUI(ui::AComponentUIPtr cui);
+	//-------------------------------------------------------------------------
+	virtual void installLookAndFeel(ui::ALookAndFeelPtr laf);
+	//-------------------------------------------------------------------------
+	/**
+	 * Maximum size
+	 */
+	Dimension maxSize;
+	//-------------------------------------------------------------------------
+	/**
+	 * Minimum size.
+	 * (This field perhaps should have been transient).
+	 */
+	Dimension minSize;
+	//-------------------------------------------------------------------------
+	/**
+	 * Preferred size.
+	 * (This field perhaps should have been transient).
+	 */
+	Dimension prefSize;
+	//-------------------------------------------------------------------------
 	bool isTreeLocked();
 	//-------------------------------------------------------------------------
 	void checkTreeLock();
 	//-------------------------------------------------------------------------
-	template<class Event>
-	void dispatchEvent(const Event &ev) {
-		EventSender<Event>::notifyListeners(this, ev);
+	template<class Event, class _EventSender>
+	void dispatchEvent(const Event &ev, _EventSender *sender) {
+		sender->EventSender<Event>::notifyListeners(sender, ev);
+	}
+	//-------------------------------------------------------------------------
+	template <typename ValueType>
+	void firePropertyChanged(const std::string &name,
+			const ValueType &oldValue, const ValueType &newValue)
+	{
+		dispatchEvent(
+			sambag::com::events::PropertyChanged(name, oldValue, newValue),
+			this
+		);
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -256,7 +317,7 @@ protected:
 	 */
 	virtual void transferFocus(bool clearOnFailure = false);
 	//-------------------------------------------------------------------------
-	virtual void repaintParentIfNeeded(const Rectangle &r);
+	virtual void redrawParentIfNeeded(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	/**
 	 * Invalidates the parent of this component if any.
@@ -265,15 +326,56 @@ protected:
 	virtual void invalidateParent();
 	//-------------------------------------------------------------------------
 	/**
-	 * Invalidates the component unless it is already invalid.
+	 * Invoked from putClientProperty.  This is provided for subclasses.
+	 * @param key
+	 * @param oldValue
+	 * @param newValue
 	 */
-	virtual void invalidateIfValid();
+	virtual void clientPropertyChanged(const std::string &key,
+			AbstractType::Ptr oldValue, AbstractType::Ptr newValue) {}
+
+protected: // TODO: remove mangeling
 	//-------------------------------------------------------------------------
-	// Should only be called while holding the tree lock
-	virtual int dispatchHierarchyEvents(HierarchyEvent::Type id,
+	virtual void __processMouseEvent_(const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return
+	 */
+	virtual int __countHierarchyMembers_() const {
+		return 1;
+	}
+	//-------------------------------------------------------------------------
+	void __updateParent_(AContainerPtr cn) {
+		parent = cn;
+	}
+	//-------------------------------------------------------------------------
+	virtual int __dispatchHierarchyEvents_(events::HierarchyEvent::Type id,
 			AComponentPtr changed, AContainerPtr changedParent,
 			long changeFlags);
-public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Invalidates the component unless it is already invalid.
+	 */
+	virtual void __invalidateIfValid_();
+public: /* END should be protected  */
+	//-------------------------------------------------------------------------
+	bool isUiSettedByUser() const {
+		return uiSettedByUser;
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * installs specific component ui.
+	 *
+	 * @param c
+	 */
+	virtual void setUserUI (ui::AComponentUIPtr cui);
+	//-------------------------------------------------------------------------
+	/**
+	 * removes component ui.
+	 *
+	 * @param c
+	 */
+	virtual void removeUserUI ();
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentY()</code>.
@@ -333,6 +435,14 @@ public:
 	virtual ~AComponent();
 	//-------------------------------------------------------------------------
 	virtual const Rectangle & getBounds() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * implements IDrawable
+	 * @return
+	 */
+	virtual Rectangle getBoundingBox() const {
+		return getBounds();
+	}
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const;
 	//-------------------------------------------------------------------------
@@ -434,6 +544,16 @@ public:
 	virtual ActionMap::Ptr getActionMap() const;
 	//-------------------------------------------------------------------------
 	/**
+	 * Returns the top-level ancestor of this component,
+	 * or <code>null</code> if this component has not
+	 * been added to any container.
+	 *
+	 * @return the top-level <code>Container</code> that this component is in,
+	 *          or <code>null</code>
+	 */
+	virtual RootPanePtr getTopLevelContainer() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * @return the autoscrolls property.
 	 */
 	virtual bool getAutoscrolls() const;
@@ -444,8 +564,8 @@ public:
 	 * components along their baseline. A return value less than 0 indicates this
 	 * component does not have a reasonable baseline and that LayoutManagers
 	 * should not align this component on its baseline.
-	 * This method calls into the ComponentUI method of the same name.
-	 * If this component does not have a ComponentUI -1 will be returned.
+	 * This method calls into the AComponentUI method of the same name.
+	 * If this component does not have a AComponentUI -1 will be returned.
 	 * If a value >= 0 is returned, then the component has a valid baseline
 	 * for any size >= the minimum size and getBaselineResizeBehavior can be
 	 * used to determine how the baseline changes with size.
@@ -489,7 +609,7 @@ public:
 	/**
 	 * @return the Lock (mutex) object
 	 */
-	virtual Lock & getTreeLock();
+	virtual Lock & getTreeLock() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return whether or not paint messages received.
@@ -612,19 +732,23 @@ public:
 	 * Draw this component
 	 * @param
 	 */
-	virtual void draw(IDrawContext::Ptr context) {
-	}
+	virtual void draw(IDrawContext::Ptr context);
 	//-------------------------------------------------------------------------
 	/**
 	 * Draws this component and all of its subcomponents.
 	 * @param context
 	 */
-	virtual void drawAll(IDrawContext::Ptr context);
+	virtual void drawChildren(IDrawContext::Ptr context);
 	//-------------------------------------------------------------------------
 	/**
 	 *  Redraws this component.
 	 */
 	virtual void redraw();
+	//-------------------------------------------------------------------------
+	/**
+	 *  Redraws this component.
+	 */
+	virtual void redraw(const Rectangle &r);
 protected:
 	//-------------------------------------------------------------------------
 	virtual AContainerPtr getContainer() const {
@@ -664,7 +788,18 @@ protected:
 	 *          <code>false</code> otherwise
 	 */
 	virtual bool isRecursivelyVisible() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the graphics object used to paint this component.
+	 * If <code>DebugGraphics</code> is turned on we create a new
+	 * <code>DebugGraphics</code> object if necessary.
+	 * Otherwise we just configure the
+	 * specified graphics object's foreground and font.
+	 */
+	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
+	//-------------------------------------------------------------------------
+	AContainerPtr getValidateRoot() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Prompts the layout manager to lay out this component.
@@ -678,20 +813,6 @@ public:
 	 *  AComponent's top-level ancestor become the focused Window.
 	 */
 	virtual void requestFocus();
-	//-------------------------------------------------------------------------
-	/**
-	 * Repaints the specified rectangle of this component.
-	 * @param     x    the <i>x</i> coordinate
-	 * @param     y    the <i>y</i> coordinate
-	 * @param     width    the width
-	 * @param     height   the height
-	 * @see       #update(Graphics)
-	 */
-	virtual void repaint(const Rectangle &r);
-	//-------------------------------------------------------------------------
-	virtual void repaint() {
-		repaint(bounds);
-	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Revalidates the component hierarchy up to the nearest validate root.
@@ -805,8 +926,8 @@ public:
 	 * Sets the border of this component.
 	 * @param br
 	 */
-	virtual void setBorder(IBorder::Ptr br) const;
-	//-------------------------------------------------------------------------
+	virtual void setBorder(IBorder::Ptr br);
+	//------------------------------------------------------------------------
 	/**
 	 * Sets the background color of this component.
 	 * The background color affects each component differently and the parts
@@ -881,10 +1002,43 @@ public:
 	virtual void update(IDrawContext::Ptr cn) {
 		draw(cn);
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the value of the property with the specified key.  Only
+	 * properties added with <code>putClientProperty</code> will return
+	 * a non-<code>null</code> value.
+	 *
+	 * @param key the being queried
+	 * @return the value of this property or <code>null</code>
+	 * @see #putClientProperty
+	 */
+	AbstractType::Ptr getClientProperty(const std::string &key) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Adds an arbitrary key/value "client property" to this component.
+	 * <p>
+	 * The <code>get/putClientProperty</code> methods provide access to
+	 * a small per-instance hashtable. Callers can use get/putClientProperty
+	 * to annotate components that were created by another module.
+	 * For example, a
+	 * layout manager might store per child constraints this way. For example:
+	 * <pre>
+	 * componentA.putClientProperty("to the left of", componentB);
+	 * </pre>
+	 * If value is <code>null</code> this method will remove the property.
+	 * Changes to client properties are reported with
+	 * <code>PropertyChange</code> events.
+	 * The name of the property (for the sake of PropertyChange
+	 * events) is <code>key.toString()</code>.
+	 * <p>
+	 * @param key the new client property key
+	 * @param value the new client property value; if <code>null</code>
+	 *          this method will remove the property
+	 * @see #getClientProperty
+	 * @see #addPropertyChangeListener
+	 */
+	void putClientProperty(const std::string &key, AbstractType::Ptr value);
 };
-
-}
-}
-}
+}}}
 
 #endif /* COMPONENT_HPP_ */

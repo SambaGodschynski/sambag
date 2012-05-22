@@ -253,6 +253,7 @@ void TestCairoDrawContext::testClip() {
 	context->stroke();
 	context->rect( Rectangle( Point2D(150., 120.), 105., 15.) );
 	context->clip();
+	CPPUNIT_ASSERT(Rectangle( Point2D(150., 120.), 105., 15.)==context->clipExtends());
 	Font font;
 	font.size = 34.;
 	font.fontFace = "arial";

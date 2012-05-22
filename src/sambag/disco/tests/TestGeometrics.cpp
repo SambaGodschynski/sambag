@@ -20,7 +20,39 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestGeometrics::testRectangle() {
 	using namespace sambag::disco;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<dimension
 	Rectangle r;
+	r = Rectangle(Point2D(0.,0.), Point2D(10., 10.));
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<xchange min and max corner.
+	r = Rectangle(Point2D(10.,10.), Point2D(0., 0.));
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<xchange min and max corner.
+	r = Rectangle(Point2D(10.,10.), Point2D(0., 0.));
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<check handling of negative w/h
+	r = Rectangle(Point2D(0.,10.), Point2D(10., 0.));
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<check handling of negative w/h constructor: p,w,h
+	r = Rectangle(Point2D(10.,10.), -10., -10.);
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<check handling of negative w/h constructor: x,y,w,h
+	r = Rectangle(10.,10., -10., -10.);
+	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
+	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
+	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<check storing coordinate type
+	r = Rectangle();
 	Coordinate c = 20.;
 	c.type = Coordinate::CM;
 	r.setWidth(c);

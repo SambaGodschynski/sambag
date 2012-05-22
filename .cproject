@@ -33,6 +33,7 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
+									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
 									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
@@ -60,6 +61,7 @@
 									<listOptionValue builtIn="false" value="boost_regex"/>
 									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="cairo"/>
+									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="ticppd"/>
 									<listOptionValue builtIn="false" value="cppunit"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>
@@ -67,6 +69,7 @@
 								</option>
 								<option id="gnu.cpp.link.option.paths.242609843" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
+									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
 								</option>
 								<option id="gnu.cpp.link.option.other.285420063" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
@@ -80,6 +83,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -254,7 +260,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -337,7 +343,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -504,6 +510,7 @@
 					</profile>
 				</scannerConfigBuildInfo>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.release.1491884157">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.1491884157" moduleId="org.eclipse.cdt.core.settings" name="Release">
@@ -529,13 +536,13 @@
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.296040418" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.725026557" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
+									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.757212955" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="BOOST_FILESYSTEM_VERSION=2"/>
 									<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -560,6 +567,7 @@
 									<listOptionValue builtIn="false" value="cppunit"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>
 									<listOptionValue builtIn="false" value="boost_signals"/>
+									<listOptionValue builtIn="false" value="boost_thread"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1020983732" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
@@ -575,6 +583,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -749,7 +760,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -832,7 +843,7 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
-				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.debug.1378312401;cdt.managedbuild.config.gnu.exe.debug.1378312401.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746;cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956">
+				<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.exe.release.1491884157;cdt.managedbuild.config.gnu.exe.release.1491884157.;cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1399940533;cdt.managedbuild.tool.gnu.cpp.compiler.input.1514310335">
 					<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 					<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 						<buildOutputProvider>
@@ -999,6 +1010,7 @@
 					</profile>
 				</scannerConfigBuildInfo>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">

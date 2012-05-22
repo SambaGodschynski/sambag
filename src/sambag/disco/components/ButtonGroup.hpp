@@ -1,12 +1,12 @@
 /*
- * MouseEvent.hpp
+ * ButtonGroup.hpp
  *
- *  Created on: Mon May 21 15:06:00 2012
+ *  Created on: Sun Jun  3 17:51:47 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_MOUSEEVENT_H
-#define SAMBAG_MOUSEEVENT_H
+#ifndef SAMBAG_BUTTONGROUP_H
+#define SAMBAG_BUTTONGROUP_H
 
 #include <boost/shared_ptr.hpp>
 
@@ -14,15 +14,17 @@ namespace sambag { namespace disco { namespace components {
 
 //=============================================================================
 /** 
-  * @class MouseEvent.
+  * @class ButtonGroup.
   */
-class MouseEvent {
+class ButtonGroup {
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<ButtonGroup> Ptr;
 protected:
 private:
 public:
-}; // MouseEvent
+}; // ButtonGroup
 }}} // namespace(s)
 
-#endif /* SAMBAG_MOUSEEVENT_H */
+#endif /* SAMBAG_BUTTONGROUP_H */

@@ -9,6 +9,8 @@
 #define SAMBAG_IBORDER_H
 
 #include <boost/shared_ptr.hpp>
+#include "Forward.hpp"
+#include <sambag/disco/IDrawContext.hpp>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -21,9 +23,34 @@ class IBorder {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IBorder> Ptr;
-protected:
-private:
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the insets of the border.
+	 * @param c
+	 * @return
+	 */
+	virtual Insets getBorderInsets(AComponentPtr c) = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns whether or not the border is opaque.
+	 * @return
+	 */
+	virtual bool isBorderOpaque() = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * Paints the border for the specified component with the specified
+	 * position and size.
+	 * @param c
+	 * @param g
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
+	virtual void paintBorder(AComponentPtr c,
+			IDrawContext::Ptr g, const Rectangle &r) = 0;
+
 }; // IBorder
 }}} // namespace(s)
 

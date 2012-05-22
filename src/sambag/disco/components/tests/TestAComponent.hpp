@@ -9,13 +9,15 @@
 #define TESTCOMPONENT_HPP_
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <sambag/disco/components/Forward.hpp>
+
 
 namespace tests {
 //=============================================================================
-class TestComponent: public CPPUNIT_NS::TestFixture {
+class TestAComponent: public CPPUNIT_NS::TestFixture {
 	//=============================================================================
 private:
-	CPPUNIT_TEST_SUITE( TestComponent );
+	CPPUNIT_TEST_SUITE( TestAComponent );
 	CPPUNIT_TEST(test_contains);
 	CPPUNIT_TEST(test_getPtr);
 	CPPUNIT_TEST(test_bounds);
@@ -49,7 +51,11 @@ private:
 	CPPUNIT_TEST(test_transferFocus);
 	CPPUNIT_TEST(test_transferFocusBackward);
 	CPPUNIT_TEST(test_validate);
+	CPPUNIT_TEST(testPropertyChanged);
+	CPPUNIT_TEST(testPutClientProperty);
 	CPPUNIT_TEST_SUITE_END();
+private:
+	sambag::disco::components::AComponentPtr comp;
 public:
 	void setUp();
 	void tearDown();
@@ -86,6 +92,8 @@ public:
 	void test_transferFocus();
 	void test_transferFocusBackward();
 	void test_validate();
+	void testPropertyChanged();
+	void testPutClientProperty();
 
 };
 

@@ -19,6 +19,7 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestPropertyChanged::testCreateAndGetter() {
 	using namespace sambag::com::events;
+	using namespace sambag::com;
 	{
 		PropertyChanged p01("p01", "0string", "1string");
 		std::string o, n;
@@ -33,12 +34,10 @@ void TestPropertyChanged::testCreateAndGetter() {
 		CPPUNIT_ASSERT_EQUAL((int)20, n);
 	} {
 		PropertyChanged p02("p02", 10, 20);
-		std::string o;
-		CPPUNIT_ASSERT_THROW(p02.getOldValue(o), PropertyChanged::IncompatibleType);
-	} {
-		PropertyChanged p02("p02", 10.f, 20.f);
-		int o;
-		CPPUNIT_ASSERT_THROW(p02.getOldValue(o), PropertyChanged::IncompatibleType);
+		std::string o = "failed";
+		p02.getOldValue(o);
+		// PropertyChanged's pair init value will be returned
+		CPPUNIT_ASSERT_EQUAL(std::string(""), o);
 	}
 }
 

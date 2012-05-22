@@ -8,9 +8,9 @@
 #ifndef SAMBAG_HIERARCHYEVENT_H
 #define SAMBAG_HIERARCHYEVENT_H
 
-#include "Forward.hpp"
+#include <sambag/disco/components/Forward.hpp>
 
-namespace sambag { namespace disco { namespace components {
+namespace sambag { namespace disco { namespace components { namespace events {
 //=============================================================================
 /** 
   * @class HierachyEvent.
@@ -57,6 +57,6 @@ struct HierarchyEvent {
 	{
 	}
 }; // HierarchyEvent
-}}} // namespace(s)
+}}}} // namespace(s)
 
 #endif /* SAMBAG_HIERACHYEVENT_H */

@@ -11,17 +11,20 @@
 #include <boost/thread.hpp>
 
 namespace sambag { namespace com {
-	typedef boost::timed_mutex Mutex;
+	typedef boost::recursive_timed_mutex Mutex;
 	struct DeadLockException {};
+	inline void wait(long sec) {
+		boost::this_thread::sleep(boost::posix_time::seconds(sec));
+	}
 }} // namespaces
 
 #define SAMBAG_DEADLOCK_EXCEPTION sambag::com::DeadLockException()
 #define SAMBAG_LOCK_TIMEOUT 1
 
-#define SAMBAG_TRY_TO_LOCK_TIMED(mutex) boost::unique_lock<boost::timed_mutex> __lock( (mutex), boost::try_to_lock);\
+#define SAMBAG_TRY_TO_LOCK_TIMED(mutex) boost::unique_lock<sambag::com::Mutex> __lock( (mutex), boost::try_to_lock);\
 	if (!__lock.owns_lock()) { __lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(SAMBAG_LOCK_TIMEOUT)); }\
 	if ( !__lock.owns_lock() ) throw SAMBAG_DEADLOCK_EXCEPTION;
-#define SAMBAG_TRY_TO_LOCK_TIMED2(mutex,timeout) boost::unique_lock<boost::timed_mutex> __lock( (mutex), boost::try_to_lock);\
+#define SAMBAG_TRY_TO_LOCK_TIMED2(mutex,timeout) boost::unique_lock<sambag::com::Mutex> __lock( (mutex), boost::try_to_lock);\
 	if (!__lock.owns_lock()) { __lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(timeout)); }\
 	if ( !__lock.owns_lock() ) throw SAMBAG_DEADLOCK_EXCEPTION;
 

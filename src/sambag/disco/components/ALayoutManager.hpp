@@ -10,14 +10,9 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/Geometry.hpp>
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
-
-class AContainer;
-class AComponent;
-typedef boost::shared_ptr<AContainer> AContainerPtr;
-typedef boost::shared_ptr<AComponent> AComponentPtr;
-
 //=============================================================================
 /** 
   * @class ALayoutManager.
@@ -47,13 +42,26 @@ public:
 	virtual ~ALayoutManager();
 	//-------------------------------------------------------------------------
 	/**
-	 * If the layout manager uses a per-component string, adds the component
-	 * comp to the layout, associating it with the string specified by name.
-	 * @param name
+	 *
+	 * @param comp
+	 * @param c
+	 */	template<class LayoutMng, class Constraint>
+	void addLayoutComponent(AComponentPtr comp, const Constraint &c) {
+		boost::shared_ptr<LayoutMng> lm =
+				boost::shared_dynamic_cast<LayoutMng>(getPtr());
+		if (!lm) {
+			// layout manager dosen't match add without constraint
+			addLayoutComponent(comp);
+			return;
+		}
+		lm->LayoutMng::addLayoutComponentImpl(comp, c);
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 *
 	 * @param comp
 	 */
-	virtual void
-	addLayoutComponent(const std::string & name, AComponentPtr comp) = 0;
+	 virtual void addLayoutComponent(AComponentPtr comp) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Lays out the specified container.
@@ -67,7 +75,19 @@ public:
 	 * @param parent
 	 * @return
 	 */
-	virtual Dimension minimumLayoutSize(AContainerPtr parent) = 0;
+	virtual Dimension minimumLayoutSize(AContainerPtr parent) {
+		return NULL_DIMENSION;
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Calculates the maximum size dimensions for the specified container,
+	 * given the components it contains.
+	 * @param parent
+	 * @return
+	 */
+	virtual Dimension maximumLayoutSize(AContainerPtr parent) {
+		return NULL_DIMENSION;
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Calculates the preferred size dimensions for the specified container,
@@ -75,13 +95,31 @@ public:
 	 * @param parent
 	 * @return
 	 */
-	virtual Dimension preferredLayoutSize(AContainerPtr parent) = 0;
+	virtual Dimension preferredLayoutSize(AContainerPtr parent) {
+		return NULL_DIMENSION;
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Removes the specified component from the layout.
 	 * @param comp
 	 */
-	virtual void removeLayoutComponent(AComponentPtr comp) = 0;
+	virtual void removeLayoutComponent(AComponentPtr comp) {}
+	//-------------------------------------------------------------------------
+	/**
+	 *
+	 * @param comp
+	 */
+	virtual void invalidateLayout(AContainerPtr target) {}
+	//-----------------------------------------------------------------------------
+	virtual Coordinate getLayoutAlignmentY(AContainerPtr target) {
+		return Coordinate(NULL_NUMBER);
+	}
+	//-----------------------------------------------------------------------------
+	virtual Coordinate getLayoutAlignmentX(AContainerPtr target) {
+		return Coordinate(NULL_NUMBER);
+	}
+	//-----------------------------------------------------------------------------
+	virtual std::string toString() const = 0;
 
 }; // ALayoutManager
 }}} // namespace(s)

@@ -17,10 +17,12 @@ class TestThread : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestThread );
-	CPPUNIT_TEST_EXCEPTION(testSynchronized, sambag::com::DeadLockException);
+	CPPUNIT_TEST(testSynchronized);
+	CPPUNIT_TEST(testSynchronizedRecursively);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSynchronized();
+	void testSynchronizedRecursively();
 };
 
 } // namespace

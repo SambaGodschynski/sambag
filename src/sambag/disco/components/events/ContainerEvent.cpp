@@ -1,15 +1,15 @@
 /*
- * MouseEvent.cpp
+ * ContainerEvent.cpp
  *
- *  Created on: Mon May 21 15:06:00 2012
+ *  Created on: Tue May 22 15:06:09 2012
  *      Author: Johannes Unger
  */
 
-#include "MouseEvent.hpp"
+#include "ContainerEvent.hpp"
 
 namespace sambag { 
 //=============================================================================
-//  Class MouseEvent
+//  Class ContainerEvent
 //=============================================================================
 //-----------------------------------------------------------------------------
 

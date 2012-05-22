@@ -66,6 +66,12 @@ inline Point2D maximize(const Point2D &a, const Point2D &b) {
 inline Point2D getNullPoint2D() {
 	return Point2D(NULL_NUMBER, NULL_NUMBER);
 }
+//=============================================================================
+inline std::ostream & operator << (std::ostream &os, const Point2D &p)
+{
+	os << "Point2D(" << p.x() << ", " << p.y() << ")";
+	return os;
+}
 
 //=============================================================================
 /**
@@ -143,6 +149,10 @@ public:
 
 	}
 	//-------------------------------------------------------------------------
+	Dimension getDimension() const {
+		return Dimension(getWidth(), getHeight());
+	}
+	//-------------------------------------------------------------------------
 	Coordinate getHeight() const {
 		Point2D result = max_corner();
 		geometry::subtract_point(result, min_corner());
@@ -162,7 +172,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Rectangle(Point2D x0 = Point2D(0, 0), Point2D x1 = Point2D(0, 0)) :
-		Base(x0, x1) {
+		Base(minimize(x0, x1), maximize(x0, x1))
+	{
 	}
 	//-------------------------------------------------------------------------
 	Rectangle(Point2D _x0, const Coordinate &width, const Coordinate &height)
@@ -170,14 +181,14 @@ public:
 	{
 		Point2D x0(_x0), x1(width, height);
 		geometry::add_point(x1, x0);
-		*this = Base(x0, x1);
+		*this = Rectangle(x0, x1);
 	}
 	//-------------------------------------------------------------------------
 	Rectangle(const Coordinate &x, const Coordinate &y, const Coordinate &width,
 			const Coordinate &height) {
 		Point2D x0(x, y), x1(width, height);
 		geometry::add_point(x1, x0);
-		*this = Base(x0, x1);
+		*this = Rectangle(x0, x1);
 	}
 	//-------------------------------------------------------------------------
 	bool operator==(const Rectangle &b) const {
@@ -189,13 +200,20 @@ public:
 	}
 };
 //=============================================================================
+inline std::ostream & operator << (std::ostream &os, const Rectangle &r)
+{
+	os << "Rectangle(" << r.x0() << ", " << r.x1() << ")";
+	return os;
+}
+
+//=============================================================================
 /**
  * @class Insets.
  * An Insets object is a representation of the borders of a container.
  * It specifies the space that a container must leave at each of its edges.
  * The space can be a border, a blank space, or a title.
  */
-class Insets : Rectangle {
+class Insets : public Rectangle {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -246,8 +264,7 @@ public:
 inline Rectangle getNullRectangle() {
 	return Rectangle(NULL_NUMBER, NULL_NUMBER, NULL_NUMBER, NULL_NUMBER);
 }
-}
-} // namespaces
+}} // namespaces
 
 
 #endif /* GEOMETRY_HPP_ */

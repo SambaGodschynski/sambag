@@ -12,10 +12,9 @@
 #include "AComponent.hpp"
 #include "ALayoutManager.hpp"
 #include <vector>
+#include "events/ContainerEvent.hpp"
 
-namespace sambag {
-namespace disco {
-namespace components {
+namespace sambag { namespace disco { namespace components {
 
 //=============================================================================
 /** 
@@ -27,13 +26,16 @@ namespace components {
  * to a container, it will be added to the end of the list (and hence to the
  * bottom of the stacking order).
  */
-class AContainer: public AComponent {
-	//=============================================================================
+class AContainer: public AComponent,
+		public EventSender<events::ContainerEvent> {
+//=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AContainer> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector<AComponent::Ptr> Components;
+	//-------------------------------------------------------------------------
+	static const bool descendUnconditionallyWhenValidating = false;
 protected:
 	//-------------------------------------------------------------------------
 	AContainer();
@@ -43,7 +45,18 @@ protected:
 	// Should only be called while holding tree lock
 	void adjustDecendantsOnParent(int num);
 	//-------------------------------------------------------------------------
+	/**
+	 * installs specific component ui on sub components.
+	 * @param c
+	 */
+	virtual void installLookAndFeel (ui::ALookAndFeelPtr laf);
 private:
+	//-------------------------------------------------------------------------
+	void retargetMouseEvent(AComponentPtr c, events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	void dispatchAddEvents(AComponent::Ptr comp);
+	//--------------------------------------------------------------------------
+	void addComponent(AComponent::Ptr comp, int index = -1);
 	//--------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<int> descendantsCount;
 	//-------------------------------------------------------------------------
@@ -55,7 +68,23 @@ private:
 	void checkAddToSelf(AComponent::Ptr c) const;
 	//-------------------------------------------------------------------------
 	Components components;
+	//-------------------------------------------------------------------------
+	Dimension getMaximumSizeAlt();
+	//-------------------------------------------------------------------------
+	Dimension getMinimumSizeAlt();
+	//-------------------------------------------------------------------------
+	Dimension getPreferredSizeAlt();
+	//-------------------------------------------------------------------------
+	AComponentPtr lastMouseTarget;
+	//-------------------------------------------------------------------------
+	void trackMouseEnterEvents(AComponentPtr target,
+			const events::MouseEvent &ev);
 protected:
+	//-------------------------------------------------------------------------
+	virtual void __processMouseEvent_(const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	virtual std::string parameterString() const;
+	//-------------------------------------------------------------------------
 	/**
 	 * Layout manager for this container.
 	 * @see #doLayout
@@ -63,6 +92,65 @@ protected:
 	 * @see #getLayout
 	 */
 	ALayoutManager::Ptr layoutMgr;
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 */
+	virtual int __countHierarchyMembers_() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 */
+	virtual int __dispatchHierarchyEvents_(events::HierarchyEvent::Type id,
+			AComponentPtr changed, AContainerPtr changedParent,
+			long changeFlags);
+	//-------------------------------------------------------------------------
+	/**
+	 * Invalidates the parent of this component if any.
+	 * This method MUST BE invoked under the TreeLock.
+	 */
+	virtual void invalidateParent();
+	//-------------------------------------------------------------------------
+	/**
+	 * Recursively descends the container tree and invalidates all
+	 * contained components.
+	 */
+	virtual void invalidateTree();
+	//-------------------------------------------------------------------------
+	virtual void drawChildren(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	enum ObscuredState {
+		NOT_OBSCURED, COMPLETELY_OBSCURED, PARTIALLY_OBSCURED
+	};
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns whether or not the region of the specified component is
+	 * obscured by a sibling.
+	 *
+	 * @return NOT_OBSCURED if non of the siblings above the Component obscure
+	 *         it, COMPLETELY_OBSCURED if one of the siblings completely
+	 *         obscures the Component or PARTIALLY_OBSCURED if the Comonent is
+	 *         only partially obscured.
+	 */
+	ObscuredState
+	getObscuredState(int compIndex, const Rectangle &rect) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * If the specified rectangle is completely obscured by any of this
+	 * component's opaque children then returns true.  Only direct children
+	 * are considered, more distant descendants are ignored.  A
+	 * <code>JComponent</code> is opaque if
+	 * <code>JComponent.isOpaque()</code> returns true, other lightweight
+	 * components are always considered transparent, and heavyweight components
+	 * are always considered opaque.
+	 *
+	 * @param x  x value of specified rectangle
+	 * @param y  y value of specified rectangle
+	 * @param width  width of specified rectangle
+	 * @param height height of specified rectangle
+	 * @return true if the specified rectangle is obscured by an opaque child
+	 */
+	virtual bool rectangleIsObscured(const Rectangle &r);
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
@@ -83,6 +171,10 @@ public:
 	 * @return the component argument
 	 */
 	virtual AComponent::Ptr add(AComponent::Ptr comp, int index = -1);
+	//-------------------------------------------------------------------------
+	template<class LayoutManager, class Constraint>
+	AComponent::Ptr add(AComponent::Ptr comp, const Constraint &c,
+			int index = -1);
 	//-------------------------------------------------------------------------
 	/**
 	 *  Causes this container to lay out its components.
@@ -157,7 +249,7 @@ public:
 	 *          returns -1 if the component is <code>null</code>
 	 *          or doesn't belong to the container
 	 */
-	int getComponentZOrder(AComponent::Ptr comp);
+	int getComponentZOrder(AComponent::Ptr comp) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Determines the insets of this container, which indicate the size of the
@@ -171,18 +263,18 @@ public:
 	/**
 	 * @return the maximum size of this component.
 	 */
-	virtual Dimension getMaximumSize() const;
+	virtual Dimension getMaximumSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the mininimum size of this component.
 	 */
 	//-------------------------------------------------------------------------
-	virtual Dimension getMinimumSize() const;
+	virtual Dimension getMinimumSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the preferred size of this component.
 	 */
-	virtual Dimension getPreferredSize() const;
+	virtual Dimension getPreferredSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * Checks if the component is contained in the component hierarchy of
@@ -218,6 +310,14 @@ public:
 	virtual bool isValidateRoot() const;
 	//-------------------------------------------------------------------------
 	/**
+	 * Invalidates this component. This component and all parents above
+	 * it are marked as needing to be laid out. This method can be called
+	 * often, so it needs to execute quickly.
+	 * @override
+	 */
+	virtual void invalidate();
+	//-------------------------------------------------------------------------
+	/**
 	 * Draw this component
 	 * @param
 	 */
@@ -248,6 +348,15 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setLayout(ALayoutManager::Ptr mgr);
 	//-------------------------------------------------------------------------
+	AComponentPtr findComponentAt(const Point2D &p,
+			bool includeSelf = true);
+	//-------------------------------------------------------------------------
+	AComponentPtr findComponentAt(const Coordinate &x, const Coordinate &y,
+			bool includeSelf = true)
+	{
+		return findComponentAt(Point2D(x,y), includeSelf);
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * Transfers the focus to the previous component,
 	 * as though this AComponent were the focus owner.
@@ -271,9 +380,41 @@ public:
 	 * subtrees marked as needing it (those marked as invalid).
 	 */
 	virtual void validateTree();
+protected:
+	//-------------------------------------------------------------------------
+	virtual void computeVisibleRect(AContainer::Ptr, Rectangle &out) const;
+public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the <code>Component</code>'s "visible rect rectangle" -  the
+	 * intersection of the visible rectangles for this component
+	 * and all of its ancestors.  The return value is stored in
+	 * <code>visibleRect</code>.
+	 *
+	 * @param visibleRect a <code>Rectangle</code> computed as the
+	 *          intersection of all visible rectangles for this
+	 *          component and all of its ancestors -- this is the return
+	 *          value for this method
+	 * @see #getVisibleRect
+	 */
+	virtual void computeVisibleRect(Rectangle &out) const {
+		computeVisibleRect(getPtr(), out);
+	}
 }; // AContainer
+//=============================================================================
+template<class LayoutManager, class Constraint>
+AComponent::Ptr AContainer::add(AComponent::Ptr comp, const Constraint &c,
+		int index) {
+	if (!comp)
+		return AComponent::Ptr();
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		addComponent(comp, index);
+		if (layoutMgr)
+			layoutMgr->addLayoutComponent<LayoutManager> (comp, c);
+	SAMBAG_END_SYNCHRONIZED
+	dispatchAddEvents(comp);
+	return comp;
 }
-}
-} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_ACONTAINER_H */

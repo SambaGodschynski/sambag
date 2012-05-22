@@ -7,15 +7,19 @@
 
 #include "AComponent.hpp"
 #include "AContainer.hpp"
-#include <sambag/com/Common.hpp> // for SAMBA_LOG_NOT_YET_IMPL
+#include <sambag/com/Common.hpp>
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
+#include "ui/AComponentUI.hpp"
+#include "Graphics.hpp"
+#include <boost/tuple/tuple.hpp>
+#include "RedrawManager.hpp"
+#include "RootPane.hpp"
+
 // (\w+\(.*?\)) -> fname()
 // /\*\*(\R.*?)*\*/\R -> doxycomment
 
-namespace sambag {
-namespace disco {
-namespace components {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 // class AComponent
 //=============================================================================
@@ -34,6 +38,16 @@ const std::string AComponent::PROPERTY_MINIMUMSIZE = "minimumSize";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_FOCUSABLE = "focusable";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_UI = "ui";
+//-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_BORDER = "border";
+//-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_ENABLED = "enabled";
+//-----------------------------------------------------------------------------
+const std::string  AComponent::PROPERTY_CLIENTPROPERTY = "client_property";
+//-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_SIZE = "size";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() {
 
 }
@@ -43,8 +57,7 @@ AComponent::~AComponent() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isTreeLocked() {
-	if (getTreeLock().try_lock())
-		return false;
+	// TODO
 	return true;
 }
 //-----------------------------------------------------------------------------
@@ -55,23 +68,26 @@ void AComponent::checkTreeLock() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::contains(Point2D p) const {
+	if (ui)
+		return ui->contains(getPtr(), p);
 	const Coordinate &width = bounds.getWidth();
 	const Coordinate &height = bounds.getHeight();
 	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);
 }
 //-----------------------------------------------------------------------------
-int AComponent::dispatchHierarchyEvents(HierarchyEvent::Type id,
+int AComponent::__dispatchHierarchyEvents_(events::HierarchyEvent::Type id,
 		AComponentPtr changed, AContainerPtr changedParent, long changeFlags) {
+	using namespace events;
 	switch (id) {
 	case HierarchyEvent::HIERARCHY_CHANGED: {
 		HierarchyEvent e(self.lock(), id, changed, changedParent, changeFlags);
-		dispatchEvent(e);
+		dispatchEvent(e, this);
 		return 1;
 	}
 	case HierarchyEvent::ANCESTOR_MOVED:
 	case HierarchyEvent::ANCESTOR_RESIZED: {
 		HierarchyEvent e(self.lock(), id, changed, changedParent);
-		dispatchEvent(e);
+		dispatchEvent(e, this);
 		return 1;
 	}
 	default:
@@ -85,20 +101,27 @@ const Rectangle & AComponent::getBounds() const {
 	return bounds;
 }
 //-----------------------------------------------------------------------------
-std::string AComponent::toString() const {
-	std::stringstream ss;
-	ss << getName() << "," << bounds.x0().x() << "," << bounds.x0().y();
-	ss << "," << bounds.getWidth() << "x" << bounds.getHeight();
+std::string AComponent::parameterString() const {
+	std::stringstream os;
+	os << getName() << "," << bounds.x0().x() << "," << bounds.x0().y();
+	os << "," << bounds.getWidth() << "x" << bounds.getHeight();
 	if (!isValid()) {
-		ss << ",invalid";
+		os << ",invalid";
 	}
 	if (!visible) {
-		ss << ",hidden";
+		os << ",hidden";
 	}
 	if (!enabled) {
-		ss << ",disabled";
+		os << ",disabled";
 	}
-	return "[" + ss.str() + "]";
+	return os.str();
+}
+
+//-----------------------------------------------------------------------------
+std::string AComponent::toString() const {
+	std::stringstream ss;
+	ss << "[" << parameterString() << "]";
+	return ss.str();
 }
 //-----------------------------------------------------------------------------
 Coordinate AComponent::getAlignmentX() const {
@@ -189,7 +212,6 @@ IDrawContext::Ptr AComponent::getDrawContext() const {
 	cn->translate(bounds.x0());
 	cn->setClip(Rectangle(0, 0, bounds.getWidth(), bounds.getHeight()));
 	return cn;
-
 }
 //-----------------------------------------------------------------------------
 ColorRGBA AComponent::getBackground() const {
@@ -210,7 +232,7 @@ ColorRGBA AComponent::getForeground() const {
 	return (parent) ? parent->getForeground() : ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
-AComponent::Lock & AComponent::getTreeLock() {
+AComponent::Lock & AComponent::getTreeLock() const {
 	return treeLock;
 }
 //-----------------------------------------------------------------------------
@@ -220,6 +242,23 @@ AContainerPtr AComponent::getRootContainer() const {
 		p = p->getParent();
 	}
 	return p;
+}
+//-----------------------------------------------------------------------------
+IDrawContext::Ptr
+AComponent::getComponentDrawContext(IDrawContext::Ptr cn) const
+{
+	//    Graphics componentGraphics = g;
+	//      if (ui != null && DEBUG_GRAPHICS_LOADED) {
+	//          if ((DebugGraphics.debugComponentCount() != 0) &&
+	//                  (shouldDebugGraphics() != 0) &&
+	//                  !(g instanceof DebugGraphics)) {
+	//              componentGraphics = new DebugGraphics(g,this);
+	//          }
+	//      }
+	cn->setStrokeColor(getForeground());
+	cn->setFillColor(getForeground());
+	//componentGraphics.setFont(getFont());
+	return cn;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::hasFocus() const {
@@ -274,7 +313,8 @@ bool AComponent::isOpaque() const {
 //-----------------------------------------------------------------------------
 bool AComponent::isShowing() const {
 	if (visible) {
-		return (parent) || parent->isShowing();
+		if (parent)
+			return parent->isShowing();
 	}
 	return false;
 }
@@ -309,34 +349,79 @@ bool AComponent::isForegroundSet() const {
 	return foreground != ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
-void AComponent::drawAll(IDrawContext::Ptr context) {
+void AComponent::drawChildren(IDrawContext::Ptr context) {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw() {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (!parent)
+			return;
+	Rectangle r(0, 0, getWidth(),  getHeight());
+		// Needs to be translated to parent coordinates since
+		// a parent native container provides the actual repaint
+		// services.  Additionally, the request is restricted to
+		// the bounds of the component.
+		Number x = r.x0().x(), y = r.x0().y(), width = r.getWidth(), height =
+				r.getHeight();
+		Number thisX = bounds.x0().x(), thisY = bounds.x0().y(), thisWidth =
+				bounds.getWidth(), thisHeight = bounds.getHeight();
+		if (x < 0) {
+			width += x;
+			x = 0;
+		}
+		if (y < 0) {
+			height += y;
+			y = 0;
+		}
+
+		Number pwidth = (width > thisWidth) ? thisWidth : width;
+		Number pheight = (height > thisHeight) ? thisHeight : height;
+
+		if (pwidth <= 0 || pheight <= 0) {
+			return;
+		}
+
+		Number px = thisX + x;
+		Number py = thisY + y;
+		parent->redraw(Rectangle(px, py, pwidth, pheight));
+}
+//-----------------------------------------------------------------------------
+void AComponent::redraw(const Rectangle &r) {
+	RedrawManager::Ptr rd = RedrawManager::currentManager(getPtr());
+	SAMBAG_ASSERT(rd);
+	rd->addDirtyRegion(getPtr(), r);
 }
 //-----------------------------------------------------------------------------
 void AComponent::requestFocus() {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
-void AComponent::repaintParentIfNeeded(const Rectangle &r) {
+void AComponent::drawBorder(IDrawContext::Ptr cn) {
+	if (!border) {
+		return;
+	}
+	border->paintBorder(getPtr(), cn, Rectangle(0, 0, getWidth(), getHeight()));
+}
+//-----------------------------------------------------------------------------
+void AComponent::draw(IDrawContext::Ptr context) {
+}
+//-----------------------------------------------------------------------------
+void AComponent::redrawParentIfNeeded(const Rectangle &r) {
 	if (parent && isShowing()) {
 		// Have the parent redraw the area this component occupied.
-		parent->repaint(r);
+		parent->redraw(r);
 		// Have the parent redraw the area this component *now* occupies.
-		repaint();
+		redraw();
 	}
 }
 //-----------------------------------------------------------------------------
 void AComponent::invalidateParent() {
 	if (parent) {
-		parent->invalidateIfValid();
+		parent->__invalidateIfValid_();
 	}
 }
 //-----------------------------------------------------------------------------
-void AComponent::invalidateIfValid() {
+void AComponent::__invalidateIfValid_() {
 	if (isValid()) {
 		invalidate();
 	}
@@ -346,57 +431,12 @@ bool AComponent::isPreferredSizeSet() const {
 	return prefSizeSet;
 }
 //-----------------------------------------------------------------------------
-void AComponent::repaint(const Rectangle &r) {
-	if (!parent)
-		return;
-	// Needs to be translated to parent coordinates since
-	// a parent native container provides the actual repaint
-	// services.  Additionally, the request is restricted to
-	// the bounds of the component.
-	Number x = r.x0().x(), y = r.x0().y(), width = r.getWidth(), height =
-			r.getHeight();
-	Number thisX = bounds.x0().x(), thisY = bounds.x0().y(), thisWidth =
-			bounds.getWidth(), thisHeight = bounds.getHeight();
-	if (x < 0) {
-		width += x;
-		x = 0;
-	}
-	if (y < 0) {
-		height += y;
-		y = 0;
-	}
-
-	Number pwidth = (width > thisWidth) ? thisWidth : width;
-	Number pheight = (height > thisHeight) ? thisHeight : height;
-
-	if (pwidth <= 0 || pheight <= 0) {
-		return;
-	}
-
-	Number px = thisX + x;
-	Number py = thisY + y;
-	parent->repaint(Rectangle(px, py, pwidth, pheight));
-
-}
-//-----------------------------------------------------------------------------
 void AComponent::revalidate() {
-	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-		invalidate();
-		AContainer::Ptr root = getContainer();
-		if (!root) {
-			// There's no parents. Just validate itself.
-			validate();
-		} else {
-			while (!root->isValidateRoot()) {
-				if (!root->getContainer()) {
-					// If there's no validate roots, we'll validate the
-					// topmost container
-					break;
-				}
-				root = root->getContainer();
-			}
-			root->validate();
-		}SAMBAG_END_SYNCHRONIZED
+	if (!getParent()) {
+		return;
+	}
+	invalidate();
+	RedrawManager::currentManager(getPtr())->addInvalidComponent(getPtr());
 }
 //-----------------------------------------------------------------------------
 void AComponent::setBounds(const Rectangle &r) {
@@ -414,11 +454,11 @@ void AComponent::setBounds(const Rectangle &r) {
 			invalidate();
 		}
 		if (parent) {
-			parent->invalidateIfValid();
+			parent->__invalidateIfValid_();
 		}
 		// TODO: events
 		// notifyNewBounds(resized, moved);
-		repaintParentIfNeeded(oldBounds);
+		redrawParentIfNeeded(oldBounds);
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
@@ -429,21 +469,21 @@ void AComponent::setPreferredSize(const Dimension &preferredSize) {
 	// size.
 	prefSize = preferredSize;
 	prefSizeSet = true;
-	dispatchEvent(PropertyChanged(PROPERTY_PREFERREDSIZE, old, preferredSize));
+	firePropertyChanged(PROPERTY_PREFERREDSIZE, old, preferredSize);
 }
 //-----------------------------------------------------------------------------
 void AComponent::setMaximumSize(const Dimension &s) {
 	Dimension old = maxSize;
 	maxSize = s;
 	maxSizeSet = true;
-	dispatchEvent(PropertyChanged(PROPERTY_MAXIMUMSIZE, old, s));
+	firePropertyChanged(PROPERTY_MAXIMUMSIZE, old, s);
 }
 //-----------------------------------------------------------------------------
 void AComponent::setMinimumSize(const Dimension &s) {
 	Dimension old = minSize;
 	minSize = s;
 	minSizeSet = true;
-	dispatchEvent(PropertyChanged(PROPERTY_MINIMUMSIZE, old, s));
+	firePropertyChanged(PROPERTY_MINIMUMSIZE, old, s);
 }
 //-----------------------------------------------------------------------------
 void AComponent::clearMostRecentFocusOwnerOnHide() {
@@ -483,6 +523,7 @@ void AComponent::disable() {
 }
 //-----------------------------------------------------------------------------
 void AComponent::show() {
+	using namespace events;
 	if (visible)
 		return;
 	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
@@ -490,10 +531,10 @@ void AComponent::show() {
 		//TODO:
 		//mixOnShowing();
 
-		dispatchHierarchyEvents(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
+		__dispatchHierarchyEvents_(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
 				parent, HierarchyEvent::SHOWING_CHANGED);
 
-		repaint();
+		redraw();
 		//TODO: EVENT
 		/*ComponentEvent e = new ComponentEvent(this,
 		 ComponentEvent.COMPONENT_SHOWN);*/
@@ -506,6 +547,7 @@ void AComponent::show() {
 }
 //-----------------------------------------------------------------------------
 void AComponent::hide() {
+	using namespace events;
 	isPacked = false;
 	if (!visible)
 		return;
@@ -518,9 +560,9 @@ void AComponent::hide() {
 		 if (containsFocus() && KeyboardFocusManager.isAutoFocusTransferEnabled()) {
 		 transferFocus(true);
 		 }*/
-		dispatchHierarchyEvents(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
+		__dispatchHierarchyEvents_(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
 				parent, HierarchyEvent::SHOWING_CHANGED);
-		repaint();
+		redraw();
 		/* TODO: Events
 		 * if (componentListener != null ||
 		 (eventMask & AWTEvent.COMPONENT_EVENT_MASK) != 0 ||
@@ -538,10 +580,17 @@ void AComponent::hide() {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setEnabled(bool b) {
+	if (b==isEnabled())
+		return;
+	bool oldEnabled = isEnabled();
 	if (b) {
 		enable();
 	} else {
 		disable();
+	}
+	firePropertyChanged(PROPERTY_ENABLED, oldEnabled, (bool)enabled);
+	if (enabled != oldEnabled) {
+		redraw();
 	}
 }
 //-----------------------------------------------------------------------------
@@ -552,8 +601,7 @@ void AComponent::setFocusable(bool b) {
 		focusable = b;
 	SAMBAG_END_SYNCHRONIZED
 	//isFocusTraversableOverridden = FOCUS_TRAVERSABLE_SET;
-	dispatchEvent(
-			PropertyChanged(PROPERTY_FOCUSABLE, oldFocusable, (bool) focusable));
+	firePropertyChanged(PROPERTY_FOCUSABLE, oldFocusable, (bool) focusable);
 	/* TODO: Focus
 	 * if (oldFocusable && !focusable) {
 	 if (isFocusOwner() && KeyboardFocusManager.isAutoFocusTransferEnabled()) {
@@ -569,28 +617,57 @@ void AComponent::setIgnoreRepaint(bool b) {
 //-----------------------------------------------------------------------------
 void AComponent::setLocation(const Point2D &p) {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-		setBounds(p.x(), p.y(), bounds.getWidth(), bounds.getHeight());
+		Rectangle r = bounds;
+		r.translate(p);
+		setBounds(r);
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void AComponent::setName(const std::string &name) {
-	std::string old = name;
+	std::string old = AComponent::name;
 	SAMBAG_BEGIN_SYNCHRONIZED(getObjectLock())
 		AComponent::name = name;
 		nameExplicitlySet = true;
 	SAMBAG_END_SYNCHRONIZED
-	dispatchEvent(PropertyChanged(PROPERTY_NAME, old, name));
+	firePropertyChanged(PROPERTY_NAME, old, name);
 }
 //-----------------------------------------------------------------------------
 void AComponent::setSize(const Dimension &d) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
+		bool resized = (bounds.getWidth() != d.width())
+				|| (bounds.getHeight() != d.height());
+		if (!resized) {
+			return;
+		}
+		Dimension old = getSize();
+		Rectangle oldBounds = bounds;
+		bounds.setWidth(d.width());
+		bounds.setHeight(d.height());
+		isPacked = false;
+		invalidate();
+		if (parent) {
+			parent->__invalidateIfValid_();
+		}
+		firePropertyChanged(PROPERTY_SIZE, old, d);
+		redrawParentIfNeeded(oldBounds);
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void AComponent::setVisible(bool b) {
+	if (b==isVisible())
+		return;
 	if (b)
 		show();
 	else
 		hide();
+	AContainerPtr parent = getParent();
+	if (parent) {
+		parent->redraw(getBounds());
+	}
+	// Some (all should) LayoutManagers do not consider components
+	// that are not visible. As such we need to revalidate when the
+	// visible bit changes.
+	revalidate();
 }
 //-----------------------------------------------------------------------------
 void AComponent::setBackground(const ColorRGBA &c) {
@@ -598,7 +675,12 @@ void AComponent::setBackground(const ColorRGBA &c) {
 	background = c;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	dispatchEvent(PropertyChanged(PROPERTY_BACKGROUND, oldColor, c));
+	firePropertyChanged(PROPERTY_BACKGROUND, oldColor, c);
+	if ((oldColor != ColorRGBA::NULL_COLOR) ? oldColor != c :
+		((c != ColorRGBA::NULL_COLOR) && c!=oldColor))
+	{
+		redraw();
+	}
 }
 //-----------------------------------------------------------------------------
 void AComponent::setForeground(const ColorRGBA &c) {
@@ -606,7 +688,12 @@ void AComponent::setForeground(const ColorRGBA &c) {
 	foreground = c;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	dispatchEvent(PropertyChanged(PROPERTY_FOREGROUND, oldColor, c));
+	firePropertyChanged(PROPERTY_FOREGROUND, oldColor, c);
+	if ((oldColor != ColorRGBA::NULL_COLOR) ? oldColor != c :
+		((c != ColorRGBA::NULL_COLOR) && c!=oldColor))
+	{
+		redraw();
+	}
 }
 //-----------------------------------------------------------------------------
 void AComponent::transferFocus() {
@@ -624,9 +711,7 @@ void AComponent::validate() {
 			doLayout();
 		}
 		valid = true;
-		if (!wasValid) {
-			//TODO: mixOnValidating();
-		}SAMBAG_END_SYNCHRONIZED
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 ActionMap::Ptr AComponent::getActionMap() const {
@@ -646,12 +731,14 @@ Coordinate AComponent::getBaseLine(const Coordinate &width,
 				"Width and height must be >= 0"
 		);
 	}
+	if (ui) {
+		return ui->getBaseline(getPtr(), width, height);
+	}
 	return -1;
 }
 //-----------------------------------------------------------------------------
 IBorder::Ptr AComponent::getBorder() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return IBorder::Ptr();
+	return border;
 }
 //-------------------------------------------------------------------------
 bool AComponent::getIgnoreRepaint() const {
@@ -662,16 +749,15 @@ void AComponent::grabFocus() {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-------------------------------------------------------------------------
-AComponent::Lock & AComponent::getObjectLock() {
+AComponent::Lock & AComponent::getObjectLock() const {
 	return objectLock;
 }
 //-----------------------------------------------------------------------------
-void AComponent::drawBorder(IDrawContext::Ptr context) {
-	SAMBA_LOG_NOT_YET_IMPL();
-}
-//-----------------------------------------------------------------------------
 void AComponent::drawComponent(IDrawContext::Ptr context) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (!ui)
+		return;
+	ScratchGraphics g(context);
+	ui->update(g.getPtr(), getPtr());
 }
 //-----------------------------------------------------------------------------
 void AComponent::setActionMap(ActionMap::Ptr am) const {
@@ -682,10 +768,122 @@ void AComponent::setAutoscrolls(bool b) const {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
-void AComponent::setBorder(IBorder::Ptr br) const {
-	SAMBA_LOG_NOT_YET_IMPL();
+void AComponent::setBorder(IBorder::Ptr br) {
+	IBorder::Ptr oldBorder = border;
+	border = br;
+	firePropertyChanged(PROPERTY_BORDER, oldBorder, border);
+	if (border != oldBorder) {
+		if (border || oldBorder || !(border->getBorderInsets(
+				getPtr()) == oldBorder->getBorderInsets(getPtr())))
+		{
+			revalidate();
+		}
+		redraw();
+	}
 }
-
+//-----------------------------------------------------------------------------
+AbstractType::Ptr AComponent::getClientProperty(const std::string &key) const
+{
+	PropertyMap::const_iterator it = propertyMap.find(key);
+	if (it==propertyMap.end())
+		return AbstractType::Ptr();
+	return it->second;
 }
+//-----------------------------------------------------------------------------
+void AComponent::putClientProperty(const std::string &key,
+		AbstractType::Ptr value)
+{
+	PropertyMap::iterator it = propertyMap.find(key);
+	if (it==propertyMap.end()) {
+		if (!value)
+			return;
+		bool inserted;
+		boost::tie(it, inserted) =
+			propertyMap.insert(std::make_pair(key, value));
+		SAMBAG_ASSERT(inserted);
+		clientPropertyChanged(key, AbstractType::Ptr(), value);
+		firePropertyChanged(PROPERTY_CLIENTPROPERTY, AbstractType::Ptr(), value);
+		return;
+	}
+	AbstractType::Ptr old = it->second;
+	if (!value) {
+		propertyMap.erase(it);
+		clientPropertyChanged(key, old, value);
+		firePropertyChanged(PROPERTY_CLIENTPROPERTY, old, value);
+		return;
+	}
+	it->second = value;
+	clientPropertyChanged(key, old, value);
+	firePropertyChanged(PROPERTY_CLIENTPROPERTY, old, value);
 }
-} // namespace(s)
+//-----------------------------------------------------------------------------
+void AComponent::__processMouseEvent_(const events::MouseEvent &ev) {
+	using namespace events;
+	EventSender<MouseEvent>::notifyListeners(
+		this,
+		ev
+	);
+}
+//-----------------------------------------------------------------------------
+RootPanePtr AComponent::getTopLevelContainer() const {
+	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	if (!p)
+		p = getParent();
+	for (; p; p = p->getParent()) {
+		RootPanePtr rt = boost::shared_dynamic_cast<RootPane>(p);
+		if (rt)
+			return rt;
+	}
+	return RootPanePtr();
+}
+//-----------------------------------------------------------------------------
+AContainerPtr AComponent::getValidateRoot() const {
+	AContainer::Ptr c = getParent();
+	for (; c; c = c->getParent()) {
+		if (!c->isDisplayable() ) {
+			return AContainer::Ptr();
+		}
+		if (c->isValidateRoot()) {
+			return c;
+		}
+	}
+	return AContainer::Ptr();
+}
+//-----------------------------------------------------------------------------
+void AComponent::setUserUI (ui::AComponentUIPtr cui) {
+	uiSettedByUser = true;
+	installUI(cui);
+}
+//-----------------------------------------------------------------------------
+void AComponent::removeUserUI () {
+	ui::AComponentUI::Ptr old = ui;
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		ui = ui::AComponentUI::Ptr();
+		uiSettedByUser = false;
+	SAMBAG_END_SYNCHRONIZED
+	revalidate();
+	redraw();
+	firePropertyChanged(PROPERTY_UI, old, ui);
+}
+//-----------------------------------------------------------------------------
+void AComponent::installUI(ui::AComponentUIPtr cui) {
+	ui::AComponentUI::Ptr old = ui;
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		ui = cui;
+	SAMBAG_END_SYNCHRONIZED
+	revalidate();
+	redraw();
+	firePropertyChanged(PROPERTY_UI, old, ui);
+}
+//-------------------------------------------------------------------------
+void AComponent::installLookAndFeel(ui::ALookAndFeelPtr laf) {
+	if (isUiSettedByUser())
+		return;
+	if (!laf)
+		return;
+	ui::AComponentUI::Ptr cui = getComponentUI(laf);
+	if (!cui)
+		return;
+	installUI(cui);
+}
+}}} // namespace(s)

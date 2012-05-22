@@ -480,6 +480,13 @@ public:
 		cairo_clip(context);
 	}
 	//-------------------------------------------------------------------------
+	virtual Rectangle clipExtends() const {
+		double x0, y0, x1, y1;
+		x0 = y0 = x1 = y1 = NULL_NUMBER;
+		cairo_clip_extents(context, &x0, &y0, &x1, &y1);
+		return Rectangle(Point2D(x0,y0), Point2D(x1, y1));
+	}
+	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPath() const {
 		cairo_path_t * path = cairo_copy_path(context);
 		return CairoPath::create(path);
