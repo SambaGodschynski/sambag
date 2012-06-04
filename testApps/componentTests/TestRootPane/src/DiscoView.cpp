@@ -113,7 +113,7 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 	root = RootPane::create(bff);
 	root->setSize(dim);
 	root->EventSender<MouseEvent>::addEventListener(&onMouse);
-	enum {NUM_COMPOS=40};
+	enum {NUM_COMPOS=25};
 	AComponent::Ptr comps[NUM_COMPOS];
 	// init components
 	int i = 0;
@@ -126,10 +126,7 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		comps[i]->setForeground(ColorRGBA(1,1,1,1));
 		comps[i]->EventSender<MouseEvent>::addEventListener(&onMouse);
-		comps[i]->putClientProperty(
-				sambag::com::createObject(std::string("index")),
-				sambag::com::createObject((int)i)
-		);
+		comps[i]->putClientProperty("index", sambag::com::createObject(i));
 		root->add(comps[i]);
 	}
 	AContainer::Ptr con = tests::TestContainer::create();
@@ -146,6 +143,7 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		comps[i]->setForeground(ColorRGBA(1,1,1,1));
 		comps[i]->EventSender<MouseEvent>::addEventListener(&onMouse);
+		comps[i]->putClientProperty("index", sambag::com::createObject(i));
 		con->add(comps[i]);
 	}
 	root->validate();

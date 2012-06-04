@@ -23,17 +23,17 @@ void TestComponent::draw(sambag::disco::IDrawContext::Ptr cn) {
 	numDrawCalled = numDrawCalled + 1;
 	// draw index if exists
 	int index = -1;
-	AbstractType::Ptr v = getClientProperty("index");
-	if (!v)
+	get( getClientProperty("index"), index );
+	if (index<0)
 		return;
 	std::stringstream ss;
 	ss<<index;
 	std::string str = ss.str();
-	cn->setFontSize(10);
+	cn->setFontSize(22);
 	cn->setFillColor(ColorRGBA(1,1,1));
 	Rectangle txt = cn->textExtends(str);
 	cn->translate( Point2D( getWidth() / 2.0 - txt.getWidth() / 2.0,
-			getHeight() / 2.0 - txt.getHeight() / 2.0
+			getHeight() / 2.0 + txt.getHeight() / 2.0
 	));
 	cn->textPath(str);
 	cn->fill();
