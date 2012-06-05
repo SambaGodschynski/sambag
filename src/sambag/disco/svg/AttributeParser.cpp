@@ -6,7 +6,7 @@
  */
 
 #include "AttributeParser.hpp"
-
+#include "HtmlColors.hpp"
 
 /*
  * TODO: replace regex with boost::spirit
@@ -127,8 +127,6 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 // Parser
 //=============================================================================
-//-----------------------------------------------------------------------------
-AttributeParser::HtmlColors AttributeParser::htmlColors;
 //-----------------------------------------------------------------------------
 AttributeParser::PathInstrMap AttributeParser::pathInstrMap;
 //-----------------------------------------------------------------------------
@@ -266,7 +264,7 @@ void AttributeParser::parseColor(const std::string &in, ColorRGBA &color) {
 	static const boost::regex colorname("[a-zA-Z]+");
 	static const boost::regex colorval("#[0-9ea-fA-F]+");
 	if ( boost::regex_match(str, colorname) ) { // is colorname
-		const ColorRGBA &c = getColorByHtmlName(str);
+		const ColorRGBA &c = HtmlColors::getColor(str);
 		color.setValues(c.getR(), c.getG(), c.getB(), c.getA());
 		return;
 	}
@@ -311,17 +309,6 @@ void AttributeParser::parseOpacity(const std::string &in, Number &v) {
 
 	v = string2Number(str, 0.f);
 	v /= 100.; // percent to 0.0 .. 1.0
-}
-//-----------------------------------------------------------------------------
-const ColorRGBA & AttributeParser::getColorByHtmlName( const std::string &name ) {
-	using boost::algorithm::to_lower_copy;
-	if (htmlColors.empty())
-		initHtmlColors();
-	std::string key = to_lower_copy(name);
-	HtmlColors::const_iterator it = htmlColors.find(key);
-	if (it==htmlColors.end())
-		return ColorRGBA::NULL_COLOR;
-	return it->second;
 }
 //-----------------------------------------------------------------------------
 pathInstruction::InstructionOp

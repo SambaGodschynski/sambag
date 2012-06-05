@@ -5,7 +5,7 @@
  *      Author: samba
  */
 
-#include "AttributeParser.hpp"
+#include "HtmlColors.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/assign/list_inserter.hpp>
 #include "sambag/com/Common.hpp"
@@ -16,12 +16,14 @@ namespace sambag { namespace disco { namespace svg {
 // Parser
 //=============================================================================
 //-----------------------------------------------------------------------------
+HtmlColors::ColorMap HtmlColors::colorMap;
+//-----------------------------------------------------------------------------
 /**
  * created with "extract_html_colors.py"
  */
-void AttributeParser::initHtmlColors() {
+void HtmlColors::initHtmlColors() {
 	using namespace boost::assign;
-	insert(htmlColors)
+	insert(colorMap)
 	( "aliceblue", ColorRGBA(0.941176470588,0.972549019608,1.0, 1.0) )
 	( "antiquewhite", ColorRGBA(0.980392156863,0.921568627451,0.843137254902, 1.0) )
 	( "aqua", ColorRGBA(0.0,1.0,1.0, 1.0) )
@@ -169,6 +171,18 @@ void AttributeParser::initHtmlColors() {
 	( "whitesmoke", ColorRGBA(0.960784313725,0.960784313725,0.960784313725, 1.0) )
 	( "yellow", ColorRGBA(1.0,1.0,0.0, 1.0) )
 	( "yellowgreen", ColorRGBA(0.603921568627,0.803921568627,0.196078431373, 1.0) )
-	( "none", Style::NONE_COLOR );
+	( "none", graphicElements::Style::NONE_COLOR );
+}
+//-----------------------------------------------------------------------------
+const ColorRGBA & HtmlColors::getColor( const std::string &name )
+{
+	using boost::algorithm::to_lower_copy;
+	if (colorMap.empty())
+		initHtmlColors();
+	std::string key = to_lower_copy(name);
+	ColorMap::const_iterator it = colorMap.find(key);
+	if (it==colorMap.end())
+		return ColorRGBA::NULL_COLOR;
+	return it->second;
 }
 }}} // namespaces

@@ -38,15 +38,9 @@ using sambag::disco::graphicElements::pathInstruction::PointContainer;
 class AttributeParser {
 private:
 	//-------------------------------------------------------------------------
-	typedef std::map<std::string, ColorRGBA> HtmlColors;
-	//-------------------------------------------------------------------------
 	typedef std::map<std::string, pathInstruction::InstructionOp> PathInstrMap;
 	//-------------------------------------------------------------------------
-	static HtmlColors htmlColors;
-	//-------------------------------------------------------------------------
 	static PathInstrMap pathInstrMap;
-	//-------------------------------------------------------------------------
-	static void initHtmlColors();
 	//-------------------------------------------------------------------------
 	static void initPathInstr();
 public:
@@ -86,8 +80,6 @@ public:
 	 * @return Instruction
 	 */
 	static pathInstruction::InstructionOp getPathInstruction(const std::string&);
-	//-------------------------------------------------------------------------
-	static const ColorRGBA & getColorByHtmlName( const std::string &name );
 	//-------------------------------------------------------------------------
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>helper
 	/**
