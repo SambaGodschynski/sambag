@@ -13,10 +13,9 @@ namespace tests {
 //-----------------------------------------------------------------------------
 int TestComponent::numDrawCalled = 0;
 //-----------------------------------------------------------------------------
-void TestComponent::draw(sambag::disco::IDrawContext::Ptr cn) {
+void TestComponent::drawComponent(sambag::disco::IDrawContext::Ptr cn) {
 	using namespace sambag::disco;
 	using namespace sambag::com;
-	AComponent::draw(cn);
 	cn->setFillColor(getBackground());
 	cn->rect(Rectangle(0,0,getWidth(), getHeight()));
 	cn->fill();

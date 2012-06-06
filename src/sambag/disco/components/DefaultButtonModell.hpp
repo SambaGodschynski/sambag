@@ -25,6 +25,8 @@ class DefaultButtonModell :
 	public ev::EventSender<DefaultButtonModellChangedEvent>
 {
 //=============================================================================
+public:
+	typedef ev::ChangedEvent<DefaultButtonModell> StateChangedEvent;
 protected:
 	//-------------------------------------------------------------------------
 	/** The bitmask used to store the state of the button. */
@@ -39,8 +41,12 @@ protected:
 	/** The button's mnemonic. */
 	int mnemonic;
 	//-------------------------------------------------------------------------
+	std::string text;
+	//-------------------------------------------------------------------------
 	void fireStateChanged();
 public:
+	//-------------------------------------------------------------------------
+	virtual ~DefaultButtonModell() {}
 	//-------------------------------------------------------------------------
 	static const int ARMED = 1;
 	//-------------------------------------------------------------------------

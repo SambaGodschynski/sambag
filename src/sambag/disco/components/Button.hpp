@@ -22,9 +22,16 @@ class Button : public AButton<DefaultButtonModell> {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Button> Ptr;
-protected:
+	//-------------------------------------------------------------------------
+	typedef DefaultButtonModell Modell;
+	//-------------------------------------------------------------------------
+	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 private:
+protected:
+	//-------------------------------------------------------------------------
+	Button();
 public:
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Button)
 }; // Button
 }}} // namespace(s)
 

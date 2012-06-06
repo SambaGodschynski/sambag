@@ -13,6 +13,9 @@
 #include <sambag/disco/components/events/MouseEventCreator.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
 #include <sambag/disco/components/FlowLayout.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
+#include <sambag/disco/components/ui/basic/BasicLookAndFeel.hpp>
+#include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
@@ -86,22 +89,8 @@ void init(int &outWidth, int &outHeight) {
 void onMouse(void *, const sambag::disco::components::events::MouseEvent &ev) {
 	using namespace std;
 	using namespace sambag::disco;
+	using namespace sambag::disco::components;
 	cout<<ev.toString()<<endl;
-	if (ev.getType() == ev.MOUSE_ENTERED) {
-		if (ev.getSource() != root)
-			ev.getSource()->setBackground(ColorRGBA(1));
-			ev.getSource()->redraw();
-	}
-	if (ev.getType() == ev.MOUSE_EXITED || ev.getType() == ev.MOUSE_RELEASED) {
-		if (ev.getSource() != root)
-			ev.getSource()->setBackground(ColorRGBA(0));
-			ev.getSource()->redraw();
-	}
-	if (ev.getType() == ev.MOUSE_CLICKED) {
-		if (ev.getSource() != root)
-			ev.getSource()->setBackground(ColorRGBA(1,1));
-			ev.getSource()->redraw();
-	}
 }
 
 void createWindow(sambag::disco::ISurface::Ptr surf) {
@@ -111,43 +100,20 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 	using namespace sambag::disco::components::events;
 	display = surf;
 	root = RootPane::create(bff);
+	ui::UIManager::instance().installLookAndFeel(root,
+			ui::basic::BasicLookAndFeel::create());
+
 	root->setSize(dim);
-	//root->EventSender<MouseEvent>::addEventListener(&onMouse);
-	enum {NUM_COMPOS=25};
-	AComponent::Ptr comps[NUM_COMPOS];
-	// init components
-	int i = 0;
-	for ( ; i < 13; ++i) {
-		std::stringstream ss;
-		ss << "TestComponent" << i;
-		comps[i] = tests::TestComponent::create();
-		comps[i]->setName(ss.str());
-		comps[i]->setBounds(Rectangle(0,0,50 + i*10, 55 + i*10));
-		comps[i]->setBackground(ColorRGBA(0,0,0,1));
-		comps[i]->setForeground(ColorRGBA(1,1,1,1));
-		comps[i]->EventSender<MouseEvent>::addEventListener(&onMouse);
-		comps[i]->putClientProperty("index", sambag::com::createObject(i));
-		root->add(comps[i]);
-	}
-	AContainer::Ptr con = tests::TestContainer::create();
-	con->setName("TestSubContaine");
-	con->setLayout( FlowLayout::create() );
-	con->setPreferredSize(Dimension(150, 100));
-	root->add(con);
-	for (; i < NUM_COMPOS; ++i) {
-		std::stringstream ss;
-		ss << "TestComponent" << i;
-		comps[i] = tests::TestComponent::create();
-		comps[i]->setName(ss.str());
-		comps[i]->setBounds(Rectangle(0,0,30, 30));
-		comps[i]->setBackground(ColorRGBA(0,0,0,1));
-		comps[i]->setForeground(ColorRGBA(1,1,1,1));
-		comps[i]->EventSender<MouseEvent>::addEventListener(&onMouse);
-		comps[i]->putClientProperty("index", sambag::com::createObject(i));
-		con->add(comps[i]);
-	}
+	Button::Ptr btn = Button::create();
+//	btn->setSize(Dimension(100,50));
+	//btn->setPreferredSize(Dimension(100,50));
+	btn->setBounds(Rectangle(0,0,100, 50));
+	btn->setText("do it!");
+	btn->setVisible(true);
+	root->add(btn);
 	root->validate();
 	root->setVisible(true);
+	btn->EventSender<MouseEvent>::addEventListener(boost::bind(&onMouse,_1, _2));
 	mev = sambag::disco::components::events::MouseEventCreator::create(root);
 }
 

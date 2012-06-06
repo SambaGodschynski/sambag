@@ -49,6 +49,17 @@
  *  DropTarget
  */
 
+#define SAMBAG_STD_STATIC_COMPONENT_CREATOR(sambag_macro_class_name)		\
+	Ptr getPtr() const {													\
+		return boost::shared_dynamic_cast<Button>(sambag_macro_class_name::getPtr());\
+	}																		\
+	static Ptr create() {													\
+		Ptr res(new sambag_macro_class_name());								\
+		res->self = res;													\
+		return res;															\
+	}
+
+
 namespace sambag { namespace disco { namespace components {
 using namespace sambag::com::events;
 //=============================================================================
@@ -1001,6 +1012,10 @@ public:
 	 */
 	virtual void update(IDrawContext::Ptr cn) {
 		draw(cn);
+	}
+	//-------------------------------------------------------------------------
+	const PropertyMap & getClientProperties() const {
+		return propertyMap;
 	}
 	//-------------------------------------------------------------------------
 	/**

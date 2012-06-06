@@ -10,10 +10,11 @@
 
 #include <boost/shared_ptr.hpp>
 #include <loki/LokiTypeInfo.h>
-//#include <boost/unordered_map.hpp>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include "AComponentUI.hpp"
 #include <sambag/disco/components/Forward.hpp>
+#include <sambag/com/AbstractType.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
@@ -26,9 +27,12 @@ class ALookAndFeel {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ALookAndFeel> Ptr;
-protected:
 	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<std::string, AbstractType::Ptr> PropertyMap;
+protected:
 private:
+	//-------------------------------------------------------------------------
+	PropertyMap propertyMap;
 	//-------------------------------------------------------------------------
 	/**
 	 * relation between Component types and their creators
@@ -48,6 +52,31 @@ public:
 	AComponentUI::Ptr getUI() const;
 	//-------------------------------------------------------------------------
 	virtual ~ALookAndFeel();
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the value of the property with the specified key.  Only
+	 * properties added with <code>putClientProperty</code> will return
+	 * a non-<code>null</code> value.
+	 *
+	 * @param key the being queried
+	 * @return the value of this property or <code>null</code>
+	 * @see #putClientProperty
+	 */
+	AbstractType::Ptr getProperty(const std::string &key) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Adds an arbitrary key/value "client property" to this laf.
+	 * <p>
+	 * If value is <code>null</code> this method will remove the property.
+	 * Changes to client properties are reported with
+	 * <code>PropertyChange</code> events.
+	 * @param key the new client property key
+	 * @param value the new client property value; if <code>null</code>
+	 *          this method will remove the property
+	 * @see #getClientProperty
+	 * @see #addPropertyChangeListener
+	 */
+	void putProperty(const std::string &key, AbstractType::Ptr value);
 }; // ALookAndFeel
 //=============================================================================
 // impl,

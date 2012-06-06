@@ -653,7 +653,7 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
 				ev.getButtons(), MouseEvent::MOUSE_ENTERED);
 		retargetMouseEvent(target, nev);
-		EventSender<MouseEvent>::notifyListeners(this, nev);
+		target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
 	}
 	lastMouseTarget = target;
 }

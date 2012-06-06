@@ -1,5 +1,5 @@
 /*
- * TestComponents.hpp
+ * TestComponents.hpp TODO: rename to ComponentsForTest
  *
  *  Created on: May 22, 2012
  *      Author: samba
@@ -87,11 +87,11 @@ namespace tests {
 	class TestComponent : public sdc::AComponent {
 	protected:
 		TestComponent() {}
+		virtual void drawComponent(sambag::disco::IDrawContext::Ptr cn);
 	public:
 		sdc::ui::AComponentUIPtr getComponentUI() const { return ui; }
 		sdc::ui::AComponentUIPtr getComponentUI(sdc::ui::ALookAndFeelPtr laf) const;
 		static int numDrawCalled;
-		virtual void draw(sambag::disco::IDrawContext::Ptr cn);
 		typedef boost::shared_ptr<TestComponent> Ptr;
 		static Ptr create() {
 			using namespace sambag::disco;

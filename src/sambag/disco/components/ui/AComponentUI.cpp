@@ -43,7 +43,6 @@ void AComponentUI::installUI(AComponent::Ptr c) {
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::draw(IDrawContext::Ptr cn, AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::uninstallUI(AComponent::Ptr c) {
@@ -51,7 +50,12 @@ void AComponentUI::uninstallUI(AComponent::Ptr c) {
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::update(IDrawContext::Ptr cn, AComponent::Ptr c){
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (c->isOpaque()) {
+		cn->setFillColor(c->getBackground());
+		cn->rect(Rectangle(0, 0, c->getWidth(), c->getHeight()));
+		cn->fill();
+	}
+	draw(cn, c);
 }
 
 }}}} // namespace(s)

@@ -13,6 +13,7 @@
 #include "ALookAndFeel.hpp"
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/components/RootPane.hpp>
+#include <sambag/com/AbstractType.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 

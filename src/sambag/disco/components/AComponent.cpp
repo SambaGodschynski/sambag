@@ -68,8 +68,8 @@ void AComponent::checkTreeLock() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::contains(Point2D p) const {
-	if (ui)
-		return ui->contains(getPtr(), p);
+//	if (ui)
+//		return ui->contains(getPtr(), p);
 	const Coordinate &width = bounds.getWidth();
 	const Coordinate &height = bounds.getHeight();
 	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);
@@ -403,7 +403,33 @@ void AComponent::drawBorder(IDrawContext::Ptr cn) {
 	border->paintBorder(getPtr(), cn, Rectangle(0, 0, getWidth(), getHeight()));
 }
 //-----------------------------------------------------------------------------
-void AComponent::draw(IDrawContext::Ptr context) {
+void AComponent::draw(IDrawContext::Ptr cn) {
+	if ((getWidth() <= 0) || (getHeight() <= 0)) {
+		return;
+	}
+
+	IDrawContext::Ptr componentGraphics = getComponentDrawContext(cn);
+	ScratchGraphics co(componentGraphics);
+
+	RedrawManager::Ptr repaintManager = RedrawManager::currentManager(getPtr());
+	Rectangle clipRect = co.clipExtends();
+	if (clipRect == NULL_RECTANGLE) {
+		clipRect = Rectangle(0,0,getWidth(), getHeight());
+	}
+
+	if(clipRect.getWidth() > getWidth()) {
+		clipRect.setWidth(getWidth());
+	}
+	if(clipRect.getHeight() > getHeight()) {
+		clipRect.setHeight(getHeight());
+	}
+	if (repaintManager->isDoubleBufferingEnabled()) {
+		repaintManager->draw(getPtr(), getPtr(), co.getPtr(), clipRect);
+	}
+	else {
+		drawComponent(co.getPtr());
+		drawBorder(co.getPtr());
+	}
 }
 //-----------------------------------------------------------------------------
 void AComponent::redrawParentIfNeeded(const Rectangle &r) {
@@ -740,7 +766,7 @@ Coordinate AComponent::getBaseLine(const Coordinate &width,
 IBorder::Ptr AComponent::getBorder() const {
 	return border;
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 bool AComponent::getIgnoreRepaint() const {
 	return ignoreRepaint;
 }
@@ -748,7 +774,7 @@ bool AComponent::getIgnoreRepaint() const {
 void AComponent::grabFocus() {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 AComponent::Lock & AComponent::getObjectLock() const {
 	return objectLock;
 }
@@ -871,6 +897,7 @@ void AComponent::installUI(ui::AComponentUIPtr cui) {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		ui = cui;
 	SAMBAG_END_SYNCHRONIZED
+	ui->installUI(getPtr());
 	revalidate();
 	redraw();
 	firePropertyChanged(PROPERTY_UI, old, ui);

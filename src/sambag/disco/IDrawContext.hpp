@@ -90,9 +90,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void rect( const Rectangle &rect ) = 0;
 	//-------------------------------------------------------------------------
-	/*
-	 * @Depreciated
-	 */
 	virtual void rect( const Rectangle &rect, const Number &cornerRadius ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void fill() = 0;

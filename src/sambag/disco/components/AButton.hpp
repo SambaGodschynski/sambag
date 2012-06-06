@@ -9,6 +9,8 @@
 #define SAMBAG_ABUTTON_H
 
 #include <boost/shared_ptr.hpp>
+#include "AComponent.hpp"
+#include <string>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -16,17 +18,47 @@ namespace sambag { namespace disco { namespace components {
   * @class AButton.
   */
 template <class ButtonModell>
-class AButton : public ButtonModell {
+class AButton : public AComponent, public ButtonModell {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AButton> Ptr;
+	typedef AButton<ButtonModell> AbstractButton;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<AbstractButton> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	AButton();
+	AButton() {}
 private:
+	//-------------------------------------------------------------------------
+	std::string text;
 public:
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return boost::shared_dynamic_cast<AbstractButton>(AComponent::getPtr());
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * sets the buttons text
+	 * @param txt
+	 */
+	void setText(const std::string &txt);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the buttons text
+	 */
+	const std::string & getText() const;
 }; // AButton
+//=============================================================================
+//-----------------------------------------------------------------------------
+template <class BM>
+void AButton<BM>::setText(const std::string &_txt) {
+	 text = _txt;
+}
+//-----------------------------------------------------------------------------
+template <class BM>
+const std::string & AButton<BM>::getText() const {
+	return text;
+}
 }}} // namespace(s)
 
 #endif /* SAMBAG_ABUTTON_H */
