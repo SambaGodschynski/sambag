@@ -13,6 +13,8 @@
 #include <sambag/disco/components/AButton.hpp>
 #include "BasicButtonListener.hpp"
 #include <sambag/disco/svg/HtmlColors.hpp>
+#include <sambag/disco/IDiscoFactory.hpp>
+#include <sambag/disco/ISurface.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -52,8 +54,26 @@ public:
 	 * @param c
 	 */
 	virtual void draw(IDrawContext::Ptr cn, AComponentPtr c);
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the specified component's maximum size appropriate for the
+	 * look and feel.
+	 * @param c
+	 * @return
+	 */
+	virtual Dimension getMaximumSize(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	virtual Dimension getMinimumSize(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the specified component's preferred size appropriate for the
+	 * look and feel.
+	 * @param c
+	 * @return
+	 */
+	virtual Dimension getPreferredSize(AComponentPtr c);
 }; // BasicButtonUI
-//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
@@ -71,7 +91,7 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
 	cn->fill();
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
-	cn->setStrokeWidth(2);
+	cn->setStrokeWidth(1);
 	cn->stroke();
 	cn->setFontSize(15);
 	cn->setFillColor(c->getForeground());
@@ -112,6 +132,29 @@ void BasicButtonUI<ButtonModell>::onButtonStateChanged(void *src, const
 	typename AbstractButton::Ptr btn = _btn->getPtr();
 	btn->redraw();
 }
+//------------------------------------------------------------------------------
+template <class ButtonModell>
+Dimension BasicButtonUI<ButtonModell>::getMaximumSize(AComponentPtr c) {
+	return getPreferredSize(c);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+Dimension BasicButtonUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
+	return getPreferredSize(c);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
+	typename AbstractButton::Ptr b =
+			boost::shared_dynamic_cast<AbstractButton>(c);
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	// TODO: handle font style/size
+	Rectangle txtEx = cn->textExtends(b->getText());
+	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 }}}}} // namespace(s)
 
 #endif /* SAMBAG_BASICBUTTONUI_H */

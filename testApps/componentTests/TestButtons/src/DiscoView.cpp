@@ -107,7 +107,7 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 	Button::Ptr btn = Button::create();
 //	btn->setSize(Dimension(100,50));
 	//btn->setPreferredSize(Dimension(100,50));
-	btn->setBounds(Rectangle(0,0,100, 50));
+	btn->setPreferredSize(Dimension(60, 25));
 	btn->setText("do it!");
 	btn->setVisible(true);
 	root->add(btn);
@@ -118,7 +118,7 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 }
 
 void handleMouseButtonPressEvent(int x, int y, int buttons) {
-	mev->createClickEvent(x, y, buttons);
+	mev->createPressEvent(x, y, buttons);
 }
 void handleMouseButtonReleaseEvent(int x, int y, int buttons) {
 	mev->createReleaseEvent(x, y, buttons);

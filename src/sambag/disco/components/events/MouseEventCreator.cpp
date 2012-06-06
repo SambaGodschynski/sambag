@@ -44,7 +44,9 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 {
 
 
-	if (lastEvent.buttons>0 && !(lastEvent.type == MouseEvent::MOUSE_RELEASED)) {
+	if (lastEvent.buttons>0
+			&& !(lastEvent.type == MouseEvent::MOUSE_RELEASED)
+			&& !(lastEvent.type == MouseEvent::MOUSE_CLICKED)) {
 		lastEvent =
 			MouseEvent(root, Point2D(x, y), lastEvent.buttons, MouseEvent::MOUSE_DRAGGED);
 		root->__processMouseEvent_(lastEvent);

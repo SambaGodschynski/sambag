@@ -25,8 +25,6 @@ namespace sambag { namespace disco {
 class IDiscoFactory {
 //=============================================================================
 public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IDiscoFactory> Ptr;
 private:
 public:
 	//-------------------------------------------------------------------------
@@ -39,6 +37,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual IImageSurface::Ptr
 	createImageSurface(IDataHandler::Ptr) const = 0;
+	//-------------------------------------------------------------------------
+	virtual IRecordingSurface::Ptr
+	createRecordingSurface() const = 0;
 	//-------------------------------------------------------------------------
 	virtual ISolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const = 0;
 	//-------------------------------------------------------------------------
@@ -53,7 +54,7 @@ public:
 };
 //=============================================================================
 //-----------------------------------------------------------------------------
-extern IDiscoFactory::Ptr getDiscoFactory();
+extern IDiscoFactory * getDiscoFactory();
 }} // namespace
 
 #endif /* IDISCOFACTORY_HPP_ */

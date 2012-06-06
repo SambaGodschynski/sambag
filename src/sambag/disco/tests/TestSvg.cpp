@@ -110,7 +110,7 @@ void TestSvg::testSvgFirstElements() {
 	CPPUNIT_ASSERT_EQUAL(12., (Number)rootObject->getSize().getWidth());
 	CPPUNIT_ASSERT_EQUAL(4., (Number)rootObject->getSize().getHeight());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -138,7 +138,7 @@ void TestSvg::testSvgTransform01() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -158,7 +158,7 @@ void TestSvg::testSvgTransform02() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -178,7 +178,7 @@ void TestSvg::testSvgTransform03() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -198,7 +198,7 @@ void TestSvg::testSvgTransform04() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 150);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -218,7 +218,7 @@ void TestSvg::testSvgTransform05() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 150);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -238,7 +238,7 @@ void TestSvg::testSvgPath() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -259,7 +259,7 @@ void TestSvg::testSvgPath02() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -279,7 +279,7 @@ void TestSvg::testSvgPath03() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -299,7 +299,7 @@ void TestSvg::testSvgPath04() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -319,7 +319,7 @@ void TestSvg::testSvgPath04b() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -339,7 +339,7 @@ void TestSvg::testSvgPath05() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -359,7 +359,7 @@ void TestSvg::testSvgPath05b() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -379,7 +379,7 @@ void TestSvg::testSvgPath06() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1000, 1000);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -399,7 +399,7 @@ void TestSvg::testSvgPathValues() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -419,7 +419,7 @@ void TestSvg::testSvgPolyline() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -439,7 +439,7 @@ void TestSvg::testSvgPolygon() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -459,7 +459,7 @@ void TestSvg::testSvgStdFill() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -479,7 +479,7 @@ void TestSvg::testSvgArc() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -499,7 +499,7 @@ void TestSvg::testSvgUse() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -519,7 +519,7 @@ void TestSvg::testSvgFont() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -539,7 +539,7 @@ void TestSvg::testSvgOpacity() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 350);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -561,7 +561,7 @@ void TestSvg::testSvgImage() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -581,7 +581,7 @@ void TestSvg::testSvgStyle() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -601,7 +601,7 @@ void TestSvg::testSvgStyle2() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 500);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -621,7 +621,7 @@ void TestSvg::testLineCapStyle() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 200);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -641,7 +641,7 @@ void TestSvg::testLineJoinStyle() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 350);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -661,7 +661,7 @@ void TestSvg::testSvgGradient() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(800, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -682,7 +682,7 @@ void TestSvg::testBoundingBoxes() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 900);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -722,7 +722,7 @@ void TestSvg::testIssue146() {
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 500);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw

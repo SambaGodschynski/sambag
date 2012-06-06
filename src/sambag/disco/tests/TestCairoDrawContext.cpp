@@ -47,7 +47,7 @@ void TestCairoDrawContext::setUp() {
 void TestCairoDrawContext::testConstructor() {
 	using namespace sambag::disco;
 	using namespace boost;
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surf = fac->createImageSurface(300, 200);
 	IDrawContext::Ptr context = fac->createContext(surf);
 	surf->writeToFile(OUTPUT_FOLDER + "testConstructor.png");
@@ -61,7 +61,7 @@ void TestCairoDrawContext::testConstructor() {
 void TestCairoDrawContext::testLine() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -97,7 +97,7 @@ void TestCairoDrawContext::testLine() {
 void TestCairoDrawContext::testArc() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -121,7 +121,7 @@ void TestCairoDrawContext::testArc() {
 void TestCairoDrawContext::testRectangle() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -154,7 +154,7 @@ void TestCairoDrawContext::testRectangle() {
 void TestCairoDrawContext::testCurve() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -173,7 +173,7 @@ void TestCairoDrawContext::testCurve() {
 void TestCairoDrawContext::testText() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -201,7 +201,7 @@ void TestCairoDrawContext::testText() {
 void TestCairoDrawContext::testPath() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -240,7 +240,7 @@ void TestCairoDrawContext::testPath() {
 void TestCairoDrawContext::testClip() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
@@ -269,7 +269,7 @@ void TestCairoDrawContext::testClip() {
 void TestCairoDrawContext::testTransformation() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare
@@ -344,7 +344,7 @@ void TestCairoDrawContext::testLineStyle() {
 	using namespace sambag::disco;
 	using namespace boost::assign;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> prepare dash
@@ -406,7 +406,7 @@ void TestCairoDrawContext::testLineStyle() {
 void TestCairoDrawContext::testSetStrokeWidth() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
@@ -424,7 +424,7 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 	context->setStrokeColor(ColorRGBA());
 	context->stroke();
 	context->rect(Rectangle(0,0,100,50));
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(100,0));
 	sol->addColorStop(ColorRGBA(1,0,0), 0);
 	sol->addColorStop(ColorRGBA(0,1,0), .5);
@@ -450,7 +450,7 @@ void drawGradients(sambag::disco::IDrawContext::Ptr context,
 void TestCairoDrawContext::testGradient() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
@@ -469,7 +469,7 @@ void TestCairoDrawContext::testGradient() {
 void TestCairoDrawContext::testSetColor() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set/compare
@@ -482,7 +482,7 @@ void TestCairoDrawContext::testSetColor() {
 void TestCairoDrawContext::testMisc() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>has current point / get current point

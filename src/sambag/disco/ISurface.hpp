@@ -34,6 +34,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void writeToFile(const std::string &filename) const = 0;
 };
+//=============================================================================
+class IRecordingSurface : public virtual ISurface {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<IRecordingSurface> Ptr;
+};
 }} // namespace
 
 #endif /* ISURFACE_HPP_ */

@@ -27,7 +27,7 @@ namespace tests {
 void TestConcreteComponents::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	surf = fac->createImageSurface(320, 200);
 	root = RootPane::create(surf);
 	ui::UIManager::instance().installLookAndFeel(
@@ -48,7 +48,6 @@ void TestConcreteComponents::testButton() {
 	Button::Ptr btn = Button::create();
 	btn->setText("do it!");
 	btn->setName("Button01");
-	btn->setSize(Dimension(100,15));
 	root->add(btn);
 	root->validate();
 	root->draw( root->getDrawContext() );
@@ -65,6 +64,6 @@ void TestConcreteComponents::testButton() {
 	evc->createReleaseEvent(159,17,1);
 	evc->createMoveEvent(0,0);
 	root->draw( root->getDrawContext() );
-	surf->writeToFile(OUTPUT_FOLDER + "/testConcreteButton(ROLLOUT).png");
+	surf->writeToFile(OUTPUT_FOLDER + "/testConcreteButton(RELEASED).png");
 }
 } //namespace

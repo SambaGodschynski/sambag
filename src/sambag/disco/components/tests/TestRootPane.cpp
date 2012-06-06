@@ -31,7 +31,7 @@ void TestRootPane::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	using namespace boost;
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	surf = fac->createImageSurface(640, 480);
 	root = RootPane::create(surf);
 	root->setSize(640, 480);
@@ -172,6 +172,14 @@ void TestRootPane::testMouseEvent() {
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
 			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_PRESSED, 1)"),
+			tl.lastEvents.top().toString()
+	);
+	tl.lastEvents.pop();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	evc->createMoveEvent(0, 0);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, tl.lastEvents.size());
+	CPPUNIT_ASSERT_EQUAL(
+			std::string("MouseEvent(RootPane, Point2D(0, 0), MOUSE_MOVED, 0)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();

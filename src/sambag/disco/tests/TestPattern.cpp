@@ -21,7 +21,7 @@ void TestPattern::testConstruction() {
 	using namespace sambag::disco;
 	using namespace boost::tuples;
 	// solid
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	ISolidPattern::Ptr spattern = fac->createSolidPattern(ColorRGBA(1));
 	CPPUNIT_ASSERT(spattern->getSolidColor() == ColorRGBA(1));
 	// linear

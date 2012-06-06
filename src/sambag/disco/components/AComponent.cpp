@@ -145,7 +145,13 @@ const Point2D & AComponent::getLocation() const {
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMaximumSize() {
-	Dimension dim = maxSize;
+	Dimension dim;
+	if (ui) {
+		dim = ui->getMaximumSize(getPtr());
+		if (dim!=NULL_DIMENSION)
+			return dim;
+	}
+	dim = maxSize;
 	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
 		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 			maxSize = getSize();
@@ -156,7 +162,13 @@ Dimension AComponent::getMaximumSize() {
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMinimumSize() {
-	Dimension dim = minSize;
+	Dimension dim;
+	if (ui) {
+		dim = ui->getMinimumSize(getPtr());
+		if (dim!=NULL_DIMENSION)
+			return dim;
+	}
+	dim = minSize;
 	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
 		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 			minSize = getSize();
@@ -175,7 +187,13 @@ AContainerPtr AComponent::getParent() const {
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getPreferredSize() {
-	Dimension dim = prefSize;
+	Dimension dim;
+	if (ui) {
+		dim = ui->getPreferredSize(getPtr());
+		if (dim!=NULL_DIMENSION)
+			return dim;
+	}
+	dim = prefSize;
 	if (dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid())) {
 		SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
 			prefSize = getMinimumSize();

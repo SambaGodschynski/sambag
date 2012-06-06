@@ -24,29 +24,24 @@ int AComponentUI::getBaseline(AComponent::Ptr c, int width, int height) {
 }
 //-----------------------------------------------------------------------------
 Dimension AComponentUI::getMaximumSize(AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+	return NULL_DIMENSION;
 }
 //-----------------------------------------------------------------------------
 Dimension AComponentUI::getMinimumSize(AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+	return NULL_DIMENSION;
 }
 //-----------------------------------------------------------------------------
 Dimension AComponentUI::getPreferredSize(AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Dimension();
+	return NULL_DIMENSION;
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::installUI(AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::draw(IDrawContext::Ptr cn, AComponent::Ptr c) {
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::uninstallUI(AComponent::Ptr c) {
-	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::update(IDrawContext::Ptr cn, AComponent::Ptr c){

@@ -15,6 +15,7 @@ namespace sambag { namespace disco { namespace components {
 Button::Button() {
 	setBackground(ColorRGBA(1,1,1));
 	setForeground(ColorRGBA(0,0,0));
+	setName("Button");
 }
 //-----------------------------------------------------------------------------
 ui::AComponentUIPtr Button::getComponentUI(ui::ALookAndFeelPtr laf) const {

@@ -7,14 +7,13 @@
 
 #include "IDiscoFactory.hpp"
 #include "CairoDiscoFactory.hpp"
+#include <loki/Singleton.h>
 namespace sambag { namespace disco {
+namespace {
+	typedef Loki::SingletonHolder<CairoDiscoFactory> DiscoFactoryHolder;
+}
 //-----------------------------------------------------------------------------
-IDiscoFactory::Ptr singleton;
-//-----------------------------------------------------------------------------
-IDiscoFactory::Ptr getDiscoFactory() {
-	if (!singleton) {
-		singleton = IDiscoFactory::Ptr(new CairoDiscoFactory());
-	}
-	return singleton;
+IDiscoFactory * getDiscoFactory() {
+	return &DiscoFactoryHolder::Instance();
 }
 }} // namespace

@@ -9,6 +9,7 @@
 #define CAIRODISCOFACTORY_HPP_
 
 #include "IDiscoFactory.hpp"
+#include <loki/Singleton.h>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -17,9 +18,10 @@ namespace sambag { namespace disco {
  */
 class CairoDiscoFactory : public IDiscoFactory {
 //=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoDiscoFactory> Ptr;
+friend struct Loki::CreateUsingNew<CairoDiscoFactory>;
+private:
+	CairoDiscoFactory() {}
+	CairoDiscoFactory(const CairoDiscoFactory&) {}
 public:
 	//-------------------------------------------------------------------------
 	virtual IDrawContext::Ptr createContext( ISurface::Ptr surface ) const;
@@ -36,6 +38,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual IImageSurface::Ptr
 	createImageSurface(IDataHandler::Ptr handler) const;
+	//-------------------------------------------------------------------------
+	virtual IRecordingSurface::Ptr
+	createRecordingSurface() const;
 	//-------------------------------------------------------------------------
 	ISolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const;
 	//-------------------------------------------------------------------------

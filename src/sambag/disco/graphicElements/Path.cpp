@@ -600,7 +600,7 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 }
 //-----------------------------------------------------------------------------
 Rectangle Path::getBoundingBox() const {
-	IDiscoFactory::Ptr fac = getDiscoFactory();
+	IDiscoFactory *fac = getDiscoFactory();
 	IDrawContext::Ptr context = fac->createContext();
 	SAMBAG_ASSERT(context);
 	drawInstructions(context);
