@@ -30,7 +30,7 @@ public:
 	typedef boost::shared_ptr<MouseEventCreator> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	MouseEvent currEvent;
+	MouseEvent lastEvent;
 	//-------------------------------------------------------------------------
 	RootPanePtr root;
 	//-------------------------------------------------------------------------
@@ -43,7 +43,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void
-	createClickEvent(const Coordinate &x,
+	createPressEvent(const Coordinate &x,
 			const Coordinate &y, Bitmask buttons);
 	//-------------------------------------------------------------------------
 	void

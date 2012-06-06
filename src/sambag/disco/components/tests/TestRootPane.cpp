@@ -118,10 +118,10 @@ void TestRootPane::testMouseEvent() {
 	);
 	MouseEventCreator::Ptr evc = MouseEventCreator::create(root);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	evc->createClickEvent(50, 50, 1);
+	evc->createPressEvent(50, 50, 1);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(TestComponent0, Point2D(25, 15), MOUSE_CLICKED, 1)"),
+			std::string("MouseEvent(TestComponent0, Point2D(25, 15), MOUSE_PRESSED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
@@ -156,7 +156,25 @@ void TestRootPane::testMouseEvent() {
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
-
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	evc->createPressEvent(10, 10, 1);
+	evc->createReleaseEvent(10, 10, 1);
+	CPPUNIT_ASSERT_EQUAL((size_t)3, tl.lastEvents.size());
+	CPPUNIT_ASSERT_EQUAL(
+			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_CLICKED, 1)"),
+			tl.lastEvents.top().toString()
+	);
+	tl.lastEvents.pop();
+	CPPUNIT_ASSERT_EQUAL(
+			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_RELEASED, 1)"),
+			tl.lastEvents.top().toString()
+	);
+	tl.lastEvents.pop();
+	CPPUNIT_ASSERT_EQUAL(
+			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_PRESSED, 1)"),
+			tl.lastEvents.top().toString()
+	);
+	tl.lastEvents.pop();
 	// TODO: test with sub components
 	// TODO: test different mouse events
 }

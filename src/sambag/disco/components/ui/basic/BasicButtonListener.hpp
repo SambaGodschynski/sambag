@@ -40,7 +40,6 @@ void BasicButtonListener<ButtonModell>::
 	case MouseEvent::MOUSE_EXITED:
 		b->setRollover(false); break;
 	case MouseEvent::MOUSE_PRESSED:
-	case MouseEvent::MOUSE_CLICKED:
 		b->setPressed(true); break;
 	case MouseEvent::MOUSE_RELEASED:
 		b->setPressed(false); break;

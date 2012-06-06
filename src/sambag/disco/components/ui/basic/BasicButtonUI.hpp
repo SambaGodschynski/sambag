@@ -62,15 +62,15 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 		return;
 	if (b->isRollover()) {
 		if (b->isPressed())
-			cn->setFillColor(svg::HtmlColors::getColor("red"));
+			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
 		else
 			cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
 	} else
 		cn->setFillColor(b->getBackground());
 	cn->setStrokeColor(c->getForeground());
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
 	cn->fill();
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
 	cn->setStrokeWidth(2);
 	cn->stroke();
 	cn->setFontSize(15);
