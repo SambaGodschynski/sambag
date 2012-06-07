@@ -542,10 +542,10 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.1568079430" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.540194364" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
 								<option id="gnu.cpp.link.option.libs.1335580772" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="Xext"/>
 									<listOptionValue builtIn="false" value="sambag"/>
 									<listOptionValue builtIn="false" value="boost_regex"/>
+									<listOptionValue builtIn="false" value="X11"/>
 									<listOptionValue builtIn="false" value="boost_signals"/>
 									<listOptionValue builtIn="false" value="boost_system"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>

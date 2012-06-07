@@ -1418,12 +1418,22 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/AContainer.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/ALayoutManager.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp \
+ /home/samba/clibs/sambag/src/sambag/com/ICommand.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/RedrawManager.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/FlowLayout.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/IDiscoFactory.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/IWindowFactory.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/Forward.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/AFramedWindow.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/AWindow.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/components/RootPane.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/X11Window.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/AFramedWindow.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/X11Window.hpp \
+ /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp \
  /home/samba/clibs/boost/boost/timer/timer.hpp \
  /home/samba/clibs/boost/boost/config/warning_disable.hpp \
  /home/samba/clibs/boost/boost/timer/config.hpp \
@@ -4290,6 +4300,8 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
 
 /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp:
 
+/home/samba/clibs/sambag/src/sambag/com/ICommand.hpp:
+
 /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp:
 
 /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp:
@@ -4301,6 +4313,24 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
 /home/samba/clibs/sambag/src/sambag/disco/components/FlowLayout.hpp:
 
 /home/samba/clibs/sambag/src/sambag/disco/IDiscoFactory.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/IWindowFactory.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/Forward.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/AFramedWindow.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/AWindow.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/components/RootPane.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/X11Window.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/AFramedWindow.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/X11Window.hpp:
+
+/home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp:
 
 /home/samba/clibs/boost/boost/timer/timer.hpp:
 

@@ -1418,6 +1418,7 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/AContainer.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/ALayoutManager.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp \
+ /home/samba/clibs/sambag/src/sambag/com/ICommand.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp \
@@ -1432,7 +1433,6 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/Button.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/DefaultButtonModell.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/ButtonGroup.hpp \
- /home/samba/clibs/sambag/src/sambag/com/ICommand.hpp \
  /home/samba/clibs/sambag/src/sambag/com/events/ChangedEvent.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/components/AButton.hpp \
  /home/samba/clibs/sambag/src/sambag/disco/IDiscoFactory.hpp \
@@ -4302,6 +4302,8 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
 
 /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp:
 
+/home/samba/clibs/sambag/src/sambag/com/ICommand.hpp:
+
 /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEvent.hpp:
 
 /home/samba/clibs/sambag/src/sambag/disco/components/events/MouseEventCreator.hpp:
@@ -4329,8 +4331,6 @@ src/DiscoView.d: ../src/DiscoView.cpp ../src/DiscoView.hpp \
 /home/samba/clibs/sambag/src/sambag/disco/components/DefaultButtonModell.hpp:
 
 /home/samba/clibs/sambag/src/sambag/disco/components/ButtonGroup.hpp:
-
-/home/samba/clibs/sambag/src/sambag/com/ICommand.hpp:
 
 /home/samba/clibs/sambag/src/sambag/com/events/ChangedEvent.hpp:
 

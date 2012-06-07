@@ -16,31 +16,31 @@ DefaultButtonModell::DefaultButtonModell() :
 		stateMask(0),
 		mnemonic(0)
 {
-	setEnabled(true);
+	setButtonEnabled(true);
 }
 //-----------------------------------------------------------------------------
-bool DefaultButtonModell::isArmed() const {
+bool DefaultButtonModell::isButtonArmed() const {
 	return (stateMask & ARMED) != 0;
 }
 //-----------------------------------------------------------------------------
-bool DefaultButtonModell::isSelected() const {
+bool DefaultButtonModell::isButtonSelected() const {
 	return (stateMask & SELECTED) != 0;
 }
 //-----------------------------------------------------------------------------
-bool DefaultButtonModell::isEnabled() const {
+bool DefaultButtonModell::isButtonEnabled() const {
 	return (stateMask & ENABLED) != 0;
 }
 //-----------------------------------------------------------------------------
-bool DefaultButtonModell::isPressed() const {
+bool DefaultButtonModell::isButtonPressed() const {
 	return (stateMask & PRESSED) != 0;
 }
 //-----------------------------------------------------------------------------
-bool DefaultButtonModell::isRollover() const {
+bool DefaultButtonModell::isButtonRollover() const {
 	return (stateMask & ROLLOVER) != 0;;
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setArmed(bool b) {
-	if (isArmed() == b)
+void DefaultButtonModell::setButtonArmed(bool b) {
+	if (isButtonArmed() == b)
 		return;
 	if (b) {
 		stateMask |= ARMED;
@@ -50,8 +50,8 @@ void DefaultButtonModell::setArmed(bool b) {
 	fireStateChanged();
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setSelected(bool b) {
-	if (isSelected() == b)
+void DefaultButtonModell::setButtonSelected(bool b) {
+	if (isButtonSelected() == b)
 		return;
 	if (b) {
 		stateMask |= SELECTED;
@@ -61,8 +61,8 @@ void DefaultButtonModell::setSelected(bool b) {
 	fireStateChanged();
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setEnabled(bool b) {
-	if (isEnabled() == b)
+void DefaultButtonModell::setButtonEnabled(bool b) {
+	if (isButtonEnabled() == b)
 		return;
 	if (b) {
 		stateMask |= ENABLED;
@@ -72,8 +72,8 @@ void DefaultButtonModell::setEnabled(bool b) {
 	fireStateChanged();
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setPressed(bool b) {
-	if (isPressed() == b)
+void DefaultButtonModell::setButtonPressed(bool b) {
+	if (isButtonPressed() == b)
 		return;
 	if (b) {
 		stateMask |= PRESSED;
@@ -83,8 +83,8 @@ void DefaultButtonModell::setPressed(bool b) {
 	fireStateChanged();
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setRollover(bool b) {
-	if (isRollover() == b)
+void DefaultButtonModell::setButtonRollover(bool b) {
+	if (isButtonRollover() == b)
 		return;
 	if (b) {
 		stateMask |= ROLLOVER;
@@ -103,20 +103,20 @@ int DefaultButtonModell::getMnemonic() const {
 	return mnemonic;
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setGroup(ButtonGroup::Ptr _group) {
+void DefaultButtonModell::setButtonGroup(ButtonGroup::Ptr _group) {
 	group = _group;
 }
 //-----------------------------------------------------------------------------
-ButtonGroup::Ptr DefaultButtonModell::getGroup() const {
+ButtonGroup::Ptr DefaultButtonModell::getButtonGroup() const {
 	return group;
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setActionCommand(sambag::com::ICommand::Ptr cmd )
+void DefaultButtonModell::setButtonCommand(sambag::com::ICommand::Ptr cmd )
 {
 	actionCommand = cmd;
 }
 //-----------------------------------------------------------------------------
-sambag::com::ICommand::Ptr DefaultButtonModell::getActionCommand() const {
+sambag::com::ICommand::Ptr DefaultButtonModell::getButtonCommand() const {
 	return actionCommand;
 }
 //-----------------------------------------------------------------------------

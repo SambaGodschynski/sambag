@@ -21,8 +21,7 @@
 
 // D.i.s.c.o
 sambag::disco::X11Surface::Ptr discoSurface;
-sambag::disco::IDiscoFactory::Ptr discoFactory =
-		sambag::disco::getDiscoFactory();
+
 
 static struct {
 	std::string title;
@@ -169,12 +168,13 @@ static void createMainWindow() {
 	// create the window
 	XSetWindowAttributes attributes;
 	attributes.background_pixel = BlackPixel(display, screen);
+	attributes.override_redirect = 1; // <-- without titlebar, always on top
 	attributes.event_mask = ButtonPressMask | ButtonReleaseMask | KeyPressMask
 			| KeyReleaseMask | ButtonMotionMask | PointerMotionHintMask
 			| StructureNotifyMask | PointerMotionMask | PointerMotionHintMask/*| ExposureMask*/;
 	win = XCreateWindow(display, RootWindow(display, screen), 50, 50, width,
 			height, CopyFromParent, CopyFromParent, InputOutput, visual,
-			CWBackPixel | CWEventMask, &attributes);
+			CWBackPixel | CWEventMask /*| CWOverrideRedirect<--*/, &attributes);
 
 	setWindowTitle(wParam.title);
 
@@ -211,7 +211,6 @@ static void destroyMainWindow() {
 
 static void handleEvent(XEvent &event) {
 	static int mx = 0, my = 0; // mouse position
-
 	switch (event.type) {
 	case ButtonPress: {
 		int buttons = 0;

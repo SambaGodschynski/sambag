@@ -66,9 +66,9 @@ public:
 	 *
 	 * @return <code>true</code> if the button is armed,
 	 *         and ready to be triggered
-	 * @see #setArmed
+	 * @see #setButtonArmed
 	 */
-	bool isArmed() const;
+	bool isButtonArmed() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Indicates if the button has been selected. Only needed for
@@ -76,7 +76,7 @@ public:
 	 *
 	 * @return <code>true</code> if the button is selected
 	 */
-	bool isSelected() const;
+	bool isButtonSelected() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Indicates if the button can be selected or triggered by
@@ -84,28 +84,28 @@ public:
 	 *
 	 * @return <code>true</code> if the button is enabled
 	 */
-	bool isEnabled() const;
+	bool isButtonEnabled() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Indicates if the button is pressed.
 	 *
 	 * @return <code>true</code> if the button is pressed
 	 */
-	bool isPressed() const;
+	bool isButtonPressed() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Indicates that the mouse is over the button.
 	 *
 	 * @return <code>true</code> if the mouse is over the button
 	 */
-	bool isRollover() const;
+	bool isButtonRollover() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Marks the button as armed or unarmed.
 	 *
 	 * @param b whether or not the button should be armed
 	 */
-	void setArmed(bool b);
+	void setButtonArmed(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * Selects or deselects the button.
@@ -113,31 +113,31 @@ public:
 	 * @param b <code>true</code> selects the button,
 	 *          <code>false</code> deselects the button
 	 */
-	void setSelected(bool b);
+	void setButtonSelected(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * Enables or disables the button.
 	 *
 	 * @param b whether or not the button should be enabled
-	 * @see #isEnabled
+	 * @see #isButtonEnabled
 	 */
-	void setEnabled(bool b);
+	void setButtonEnabled(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the button to pressed or unpressed.
 	 *
 	 * @param b whether or not the button should be pressed
-	 * @see #isPressed
+	 * @see #isButtonPressed
 	 */
-	void setPressed(bool b);
+	void setButtonPressed(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets or clears the button's rollover state
 	 *
 	 * @param b whether or not the button is in the rollover state
-	 * @see #isRollover
+	 * @see #isButtonRollover
 	 */
-	void setRollover(bool b);
+	void setButtonRollover(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the keyboard mnemonic (shortcut key or
@@ -162,13 +162,13 @@ public:
 	 *
 	 * @param group the <code>ButtonGroup</code> the button belongs to
 	 */
-	void setGroup(ButtonGroup::Ptr group);
+	void setButtonGroup(ButtonGroup::Ptr group);
 	//-------------------------------------------------------------------------
-	ButtonGroup::Ptr getGroup() const;
+	ButtonGroup::Ptr getButtonGroup() const;
 	//-------------------------------------------------------------------------
-	void setActionCommand(sambag::com::ICommand::Ptr actionCommand);
+	void setButtonCommand(sambag::com::ICommand::Ptr actionCommand);
 	//-------------------------------------------------------------------------
-	sambag::com::ICommand::Ptr getActionCommand() const;
+	sambag::com::ICommand::Ptr getButtonCommand() const;
 }; // IButtonModell
 }}} // namespace(s)
 

@@ -5,18 +5,15 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/DiscoView.cpp \
-/home/samba/workspace/sambag/src/sambag/disco/components/tests/TestComponents.cpp \
-../src/X11Main.cpp 
+/home/samba/workspace/sambag/src/sambag/disco/components/tests/TestComponents.cpp 
 
 OBJS += \
 ./src/DiscoView.o \
-./src/TestComponents.o \
-./src/X11Main.o 
+./src/TestComponents.o 
 
 CPP_DEPS += \
 ./src/DiscoView.d \
-./src/TestComponents.d \
-./src/X11Main.d 
+./src/TestComponents.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

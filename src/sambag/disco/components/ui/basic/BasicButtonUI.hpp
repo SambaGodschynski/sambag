@@ -80,24 +80,24 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
-	if (b->isRollover()) {
-		if (b->isPressed())
+	if (b->isButtonRollover()) {
+		if (b->isButtonPressed())
 			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
 		else
 			cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
 	} else
 		cn->setFillColor(b->getBackground());
 	cn->setStrokeColor(c->getForeground());
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->fill();
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 10);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->setStrokeWidth(1);
 	cn->stroke();
 	cn->setFontSize(15);
 	cn->setFillColor(c->getForeground());
 	std::string str = b->getText();
 	Rectangle txt = cn->textExtends(str);
-	cn->translate( Point2D( c->getWidth() / 2.0 - txt.getWidth() / 2.0,
+	cn->translate( Point2D( 10,
 			c->getHeight() / 2.0 + txt.getHeight() / 2.0
 	));
 	cn->textPath(str);

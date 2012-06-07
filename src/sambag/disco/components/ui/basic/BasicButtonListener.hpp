@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/AButton.hpp>
+#include <sambag/com/ICommand.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -36,13 +37,25 @@ void BasicButtonListener<ButtonModell>::
 			boost::shared_dynamic_cast<AbstractButton>(ev.getSource());
 	switch(ev.getType()) {
 	case MouseEvent::MOUSE_ENTERED:
-		b->setRollover(true); break;
+		b->setButtonRollover(true);
+		break;
 	case MouseEvent::MOUSE_EXITED:
-		b->setRollover(false); break;
+		b->setButtonRollover(false);
+		break;
 	case MouseEvent::MOUSE_PRESSED:
-		b->setPressed(true); break;
-	case MouseEvent::MOUSE_RELEASED:
-		b->setPressed(false); break;
+		b->setButtonPressed(true);
+		break;
+	case MouseEvent::MOUSE_RELEASED: {
+		bool oldState = b->isButtonPressed();
+		b->setButtonPressed(false);
+		if (!oldState)
+			break;
+		sambag::com::ICommand::Ptr c =
+				b->getButtonCommand();
+		if (c)
+			c->execute();
+		break;
+	}
 	default:
 		break;
 	}

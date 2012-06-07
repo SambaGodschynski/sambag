@@ -1415,7 +1415,8 @@ src/TestComponents.d: \
  /home/samba/clibs/loki/include/loki/NullType.h \
  /home/samba/clibs/loki/include/loki/TypeManip.h \
  /home/samba/clibs/loki/include/loki/TypelistMacros.h \
- /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp
+ /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp \
+ /home/samba/clibs/sambag/src/sambag/com/ICommand.hpp
 
 /home/samba/workspace/sambag/src/sambag/disco/components/tests/TestComponents.hpp:
 
@@ -4250,3 +4251,5 @@ src/TestComponents.d: \
 /home/samba/clibs/loki/include/loki/TypelistMacros.h:
 
 /home/samba/clibs/sambag/src/sambag/disco/components/ui/AComponentUI.hpp:
+
+/home/samba/clibs/sambag/src/sambag/com/ICommand.hpp:

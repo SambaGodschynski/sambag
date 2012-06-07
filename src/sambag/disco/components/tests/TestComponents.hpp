@@ -15,6 +15,7 @@
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include <string>
+#include <sambag/com/ICommand.hpp>
 
 namespace tests {
 	namespace sdc = sambag::disco::components;
@@ -161,6 +162,18 @@ namespace tests {
 			return "TestLayoutManager";
 		}
 	}; // ALayoutManager
+	//=========================================================================
+	struct CommandForTest : public sambag::com::ICommand {
+		sambag::com::ArithmeticWrapper<bool> called;
+		typedef boost::shared_ptr<CommandForTest> Ptr;
+		static Ptr create() {
+			return Ptr(new CommandForTest());
+		}
+		virtual void execute() {
+			called = true;
+		}
+		bool wasCalled() const { return called; }
+	};
 }
 
 #endif /* TESTCOMPONENTS_HPP_ */

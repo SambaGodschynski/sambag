@@ -17,6 +17,7 @@
 #include <sambag/disco/components/ui/basic/BasicLookAndFeel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
+#include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -86,12 +87,17 @@ void init(int &outWidth, int &outHeight) {
 	outHeight = dim.height();
 }
 
-void onMouse(void *, const sambag::disco::components::events::MouseEvent &ev) {
-	using namespace std;
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	cout<<ev.toString()<<endl;
-}
+struct ButtonCommand : public sambag::com::ICommand {
+	typedef boost::shared_ptr<ButtonCommand> Ptr;
+	int id;
+	static Ptr create(int id) {
+		return Ptr(new ButtonCommand(id));
+	}
+	virtual void execute() {
+		std::cout<<id<<" pressed"<<std::endl;
+	}
+	ButtonCommand(int id) : id(id) {}
+};
 
 void createWindow(sambag::disco::ISurface::Ptr surf) {
 	assert(surf);
@@ -102,18 +108,34 @@ void createWindow(sambag::disco::ISurface::Ptr surf) {
 	root = RootPane::create(bff);
 	ui::UIManager::instance().installLookAndFeel(root,
 			ui::basic::BasicLookAndFeel::create());
-
 	root->setSize(dim);
+	// content
+	tests::TestContainer::Ptr cn = tests::TestContainer::create();
+	cn->setLayout( FlowLayout::create() );
+	cn->setPreferredSize(Dimension(150,150));
+	for (int i = 0; i < 10; ++i) {
+		std::stringstream ss;
+		ss << i;
+		Button::Ptr btn = Button::create();
+		btn->setText(ss.str());
+		btn->setButtonCommand(ButtonCommand::create(i));
+		cn->add(btn);
+	}
 	Button::Ptr btn = Button::create();
-//	btn->setSize(Dimension(100,50));
-	//btn->setPreferredSize(Dimension(100,50));
-	btn->setPreferredSize(Dimension(60, 25));
-	btn->setText("do it!");
-	btn->setVisible(true);
+	btn->setText("#");
+	btn->setButtonCommand(ButtonCommand::create(10));
+	cn->add(btn);
+	btn = Button::create();
+	btn->setText("*");
+	btn->setButtonCommand(ButtonCommand::create(11));
+	cn->add(btn);
+
+	btn = Button::create();
+	btn->setText("do it! bitch");
+	root->add(cn);
 	root->add(btn);
 	root->validate();
 	root->setVisible(true);
-	btn->EventSender<MouseEvent>::addEventListener(boost::bind(&onMouse,_1, _2));
 	mev = sambag::disco::components::events::MouseEventCreator::create(root);
 }
 
