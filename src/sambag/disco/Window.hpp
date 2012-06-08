@@ -1,0 +1,86 @@
+/*
+ * AWindow.hpp
+ *
+ *  Created on: Thu Jun  7 10:44:23 2012
+ *      Author: Johannes Unger
+ */
+
+#ifndef SAMBAG_WINDOW_H
+#define SAMBAG_WINDOW_H
+
+#include <boost/shared_ptr.hpp>
+#include "components/RootPane.hpp"
+#include "ISurface.hpp"
+#include "windowImpl/AWindow.hpp"
+
+namespace sambag { namespace disco {
+//=============================================================================
+/** 
+  * @class Window.
+  */
+class Window {
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<Window> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<Window> WPtr;
+protected:
+	//-------------------------------------------------------------------------
+	WPtr self;
+	//-------------------------------------------------------------------------
+	Window::Ptr parent;
+	//-------------------------------------------------------------------------
+	components::RootPane::Ptr rootPane;
+	//-------------------------------------------------------------------------
+	Window(Window::Ptr parent);
+	//-------------------------------------------------------------------------
+	AWindow::Ptr windowImpl;
+private:
+public:
+	//-------------------------------------------------------------------------
+	static Ptr create(Window::Ptr parent=WindowPtr()) {
+		Ptr res(new Window(parent));
+		res->self = res;
+		return res;
+	}
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return self.lock();
+	}
+	//-------------------------------------------------------------------------
+	components::RootPane::Ptr getRootPane() const;
+	//-------------------------------------------------------------------------
+	virtual void open();
+	//-------------------------------------------------------------------------
+	virtual void close();
+	//-------------------------------------------------------------------------
+	virtual void setBounds(const Rectangle &r);
+	//-------------------------------------------------------------------------
+	virtual void setSize(const Dimension &d) {
+		Rectangle neu = getBounds();
+		neu.setWidth(d.width());
+		neu.setHeight(d.height());
+		setBounds(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual void setLocation(const Point2D &p) {
+		Rectangle neu = getBounds();
+		neu.translate(p);
+		setBounds(neu);
+	}
+	//-------------------------------------------------------------------------
+	virtual Rectangle getBounds() const;
+	//-------------------------------------------------------------------------
+	virtual Dimension getSize() const {
+		Rectangle curr = getBounds();
+		return curr.getDimension();
+	}
+	//-------------------------------------------------------------------------
+	virtual Point2D getLocation() const {
+		Rectangle curr = getBounds();
+		return curr.x0();
+	}
+}; // AWindow
+}} // namespace(s)
+#endif /* SAMBAG_AWINDOW_H */
