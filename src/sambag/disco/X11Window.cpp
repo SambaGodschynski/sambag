@@ -35,19 +35,15 @@ void OpenWindow::execute() {
 //-----------------------------------------------------------------------------
 X11WindowImpl::WinMap X11WindowImpl::winmap;
 //-----------------------------------------------------------------------------
-Display * X11WindowImpl::display = NULL;
-//-----------------------------------------------------------------------------
 int X11WindowImpl::instances = 0;
+//-----------------------------------------------------------------------------
+X11WindowImpl::Invocations X11WindowImpl::invocations;
+//-----------------------------------------------------------------------------
+Display * X11WindowImpl::display = NULL;
 //-----------------------------------------------------------------------------
 Atom X11WindowImpl::wm_protocols_atom = 0;
 //-----------------------------------------------------------------------------
 Atom X11WindowImpl::wm_delete_window_atom = 0;
-//-----------------------------------------------------------------------------
-X11WindowImpl::Invocations X11WindowImpl::invocations;
-//-----------------------------------------------------------------------------
-int X11WindowImpl::screen = 0;
-//-----------------------------------------------------------------------------
-Visual * X11WindowImpl::visual = NULL;
 //-----------------------------------------------------------------------------
 X11WindowImpl * X11WindowImpl::getX11WindowImpl(Window win) {
 	WinMap::iterator it = winmap.find(win);
@@ -60,6 +56,8 @@ X11WindowImpl::X11WindowImpl(bool framed) :
 	framed(framed),
 	bounds(Rectangle(0,0,1,1)),
 	visible(false),
+	screen(0),
+	visual(NULL),
 	win(0)
 {
 }
@@ -67,18 +65,15 @@ X11WindowImpl::X11WindowImpl(bool framed) :
 void X11WindowImpl::createWindow() {
 	if (instances++==0) {
 		display = XOpenDisplay(NULL);
-		SAMBAG_ASSERT(display);
 		wm_protocols_atom = XInternAtom(display, "WM_PROTOCOLS", False);
 		wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
-		screen = DefaultScreen(display);
-		// init visual
-		visual = XDefaultVisual(display, 0);
 	}
 	SAMBAG_ASSERT(display);
+	screen = DefaultScreen(display);
+	// init visual
+	visual = XDefaultVisual(display, 0);
 
-	// initialize variables
-	win = 0;
-
+	SAMBAG_ASSERT(display);
 	// create the window
 	XSetWindowAttributes attributes;
 	attributes.background_pixel = BlackPixel(display, screen);
@@ -102,15 +97,15 @@ void X11WindowImpl::createWindow() {
 	// register win
 	winmap[win] = this;
 	// participate in the window manager 'delete yourself' protocol
-	/*if (XSetWMProtocols(display, win, &wm_delete_window_atom, 1)==0) {
+	if (XSetWMProtocols(display, win, &wm_delete_window_atom, 1)==0) {
 		SAMBAG_ASSERT(false);
-	}*/
+	}
 	// disco stuff
 	createSurface();
 	SAMBAG_ASSERT(surface);
 	// pop up the window
 	XMapWindow(display, win);
-	XSync(display, win);
+	//XSync(display, win);
 	visible = true;
 	updateTitle();
 	onCreated();
@@ -129,6 +124,8 @@ void X11WindowImpl::destroyWindow() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::close() {
+	if (win==0)
+		return;
 	invokeLater(DestroyWindow::create(this));
 }
 //-----------------------------------------------------------------------------

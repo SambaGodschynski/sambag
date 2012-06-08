@@ -105,10 +105,10 @@ protected:
 	// X11
 	static Display *display;
 	static int instances;
-	static int screen;
+	int screen;
 	static Atom wm_protocols_atom;
 	static Atom wm_delete_window_atom;
-	static Visual *visual;
+	Visual *visual;
 	Window win;
 	//-------------------------------------------------------------------------
 	ISurface::Ptr surface;
