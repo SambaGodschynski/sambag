@@ -20,10 +20,7 @@ class IWindowFactory {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindow(AWindowPtr parent=AWindowPtr()) const = 0;
-	//-------------------------------------------------------------------------
-	virtual AFramedWindowPtr
-	createFramedWindow(AWindowPtr parent=AWindowPtr()) const = 0;
+	virtual AWindowPtr createWindowImpl() const = 0;
 }; // IWindowFactory
 ///////////////////////////////////////////////////////////////////////////////
 extern IWindowFactory * getWindowFactory();

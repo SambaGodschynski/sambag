@@ -12,7 +12,7 @@
 
 namespace sambag { namespace disco {
 class AWindow; typedef boost::shared_ptr<AWindow> AWindowPtr;
-class AFramedWindow; typedef boost::shared_ptr<AFramedWindow> AFramedWindowPtr;
+class Window; typedef boost::shared_ptr<Window> WindowPtr;
 }} // namespace(s)
 
 #endif /* SAMBAG_FORWARD_H */

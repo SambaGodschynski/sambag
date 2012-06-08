@@ -12,8 +12,8 @@
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/IWindowFactory.hpp>
-#include <sambag/disco/AFramedWindow.hpp>
-#include <sambag/disco/X11Window.hpp>
+#include <sambag/disco/Window.hpp>
+#include <sambag/disco/windowImpl/X11Window.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -166,18 +166,10 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 	std::cout<<ev.toString()<<std::endl;
 }
 
-sd::AFramedWindowPtr win;
+sd::Window::Ptr win;
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	std::stringstream ss;
-	static int c = 0;
-	ss<<"Window"<<c;
-	AFramedWindowPtr win = getWindowFactory()->createFramedWindow();
-	win->getRootPane()->setBounds(Rectangle(0,0,230,200));
-	//win->setTitle(ss.str());
-	win->open();
+	std::cout<<"aha"<<std::endl;
 }
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	win->close();
@@ -186,12 +178,12 @@ void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
 int main() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	win = getWindowFactory()->createFramedWindow();
+	win = sd::Window::create();
 	win->setBounds(Rectangle(0,0,230,200));
 	win->getRootPane()->setBounds(Rectangle(0,0,230,200));
 	win->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onMouse);
-	win->setTitle("Window01");
+	//win->setTitle("Window01");
 
 	Button::Ptr btn = Button::create();
 	btn->setText("hinzufügen");
