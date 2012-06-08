@@ -35,6 +35,8 @@ protected:
 	}
 	//-------------------------------------------------------------------------
 	RootPane(ISurface::Ptr surface);
+	//-------------------------------------------------------------------------
+	virtual void redrawParentIfNeeded(const Rectangle &r);
 private:
 	//-------------------------------------------------------------------------
 	ISurface::Ptr surface;
@@ -60,11 +62,11 @@ public:
 		return AContainer::Ptr();
 	}
 	//-------------------------------------------------------------------------
-	void resetSurface(ISurface::Ptr _surface);
+	void setSurface(ISurface::Ptr _surface);
 	//-------------------------------------------------------------------------
 	IDrawContext::Ptr getDrawContext() const;
 	//-------------------------------------------------------------------------
-	static Ptr create(ISurface::Ptr surface);
+	static Ptr create(ISurface::Ptr surface = ISurface::Ptr());
 	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {
 		return surface;

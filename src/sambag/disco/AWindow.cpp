@@ -6,6 +6,7 @@
  */
 
 #include "AWindow.hpp"
+#include "components/RootPane.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -13,6 +14,7 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 AWindow::AWindow(AWindow::Ptr parent) : parent(parent) {
+	rootPane = components::RootPane::create();
 }
 //-----------------------------------------------------------------------------
 components::RootPane::Ptr AWindow::getRootPane() const {

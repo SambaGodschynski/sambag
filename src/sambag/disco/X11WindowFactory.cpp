@@ -15,14 +15,14 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 AWindowPtr X11WindowFactory::createWindow( AWindowPtr parent ) const {
-	AWindowPtr res = X11Window::create(parent);
+	AWindowPtr res = X11Window<AWindow>::create(parent, false);
 	return res;
 }
 //-----------------------------------------------------------------------------
 AFramedWindowPtr
 X11WindowFactory::createFramedWindow( AWindowPtr parent ) const
 {
-	AFramedWindowPtr res = X11FramedWindow::create(parent);
+	AFramedWindowPtr res = X11Window<AFramedWindow>::create(parent, true);
 	return res;
 }
 //-----------------------------------------------------------------------------

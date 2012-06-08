@@ -12,6 +12,7 @@
 #include <sambag/com/ICommand.hpp>
 #include <sambag/com/events/ChangedEvent.hpp>
 #include <sambag/com/events/Events.hpp>
+#include "events/ActionEvent.hpp"
 
 namespace sambag { namespace disco { namespace components {
 namespace ev = sambag::com::events;
@@ -22,7 +23,8 @@ typedef ev::ChangedEvent<DefaultButtonModell> DefaultButtonModellChangedEvent;
   * @class DefaultButtonModell Policy.
   */
 class DefaultButtonModell :
-	public ev::EventSender<DefaultButtonModellChangedEvent>
+	public ev::EventSender<DefaultButtonModellChangedEvent>,
+	public ev::EventSender<events::ActionEvent>
 {
 //=============================================================================
 public:

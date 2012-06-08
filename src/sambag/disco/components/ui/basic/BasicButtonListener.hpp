@@ -12,6 +12,7 @@
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/AButton.hpp>
 #include <sambag/com/ICommand.hpp>
+#include <sambag/disco/components/events/ActionEvent.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -54,6 +55,10 @@ void BasicButtonListener<ButtonModell>::
 				b->getButtonCommand();
 		if (c)
 			c->execute();
+		b->EventSender<events::ActionEvent>::notifyListeners(
+				b.get(),
+				events::ActionEvent(b)
+		);
 		break;
 	}
 	default:

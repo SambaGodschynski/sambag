@@ -10,6 +10,7 @@
 #include "FlowLayout.hpp"
 #include "ui/UIManager.hpp"
 #include "ui/ALookAndFeel.hpp"
+#include "ui/basic/BasicLookAndFeel.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -24,18 +25,27 @@ RootPane::RootPane(ISurface::Ptr surface) : surface(surface) {
 	setLayout(FlowLayout::create());
 	setName("RootPane");
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void RootPane::redrawParentIfNeeded(const Rectangle &r) {
+	if (isShowing()) {
+		redraw();
+	}
+}
+//-----------------------------------------------------------------------------
 ui::ALookAndFeelPtr RootPane::getCurrentLookAndFeel() const {
 	return ui::UIManager::instance().getLookAndFeel(getPtr());
 }
 //-----------------------------------------------------------------------------
-void RootPane::resetSurface(ISurface::Ptr _surface) {
+void RootPane::setSurface(ISurface::Ptr _surface) {
 	ISurface::Ptr old = _surface;
 	surface = _surface;
 	firePropertyChanged(PROPERTY_SURFACE, old, _surface);
 }
 //-----------------------------------------------------------------------------
 IDrawContext::Ptr RootPane::getDrawContext() const {
+	if (!surface) {
+		getDiscoFactory()->createRecordingSurface();
+	}
 	return getDiscoFactory()->createContext(surface);
 }
 //-----------------------------------------------------------------------------
@@ -43,6 +53,9 @@ RootPane::Ptr RootPane::create(ISurface::Ptr surface)
 {
 	Ptr res(new RootPane(surface));
 	res->self = res;
+	ui::UIManager::instance().installLookAndFeel(res,
+		ui::basic::BasicLookAndFeel::create()
+	);
 	return res;
 }
 //-----------------------------------------------------------------------------

@@ -24,6 +24,12 @@ void DestroyWindow::execute() {
 	dst->destroyWindow();
 }
 //=============================================================================
+// struct OpenWindow
+//=============================================================================
+void OpenWindow::execute() {
+	dst->createWindow();
+}
+//=============================================================================
 //  Class X11WindowImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
@@ -50,13 +56,15 @@ X11WindowImpl * X11WindowImpl::getX11WindowImpl(Window win) {
 	return it->second;
 }
 //-----------------------------------------------------------------------------
-X11WindowImpl::X11WindowImpl() :
+X11WindowImpl::X11WindowImpl(bool framed) :
+	framed(framed),
+	bounds(Rectangle(0,0,1,1)),
 	visible(false),
 	win(0)
 {
 }
 //-----------------------------------------------------------------------------
-void X11WindowImpl::createWindow(bool framed) {
+void X11WindowImpl::createWindow() {
 	if (instances++==0) {
 		display = XOpenDisplay(NULL);
 		SAMBAG_ASSERT(display);
@@ -82,17 +90,30 @@ void X11WindowImpl::createWindow(bool framed) {
 		attributes.override_redirect = 1;
 		valuemask |= CWOverrideRedirect;
 	}
-	win = XCreateWindow(display, RootWindow(display, screen), 50, 50, bounds.getWidth(),
-			bounds.getHeight(), CopyFromParent, CopyFromParent, InputOutput, visual,
+	win = XCreateWindow(display,
+			RootWindow(display, screen),
+			(int)bounds.x0().x(),
+			(int)bounds.x0().y(),
+			(unsigned int)bounds.getWidth(),
+			(unsigned int)bounds.getHeight(),
+			CopyFromParent,
+			CopyFromParent, InputOutput, visual,
 			valuemask, &attributes);
 	// register win
 	winmap[win] = this;
 	// participate in the window manager 'delete yourself' protocol
-	if (XSetWMProtocols(display, win, &wm_delete_window_atom, 1)==0) {
+	/*if (XSetWMProtocols(display, win, &wm_delete_window_atom, 1)==0) {
 		SAMBAG_ASSERT(false);
-	}
+	}*/
 	// disco stuff
 	createSurface();
+	SAMBAG_ASSERT(surface);
+	// pop up the window
+	XMapWindow(display, win);
+	XSync(display, win);
+	visible = true;
+	updateTitle();
+	onCreated();
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::destroyWindow() {
@@ -103,26 +124,23 @@ void X11WindowImpl::destroyWindow() {
 	XSync(display, 0);
 	win = 0;
 	--instances;
+	visible = false;
+	onDestroyed();
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::close() {
 	invokeLater(DestroyWindow::create(this));
-	visible = false;
+}
+//-----------------------------------------------------------------------------
+void X11WindowImpl::open() {
+	invokeLater(OpenWindow::create(this));
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
-	destroyWindow();
 }
 //-----------------------------------------------------------------------------
 bool X11WindowImpl::isVisible() const {
 	return visible;
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::show() {
-	// pop up the window
-	XMapWindow(display, win);
-	XSync(display, win);
-	visible = true;
 }
 //-----------------------------------------------------------------------------
 Rectangle X11WindowImpl::getBounds() const {
@@ -137,18 +155,26 @@ void X11WindowImpl::createSurface() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::setBounds(const Rectangle &r) {
-	bounds = r;
-	if (!isVisible())
-		return;
 	Rectangle curr = getBounds();
 	if (curr == r)
 		return;
-	typedef unsigned int UI;
-	XMoveResizeWindow(display, win, (int)r.x0().x(),
-			(int)r.x0().y(),
-			(UI)r.getWidth(),
-			(UI)r.getHeight()
-	);
+	bounds = r;
+
+	if (bounds.getWidth() < 1.)
+		bounds.setWidth(1.);
+	if (bounds.getHeight() < 1.)
+		bounds.setHeight(1.);
+
+	if (!isVisible())
+		return;
+
+	updateBoundsToWindow();
+}
+//-----------------------------------------------------------------------------
+void X11WindowImpl::drawAll() {
+	BOOST_FOREACH(WinMap::value_type &v, winmap) {
+		v.second->processDraw();
+	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::mainLoop() {
@@ -160,21 +186,42 @@ void X11WindowImpl::mainLoop() {
 			XNextEvent(display, &event);
 			handleEvent(event);
 		}
-		//processDraw();
-		processInvocations();
+		drawAll();
 		microsleep(1000);
 		XSync(display, 0);
+		processInvocations();
 	}
 	XCloseDisplay(display);
 	display = NULL;
 
 }
 //-----------------------------------------------------------------------------
-void X11WindowImpl::setTitle(const std::string &title) {
-	X11WindowImpl::title = title;
+void X11WindowImpl::setTitle(const std::string &_title) {
+	title = _title;
 	if (!isVisible())
 		return;
-	// set the window title
+	updateTitle();
+}
+//-----------------------------------------------------------------------------
+void X11WindowImpl::updateBoundsToWindow() {
+	typedef unsigned int UI;
+	XMoveResizeWindow(display, win, (int)bounds.x0().x(),
+			(int)bounds.x0().y(),
+			(UI)bounds.getWidth(),
+			(UI)bounds.getHeight()
+	);
+}
+//-----------------------------------------------------------------------------
+void X11WindowImpl::updateWindowToBounds(const Rectangle &r) {
+	if (r.getDimension() != bounds.getDimension()) {
+		// reset surface
+		createSurface();
+	}
+	bounds = r;
+	boundsUpdated();
+}
+//-----------------------------------------------------------------------------
+void X11WindowImpl::updateTitle() {
 	XTextProperty window_name;
 	window_name.value = (unsigned char*) title.c_str();
 	window_name.encoding = XA_STRING;
@@ -194,6 +241,9 @@ void X11WindowImpl::processInvocations() {
 //-----------------------------------------------------------------------------
 void X11WindowImpl::invokeLater(sambag::com::ICommand::Ptr cmd) {
 	invocations.push_back(cmd);
+	if (instances==0) { // loop isn't running, handle now
+		processInvocations();
+	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::handleEvent(XEvent &event) {
@@ -255,64 +305,19 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 		}
 		return;
 
-	case ConfigureNotify:
-		//width = event.xconfigure.width;
-		//height = event.xconfigure.height;
+	case ConfigureNotify: {
+		Rectangle neu(event.xconfigure.x,
+				event.xconfigure.y,
+				event.xconfigure.width,
+				event.xconfigure.height);
+		src->updateWindowToBounds(neu);
 		return;
 	}
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::
-handleMouseButtonPressEvent(int x, int y, int buttons)
-{
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::
-handleMouseButtonReleaseEvent(int x, int y, int buttons)
-{
-
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::handleMouseMotionEvent(int x, int y) {
-
+	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::startMainLoop() {
 	mainLoop();
-}
-//=============================================================================
-// class X11Window
-//=============================================================================
-X11Window::X11Window(AWindow::Ptr parent) : AWindow(parent) {
-	X11WindowImpl::createWindow(false);
-}
-//-----------------------------------------------------------------------------
-void X11Window::setBounds(const Rectangle &r) {
-	X11WindowImpl::setBounds(r);
-}
-//-----------------------------------------------------------------------------
-Rectangle X11Window::getBounds() const {
-	return X11WindowImpl::getBounds();
-}
-//=============================================================================
-// class X11FramedWindow
-//=============================================================================
-X11FramedWindow::X11FramedWindow(AWindow::Ptr parent) :
-		AFramedWindow(parent)
-{
-	X11WindowImpl::createWindow(true);
-}
-//-----------------------------------------------------------------------------
-void X11FramedWindow::setBounds(const Rectangle &r) {
-	X11WindowImpl::setBounds(r);
-}
-//-----------------------------------------------------------------------------
-Rectangle X11FramedWindow::getBounds() const {
-	return X11WindowImpl::getBounds();
-}
-//-----------------------------------------------------------------------------
-void X11FramedWindow::setTitle(const std::string &title) {
-	X11WindowImpl::setTitle(title);
 }
 }} // namespace(s)
 

@@ -6,13 +6,10 @@
  */
 
 #include "DiscoView.hpp"
-#include <sambag/com/AbstractType.hpp>
 #include <sambag/disco/components/RootPane.hpp>
-#include <sambag/disco/components/tests/TestComponents.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
-#include <sambag/disco/components/events/MouseEventCreator.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
-#include <sambag/disco/components/FlowLayout.hpp>
+#include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/IWindowFactory.hpp>
 #include <sambag/disco/AFramedWindow.hpp>
@@ -163,21 +160,50 @@
 //void handleMouseMotionEvent(int x, int y) {
 //	mev->createMoveEvent(x, y);
 //}
+namespace sd = sambag::disco;
+namespace sdc = sambag::disco::components;
+void onMouse(void *src, const sdc::events::MouseEvent &ev) {
+	std::cout<<ev.toString()<<std::endl;
+}
+
+sd::AFramedWindowPtr win;
+
+void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	std::stringstream ss;
+	static int c = 0;
+	ss<<"Window"<<c;
+	AFramedWindowPtr win = getWindowFactory()->createFramedWindow();
+	win->getRootPane()->setBounds(Rectangle(0,0,230,200));
+	//win->setTitle(ss.str());
+	win->open();
+}
+void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	win->close();
+}
 
 int main() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	AFramedWindowPtr win = getWindowFactory()->createFramedWindow();
-	AFramedWindowPtr win2 = getWindowFactory()->createFramedWindow();
+	win = getWindowFactory()->createFramedWindow();
+	win->setBounds(Rectangle(0,0,230,200));
+	win->getRootPane()->setBounds(Rectangle(0,0,230,200));
+	win->getRootPane()->EventSender<sdc::events::MouseEvent>::
+			addEventListener(&onMouse);
 	win->setTitle("Window01");
-	win->setBounds(Rectangle(100,100,230,200));
-	win->open();
 
-	win2->setSize(Dimension(300,200));
-	win2->open();
-	win2->setTitle("Window02");
-	X11WindowImpl::startMainLoop();
-	win->setLocation(Point2D(100,100));
+	Button::Ptr btn = Button::create();
+	btn->setText("hinzufügen");
+	btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
+	win->getRootPane()->add(btn);
+
+	btn = Button::create();
+	btn->setText("tschüß");
+	btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
+	win->getRootPane()->add(btn);
+
+	win->getRootPane()->validate();
 	win->open();
 	X11WindowImpl::startMainLoop();
 	std::cout<<"bye"<<std::endl;
