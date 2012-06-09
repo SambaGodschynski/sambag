@@ -1,11 +1,11 @@
 /*
- * TWindow.hpp
+ * WindowImpl.hpp
  *
  *  Created on: Jun 8, 2012
  *      Author: samba
  */
-#ifndef TWINDOW_HPP_
-#define TWINDOW_HPP_
+#ifndef WINDOWIMPL_HPP_
+#define WINDOWIMPL_HPP_
 
 #include <sambag/disco/components/events/MouseEventCreator.hpp>
 #include <list>
@@ -18,21 +18,21 @@
 namespace sambag { namespace disco {
 //=============================================================================
 /**
-  * @class TWindow.
+  * @class WindowImpl.
   */
 template <class WindowBase>
-class TWindow : public WindowBase, public AWindow {
+class WindowImpl : public WindowBase, public AWindow {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<TWindow> Ptr;
+	typedef boost::shared_ptr<WindowImpl> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	sambag::disco::IImageSurface::Ptr bff;
 	//-------------------------------------------------------------------------
 	components::RootPanePtr rootPane;
 	//-------------------------------------------------------------------------
-	TWindow() : X11WindowImpl() {
+	WindowImpl() : X11WindowImpl() {
 	}
 	//-------------------------------------------------------------------------
 	virtual void processDraw();
@@ -93,7 +93,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		Ptr res(new TWindow<WindowBase>());
+		Ptr res(new WindowImpl<WindowBase>());
 		return res;
 	}
 	//-------------------------------------------------------------------------
@@ -115,7 +115,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 template <class WindowBase>
-void TWindow<WindowBase>::onCreated() {
+void WindowImpl<WindowBase>::onCreated() {
 	using namespace components;
 	// create offbuffer
 	Dimension dim = X11WindowImpl::getBounds().getDimension();
@@ -130,11 +130,11 @@ void TWindow<WindowBase>::onCreated() {
 }
 //-----------------------------------------------------------------------------
 template <class WindowBase>
-void TWindow<WindowBase>::onDestroyed() {
+void WindowImpl<WindowBase>::onDestroyed() {
 }
 //-----------------------------------------------------------------------------
 template <class WindowBase>
-void TWindow<WindowBase>::processDraw() {
+void WindowImpl<WindowBase>::processDraw() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	RootPane::Ptr root = rootPane;
@@ -150,7 +150,7 @@ void TWindow<WindowBase>::processDraw() {
 }
 //-----------------------------------------------------------------------------
 template <class WindowBase>
-void TWindow<WindowBase>::boundsUpdated() {
+void WindowImpl<WindowBase>::boundsUpdated() {
 	using namespace components;
 	// create offbuffer
 	Dimension dim = X11WindowImpl::getBounds().getDimension();

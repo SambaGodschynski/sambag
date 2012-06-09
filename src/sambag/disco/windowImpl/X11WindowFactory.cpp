@@ -8,7 +8,7 @@
 
 #include "X11WindowFactory.hpp"
 #include "X11Window.hpp"
-#include "TWindow.hpp"
+#include "WindowImpl.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -16,7 +16,7 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 AWindowPtr X11WindowFactory::createWindowImpl() const {
-	AWindowPtr res = TWindow<X11WindowImpl>::create();
+	AWindowPtr res = WindowImpl<X11WindowImpl>::create();
 	return res;
 }
 //-----------------------------------------------------------------------------

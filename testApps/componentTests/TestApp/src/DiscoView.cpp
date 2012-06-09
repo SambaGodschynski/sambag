@@ -173,14 +173,16 @@ void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"aha"<<std::endl;
-	win2 = sd::Window::create();
+	if (!win2)
+		win2 = sd::Window::create();
 	win2->setBounds(Rectangle(0,0,230,200));
 	win2->getRootPane()->setBounds(Rectangle(0,0,230,200));
 	win2->getRootPane()->validate();
 	win2->open();
 }
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
-	win2->close();
+	if (win2)
+		win2->close();
 }
 
 int main() {
@@ -189,7 +191,7 @@ int main() {
 		using namespace sambag::disco::components;
 		win = sd::Window::create();
 		win->setBounds(Rectangle(0,0,230,200));
-		win->getRootPane()->setBounds(Rectangle(0,0,230,200));
+		win->getRootPane()->setSize(230,200);
 		win->getRootPane()->EventSender<sdc::events::MouseEvent>::
 				addEventListener(&onMouse);
 		//win->setTitle("Window01");
@@ -206,6 +208,7 @@ int main() {
 
 		win->getRootPane()->validate();
 		win->open();
+		win->setLocation(Point2D(100,100));
 		X11WindowImpl::startMainLoop();
 	}
 	win.reset();
