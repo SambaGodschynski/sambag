@@ -14,14 +14,22 @@
 #include "AWindow.hpp"
 #include <sambag/disco/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
+#include "BufferedDrawPolicy.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
 /**
   * @class WindowImpl.
   */
-template <class WindowBase>
-class WindowImpl : public WindowBase, public AWindow {
+template <
+	class ConcreteWindowImpl,
+	class DrawPolicy = BufferedDrawPolicy
+>
+class WindowImpl :
+	public ConcreteWindowImpl,
+	public DrawPolicy,
+	public AWindow
+{
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -32,8 +40,7 @@ protected:
 	//-------------------------------------------------------------------------
 	components::RootPanePtr rootPane;
 	//-------------------------------------------------------------------------
-	WindowImpl() : X11WindowImpl() {
-	}
+	WindowImpl() {}
 	//-------------------------------------------------------------------------
 	virtual void processDraw();
 	//-------------------------------------------------------------------------
@@ -56,8 +63,12 @@ public:
 
 	}
 	//-------------------------------------------------------------------------
+	virtual bool isVisible() const {
+		return ConcreteWindowImpl::isVisible();
+	}
+	//-------------------------------------------------------------------------
 	virtual void setFramed(bool b) {
-		WindowBase::setFramed(b);
+		ConcreteWindowImpl::setFramed(b);
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseButtonPressEvent(int x, int y, int buttons) {
@@ -85,87 +96,65 @@ public:
 	virtual void boundsUpdated();
 	//-------------------------------------------------------------------------
 	void setBounds(const Rectangle &r) {
-		X11WindowImpl::setBounds(r);
+		ConcreteWindowImpl::setBounds(r);
 	}
 	//-------------------------------------------------------------------------
 	Rectangle getBounds() const {
-		return X11WindowImpl::getBounds();
+		return ConcreteWindowImpl::getBounds();
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		Ptr res(new WindowImpl<WindowBase>());
+		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
+		res->ConcreteWindowImpl::self = res;
 		return res;
 	}
 	//-------------------------------------------------------------------------
 	virtual void open() {
 		// init surface
-		X11WindowImpl::open();
+		ConcreteWindowImpl::open();
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {
 		rootPane->setSurface(ISurface::Ptr());
 		mec.reset();
-		X11WindowImpl::close();
+		ConcreteWindowImpl::close();
 	}
 	//--------------------------------------------------------------------------
 	virtual void setTitle(const std::string &title) {
-		X11WindowImpl::setTitle(title);
+		ConcreteWindowImpl::setTitle(title);
 	}
-}; // X11Window
+};
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-template <class WindowBase>
-void WindowImpl<WindowBase>::onCreated() {
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
 	using namespace components;
-	// create offbuffer
-	Dimension dim = X11WindowImpl::getBounds().getDimension();
-	bff = sambag::disco::
-			getDiscoFactory()->createImageSurface(dim.width(), dim.height());
-	// create root pane
-	rootPane->setSurface(bff);
-	rootPane->setBounds(X11WindowImpl::getBounds());
+	rootPane->setSize(ConcreteWindowImpl::getBounds().getDimension());
+	DrawPolicy::init(rootPane, ConcreteWindowImpl::surface);
 	// create mousevent creator
 	mec = events::MouseEventCreator::create(rootPane);
-	update();
 }
 //-----------------------------------------------------------------------------
-template <class WindowBase>
-void WindowImpl<WindowBase>::onDestroyed() {
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroyed() {
 }
 //-----------------------------------------------------------------------------
-template <class WindowBase>
-void WindowImpl<WindowBase>::processDraw() {
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	RootPane::Ptr root = rootPane;
-	IDrawContext::Ptr cn =
-			getDiscoFactory()->createContext(WindowBase::getSurface());
-	if (needUpdate) {
-		root->draw(root->getDrawContext());
-		needUpdate=false;
-		return;
-	}
-	RedrawManager::currentManager(root)->drawDirtyRegions();
-	cn->drawSurface(bff);
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::processDraw() {
+	DrawPolicy::processDraw(rootPane, ConcreteWindowImpl::surface);
 }
 //-----------------------------------------------------------------------------
-template <class WindowBase>
-void WindowImpl<WindowBase>::boundsUpdated() {
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	using namespace components;
 	// create offbuffer
-	Dimension dim = X11WindowImpl::getBounds().getDimension();
+	Dimension dim = ConcreteWindowImpl::getBounds().getDimension();
 	if (dim == rootPane->getSize())
 		return;
 	std::cout<<dim<<std::endl;
-	bff = sambag::disco::
-			getDiscoFactory()->createImageSurface(dim.width(), dim.height());
-	// create root pane
-	rootPane->setSurface(bff);
 	rootPane->setSize(dim);
+	DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
 	rootPane->validate();
-	RedrawManager::currentManager(rootPane)->
-			markCompletelyDirty(rootPane);
-	update();
 }
 }} // namespace(s)
 #endif /* TWINDOW_HPP_ */

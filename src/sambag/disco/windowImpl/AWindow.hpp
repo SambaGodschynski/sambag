@@ -62,6 +62,9 @@ public:
 	virtual void setParentWindow(WindowPtr parent) = 0;
 	//-------------------------------------------------------------------------
 	virtual void setFramed(bool b) = 0;
+	//-------------------------------------------------------------------------
+	virtual bool isVisible() const = 0;
+
 }; // AWindow
 }} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

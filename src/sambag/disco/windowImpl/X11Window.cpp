@@ -77,8 +77,14 @@ void X11WindowImpl::createWindow() {
 	XSetWindowAttributes attributes;
 	attributes.background_pixel = BlackPixel(display, screen);
 	attributes.event_mask = ButtonPressMask | ButtonReleaseMask | KeyPressMask
-			| KeyReleaseMask | ButtonMotionMask | PointerMotionHintMask
-			| StructureNotifyMask | PointerMotionMask | PointerMotionHintMask/*| ExposureMask*/;
+			| KeyReleaseMask
+			| ButtonMotionMask
+			| PointerMotionHintMask
+			| StructureNotifyMask
+			| PointerMotionMask
+			| PointerMotionHintMask
+	//		| ExposureMask
+	;
 	unsigned long valuemask = CWBackPixel | CWEventMask;
 	if (!framed) {
 		attributes.override_redirect = 1;
@@ -115,7 +121,7 @@ void X11WindowImpl::destroyWindow() {
 	winmap.erase(win);
 	// X11's destroy
 	XDestroyWindow(display, win);
-	XSync(display, 0);
+	//XSync(display, 0);
 	win = 0;
 	--instances;
 	visible = false;
@@ -125,11 +131,11 @@ void X11WindowImpl::destroyWindow() {
 void X11WindowImpl::close() {
 	if (win==0)
 		return;
-	invokeLater(DestroyWindow::create(this));
+	invokeLater(DestroyWindow::create(getPtr()));
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::open() {
-	invokeLater(OpenWindow::create(this));
+	invokeLater(OpenWindow::create(getPtr()));
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
@@ -185,7 +191,6 @@ void X11WindowImpl::mainLoop() {
 		drawAll();
 		microsleep(1000);
 		processInvocations();
-		XSync(display, 0);
 	}
 	XCloseDisplay(display);
 	display = NULL;
@@ -308,6 +313,9 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 				event.xconfigure.height);
 		src->updateWindowToBounds(neu);
 		return;
+	}
+	case Expose:{
+		//drawAll();
 	}
 	}
 }

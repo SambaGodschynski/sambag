@@ -22,14 +22,14 @@
 #include <sambag/disco/ISurface.hpp>
 
 namespace sambag { namespace disco {
-class X11WindowImpl;
+class X11WindowImpl; typedef boost::shared_ptr<X11WindowImpl> X11WindowImplPtr;
 //=============================================================================
 struct DestroyWindow : public sambag::com::ICommand {
 //=============================================================================
 	typedef boost::shared_ptr<DestroyWindow> Ptr;
-	X11WindowImpl * dst;
+	X11WindowImplPtr dst;
 	virtual void execute();
-	static Ptr create(X11WindowImpl* _dst) {
+	static Ptr create(X11WindowImplPtr _dst) {
 		Ptr res(new DestroyWindow());
 		res->dst = _dst;
 		return res;
@@ -39,9 +39,9 @@ struct DestroyWindow : public sambag::com::ICommand {
 struct OpenWindow : public sambag::com::ICommand {
 //=============================================================================
 	typedef boost::shared_ptr<OpenWindow> Ptr;
-	X11WindowImpl * dst;
+	X11WindowImplPtr dst;
 	virtual void execute();
-	static Ptr create(X11WindowImpl* _dst) {
+	static Ptr create(X11WindowImplPtr _dst) {
 		Ptr res(new OpenWindow());
 		res->dst = _dst;
 		return res;
@@ -55,6 +55,11 @@ class X11WindowImpl {
 //=============================================================================
 friend struct DestroyWindow;
 friend struct OpenWindow;
+public:
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<X11WindowImpl> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<X11WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<bool, true> framed;
@@ -92,6 +97,8 @@ private:
 	static void drawAll();
 protected:
 	//-------------------------------------------------------------------------
+	WPtr self; // setted during WindowImpl::create()
+	//-------------------------------------------------------------------------
 	X11WindowImpl();
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<Window, X11WindowImpl*> WinMap;
@@ -123,6 +130,10 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void processDraw() = 0;
 public:
+	//-------------------------------------------------------------------------
+	Ptr getPtr() {
+		return self.lock();
+	}
 	//-------------------------------------------------------------------------
 	void setFramed(bool b) {
 		framed = b;
