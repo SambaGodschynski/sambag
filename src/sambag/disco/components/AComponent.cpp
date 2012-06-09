@@ -48,6 +48,8 @@ const std::string  AComponent::PROPERTY_CLIENTPROPERTY = "client_property";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_SIZE = "size";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_FONT = "font";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() {
 
 }
@@ -920,7 +922,7 @@ void AComponent::installUI(ui::AComponentUIPtr cui) {
 	redraw();
 	firePropertyChanged(PROPERTY_UI, old, ui);
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void AComponent::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 	if (isUiSettedByUser())
 		return;
@@ -930,5 +932,17 @@ void AComponent::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 	if (!cui)
 		return;
 	installUI(cui);
+}
+//-----------------------------------------------------------------------------
+void AComponent::setFont(const Font &_font) {
+	Font olf = font;
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		font = _font;
+	SAMBAG_END_SYNCHRONIZED
+	firePropertyChanged(PROPERTY_FONT, olf, font);
+}
+//-----------------------------------------------------------------------------
+const Font & AComponent::getFont() const {
+	return font;
 }
 }}} // namespace(s)

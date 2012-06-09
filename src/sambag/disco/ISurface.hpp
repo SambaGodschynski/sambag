@@ -24,6 +24,15 @@ public:
 	typedef boost::shared_ptr<ISurface> Ptr;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * note: not all surfaces implements this
+	 * LibCairo:
+	 * A Pixmap can never change size, so it is never necessary to call this
+	 * function on a surface created for a Pixmap.
+	 * @return
+	 */
+	virtual void setSize(const Rectangle &r) {}
 };
 //=============================================================================
 class IImageSurface : public virtual ISurface {

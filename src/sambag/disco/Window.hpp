@@ -12,13 +12,22 @@
 #include "components/RootPane.hpp"
 #include "ISurface.hpp"
 #include "windowImpl/AWindow.hpp"
+#include "Forward.hpp"
+#include <sambag/com/events/Events.hpp>
 
 namespace sambag { namespace disco {
+//=============================================================================
+struct OnCloseEvent {
+//=============================================================================
+	WindowPtr src;
+	OnCloseEvent(WindowPtr src) : src(src) {}
+	WindowPtr getSource() const { return src; }
+};
 //=============================================================================
 /** 
   * @class Window.
   */
-class Window {
+class Window : public sambag::com::events::EventSender<OnCloseEvent> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -37,6 +46,8 @@ protected:
 	//-------------------------------------------------------------------------
 	AWindow::Ptr windowImpl;
 private:
+	//-------------------------------------------------------------------------
+	void onWindowImplClose(void *src, const OnAWindowCloseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create(Window::Ptr parent=WindowPtr()) {
@@ -81,6 +92,6 @@ public:
 		Rectangle curr = getBounds();
 		return curr.x0();
 	}
-}; // AWindow
+}; // Window
 }} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

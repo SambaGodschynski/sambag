@@ -15,6 +15,7 @@
 #include <sambag/disco/svg/HtmlColors.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include <sambag/disco/IPattern.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -32,7 +33,11 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
 protected:
+	//-------------------------------------------------------------------------
+	BasicButtonUI();
 private:
+	//-------------------------------------------------------------------------
+	IPattern::Ptr bk, roll, press;
 public:
 	//-------------------------------------------------------------------------
 	void onButtonStateChanged(void *src, const
@@ -76,6 +81,25 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
+BasicButtonUI<ButtonModell>::BasicButtonUI() {
+	ILinearPattern::Ptr lp =
+		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
+	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
+	lp->addColorStop(svg::HtmlColors::getColor("lavender"), 1.0);
+	bk = lp;
+	lp =
+		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
+	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
+	lp->addColorStop(svg::HtmlColors::getColor("slategrey"), 1.0);
+	press = lp;
+	lp =
+		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
+	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
+	lp->addColorStop(svg::HtmlColors::getColor("lightblue"), 1.0);
+	roll = lp;
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
@@ -86,18 +110,21 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 
 	if (b->isButtonRollover()) {
 		if (b->isButtonPressed())
-			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
+			//cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
+			cn->setFillPattern(press);
 		else
-			cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
+			cn->setFillPattern(roll);
+			//cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
 	} else
-		cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
+		//cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
+		cn->setFillPattern(bk);
 	cn->setStrokeColor(c->getForeground());
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->fill();
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->setStrokeWidth(1);
 	cn->stroke();
-	cn->setFontSize(15);
+	cn->setFont(b->getFont());
 	cn->setFillColor(c->getForeground());
 	std::string str = b->getText();
 	Rectangle txt = cn->textExtends(str);
@@ -153,6 +180,7 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 			boost::shared_dynamic_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
+	cn->setFont(b->getFont());
 	Rectangle txtEx = cn->textExtends(b->getText());
 	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
 }

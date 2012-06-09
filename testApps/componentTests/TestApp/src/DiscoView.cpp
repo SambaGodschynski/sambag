@@ -31,18 +31,18 @@ sd::Window::Ptr win2;
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	std::cout<<"aha"<<std::endl;
-	if (!win2)
+	if (!win2) {
 		win2 = sd::Window::create();
-	win2->setBounds(Rectangle(0,0,230,200));
-	win2->getRootPane()->setBounds(Rectangle(0,0,230,200));
-	win2->getRootPane()->validate();
+		win2->setBounds(Rectangle(0,0,230,200));
+		win2->getRootPane()->setBounds(Rectangle(0,0,230,200));
+		win2->getRootPane()->validate();
+	}
 	win2->open();
 }
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (win2)
 		win2->close();
-	win2.reset();
+	//win2.reset();
 }
 
 int main() {
@@ -57,12 +57,16 @@ int main() {
 		//win->setTitle("Window01");
 
 		Button::Ptr btn = Button::create();
-		btn->setText("hinzufügen");
+		btn->setText("hinzufügen und belassen");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
 		win->getRootPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("tschüß");
+		sambag::disco::Font f = btn->getFont();
+		//f.fontFace = "monospaced";
+		f.size = 50;
+		btn->setFont(f);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
 		win->getRootPane()->add(btn);
 

@@ -11,13 +11,18 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/Forward.hpp>
-
+#include <sambag/com/events/Events.hpp>
 namespace sambag { namespace disco {
+//=============================================================================
+struct OnAWindowCloseEvent {
+//=============================================================================
+};
 //=============================================================================
 /** 
   * @class AWindow.
   */
-class AWindow {
+class AWindow :
+	public sambag::com::events::EventSender<OnAWindowCloseEvent> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

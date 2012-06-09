@@ -27,7 +27,9 @@ public:
 	typedef boost::shared_ptr<AbstractButton> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	AButton() {}
+	AButton() {
+		font.size = 15;
+	}
 private:
 	//-------------------------------------------------------------------------
 	std::string text;

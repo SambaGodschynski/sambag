@@ -46,7 +46,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void onCreated();
 	//-------------------------------------------------------------------------
-	virtual void onDestroyed();
+	virtual void onDestroy();
 private:
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<bool, true> needUpdate;
@@ -136,7 +136,13 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
-void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroyed() {
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
+	using namespace sambag::com::events;
+	rootPane->setSurface(ISurface::Ptr());
+	EventSender<OnAWindowCloseEvent>::notifyListeners (
+		this,
+		OnAWindowCloseEvent()
+	);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

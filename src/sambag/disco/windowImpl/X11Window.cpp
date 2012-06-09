@@ -66,6 +66,7 @@ void X11WindowImpl::createWindow() {
 		display = XOpenDisplay(NULL);
 		wm_protocols_atom = XInternAtom(display, "WM_PROTOCOLS", False);
 		wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
+		//XSynchronize(display, True);
 	}
 	SAMBAG_ASSERT(display);
 	screen = DefaultScreen(display);
@@ -120,25 +121,29 @@ void X11WindowImpl::destroyWindow() {
 	// unregister window
 	winmap.erase(win);
 	// X11's destroy
+	surface.reset();
+	onDestroy();
 	XDestroyWindow(display, win);
-	//XSync(display, 0);
+	XSync(display, True);
 	win = 0;
 	--instances;
 	visible = false;
-	onDestroyed();
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::close() {
-	if (win==0)
+	if (!visible)
 		return;
 	invokeLater(DestroyWindow::create(getPtr()));
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::open() {
+	if (visible)
+		return;
 	invokeLater(OpenWindow::create(getPtr()));
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
+	close();
 }
 //-----------------------------------------------------------------------------
 bool X11WindowImpl::isVisible() const {
@@ -215,8 +220,7 @@ void X11WindowImpl::updateBoundsToWindow() {
 //-----------------------------------------------------------------------------
 void X11WindowImpl::updateWindowToBounds(const Rectangle &r) {
 	if (r.getDimension() != bounds.getDimension()) {
-		// reset surface
-		createSurface();
+		surface->setSize(r);
 	}
 	bounds = r;
 	boundsUpdated();

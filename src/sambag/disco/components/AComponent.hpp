@@ -109,7 +109,11 @@ public:
 	static const std::string PROPERTY_CLIENTPROPERTY;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_SIZE;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_FONT;
 protected:
+	//-------------------------------------------------------------------------
+	Font font;
 	//-------------------------------------------------------------------------
 	/*
 	 * setted during cretate() by subclasses
@@ -380,6 +384,10 @@ public: /* END should be protected  */
 	 * @param c
 	 */
 	virtual void setUserUI (ui::AComponentUIPtr cui);
+	//-------------------------------------------------------------------------
+	virtual void setFont(const Font &font);
+	//-------------------------------------------------------------------------
+	virtual const Font & getFont() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * removes component ui.

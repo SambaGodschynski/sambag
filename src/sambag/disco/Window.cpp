@@ -18,6 +18,10 @@ Window::Window(Window::Ptr parent) : parent(parent) {
 	rootPane = components::RootPane::create();
 	windowImpl = getWindowFactory()->createWindowImpl();
 	windowImpl->setRootPane(rootPane);
+	windowImpl->EventSender<OnAWindowCloseEvent>::addTrackedEventListener(
+			boost::bind(&Window::onWindowImplClose, this, _1, _2),
+			getPtr()
+	);
 }
 //-----------------------------------------------------------------------------
 components::RootPane::Ptr Window::getRootPane() const {
@@ -38,5 +42,12 @@ void Window::open() {
 //-----------------------------------------------------------------------------
 void Window::close() {
 	windowImpl->close();
+}
+//-----------------------------------------------------------------------------
+void Window::onWindowImplClose(void *src, const OnAWindowCloseEvent &ev) {
+	EventSender<OnCloseEvent>::notifyListeners(
+			this,
+			OnCloseEvent(getPtr())
+	);
 }
 }} // namespace(s)
