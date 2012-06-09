@@ -167,37 +167,48 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 }
 
 sd::Window::Ptr win;
+sd::Window::Ptr win2;
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
 	std::cout<<"aha"<<std::endl;
+	win2 = sd::Window::create();
+	win2->setBounds(Rectangle(0,0,230,200));
+	win2->getRootPane()->setBounds(Rectangle(0,0,230,200));
+	win2->getRootPane()->validate();
+	win2->open();
 }
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
-	win->close();
+	win2->close();
 }
 
 int main() {
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	win = sd::Window::create();
-	win->setBounds(Rectangle(0,0,230,200));
-	win->getRootPane()->setBounds(Rectangle(0,0,230,200));
-	win->getRootPane()->EventSender<sdc::events::MouseEvent>::
-			addEventListener(&onMouse);
-	//win->setTitle("Window01");
+	{ // extra scope (bye message should occur after releasing all objs)
+		using namespace sambag::disco;
+		using namespace sambag::disco::components;
+		win = sd::Window::create();
+		win->setBounds(Rectangle(0,0,230,200));
+		win->getRootPane()->setBounds(Rectangle(0,0,230,200));
+		win->getRootPane()->EventSender<sdc::events::MouseEvent>::
+				addEventListener(&onMouse);
+		//win->setTitle("Window01");
 
-	Button::Ptr btn = Button::create();
-	btn->setText("hinzufügen");
-	btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
-	win->getRootPane()->add(btn);
+		Button::Ptr btn = Button::create();
+		btn->setText("hinzufügen");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
+		win->getRootPane()->add(btn);
 
-	btn = Button::create();
-	btn->setText("tschüß");
-	btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
-	win->getRootPane()->add(btn);
+		btn = Button::create();
+		btn->setText("tschüß");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
+		win->getRootPane()->add(btn);
 
-	win->getRootPane()->validate();
-	win->open();
-	X11WindowImpl::startMainLoop();
+		win->getRootPane()->validate();
+		win->open();
+		X11WindowImpl::startMainLoop();
+	}
+	win.reset();
 	std::cout<<"bye"<<std::endl;
 }
 

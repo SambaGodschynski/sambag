@@ -80,13 +80,17 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
+	// consider clipping
+	cn->translate(Point2D(2,2));
+	cn->scale(Point2D(0.8, 0.8));
+
 	if (b->isButtonRollover()) {
 		if (b->isButtonPressed())
 			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
 		else
 			cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
 	} else
-		cn->setFillColor(b->getBackground());
+		cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
 	cn->setStrokeColor(c->getForeground());
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->fill();

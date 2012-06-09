@@ -70,7 +70,7 @@ void X11WindowImpl::createWindow() {
 	SAMBAG_ASSERT(display);
 	screen = DefaultScreen(display);
 	// init visual
-	visual = XDefaultVisual(display, 0);
+	visual = XDefaultVisual(display, screen);
 
 	SAMBAG_ASSERT(display);
 	// create the window
@@ -184,8 +184,8 @@ void X11WindowImpl::mainLoop() {
 		}
 		drawAll();
 		microsleep(1000);
-		XSync(display, 0);
 		processInvocations();
+		XSync(display, 0);
 	}
 	XCloseDisplay(display);
 	display = NULL;
