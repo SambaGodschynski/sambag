@@ -16,6 +16,7 @@
 #include <assert.h>
 #include "Common.hpp"
 
+// TODO: remove string conv.
 #define SAMBAG_THROW(obj, what) {		\
 		std::stringstream ss;				\
 		ss<<__LINE__;						\
@@ -43,6 +44,12 @@ struct Exception {
 	std::string what;
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * TODO change line argument type from string to int
+	 * @param what
+	 * @param where
+	 * @param line
+	 */
 	Exception(const std::string &what = "unknown reason",
 			  const std::string &where = "unknown location",
 			  const std::string &line = "unknown line number")

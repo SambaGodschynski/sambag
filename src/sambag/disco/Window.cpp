@@ -14,9 +14,14 @@ namespace sambag { namespace disco {
 //  Class Window
 //=============================================================================
 //-----------------------------------------------------------------------------
+void Window::startMainLoop() {
+	__startWindowImplMainLoop_();
+}
+//-----------------------------------------------------------------------------
 Window::Window(Window::Ptr parent) : parent(parent) {
 	rootPane = components::RootPane::create();
 	windowImpl = getWindowFactory()->createWindowImpl();
+	windowImpl->setFramed(false);
 	windowImpl->setRootPane(rootPane);
 	windowImpl->EventSender<OnAWindowCloseEvent>::addTrackedEventListener(
 			boost::bind(&Window::onWindowImplClose, this, _1, _2),

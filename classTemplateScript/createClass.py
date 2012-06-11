@@ -77,6 +77,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	configGlobal(args)
 	processFile(inh, name + '.hpp')
-	processFile(incpp, name + '.cpp')	
+	if len(incpp) > 0:
+		processFile(incpp, name + '.cpp')	
 	print('all done.')
 

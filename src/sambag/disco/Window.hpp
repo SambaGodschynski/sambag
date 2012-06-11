@@ -50,6 +50,8 @@ private:
 	void onWindowImplClose(void *src, const OnAWindowCloseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
+	static void startMainLoop();
+	//-------------------------------------------------------------------------
 	static Ptr create(Window::Ptr parent=WindowPtr()) {
 		Ptr res(new Window(parent));
 		res->self = res;

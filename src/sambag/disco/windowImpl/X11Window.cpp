@@ -18,6 +18,10 @@ namespace {
 
 namespace sambag { namespace disco {
 //=============================================================================
+void __startWindowImplMainLoop_() {
+	X11WindowImpl::startMainLoop();
+}
+//=============================================================================
 // struct DestroyWindow
 //=============================================================================
 void DestroyWindow::execute() {
@@ -111,6 +115,9 @@ void X11WindowImpl::createWindow() {
 	SAMBAG_ASSERT(surface);
 	// pop up the window
 	XMapWindow(display, win);
+	// force position
+	XMoveWindow(display, win, (int)bounds.x0().x(),
+			(int)bounds.x0().y());
 	//XSync(display, win);
 	visible = true;
 	updateTitle();
@@ -207,6 +214,10 @@ void X11WindowImpl::setTitle(const std::string &_title) {
 	if (!isVisible())
 		return;
 	updateTitle();
+}
+//-------------------------------------------------------------------------
+std::string X11WindowImpl::getTitle() const {
+	return title;
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::updateBoundsToWindow() {

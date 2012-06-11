@@ -25,6 +25,8 @@ public:
 	typedef AButton<ButtonModell> AbstractButton;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AbstractButton> Ptr;
+	//-------------------------------------------------------------------------
+	typedef ButtonModell Modell;
 protected:
 	//-------------------------------------------------------------------------
 	AButton() {

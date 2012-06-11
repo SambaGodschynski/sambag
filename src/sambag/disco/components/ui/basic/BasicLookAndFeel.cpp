@@ -8,7 +8,11 @@
 #include "BasicLookAndFeel.hpp"
 // button
 #include "BasicButtonUI.hpp"
+#include "BasicMenuItemUI.hpp"
+#include "BasicPopupMenuUI.hpp"
 #include <sambag/disco/components/Button.hpp>
+#include <sambag/disco/components/MenuItem.hpp>
+#include <sambag/disco/components/PopupMenu.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -22,6 +26,8 @@ BasicLookAndFeel::BasicLookAndFeel() {
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Button, BasicButtonUI<Button::Modell> >();
+	registerComponentUI<MenuItem, BasicMenuItemUI<MenuItem::Modell> >();
+	registerComponentUI<PopupMenu, BasicPopupMenuUI<PopupMenu::Modell> >();
 }
 
 }}}}} // namespace(s)

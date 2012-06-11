@@ -1,36 +1,37 @@
 /*
- * Button.hpp
+ * PopupMenu.hpp
  *
- *  Created on: Mon Jun  4 12:21:08 2012
+ *  Created on: Mon Jun 11 11:19:42 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_BUTTON_H
-#define SAMBAG_BUTTON_H
+#ifndef SAMBAG_POPUPMENU_H
+#define SAMBAG_POPUPMENU_H
 
 #include <boost/shared_ptr.hpp>
-#include "DefaultButtonModell.hpp"
-#include "AButton.hpp"
+#include "APopupMenu.hpp"
+#include "DefaultSingleSelectionModell.hpp"
 
 namespace sambag { namespace disco { namespace components {
+
 //=============================================================================
 /** 
-  * @class Button.
+  * @class PopupMenu.
   */
-class Button : public AButton<DefaultButtonModell> {
+class PopupMenu : public APopupMenu<DefaultSingleSelectionModell> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Button> Ptr;
+	typedef boost::shared_ptr<PopupMenu> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 private:
 protected:
 	//-------------------------------------------------------------------------
-	Button();
+	PopupMenu();
 public:
-	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Button)
-}; // Button
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR(PopupMenu)
+}; // PopupMenu
 }}} // namespace(s)
 
-#endif /* SAMBAG_BUTTON_H */
+#endif /* SAMBAG_POPUPMENU_H */

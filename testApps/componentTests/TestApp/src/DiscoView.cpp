@@ -13,7 +13,9 @@
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/IWindowFactory.hpp>
 #include <sambag/disco/Window.hpp>
+#include <sambag/disco/FramedWindow.hpp>
 #include <sambag/disco/windowImpl/X11Window.hpp>
+#include <sambag/disco/components/BoxLayout.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -25,17 +27,26 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 	std::cout<<ev.toString()<<std::endl;
 }
 
-sd::Window::Ptr win;
-sd::Window::Ptr win2;
+sd::FramedWindow::Ptr win;
+sd::FramedWindow::Ptr win2;
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	if (!win2) {
-		win2 = sd::Window::create();
-		win2->setBounds(Rectangle(0,0,230,200));
-		win2->getRootPane()->setBounds(Rectangle(0,0,230,200));
+		win2 = sd::FramedWindow::create();
+		win2->setBounds(Rectangle(110,110,230,200));
 		win2->getRootPane()->validate();
+		win2->getRootPane()->setLayout(
+				BoxLayout::create(win2->getRootPane(), BoxLayout::Y_AXIS)
+		);
+		for (int i = 0; i < 10; ++i) {
+			std::stringstream ss;
+			ss << i + 1;
+			Button::Ptr btn = Button::create();
+			btn->setText(ss.str());
+			win2->getRootPane()->add(btn);
+		}
 	}
 	win2->open();
 }
@@ -46,15 +57,15 @@ void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
 }
 
 int main() {
+	std::cout<<"hi"<<std::endl;
 	{ // extra scope (bye message should occur after releasing all objs)
 		using namespace sambag::disco;
 		using namespace sambag::disco::components;
-		win = sd::Window::create();
+		win = sd::FramedWindow::create();
 		win->setBounds(Rectangle(100,100,230,200));
-		win->getRootPane()->setSize(230,200);
 		win->getRootPane()->EventSender<sdc::events::MouseEvent>::
 				addEventListener(&onMouse);
-		//win->setTitle("Window01");
+		win->setTitle("Messerschmitz");
 
 		Button::Ptr btn = Button::create();
 		btn->setText("hinzufügen und belassen");
@@ -72,7 +83,7 @@ int main() {
 
 		win->getRootPane()->validate();
 		win->open();
-		X11WindowImpl::startMainLoop();
+		sambag::disco::Window::startMainLoop();
 	}
 	win.reset();
 	std::cout<<"bye"<<std::endl;

@@ -71,6 +71,9 @@ inline void BufferedDrawPolicy::init(components::RootPane::Ptr root,
 {
 	using namespace components;
 	Dimension dim = root->getBounds().getDimension();
+	if (bff)
+		if (bff->getSize().getDimension() == dim)
+			return;
 	bff = sambag::disco::
 			getDiscoFactory()->createImageSurface(dim.width(), dim.height());
 	root->setSurface(bff);

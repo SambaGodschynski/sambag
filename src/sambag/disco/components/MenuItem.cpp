@@ -1,25 +1,26 @@
 /*
- * Button.cpp
+ * MenuItem.cpp
  *
- *  Created on: Mon Jun  4 12:21:08 2012
+ *  Created on: Mon Jun 11 06:33:02 2012
  *      Author: Johannes Unger
  */
 
-#include "Button.hpp"
+#include "MenuItem.hpp"
 #include "ui/ALookAndFeel.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-//  Class Button
+//  Class MenuItem
 //=============================================================================
 //-----------------------------------------------------------------------------
-Button::Button() {
+MenuItem::MenuItem() {
 	setBackground(ColorRGBA(1,1,1));
 	setForeground(ColorRGBA(0,0,0));
-	setName("Button");
+	setName("MenuItem");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Button::getComponentUI(ui::ALookAndFeelPtr laf) const {
-	return laf->getUI<Button>();
+ui::AComponentUIPtr MenuItem::getComponentUI(ui::ALookAndFeelPtr laf) const {
+	return laf->getUI<MenuItem>();
 }
+
 }}} // namespace(s)

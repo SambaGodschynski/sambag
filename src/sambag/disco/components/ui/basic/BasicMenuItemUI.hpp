@@ -1,12 +1,12 @@
 /*
- * BasicButtonUI.hpp
+ * BasicMenuItemUI.hpp
  *
- *  Created on: Tue Jun  5 06:38:01 2012
+ *  Created on: Mon Jun 11 06:52:26 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_BASICBUTTONUI_H
-#define SAMBAG_BASICBUTTONUI_H
+#ifndef SAMBAG_BASICMENUITEMUI_H
+#define SAMBAG_BASICMENUITEMUI_H
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/ui/IButtonUI.hpp>
@@ -22,22 +22,20 @@ namespace components { namespace ui { namespace basic {
 
 //=============================================================================
 /** 
-  * @class BasicButtonUI.
+  * @class BasicMenuItemUI.
   */
 template <class ButtonModell>
-class BasicButtonUI : public IButtonUI {
+class BasicMenuItemUI : public IButtonUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicButtonUI<ButtonModell> > Ptr;
+	typedef boost::shared_ptr<BasicMenuItemUI<ButtonModell> > Ptr;
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
 protected:
 	//-------------------------------------------------------------------------
-	BasicButtonUI();
+	BasicMenuItemUI();
 private:
-	//-------------------------------------------------------------------------
-	IPattern::Ptr bk, roll, press;
 public:
 	//-------------------------------------------------------------------------
 	void onButtonStateChanged(void *src, const
@@ -50,7 +48,7 @@ public:
 	virtual void installUI(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		return Ptr(new BasicButtonUI<ButtonModell>());
+		return Ptr(new BasicMenuItemUI<ButtonModell>());
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -77,32 +75,16 @@ public:
 	 * @return
 	 */
 	virtual Dimension getPreferredSize(AComponentPtr c);
-}; // BasicButtonUI
+}; // BasicMenuItemUI
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-BasicButtonUI<ButtonModell>::BasicButtonUI() {
-	ILinearPattern::Ptr lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0.5);
-	lp->addColorStop(svg::HtmlColors::getColor("lavender"), .51);
-	lp->addColorStop(svg::HtmlColors::getColor("lavender"), 1.0);
-	bk = lp;
-	lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("slategrey"), 1.0);
-	press = lp;
-	lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("lightblue"), 1.0);
-	roll = lp;
+BasicMenuItemUI<ButtonModell>::BasicMenuItemUI() {
+
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
@@ -112,24 +94,21 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 
 	if (b->isButtonRollover()) {
 		if (b->isButtonPressed())
-			//cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
-			cn->setFillPattern(press);
+			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
 		else
-			cn->setFillPattern(roll);
-			//cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
+			cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
 	} else
-		//cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
-		cn->setFillPattern(bk);
+		cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
 	cn->setStrokeColor(c->getForeground());
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()));
 	cn->fill();
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()));
 	cn->setStrokeWidth(1);
 	cn->stroke();
 	cn->setFont(b->getFont());
+	cn->setFillColor(c->getForeground());
 	std::string str = b->getText();
 	Rectangle txt = cn->textExtends(str);
-	cn->setFillColor(c->getForeground());
 	cn->translate( Point2D( 10,
 			c->getHeight() / 2.0 + txt.getHeight() / 2.0
 	));
@@ -138,7 +117,7 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
+void BasicMenuItemUI<ButtonModell>::installUI(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
 			boost::shared_dynamic_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
@@ -149,14 +128,14 @@ void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
 	);
 	b->EventSender<typename ButtonModell::StateChangedEvent>::
 	addTrackedEventListener(
-			boost::bind(&BasicButtonUI<ButtonModell>::onButtonStateChanged,
+			boost::bind(&BasicMenuItemUI<ButtonModell>::onButtonStateChanged,
 					this, _1, _2),
 			b
 	);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-void BasicButtonUI<ButtonModell>::onButtonStateChanged(void *src, const
+void BasicMenuItemUI<ButtonModell>::onButtonStateChanged(void *src, const
 			typename AbstractButton::StateChangedEvent &ev)
 {
 	const AbstractButton *_btn =
@@ -167,17 +146,17 @@ void BasicButtonUI<ButtonModell>::onButtonStateChanged(void *src, const
 }
 //------------------------------------------------------------------------------
 template <class ButtonModell>
-Dimension BasicButtonUI<ButtonModell>::getMaximumSize(AComponentPtr c) {
+Dimension BasicMenuItemUI<ButtonModell>::getMaximumSize(AComponentPtr c) {
 	return getPreferredSize(c);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-Dimension BasicButtonUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
+Dimension BasicMenuItemUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
 	return getPreferredSize(c);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
+Dimension BasicMenuItemUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
 			boost::shared_dynamic_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
@@ -191,4 +170,4 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 ///////////////////////////////////////////////////////////////////////////////
 }}}}} // namespace(s)
 
-#endif /* SAMBAG_BASICBUTTONUI_H */
+#endif /* SAMBAG_BASICMENUITEMUI_H */

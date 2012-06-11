@@ -51,7 +51,7 @@
 
 #define SAMBAG_STD_STATIC_COMPONENT_CREATOR(sambag_macro_class_name)		\
 	Ptr getPtr() const {													\
-		return boost::shared_dynamic_cast<Button>(sambag_macro_class_name::getPtr());\
+		return boost::shared_dynamic_cast<sambag_macro_class_name>(AComponent::getPtr());\
 	}																		\
 	static Ptr create() {													\
 		Ptr res(new sambag_macro_class_name());								\

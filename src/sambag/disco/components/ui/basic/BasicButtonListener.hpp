@@ -27,7 +27,7 @@ struct BasicButtonListener {
 	static void onMouseEvent(void *src, const events::MouseEvent &ev);
 }; // BasicButtonListener
 
-//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 template <class ButtonModell>
 void BasicButtonListener<ButtonModell>::
 	onMouseEvent(void *src, const events::MouseEvent &ev)
@@ -42,6 +42,7 @@ void BasicButtonListener<ButtonModell>::
 		break;
 	case MouseEvent::MOUSE_EXITED:
 		b->setButtonRollover(false);
+		b->setButtonPressed(false);
 		break;
 	case MouseEvent::MOUSE_PRESSED:
 		b->setButtonPressed(true);

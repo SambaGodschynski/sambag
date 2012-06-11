@@ -1,12 +1,12 @@
 /*
- * Button.hpp
+ * MenuItem.hpp
  *
- *  Created on: Mon Jun  4 12:21:08 2012
+ *  Created on: Mon Jun 11 06:33:02 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_BUTTON_H
-#define SAMBAG_BUTTON_H
+#ifndef SAMBAG_MENUITEM_H
+#define SAMBAG_MENUITEM_H
 
 #include <boost/shared_ptr.hpp>
 #include "DefaultButtonModell.hpp"
@@ -15,22 +15,25 @@
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
-  * @class Button.
+  * @class MenuItem.
   */
-class Button : public AButton<DefaultButtonModell> {
+class MenuItem : public AButton<DefaultButtonModell> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Button> Ptr;
+	typedef boost::shared_ptr<MenuItem> Ptr;
+	//-------------------------------------------------------------------------
+	typedef DefaultButtonModell Modell;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 private:
 protected:
 	//-------------------------------------------------------------------------
-	Button();
+	MenuItem();
 public:
-	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Button)
-}; // Button
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR(MenuItem)
+
+}; // MenuItem
 }}} // namespace(s)
 
-#endif /* SAMBAG_BUTTON_H */
+#endif /* SAMBAG_MENUITEM_H */

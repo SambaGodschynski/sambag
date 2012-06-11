@@ -123,6 +123,10 @@ public:
 	virtual void setTitle(const std::string &title) {
 		ConcreteWindowImpl::setTitle(title);
 	}
+	//-------------------------------------------------------------------------
+	virtual std::string getTitle() const {
+		return ConcreteWindowImpl::getTitle();
+	}
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -130,6 +134,7 @@ template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
 	using namespace components;
 	rootPane->setSize(ConcreteWindowImpl::getBounds().getDimension());
+	rootPane->validate();
 	DrawPolicy::init(rootPane, ConcreteWindowImpl::surface);
 	// create mousevent creator
 	mec = events::MouseEventCreator::create(rootPane);
