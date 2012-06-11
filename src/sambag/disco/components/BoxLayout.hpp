@@ -73,6 +73,7 @@ private:
 	void checkRequests();
 	//-------------------------------------------------------------------------
 	Axis resolveAxis( Axis axis );
+protected:
 	//-------------------------------------------------------------------------
 	/**
 	 * Creates a layout manager that will lay out components along the given axis.

@@ -18,15 +18,18 @@ namespace sambag { namespace disco {
 //=============================================================================
 extern void __startWindowImplMainLoop_();
 //=============================================================================
-struct OnAWindowCloseEvent {
+struct OnCloseEvent {
 //=============================================================================
+	// implement Window source ptr. is quite tricky
+	// because the Window Object is possible gone on windowimpl.
+	// closing event.
 };
 //=============================================================================
 /** 
   * @class AWindow.
   */
 class AWindow :
-	public sambag::com::events::EventSender<OnAWindowCloseEvent> {
+	public sambag::com::events::EventSender<OnCloseEvent> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

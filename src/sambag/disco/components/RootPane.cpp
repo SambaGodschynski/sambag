@@ -20,9 +20,6 @@ namespace sambag { namespace disco { namespace components {
 const std::string RootPane::PROPERTY_SURFACE = "surface";
 //-----------------------------------------------------------------------------
 RootPane::RootPane(ISurface::Ptr surface) : surface(surface) {
-	setBackground(ColorRGBA(1,1,1,1));
-	setForeground(ColorRGBA(0,0,0,1));
-	setLayout(FlowLayout::create());
 	setName("RootPane");
 }
 //-----------------------------------------------------------------------------

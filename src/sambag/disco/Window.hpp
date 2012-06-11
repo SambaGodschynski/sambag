@@ -17,17 +17,10 @@
 
 namespace sambag { namespace disco {
 //=============================================================================
-struct OnCloseEvent {
-//=============================================================================
-	WindowPtr src;
-	OnCloseEvent(WindowPtr src) : src(src) {}
-	WindowPtr getSource() const { return src; }
-};
-//=============================================================================
 /** 
   * @class Window.
   */
-class Window : public sambag::com::events::EventSender<OnCloseEvent> {
+class Window {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -46,9 +39,18 @@ protected:
 	//-------------------------------------------------------------------------
 	AWindow::Ptr windowImpl;
 private:
-	//-------------------------------------------------------------------------
-	void onWindowImplClose(void *src, const OnAWindowCloseEvent &ev);
 public:
+	//-------------------------------------------------------------------------
+	typedef sambag::com::events::EventSender<OnCloseEvent> OnCloseEventSender;
+	//-------------------------------------------------------------------------
+	typedef sambag::com::events::AnyWPtr AnyWPtr;
+	//-------------------------------------------------------------------------
+	OnCloseEventSender::Connection
+	addOnCloseEventListener(const OnCloseEventSender::EventFunction &f);
+	//-------------------------------------------------------------------------
+	OnCloseEventSender::Connection
+	addTrackedOnCloseEventListener
+	(const OnCloseEventSender::EventFunction &f, AnyWPtr ptr );
 	//-------------------------------------------------------------------------
 	static void startMainLoop();
 	//-------------------------------------------------------------------------

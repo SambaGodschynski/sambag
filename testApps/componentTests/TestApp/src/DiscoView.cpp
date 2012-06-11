@@ -16,6 +16,7 @@
 #include <sambag/disco/FramedWindow.hpp>
 #include <sambag/disco/windowImpl/X11Window.hpp>
 #include <sambag/disco/components/BoxLayout.hpp>
+#include <sambag/disco/components/Panel.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -36,24 +37,48 @@ void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (!win2) {
 		win2 = sd::FramedWindow::create();
 		win2->setBounds(Rectangle(110,110,230,200));
-		win2->getRootPane()->validate();
-		win2->getRootPane()->setLayout(
-				BoxLayout::create(win2->getRootPane(), BoxLayout::Y_AXIS)
+
+		AContainer::Ptr c = Panel::create();
+		c->setLayout(
+				BoxLayout::create(c, BoxLayout::Y_AXIS)
 		);
 		for (int i = 0; i < 10; ++i) {
 			std::stringstream ss;
 			ss << i + 1;
 			Button::Ptr btn = Button::create();
 			btn->setText(ss.str());
-			win2->getRootPane()->add(btn);
+			c->add(btn);
 		}
+		win2->getRootPane()->add(c);
+		///////////////////////////////////////////////////////////////////////
+		c = Panel::create();
+		c->setLayout(
+				BoxLayout::create(c, BoxLayout::X_AXIS)
+		);
+		for (int i = 0; i < 10; ++i) {
+			std::stringstream ss;
+			char txt[] = {'a' + i, '\0'};
+			ss << txt;
+			Button::Ptr btn = Button::create();
+			btn->setText(ss.str());
+			c->add(btn);
+		}
+		win2->getRootPane()->add(c);
+
+		win2->getRootPane()->validate();
 	}
 	win2->open();
 }
+
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (win2)
 		win2->close();
 	//win2.reset();
+}
+
+void onMainClose(void*, const sd::OnCloseEvent &ev) {
+	if (win2)
+		win2->close();
 }
 
 int main() {
@@ -65,6 +90,7 @@ int main() {
 		win->setBounds(Rectangle(100,100,230,200));
 		win->getRootPane()->EventSender<sdc::events::MouseEvent>::
 				addEventListener(&onMouse);
+		win->addOnCloseEventListener(&onMainClose);
 		win->setTitle("Messerschmitz");
 
 		Button::Ptr btn = Button::create();

@@ -144,9 +144,9 @@ template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
 	using namespace sambag::com::events;
 	rootPane->setSurface(ISurface::Ptr());
-	EventSender<OnAWindowCloseEvent>::notifyListeners (
+	EventSender<OnCloseEvent>::notifyListeners (
 		this,
-		OnAWindowCloseEvent()
+		OnCloseEvent()
 	);
 }
 //-----------------------------------------------------------------------------
