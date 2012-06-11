@@ -270,7 +270,9 @@ protected:
 	 *
 	 * @param c
 	 */
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const = 0;
+	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
+		return ui::AComponentUIPtr();
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * installs specific component ui. Every Component has to impl. its own version.

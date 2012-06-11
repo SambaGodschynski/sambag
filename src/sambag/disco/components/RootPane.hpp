@@ -13,6 +13,7 @@
 #include "AContainer.hpp"
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include "Forward.hpp"
+#include "Panel.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
@@ -20,7 +21,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class RootPane.
   */
-class RootPane : public AContainer {
+class RootPane : public Panel {
 //=============================================================================
 friend class ui::UIManager;
 public:
