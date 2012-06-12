@@ -13,6 +13,7 @@
 #include "ALayoutManager.hpp"
 #include <vector>
 #include "events/ContainerEvent.hpp"
+#include <boost/unordered_map.hpp>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -51,6 +52,10 @@ protected:
 	 */
 	virtual void installLookAndFeel (ui::ALookAndFeelPtr laf);
 private:
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_multimap<std::string, AComponentPtr> TagMap;
+	//-------------------------------------------------------------------------
+	TagMap tagMap;
 	//-------------------------------------------------------------------------
 	void retargetMouseEvent(AComponentPtr c, events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
@@ -152,6 +157,25 @@ protected:
 	 */
 	virtual bool rectangleIsObscured(const Rectangle &r);
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * adds tag, component relation.
+	 * @note case sensitive
+	 * @note dosen't check whether component is contained by container
+	 * @param comp
+	 * @param tag
+	 * @see getComponentsByTag
+	 */
+	void addTag(AComponent::Ptr comp, const std::string &tag);
+	//-------------------------------------------------------------------------
+	/**
+	 * returns components which are related to tag
+	 * @note case sensitive
+	 * @param tag
+	 * @param out
+	 */
+	template <typename Container>
+	void getComponentsByTag(const std::string &tag, Container &out) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		Ptr s = boost::shared_dynamic_cast<AContainer>(self.lock());
@@ -414,6 +438,17 @@ AComponent::Ptr AContainer::add(AComponent::Ptr comp, const Constraint &c,
 	SAMBAG_END_SYNCHRONIZED
 	dispatchAddEvents(comp);
 	return comp;
+}
+//-----------------------------------------------------------------------------
+template <typename Container>
+void AContainer::getComponentsByTag(const std::string &tag, Container &out)
+const
+{
+	TagMap::const_iterator it, end;
+	boost::tie(it, end) = tagMap.equal_range(tag);
+	for (; it!=end; ++it) {
+		out.push_back(it->second);
+	}
 }
 }}} // namespace(s)
 

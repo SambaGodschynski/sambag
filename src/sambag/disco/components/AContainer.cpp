@@ -698,11 +698,15 @@ std::string AContainer::parameterString() const {
 		os << ",maximumSize=" << prefSize;
 	return os.str();
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void AContainer::installLookAndFeel (ui::ALookAndFeelPtr laf) {
 	BOOST_FOREACH(AComponent::Ptr c, components) {
 		c->installLookAndFeel(laf);
 	}
+}
+//-----------------------------------------------------------------------------
+void AContainer::addTag(AComponent::Ptr comp, const std::string &tag) {
+	tagMap.insert(std::make_pair(tag, comp));
 }
 }}}
 // namespace(s)

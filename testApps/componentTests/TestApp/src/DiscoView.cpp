@@ -19,6 +19,7 @@
 #include <sambag/disco/components/BoxLayout.hpp>
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
+#include <sambag/disco/components/Label.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -27,10 +28,15 @@
 namespace sd = sambag::disco;
 namespace sdc = sambag::disco::components;
 
+void trackMouse(void *src, const sdc::events::MouseEvent &ev);
+void onMouse(void *src, const sdc::events::MouseEvent &ev);
+void onButton(void *src, const sdc::events::ActionEvent &ev);
 
 sd::FramedWindow::Ptr win;
 sd::FramedWindow::Ptr win2;
 sdc::PopupMenu::Ptr popup;
+
+static const std::string INPUT_LABEL = "inputLabel";
 
 void createPopup() {
 	using namespace sambag::disco::components;
@@ -43,6 +49,46 @@ void createPopup() {
 		btn->setText(items[i]);
 		popup->add(btn);
 	}
+}
+
+void createACMEPane() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win2 = sd::FramedWindow::create(win);
+	win2->setBounds(Rectangle(110,100,430,280));
+
+	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
+			addEventListener(&trackMouse);
+	AContainerPtr con = win2->getRootPane();
+	sd::Font f;
+	f.size = 20;
+	for (int i = 0; i < 10; ++i) {
+		std::stringstream ss;
+		ss << i + 1;
+		Button::Ptr btn = Button::create();
+		btn->EventSender<sdc::events::ActionEvent>::
+				addEventListener(&onButton);
+		btn->setText(ss.str());
+		btn->setFont(f);
+		con->add(btn);
+	}
+	for (int i = 0; i < 24; ++i) {
+		char c[] = {'A' + i, 0};
+		Button::Ptr btn = Button::create();
+		btn->EventSender<sdc::events::ActionEvent>::
+				addEventListener(&onButton);
+		btn->setText(std::string(c));
+		btn->setFont(f);
+		con->add(btn);
+	}
+
+	f.size = 40;
+	f.fontFace = "monospace";
+	Label::Ptr label = Label::create();
+	label->setFont(f);
+	label->setText("ACME Panel");
+	con->add(label);
+	con->addTag(label, INPUT_LABEL);
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
@@ -69,40 +115,28 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 }
 
 void onButton(void *src, const sdc::events::ActionEvent &ev) {
-	std::cout<<ev.getSource()->toString()<<" pressed."<<std::endl;
+	using namespace sambag::disco::components;
+	Button::Ptr b = boost::shared_dynamic_cast<Button>(ev.getSource());
+	if (!b) {
+		std::cout<<ev.getSource()->toString()<<std::endl;
+		return;
+	}
+	std::list<AComponentPtr> l;
+	win2->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
+	if (l.empty())
+		return;
+	Label::Ptr label = boost::shared_dynamic_cast<Label>(l.back());
+	if (!label)
+		return;
+	label->setText(label->getText() + b->getText());
+	win2->getRootPane()->validate();
 }
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	if (!win2) {
-		win2 = sd::FramedWindow::create(win);
-		win2->setBounds(Rectangle(110,100,430,280));
-
-		win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
-				addEventListener(&trackMouse);
-		sd::Font f;
-		f.size = 22;
-		f.fontFace = "monospace";
-		for (int i = 0; i < 10; ++i) {
-			std::stringstream ss;
-			ss << i + 1;
-			Button::Ptr btn = Button::create();
-			btn->EventSender<sdc::events::ActionEvent>::
-					addEventListener(&onButton);
-			btn->setText(ss.str());
-			btn->setFont(f);
-			win2->getRootPane()->add(btn);
-		}
-		for (int i = 0; i < 24; ++i) {
-			char c[] = {'A' + i, 0};
-			Button::Ptr btn = Button::create();
-			btn->EventSender<sdc::events::ActionEvent>::
-					addEventListener(&onButton);
-			btn->setText(std::string(c));
-			btn->setFont(f);
-			win2->getRootPane()->add(btn);
-		}
+		createACMEPane();
 	}
 	win2->getRootPane()->validate();
 	win2->open();
