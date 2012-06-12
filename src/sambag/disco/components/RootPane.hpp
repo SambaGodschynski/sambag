@@ -13,6 +13,7 @@
 #include "AContainer.hpp"
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include "Forward.hpp"
+#include <sambag/disco/Forward.hpp>
 #include "Panel.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -24,12 +25,15 @@ namespace sambag { namespace disco { namespace components {
 class RootPane : public Panel {
 //=============================================================================
 friend class ui::UIManager;
+friend class sambag::disco::Window;
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<RootPane> Ptr;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_SURFACE;
 protected:
+	//-------------------------------------------------------------------------
+	WindowPtr parent;
 	//-------------------------------------------------------------------------
 	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();
@@ -41,7 +45,11 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	ISurface::Ptr surface;
+	//-------------------------------------------------------------------------
+	void setParent(WindowPtr parent);
 public:
+	//-------------------------------------------------------------------------
+	virtual Point2D getLocationOnScreen(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return boost::shared_dynamic_cast<RootPane>(AComponent::getPtr());

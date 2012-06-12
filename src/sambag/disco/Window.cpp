@@ -24,6 +24,10 @@ Window::Window(Window::Ptr parent) : parent(parent) {
 	windowImpl->setFramed(false);
 	windowImpl->setRootPane(rootPane);
 }
+//-------------------------------------------------------------------------
+void Window::onParentRemove(void *src, const OnCloseEvent &ev) {
+	close();
+}
 //-----------------------------------------------------------------------------
 components::RootPane::Ptr Window::getRootPane() const {
 	return rootPane;
@@ -38,11 +42,26 @@ Rectangle Window::getBounds() const {
 }
 //-----------------------------------------------------------------------------
 void Window::open() {
+	if (parent) {
+		parent->addTrackedOnCloseEventListener(
+			boost::bind(&Window::onParentRemove, this, _1, _2),
+			getPtr()
+		);
+	}
+	rootPane->setParent(getPtr());
 	windowImpl->open();
 }
 //-----------------------------------------------------------------------------
 void Window::close() {
+	rootPane->setParent(Window::Ptr());
 	windowImpl->close();
+}
+//-----------------------------------------------------------------------------
+void Window::pack() {
+	// invalidate because:
+	// AContainer::(dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid()))
+	rootPane->invalidate();
+	setSize(rootPane->getPreferredSize());
 }
 //-----------------------------------------------------------------------------
 Window::OnCloseEventSender::Connection

@@ -59,16 +59,6 @@ public:
 	virtual void draw(IDrawContext::Ptr cn, AComponentPtr c);
 	//-------------------------------------------------------------------------
 	/**
-	 * Returns the specified component's maximum size appropriate for the
-	 * look and feel.
-	 * @param c
-	 * @return
-	 */
-	virtual Dimension getMaximumSize(AComponentPtr c);
-	//-------------------------------------------------------------------------
-	virtual Dimension getMinimumSize(AComponentPtr c);
-	//-------------------------------------------------------------------------
-	/**
 	 * Returns the specified component's preferred size appropriate for the
 	 * look and feel.
 	 * @param c
@@ -88,10 +78,6 @@ void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
-	// consider clipping
-	cn->translate(Point2D(2,2));
-	cn->scale(Point2D(0.8, 0.8));
-
 	if (b->isButtonRollover()) {
 		if (b->isButtonPressed())
 			cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
@@ -102,9 +88,9 @@ void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 	cn->setStrokeColor(c->getForeground());
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()));
 	cn->fill();
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()));
-	cn->setStrokeWidth(1);
-	cn->stroke();
+//	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()));
+//	cn->setStrokeWidth(1);
+//	cn->stroke();
 	cn->setFont(b->getFont());
 	cn->setFillColor(c->getForeground());
 	std::string str = b->getText();
@@ -143,16 +129,6 @@ void BasicMenuItemUI<ButtonModell>::onButtonStateChanged(void *src, const
 	BOOST_ASSERT(_btn);
 	typename AbstractButton::Ptr btn = _btn->getPtr();
 	btn->redraw();
-}
-//------------------------------------------------------------------------------
-template <class ButtonModell>
-Dimension BasicMenuItemUI<ButtonModell>::getMaximumSize(AComponentPtr c) {
-	return getPreferredSize(c);
-}
-//-----------------------------------------------------------------------------
-template <class ButtonModell>
-Dimension BasicMenuItemUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
-	return getPreferredSize(c);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>

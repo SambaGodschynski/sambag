@@ -45,9 +45,13 @@ void BasicButtonListener<ButtonModell>::
 		b->setButtonPressed(false);
 		break;
 	case MouseEvent::MOUSE_PRESSED:
+		if (ev.getButtons() != MouseEvent::BUTTON1)
+			break;
 		b->setButtonPressed(true);
 		break;
 	case MouseEvent::MOUSE_RELEASED: {
+		if (ev.getButtons() != MouseEvent::BUTTON1)
+			break;
 		bool oldState = b->isButtonPressed();
 		b->setButtonPressed(false);
 		if (!oldState)

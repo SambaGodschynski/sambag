@@ -30,6 +30,20 @@ public:
 	static Ptr create(AContainerPtr target, Axis axis) {
 		return Ptr(new DefaultMenuLayout(target, axis));
 	}
+	//-------------------------------------------------------------------------
+	virtual Dimension preferredLayoutSize(AContainerPtr target) {
+		/*if (target instanceof JPopupMenu) {
+			JPopupMenu popupMenu = (JPopupMenu) target;
+			sun.swing.MenuItemLayoutHelper.clearUsedClientProperties(popupMenu);
+			if (popupMenu.getComponentCount() == 0) {
+				return new Dimension(0, 0);
+			}
+		}*/
+
+		// Make BoxLayout recalculate cached preferred sizes
+		BoxLayout::invalidateLayout(target);
+		return BoxLayout::preferredLayoutSize(target);
+	}
 }; // DefaultMenuLayout
 }}}} // namespace(s)
 

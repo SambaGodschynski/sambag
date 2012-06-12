@@ -39,6 +39,8 @@ protected:
 	//-------------------------------------------------------------------------
 	AWindow::Ptr windowImpl;
 private:
+	//-------------------------------------------------------------------------
+	void onParentRemove(void *src, const OnCloseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	typedef sambag::com::events::EventSender<OnCloseEvent> OnCloseEventSender;
@@ -51,6 +53,14 @@ public:
 	OnCloseEventSender::Connection
 	addTrackedOnCloseEventListener
 	(const OnCloseEventSender::EventFunction &f, AnyWPtr ptr );
+	//-------------------------------------------------------------------------
+	/**
+	 * Sets the minimum size of this window to a constant value.
+	 * Subsequent calls to getMinimumSize will always return this value.
+	 * If current window's size is less than minimumSize the size of the
+	 * window is automatically enlarged to honor the minimum size.
+	 */
+	virtual void pack();
 	//-------------------------------------------------------------------------
 	static void startMainLoop();
 	//-------------------------------------------------------------------------
@@ -95,6 +105,12 @@ public:
 	virtual Point2D getLocation() const {
 		Rectangle curr = getBounds();
 		return curr.x0();
+	}
+	//-------------------------------------------------------------------------
+	virtual bool isVisible() const {
+		if (!windowImpl)
+			return false;
+		return windowImpl->isVisible();
 	}
 }; // Window
 }} // namespace(s)

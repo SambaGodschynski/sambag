@@ -153,14 +153,10 @@ Dimension AComponent::getMaximumSize() {
 		if (dim!=NULL_DIMENSION)
 			return dim;
 	}
-	dim = maxSize;
-	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
-		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-			maxSize = getSize();
-			dim = maxSize;
-		SAMBAG_END_SYNCHRONIZED
+	if (isMaximumSizeSet()) {
+		return maxSize;
 	}
-	return dim;
+	return Dimension(9999.,9999.);
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMinimumSize() {
@@ -262,6 +258,20 @@ AContainerPtr AComponent::getRootContainer() const {
 		p = p->getParent();
 	}
 	return p;
+}
+//-----------------------------------------------------------------------------
+Point2D AComponent::getLocationOnScreen(const Point2D &p) const {
+	if (!isVisible())
+		return NULL_POINT2D;
+	Point2D tmp = p;
+	boost::geometry::add_point(tmp, getLocation());
+	for (AContainerPtr parent = getContainer();
+			parent;
+			parent = parent->getContainer())
+	{
+		boost::geometry::add_point(tmp, parent->getLocationOnScreen(tmp));
+	}
+	return tmp;
 }
 //-----------------------------------------------------------------------------
 IDrawContext::Ptr
@@ -897,6 +907,8 @@ AContainerPtr AComponent::getValidateRoot() const {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setUserUI (ui::AComponentUIPtr cui) {
+	if (!cui)
+		return;
 	uiSettedByUser = true;
 	installUI(cui);
 }

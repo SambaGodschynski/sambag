@@ -162,7 +162,6 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	Dimension dim = ConcreteWindowImpl::getBounds().getDimension();
 	if (dim == rootPane->getSize())
 		return;
-	std::cout<<dim<<std::endl;
 	rootPane->setSize(dim);
 	DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
 	rootPane->validate();

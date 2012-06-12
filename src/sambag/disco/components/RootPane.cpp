@@ -11,6 +11,7 @@
 #include "ui/UIManager.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "ui/basic/BasicLookAndFeel.hpp"
+#include <sambag/disco/Window.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -31,6 +32,18 @@ void RootPane::redrawParentIfNeeded(const Rectangle &r) {
 //-----------------------------------------------------------------------------
 ui::ALookAndFeelPtr RootPane::getCurrentLookAndFeel() const {
 	return ui::UIManager::instance().getLookAndFeel(getPtr());
+}
+//-----------------------------------------------------------------------------
+void  RootPane::setParent(WindowPtr _parent) {
+	parent = _parent;
+}
+//-------------------------------------------------------------------------
+Point2D RootPane::getLocationOnScreen(const Point2D &p) const {
+	if (!parent)
+		return Point2D();
+	Point2D tmp = p;
+	boost::geometry::add_point(tmp, parent->getBounds().x0());
+	return tmp;
 }
 //-----------------------------------------------------------------------------
 void RootPane::setSurface(ISurface::Ptr _surface) {

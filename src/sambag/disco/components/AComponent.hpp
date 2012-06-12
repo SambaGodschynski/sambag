@@ -319,12 +319,6 @@ protected:
 		);
 	}
 	//-------------------------------------------------------------------------
-	/**
-	 * Fetches the root container somewhere higher up in the component
-	 * tree that contains this component.
-	 */
-	virtual AContainerPtr getRootContainer() const;
-	//-------------------------------------------------------------------------
 	virtual void clearMostRecentFocusOwnerOnHide();
 	//-------------------------------------------------------------------------
 	/**
@@ -375,6 +369,12 @@ protected: // TODO: remove mangeling
 	 */
 	virtual void __invalidateIfValid_();
 public: /* END should be protected  */
+	//-------------------------------------------------------------------------
+	/**
+	 * Fetches the root container somewhere higher up in the component
+	 * tree that contains this component.
+	 */
+	virtual AContainerPtr getRootContainer() const;
 	//-------------------------------------------------------------------------
 	bool isUiSettedByUser() const {
 		return uiSettedByUser;
@@ -819,6 +819,8 @@ protected:
 	 */
 	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
+	//-------------------------------------------------------------------------
+	virtual Point2D getLocationOnScreen(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	AContainerPtr getValidateRoot() const;
 	//-------------------------------------------------------------------------

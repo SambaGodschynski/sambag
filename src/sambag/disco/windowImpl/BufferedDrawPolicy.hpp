@@ -34,6 +34,10 @@ protected:
 	void init(components::RootPane::Ptr root, ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
 	void reinit(components::RootPane::Ptr root, ISurface::Ptr surface) {
+		if (bff)
+			if (bff->getSize().getDimension() ==
+					root->getBounds().getDimension())
+				return;
 		init(root, surface);
 	}
 private:
@@ -71,9 +75,6 @@ inline void BufferedDrawPolicy::init(components::RootPane::Ptr root,
 {
 	using namespace components;
 	Dimension dim = root->getBounds().getDimension();
-	if (bff)
-		if (bff->getSize().getDimension() == dim)
-			return;
 	bff = sambag::disco::
 			getDiscoFactory()->createImageSurface(dim.width(), dim.height());
 	root->setSurface(bff);
