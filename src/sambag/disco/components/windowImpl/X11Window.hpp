@@ -21,7 +21,7 @@
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 class X11WindowImpl; typedef boost::shared_ptr<X11WindowImpl> X11WindowImplPtr;
 //=============================================================================
 struct DestroyWindow : public sambag::com::ICommand {
@@ -167,7 +167,7 @@ public:
 	 */
 	static void startMainLoop();
 }; // X11Window
-}}
+}}}
 
 #endif //DISCO_USE_X11
 #endif /* SAMBAG_X11WINDOW_H */

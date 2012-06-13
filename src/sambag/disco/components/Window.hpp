@@ -9,13 +9,13 @@
 #define SAMBAG_WINDOW_H
 
 #include <boost/shared_ptr.hpp>
-#include "components/RootPane.hpp"
-#include "ISurface.hpp"
+#include "RootPane.hpp"
+#include <sambag/disco/ISurface.hpp>
 #include "windowImpl/AWindow.hpp"
 #include "Forward.hpp"
 #include <sambag/com/events/Events.hpp>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class Window.
@@ -113,5 +113,5 @@ public:
 		return windowImpl->isVisible();
 	}
 }; // Window
-}} // namespace(s)
+}}} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

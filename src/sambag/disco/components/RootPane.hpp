@@ -13,7 +13,6 @@
 #include "AContainer.hpp"
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include "Forward.hpp"
-#include <sambag/disco/Forward.hpp>
 #include "Panel.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -25,7 +24,7 @@ namespace sambag { namespace disco { namespace components {
 class RootPane : public Panel {
 //=============================================================================
 friend class ui::UIManager;
-friend class sambag::disco::Window;
+friend class sambag::disco::components::Window;
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<RootPane> Ptr;

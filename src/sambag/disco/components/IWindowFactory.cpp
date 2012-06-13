@@ -7,10 +7,10 @@
 
 #include "IWindowFactory.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class IWindowFactory
 //=============================================================================
 //-----------------------------------------------------------------------------
 
-}} // namespace(s)
+}}} // namespace(s)

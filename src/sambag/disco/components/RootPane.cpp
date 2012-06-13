@@ -11,7 +11,7 @@
 #include "ui/UIManager.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "ui/basic/BasicLookAndFeel.hpp"
-#include <sambag/disco/Window.hpp>
+#include <sambag/disco/components/Window.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================

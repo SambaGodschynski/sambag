@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "Forward.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class IWindowFactory.
@@ -24,5 +24,5 @@ public:
 }; // IWindowFactory
 ///////////////////////////////////////////////////////////////////////////////
 extern IWindowFactory * getWindowFactory();
-}} // namespace(s)
+}}} // namespace(s)
 #endif /* SAMBAG_IWINDOWFACTORY_H */

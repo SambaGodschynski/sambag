@@ -9,10 +9,10 @@
 #define SAMBAG_X11WINDOWFACTORY_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/IWindowFactory.hpp>
+#include <sambag/disco/components/IWindowFactory.hpp>
 #include <loki/Singleton.h>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 
 //=============================================================================
 /** 
@@ -29,6 +29,6 @@ public:
 	virtual AWindowPtr createWindowImpl() const;
 
 }; // X11WindowFactory
-}} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_X11WINDOWFACTORY_H */

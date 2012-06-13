@@ -12,11 +12,11 @@
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
 #include "AWindow.hpp"
-#include <sambag/disco/Forward.hpp>
+#include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include "BufferedDrawPolicy.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /**
   * @class WindowImpl.
@@ -166,5 +166,5 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
 	rootPane->validate();
 }
-}} // namespace(s)
+}}} // namespace(s)
 #endif /* TWINDOW_HPP_ */

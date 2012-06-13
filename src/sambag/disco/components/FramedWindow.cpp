@@ -7,7 +7,7 @@
 
 #include "FramedWindow.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class FramedWindow
 //=============================================================================
@@ -23,4 +23,4 @@ void FramedWindow::setTitle(const std::string &title) {
 std::string FramedWindow::getTitle() const {
 	return windowImpl->getTitle();
 }
-}} // namespace(s)
+}}} // namespace(s)

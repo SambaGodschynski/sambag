@@ -12,7 +12,7 @@
 #include "Window.hpp"
 #include <string>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class FramedWindow.
@@ -41,6 +41,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual std::string getTitle() const;
 }; // FramedWindow
-}} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_FRAMEDWINDOW_H */

@@ -16,7 +16,7 @@
  */
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
-#include <sambag/disco/Forward.hpp>
+#include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 
 namespace sambag { namespace disco {

@@ -6,10 +6,10 @@
  */
 
 #include "Window.hpp"
-#include "components/RootPane.hpp"
+#include "RootPane.hpp"
 #include "IWindowFactory.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Window
 //=============================================================================
@@ -81,4 +81,4 @@ Window::addTrackedOnCloseEventListener(
 	return
 		windowImpl->EventSender<OnCloseEvent>::addTrackedEventListener(f, wPtr);
 }
-}} // namespace(s)
+}}} // namespace(s)

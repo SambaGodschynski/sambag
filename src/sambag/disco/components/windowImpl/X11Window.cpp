@@ -16,7 +16,7 @@ namespace {
 	}
 }
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 void __startWindowImplMainLoop_() {
 	X11WindowImpl::startMainLoop();
@@ -338,6 +338,6 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 void X11WindowImpl::startMainLoop() {
 	mainLoop();
 }
-}} // namespace(s)
+}}} // namespace(s)
 
 #endif // DISCO_USE_X11

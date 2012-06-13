@@ -10,7 +10,7 @@
 #include "X11Window.hpp"
 #include "WindowImpl.hpp"
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class X11WindowFactory
 //=============================================================================
@@ -25,6 +25,6 @@ typedef Loki::SingletonHolder<X11WindowFactory> X11WindowFactoryHolder;
 IWindowFactory * getWindowFactory() {
 	return &X11WindowFactoryHolder::Instance();
 }
-}} // namespace(s)
+}}} // namespace(s)
 
 #endif // DISCO_USE_X11

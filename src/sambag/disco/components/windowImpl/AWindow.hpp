@@ -10,11 +10,11 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/RootPane.hpp>
-#include <sambag/disco/Forward.hpp>
+#include <sambag/disco/components/Forward.hpp>
 #include <sambag/com/events/Events.hpp>
 #include <string>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 extern void __startWindowImplMainLoop_();
 //=============================================================================
@@ -82,5 +82,5 @@ public:
 	virtual std::string getTitle() const = 0;
 
 }; // AWindow
-}} // namespace(s)
+}}} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

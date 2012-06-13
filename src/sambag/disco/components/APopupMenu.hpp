@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "AContainer.hpp"
 #include "FlowLayout.hpp"
-#include <sambag/disco/Window.hpp>
+#include <sambag/disco/components/Window.hpp>
 #include "ui/DefaultMenuLayout.hpp"
 #include "MenuItem.hpp"
 
@@ -114,7 +114,7 @@ void APopupMenu<SM>::add(MenuItem::Ptr c) {
 template <class SM>
 void APopupMenu<SM>::onItemClicked(void *src, const events::ActionEvent &ev)
 {
-	hidePopup();
+	//hidePopup();
 }
 }}} // namespace(s)
 
