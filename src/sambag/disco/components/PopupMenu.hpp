@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "APopupMenu.hpp"
 #include "DefaultSingleSelectionModell.hpp"
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
@@ -28,9 +29,18 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	PopupMenu();
+	PopupMenu(WindowPtr parent = WindowPtr());
 public:
-	SAMBAG_STD_STATIC_COMPONENT_CREATOR(PopupMenu)
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return boost::shared_dynamic_cast<PopupMenu>(AComponent::getPtr());
+	}
+	//-------------------------------------------------------------------------
+	static Ptr create(WindowPtr parent = WindowPtr()) {
+		Ptr neu(new PopupMenu(parent));
+		neu->self = neu;
+		return neu;
+	}
 }; // PopupMenu
 }}} // namespace(s)
 

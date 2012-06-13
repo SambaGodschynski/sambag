@@ -957,4 +957,8 @@ void AComponent::setFont(const Font &_font) {
 const Font & AComponent::getFont() const {
 	return font;
 }
+//-----------------------------------------------------------------------------
+Font & AComponent::getFont() {
+	return font;
+}
 }}} // namespace(s)

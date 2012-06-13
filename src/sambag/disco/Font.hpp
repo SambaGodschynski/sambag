@@ -64,6 +64,22 @@ struct Font {
 	const Font & get() const {
 		return *this;
 	}
+	Font & setFontFace (const FontFace &_fontFace) {
+		fontFace = _fontFace;
+		return *this;
+	}
+	Font & setSize (Size _size) {
+		size = _size;
+		return *this;
+	}
+	Font & setSlant(Slant _slant) {
+		slant = _slant;
+		return *this;
+	}
+	Font & setWeight (Weight _weight) {
+		weight = _weight;
+		return *this;
+	}
 };
 
 }} //namespaces

@@ -33,15 +33,17 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev);
 void onButton(void *src, const sdc::events::ActionEvent &ev);
 void onClearTxtField(void *src, const sdc::events::ActionEvent &ev);
 
+
 sdc::FramedWindow::Ptr win;
 sdc::FramedWindow::Ptr win2;
 sdc::PopupMenu::Ptr popup;
 
 static const std::string INPUT_LABEL = "inputLabel";
+static const int INPUT_LABEL_SIZE = 40;
 
 void createPopup() {
 	using namespace sambag::disco::components;
-	popup = PopupMenu::create();
+	popup = PopupMenu::create(win2);
 	const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
@@ -68,32 +70,27 @@ void createACMEPane() {
 			addEventListener(&trackMouse);
 
 	RootPanePtr con = win2->getRootPane();
-	sd::Font f;
-	f.size = 20;
 	for (int i = 0; i < 10; ++i) {
 		std::stringstream ss;
-		ss << i + 1;
+		ss << i;
 		Button::Ptr btn = Button::create();
 		btn->EventSender<sdc::events::ActionEvent>::
 				addEventListener(&onButton);
 		btn->setText(ss.str());
-		btn->setFont(f);
+		btn->getFont().setFontFace("monospace");
 		con->add(btn);
 	}
-	for (int i = 0; i < 24; ++i) {
+	for (int i = 0; i < 26; ++i) {
 		char c[] = {'A' + i, 0};
 		Button::Ptr btn = Button::create();
 		btn->EventSender<sdc::events::ActionEvent>::
 				addEventListener(&onButton);
 		btn->setText(std::string(c));
-		btn->setFont(f);
+		btn->getFont().setFontFace("monospace");
 		con->add(btn);
 	}
-
-	f.size = 40;
-	f.fontFace = "monospace";
 	Label::Ptr label = Label::create();
-	label->setFont(f);
+	label->getFont().setFontFace("monospace").setSize(INPUT_LABEL_SIZE);
 	con->add(label);
 	con->addTag(label, INPUT_LABEL);
 }
@@ -109,11 +106,11 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 		return;
 	label->setText("");
 	win2->getRootPane()->validate();
+	label->getFont().setSize(INPUT_LABEL_SIZE);
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
-	//std::cout<<ev.toString()<<std::endl;
-	std::cout<<win2->getRootPane()->getLocationOnScreen(ev.getLocation())<<std::endl;
+	std::cout<<ev.toString()<<std::endl;
 }
 
 void onMouse(void *src, const sdc::events::MouseEvent &ev) {
@@ -149,8 +146,13 @@ void onButton(void *src, const sdc::events::ActionEvent &ev) {
 	Label::Ptr label = boost::shared_dynamic_cast<Label>(l.back());
 	if (!label)
 		return;
-	label->setText(label->getText() + b->getText());
+	std::string txt = label->getText() + b->getText();
+	label->setText(txt);
+	if (txt.length() > 15) {
+		label->getFont().setSize( (15 / (float)txt.length()) * INPUT_LABEL_SIZE );
+	}
 	win2->getRootPane()->validate();
+	win2->getRootPane()->redraw();
 }
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
@@ -185,17 +187,12 @@ int main() {
 		Button::Ptr btn = Button::create();
 		btn->setText("hinzufügen und belassen");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
-		sambag::disco::Font f = btn->getFont();
-		f.fontFace = "monospace";
-		btn->setFont(f);
+		btn->getFont().setFontFace("monospace");
 		win->getRootPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("tschüß");
-		f = btn->getFont();
-		f.fontFace = "monospace";
-		f.size = 50;
-		btn->setFont(f);
+		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
 		win->getRootPane()->add(btn);
 

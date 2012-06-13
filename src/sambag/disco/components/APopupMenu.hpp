@@ -36,15 +36,23 @@ private:
 	//-------------------------------------------------------------------------
 	void initWindow();
 	//-------------------------------------------------------------------------
-	WindowPtr window;
+	WindowPtr window, parent;
 protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
 	virtual void onItemClicked(void *src, const events::ActionEvent &ev);
 	//-------------------------------------------------------------------------
-	APopupMenu();
+	APopupMenu(WindowPtr parent = WindowPtr());
 public:
+	//-------------------------------------------------------------------------
+	virtual void setParentWindow(WindowPtr _parent) {
+		parent = _parent;
+	}
+	//-------------------------------------------------------------------------
+	virtual WindowPtr getParentWindow() const {
+		return parent;
+	}
 	//-------------------------------------------------------------------------
 	virtual void add(MenuItem::Ptr c);
 	//-------------------------------------------------------------------------
@@ -76,7 +84,7 @@ template <class SM>
 const std::string  APopupMenu<SM>::PROPERTY_POPUP_LOCATION = "popuplocation";
 //-----------------------------------------------------------------------------
 template <class SM>
-APopupMenu<SM>::APopupMenu() {
+APopupMenu<SM>::APopupMenu(WindowPtr parent) : parent(parent) {
 }
 //-----------------------------------------------------------------------------
 template <class SM>
@@ -98,7 +106,7 @@ void APopupMenu<SM>::initWindow() {
 	setLayout(
 		ui::DefaultMenuLayout::create(getPtr(), ui::DefaultMenuLayout::Y_AXIS)
 	);
-	window = Window::create();
+	window = Window::create(parent);
 	window->getRootPane()->add(getPtr());
 	window->setWindowLocation(location);
 }
