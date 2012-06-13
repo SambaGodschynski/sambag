@@ -125,6 +125,8 @@ void X11WindowImpl::createWindow() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::destroyWindow() {
+	if (win==0)
+		return;
 	// unregister window
 	winmap.erase(win);
 	// X11's destroy

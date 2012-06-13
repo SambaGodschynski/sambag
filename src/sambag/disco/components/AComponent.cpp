@@ -254,7 +254,7 @@ AComponent::Lock & AComponent::getTreeLock() const {
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getRootContainer() const {
 	AContainer::Ptr p = parent;
-	while (p) {
+	while (p->getParent()) {
 		p = p->getParent();
 	}
 	return p;
@@ -881,7 +881,7 @@ void AComponent::__processMouseEvent_(const events::MouseEvent &ev) {
 	);
 }
 //-----------------------------------------------------------------------------
-RootPanePtr AComponent::getTopLevelContainer() const {
+RootPanePtr AComponent::getTopLevelRootPane() const {
 	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();

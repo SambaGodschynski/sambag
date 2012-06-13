@@ -60,14 +60,14 @@ void createACMEPane() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	win2 = sdc::FramedWindow::create(win);
-	win2->setBounds(Rectangle(110,100,430,280));
+	win2->setWindowBounds(Rectangle(110,100,430,280));
 
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onMouse);
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&trackMouse);
 
-	AContainerPtr con = win2->getRootPane();
+	RootPanePtr con = win2->getRootPane();
 	sd::Font f;
 	f.size = 20;
 	for (int i = 0; i < 10; ++i) {
@@ -112,7 +112,8 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
-	std::cout<<ev.toString()<<std::endl;
+	//std::cout<<ev.toString()<<std::endl;
+	std::cout<<win2->getRootPane()->getLocationOnScreen(ev.getLocation())<<std::endl;
 }
 
 void onMouse(void *src, const sdc::events::MouseEvent &ev) {
@@ -178,7 +179,7 @@ int main() {
 		using namespace sambag::disco;
 		using namespace sambag::disco::components;
 		win = sdc::FramedWindow::create();
-		win->setBounds(Rectangle(100,100,230,200));
+		win->setWindowBounds(Rectangle(100,100,230,200));
 		win->setTitle("Messerschmitz");
 
 		Button::Ptr btn = Button::create();

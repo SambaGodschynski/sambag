@@ -25,11 +25,19 @@ struct OnCloseEvent {
 	// closing event.
 };
 //=============================================================================
+struct OnBoundsChanged {
+//=============================================================================
+	Rectangle newBounds;
+	const Rectangle & getNewBounds() const { return newBounds; }
+	OnBoundsChanged(const Rectangle &r) : newBounds(r) {}
+};
+//=============================================================================
 /** 
   * @class AWindow.
   */
 class AWindow :
-	public sambag::com::events::EventSender<OnCloseEvent> {
+	public sambag::com::events::EventSender<OnCloseEvent>,
+	public sambag::com::events::EventSender<OnBoundsChanged> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

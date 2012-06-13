@@ -14,13 +14,16 @@
 #include "windowImpl/AWindow.hpp"
 #include "Forward.hpp"
 #include <sambag/com/events/Events.hpp>
+#include "AContainer.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class Window.
+  * TODO: for embedded usage (vstwindow) create
+  * a 'embedded'-window (e.g. AEffGuiEditor) subclass.
   */
-class Window {
+class Window : public AContainer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -29,8 +32,6 @@ public:
 	typedef boost::weak_ptr<Window> WPtr;
 protected:
 	//-------------------------------------------------------------------------
-	WPtr self;
-	//-------------------------------------------------------------------------
 	Window::Ptr parent;
 	//-------------------------------------------------------------------------
 	components::RootPane::Ptr rootPane;
@@ -38,10 +39,33 @@ protected:
 	Window(Window::Ptr parent);
 	//-------------------------------------------------------------------------
 	AWindow::Ptr windowImpl;
+	//-------------------------------------------------------------------------
+	/**
+	 * has to call from create()
+	 */
+	virtual void initWindow();
 private:
 	//-------------------------------------------------------------------------
 	void onParentRemove(void *src, const OnCloseEvent &ev);
+	//-------------------------------------------------------------------------
+	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
+	//-------------------------------------------------------------------------
+	virtual Point2D getLocationOnScreen(const Point2D &p) const;
+	//-------------------------------------------------------------------------
+	virtual AContainer::Ptr getParent() const {
+		return AContainer::Ptr();
+	}
+	//-------------------------------------------------------------------------
+	Rectangle getWindowBounds() const;
+	//-------------------------------------------------------------------------
+	Point2D getWindowLocation() const {
+		return getWindowBounds().x0();
+	}
+	//-------------------------------------------------------------------------
+	Dimension getWindowSize() const {
+		return getWindowBounds().getDimension();
+	}
 	//-------------------------------------------------------------------------
 	typedef sambag::com::events::EventSender<OnCloseEvent> OnCloseEventSender;
 	//-------------------------------------------------------------------------
@@ -67,11 +91,12 @@ public:
 	static Ptr create(Window::Ptr parent=WindowPtr()) {
 		Ptr res(new Window(parent));
 		res->self = res;
+		res->initWindow();
 		return res;
 	}
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return self.lock();
+		return boost::shared_dynamic_cast<Window>(self.lock());
 	}
 	//-------------------------------------------------------------------------
 	components::RootPane::Ptr getRootPane() const;
@@ -80,31 +105,19 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void close();
 	//-------------------------------------------------------------------------
-	virtual void setBounds(const Rectangle &r);
+	virtual void setWindowBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
-	virtual void setSize(const Dimension &d) {
-		Rectangle neu = getBounds();
+	virtual void setWindowSize(const Dimension &d) {
+		Rectangle neu = getWindowBounds();
 		neu.setWidth(d.width());
 		neu.setHeight(d.height());
-		setBounds(neu);
+		setWindowBounds(neu);
 	}
 	//-------------------------------------------------------------------------
-	virtual void setLocation(const Point2D &p) {
-		Rectangle neu = getBounds();
+	virtual void setWindowLocation(const Point2D &p) {
+		Rectangle neu = getWindowBounds();
 		neu.translate(p);
-		setBounds(neu);
-	}
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBounds() const;
-	//-------------------------------------------------------------------------
-	virtual Dimension getSize() const {
-		Rectangle curr = getBounds();
-		return curr.getDimension();
-	}
-	//-------------------------------------------------------------------------
-	virtual Point2D getLocation() const {
-		Rectangle curr = getBounds();
-		return curr.x0();
+		setWindowBounds(neu);
 	}
 	//-------------------------------------------------------------------------
 	virtual bool isVisible() const {

@@ -572,7 +572,7 @@ public:
 	 * @return the top-level <code>Container</code> that this component is in,
 	 *          or <code>null</code>
 	 */
-	virtual RootPanePtr getTopLevelContainer() const;
+	virtual RootPanePtr getTopLevelRootPane() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the autoscrolls property.

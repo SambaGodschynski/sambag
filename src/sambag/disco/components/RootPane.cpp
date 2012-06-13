@@ -33,16 +33,13 @@ void RootPane::redrawParentIfNeeded(const Rectangle &r) {
 ui::ALookAndFeelPtr RootPane::getCurrentLookAndFeel() const {
 	return ui::UIManager::instance().getLookAndFeel(getPtr());
 }
-//-----------------------------------------------------------------------------
-void  RootPane::setParent(WindowPtr _parent) {
-	parent = _parent;
-}
 //-------------------------------------------------------------------------
 Point2D RootPane::getLocationOnScreen(const Point2D &p) const {
+	Window::Ptr parent = boost::shared_dynamic_cast<Window>(getRootContainer());
 	if (!parent)
 		return Point2D();
 	Point2D tmp = p;
-	boost::geometry::add_point(tmp, parent->getBounds().x0());
+	boost::geometry::add_point(tmp, parent->getWindowBounds().x0());
 	return tmp;
 }
 //-----------------------------------------------------------------------------
@@ -91,5 +88,9 @@ bool RootPane::isValidateRoot() const {
 //-----------------------------------------------------------------------------
 bool RootPane::isDisplayable() const {
 	return true;
+}
+//-----------------------------------------------------------------------------
+void RootPane::addTag(AComponent::Ptr comp, const std::string &tag) {
+	tagMap.insert(std::make_pair(tag, comp));
 }
 }}} // namespace(s)

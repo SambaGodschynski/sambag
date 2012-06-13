@@ -14,6 +14,7 @@
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include "Forward.hpp"
 #include "Panel.hpp"
+#include <boost/unordered_map.hpp>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -32,8 +33,6 @@ public:
 	static const std::string PROPERTY_SURFACE;
 protected:
 	//-------------------------------------------------------------------------
-	WindowPtr parent;
-	//-------------------------------------------------------------------------
 	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();
 	}
@@ -43,10 +42,31 @@ protected:
 	virtual void redrawParentIfNeeded(const Rectangle &r);
 private:
 	//-------------------------------------------------------------------------
-	ISurface::Ptr surface;
+	typedef boost::unordered_multimap<std::string, AComponentPtr> TagMap;
 	//-------------------------------------------------------------------------
-	void setParent(WindowPtr parent);
+	TagMap tagMap;
+	//-------------------------------------------------------------------------
+	ISurface::Ptr surface;
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * adds tag, component relation.
+	 * @note case sensitive
+	 * @note dosen't check whether component is contained by container
+	 * @param comp
+	 * @param tag
+	 * @see getComponentsByTag
+	 */
+	void addTag(AComponent::Ptr comp, const std::string &tag);
+	//-------------------------------------------------------------------------
+	/**
+	 * returns components which are related to tag
+	 * @note case sensitive
+	 * @param tag
+	 * @param out
+	 */
+	template <typename Container>
+	void getComponentsByTag(const std::string &tag, Container &out) const;
 	//-------------------------------------------------------------------------
 	virtual Point2D getLocationOnScreen(const Point2D &p) const;
 	//-------------------------------------------------------------------------
@@ -66,10 +86,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------
-	virtual AContainer::Ptr getParent() const {
-		return AContainer::Ptr();
-	}
-	//-------------------------------------------------------------------------
 	void setSurface(ISurface::Ptr _surface);
 	//-------------------------------------------------------------------------
 	IDrawContext::Ptr getDrawContext() const;
@@ -79,8 +95,19 @@ public:
 	ISurface::Ptr getSurface() const {
 		return surface;
 	}
-
 }; // RootPane
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+template <typename Container>
+void RootPane::getComponentsByTag(const std::string &tag, Container &out)
+const
+{
+	TagMap::const_iterator it, end;
+	boost::tie(it, end) = tagMap.equal_range(tag);
+	for (; it!=end; ++it) {
+		out.push_back(it->second);
+	}
+}
 }}} // namespace(s)
 
 #endif /* SAMBAG_ROOTPANE_H */

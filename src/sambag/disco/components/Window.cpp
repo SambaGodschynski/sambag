@@ -23,37 +23,70 @@ Window::Window(Window::Ptr parent) : parent(parent) {
 	windowImpl = getWindowFactory()->createWindowImpl();
 	windowImpl->setFramed(false);
 	windowImpl->setRootPane(rootPane);
-}
-//-------------------------------------------------------------------------
-void Window::onParentRemove(void *src, const OnCloseEvent &ev) {
-	close();
+	//add(rootPane); do not call in constructor! -> getPtr() returns NULL
 }
 //-----------------------------------------------------------------------------
-components::RootPane::Ptr Window::getRootPane() const {
-	return rootPane;
-}
-//-----------------------------------------------------------------------------
-void Window::setBounds(const Rectangle &r) {
-	windowImpl->setBounds(r);
-}
-//-----------------------------------------------------------------------------
-Rectangle Window::getBounds() const {
-	return windowImpl->getBounds();
-}
-//-----------------------------------------------------------------------------
-void Window::open() {
+void Window::initWindow() {
+	add(rootPane);
 	if (parent) {
 		parent->addTrackedOnCloseEventListener(
 			boost::bind(&Window::onParentRemove, this, _1, _2),
 			getPtr()
 		);
 	}
-	rootPane->setParent(getPtr());
+	windowImpl->EventSender<OnBoundsChanged>::addTrackedEventListener(
+			boost::bind(&Window::onBoundsChanged, this, _1, _2),
+			getPtr()
+	);
+}
+//-----------------------------------------------------------------------------
+void Window::onParentRemove(void *src, const OnCloseEvent &ev) {
+	if (windowImpl)
+		close();
+}
+//-----------------------------------------------------------------------------
+void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {
+	//AContainer::setSizeBounds(ev.getNewBounds());
+	Dimension n = ev.getNewBounds().getDimension();
+	if (n != getSize()) {
+		setSize(n);
+		validate();
+	}
+}
+//-----------------------------------------------------------------------------
+components::RootPane::Ptr Window::getRootPane() const {
+	return rootPane;
+}
+//-----------------------------------------------------------------------------
+void Window::setWindowBounds(const Rectangle &r) {
+	if (!windowImpl->isVisible()) {
+		Dimension n = r.getDimension();
+		if (n != getSize()) {
+			setSize(n);
+			validate();
+		}
+	}
+	// container size will be set on WindowImpl resize event
+	windowImpl->setBounds(r);
+}
+//-----------------------------------------------------------------------------
+Point2D Window::getLocationOnScreen(const Point2D &p) const {
+	if (!isVisible())
+		return NULL_POINT2D;
+	Point2D tmp = p;
+	boost::geometry::add_point(tmp, getWindowLocation());
+	return tmp;
+}
+//-----------------------------------------------------------------------------
+Rectangle Window::getWindowBounds() const {
+	return windowImpl->getBounds();
+}
+//-----------------------------------------------------------------------------
+void Window::open() {
 	windowImpl->open();
 }
 //-----------------------------------------------------------------------------
 void Window::close() {
-	rootPane->setParent(Window::Ptr());
 	windowImpl->close();
 }
 //-----------------------------------------------------------------------------
@@ -61,7 +94,7 @@ void Window::pack() {
 	// invalidate because:
 	// AContainer::(dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid()))
 	rootPane->invalidate();
-	setSize(rootPane->getPreferredSize());
+	setWindowSize(rootPane->getPreferredSize());
 }
 //-----------------------------------------------------------------------------
 Window::OnCloseEventSender::Connection

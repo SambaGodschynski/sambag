@@ -88,7 +88,7 @@ void AContainer::addComponent(AComponent::Ptr comp, int index) {
 	}
 	// update ui
 	if (!comp->isUiSettedByUser()) {
-		RootPane::Ptr root = getTopLevelContainer();
+		RootPane::Ptr root = getTopLevelRootPane();
 		if (root) {
 			ui::ALookAndFeelPtr laf = root->getCurrentLookAndFeel();
 			if (laf)
@@ -703,10 +703,6 @@ void AContainer::installLookAndFeel (ui::ALookAndFeelPtr laf) {
 	BOOST_FOREACH(AComponent::Ptr c, components) {
 		c->installLookAndFeel(laf);
 	}
-}
-//-----------------------------------------------------------------------------
-void AContainer::addTag(AComponent::Ptr comp, const std::string &tag) {
-	tagMap.insert(std::make_pair(tag, comp));
 }
 }}}
 // namespace(s)

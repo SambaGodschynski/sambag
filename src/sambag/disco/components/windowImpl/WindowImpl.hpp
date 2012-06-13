@@ -160,11 +160,12 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	using namespace components;
 	// create offbuffer
 	Dimension dim = ConcreteWindowImpl::getBounds().getDimension();
-	if (dim == rootPane->getSize())
-		return;
-	rootPane->setSize(dim);
-	DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
-	rootPane->validate();
+	if (dim != rootPane->getSize()) {
+		rootPane->setSize(dim);
+		DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
+		rootPane->invalidate();
+	}
+	EventSender<OnBoundsChanged>::notifyListeners(this, OnBoundsChanged(dim));
 }
 }}} // namespace(s)
 #endif /* TWINDOW_HPP_ */

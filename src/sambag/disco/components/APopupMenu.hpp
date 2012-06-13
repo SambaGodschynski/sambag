@@ -66,7 +66,7 @@ public:
 			location = p;
 		SAMBAG_END_SYNCHRONIZED
 		if (window)
-			window->setLocation(p);
+			window->setWindowLocation(p);
 		firePropertyChanged(PROPERTY_POPUP_LOCATION, old, p);
 	}
 }; // PopupMenu
@@ -100,7 +100,7 @@ void APopupMenu<SM>::initWindow() {
 	);
 	window = Window::create();
 	window->getRootPane()->add(getPtr());
-	window->setLocation(location);
+	window->setWindowLocation(location);
 }
 //-----------------------------------------------------------------------------
 template <class SM>

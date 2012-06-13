@@ -34,6 +34,7 @@ public:
 	static Ptr create(Window::Ptr parent = Window::Ptr()) {
 		Ptr neu(new FramedWindow(parent));
 		neu->self = neu;
+		neu->initWindow();
 		return neu;
 	}
 	//-------------------------------------------------------------------------
