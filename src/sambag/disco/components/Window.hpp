@@ -51,6 +51,8 @@ private:
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
 	//-------------------------------------------------------------------------
+	virtual AContainerPtr getRootContainer() const;
+	//-------------------------------------------------------------------------
 	virtual Point2D getLocationOnScreen(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	virtual AContainer::Ptr getParent() const {

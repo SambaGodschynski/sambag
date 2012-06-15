@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace components {
 //  Class PopupMenu
 //=============================================================================
 //-----------------------------------------------------------------------------
-PopupMenu::PopupMenu(WindowPtr parent) :
+PopupMenu::PopupMenu(AComponentPtr parent) :
 	APopupMenu<DefaultSingleSelectionModell>(parent)
 {
 	setName("PopupMenu");

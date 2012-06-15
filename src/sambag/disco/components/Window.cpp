@@ -54,6 +54,10 @@ void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {
 	}
 }
 //-----------------------------------------------------------------------------
+AContainerPtr Window::getRootContainer() const {
+	return getPtr();
+}
+//-----------------------------------------------------------------------------
 components::RootPane::Ptr Window::getRootPane() const {
 	return rootPane;
 }

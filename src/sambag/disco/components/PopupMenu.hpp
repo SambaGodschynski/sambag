@@ -29,14 +29,14 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	PopupMenu(WindowPtr parent = WindowPtr());
+	PopupMenu(AComponentPtr parent = AComponentPtr());
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return boost::shared_dynamic_cast<PopupMenu>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create(WindowPtr parent = WindowPtr()) {
+	static Ptr create(AComponentPtr parent = AComponentPtr()) {
 		Ptr neu(new PopupMenu(parent));
 		neu->self = neu;
 		return neu;

@@ -9,22 +9,31 @@
 #define SAMBAG_MENU_H
 
 #include <boost/shared_ptr.hpp>
-
-namespace sambag {
-
+#include "MenuItem.hpp"
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class Menu.
   */
-class Menu {
+class Menu : public MenuItem {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Menu> Ptr;
+	//-------------------------------------------------------------------------
+	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
+	//-------------------------------------------------------------------------
+	Menu() {}
 private:
 public:
+	//-------------------------------------------------------------------------
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Menu)
+	//-------------------------------------------------------------------------
+	virtual void add(MenuItem::Ptr item);
+	//-------------------------------------------------------------------------
+	virtual void add(AComponent::Ptr comp, size_t index = -1);
 }; // Menu
-} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_MENU_H */

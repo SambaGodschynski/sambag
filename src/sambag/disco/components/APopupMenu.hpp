@@ -36,21 +36,23 @@ private:
 	//-------------------------------------------------------------------------
 	void initWindow();
 	//-------------------------------------------------------------------------
-	WindowPtr window, parent;
+	WindowPtr window;
+	//-------------------------------------------------------------------------
+	AComponentPtr parent;
 protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
 	virtual void onItemClicked(void *src, const events::ActionEvent &ev);
 	//-------------------------------------------------------------------------
-	APopupMenu(WindowPtr parent = WindowPtr());
+	APopupMenu(AComponentPtr parent = AComponentPtr());
 public:
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr _parent) {
 		parent = _parent;
 	}
 	//-------------------------------------------------------------------------
-	virtual WindowPtr getParentWindow() const {
+	virtual AComponentPtr getParentComponent() const {
 		return parent;
 	}
 	//-------------------------------------------------------------------------
@@ -84,7 +86,7 @@ template <class SM>
 const std::string  APopupMenu<SM>::PROPERTY_POPUP_LOCATION = "popuplocation";
 //-----------------------------------------------------------------------------
 template <class SM>
-APopupMenu<SM>::APopupMenu(WindowPtr parent) : parent(parent) {
+APopupMenu<SM>::APopupMenu(AComponentPtr parent) : parent(parent) {
 }
 //-----------------------------------------------------------------------------
 template <class SM>
@@ -106,7 +108,12 @@ void APopupMenu<SM>::initWindow() {
 	setLayout(
 		ui::DefaultMenuLayout::create(getPtr(), ui::DefaultMenuLayout::Y_AXIS)
 	);
-	window = Window::create(parent);
+	Window::Ptr parentW;
+	if (parent) {
+		AContainerPtr pc = parent->getRootContainer();
+		parentW = boost::shared_dynamic_cast<Window>(pc);
+	}
+	window = Window::create(parentW);
 	window->getRootPane()->add(getPtr());
 	window->setWindowLocation(location);
 }

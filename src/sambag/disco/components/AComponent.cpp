@@ -194,7 +194,7 @@ Dimension AComponent::getPreferredSize() {
 	dim = prefSize;
 	if (dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid())) {
 		SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
-			prefSize = getMinimumSize();
+			prefSize = AComponent::getMinimumSize();
 			dim = prefSize;
 		SAMBAG_END_SYNCHRONIZED
 	}
@@ -254,6 +254,8 @@ AComponent::Lock & AComponent::getTreeLock() const {
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getRootContainer() const {
 	AContainer::Ptr p = parent;
+	if (!p)
+		return AContainerPtr();
 	while (p->getParent()) {
 		p = p->getParent();
 	}

@@ -10,7 +10,7 @@
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
 #include <sambag/disco/components/Button.hpp>
-#include <sambag/disco/components/MenuItem.hpp>
+#include <sambag/disco/components/Menu.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/IWindowFactory.hpp>
 #include <sambag/disco/components/Window.hpp>
@@ -43,7 +43,7 @@ static const int INPUT_LABEL_SIZE = 40;
 
 void createPopup() {
 	using namespace sambag::disco::components;
-	popup = PopupMenu::create(win2);
+	popup = PopupMenu::create(win2->getRootPane());
 	const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
@@ -56,6 +56,9 @@ void createPopup() {
 			continue;
 		btn->EventSender<events::ActionEvent>::addEventListener(&onClearTxtField);
 	}
+	Menu::Ptr menu = Menu::create();
+	menu->setText("feuer feuer");
+	popup->add(menu);
 }
 
 void createACMEPane() {
@@ -196,7 +199,7 @@ int main() {
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
 		win->getRootPane()->add(btn);
 
-		win->getRootPane()->validate();
+		win->validate();
 		win->pack();
 		win->open();
 		sdc::Window::startMainLoop();

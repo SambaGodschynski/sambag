@@ -6,11 +6,20 @@
  */
 
 #include "Menu.hpp"
+#include "ui/ALookAndFeel.hpp"
 
-namespace sambag { 
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Menu
 //=============================================================================
 //-----------------------------------------------------------------------------
-
-} // namespace(s)
+void Menu::add(MenuItem::Ptr item) {
+}
+//-----------------------------------------------------------------------------
+void Menu::add(AComponent::Ptr comp, size_t index) {
+}
+//-----------------------------------------------------------------------------
+ui::AComponentUIPtr Menu::getComponentUI(ui::ALookAndFeelPtr laf) const {
+	return laf->getUI<Menu>();
+}
+}}} // namespace(s)
