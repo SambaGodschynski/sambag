@@ -11,13 +11,17 @@
 #include <boost/shared_ptr.hpp>
 #include "DefaultButtonModell.hpp"
 #include "AButton.hpp"
+#include "IMenuElement.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class MenuItem.
   */
-class MenuItem : public AButton<DefaultButtonModell> {
+class MenuItem :
+	public AButton<DefaultButtonModell>,
+	public IMenuElement
+{
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -29,9 +33,32 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
+	MenuElements elements;
+	//-------------------------------------------------------------------------
 	MenuItem();
 public:
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(MenuItem)
+	//-------------------------------------------------------------------------
+	/**
+	 * @return return the Component used to paint the receiving element.
+	 */
+	virtual AComponentPtr getComponent() const {
+		return getPtr();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * This method should return an array containing the sub-elements for
+	 * the receiving menu element
+	 */
+	virtual const MenuElements & getSubElements() const {
+		return elements;
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * Call by the MenuSelectionManager when the MenuElement is added or
+	 * remove from the menu selection.
+	 */
+	virtual void menuSelectionChanged(bool isIncluded){}
 
 }; // MenuItem
 }}} // namespace(s)
