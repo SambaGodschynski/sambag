@@ -371,6 +371,12 @@ protected: // TODO: remove mangeling
 public: /* END should be protected  */
 	//-------------------------------------------------------------------------
 	/**
+	 * writes all components into stream
+	 * @param the stream
+	 */
+	virtual void printComponentTree(std::ostream &ss) const;
+	//-------------------------------------------------------------------------
+	/**
 	 * Fetches the root container somewhere higher up in the component
 	 * tree that contains this component.
 	 */
@@ -1080,6 +1086,11 @@ public:
 	 */
 	void putClientProperty(const std::string &key, AbstractType::Ptr value);
 };
+///////////////////////////////////////////////////////////////////////////////
+inline std::ostream & operator << (std::ostream &os, const AComponent &p) {
+	p.printComponentTree(os);
+	return os;
+}
 }}}
 
 #endif /* COMPONENT_HPP_ */

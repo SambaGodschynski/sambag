@@ -704,5 +704,12 @@ void AContainer::installLookAndFeel (ui::ALookAndFeelPtr laf) {
 		c->installLookAndFeel(laf);
 	}
 }
+//-----------------------------------------------------------------------------
+void AContainer::printComponentTree(std::ostream &ss) const {
+	ss << toString() << std::endl;
+	BOOST_FOREACH(AComponent::Ptr c, components) {
+		ss << " " << c->toString() << std::endl;
+	}
+}
 }}}
 // namespace(s)

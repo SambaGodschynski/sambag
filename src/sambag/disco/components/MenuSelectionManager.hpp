@@ -12,13 +12,18 @@
 #include "MenuItem.hpp"
 #include "IMenuElement.hpp"
 #include "loki/Singleton.h"
+#include <sambag/com/events/ChangedEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
+namespace sce = sambag::com::events;
+class MenuSelectionManager;
+typedef sce::ChangedEvent<MenuSelectionManager> MenuSelectionManagerChanged;
 //=============================================================================
 /** 
   * @class MenuSelectionManager.
   */
-class MenuSelectionManager {
+class MenuSelectionManager :
+	public sce::EventSender<MenuSelectionManagerChanged> {
 //=============================================================================
 friend struct Loki::CreateUsingNew<MenuSelectionManager>;
 public:
@@ -34,6 +39,9 @@ private:
 	MenuSelectionManager() {}
 	//-------------------------------------------------------------------------
 	MenuSelectionManager(const MenuSelectionManager&) {}
+	//-------------------------------------------------------------------------
+	bool isComponentPartOfCurrentMenu
+	(IMenuElement::Ptr root, AComponentPtr c) const;
 public:
 	//-------------------------------------------------------------------------
 	// Adds a ChangeListener to the button.
@@ -44,7 +52,7 @@ public:
 	//-------------------------------------------------------------------------
 	// Returns the component in the currently selected path which contains sourcePoint.
 	AComponentPtr componentForPoint(AComponentPtr source,
-			const Point2D sourcePoint) const;
+			const Point2D &sourcePoint) const;
 	//-------------------------------------------------------------------------
 	// Returns the default menu selection manager.
 	static MenuSelectionManager & defaultManager();

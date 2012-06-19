@@ -54,18 +54,87 @@ void MenuSelectionManager::clearSelectedPath() {
 }
 //-----------------------------------------------------------------------------
 AComponentPtr MenuSelectionManager::componentForPoint(AComponentPtr source,
-		const Point2D sourcePoint) const
+		const Point2D &sourcePoint) const
 {
+	Coordinate screenX, screenY;
+	Point2D p = sourcePoint;
+	int i, j, d;
+	AComponentPtr mc;
+	Rectangle r2;
+	Coordinate cWidth, cHeight;
+	IMenuElement::Ptr menuElement;
+	MenuElements subElements;
+	MenuElements tmp;
+	int selectionSize;
+
+	p = source->getLocationOnScreen(p);
+	screenX = p.x();
+	screenY = p.y();
+
+	tmp = selection;
+	selectionSize = tmp.size();
+	for (i = selectionSize - 1; i >= 0; --i) {
+		menuElement = tmp.at(i);
+		subElements.clear();
+		menuElement->getSubElements(subElements);
+		for (j = 0, d = subElements.size(); j < d; ++j) {
+			if (!subElements[j])
+				continue;
+			mc = subElements[j]->getComponent();
+			if (!mc->isShowing())
+				continue;
+			cWidth = mc->getWidth();
+			cHeight = mc->getHeight();
+			p.x(screenX);
+			p.y(screenY);
+			p = mc->getLocationOnComponent(p);
+
+			/** Return the deepest component on the selection
+			 *  path in whose bounds the event's point occurs
+			 */
+			if (p.x() >= 0 && p.x() < cWidth && p.y() >= 0 && p.y() < cHeight) {
+				return mc;
+			}
+		}
+	}
 	return AComponentPtr();
 }
 //-----------------------------------------------------------------------------
 void MenuSelectionManager::fireStateChanged() {
-
+	EventSender<MenuSelectionManagerChanged>::notifyListeners(
+			this,
+			MenuSelectionManagerChanged(*this)
+	);
 }
 //-----------------------------------------------------------------------------
-bool
-MenuSelectionManager::isComponentPartOfCurrentMenu(AComponentPtr c) const
+bool MenuSelectionManager::
+isComponentPartOfCurrentMenu(AComponentPtr c) const
 {
+	if (selection.size() > 0) {
+		IMenuElement::Ptr me = selection.at(0);
+		return isComponentPartOfCurrentMenu(me, c);
+	} else
+		return false;
+}
+//-----------------------------------------------------------------------------
+bool MenuSelectionManager::
+isComponentPartOfCurrentMenu(IMenuElement::Ptr root, AComponentPtr c) const
+{
+	MenuElements children;
+	int i, d;
+
+	if (!root)
+		return false;
+
+	if (root->getComponent() == c)
+		return true;
+	else {
+		root->getSubElements(children);
+		for (i = 0, d = children.size(); i < d; i++) {
+			if (isComponentPartOfCurrentMenu(children[i], c))
+				return true;
+		}
+	}
 	return false;
 }
 //-----------------------------------------------------------------------------

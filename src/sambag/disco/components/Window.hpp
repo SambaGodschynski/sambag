@@ -16,6 +16,18 @@
 #include <sambag/com/events/Events.hpp>
 #include "AContainer.hpp"
 
+#define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
+	Ptr getPtr() const {													\
+		return 																\
+		boost::shared_dynamic_cast<window_class_name>(Window::getPtr()); 	\
+	}																		\
+	static Ptr create(Window::Ptr parent = Window::Ptr()) { 				\
+		Ptr neu(new window_class_name(parent));								\
+		neu->self = neu;													\
+		neu->initWindow();													\
+		return neu;															\
+	}
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
@@ -65,7 +77,6 @@ public:
 	//-------------------------------------------------------------------------
 	Rectangle getWindowBounds() const;
 	//-------------------------------------------------------------------------
-	// TODO: use components size handling
 	Point2D getWindowLocation() const {
 		return getWindowBounds().x0();
 	}

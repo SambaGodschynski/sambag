@@ -153,6 +153,12 @@ protected:
 	virtual bool rectangleIsObscured(const Rectangle &r);
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * writes all components into stream
+	 * @param the stream
+	 */
+	virtual void printComponentTree(std::ostream &ss) const;
+	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		Ptr s = boost::shared_dynamic_cast<AContainer>(self.lock());
 		return s;

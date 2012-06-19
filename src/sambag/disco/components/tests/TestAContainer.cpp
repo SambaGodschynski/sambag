@@ -50,6 +50,27 @@ void TestAContainer::test_toString() {
 	CPPUNIT_ASSERT_EQUAL(str, con->toString());
 }
 //-----------------------------------------------------------------------------
+void TestAContainer::test_printComponentTree() {
+	using namespace sambag::disco::components;
+	static const size_t NUM = 3;
+	for (size_t i=0; i<NUM; ++i) {
+		TestComponent::Ptr comp = TestComponent::create();
+		comp->setSize(50, 50);
+		std::stringstream ss;
+		ss << "Test Component Nr. " << i;
+		comp->setName(ss.str());
+		con->add(comp);
+	}
+	con->validate();
+	std::stringstream ss;
+	ss << *con.get();
+	std::string exp("[TestContainer,0,0,500x550,alignmentX=0.5,alignmentY=0.5]\n"
+			" [Test Component Nr. 0,170,5,50x50]\n"
+			" [Test Component Nr. 1,225,5,50x50]\n"
+			" [Test Component Nr. 2,280,5,50x50]\n");
+	CPPUNIT_ASSERT_EQUAL(exp, ss.str());
+}
+//-----------------------------------------------------------------------------
 void TestAContainer::test_add() {
 	using namespace sambag::disco::components;
 	static const size_t NUM = 3;

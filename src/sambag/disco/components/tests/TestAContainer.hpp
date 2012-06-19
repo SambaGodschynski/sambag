@@ -37,6 +37,7 @@ private:
 	CPPUNIT_TEST(test_removeAll);
 	CPPUNIT_TEST(test_findComponentAt);
 	CPPUNIT_TEST(test_toString);
+	CPPUNIT_TEST(test_printComponentTree);
 	CPPUNIT_TEST_SUITE_END();
 private:
 	sambag::disco::components::AContainerPtr con;
@@ -63,6 +64,7 @@ public:
 	void test_removeAll();
 	void test_findComponentAt();
 	void test_toString();
+	void test_printComponentTree();
 };
 
 } // namespace

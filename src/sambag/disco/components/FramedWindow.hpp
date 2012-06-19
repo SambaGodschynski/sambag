@@ -27,16 +27,7 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
-	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<FramedWindow>(Window::getPtr());
-	}
-	//-------------------------------------------------------------------------
-	static Ptr create(Window::Ptr parent = Window::Ptr()) {
-		Ptr neu(new FramedWindow(parent));
-		neu->self = neu;
-		neu->initWindow();
-		return neu;
-	}
+	SAMBAG_STD_WINDOW_CREATOR(FramedWindow)
 	//-------------------------------------------------------------------------
 	virtual void setTitle(const std::string &title);
 	//-------------------------------------------------------------------------

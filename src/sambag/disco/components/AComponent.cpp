@@ -968,4 +968,8 @@ const Font & AComponent::getFont() const {
 Font & AComponent::getFont() {
 	return font;
 }
+//-----------------------------------------------------------------------------
+void AComponent::printComponentTree(std::ostream &ss) const {
+	ss << toString() << std::endl;
+}
 }}} // namespace(s)
