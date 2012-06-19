@@ -68,8 +68,6 @@ public:
 	template <typename Container>
 	void getComponentsByTag(const std::string &tag, Container &out) const;
 	//-------------------------------------------------------------------------
-	virtual Point2D getLocationOnScreen(const Point2D &p) const;
-	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return boost::shared_dynamic_cast<RootPane>(AComponent::getPtr());
 	}
@@ -82,7 +80,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual bool isShowing() const;
 	//-------------------------------------------------------------------------
-	void __processMouseEvent_(const events::MouseEvent &ev);
+	void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	virtual void draw(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------

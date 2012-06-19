@@ -13,7 +13,6 @@
 #include <loki/Singleton.h>
 
 namespace sambag { namespace disco { namespace components {
-
 //=============================================================================
 /** 
   * @class X11WindowFactory.
@@ -25,6 +24,8 @@ private:
 	X11WindowFactory(){}
 	X11WindowFactory(const X11WindowFactory&){}
 public:
+	//-------------------------------------------------------------------------
+	virtual void startMainLoop();
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const;
 

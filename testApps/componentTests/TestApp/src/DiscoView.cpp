@@ -79,6 +79,8 @@ void createACMEPane() {
 		Button::Ptr btn = Button::create();
 		btn->EventSender<sdc::events::ActionEvent>::
 				addEventListener(&onButton);
+		btn->EventSender<sdc::events::MouseEvent>::
+				addEventListener(&trackMouse);
 		btn->setText(ss.str());
 		btn->getFont().setFontFace("monospace");
 		con->add(btn);
@@ -113,7 +115,12 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
-	std::cout<<ev.toString()<<std::endl;
+	using namespace sambag::disco::components;
+	using namespace sambag::disco;
+	//std::cout<<ev.toString()<<std::endl;
+	Point2D scr = ev.getSource()->getLocationOnScreen(ev.getLocation());
+	Point2D comp = ev.getSource()->getLocationOnComponent(scr);
+	std::cout<<ev.getSource()->toString()<<" | "<<scr<<" / "<<comp<<std::endl;
 }
 
 void onMouse(void *src, const sdc::events::MouseEvent &ev) {

@@ -21,8 +21,19 @@ class IWindowFactory {
 public:
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void startMainLoop() = 0;
 }; // IWindowFactory
 ///////////////////////////////////////////////////////////////////////////////
-extern IWindowFactory * getWindowFactory();
+//-----------------------------------------------------------------------------
+extern IWindowFactory * _getWindowFactoryImpl();
+//-----------------------------------------------------------------------------
+IWindowFactory * getWindowFactory();
+//-----------------------------------------------------------------------------
+/**
+ * used for testing
+ * @param current Windowfactory
+ */
+void setWindowFactory(IWindowFactory *wf);
 }}} // namespace(s)
 #endif /* SAMBAG_IWINDOWFACTORY_H */

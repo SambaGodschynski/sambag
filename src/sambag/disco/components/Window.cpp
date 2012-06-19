@@ -13,9 +13,9 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Window
 //=============================================================================
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 void Window::startMainLoop() {
-	__startWindowImplMainLoop_();
+	getWindowFactory()->startMainLoop();
 }
 //-----------------------------------------------------------------------------
 Window::Window(Window::Ptr parent) : parent(parent) {
@@ -79,6 +79,14 @@ Point2D Window::getLocationOnScreen(const Point2D &p) const {
 		return NULL_POINT2D;
 	Point2D tmp = p;
 	boost::geometry::add_point(tmp, getWindowLocation());
+	return tmp;
+}
+//-----------------------------------------------------------------------------
+Point2D Window::getLocationOnComponent(const Point2D &p) const {
+	if (!isVisible())
+		return NULL_POINT2D;
+	Point2D tmp = p;
+	boost::geometry::subtract_point(tmp, getWindowLocation());
 	return tmp;
 }
 //-----------------------------------------------------------------------------

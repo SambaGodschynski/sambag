@@ -33,10 +33,9 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	MenuElements elements;
-	//-------------------------------------------------------------------------
 	MenuItem();
 public:
+	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(MenuItem)
 	//-------------------------------------------------------------------------
 	/**
@@ -50,15 +49,16 @@ public:
 	 * This method should return an array containing the sub-elements for
 	 * the receiving menu element
 	 */
-	virtual const MenuElements & getSubElements() const {
-		return elements;
-	}
+	virtual void getSubElements(MenuElements &out) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Call by the MenuSelectionManager when the MenuElement is added or
 	 * remove from the menu selection.
 	 */
-	virtual void menuSelectionChanged(bool isIncluded){}
+	virtual void menuSelectionChanged(bool isIncluded);
+	//-------------------------------------------------------------------------
+	virtual void processMouseEvent(events::MouseEvent event,
+			const MenuElements & path, MenuSelectionManager &manager);
 
 }; // MenuItem
 }}} // namespace(s)

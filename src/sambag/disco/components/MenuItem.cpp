@@ -22,5 +22,17 @@ MenuItem::MenuItem() {
 ui::AComponentUIPtr MenuItem::getComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<MenuItem>();
 }
+//-----------------------------------------------------------------------------
+void MenuItem::processMouseEvent(events::MouseEvent event,
+		const MenuElements & path, MenuSelectionManager &manager)
+{
+	AComponent::processMouseEvent(event);
+}
+//-----------------------------------------------------------------------------
+void MenuItem::menuSelectionChanged(bool isIncluded) {
+}
+//-----------------------------------------------------------------------------
+void MenuItem::getSubElements(MenuElements &out) const {
+}
 
 }}} // namespace(s)

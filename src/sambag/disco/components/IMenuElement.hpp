@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include "Forward.hpp"
+#include "events/MouseEvent.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -24,9 +25,9 @@ class IMenuElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef std::vector<IMenuElement> MenuElements;
-	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IMenuElement> Ptr;
+	//-------------------------------------------------------------------------
+	typedef std::vector<Ptr> MenuElements;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return return the Component used to paint the receiving element.
@@ -37,13 +38,16 @@ public:
 	 * This method should return an array containing the sub-elements for
 	 * the receiving menu element
 	 */
-	virtual const MenuElements & getSubElements() const = 0;
+	virtual void getSubElements(MenuElements &out) const = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Call by the MenuSelectionManager when the MenuElement is added or
 	 * remove from the menu selection.
 	 */
 	virtual void menuSelectionChanged(bool isIncluded) = 0;
+	//-------------------------------------------------------------------------
+	virtual void processMouseEvent (events::MouseEvent event,
+			const MenuElements & path, MenuSelectionManager &manager) = 0;
 }; // IMenuElement
 }}} // namespace(s)
 

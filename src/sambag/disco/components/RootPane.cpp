@@ -33,15 +33,6 @@ void RootPane::redrawParentIfNeeded(const Rectangle &r) {
 ui::ALookAndFeelPtr RootPane::getCurrentLookAndFeel() const {
 	return ui::UIManager::instance().getLookAndFeel(getPtr());
 }
-//-------------------------------------------------------------------------
-Point2D RootPane::getLocationOnScreen(const Point2D &p) const {
-	Window::Ptr parent = boost::shared_dynamic_cast<Window>(getRootContainer());
-	if (!parent)
-		return Point2D();
-	Point2D tmp = p;
-	boost::geometry::add_point(tmp, parent->getWindowBounds().x0());
-	return tmp;
-}
 //-----------------------------------------------------------------------------
 void RootPane::setSurface(ISurface::Ptr _surface) {
 	ISurface::Ptr old = _surface;
@@ -77,9 +68,9 @@ bool RootPane::isShowing() const {
 	return true;
 }
 //-----------------------------------------------------------------------------
-void RootPane::__processMouseEvent_(const events::MouseEvent &ev) {
+void RootPane::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
-	AContainer::__processMouseEvent_(MouseEvent(getPtr(), ev));
+	AContainer::processMouseEvent(MouseEvent(getPtr(), ev));
 }
 //-----------------------------------------------------------------------------
 bool RootPane::isValidateRoot() const {

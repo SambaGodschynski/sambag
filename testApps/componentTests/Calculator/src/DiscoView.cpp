@@ -149,7 +149,6 @@ void setInputText(const std::string &txt, bool append = false) {
 		label->getFont().setSize(INPUT_LABEL_SIZE);
 	}
 	win->getRootPane()->validate();
-	win->getRootPane()->redraw();
 }
 
 void onNumericButton(void *src, const sdc::events::ActionEvent &ev) {

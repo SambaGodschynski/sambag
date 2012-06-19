@@ -81,7 +81,7 @@ private:
 			const events::MouseEvent &ev);
 protected:
 	//-------------------------------------------------------------------------
-	virtual void __processMouseEvent_(const events::MouseEvent &ev);
+	virtual void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	virtual std::string parameterString() const;
 	//-------------------------------------------------------------------------

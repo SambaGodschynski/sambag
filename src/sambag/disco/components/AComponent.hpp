@@ -347,7 +347,7 @@ protected:
 
 protected: // TODO: remove mangeling
 	//-------------------------------------------------------------------------
-	virtual void __processMouseEvent_(const events::MouseEvent &ev);
+	virtual void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	/**
 	 * @return
@@ -822,7 +822,19 @@ protected:
 	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * converts component location to screen location.
+	 * @param p
+	 * @return
+	 */
 	virtual Point2D getLocationOnScreen(const Point2D &p) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * converts screen location to component location.
+	 * @param p
+	 * @return
+	 */
+	virtual Point2D getLocationOnComponent(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	AContainerPtr getValidateRoot() const;
 	//-------------------------------------------------------------------------

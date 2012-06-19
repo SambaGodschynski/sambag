@@ -16,8 +16,6 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-extern void __startWindowImplMainLoop_();
-//=============================================================================
 struct OnCloseEvent {
 //=============================================================================
 	// implement Window source ptr. is quite tricky

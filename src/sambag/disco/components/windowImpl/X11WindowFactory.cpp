@@ -15,6 +15,10 @@ namespace sambag { namespace disco { namespace components {
 //  Class X11WindowFactory
 //=============================================================================
 //-----------------------------------------------------------------------------
+void X11WindowFactory::startMainLoop() {
+	X11WindowImpl::startMainLoop();
+}
+//-----------------------------------------------------------------------------
 AWindowPtr X11WindowFactory::createWindowImpl() const {
 	AWindowPtr res = WindowImpl<X11WindowImpl>::create();
 	return res;
@@ -22,7 +26,7 @@ AWindowPtr X11WindowFactory::createWindowImpl() const {
 //-----------------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////
 typedef Loki::SingletonHolder<X11WindowFactory> X11WindowFactoryHolder;
-IWindowFactory * getWindowFactory() {
+IWindowFactory * _getWindowFactoryImpl() {
 	return &X11WindowFactoryHolder::Instance();
 }
 }}} // namespace(s)

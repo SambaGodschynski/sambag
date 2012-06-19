@@ -18,10 +18,6 @@ namespace {
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-void __startWindowImplMainLoop_() {
-	X11WindowImpl::startMainLoop();
-}
-//=============================================================================
 // struct DestroyWindow
 //=============================================================================
 void DestroyWindow::execute() {

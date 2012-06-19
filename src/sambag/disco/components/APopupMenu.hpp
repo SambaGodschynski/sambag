@@ -23,7 +23,10 @@ namespace sambag { namespace disco { namespace components {
   * @class PopupMenu.
   */
 template <class SingleSelectionModell>
-class APopupMenu : public AContainer, public SingleSelectionModell {
+class APopupMenu :
+	public AContainer,
+	public IMenuElement,
+	public SingleSelectionModell {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -43,10 +46,30 @@ protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
-	virtual void onItemClicked(void *src, const events::ActionEvent &ev);
-	//-------------------------------------------------------------------------
 	APopupMenu(AComponentPtr parent = AComponentPtr());
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * @return return the Component used to paint the receiving element.
+	 */
+	virtual AComponentPtr getComponent() const {
+		return getPtr();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * This method should return an array containing the sub-elements for
+	 * the receiving menu element
+	 */
+	virtual void getSubElements(MenuElements &out) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Call by the MenuSelectionManager when the MenuElement is added or
+	 * remove from the menu selection.
+	 */
+	virtual void menuSelectionChanged(bool isIncluded){}
+	//-------------------------------------------------------------------------
+	virtual void processMouseEvent(events::MouseEvent event,
+			const MenuElements & path, MenuSelectionManager &manager) {}
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr _parent) {
 		parent = _parent;
@@ -55,8 +78,6 @@ public:
 	virtual AComponentPtr getParentComponent() const {
 		return parent;
 	}
-	//-------------------------------------------------------------------------
-	virtual void add(MenuItem::Ptr c);
 	//-------------------------------------------------------------------------
 	virtual void showPopup(const Point2D &_where);
 	//-------------------------------------------------------------------------
@@ -119,18 +140,16 @@ void APopupMenu<SM>::initWindow() {
 }
 //-----------------------------------------------------------------------------
 template <class SM>
-void APopupMenu<SM>::add(MenuItem::Ptr c) {
-	c->EventSender<events::ActionEvent>::addEventListener(
-		boost::bind(&APopupMenu<SM>::onItemClicked, this, _1, _2)
-	);
-	AContainer::add(c);
+void APopupMenu<SM>::getSubElements(MenuElements &out) const {
+	for (size_t i=0; i<getComponentCount(); ++i) {
+		AComponentPtr comp = AContainer::getComponent(i);
+		IMenuElement::Ptr el = boost::shared_dynamic_cast<IMenuElement>(comp);
+		if (!el)
+			continue;
+		out.push_back(el);
+	}
 }
-//-----------------------------------------------------------------------------
-template <class SM>
-void APopupMenu<SM>::onItemClicked(void *src, const events::ActionEvent &ev)
-{
-	//hidePopup();
-}
+
 }}} // namespace(s)
 
 #endif /* SAMBAG_APOPUPMENU_H */

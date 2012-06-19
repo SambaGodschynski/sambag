@@ -51,9 +51,13 @@ private:
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
 	//-------------------------------------------------------------------------
+	static void startMainLoop();
+	//-------------------------------------------------------------------------
 	virtual AContainerPtr getRootContainer() const;
 	//-------------------------------------------------------------------------
 	virtual Point2D getLocationOnScreen(const Point2D &p) const;
+	//-------------------------------------------------------------------------
+	virtual Point2D getLocationOnComponent(const Point2D &p) const;
 	//-------------------------------------------------------------------------
 	virtual AContainer::Ptr getParent() const {
 		return AContainer::Ptr();
@@ -61,6 +65,7 @@ public:
 	//-------------------------------------------------------------------------
 	Rectangle getWindowBounds() const;
 	//-------------------------------------------------------------------------
+	// TODO: use components size handling
 	Point2D getWindowLocation() const {
 		return getWindowBounds().x0();
 	}
@@ -87,8 +92,6 @@ public:
 	 * window is automatically enlarged to honor the minimum size.
 	 */
 	virtual void pack();
-	//-------------------------------------------------------------------------
-	static void startMainLoop();
 	//-------------------------------------------------------------------------
 	static Ptr create(Window::Ptr parent=WindowPtr()) {
 		Ptr res(new Window(parent));

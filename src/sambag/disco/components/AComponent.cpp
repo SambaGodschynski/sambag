@@ -265,14 +265,19 @@ AContainerPtr AComponent::getRootContainer() const {
 Point2D AComponent::getLocationOnScreen(const Point2D &p) const {
 	if (!isVisible())
 		return NULL_POINT2D;
-	Point2D tmp = p;
-	boost::geometry::add_point(tmp, getLocation());
-	for (AContainerPtr parent = getContainer();
-			parent;
-			parent = parent->getContainer())
-	{
-		boost::geometry::add_point(tmp, parent->getLocationOnScreen(tmp));
-	}
+ 	Point2D tmp = p;
+ 	boost::geometry::add_point(tmp, getLocation());
+	if (!parent)
+		return tmp;
+	boost::geometry::add_point(tmp, parent->getLocationOnScreen(Point2D(0,0)));
+	return tmp;
+}
+//-----------------------------------------------------------------------------
+Point2D AComponent::getLocationOnComponent(const Point2D &p) const {
+	if (!isVisible())
+		return NULL_POINT2D;
+ 	Point2D tmp = p;
+ 	boost::geometry::subtract_point(tmp, getLocationOnScreen(Point2D(0,0)));
 	return tmp;
 }
 //-----------------------------------------------------------------------------
@@ -289,7 +294,7 @@ AComponent::getComponentDrawContext(IDrawContext::Ptr cn) const
 	//      }
 	cn->setStrokeColor(getForeground());
 	cn->setFillColor(getForeground());
-	//componentGraphics.setFont(getFont());
+	cn->setFont(getFont());
 	return cn;
 }
 //-----------------------------------------------------------------------------
@@ -875,7 +880,7 @@ void AComponent::putClientProperty(const std::string &key,
 	firePropertyChanged(PROPERTY_CLIENTPROPERTY, old, value);
 }
 //-----------------------------------------------------------------------------
-void AComponent::__processMouseEvent_(const events::MouseEvent &ev) {
+void AComponent::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
 	EventSender<MouseEvent>::notifyListeners(
 		this,

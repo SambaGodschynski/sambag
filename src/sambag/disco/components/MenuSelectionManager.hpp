@@ -29,7 +29,7 @@ public:
 protected:
 private:
 	//-------------------------------------------------------------------------
-	MenuElements currPath;
+	MenuElements selection;
 	//-------------------------------------------------------------------------
 	MenuSelectionManager() {}
 	//-------------------------------------------------------------------------
@@ -55,7 +55,9 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	//  Returns the path to the currently selected menu item
-	const MenuElements & getSelectedPath() const;
+	const MenuElements & getSelectedPath() const {
+		return selection;
+	}
 	//-------------------------------------------------------------------------
 	//  Returns the path to the currently selected menu item
 	MenuElements & getSelectedPath();
@@ -65,6 +67,8 @@ public:
 	//-------------------------------------------------------------------------
 	// Changes the selection in the menu hierarchy.
 	void setSelectedPath(const MenuElements &path);
+	//-------------------------------------------------------------------------
+	void processMouseEvent(const events::MouseEvent &ev);
 }; // MenuSelectionManager
 }}} // namespace(s)
 

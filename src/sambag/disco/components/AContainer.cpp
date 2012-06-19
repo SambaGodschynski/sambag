@@ -653,22 +653,22 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
 				ev.getButtons(), MouseEvent::MOUSE_ENTERED);
 		retargetMouseEvent(target, nev);
-		target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
+		 target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
 	}
 	lastMouseTarget = target;
 }
 //-----------------------------------------------------------------------------
-void AContainer::__processMouseEvent_(const events::MouseEvent &ev) {
+void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
 	trackMouseEnterEvents(target, ev);
 	if (!target || target == getPtr()) {
-		AComponent::__processMouseEvent_(ev);
+		AComponent::processMouseEvent(ev);
 		return;
 	}
 	MouseEvent nev = MouseEvent(getPtr(), ev);
 	retargetMouseEvent(target, nev);
-	target->__processMouseEvent_(nev);
+	target->processMouseEvent(nev);
 }
 //-----------------------------------------------------------------------------
 void AContainer::retargetMouseEvent(AComponentPtr c, events::MouseEvent &ev)
