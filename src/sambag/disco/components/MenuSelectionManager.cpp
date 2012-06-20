@@ -20,11 +20,11 @@ MenuSelectionManager & MenuSelectionManager::defaultManager() {
 void MenuSelectionManager::setSelectedPath(const
 MenuSelectionManager:: MenuElements &path)
 {
-	size_t i, c;
-	size_t currentSelectionCount = selection.size();
-	size_t firstDifference = 0;
+	int i, c;
+	int currentSelectionCount = (int)selection.size();
+	int firstDifference = 0;
 
-	for (i = 0, c = path.size(); i < c; i++) {
+	for (i = 0, c = (int)path.size(); i < c; i++) {
 		if (i < currentSelectionCount && selection.at(i) == path[i])
 			firstDifference++;
 		else
@@ -37,7 +37,7 @@ MenuSelectionManager:: MenuElements &path)
 		me->menuSelectionChanged(false);
 	}
 
-	for (i = firstDifference, c = path.size(); i < c; i++) {
+	for (i = firstDifference, c = (int)path.size(); i < c; i++) {
 		if (path[i]) {
 			selection.push_back(path[i]);
 			path[i]->menuSelectionChanged(true);
@@ -236,5 +236,24 @@ void MenuSelectionManager::processMouseEvent(const events::MouseEvent &ev)
 			}
 		}
 	}
+}
+//-----------------------------------------------------------------------------
+std::ostream & operator << (std::ostream &os,
+		const IMenuElement::MenuElements &path)
+{
+	if (path.empty()) {
+		os << "{}";
+		return os;
+	}
+	bool first = true;
+	BOOST_FOREACH(IMenuElement::Ptr el, path) {
+		if (first) {
+			os << el->toString();
+			first = false;
+			continue;
+		}
+		os << ">>" << el->toString();
+	}
+	return os;
 }
 }}} // namespace(s)

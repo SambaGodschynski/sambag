@@ -13,7 +13,11 @@ namespace sambag { namespace disco { namespace components {
 //  Class Menu
 //=============================================================================
 //-----------------------------------------------------------------------------
-void Menu::add(MenuItem::Ptr item) {
+Menu::Menu() {
+}
+//-----------------------------------------------------------------------------
+void Menu::constructorAlt() {
+	popupMenu = PopupMenu::create(getPtr());
 }
 //-----------------------------------------------------------------------------
 void Menu::add(AComponent::Ptr comp, size_t index) {

@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/ui/IButtonUI.hpp>
 #include <sambag/disco/components/AButton.hpp>
-#include "BasicMenuItemListener.hpp"
+#include "BasicMenuListener.hpp"
 #include <sambag/disco/svg/HtmlColors.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/ISurface.hpp>
@@ -25,7 +25,7 @@ namespace components { namespace ui { namespace basic {
   * @class BasicMenuUI.
   */
 template <class ButtonModell>
-class BasicMenuUI : public IButtonUI {
+class BasicMenuUI : public BasicMenuItemUI<ButtonModell> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -107,7 +107,7 @@ void BasicMenuUI<ButtonModell>::installUI(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
 			boost::shared_dynamic_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
-	typedef BasicMenuItemListener<ButtonModell> ButtonListener;
+	typedef BasicMenuListener<ButtonModell> ButtonListener;
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
 			boost::bind(&ButtonListener::onMouseEvent, _1, _2),
 			b

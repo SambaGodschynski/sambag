@@ -20,6 +20,7 @@
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
 #include <sambag/disco/components/Label.hpp>
+#include <sambag/disco/components/MenuSelectionManager.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -136,6 +137,11 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 		createPopup();
 	}
 	if (!popup->isPopupVisible()) {
+		MenuSelectionManager &m = MenuSelectionManager::defaultManager();
+		m.clearSelectedPath();
+		IMenuElement::MenuElements p;
+		p.push_back(popup);
+		m.setSelectedPath(p);
 		popup->showPopup(
 			win2->getRootPane()->getLocationOnScreen(ev.getLocation())
 		);
@@ -185,6 +191,10 @@ void onMainClose(void*, const sdc::OnCloseEvent &ev) {
 		win2->close();
 }
 
+void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
+	std::cout<<ev.getSrc().getSelectedPath()<<std::endl;
+}
+
 int main() {
 	std::cout<<"hi"<<std::endl;
 	{ // extra scope (bye message should occur after releasing all objs)
@@ -209,6 +219,11 @@ int main() {
 		win->validate();
 		win->pack();
 		win->open();
+
+		MenuSelectionManager::defaultManager().
+		EventSender<MenuSelectionManagerChanged>::addEventListener
+			( &pathChanged );
+
 		sdc::Window::startMainLoop();
 	}
 	win.reset();

@@ -13,6 +13,7 @@
 #include "IMenuElement.hpp"
 #include "loki/Singleton.h"
 #include <sambag/com/events/ChangedEvent.hpp>
+#include <ostream>
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -68,7 +69,9 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	//  Returns the path to the currently selected menu item
-	MenuElements & getSelectedPath();
+	MenuElements & getSelectedPath() {
+		return selection;
+	}
 	//-------------------------------------------------------------------------
 	// Return true if c is part of the currently used menu
 	bool isComponentPartOfCurrentMenu(AComponentPtr c) const;
@@ -78,6 +81,9 @@ public:
 	//-------------------------------------------------------------------------
 	void processMouseEvent(const events::MouseEvent &ev);
 }; // MenuSelectionManager
+///////////////////////////////////////////////////////////////////////////////
+std::ostream & operator << (std::ostream &os,
+		const IMenuElement::MenuElements &path);
 }}} // namespace(s)
 
 #endif /* SAMBAG_MENUSELECTIONMANAGER_H */

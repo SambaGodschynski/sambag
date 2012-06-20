@@ -30,11 +30,25 @@ public:
 	typedef DefaultButtonModell Modell;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_DELAY;
 private:
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<int> delay;
 protected:
 	//-------------------------------------------------------------------------
 	MenuItem();
 public:
+	//-------------------------------------------------------------------------
+	virtual std::string toString() const {
+		return AButton<Modell>::toString();
+	}
+	//-------------------------------------------------------------------------
+	void setDelay(int newDelay);
+	//-------------------------------------------------------------------------
+	int getDelay() const {
+		return delay;
+	}
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(MenuItem)
 	//-------------------------------------------------------------------------

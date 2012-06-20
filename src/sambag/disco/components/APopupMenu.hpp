@@ -49,6 +49,10 @@ protected:
 	APopupMenu(AComponentPtr parent = AComponentPtr());
 public:
 	//-------------------------------------------------------------------------
+	virtual std::string toString() const {
+		return AContainer::toString();
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * @return return the Component used to paint the receiving element.
 	 */
@@ -108,6 +112,7 @@ const std::string  APopupMenu<SM>::PROPERTY_POPUP_LOCATION = "popuplocation";
 //-----------------------------------------------------------------------------
 template <class SM>
 APopupMenu<SM>::APopupMenu(AComponentPtr parent) : parent(parent) {
+	setName("PopupMenu");
 }
 //-----------------------------------------------------------------------------
 template <class SM>

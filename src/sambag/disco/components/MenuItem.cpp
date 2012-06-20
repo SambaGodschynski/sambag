@@ -13,6 +13,8 @@ namespace sambag { namespace disco { namespace components {
 //  Class MenuItem
 //=============================================================================
 //-----------------------------------------------------------------------------
+const std::string MenuItem::PROPERTY_DELAY = "menuItemDelay";
+//-----------------------------------------------------------------------------
 MenuItem::MenuItem() {
 	setBackground(ColorRGBA(1,1,1));
 	setForeground(ColorRGBA(0,0,0));
@@ -33,6 +35,12 @@ void MenuItem::menuSelectionChanged(bool isIncluded) {
 }
 //-----------------------------------------------------------------------------
 void MenuItem::getSubElements(MenuElements &out) const {
+}
+//-----------------------------------------------------------------------------
+void MenuItem::setDelay(int newDelay) {
+	int old = delay;
+	delay = newDelay;
+	firePropertyChanged(PROPERTY_DELAY, old, newDelay);
 }
 
 }}} // namespace(s)

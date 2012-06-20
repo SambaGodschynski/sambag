@@ -1,52 +1,46 @@
 /*
- * BasicMenuItemListener.hpp
+ * BasicMenuListener.hpp
  *
  *  Created on: Tue Jun  5 15:25:21 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_BASICMENUITEMLISTENER_H
-#define SAMBAG_BASICMENUITEMLISTENER_H
+#ifndef SAMBAG_BASICMENULISTENER_H
+#define SAMBAG_BASICMENULISTENER_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/components/events/MouseEvent.hpp>
-#include <sambag/disco/components/MenuItem.hpp>
-#include <sambag/com/ICommand.hpp>
-#include <sambag/disco/components/events/ActionEvent.hpp>
-#include <sambag/disco/components/Window.hpp>
-#include <sambag/disco/components/IMenuElement.hpp>
-#include <sambag/disco/components/MenuSelectionManager.hpp>
-#include <algorithm>
-
+#include "BasicMenuItemListener.hpp"
+#include <sambag/disco/components/Menu.hpp>
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
 //=============================================================================
 /** 
-  * @class BasicMenuItemListener.
+  * @class BasicMenuListener.
   */
 template <class ComponentModell>
-struct BasicMenuItemListener {
+struct BasicMenuListener : public BasicMenuItemListener<ComponentModell>
+{
 //=============================================================================
 private:
 	//-------------------------------------------------------------------------
-	static void onMouseEntered(MenuItem::Ptr item);
+	static void onMouseEntered(Menu::Ptr item);
 	//-------------------------------------------------------------------------
-	static void onMouseExited(MenuItem::Ptr item);
+	static void onMouseExited(Menu::Ptr item);
+	//-------------------------------------------------------------------------
+	static void setupPostTimer(Menu::Ptr item);
 public:
 	//-------------------------------------------------------------------------
 	static void onMouseEvent(void *src, const events::MouseEvent &ev);
-	//-------------------------------------------------------------------------
-	static void getPath(IMenuElement::MenuElements &out, MenuItem::Ptr c);
-}; // BasicMenuItemListener
+}; // BasicMenuListener
 
 ///////////////////////////////////////////////////////////////////////////////
 template <class ComponentModell>
-void BasicMenuItemListener<ComponentModell>::
+void BasicMenuListener<ComponentModell>::
 	onMouseEvent(void *src, const events::MouseEvent &ev)
 {
 	using namespace events;
-	MenuItem::Ptr b =
-			boost::shared_dynamic_cast<MenuItem>(ev.getSource());
+	Menu::Ptr b =
+			boost::shared_dynamic_cast<Menu>(ev.getSource());
 	SAMBAG_ASSERT(b);
 	switch(ev.getType()) {
 	case MouseEvent::MOUSE_ENTERED:
@@ -86,8 +80,8 @@ void BasicMenuItemListener<ComponentModell>::
 }
 //-----------------------------------------------------------------------------
 template <class ComponentModell>
-void BasicMenuItemListener<ComponentModell>::
-onMouseEntered(MenuItem::Ptr item)
+void BasicMenuListener<ComponentModell>::
+onMouseEntered(Menu::Ptr item)
 {
 	item->setButtonRollover(true);
 //	// 4188027: drag enter/exit added in JDK 1.1.7A, JDK1.2
@@ -96,52 +90,31 @@ onMouseEntered(MenuItem::Ptr item)
 //		MenuSelectionManager.defaultManager().processMouseEvent(e);
 //	} else {
 	IMenuElement::MenuElements path;
-	getPath(path, item);
+	BasicMenuItemListener<ComponentModell>::getPath(path, item);
 	MenuSelectionManager::defaultManager().setSelectedPath(path);
+	setupPostTimer(item);
 }
 //-----------------------------------------------------------------------------
 template <class ComponentModell>
-void BasicMenuItemListener<ComponentModell>::
-onMouseExited(MenuItem::Ptr item)
+void BasicMenuListener<ComponentModell>::
+setupPostTimer(Menu::Ptr item)
+{
+	// TODO: implement delayed callback
+	MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
+	IMenuElement::MenuElements &path = defaultManager.getSelectedPath();
+	if (path.size() > 0 && path[path.size() - 1] == item) {
+		//appendPath(path, menu.getPopupMenu());
+		path.push_back(item->getPopupMenu());
+		defaultManager.setSelectedPath(path);
+	}
+}
+//-----------------------------------------------------------------------------
+template <class ComponentModell>
+void BasicMenuListener<ComponentModell>::
+onMouseExited(Menu::Ptr item)
 {
 	item->setButtonRollover(false);
 	item->setButtonPressed(false);
 }
-//-----------------------------------------------------------------------------
-template <class ComponentModell>
-void BasicMenuItemListener<ComponentModell>::
-getPath(IMenuElement::MenuElements &out, MenuItem::Ptr menuItem)
-{
-	typedef IMenuElement::MenuElements MenuElements;
-	MenuSelectionManager &m = MenuSelectionManager::defaultManager();
-	MenuElements oldPath = m.getSelectedPath();
-	int i = oldPath.size();
-	if (i == 0)
-		return;
-	AComponentPtr parent = menuItem->getParent();
-	if (oldPath[i - 1]->getComponent() == parent) {
-		// The parent popup menu is the last so far
-		out.resize(i + 1);
-		//System.arraycopy(oldPath, 0, newPath, 0, i);
-		std::copy(oldPath.begin(), oldPath.begin() + i, out.begin());
-		out[i] = menuItem;
-	} else {
-		// A sibling menuitem is the current selection
-		//
-		//  This probably needs to handle 'exit submenu into
-		// a menu item.  Search backwards along the current
-		// selection until you find the parent popup menu,
-		// then copy up to that and add yourself...
-		int j;
-		for (j = oldPath.size() - 1; j >= 0; --j) {
-			if (oldPath[j]->getComponent() == parent)
-				break;
-		}
-		out.resize(j + 2);
-		//System.arraycopy(oldPath, 0, newPath, 0, j + 1);
-		std::copy(oldPath.begin(), oldPath.begin() + (j + 1), out.begin());
-		out[j + 1] = menuItem;
-	}
- }
 }}}}} // namespace(s)
-#endif /* SAMBAG_BASICMENUITEMLISTENER_H */
+#endif /* SAMBAG_BASICMENULISTENER_H */

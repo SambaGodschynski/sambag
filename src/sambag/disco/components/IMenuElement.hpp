@@ -48,6 +48,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void processMouseEvent (events::MouseEvent event,
 			const MenuElements & path, MenuSelectionManager &manager) = 0;
+	//-------------------------------------------------------------------------
+	virtual std::string toString() const = 0;
 }; // IMenuElement
 }}} // namespace(s)
 
