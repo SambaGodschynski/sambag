@@ -7,7 +7,7 @@
 
 #include "Window.hpp"
 #include "RootPane.hpp"
-#include "IWindowFactory.hpp"
+#include "WindowToolkit.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -15,12 +15,12 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-------------------------------------------------------------------------
 void Window::startMainLoop() {
-	getWindowFactory()->startMainLoop();
+	getWindowToolkit()->startMainLoop();
 }
 //-----------------------------------------------------------------------------
 Window::Window(Window::Ptr parent) : parent(parent) {
 	rootPane = components::RootPane::create();
-	windowImpl = getWindowFactory()->createWindowImpl();
+	windowImpl = getWindowToolkit()->createWindowImpl();
 	windowImpl->setFramed(false);
 	windowImpl->setRootPane(rootPane);
 	//add(rootPane); do not call in constructor! -> getPtr() returns NULL

@@ -1,12 +1,12 @@
 /*
- * IWindowFactory.hpp
+ * WindowToolkit.hpp
  *
  *  Created on: Thu Jun  7 10:44:45 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_IWINDOWFACTORY_H
-#define SAMBAG_IWINDOWFACTORY_H
+#ifndef SAMBAG_WINDOWTOOLKIT_H
+#define SAMBAG_WINDOWTOOLKIT_H
 
 #include <boost/shared_ptr.hpp>
 #include "Forward.hpp"
@@ -14,26 +14,26 @@
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
-  * @class IWindowFactory.
+  * @class WindowToolkit.
   */
-class IWindowFactory {
+class WindowToolkit {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() = 0;
-}; // IWindowFactory
+}; // WindowToolkit
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-extern IWindowFactory * _getWindowFactoryImpl();
+extern WindowToolkit * _getWindowToolkitImpl();
 //-----------------------------------------------------------------------------
-IWindowFactory * getWindowFactory();
+WindowToolkit * getWindowToolkit();
 //-----------------------------------------------------------------------------
 /**
  * used for testing
  * @param current Windowfactory
  */
-void setWindowFactory(IWindowFactory *wf);
+void setWindowFactory(WindowToolkit *wf);
 }}} // namespace(s)
-#endif /* SAMBAG_IWINDOWFACTORY_H */
+#endif /* SAMBAG_WINDOWTOOLKIT_H */

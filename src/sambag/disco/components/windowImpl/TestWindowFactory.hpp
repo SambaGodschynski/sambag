@@ -9,7 +9,7 @@
 #define SAMBAG_TESTWINDOWFACTORY_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/components/IWindowFactory.hpp>
+#include <sambag/disco/components/WindowToolkit.hpp>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -17,7 +17,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class TestWindowFactory.
   */
-class TestWindowFactory : public IWindowFactory {
+class TestWindowFactory : public WindowToolkit {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
