@@ -13,11 +13,16 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
+#include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class X11WindowToolkit
 //=============================================================================
+//-----------------------------------------------------------------------------
+X11WindowToolkit::ToInvoke X11WindowToolkit::toInvoke;
 //-----------------------------------------------------------------------------
 X11WindowToolkit::X11WindowToolkit() {
 	globals.display = XOpenDisplay(NULL);
@@ -56,9 +61,44 @@ X11WindowToolkit * X11WindowToolkit::getToolkit() {
 	typedef Loki::SingletonHolder<X11WindowToolkit> X11WindowFactoryHolder;
 	return &X11WindowFactoryHolder::Instance();
 }
+///////////////////////////////////////////////////////////////////////////////
+namespace { // thread / timer stuff
+	//-------------------------------------------------------------------------
+	boost::asio::io_service io;
+	//-------------------------------------------------------------------------
+	bool threadsAreRunning = true;
+	//-------------------------------------------------------------------------
+	void timerThreadClbk() {
+		while (threadsAreRunning) {
+			io.run();
+			boost::this_thread::sleep(boost::posix_time::millisec(10));
+		}
+	}
+}
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::
+invokeLater(sambag::com::ICommand::Ptr cmd, long ms)
+{
+	Timer *t = new Timer(io, boost::posix_time::millisec(ms));
+	toInvoke.insert( std::make_pair(t, cmd) );
+	t->async_wait(boost::bind(&timerCallback, boost::asio::placeholders::error, t));
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::timerCallback(const boost::system::error_code&,
+		Timer *timer)
+{
+	ToInvoke::iterator it = toInvoke.find(timer);
+	SAMBAG_ASSERT(it!=toInvoke.end());
+	it->second->execute();
+	toInvoke.erase(it);
+	delete timer;
+}
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::mainLoop() {
 	::Display *display = getToolkit()->getGlobals().display;
+	threadsAreRunning = true;
+	boost::thread timerThread(&timerThreadClbk);
 	while ( X11WindowImpl::getNumInstances() > 0 ) {
 		// read in and process all pending events for the main window
 		XEvent event;
@@ -70,6 +110,8 @@ void X11WindowToolkit::mainLoop() {
 		usleep(1000);
 		X11WindowImpl::processInvocations();
 	}
+	threadsAreRunning = false;
+	timerThread.join();
 	XCloseDisplay(display);
 	display = NULL;
 

@@ -15,12 +15,12 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/FramedWindow.hpp>
-#include <sambag/disco/components/windowImpl/X11Window.hpp>
 #include <sambag/disco/components/BoxLayout.hpp>
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
 #include <sambag/disco/components/Label.hpp>
 #include <sambag/disco/components/MenuSelectionManager.hpp>
+#include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -223,11 +223,22 @@ void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
 	std::cout<<ev.getSrc().getSelectedPath()<<std::endl;
 }
 
+struct TimedCommand : sambag::com::ICommand {
+	typedef boost::shared_ptr<TimedCommand> Ptr;
+	static Ptr create() {
+		return Ptr(new TimedCommand());
+	}
+	virtual void execute() {
+		std::cout<<"timed callback!" << std::flush << std::endl;
+	}
+};
+
 int main() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
+	getWindowToolkit()->invokeLater(TimedCommand::create(), 10000 /* 10 sec.*/);
 	{ // extra scope (bye message should occur after releasing all objs)
 		win = sdc::FramedWindow::create();
 		win->setWindowBounds(Rectangle(100,100,230,200));

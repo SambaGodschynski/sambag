@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "Forward.hpp"
 #include <sambag/disco/Geometry.hpp>
+#include <sambag/com/ICommand.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -24,6 +25,13 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const = 0;
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * invokes command, when given time passed by.
+	 * @param the command
+	 * @param the time to wait in ms
+	 */
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms) = 0;
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() = 0;
 	//-------------------------------------------------------------------------

@@ -10,9 +10,13 @@
 
 #ifdef DISCO_USE_X11
 #include <boost/shared_ptr.hpp>
+#include <boost/asio.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
 #include <X11/Xlib.h>
+#include <boost/system/error_code.hpp>
+#include <boost/unordered_map.hpp>
+#include <sambag/com/ICommand.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -27,6 +31,14 @@ private:
 	X11WindowToolkit(const X11WindowToolkit&){}
 	//-------------------------------------------------------------------------
 	static void mainLoop();
+	//-------------------------------------------------------------------------
+	typedef boost::asio::deadline_timer Timer;
+	typedef sambag::com::ICommand::Ptr CommandPtr;
+	typedef boost::unordered_map<Timer*, CommandPtr> ToInvoke;
+	//-------------------------------------------------------------------------
+	static void timerCallback(const boost::system::error_code&, Timer* timer);
+	//-------------------------------------------------------------------------
+	static ToInvoke toInvoke;
 public:
 	//-------------------------------------------------------------------------
 	struct Globals {
@@ -40,6 +52,8 @@ protected:
 	virtual AWindowPtr createWindowImpl() const;
 	//-------------------------------------------------------------------------
 public:
+	//-------------------------------------------------------------------------
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms);
 	//-------------------------------------------------------------------------
 	static X11WindowToolkit * getToolkit();
 	//-------------------------------------------------------------------------

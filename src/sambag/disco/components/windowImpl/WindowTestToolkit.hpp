@@ -34,6 +34,10 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() {}
 	//-------------------------------------------------------------------------
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms) {
+		cmd->execute();
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new WindowTestToolkit);
 	}
