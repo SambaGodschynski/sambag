@@ -22,6 +22,7 @@ namespace sambag { namespace disco { namespace components {
 	class AWindow; typedef boost::shared_ptr<AWindow> AWindowPtr;
 	class Window; typedef boost::shared_ptr<Window> WindowPtr;
 	class FramedWindow; typedef boost::shared_ptr<FramedWindow> FramedWindowPtr;
+	class PopupMenu; typedef boost::shared_ptr<PopupMenu> PopupMenuPtr;
 	class MenuSelectionManager;
 namespace ui {
 	class UIManager;

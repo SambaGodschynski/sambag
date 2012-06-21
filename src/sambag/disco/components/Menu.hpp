@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "MenuItem.hpp"
-#include "PopupMenu.hpp"
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -26,7 +26,7 @@ public:
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
-	PopupMenu::Ptr popupMenu;
+	PopupMenuPtr popupMenu;
 	//-------------------------------------------------------------------------
 	Menu();
 	//-------------------------------------------------------------------------
@@ -34,13 +34,17 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
-	PopupMenu::Ptr getPopupMenu() const {
+	PopupMenuPtr getPopupMenu() const {
 		return popupMenu;
 	}
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Menu)
 	//-------------------------------------------------------------------------
 	virtual void add(AComponent::Ptr comp, size_t index = -1);
+	//-------------------------------------------------------------------------
+	void setPopupMenuVisible(bool b);
+	//-------------------------------------------------------------------------
+	bool isPopupMenuVisible() const;
 }; // Menu
 }}} // namespace(s)
 

@@ -68,11 +68,6 @@ public:
 		return selection;
 	}
 	//-------------------------------------------------------------------------
-	//  Returns the path to the currently selected menu item
-	MenuElements & getSelectedPath() {
-		return selection;
-	}
-	//-------------------------------------------------------------------------
 	// Return true if c is part of the currently used menu
 	bool isComponentPartOfCurrentMenu(AComponentPtr c) const;
 	//-------------------------------------------------------------------------

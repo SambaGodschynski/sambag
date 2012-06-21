@@ -22,5 +22,4 @@ PopupMenu::PopupMenu(AComponentPtr parent) :
 ui::AComponentUIPtr PopupMenu::getComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<PopupMenu>();
 }
-
 }}} // namespace(s)

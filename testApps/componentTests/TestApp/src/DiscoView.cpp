@@ -59,6 +59,24 @@ void createPopup() {
 	}
 	Menu::Ptr menu = Menu::create();
 	menu->setText("feuer feuer");
+	for (size_t i=0; i<10; ++i) {
+		std::stringstream ss;
+		ss << "actione nummere " << i;
+		MenuItem::Ptr btn = MenuItem::create();
+		btn->setText(ss.str());
+		menu->add(btn);
+	}
+	popup->add(menu);
+
+	menu = Menu::create();
+	menu->setText("wasser");
+	for (size_t i=0; i<10; ++i) {
+		std::stringstream ss;
+		ss << "römer gehen in das:" << i;
+		MenuItem::Ptr btn = MenuItem::create();
+		btn->setText(ss.str());
+		menu->add(btn);
+	}
 	popup->add(menu);
 }
 

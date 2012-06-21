@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "BasicMenuItemListener.hpp"
 #include <sambag/disco/components/Menu.hpp>
+#include <sambag/disco/components/PopupMenu.hpp>
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
 //=============================================================================
@@ -101,7 +102,7 @@ setupPostTimer(Menu::Ptr item)
 {
 	// TODO: implement delayed callback
 	MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
-	IMenuElement::MenuElements &path = defaultManager.getSelectedPath();
+	IMenuElement::MenuElements path = defaultManager.getSelectedPath();
 	if (path.size() > 0 && path[path.size() - 1] == item) {
 		//appendPath(path, menu.getPopupMenu());
 		path.push_back(item->getPopupMenu());

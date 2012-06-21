@@ -14,6 +14,7 @@
 #include <sambag/disco/components/Window.hpp>
 #include "ui/DefaultMenuLayout.hpp"
 #include "MenuItem.hpp"
+#include "Menu.hpp"
 
 
 namespace sambag { namespace disco { namespace components {
@@ -37,6 +38,8 @@ public:
 	static const std::string PROPERTY_POPUP_LOCATION;
 private:
 	//-------------------------------------------------------------------------
+	AComponentPtr invoker;
+	//-------------------------------------------------------------------------
 	void initWindow();
 	//-------------------------------------------------------------------------
 	WindowPtr window;
@@ -48,6 +51,10 @@ protected:
 	//-------------------------------------------------------------------------
 	APopupMenu(AComponentPtr parent = AComponentPtr());
 public:
+	//-------------------------------------------------------------------------
+	void setInvoker(AComponentPtr _invoker);
+	//-------------------------------------------------------------------------
+	AComponentPtr getInvoker() const;
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return AContainer::toString();
@@ -70,7 +77,7 @@ public:
 	 * Call by the MenuSelectionManager when the MenuElement is added or
 	 * remove from the menu selection.
 	 */
-	virtual void menuSelectionChanged(bool isIncluded){}
+	virtual void menuSelectionChanged(bool isIncluded);
 	//-------------------------------------------------------------------------
 	virtual void processMouseEvent(events::MouseEvent event,
 			const MenuElements & path, MenuSelectionManager &manager) {}
@@ -126,7 +133,8 @@ void APopupMenu<SM>::showPopup(const Point2D &_where) {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::hidePopup() {
-	window->close();
+	if (window)
+		window->close();
 }
 //-----------------------------------------------------------------------------
 template <class SM>
@@ -154,7 +162,24 @@ void APopupMenu<SM>::getSubElements(MenuElements &out) const {
 		out.push_back(el);
 	}
 }
-
+//-----------------------------------------------------------------------------
+template <class SM>
+void APopupMenu<SM>::setInvoker(AComponentPtr _invoker) {
+	invoker = _invoker;
+}
+//-----------------------------------------------------------------------------
+template <class SM>
+AComponentPtr APopupMenu<SM>::getInvoker() const {
+	return invoker;
+}
+//-----------------------------------------------------------------------------
+template <class SM>
+void APopupMenu<SM>::menuSelectionChanged(bool isIncluded) {
+	Menu::Ptr m = boost::shared_dynamic_cast<Menu>(getInvoker());
+	if (!m)
+		return;
+	m->setPopupMenuVisible(isIncluded);
+}
 }}} // namespace(s)
 
 #endif /* SAMBAG_APOPUPMENU_H */
