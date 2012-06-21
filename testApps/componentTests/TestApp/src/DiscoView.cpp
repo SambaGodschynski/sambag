@@ -224,10 +224,11 @@ void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
 }
 
 int main() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
+	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
 	{ // extra scope (bye message should occur after releasing all objs)
-		using namespace sambag::disco;
-		using namespace sambag::disco::components;
 		win = sdc::FramedWindow::create();
 		win->setWindowBounds(Rectangle(100,100,230,200));
 		win->setTitle("Messerschmitz");
@@ -251,8 +252,6 @@ int main() {
 		MenuSelectionManager::defaultManager().
 		EventSender<MenuSelectionManagerChanged>::addEventListener
 			( &pathChanged );
-
-		std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
 
 		sdc::Window::startMainLoop();
 	}

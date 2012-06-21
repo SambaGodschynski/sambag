@@ -1052,6 +1052,12 @@ public:
 	const PropertyMap & getClientProperties() const {
 		return propertyMap;
 	}
+	//-----------------------------------------------------------------------------
+	template <typename T>
+	void putClientProperty(const std::string &name, const T &c);
+	//-----------------------------------------------------------------------------
+	template <typename T>
+	void getClientProperty(const std::string &name, T &out) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the value of the property with the specified key.  Only
@@ -1087,12 +1093,30 @@ public:
 	 * @see #getClientProperty
 	 * @see #addPropertyChangeListener
 	 */
-	void putClientProperty(const std::string &key, AbstractType::Ptr value);
+	void putClientPropertyImpl(const std::string &key, AbstractType::Ptr value);
 };
 ///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
 inline std::ostream & operator << (std::ostream &os, const AComponent &p) {
 	p.printComponentTree(os);
 	return os;
+}
+//-----------------------------------------------------------------------------
+template <typename T>
+void AComponent::putClientProperty(const std::string &name, const T &c) {
+	typedef ConcreteType<T> Type;
+	typename Type::Ptr val = Type::create(c);
+	putClientPropertyImpl(name, val);
+}
+//-----------------------------------------------------------------------------
+template <typename T>
+void AComponent::getClientProperty(const std::string &name, T &out) const {
+	typedef ConcreteType<T> Type;
+	typename Type::Ptr val = boost::shared_dynamic_cast<Type>(
+			getClientProperty(name)
+	);
+	if (val)
+		out = *val;
 }
 }}}
 

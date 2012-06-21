@@ -17,9 +17,11 @@ class TestUIManager : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestUIManager );
 	CPPUNIT_TEST( testSingleton );
+	CPPUNIT_TEST( testSetGetProperty );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSingleton();
+	void testSetGetProperty();
 };
 
 } // namespace

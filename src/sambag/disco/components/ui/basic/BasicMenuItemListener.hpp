@@ -75,9 +75,7 @@ void BasicMenuItemListener<ComponentModell>::
 				b.get(),
 				events::ActionEvent(b)
 		);
-		Window::Ptr w = boost::shared_dynamic_cast<Window>(b->getRootContainer());
-		if (w)
-			w->close();
+		MenuSelectionManager::defaultManager().clearSelectedPath();
 		break;
 	}
 	default:

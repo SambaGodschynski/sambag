@@ -303,15 +303,21 @@ void TestAComponent::test_validate() {
 //-----------------------------------------------------------------------------
 void TestAComponent::testPutClientProperty() {
 	using namespace sambag::com;
+	using namespace sambag::disco;
 	size_t origNum = comp->getClientProperties().size();
-	comp->putClientProperty("index", createObject(101));
+	comp->putClientPropertyImpl("index", createObject(101));
 	AbstractType::Ptr v = comp->getClientProperty("index");
 	CPPUNIT_ASSERT(v);
 	int res = 0;
 	get(v, res);
 	CPPUNIT_ASSERT_EQUAL((int)101, res);
 	// remove value
-	comp->putClientProperty("index", AbstractType::Ptr());
+	comp->putClientPropertyImpl("index", AbstractType::Ptr());
 	CPPUNIT_ASSERT_EQUAL(origNum, comp->getClientProperties().size());
+
+	comp->putClientProperty("pos", Point2D(100, 101));
+	Point2D p;
+	comp->getClientProperty("pos", p);
+	CPPUNIT_ASSERT_EQUAL(p, Point2D(100, 101));
 }
 } // namespace

@@ -176,9 +176,10 @@ AComponentPtr APopupMenu<SM>::getInvoker() const {
 template <class SM>
 void APopupMenu<SM>::menuSelectionChanged(bool isIncluded) {
 	Menu::Ptr m = boost::shared_dynamic_cast<Menu>(getInvoker());
-	if (!m)
-		return;
-	m->setPopupMenuVisible(isIncluded);
+	if (m)
+		m->setPopupMenuVisible(isIncluded);
+	else
+		hidePopup();
 }
 }}} // namespace(s)
 

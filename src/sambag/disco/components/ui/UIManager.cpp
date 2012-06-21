@@ -32,4 +32,33 @@ ALookAndFeel::Ptr UIManager::getLookAndFeel(RootPane::Ptr root) const {
 UIManager & UIManager::instance() {
 	return UIManagerHolder::Instance();
 }
+//-----------------------------------------------------------------------------
+AbstractType::Ptr UIManager::getProperty(const std::string &key) const
+{
+	PropertyMap::const_iterator it = propertyMap.find(key);
+	if (it==propertyMap.end())
+		return AbstractType::Ptr();
+	return it->second;
+}
+//-----------------------------------------------------------------------------
+void UIManager::putPropertyImpl(const std::string &key,
+		AbstractType::Ptr value)
+{
+	PropertyMap::iterator it = propertyMap.find(key);
+	if (it==propertyMap.end()) {
+		if (!value)
+			return;
+		bool inserted;
+		boost::tie(it, inserted) =
+			propertyMap.insert(std::make_pair(key, value));
+		SAMBAG_ASSERT(inserted);
+		return;
+	}
+	AbstractType::Ptr old = it->second;
+	if (!value) {
+		propertyMap.erase(it);
+		return;
+	}
+	it->second = value;
+}
 }}}} // namespace(s)

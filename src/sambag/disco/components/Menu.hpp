@@ -32,6 +32,11 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void constructorAlt();
 private:
+	//-------------------------------------------------------------------------
+	/**
+	 * @return popup location
+	 */
+	Point2D computePopupLocation() const;
 public:
 	//-------------------------------------------------------------------------
 	PopupMenuPtr getPopupMenu() const {

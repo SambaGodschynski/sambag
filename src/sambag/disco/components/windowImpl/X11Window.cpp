@@ -129,7 +129,6 @@ void X11WindowImpl::destroyWindow() {
 	surface.reset();
 	onDestroy();
 	XDestroyWindow(display, win);
-	XSync(display, True);
 	win = 0;
 	--instances;
 	visible = false;

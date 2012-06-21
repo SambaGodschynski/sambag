@@ -853,7 +853,7 @@ AbstractType::Ptr AComponent::getClientProperty(const std::string &key) const
 	return it->second;
 }
 //-----------------------------------------------------------------------------
-void AComponent::putClientProperty(const std::string &key,
+void AComponent::putClientPropertyImpl(const std::string &key,
 		AbstractType::Ptr value)
 {
 	PropertyMap::iterator it = propertyMap.find(key);

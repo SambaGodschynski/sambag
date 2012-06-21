@@ -16,6 +16,7 @@
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/ISurface.hpp>
 #include <sambag/disco/IPattern.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -118,6 +119,13 @@ void BasicMenuUI<ButtonModell>::installUI(AComponentPtr c) {
 					this, _1, _2),
 			b
 	);
+	// install properties
+	UIManager &uim = UIManager::instance();
+	uim.putProperty("Menu.submenuPopupOffsetX", 150);
+	uim.putProperty("Menu.submenuPopupOffsetY", 15);
+	uim.putProperty("Menu.menuPopupOffsetX", 15);
+	uim.putProperty("Menu.menuPopupOffsetY", 15);
+
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
