@@ -11,7 +11,7 @@
 #include <list>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
-#include "AWindow.hpp"
+#include "AWindowImpl.hpp"
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include "BufferedDrawPolicy.hpp"
@@ -28,7 +28,7 @@ template <
 class WindowImpl :
 	public ConcreteWindowImpl,
 	public DrawPolicy,
-	public AWindow
+	public AWindowImpl
 {
 //=============================================================================
 public:

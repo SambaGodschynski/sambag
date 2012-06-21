@@ -23,7 +23,7 @@ namespace tests {
 void TestWindow::setUp() {
 	using namespace sambag::disco::components;
 	if (!wfac)
-		wfac = TestWindowFactory::create();
+		wfac = WindowTestToolkit::create();
 	sambag::disco::components::setWindowFactory(wfac.get());
 }
 //-----------------------------------------------------------------------------

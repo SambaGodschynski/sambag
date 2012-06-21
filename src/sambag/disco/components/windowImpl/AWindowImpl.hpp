@@ -1,5 +1,5 @@
 /*
- * AWindow.hpp
+ * AWindowImpl.hpp
  *
  *  Created on: Thu Jun  7 10:44:23 2012
  *      Author: Johannes Unger
@@ -31,15 +31,15 @@ struct OnBoundsChanged {
 };
 //=============================================================================
 /** 
-  * @class AWindow.
+  * @class AWindowImpl.
   */
-class AWindow :
+class AWindowImpl :
 	public sambag::com::events::EventSender<OnCloseEvent>,
 	public sambag::com::events::EventSender<OnBoundsChanged> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AWindow> Ptr;
+	typedef boost::shared_ptr<AWindowImpl> Ptr;
 protected:
 private:
 public:
@@ -87,6 +87,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual std::string getTitle() const = 0;
 
-}; // AWindow
+}; // AWindowImpl
 }}} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

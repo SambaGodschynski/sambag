@@ -9,7 +9,7 @@
 #define SAMBAG_TESTWINDOW_H
 
 #include <boost/shared_ptr.hpp>
-#include "AWindow.hpp"
+#include "AWindowImpl.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
@@ -17,7 +17,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class TestWindow.
   */
-class TestWindow : public AWindow {
+class TestWindow : public AWindowImpl {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

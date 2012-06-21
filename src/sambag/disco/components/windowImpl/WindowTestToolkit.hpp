@@ -1,12 +1,12 @@
 /*
- * TestWindowFactory.hpp
+ * WindowTestToolkit.hpp
  *
  *  Created on: Mon Jun 18 15:09:40 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_TESTWINDOWFACTORY_H
-#define SAMBAG_TESTWINDOWFACTORY_H
+#ifndef SAMBAG_WINDOWTESTTOOLKIT_
+#define SAMBAG_WINDOWTESTTOOLKIT_
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
@@ -15,27 +15,27 @@ namespace sambag { namespace disco { namespace components {
 
 //============================================================================
 /** 
-  * @class TestWindowFactory.
+  * @class WindowTestToolkit.
   */
-class TestWindowFactory : public WindowToolkit {
+class WindowTestToolkit : public WindowToolkit {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<TestWindowFactory> Ptr;
+	typedef boost::shared_ptr<WindowTestToolkit> Ptr;
 protected:
 private:
 	//-------------------------------------------------------------------------
-	TestWindowFactory() {}
+	WindowTestToolkit() {}
 public:
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() {}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		return Ptr(new TestWindowFactory);
+		return Ptr(new WindowTestToolkit);
 	}
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const;
-}; // TestWindowFactory
+}; // WindowTestToolkit
 }}} // namespace(s)
 
-#endif /* SAMBAG_TESTWINDOWFACTORY_H */
+#endif /* SAMBAG_WINDOWTESTTOOLKIT_ */

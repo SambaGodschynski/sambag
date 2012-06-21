@@ -1,5 +1,5 @@
 /*
- * AWindow.cpp
+ * AWindowImpl.cpp
  *
  *  Created on: Thu Jun  7 10:44:23 2012
  *      Author: Johannes Unger

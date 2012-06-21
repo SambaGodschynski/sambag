@@ -1,5 +1,5 @@
 /*
- * AWindow.hpp
+ * AWindowImpl.hpp
  *
  *  Created on: Thu Jun  7 10:44:23 2012
  *      Author: Johannes Unger
@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "RootPane.hpp"
 #include <sambag/disco/ISurface.hpp>
-#include "windowImpl/AWindow.hpp"
+#include "windowImpl/AWindowImpl.hpp"
 #include "Forward.hpp"
 #include <sambag/com/events/Events.hpp>
 #include "AContainer.hpp"
@@ -50,7 +50,7 @@ protected:
 	//-------------------------------------------------------------------------
 	Window(Window::Ptr parent);
 	//-------------------------------------------------------------------------
-	AWindow::Ptr windowImpl;
+	AWindowImpl::Ptr windowImpl;
 	//-------------------------------------------------------------------------
 	/**
 	 * has to call from create()

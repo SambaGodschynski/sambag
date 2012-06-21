@@ -9,7 +9,7 @@
 #define SAMBAG_TESTWINDOW_H
 
 #include <cppunit/extensions/HelperMacros.h>
-#include <sambag/disco/components/windowImpl/TestWindowFactory.hpp>
+#include <sambag/disco/components/windowImpl/WindowTestToolkit.hpp>
 
 namespace tests {
 //=============================================================================
@@ -19,7 +19,7 @@ private:
 	CPPUNIT_TEST_SUITE( TestWindow );
 	CPPUNIT_TEST( testComponentScreenPointConverts );
 	CPPUNIT_TEST_SUITE_END();
-	sambag::disco::components::TestWindowFactory::Ptr wfac;
+	sambag::disco::components::WindowTestToolkit::Ptr wfac;
 public:
 	void setUp();
 	void tearDown();
