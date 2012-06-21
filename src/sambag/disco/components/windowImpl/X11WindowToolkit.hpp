@@ -25,6 +25,8 @@ friend struct Loki::CreateUsingNew<X11WindowToolkit>;
 private:
 	X11WindowToolkit();
 	X11WindowToolkit(const X11WindowToolkit&){}
+	//-------------------------------------------------------------------------
+	static void mainLoop();
 public:
 	//-------------------------------------------------------------------------
 	struct Globals {

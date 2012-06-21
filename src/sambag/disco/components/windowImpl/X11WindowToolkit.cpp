@@ -7,8 +7,12 @@
 #ifdef DISCO_USE_X11
 
 #include "X11WindowToolkit.hpp"
-#include "X11Window.hpp"
+#include "X11WindowImpl.hpp"
 #include "WindowImpl.hpp"
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/keysym.h>
+#include <X11/Xutil.h>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -27,7 +31,7 @@ X11WindowToolkit::~X11WindowToolkit() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::startMainLoop() {
-	X11WindowImpl::startMainLoop();
+	mainLoop();
 }
 //-----------------------------------------------------------------------------
 AWindowPtr X11WindowToolkit::createWindowImpl() const {
@@ -53,6 +57,23 @@ X11WindowToolkit * X11WindowToolkit::getToolkit() {
 	return &X11WindowFactoryHolder::Instance();
 }
 //-----------------------------------------------------------------------------
+void X11WindowToolkit::mainLoop() {
+	::Display *display = getToolkit()->getGlobals().display;
+	while ( X11WindowImpl::getNumInstances() > 0 ) {
+		// read in and process all pending events for the main window
+		XEvent event;
+		while (X11WindowImpl::getNumInstances() > 0 && XPending(display)) {
+			XNextEvent(display, &event);
+			X11WindowImpl::handleEvent(event);
+		}
+		X11WindowImpl::drawAll();
+		usleep(1000);
+		X11WindowImpl::processInvocations();
+	}
+	XCloseDisplay(display);
+	display = NULL;
+
+}
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {
 	return X11WindowToolkit::getToolkit();
