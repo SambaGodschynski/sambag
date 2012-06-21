@@ -12,7 +12,7 @@
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/Menu.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
-#include <sambag/disco/components/IWindowFactory.hpp>
+#include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/FramedWindow.hpp>
 #include <sambag/disco/components/windowImpl/X11Window.hpp>
@@ -70,13 +70,23 @@ void createPopup() {
 
 	menu = Menu::create();
 	menu->setText("wasser");
-	for (size_t i=0; i<10; ++i) {
+	for (size_t i=0; i<5; ++i) {
 		std::stringstream ss;
 		ss << "römer gehen in das:" << i;
 		MenuItem::Ptr btn = MenuItem::create();
 		btn->setText(ss.str());
 		menu->add(btn);
 	}
+	Menu::Ptr subsub = Menu::create();
+	subsub->setText("holy anker");
+	for (size_t i=0; i<5; ++i) {
+		std::stringstream ss;
+		ss << i;
+		MenuItem::Ptr btn = MenuItem::create();
+		btn->setText(ss.str());
+		subsub->add(btn);
+	}
+	menu->add(subsub);
 	popup->add(menu);
 }
 
@@ -241,6 +251,8 @@ int main() {
 		MenuSelectionManager::defaultManager().
 		EventSender<MenuSelectionManagerChanged>::addEventListener
 			( &pathChanged );
+
+		std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
 
 		sdc::Window::startMainLoop();
 	}

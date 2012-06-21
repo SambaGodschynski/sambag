@@ -1,23 +1,23 @@
 /*
- * WindowTestToolkit.cpp
+ * $$$NAME$$$.cpp
  *
- *  Created on: Mon Jun 18 15:09:40 2012
- *      Author: Johannes Unger
+ *  Created on: $$$DATE$$$
+ *      Author: $$$AUTHOR$$$
  */
 
-#include "WindowTestToolkit.hpp"
-#include "TestWindow.hpp"
+#include "$$$NAME$$$.hpp"
+#include "ui/ALookAndFeel.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-//  Class WindowTestToolkit
+//  Class $$$NAME$$$
 //=============================================================================
 //-----------------------------------------------------------------------------
-AWindowPtr WindowTestToolkit::createWindowImpl() const {
-	return TestWindow::create();
+$$$NAME$$$::$$$NAME$$$() {
+	setName("$$$NAME$$$");
 }
 //-----------------------------------------------------------------------------
-Dimension WindowTestToolkit::getScreenSize() const {
-	return Dimension(1024, 768);
+ui::AComponentUIPtr $$$NAME$$$::getComponentUI(ui::ALookAndFeelPtr laf) const {
+	return laf->getUI<$$$NAME$$$>();
 }
 }}} // namespace(s)

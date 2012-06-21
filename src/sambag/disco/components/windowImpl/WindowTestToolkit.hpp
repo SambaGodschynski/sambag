@@ -23,18 +23,20 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<WindowTestToolkit> Ptr;
 protected:
+	//-------------------------------------------------------------------------
+	virtual AWindowPtr createWindowImpl() const;
 private:
 	//-------------------------------------------------------------------------
 	WindowTestToolkit() {}
 public:
+	//-------------------------------------------------------------------------
+	virtual Dimension getScreenSize() const;
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() {}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new WindowTestToolkit);
 	}
-	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindowImpl() const;
 }; // WindowTestToolkit
 }}} // namespace(s)
 

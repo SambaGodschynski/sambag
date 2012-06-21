@@ -9,6 +9,7 @@
 #include "X11Window.hpp"
 #include <sambag/disco/X11Surface.hpp>
 #include <boost/foreach.hpp>
+#include "X11WindowToolkit.hpp"
 
 namespace {
 	void microsleep(int usecs) {
@@ -39,13 +40,11 @@ int X11WindowImpl::instances = 0;
 //-----------------------------------------------------------------------------
 X11WindowImpl::Invocations X11WindowImpl::invocations;
 //-----------------------------------------------------------------------------
-Display * X11WindowImpl::display = NULL;
-//-----------------------------------------------------------------------------
 Atom X11WindowImpl::wm_protocols_atom = 0;
 //-----------------------------------------------------------------------------
 Atom X11WindowImpl::wm_delete_window_atom = 0;
 //-----------------------------------------------------------------------------
-X11WindowImpl * X11WindowImpl::getX11WindowImpl(Window win) {
+X11WindowImpl * X11WindowImpl::getX11WindowImpl(::Window win) {
 	WinMap::iterator it = winmap.find(win);
 	if (it==winmap.end())
 		return NULL;
@@ -56,19 +55,20 @@ X11WindowImpl::X11WindowImpl() :
 	bounds(Rectangle(0,0,1,1)),
 	visible(false),
 	screen(0),
+	display(NULL),
 	visual(NULL),
 	win(0)
 {
+	display = X11WindowToolkit::getToolkit()->getGlobals().display;
+	SAMBAG_ASSERT(display);
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::createWindow() {
 	if (instances++==0) {
-		display = XOpenDisplay(NULL);
 		wm_protocols_atom = XInternAtom(display, "WM_PROTOCOLS", False);
 		wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
 		//XSynchronize(display, True);
 	}
-	SAMBAG_ASSERT(display);
 	screen = DefaultScreen(display);
 	// init visual
 	visual = XDefaultVisual(display, screen);
@@ -190,6 +190,7 @@ void X11WindowImpl::drawAll() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::mainLoop() {
+	::Display *display = X11WindowToolkit::getToolkit()->getGlobals().display;
 	// TODO: sync with destroyWindow
 	while (instances>0) {
 		// read in and process all pending events for the main window
@@ -261,8 +262,9 @@ void X11WindowImpl::invokeLater(sambag::com::ICommand::Ptr cmd) {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::handleEvent(XEvent &event) {
+	::Display *display = X11WindowToolkit::getToolkit()->getGlobals().display;
 	static int mx = 0, my = 0; // mouse position
-	Window win = event.xany.window;
+	::Window win = event.xany.window;
 	X11WindowImpl *src = getX11WindowImpl(win);
 	if (!src)
 		return;
@@ -297,7 +299,7 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 
 	case MotionNotify: {
 		if (event.xmotion.is_hint) {
-			Window root, child;
+			::Window root, child;
 			unsigned int mask;
 			XQueryPointer(display, win, &root, &child, &event.xbutton.x_root,
 					&event.xbutton.y_root, &event.xbutton.x, &event.xbutton.y,

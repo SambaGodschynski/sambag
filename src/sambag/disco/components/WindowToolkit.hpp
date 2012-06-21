@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "Forward.hpp"
+#include <sambag/disco/Geometry.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -18,11 +19,15 @@ namespace sambag { namespace disco { namespace components {
   */
 class WindowToolkit {
 //=============================================================================
-public:
+friend class Window;
+protected:
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const = 0;
+public:
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() = 0;
+	//-------------------------------------------------------------------------
+	virtual Dimension getScreenSize() const = 0;
 }; // WindowToolkit
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

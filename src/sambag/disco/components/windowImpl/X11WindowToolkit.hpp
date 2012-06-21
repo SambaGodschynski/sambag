@@ -8,9 +8,11 @@
 #ifndef SAMBAG_X11WINDOWTOOLKIT_H
 #define SAMBAG_X11WINDOWTOOLKIT_H
 
+#ifdef DISCO_USE_X11
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
+#include <X11/Xlib.h>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -21,15 +23,33 @@ class X11WindowToolkit : public WindowToolkit {
 //=============================================================================
 friend struct Loki::CreateUsingNew<X11WindowToolkit>;
 private:
-	X11WindowToolkit(){}
+	X11WindowToolkit();
 	X11WindowToolkit(const X11WindowToolkit&){}
 public:
 	//-------------------------------------------------------------------------
-	virtual void startMainLoop();
+	struct Globals {
+		::Display * display;
+		Globals() : display(NULL) {}
+	};
+protected:
+	//-------------------------------------------------------------------------
+	Globals globals;
 	//-------------------------------------------------------------------------
 	virtual AWindowPtr createWindowImpl() const;
+	//-------------------------------------------------------------------------
+public:
+	//-------------------------------------------------------------------------
+	static X11WindowToolkit * getToolkit();
+	//-------------------------------------------------------------------------
+	~X11WindowToolkit();
+	//-------------------------------------------------------------------------
+	const Globals & getGlobals() const;
+	//-------------------------------------------------------------------------
+	virtual void startMainLoop();
+	//-------------------------------------------------------------------------
+	virtual Dimension getScreenSize() const;
 
 }; // X11WindowToolkit
 }}} // namespace(s)
-
+#endif // DISCO_USE_X11
 #endif /* SAMBAG_X11WINDOWTOOLKIT_H */

@@ -15,6 +15,17 @@ namespace sambag { namespace disco { namespace components {
 //  Class X11WindowToolkit
 //=============================================================================
 //-----------------------------------------------------------------------------
+X11WindowToolkit::X11WindowToolkit() {
+	globals.display = XOpenDisplay(NULL);
+}
+//-----------------------------------------------------------------------------
+X11WindowToolkit::~X11WindowToolkit() {
+	if (globals.display) {
+		XCloseDisplay(globals.display);
+		globals.display = NULL;
+	}
+}
+//-----------------------------------------------------------------------------
 void X11WindowToolkit::startMainLoop() {
 	X11WindowImpl::startMainLoop();
 }
@@ -23,11 +34,28 @@ AWindowPtr X11WindowToolkit::createWindowImpl() const {
 	AWindowPtr res = WindowImpl<X11WindowImpl>::create();
 	return res;
 }
+//-------------------------------------------------------------------------
+const X11WindowToolkit::Globals & X11WindowToolkit::getGlobals() const {
+	return globals;
+}
+//-----------------------------------------------------------------------------
+Dimension X11WindowToolkit::getScreenSize() const {
+	::Display * dsp = globals.display;
+	SAMBAG_ASSERT(dsp);
+	::Screen *scr = XScreenOfDisplay(dsp, XDefaultScreen(dsp));
+	int w = XWidthOfScreen(scr);
+	int h = XHeightOfScreen(scr);
+	return Dimension((Coordinate)w, (Coordinate)h);
+}
+//-----------------------------------------------------------------------------
+X11WindowToolkit * X11WindowToolkit::getToolkit() {
+	typedef Loki::SingletonHolder<X11WindowToolkit> X11WindowFactoryHolder;
+	return &X11WindowFactoryHolder::Instance();
+}
 //-----------------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////
-typedef Loki::SingletonHolder<X11WindowToolkit> X11WindowFactoryHolder;
 WindowToolkit * _getWindowToolkitImpl() {
-	return &X11WindowFactoryHolder::Instance();
+	return X11WindowToolkit::getToolkit();
 }
 }}} // namespace(s)
 

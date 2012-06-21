@@ -82,7 +82,7 @@ private:
 	//-------------------------------------------------------------------------
 	static void processInvocations();
 	//-------------------------------------------------------------------------
-	static X11WindowImpl * getX11WindowImpl(Window win);
+	static X11WindowImpl * getX11WindowImpl(::Window win);
 	//-------------------------------------------------------------------------
 	void createWindow();
 	//-------------------------------------------------------------------------
@@ -106,9 +106,9 @@ protected:
 	static WinMap winmap;
 	//-------------------------------------------------------------------------
 	// X11
-	static Display *display;
 	static int instances;
 	int screen;
+	::Display *display;
 	static Atom wm_protocols_atom;
 	static Atom wm_delete_window_atom;
 	Visual *visual;
