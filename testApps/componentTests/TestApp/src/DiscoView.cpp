@@ -229,7 +229,8 @@ struct TimedCommand : sambag::com::ICommand {
 		return Ptr(new TimedCommand());
 	}
 	virtual void execute() {
-		std::cout<<"timed callback!" << std::flush << std::endl;
+		static int i=0;
+		std::cout<<"timed callback(" << ++i << ")" << std::flush << std::endl;
 	}
 };
 
@@ -238,7 +239,7 @@ int main() {
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	getWindowToolkit()->invokeLater(TimedCommand::create(), 10000 /* 10 sec.*/);
+	getWindowToolkit()->invokeLater(TimedCommand::create(), 10000 /* 10 sec.*/, 10);
 	{ // extra scope (bye message should occur after releasing all objs)
 		win = sdc::FramedWindow::create();
 		win->setWindowBounds(Rectangle(100,100,230,200));

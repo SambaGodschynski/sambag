@@ -36,9 +36,12 @@ private:
 	typedef sambag::com::ICommand::Ptr CommandPtr;
 	typedef boost::unordered_map<Timer*, CommandPtr> ToInvoke;
 	//-------------------------------------------------------------------------
-	static void timerCallback(const boost::system::error_code&, Timer* timer);
+	static void timerCallback(const boost::system::error_code&,
+			Timer* timer, long ms, int repetitions);
 	//-------------------------------------------------------------------------
 	static ToInvoke toInvoke;
+	//-------------------------------------------------------------------------
+	static void closeAllTimer();
 public:
 	//-------------------------------------------------------------------------
 	struct Globals {
@@ -53,7 +56,8 @@ protected:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms);
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms,
+			int repetitions = 0);
 	//-------------------------------------------------------------------------
 	static X11WindowToolkit * getToolkit();
 	//-------------------------------------------------------------------------

@@ -34,7 +34,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() {}
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms) {
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms,
+			int repetitions = 0)
+	{
 		cmd->execute();
 	}
 	//-------------------------------------------------------------------------

@@ -30,8 +30,10 @@ public:
 	 * invokes command, when given time passed by.
 	 * @param the command
 	 * @param the time to wait in ms
+	 * @param number of repetitions. -1 means infinite.
 	 */
-	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms) = 0;
+	virtual void invokeLater(sambag::com::ICommand::Ptr cmd,
+			long ms, int repetitions = 0) = 0;
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() = 0;
 	//-------------------------------------------------------------------------

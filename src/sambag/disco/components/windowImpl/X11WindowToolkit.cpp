@@ -71,6 +71,7 @@ namespace { // thread / timer stuff
 	void timerThreadClbk() {
 		while (threadsAreRunning) {
 			io.run();
+			io.reset();
 			boost::this_thread::sleep(boost::posix_time::millisec(10));
 		}
 	}
@@ -78,21 +79,46 @@ namespace { // thread / timer stuff
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::
-invokeLater(sambag::com::ICommand::Ptr cmd, long ms)
+invokeLater(sambag::com::ICommand::Ptr cmd, long ms, int repetitions)
 {
 	Timer *t = new Timer(io, boost::posix_time::millisec(ms));
 	toInvoke.insert( std::make_pair(t, cmd) );
-	t->async_wait(boost::bind(&timerCallback, boost::asio::placeholders::error, t));
+	t->async_wait(
+		boost::bind(&timerCallback,
+		boost::asio::placeholders::error,
+		t,
+		ms,
+		repetitions)
+	);
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::timerCallback(const boost::system::error_code&,
-		Timer *timer)
+		Timer *timer, long ms, int repetitions)
 {
 	ToInvoke::iterator it = toInvoke.find(timer);
 	SAMBAG_ASSERT(it!=toInvoke.end());
 	it->second->execute();
-	toInvoke.erase(it);
-	delete timer;
+	if (repetitions == 0 || !threadsAreRunning) {
+		toInvoke.erase(it);
+		delete timer;
+		return;
+	}
+	if (repetitions != -1)
+		--repetitions;
+	timer->expires_at(timer->expires_at() + boost::posix_time::millisec(ms));
+	timer->async_wait(
+		boost::bind(&timerCallback,
+		boost::asio::placeholders::error,
+		timer,
+		ms,
+		repetitions)
+	);
+}
+//-------------------------------------------------------------------------
+void X11WindowToolkit::closeAllTimer() {
+	BOOST_FOREACH(ToInvoke::value_type &v, toInvoke) {
+		v.first->cancel();
+	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::mainLoop() {
@@ -111,6 +137,7 @@ void X11WindowToolkit::mainLoop() {
 		X11WindowImpl::processInvocations();
 	}
 	threadsAreRunning = false;
+	closeAllTimer();
 	timerThread.join();
 	XCloseDisplay(display);
 	display = NULL;
