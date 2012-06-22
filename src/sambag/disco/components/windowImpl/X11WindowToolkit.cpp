@@ -98,12 +98,12 @@ void X11WindowToolkit::timerCallback(const boost::system::error_code&,
 	ToInvoke::iterator it = toInvoke.find(timer);
 	SAMBAG_ASSERT(it!=toInvoke.end());
 	it->second->execute();
-	if (repetitions == 0 || !threadsAreRunning) {
+	if (repetitions == 1 || !threadsAreRunning) {
 		toInvoke.erase(it);
 		delete timer;
 		return;
 	}
-	if (repetitions != -1)
+	if (repetitions > 1)
 		--repetitions;
 	timer->expires_at(timer->expires_at() + boost::posix_time::millisec(ms));
 	timer->async_wait(

@@ -94,6 +94,7 @@ void createACMEPane() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	win2 = sdc::FramedWindow::create(win);
+	win2->setTitle("ACME panel");
 	win2->setWindowBounds(Rectangle(110,100,430,280));
 
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
@@ -239,7 +240,7 @@ int main() {
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	getWindowToolkit()->invokeLater(TimedCommand::create(), 10000 /* 10 sec.*/, 10);
+	getWindowToolkit()->invokeLater(TimedCommand::create(), 1000 /* 1 sec.*/, 10);
 	{ // extra scope (bye message should occur after releasing all objs)
 		win = sdc::FramedWindow::create();
 		win->setWindowBounds(Rectangle(100,100,230,200));
