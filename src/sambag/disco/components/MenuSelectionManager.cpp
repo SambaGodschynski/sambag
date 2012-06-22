@@ -23,7 +23,6 @@ MenuSelectionManager:: MenuElements &path)
 	int i, c;
 	int currentSelectionCount = (int)selection.size();
 	int firstDifference = 0;
-	int pathSize = path.size();
 
 	for (i = 0, c = (int)path.size(); i < c; i++) {
 		if (i < currentSelectionCount && selection.at(i) == path[i])

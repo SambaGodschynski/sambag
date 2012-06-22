@@ -12,6 +12,8 @@
 #include "BasicMenuItemListener.hpp"
 #include <sambag/disco/components/Menu.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
+#include <sambag/disco/components/WindowToolkit.hpp>
+
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
 //=============================================================================
@@ -96,18 +98,38 @@ onMouseEntered(Menu::Ptr item)
 	setupPostTimer(item);
 }
 //-----------------------------------------------------------------------------
+struct CallLater : public sambag::com::ICommand {
+	typedef boost::shared_ptr<CallLater> Ptr;
+	Menu::Ptr item;
+	static void executeNow(Menu::Ptr item) {
+		MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
+		IMenuElement::MenuElements path = defaultManager.getSelectedPath();
+		if (path.size() > 0 && path[path.size() - 1] == item) {
+			//appendPath(path, menu.getPopupMenu());
+			path.push_back(item->getPopupMenu());
+			defaultManager.setSelectedPath(path);
+		}
+	}
+	virtual void execute() {
+		executeNow(item);
+	}
+	static Ptr create(Menu::Ptr item) {
+		Ptr neu(new CallLater());
+		neu->item = item;
+		return neu;
+	}
+};
+//-----------------------------------------------------------------------------
 template <class ComponentModell>
 void BasicMenuListener<ComponentModell>::
 setupPostTimer(Menu::Ptr item)
 {
-	// TODO: implement delayed callback
-	MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
-	IMenuElement::MenuElements path = defaultManager.getSelectedPath();
-	if (path.size() > 0 && path[path.size() - 1] == item) {
-		//appendPath(path, menu.getPopupMenu());
-		path.push_back(item->getPopupMenu());
-		defaultManager.setSelectedPath(path);
+	if (item->getDelay() == 0) {
+		CallLater::executeNow(item);
+		return;
 	}
+	CallLater::Ptr cmd = CallLater::create(item);
+	getWindowToolkit()->invokeLater(cmd, item->getDelay());
 }
 //-----------------------------------------------------------------------------
 template <class ComponentModell>
