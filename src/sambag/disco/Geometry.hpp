@@ -142,6 +142,10 @@ public:
 		geometry::add_point(max_corner(), diff);
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use width()
+	 * @return
+	 */
 	Coordinate getWidth() const {
 		Point2D result = max_corner();
 		geometry::subtract_point(result, min_corner());
@@ -149,20 +153,36 @@ public:
 
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use getSize()
+	 * @return
+	 */
 	Dimension getDimension() const {
 		return Dimension(getWidth(), getHeight());
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use height()
+	 * @return
+	 */
 	Coordinate getHeight() const {
 		Point2D result = max_corner();
 		geometry::subtract_point(result, min_corner());
 		return result.y();
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use width()
+	 * @param w
+	 */
 	void setWidth(const Coordinate &w) {
 		max_corner().x(min_corner().x() + w);
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use height()
+	 * @param h
+	 */
 	void setHeight(const Coordinate &h) {
 		max_corner().y(min_corner().y() + h);
 	}
@@ -197,6 +217,33 @@ public:
 	//-------------------------------------------------------------------------
 	bool operator!=(const Rectangle &b) const {
 		return !(*this==b);
+	}
+	///////////////////////////////////////////////////////////////////////////
+	// new getter setter versions
+	//-------------------------------------------------------------------------
+	Coordinate width() const {
+		Point2D result = max_corner();
+		geometry::subtract_point(result, min_corner());
+		return result.x();
+
+	}
+	//-------------------------------------------------------------------------
+	Dimension getSize() const {
+		return Dimension(getWidth(), getHeight());
+	}
+	//-------------------------------------------------------------------------
+	Coordinate height() const {
+		Point2D result = max_corner();
+		geometry::subtract_point(result, min_corner());
+		return result.y();
+	}
+	//-------------------------------------------------------------------------
+	void width(const Coordinate &w) {
+		max_corner().x(min_corner().x() + w);
+	}
+	//-------------------------------------------------------------------------
+	void height(const Coordinate &h) {
+		max_corner().y(min_corner().y() + h);
 	}
 };
 //=============================================================================

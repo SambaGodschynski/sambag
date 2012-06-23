@@ -29,7 +29,7 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
-	SAMBAG_STD_CREATOR_AND_GETTER($$$NAME$$$)
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR($$$NAME$$$)
 }; // $$$NAME$$$
 }}} // namespace(s)
 

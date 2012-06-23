@@ -16,7 +16,7 @@
 #include "RedrawManager.hpp"
 #include "RootPane.hpp"
 
-// (\w+\(.*?\)) -> fname()
+// (?s)(\w+\(.*?\)) -> fname()
 // /\*\*(\R.*?)*\*/\R -> doxycomment
 
 namespace sambag { namespace disco { namespace components {
