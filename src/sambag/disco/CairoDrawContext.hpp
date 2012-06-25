@@ -517,7 +517,10 @@ public:
 		return Rectangle(Point2D(x,y), Point2D(x1, y1));
 	}
 	//-------------------------------------------------------------------------
-	virtual IImageSurface::Ptr copyAreaToImage(const Rectangle &r) const;
+	virtual void copyTo(IDrawContext::Ptr cn) const;
+	//-------------------------------------------------------------------------
+	virtual void copyAreaTo(IDrawContext::Ptr cn,
+			const Rectangle &src, const Point2D &dst) const;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) {

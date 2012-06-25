@@ -478,13 +478,16 @@ void TestCairoDrawContext::testCopyAreaToImage() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
 	IDiscoFactory *fac = getDiscoFactory();
-	IImageSurface::Ptr surface = fac->createImageSurface(30*30, 30*10);
+	const int W = 30*30;
+	const int H = 30*4;
+	IImageSurface::Ptr surface = fac->createImageSurface(W, H);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
 	// fill bk
 	context->rect(Rectangle(0,0,1200,400));
 	context->setFillColor(ColorRGBA(1,1,1));
 	context->fill();
+	context->save(); // save origin
 	// draw src
 	drawMiniRect(context, ColorRGBA(1,0,0), 1);
 	context->translate(Point2D(0,15));
@@ -494,18 +497,29 @@ void TestCairoDrawContext::testCopyAreaToImage() {
 	context->translate(Point2D(0,-15));
 	drawMiniRect(context, ColorRGBA(1,1,0), 4);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>copyArea
-	IImageSurface::Ptr img = context->copyAreaToImage(Rectangle(0,0,30,30));
+	IImageSurface::Ptr img = getDiscoFactory()->createImageSurface(30,30);
+	IDrawContext::Ptr imageCn = getDiscoFactory()->createContext(img);
+	context->copyTo(imageCn);
+	context->setFont(context->getCurrentFont().setSize(22));
 	context->translate(Point2D(15,0));
-	for (int i=1; i<1200/30; ++i) {
+	context->setFillColor(ColorRGBA(0,0,0));
+	for (int i=0; i<(W/30-1); ++i) {
+		context->drawSurface(img);
+		context->moveTo(Point2D(9, 23));
+		std::stringstream ss;
+		ss << i;
+		context->textPath(ss.str());
+		context->fill();
+		context->translate(Point2D(30.,0));
+	}
+	context->copyAreaTo(imageCn, Rectangle(30,0,30,30), Point2D(0,0));
+	context->translate(Point2D(-W,30));
+	for (int i=0; i<W/30; ++i) {
 		context->drawSurface(img);
 		context->translate(Point2D(30.,0));
 	}
-	context->translate(Point2D(-1200,0));
-	img = context->copyAreaToImage(Rectangle(0,0,1200,30));
-	for (int i=1; i<400/30; ++i) {
-		context->translate(Point2D(0,30.));
-		context->drawSurface(img);
-	}
+	context->restore(); // reset origin
+	context->copyAreaTo(context, Rectangle(0,0,W,H/2), Point2D(0,H/2));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
 	testPng("testCopyAreaToImage", surface);
 }

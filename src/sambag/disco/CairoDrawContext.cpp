@@ -83,6 +83,10 @@ void CairoDrawContext::drawSurface(ISurface::Ptr _surface, Number opacity) {
 	} else {
 		cairo_paint_with_alpha(context, opacity);
 	}
+	// bug/curiosity:
+	// color settings has to be reseted.
+	setFillColor(getFillColor());
+	setStrokeColor(getStrokeColor());
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setFillPattern() {
@@ -102,17 +106,28 @@ void CairoDrawContext::setClip(const Rectangle &r) {
 	clip();
 }
 //-----------------------------------------------------------------------------
-IImageSurface::Ptr
-CairoDrawContext::copyAreaToImage(const Rectangle &r) const {
-	IImageSurface::Ptr img =
-		getDiscoFactory()->createImageSurface(r.getWidth(), r.getHeight());
+void CairoDrawContext::copyTo(IDrawContext::Ptr cn) const
+{
 	CairoDrawContext::Ptr dst =
-		boost::shared_dynamic_cast<CairoDrawContext>
-			(getDiscoFactory()->createContext(img));
-
+		boost::shared_dynamic_cast<CairoDrawContext>(cn);
+	SAMBAG_ASSERT(dst);
 	cairo_set_source_surface (dst->getCairoContext(),
-			surfaceRef->getCairoSurface(), r.x0().x(), r.x0().y());
+			surfaceRef->getCairoSurface(),
+			0, 0);
 	cairo_paint (dst->getCairoContext());
-	return img;
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
+		const Rectangle &src, const Point2D &dest) const
+{
+	CairoDrawContext::Ptr dstCn =
+		boost::shared_dynamic_cast<CairoDrawContext>(cn);
+	SAMBAG_ASSERT(dstCn);
+	cairo_t *cr = dstCn->getCairoContext();
+	cairo_set_source_surface (cr,
+			surfaceRef->getCairoSurface(),
+			dest.x() - src.x0().x(), dest.y() - src.x0().y());
+	cairo_rectangle (cr, dest.x(), dest.y(), src.width(), src.height());
+	cairo_fill (cr);
 }
 }} // namespaces
