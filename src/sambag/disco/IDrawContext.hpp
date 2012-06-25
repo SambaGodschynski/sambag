@@ -211,6 +211,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle pathExtends() const = 0;
 	//-------------------------------------------------------------------------
+	virtual IImageSurface::Ptr copyAreaToImage(const Rectangle &r) const = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) = 0;

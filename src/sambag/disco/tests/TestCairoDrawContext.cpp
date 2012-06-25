@@ -466,6 +466,50 @@ void TestCairoDrawContext::testGradient() {
 	testPng("testPattern", surface);
 }
 //-----------------------------------------------------------------------------
+void drawMiniRect(sambag::disco::IDrawContext::Ptr context,
+		const sambag::disco::ColorRGBA col, int num)
+{
+	context->setFillColor(col);
+	context->rect(Rectangle(0, 0, 15, 15));
+	context->fill();
+}
+//-----------------------------------------------------------------------------
+void TestCairoDrawContext::testCopyAreaToImage() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	IDiscoFactory *fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(30*30, 30*10);
+	IDrawContext::Ptr context = fac->createContext(surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
+	// fill bk
+	context->rect(Rectangle(0,0,1200,400));
+	context->setFillColor(ColorRGBA(1,1,1));
+	context->fill();
+	// draw src
+	drawMiniRect(context, ColorRGBA(1,0,0), 1);
+	context->translate(Point2D(0,15));
+	drawMiniRect(context, ColorRGBA(0,1,0), 2);
+	context->translate(Point2D(15,0));
+	drawMiniRect(context, ColorRGBA(0,0,1), 3);
+	context->translate(Point2D(0,-15));
+	drawMiniRect(context, ColorRGBA(1,1,0), 4);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>copyArea
+	IImageSurface::Ptr img = context->copyAreaToImage(Rectangle(0,0,30,30));
+	context->translate(Point2D(15,0));
+	for (int i=1; i<1200/30; ++i) {
+		context->drawSurface(img);
+		context->translate(Point2D(30.,0));
+	}
+	context->translate(Point2D(-1200,0));
+	img = context->copyAreaToImage(Rectangle(0,0,1200,30));
+	for (int i=1; i<400/30; ++i) {
+		context->translate(Point2D(0,30.));
+		context->drawSurface(img);
+	}
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testCopyAreaToImage", surface);
+}
+//-----------------------------------------------------------------------------
 void TestCairoDrawContext::testSetColor() {
 	using namespace sambag::disco;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png

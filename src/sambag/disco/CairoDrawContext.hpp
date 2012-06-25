@@ -516,6 +516,8 @@ public:
 		cairo_path_extents(context, &x, &y, &x1, &y1);
 		return Rectangle(Point2D(x,y), Point2D(x1, y1));
 	}
+	//-------------------------------------------------------------------------
+	virtual IImageSurface::Ptr copyAreaToImage(const Rectangle &r) const;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation
 	//-------------------------------------------------------------------------
 	virtual void translate( const Point2D &p0 ) {

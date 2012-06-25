@@ -32,6 +32,7 @@ private:
 	CPPUNIT_TEST( testPath );
 	CPPUNIT_TEST( testGradient );
 	CPPUNIT_TEST( testText );
+	CPPUNIT_TEST( testCopyAreaToImage );
 	CPPUNIT_TEST( testDash );
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -45,6 +46,7 @@ public:
 	void testLineStyle();
 	void testClip();
 	void testSetStrokeWidth();
+	void testCopyAreaToImage();
 	void testMatrixConv();
 	void testTransformation();
 	void testPath();

@@ -103,6 +103,28 @@ private:
 	 */
 	sambag::com::ArithmeticWrapper<bool> scrollUnderway;
 private:
+	//-------------------------------------------------------------------------
+	IDrawContext::Ptr getBackingStoreContext(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	/**
+	 * Ascends the <code>Viewport</code>'s parents stopping when
+	 * a component is found that returns
+	 * <code>true</code> to <code>isValidateRoot</code>.
+	 * If all the <code>Component</code>'s  parents are visible,
+	 * <code>validate</code> will then be invoked on it. The
+	 * <code>RepaintManager</code> is then invoked with
+	 * <code>removeInvalidComponent</code>. This
+	 * is the synchronous version of a <code>revalidate</code>.
+	 */
+	void validateView();
+	//-------------------------------------------------------------------------
+	/**  Used by the scrollRectToVisible method to determine the
+	 *  proper direction and amount to move by. The integer variables are named
+	 *  width, but this method is applicable to height also. The code assumes that
+	 *  parentWidth/childWidth are positive and childAt can be negative.
+	 */
+	Coordinate positionAdjustment(const Coordinate &parentWidth,
+			const Coordinate &childWidth, const Coordinate &childAt);
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Viewport)
@@ -176,13 +198,6 @@ public:
 	 * @return
 	 */
 	virtual Insets getInsets() const;
-	//-------------------------------------------------------------------------
-	/**
-	 * Returns an Insets object containing this Viewports inset values.
-	 * @param insets
-	 * @return
-	 */
-	virtual Insets getInsets(Insets insets) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the current scrolling mode.

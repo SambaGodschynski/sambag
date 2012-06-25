@@ -23,4 +23,10 @@ bool Graphics::hitClip(const Rectangle &r) const {
 	return boost::geometry::intersects<Rectangle::Base, Rectangle::Base>(r,
 			clipExtends());
 }
+//-----------------------------------------------------------------------------
+void Graphics::copyArea(const Rectangle &src, const Point2D &dst) {
+	IImageSurface::Ptr img = cn->copyAreaToImage(src);
+	cn->translate(dst);
+	cn->drawSurface(img, 1.0);
+}
 }}} // namespace(s)

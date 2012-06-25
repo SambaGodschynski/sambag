@@ -131,6 +131,9 @@ public: /*Interface impl.*/
 	virtual Rectangle textExtends(const std::string &str) const {
 		return cn->textExtends(str);
 	}
+	virtual IImageSurface::Ptr copyAreaToImage(const Rectangle &r) const {
+		return cn->copyAreaToImage(r);
+	}
 	virtual Path::Ptr copyPath() const { return cn->copyPath(); }
 	virtual Path::Ptr copyPathFlat() const { return cn->copyPathFlat(); }
 	virtual void appendPath(Path::Ptr path) { cn->appendPath(path); }
@@ -153,6 +156,8 @@ public:
 	void clearRect(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	bool hitClip(const Rectangle &r) const;
+	//-------------------------------------------------------------------------
+	void copyArea(const Rectangle &src, const Point2D &dst);
 }; // Graphics
 //=============================================================================
 /**

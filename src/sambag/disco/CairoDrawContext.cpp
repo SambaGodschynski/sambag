@@ -7,7 +7,8 @@
 
 #include "CairoDrawContext.hpp"
 #include "CairoSurface.hpp"
-
+#include <sambag/com/Common.hpp>
+#include "IDiscoFactory.hpp"
 namespace sambag { namespace disco {
 //=============================================================================
 //  Class CairoDrawContext:
@@ -99,5 +100,19 @@ void CairoDrawContext::setStrokePattern() {
 void CairoDrawContext::setClip(const Rectangle &r) {
 	rect(r);
 	clip();
+}
+//-----------------------------------------------------------------------------
+IImageSurface::Ptr
+CairoDrawContext::copyAreaToImage(const Rectangle &r) const {
+	IImageSurface::Ptr img =
+		getDiscoFactory()->createImageSurface(r.getWidth(), r.getHeight());
+	CairoDrawContext::Ptr dst =
+		boost::shared_dynamic_cast<CairoDrawContext>
+			(getDiscoFactory()->createContext(img));
+
+	cairo_set_source_surface (dst->getCairoContext(),
+			surfaceRef->getCairoSurface(), r.x0().x(), r.x0().y());
+	cairo_paint (dst->getCairoContext());
+	return img;
 }
 }} // namespaces
