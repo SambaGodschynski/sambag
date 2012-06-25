@@ -32,12 +32,12 @@ private:
 	//-------------------------------------------------------------------------
 	static void mainLoop();
 	//-------------------------------------------------------------------------
-	typedef boost::asio::deadline_timer Timer;
+	typedef boost::asio::deadline_timer TimerImpl;
 	typedef sambag::com::ICommand::Ptr CommandPtr;
-	typedef boost::unordered_map<Timer*, CommandPtr> ToInvoke;
+	typedef boost::unordered_map<TimerImpl*, Timer::Ptr> ToInvoke;
 	//-------------------------------------------------------------------------
 	static void timerCallback(const boost::system::error_code&,
-			Timer* timer, long ms, int repetitions);
+			TimerImpl* timer, long ms, int repetitions);
 	//-------------------------------------------------------------------------
 	static ToInvoke toInvoke;
 	//-------------------------------------------------------------------------
@@ -56,8 +56,9 @@ protected:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms,
-			int repetitions = 0);
+	virtual void startTimer(Timer::Ptr tm);
+	//-------------------------------------------------------------------------
+	virtual void stopTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------
 	static X11WindowToolkit * getToolkit();
 	//-------------------------------------------------------------------------

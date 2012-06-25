@@ -56,8 +56,6 @@ private:
 	//-------------------------------------------------------------------------
 	void dispatchAddEvents(AComponent::Ptr comp);
 	//--------------------------------------------------------------------------
-	void addComponent(AComponent::Ptr comp, int index = -1);
-	//--------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<int> descendantsCount;
 	//-------------------------------------------------------------------------
 	/**
@@ -80,6 +78,8 @@ private:
 	void trackMouseEnterEvents(AComponentPtr target,
 			const events::MouseEvent &ev);
 protected:
+	//--------------------------------------------------------------------------
+	void addComponent(AComponent::Ptr comp, int index = -1);
 	//-------------------------------------------------------------------------
 	virtual void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------

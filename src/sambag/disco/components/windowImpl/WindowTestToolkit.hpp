@@ -34,10 +34,11 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void startMainLoop() {}
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(sambag::com::ICommand::Ptr cmd, long ms,
-			int repetitions = 0)
-	{
-		cmd->execute();
+	virtual void startTimer( Timer::Ptr tm ) {
+	}
+	//-------------------------------------------------------------------------
+	virtual void stopTimer( Timer::Ptr tm ) {
+
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create() {

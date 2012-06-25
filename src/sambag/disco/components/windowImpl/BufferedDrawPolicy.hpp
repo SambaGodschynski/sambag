@@ -31,6 +31,8 @@ protected:
 	//-------------------------------------------------------------------------
 	void processDraw(components::RootPane::Ptr root, ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
+	void clearBuffer();
+	//-------------------------------------------------------------------------
 	void init(components::RootPane::Ptr root, ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
 	void reinit(components::RootPane::Ptr root, ISurface::Ptr surface) {
@@ -54,6 +56,15 @@ public:
 }; // X11Window
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
+inline void BufferedDrawPolicy::clearBuffer() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext(bff);
+	cn->setFillColor(ColorRGBA());
+	cn->rect(bff->getSize());
+	cn->fill();
+}
+//-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
 		ISurface::Ptr surface)
 {
@@ -62,6 +73,7 @@ inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
 	if (needUpdate) {
+		clearBuffer();
 		root->draw(root->getDrawContext());
 		needUpdate=false;
 		return;

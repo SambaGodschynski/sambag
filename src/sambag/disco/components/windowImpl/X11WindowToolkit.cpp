@@ -78,11 +78,11 @@ namespace { // thread / timer stuff
 }
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-void X11WindowToolkit::
-invokeLater(sambag::com::ICommand::Ptr cmd, long ms, int repetitions)
-{
-	Timer *t = new Timer(io, boost::posix_time::millisec(ms));
-	toInvoke.insert( std::make_pair(t, cmd) );
+void X11WindowToolkit::startTimer(Timer::Ptr tm) {
+	Timer::TimeType ms = tm->getDelay();
+	int repetitions = tm->getNumRepetitions();
+	TimerImpl *t = new TimerImpl(io, boost::posix_time::millisec(ms));
+	toInvoke.insert( std::make_pair(t, tm) );
 	t->async_wait(
 		boost::bind(&timerCallback,
 		boost::asio::placeholders::error,
@@ -90,20 +90,26 @@ invokeLater(sambag::com::ICommand::Ptr cmd, long ms, int repetitions)
 		ms,
 		repetitions)
 	);
+	tm->__setRunningByToolkit_(true);
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
+
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::timerCallback(const boost::system::error_code&,
-		Timer *timer, long ms, int repetitions)
+		TimerImpl *timer, long ms, int repetitions)
 {
 	ToInvoke::iterator it = toInvoke.find(timer);
 	SAMBAG_ASSERT(it!=toInvoke.end());
-	it->second->execute();
-	if (repetitions == 1 || !threadsAreRunning) {
+	it->second->timedExpired();
+	if (repetitions == 0 || !threadsAreRunning) {
+		it->second->__setRunningByToolkit_(false);
 		toInvoke.erase(it);
 		delete timer;
 		return;
 	}
-	if (repetitions > 1)
+	if (repetitions > 0)
 		--repetitions;
 	timer->expires_at(timer->expires_at() + boost::posix_time::millisec(ms));
 	timer->async_wait(

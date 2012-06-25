@@ -12,6 +12,8 @@
 #include "AContainer.hpp"
 #include "IBorder.hpp"
 #include "Forward.hpp"
+#include <sambag/disco/components/Timer.hpp>
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
@@ -25,10 +27,81 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------
-	enum ScrollMode {};
+	enum ScrollMode {
+		SIMPLE_SCROLL_MODE,
+		BLIT_SCROLL_MODE,
+		BACKINGSTORE_SCROLL_MODE
+	};
 protected:
 	//-------------------------------------------------------------------------
+	/**
+	 * True when the viewport dimensions have been determined.
+	 * The default is false.
+	 */
+	sambag::com::ArithmeticWrapper<bool> isViewSizeSet;
+	//-------------------------------------------------------------------------
+	/**
+	 * The last <code>viewPosition</code> that we've painted, so we know how
+	 * much of the backing store image is valid.
+	 */
+	Point2D lastPaintPosition;
+	//-------------------------------------------------------------------------
+	/** The view image used for a backing store. */
+	IImageSurface::Ptr backingStoreImage;
+	//-------------------------------------------------------------------------
 	Viewport();
+	//-------------------------------------------------------------------------
+	ScrollMode scrollMode;
+private:
+	//-------------------------------------------------------------------------
+	/**
+	 * This is set to true in <code>setViewPosition</code>
+	 * if doing a window blit and the viewport is obscured.
+	 */
+	bool repaintAll;
+	//-------------------------------------------------------------------------
+	/**
+	 * This is set to true in paint, if <code>repaintAll</code>
+	 * is true and the clip rectangle does not match the bounds.
+	 * If true, and scrolling happens the
+	 * repaint manager is not cleared which then allows for the repaint
+	 * previously invoked to succeed.
+	 */
+	bool waitingForRepaint;
+	//-------------------------------------------------------------------------
+	/**
+	 * Instead of directly invoking repaint, a <code>Timer</code>
+	 * is started and when it fires, repaint is invoked.
+	 */
+	Timer::Ptr repaintTimer;
+	//-------------------------------------------------------------------------
+	/**
+	 * Set to true in paintView when paint is invoked.
+	 */
+	bool inBlitPaint;
+	//-------------------------------------------------------------------------
+	/**
+	 * Whether or not a valid view has been installed.
+	 */
+	bool hasHadValidView;
+	//-------------------------------------------------------------------------
+	/**
+	 * The <code>scrollUnderway</code> flag is used for components like
+	 * <code>List</code>.  When the downarrow key is pressed on a
+	 * <code>List</code> and the selected
+	 * cell is the last in the list, the <code>scrollpane</code> autoscrolls.
+	 * Here, the old selected cell needs repainting and so we need
+	 * a flag to make the viewport do the optimized painting
+	 * only when there is an explicit call to
+	 * <code>setViewPosition(Point)</code>.
+	 * When <code>setBounds</code> is called through other routes,
+	 * the flag is off and the view repaints normally.  Another approach
+	 * would be to remove this from the <code>JViewport</code>
+	 * class and have the <code>JList</code> manage this case by using
+	 * <code>setBackingStoreEnabled</code>.  The default is
+	 * <code>false</code>.
+	 */
+	sambag::com::ArithmeticWrapper<bool> scrollUnderway;
 private:
 public:
 	//-------------------------------------------------------------------------
@@ -40,7 +113,7 @@ protected:
 	 * @param child
 	 * @param index
 	 */
-	virtual void addImpl(AComponentPtr child, int index);
+	virtual void addComponent(AComponentPtr child, int index = -1);
 	//-------------------------------------------------------------------------
 	/**
 	 * Computes the parameters for a blit where the backing store image

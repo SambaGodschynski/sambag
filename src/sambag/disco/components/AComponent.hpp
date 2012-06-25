@@ -831,6 +831,8 @@ protected:
 	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
 	//-------------------------------------------------------------------------
+	virtual void setOpaque(bool b) {}
+	//-------------------------------------------------------------------------
 	/**
 	 * converts component location to screen location.
 	 * @param p

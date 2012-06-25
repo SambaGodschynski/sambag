@@ -40,6 +40,10 @@ protected:
 	MenuItem();
 public:
 	//-------------------------------------------------------------------------
+	virtual bool isToplevelMenu() const {
+		return false;
+	}
+	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return AButton<Modell>::toString();
 	}

@@ -224,30 +224,51 @@ void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
 	std::cout<<ev.getSrc().getSelectedPath()<<std::endl;
 }
 
-struct TimedCommand : sambag::com::ICommand {
-	typedef boost::shared_ptr<TimedCommand> Ptr;
-	static Ptr create() {
-		return Ptr(new TimedCommand());
-	}
-	virtual void execute() {
-		static int i=0;
-		std::cout<<"timed callback(" << ++i << ")" << std::flush << std::endl;
-	}
-};
+void timedCallbackInf(void *src, const sdc::TimerEvent &ev) {
+	static int i=0;
+	std::cout<<"timed callbackInf(" << ++i << ")" << std::flush << std::endl;
+}
+
+void timedCallback5(void *src, const sdc::TimerEvent &ev) {
+	static int i=0;
+	std::cout<<"timed callback5(" << ++i << ")" << std::flush << std::endl;
+}
+
+void timedCallbackOnce(void *src, const sdc::TimerEvent &ev) {
+	std::cout<<"timed once" << std::flush << std::endl;
+}
+
+void initTimer() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	Timer::Ptr timer = Timer::create(10000);
+	timer->setNumRepetitions(-1);
+	timer->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
+	timer->start();
+
+	Timer::Ptr timer2 = Timer::create(1000);
+	timer2->setNumRepetitions(4);
+	timer2->EventSender<TimerEvent>::addEventListener(&timedCallback5);
+	timer2->start();
+
+	Timer::Ptr timer3 = Timer::create(500);
+	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
+	timer3->start();
+}
 
 int main() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	getWindowToolkit()->invokeLater(TimedCommand::create(), 1000 /* 1 sec.*/, 10);
+	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win = sdc::FramedWindow::create();
 		win->setWindowBounds(Rectangle(100,100,230,200));
-		win->setTitle("Messerschmitz");
+		win->setTitle("Messerschmitz 1.0");
 
 		Button::Ptr btn = Button::create();
-		btn->setText("hinzufügen und belassen");
+		btn->setText("open ACME Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
 		btn->getFont().setFontFace("monospace");
 		win->getRootPane()->add(btn);
