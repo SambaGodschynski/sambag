@@ -15,12 +15,12 @@ namespace sambag { namespace disco { namespace components {
 //  Class ViewportLayout
 //=============================================================================
 //-----------------------------------------------------------------------------
-ViewportLayout::Ptr ViewportLayout::SHARED_INSTANCE;
+ViewportLayout::Ptr ViewportLayout::__sharedInstance;
 //-----------------------------------------------------------------------------
 ViewportLayout::Ptr ViewportLayout::getSharedInstance() {
-	if (!SHARED_INSTANCE)
-		SHARED_INSTANCE = create();
-	return SHARED_INSTANCE;
+	if (!__sharedInstance)
+		__sharedInstance = create();
+	return __sharedInstance;
 }
 //-----------------------------------------------------------------------------
 ViewportLayout::ViewportLayout() {

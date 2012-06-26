@@ -58,6 +58,9 @@ RootPane::Ptr RootPane::create(ISurface::Ptr surface)
 }
 //-----------------------------------------------------------------------------
 void RootPane::draw(IDrawContext::Ptr cn) {
+	if (!cn) {
+		return;
+	}
 	cn->setFillColor(getBackground());
 	cn->rect(getBounds());
 	cn->fill();

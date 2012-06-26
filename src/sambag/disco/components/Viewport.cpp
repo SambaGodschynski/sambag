@@ -9,6 +9,8 @@
 #include "ui/ALookAndFeel.hpp"
 #include "RedrawManager.hpp"
 #include <sambag/disco/IDiscoFactory.hpp>
+#include "Graphics.hpp"
+#include "ViewportLayout.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -19,6 +21,14 @@ Viewport::Viewport() {
 	setName("Viewport");
 	setLayout(createLayoutManager());
 	setOpaque(true);
+	lastPaintPosition = NULL_POINT2D;
+}
+//-----------------------------------------------------------------------------
+Viewport::~Viewport() {
+	if (redrawTimer) {
+		if (redrawTimer->isRunning())
+			redrawTimer->stop();
+	}
 }
 //----------------------------------------------------------------------------
 ui::AComponentUIPtr Viewport::getComponentUI(ui::ALookAndFeelPtr laf) const
@@ -30,26 +40,77 @@ void Viewport::addComponent(AComponentPtr child, int index) {
 	setView(child);
 }
 //-----------------------------------------------------------------------------
-bool Viewport::computeBlit(int dx, int dy, const Point2D & blitFrom,
-		const Point2D & blitTo, const Dimension & blitSize,
-		const Rectangle & blitPaint)
+bool Viewport::computeBlit(const Coordinate &dx, const Coordinate &dy,
+		Point2D & blitFrom, Point2D & blitTo,
+		Dimension & blitSize, Rectangle & blitPaint)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	Coordinate dxAbs = std::abs(dx);
+	Coordinate dyAbs = std::abs(dy);
+	Dimension extentSize = getExtentSize();
+
+	if ((dx == 0) && (dy != 0) && (dyAbs < extentSize.height())) {
+		if (dy < 0) {
+			blitFrom.y(-dy);
+			blitTo.y(0);
+			blitPaint.x0().y(extentSize.height() + dy);
+		} else {
+			blitFrom.y(0);
+			blitTo.y(dy);
+			blitPaint.x0().y(0);
+		}
+
+		blitPaint.x0().x(0); blitFrom.x(0); blitTo.x(0);
+
+		blitSize.width(extentSize.width());
+		blitSize.height(extentSize.height() - dyAbs);
+
+		blitPaint.width(extentSize.width());
+		blitPaint.height(dyAbs);
+
+		return true;
+	}
+	else if ((dy == 0) && (dx != 0) && (dxAbs < extentSize.width())) {
+		if (dx < 0) {
+			blitFrom.x(-dx);
+			blitTo.x(0);
+			blitPaint.x0().x(extentSize.width() + dx);
+		} else {
+			blitFrom.x(0);
+			blitTo.x(dx);
+			blitPaint.x0().x(0);
+		}
+
+		blitPaint.x0().y(0); blitFrom.y(0); blitTo.y(0);
+
+		blitSize.width(extentSize.width() - dxAbs);
+		blitSize.height(extentSize.height());
+
+		blitPaint.width(dxAbs);
+		blitPaint.height(extentSize.height());
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 //-----------------------------------------------------------------------------
 ALayoutManagerPtr Viewport::createLayoutManager() {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return ALayoutManagerPtr();
+	return ViewportLayout::getSharedInstance();
 }
 //-----------------------------------------------------------------------------
-void Viewport::fireStateChanged() const {
-	SAMBA_LOG_NOT_YET_IMPL();
+void Viewport::fireStateChanged() {
+	EventSender<ViewportChanged>::notifyListeners(
+			this,
+			ViewportChanged(*this)
+	);
+}
+//-----------------------------------------------------------------------------
+bool Viewport::needsRepaintAfterBlit() {
+	return false;
 }
 //-----------------------------------------------------------------------------
 bool Viewport::isPaintingOrigin() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return scrollMode == BACKINGSTORE_SCROLL_MODE;
 }
 //-----------------------------------------------------------------------------
 std::string Viewport::paramString() const {
@@ -58,8 +119,7 @@ std::string Viewport::paramString() const {
 }
 //-----------------------------------------------------------------------------
 Dimension Viewport::getExtentSize() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_DIMENSION;
+	return getSize();
 }
 //-----------------------------------------------------------------------------
 Insets Viewport::getInsets() const {
@@ -75,19 +135,46 @@ IDrawContext::Ptr Viewport::getBackingStoreContext(IDrawContext::Ptr cn) {
 	return bsg;
 }
 //-----------------------------------------------------------------------------
+void Viewport::drawViaBackingStore(IDrawContext::Ptr cn) {
+	IDrawContext::Ptr bsc = getBackingStoreContext(cn);
+	Super::draw(bsc);
+	cn->drawSurface(backingStoreImage);
+}
+//-----------------------------------------------------------------------------
+void Viewport::drawViaBackingStore(IDrawContext::Ptr cn,
+		const Rectangle &oClip)
+{
+	IDrawContext::Ptr bsc = getBackingStoreContext(cn);
+	Super::draw(bsc);
+	cn->setClip(oClip);
+	cn->drawSurface(backingStoreImage);
+}
+//-----------------------------------------------------------------------------
 AComponentPtr Viewport::getView() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return AComponentPtr();
+	return (getComponentCount() > 0) ? getComponent(0) : AComponentPtr();
 }
 //-----------------------------------------------------------------------------
 Viewport::ScrollMode Viewport::getScrollMode() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return (ScrollMode)0;
+	return scrollMode;
 }
 //-----------------------------------------------------------------------------
+Point2D Viewport::getViewLocation() const {
+	AComponentPtr view = getView();
+	if (view)
+		return view->getLocation();
+	return Point2D(0, 0);
+ }
+//-----------------------------------------------------------------------------
 Point2D Viewport::getViewPosition() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_POINT2D;
+	AComponentPtr view = getView();
+	if (view) {
+		Point2D p = view->getLocation();
+		p.x(-p.x());
+		p.y(-p.y());
+		return p;
+	} else {
+		return Point2D(0, 0);
+	}
 }
 //-----------------------------------------------------------------------------
 Rectangle Viewport::getViewRect() const {
@@ -96,24 +183,197 @@ Rectangle Viewport::getViewRect() const {
 }
 //-----------------------------------------------------------------------------
 Dimension Viewport::getViewSize() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_DIMENSION;
+	AComponentPtr view = getView();
+	if (!view) {
+		return Dimension(0, 0);
+	} else if (isViewSizeSet) {
+		return view->getSize();
+	} else {
+		return view->getPreferredSize();
+	}
 }
 //-----------------------------------------------------------------------------
-void Viewport::paint(IDrawContext::Ptr cn) {
-	SAMBA_LOG_NOT_YET_IMPL();
+void Viewport::redrawTimerClbk(void *src, const TimerEvent &ev) {
+	// waitingForRepaint will be false if a paint came down
+	// with the complete clip rect, in which case we don't
+	// have to cause a repaint.
+	if (waitingForRepaint) {
+		Super::redraw();
+	}
+}
+//-----------------------------------------------------------------------------
+Timer::Ptr Viewport::createRedrawTimer() {
+	Timer::Ptr timer = Timer::create(300);
+	timer->EventSender<TimerEvent>::addTrackedEventListener(
+		boost::bind(&Viewport::redrawTimerClbk, this, _1, _2),
+		getPtr()
+	);
+	return timer;
+}
+//-----------------------------------------------------------------------------
+void Viewport::draw(IDrawContext::Ptr cn) {
+	Coordinate width = getWidth();
+	Coordinate height = getHeight();
+
+	if ((width <= 0) || (height <= 0)) {
+		return;
+	}
+
+	if (inBlitPaint) {
+		// We invoked paint as part of copyArea cleanup, let it through.
+		Super::draw(cn);
+		return;
+	}
+
+	if (repaintAll) {
+		repaintAll = false;
+		Rectangle clipB = cn->clipExtends();
+		if (clipB.width() < getWidth() || clipB.height() < getHeight()) {
+			waitingForRepaint = true;
+			if (!redrawTimer) {
+				redrawTimer = createRedrawTimer();
+			}
+			redrawTimer->stop();
+			redrawTimer->start();
+			// We really don't need to paint, a future repaint will
+			// take care of it, but if we don't we get an ugly flicker.
+		} else {
+			if (redrawTimer) {
+				redrawTimer->stop();
+			}
+			waitingForRepaint = false;
+		}
+	} else if (waitingForRepaint) {
+		// Need a complete repaint before resetting waitingForRepaint
+		Rectangle clipB = cn->clipExtends();
+		if (clipB.width() >= getWidth() && clipB.height() >= getHeight()) {
+			waitingForRepaint = false;
+			redrawTimer->stop();
+		}
+	}
+
+	if (!backingStore || isBlitting() || !getView()) {
+		Super::draw(cn);
+		lastPaintPosition = getViewLocation();
+		return;
+	}
+
+	// If the view is smaller than the viewport and we are not opaque
+	// (that is, we won't paint our background), we should set the
+	// clip. Otherwise, as the bounds of the view vary, we will
+	// blit garbage into the exposed areas.
+	const Rectangle &viewBounds = getView()->getBounds();
+	if (!isOpaque()) {
+		Graphics g(cn);
+		g.clipRect(Rectangle(0, 0, viewBounds.width(), viewBounds.height()));
+	}
+
+	if (!backingStoreImage) {
+		// Backing store is enabled but this is the first call to paint.
+		// Create the backing store, paint it and then copy to g.
+		// The backing store image will be created with the size of
+		// the viewport. We must make sure the clip region is the
+		// same size, otherwise when scrolling the backing image
+		// the region outside of the clipped region will not be painted,
+		// and result in empty areas.
+		backingStoreImage =
+				getDiscoFactory()->createImageSurface(width, height);
+		Rectangle clip = cn->clipExtends();
+		if (clip.width() != width || clip.height() != height) {
+			if (!isOpaque()) {
+				cn->setClip(Rectangle(0, 0,
+						std::min(viewBounds.width(), width),
+						std::min(viewBounds.height(), height)));
+			} else {
+				cn->setClip(Rectangle(0, 0, width, height));
+			}
+			drawViaBackingStore(cn, clip);
+		} else {
+			drawViaBackingStore(cn);
+		}
+	} else {
+		if (!scrollUnderway || lastPaintPosition == getViewLocation()) {
+			// No scrolling happened: repaint required area via backing store.
+			drawViaBackingStore(cn);
+		} else {
+			// The image was scrolled. Manipulate the backing store and flush it to g.
+			Point2D blitFrom;
+			Point2D blitTo;
+			Dimension blitSize;
+			Rectangle blitPaint;
+
+			Point2D newLocation = getViewLocation();
+			Coordinate dx = newLocation.x() - lastPaintPosition.x();
+			Coordinate dy = newLocation.y() - lastPaintPosition.y();
+			bool canBlit = computeBlit(dx, dy, blitFrom, blitTo, blitSize,
+					blitPaint);
+			if (!canBlit) {
+				// The image was either moved diagonally or
+				// moved by more than the image size: paint normally.
+				drawViaBackingStore(cn);
+			} else {
+				Coordinate bdx = blitTo.x() - blitFrom.x();
+				Coordinate bdy = blitTo.y() - blitFrom.y();
+
+				// Move the relevant part of the backing store.
+				Rectangle clip = cn->clipExtends();
+				// We don't want to inherit the clip region when copying
+				// bits, if it is inherited it will result in not moving
+				// all of the image resulting in garbage appearing on
+				// the screen.
+				cn->setClip(Rectangle(0, 0, width, height));
+				IDrawContext::Ptr bsc = getBackingStoreContext(cn);
+				Graphics bsg(bsc);
+				bsg.copyArea(Rectangle(blitFrom.x(), blitFrom.y(), blitSize.width(),
+						blitSize.height()), Point2D(bdx, bdy));
+
+				cn->setClip(Rectangle(clip.x0().x(),
+						clip.x0().y(), clip.width(), clip.height()));
+				// Draw the rest of the view; the part that has just been exposed.
+				Rectangle r; // = viewBounds.intersection(blitPaint);
+				boost::geometry::intersection<Rectangle::Base,
+				Rectangle::Base, Rectangle::Base>(viewBounds,blitPaint,r);
+				bsg.setClip(r);
+				Super::draw(bsc);
+
+				// Copy whole of the backing store to g.
+				cn->drawSurface(backingStoreImage);
+			}
+		}
+	}
+	lastPaintPosition = getViewLocation();
+	scrollUnderway = false;
+}
+//-----------------------------------------------------------------------------
+bool Viewport::isBlitting() const {
+	AComponentPtr view = getView();
+	return (scrollMode == BLIT_SCROLL_MODE) && view->isOpaque();
 }
 //-----------------------------------------------------------------------------
 void Viewport::remove(AComponentPtr child) {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
-void Viewport::repaint(int x, int y, int w, int h) {
-	SAMBA_LOG_NOT_YET_IMPL();
+void Viewport::redraw(const Rectangle &r) {
+	AContainerPtr parent = getParent();
+	if(parent) {
+		Rectangle d = r;
+		d.translate(Point2D(getX(), getY()));
+		parent->redraw(d);
+	}
+	else
+		Super::redraw(r);
 }
 //-----------------------------------------------------------------------------
-void Viewport::reshape(int x, int y, int w, int h) {
-	SAMBA_LOG_NOT_YET_IMPL();
+void Viewport::setBounds(const Rectangle &r) {
+	bool sizeChanged = (getWidth() != r.width()) || (getHeight() != r.height());
+	if (sizeChanged) {
+		backingStoreImage.reset();
+	}
+	Super::setBounds(r);
+	if (sizeChanged) {
+		fireStateChanged();
+	}
 }
 //-----------------------------------------------------------------------------
 void Viewport::scrollRectToVisible(const Rectangle & contentRect) {
@@ -264,32 +524,212 @@ void Viewport::setBorder(IBorder::Ptr border) {
 }
 //-----------------------------------------------------------------------------
 void Viewport::setExtentSize(const Dimension & newExtent) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Dimension oldExtent = getExtentSize();
+	if (newExtent!=oldExtent) {
+		setSize(newExtent);
+		fireStateChanged();
+	}
 }
 //-----------------------------------------------------------------------------
 void Viewport::setScrollMode(ScrollMode mode) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	scrollMode = mode;
+	backingStore = mode == BACKINGSTORE_SCROLL_MODE;
 }
 //-----------------------------------------------------------------------------
 void Viewport::setView(AComponentPtr view) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	/* Remove the viewport's existing children, if any.
+	 * Note that removeAll() isn't used here because it
+	 * doesn't call remove()
+	 */
+	size_t n = getComponentCount();
+	for (size_t i = n - 1; i >= 0; --i) {
+		remove(getComponent(i));
+	}
+
+	isViewSizeSet = false;
+
+	if (view) {
+		Super::add(view);
+	}
+
+	if (hasHadValidView) {
+		// Only fire a change if a view has been installed.
+		fireStateChanged();
+	} else if (view) {
+		hasHadValidView = true;
+	}
+	revalidate();
+	Super::redraw();
 }
 //-----------------------------------------------------------------------------
 void Viewport::setViewPosition(const Point2D & p) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	AComponentPtr view = getView();
+	if (!view) {
+		return;
+	}
+
+	Coordinate oldX, oldY, x = p.x(), y = p.y();
+
+	/* Collect the old x,y values for the views location
+	 * and do the song and dance to avoid allocating
+	 * a Rectangle object if we don't have to.
+	 */
+
+	oldX = view->getX();
+	oldY = view->getY();
+
+	/* The view scrolls in the opposite direction to mouse
+	 * movement.
+	 */
+	Coordinate newX = -x;
+	Coordinate newY = -y;
+
+	if ((oldX != newX) || (oldY != newY)) {
+		if (!waitingForRepaint && isBlitting() && canUseWindowBlitter()) {
+			RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+			Rectangle dirty = rm->getDirtyRegion(view);
+			//if (dirty.contains(jview.getVisibleRect())) {
+			if (boost::geometry::within<Rectangle::Base, Rectangle::Base>
+				(dirty, view->getVisibleRect())) {
+				IDrawContext::Ptr cn = view->getDrawContext();
+				flushViewDirtyRegion(cn, dirty);
+				view->setLocation(Point2D(newX, newY));
+				cn->setClip(Rectangle(0, 0, getWidth(),
+						std::min(getHeight(), view->getHeight())));
+				// Repaint the complete component if the blit succeeded
+				// and needsRepaintAfterBlit returns true.
+				repaintAll = (windowBlitDraw(cn) && needsRepaintAfterBlit());
+				rm->markCompletelyClean(getParent());
+				rm->markCompletelyClean(getPtr());
+				rm->markCompletelyClean(view);
+
+			} else {
+				// The visible region is dirty, no point in doing copyArea
+				view->setLocation(Point2D(newX, newY));
+				repaintAll = false;
+			}
+		} else {
+			scrollUnderway = true;
+			// This calls setBounds(), and then repaint().
+			view->setLocation(Point2D(newX, newY));
+			repaintAll = false;
+		}
+		// we must validate the hierarchy to not break the hw/lw mixing
+		revalidate();
+		fireStateChanged();
+	}
 }
 //-----------------------------------------------------------------------------
 void Viewport::setViewSize(const Dimension & newSize) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	AComponent::Ptr view = getView();
+		if (view) {
+			Dimension oldSize = view->getSize();
+			if (newSize != oldSize) {
+				// scrollUnderway will be true if this is invoked as the
+				// result of a validate and setViewPosition was previously
+				// invoked.
+				scrollUnderway = false;
+				view->setSize(newSize);
+				isViewSizeSet = true;
+				fireStateChanged();
+			}
+		}
 }
 //-----------------------------------------------------------------------------
 Dimension Viewport::toViewCoordinates(const Dimension & size) const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_DIMENSION;
+	return size;
 }
 //-----------------------------------------------------------------------------
-Point2D Viewport::toViewCoordinates(Point2D p) const {
+Point2D Viewport::toViewCoordinates(const Point2D &p) const {
+	return p;
+}
+//-----------------------------------------------------------------------------
+void Viewport::flushViewDirtyRegion(IDrawContext::Ptr cn,
+		Rectangle &dirty)
+{
+	Graphics g(cn);
+	AComponentPtr view = getView();
+	if (dirty.width() > 0 && dirty.height() > 0) {
+		dirty.x0().x((view->getX()));
+		dirty.x0().y((view->getY()));
+		Rectangle clip = g.clipExtends();
+		g.clipRect(Rectangle(dirty.x0().x(),
+				dirty.x0().y(), dirty.width(), dirty.height()));
+		clip = cn->clipExtends();
+		// Only paint the dirty region if it is visible.
+		if (clip.width() > 0 && clip.height() > 0) {
+			drawView(cn);
+		}
+	}
+}
+//-----------------------------------------------------------------------------
+bool Viewport::windowBlitDraw(IDrawContext::Ptr cn) {
+	Coordinate width = getWidth();
+	Coordinate height = getHeight();
+
+	if ((width == 0) || (height == 0)) {
+		return false;
+	}
+
+	bool retValue;
+	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	AComponentPtr view = getView();
+
+	if (lastPaintPosition == NULL_POINT2D
+			|| lastPaintPosition == getViewLocation()) {
+		drawView(cn);
+		retValue = false;
+	} else {
+		// The image was scrolled. Manipulate the backing store and flush
+		// it to g.
+		Point2D blitFrom;
+		Point2D blitTo;
+		Dimension blitSize;
+		Rectangle blitPaint;
+
+		Point2D newLocation = getViewLocation();
+		Coordinate dx = newLocation.x() - lastPaintPosition.x();
+		Coordinate dy = newLocation.y() - lastPaintPosition.y();
+		bool canBlit = computeBlit(dx, dy, blitFrom, blitTo, blitSize,
+				blitPaint);
+		if (!canBlit) {
+			drawView(cn);
+			retValue = false;
+		} else {
+			// Prepare the rest of the view; the part that has just been
+			// exposed.
+			Rectangle r; // = view.getBounds().intersection(blitPaint);
+			boost::geometry::intersection<Rectangle::Base, Rectangle::Base,
+			Rectangle::Base>(view->getBounds(), blitPaint, r);
+			r.x0().x( r.x0().x() - view->getX() );
+			r.x0().y( r.x0().y() - view->getY() );
+
+			blitDoubleBuffered(view, cn, r.x0().x(), r.x0().y(), r.width(), r.height(),
+					blitFrom.x(), blitFrom.y(), blitTo.x(), blitTo.y(), blitSize.width(),
+					blitSize.height());
+			retValue = true;
+		}
+	}
+	lastPaintPosition = getViewLocation();
+	return retValue;
+}
+//-----------------------------------------------------------------------------
+void Viewport::blitDoubleBuffered(AComponentPtr view, IDrawContext::Ptr cn,
+		const Coordinate &clipX, const Coordinate &clipY,
+		const Coordinate &clipW, const Coordinate &clipH,
+		const Coordinate &blitFromX, const Coordinate &blitFromY,
+		const Coordinate &blitToX, const Coordinate &blitToY,
+		const Coordinate &blitW, const Coordinate &blitH)
+{
 	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_POINT2D;
+}
+//-----------------------------------------------------------------------------
+void Viewport::drawView(IDrawContext::Ptr cn) {
+	SAMBA_LOG_NOT_YET_IMPL();
+}
+//-----------------------------------------------------------------------------
+bool Viewport::canUseWindowBlitter() {
+	SAMBA_LOG_NOT_YET_IMPL();
+	return false;
 }
 }}} // namespace(s)

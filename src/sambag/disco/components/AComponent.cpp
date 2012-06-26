@@ -972,4 +972,29 @@ Font & AComponent::getFont() {
 void AComponent::printComponentTree(std::ostream &ss) const {
 	ss << toString() << std::endl;
 }
+//-----------------------------------------------------------------------------
+void AComponent::computeVisibleRect(AComponent::Ptr c, Rectangle &out) {
+	using namespace boost;
+	AContainer::Ptr p = c->getParent();
+	Rectangle bounds = c->getBounds();
+
+	if (!p) {
+		out = Rectangle(0, 0, bounds.getWidth(), bounds.getHeight());
+	} else {
+		computeVisibleRect(p, out);
+		geometry::subtract_point(out.x0(), bounds.x0());
+		geometry::intersection<Rectangle::Base, Rectangle::Base, Rectangle::Base>
+		(
+				Rectangle(0,0,bounds.getWidth(), bounds.getHeight()),
+				out,
+				out
+		);
+	}
+}
+//-----------------------------------------------------------------------------
+Rectangle AComponent::getVisibleRect() const {
+	Rectangle res;
+	computeVisibleRect(res);
+	return res;
+}
 }}} // namespace(s)

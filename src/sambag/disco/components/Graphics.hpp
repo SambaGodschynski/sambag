@@ -160,7 +160,32 @@ public:
 	//-------------------------------------------------------------------------
 	void clearRect(const Rectangle &r);
 	//-------------------------------------------------------------------------
+	/**
+	 * Intersects the current clip with the specified rectangle.
+	 * The resulting clipping area is the intersection of the current
+	 * clipping area and the specified rectangle. If there is no current
+	 * clipping area, either because the clip has never been set, or the clip
+	 * has been cleared using setClip(null), the specified rectangle becomes
+	 * the new clip. This method sets the user clip, which is independent of
+	 * the clipping associated with device bounds and window visibility.
+	 * This method can only be used to make the current clip smaller.
+	 * To set the current clip larger, use any of the setClip methods.
+	 * Rendering operations have no effect outside of the clipping area.
+	 * @param r
+	 */
+	void clipRect(const Rectangle &r);
+	//-------------------------------------------------------------------------
 	bool hitClip(const Rectangle &r) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Copies an area of the component by a distance specified by dx and dy.
+	 * From the point specified by x and y, this method copies downwards and
+	 * to the right. To copy an area of the component to the left or upwards,
+	 * specify a negative value for dx or dy
+	 * @param src
+	 * @param d
+	 */
+	void copyArea(const Rectangle &src, const Point2D &delta);
 }; // Graphics
 //=============================================================================
 /**

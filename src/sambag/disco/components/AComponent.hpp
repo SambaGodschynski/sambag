@@ -1096,6 +1096,28 @@ public:
 	 * @see #addPropertyChangeListener
 	 */
 	void putClientPropertyImpl(const std::string &key, AbstractType::Ptr value);
+protected:
+	//-------------------------------------------------------------------------
+	static void computeVisibleRect(AComponent::Ptr, Rectangle &out);
+public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns the <code>Component</code>'s "visible rect rectangle" -  the
+	 * intersection of the visible rectangles for this component
+	 * and all of its ancestors.  The return value is stored in
+	 * <code>visibleRect</code>.
+	 *
+	 * @param visibleRect a <code>Rectangle</code> computed as the
+	 *          intersection of all visible rectangles for this
+	 *          component and all of its ancestors -- this is the return
+	 *          value for this method
+	 * @see #getVisibleRect
+	 */
+	virtual void computeVisibleRect(Rectangle &out) const {
+		computeVisibleRect(getPtr(), out);
+	}
+	//-------------------------------------------------------------------------
+	Rectangle getVisibleRect() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

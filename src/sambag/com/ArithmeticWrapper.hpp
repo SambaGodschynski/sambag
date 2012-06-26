@@ -21,19 +21,27 @@ namespace sambag { namespace com {
 //=============================================================================
 /** 
   * @class ArithmeticWrapper.
-  * Useful in classes, so its going to be unnecessary to implement an extra
-  * constructor initializer.
+  * Initializer for arithmetic value types.
+  * Useful to initialize arithmetic values in classes.
+  * eg.:
+  * class AClass {
+  * 	ArithmeticWrapper<int> value; // initializes with 0
+  * 	ArithmeticWrapper<int, 1> value; // initializes with 1
+  * 	ArithmeticWrapper<float, 1, 2> value; // initializes with 0.5
+  * };
   */
-template <typename T, int InitValue=0>
+template <typename T, int Nominator=0, int Denominator = 1>
 class ArithmeticWrapper {
 //=============================================================================
 BOOST_STATIC_ASSERT(boost::is_arithmetic<T>::value);
+BOOST_STATIC_ASSERT(Denominator!=0);
 private:
 	//-------------------------------------------------------------------------
 	T value;
 public:
 	//-------------------------------------------------------------------------
-	ArithmeticWrapper(T value = (T)InitValue) : value(value) {}
+	ArithmeticWrapper(T value = (T)Nominator/(T)Denominator) :
+		value(value) {}
 	//-------------------------------------------------------------------------
 	inline operator T() const {
 		return value;

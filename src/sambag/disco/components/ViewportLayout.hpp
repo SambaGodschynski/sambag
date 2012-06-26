@@ -27,7 +27,7 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	// Single instance used by JViewport.
-	static Ptr SHARED_INSTANCE;
+	static Ptr __sharedInstance;
 public:
 	//-------------------------------------------------------------------------
 	static Ptr getSharedInstance();

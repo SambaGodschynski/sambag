@@ -13,15 +13,25 @@
 #include "IBorder.hpp"
 #include "Forward.hpp"
 #include <sambag/disco/components/Timer.hpp>
+#include <sambag/com/events/ChangedEvent.hpp>
+#include <sambag/com/events/Events.hpp>
 
 namespace sambag { namespace disco { namespace components {
+namespace sce = sambag::com::events;
+class Viewport;
+typedef sce::ChangedEvent<Viewport> ViewportChanged;
 //=============================================================================
 /** 
   * @class Viewport.
   */
-class Viewport : public AContainer {
+class Viewport :
+	public AContainer,
+	public sce::EventSender<ViewportChanged>
+{
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	typedef AContainer Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Viewport> Ptr;
 	//-------------------------------------------------------------------------
@@ -54,6 +64,10 @@ protected:
 	ScrollMode scrollMode;
 private:
 	//-------------------------------------------------------------------------
+	bool needsRepaintAfterBlit();
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<bool> backingStore;
+	//-------------------------------------------------------------------------
 	/**
 	 * This is set to true in <code>setViewPosition</code>
 	 * if doing a window blit and the viewport is obscured.
@@ -73,7 +87,7 @@ private:
 	 * Instead of directly invoking repaint, a <code>Timer</code>
 	 * is started and when it fires, repaint is invoked.
 	 */
-	Timer::Ptr repaintTimer;
+	Timer::Ptr redrawTimer;
 	//-------------------------------------------------------------------------
 	/**
 	 * Set to true in paintView when paint is invoked.
@@ -104,6 +118,21 @@ private:
 	sambag::com::ArithmeticWrapper<bool> scrollUnderway;
 private:
 	//-------------------------------------------------------------------------
+	void redrawTimerClbk(void *src, const TimerEvent &ev);
+	//-------------------------------------------------------------------------
+	/**
+	  * Only used by the draw method.
+	  */
+	Point2D getViewLocation() const;
+	//-------------------------------------------------------------------------
+	bool isBlitting() const;
+	//-------------------------------------------------------------------------
+	Timer::Ptr createRedrawTimer();
+	//-------------------------------------------------------------------------
+	void drawViaBackingStore(IDrawContext::Ptr cn, const Rectangle &oClip);
+	//-------------------------------------------------------------------------
+	void drawViaBackingStore(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
 	IDrawContext::Ptr getBackingStoreContext(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------
 	/**
@@ -125,6 +154,46 @@ private:
 	 */
 	Coordinate positionAdjustment(const Coordinate &parentWidth,
 			const Coordinate &childWidth, const Coordinate &childAt);
+	//-------------------------------------------------------------------------
+	/**
+	 * If the repaint manager has a dirty region for the view, the view is
+	 * asked to paint.
+	 *
+	 * @param g  the <code>Graphics</code> context within which to paint
+	 */
+	void flushViewDirtyRegion(IDrawContext::Ptr cn, Rectangle &dirty);
+	//-------------------------------------------------------------------------
+	/**
+	 * Used when blitting.
+	 *
+	 * @param g  the <code>Graphics</code> context within which to paint
+	 * @return true if blitting succeeded; otherwise false
+	 */
+	bool windowBlitDraw(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	void blitDoubleBuffered(AComponentPtr view, IDrawContext::Ptr cn,
+			const Coordinate &clipX, const Coordinate &clipY,
+			const Coordinate &clipW, const Coordinate &clipH,
+			const Coordinate &blitFromX, const Coordinate &blitFromY,
+			const Coordinate &blitToX, const Coordinate &blitToY,
+			const Coordinate &blitW, const Coordinate &blitH);
+	//-------------------------------------------------------------------------
+	/**
+	 * Called to paint the view, usually when <code>blitPaint</code>
+	 * can not blit.
+	 *
+	 * @param g the <code>Graphics</code> context within which to paint
+	 */
+	void drawView(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	/**
+	 * Returns true if the viewport is not obscured by one of its ancestors,
+	 * or its ancestors children and if the viewport is showing. Blitting
+	 * when the view isn't showing will work,
+	 * or rather <code>copyArea</code> will work,
+	 * but will not produce the expected behavior.
+	 */
+	bool canUseWindowBlitter();
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Viewport)
@@ -149,9 +218,9 @@ protected:
 	 * @param blitPaint
 	 * @return
 	 */
-	virtual bool computeBlit(int dx, int dy, const Point2D & blitFrom,
-			const Point2D & blitTo, const Dimension & blitSize,
-			const Rectangle & blitPaint);
+	virtual bool computeBlit(const Coordinate &dx, const Coordinate &dy,
+			Point2D & blitFrom, Point2D & blitTo, Dimension & blitSize,
+			Rectangle & blitPaint);
 	//-------------------------------------------------------------------------
 	/**
 	 * Subclassers can override this to install a different layout
@@ -170,7 +239,7 @@ protected:
 	void firePropertyChange(const std::string &propertyName,
 			const T &oldValue, const T &newValue) const;
 	//-------------------------------------------------------------------------
-	virtual void fireStateChanged() const;
+	virtual void fireStateChanged();
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns true if scroll mode is a BACKINGSTORE_SCROLL_MODE
@@ -185,6 +254,8 @@ protected:
 	 */
 	virtual std::string paramString() const;
 public:
+	//-------------------------------------------------------------------------
+	~Viewport();
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the size of the visible part of the view in view coordinates.
@@ -234,7 +305,7 @@ public:
 	 * using the backing store to "blit" the remainder.
 	 * @param cn
 	 */
-	virtual void paint(IDrawContext::Ptr cn);
+	virtual void draw(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------
 	/**
 	 * Removes the Viewports one child.
@@ -251,7 +322,7 @@ public:
 	 * @param w
 	 * @param h
 	 */
-	virtual void repaint(int x, int y, int w, int h);
+	virtual void redraw(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the bounds of this viewport.
@@ -260,7 +331,7 @@ public:
 	 * @param w
 	 * @param h
 	 */
-	virtual void reshape(int x, int y, int w, int h);
+	virtual void setBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	/**
 	 * Scrolls the view so that Rectangle within the view becomes visible.
@@ -316,7 +387,7 @@ public:
 	 * @param p
 	 * @return
 	 */
-	virtual Point2D toViewCoordinates(Point2D p) const;
+	virtual Point2D toViewCoordinates(const Point2D &p) const;
 }; // Viewport
 }}} // namespace(s)
 

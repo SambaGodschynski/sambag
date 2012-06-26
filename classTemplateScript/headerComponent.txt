@@ -20,6 +20,8 @@ class $$$NAME$$$ : public AComponent / AContainer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef AComponent / AContainer Super;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<$$$NAME$$$> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;

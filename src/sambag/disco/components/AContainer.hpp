@@ -386,26 +386,6 @@ public:
 	 * subtrees marked as needing it (those marked as invalid).
 	 */
 	virtual void validateTree();
-protected:
-	//-------------------------------------------------------------------------
-	virtual void computeVisibleRect(AContainer::Ptr, Rectangle &out) const;
-public:
-	//-------------------------------------------------------------------------
-	/**
-	 * Returns the <code>Component</code>'s "visible rect rectangle" -  the
-	 * intersection of the visible rectangles for this component
-	 * and all of its ancestors.  The return value is stored in
-	 * <code>visibleRect</code>.
-	 *
-	 * @param visibleRect a <code>Rectangle</code> computed as the
-	 *          intersection of all visible rectangles for this
-	 *          component and all of its ancestors -- this is the return
-	 *          value for this method
-	 * @see #getVisibleRect
-	 */
-	virtual void computeVisibleRect(Rectangle &out) const {
-		computeVisibleRect(getPtr(), out);
-	}
 }; // AContainer
 //=============================================================================
 template<class LayoutManager, class Constraint>

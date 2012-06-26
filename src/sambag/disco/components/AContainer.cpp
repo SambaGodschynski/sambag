@@ -614,25 +614,6 @@ void AContainer::validateTree() {
 	}
 	AComponent::validate();
 }
-//-----------------------------------------------------------------------------
-void AContainer::computeVisibleRect(AContainer::Ptr c, Rectangle &out) const {
-	using namespace boost;
-	AContainer::Ptr p = c->getParent();
-	Rectangle bounds = c->getBounds();
-
-	if (!p) {
-		out = Rectangle(0, 0, bounds.getWidth(), bounds.getHeight());
-	} else {
-		computeVisibleRect(p, out);
-		geometry::subtract_point(out.x0(), bounds.x0());
-		geometry::intersection<Rectangle::Base, Rectangle::Base, Rectangle::Base>
-		(
-				Rectangle(0,0,bounds.getWidth(), bounds.getHeight()),
-				out,
-				out
-		);
-	}
-}
 //-------------------------------------------------------------------------
 void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		const events::MouseEvent &ev)
