@@ -15,7 +15,8 @@
 #include <loki/Singleton.h>
 #include <X11/Xlib.h>
 #include <boost/system/error_code.hpp>
-#include <boost/unordered_map.hpp>
+#include <boost/bimap.hpp>
+#include <boost/bimap/unordered_set_of.hpp>
 #include <sambag/com/ICommand.hpp>
 
 namespace sambag { namespace disco { namespace components {
@@ -34,7 +35,9 @@ private:
 	//-------------------------------------------------------------------------
 	typedef boost::asio::deadline_timer TimerImpl;
 	typedef sambag::com::ICommand::Ptr CommandPtr;
-	typedef boost::unordered_map<TimerImpl*, Timer::Ptr> ToInvoke;
+	typedef boost::bimap<
+		boost::bimaps::unordered_set_of<TimerImpl*>,
+		boost::bimaps::unordered_set_of<Timer::Ptr> > ToInvoke;
 	//-------------------------------------------------------------------------
 	static void timerCallback(const boost::system::error_code&,
 			TimerImpl* timer, long ms, int repetitions);

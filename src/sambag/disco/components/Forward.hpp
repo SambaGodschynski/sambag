@@ -19,6 +19,7 @@ namespace sambag { namespace disco { namespace components {
 	class ALayoutManager; typedef boost::shared_ptr<ALayoutManager> ALayoutManagerPtr;
 	class Panel; typedef boost::shared_ptr<Panel> PanelPtr;
 	class RootPane; typedef boost::shared_ptr<RootPane> RootPanePtr;
+	class Viewport; typedef boost::shared_ptr<Viewport> ViewportPtr;
 	class RedrawManager; typedef boost::shared_ptr<RedrawManager> RedrawManagerPtr;
 	class AWindowImpl; typedef boost::shared_ptr<AWindowImpl> AWindowPtr;
 	class Window; typedef boost::shared_ptr<Window> WindowPtr;

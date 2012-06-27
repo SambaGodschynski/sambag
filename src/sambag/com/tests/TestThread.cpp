@@ -11,7 +11,7 @@
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestThread );
 
-void callLockRecursive(sambag::com::Mutex &mutex, int i=0) {
+void callLockRecursive(sambag::com::RecursiveMutex &mutex, int i=0) {
 	if (i==10)
 		return;
 	using namespace sambag::com;
@@ -21,7 +21,7 @@ void callLockRecursive(sambag::com::Mutex &mutex, int i=0) {
 }
 
 struct Deadlock {
-	sambag::com::Mutex &mutex;
+	sambag::com::RecursiveMutex &mutex;
 	bool &deadlockExThrown;
 	void operator()() {
 		try {
@@ -33,7 +33,7 @@ struct Deadlock {
 			deadlockExThrown = true;
 		}
 	}
-	Deadlock(sambag::com::Mutex &mutex, bool &deadlockExThrown) :
+	Deadlock(sambag::com::RecursiveMutex &mutex, bool &deadlockExThrown) :
 		mutex(mutex), deadlockExThrown(deadlockExThrown) {}
 };
 
@@ -44,7 +44,7 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestThread::testSynchronized() {
 	using namespace sambag::com;
-	Mutex mutex;
+	RecursiveMutex mutex;
 	int c=0;
 	SAMBAG_BEGIN_SYNCHRONIZED(mutex)
 		c++;
@@ -54,7 +54,7 @@ void TestThread::testSynchronized() {
 //-----------------------------------------------------------------------------
 void TestThread::testSynchronizedRecursively() {
 	using namespace sambag::com;
-	Mutex mutex;
+	RecursiveMutex mutex;
 	// should'nt occur a deadlock because the locking is on same thread
 	callLockRecursive(mutex);
 	// force lock-> two threads one lock

@@ -15,6 +15,7 @@
 #include <X11/Xutil.h>
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <sambag/com/Thread.hpp>
 #include <boost/thread.hpp>
 
 namespace sambag { namespace disco { namespace components {
@@ -68,6 +69,8 @@ namespace { // thread / timer stuff
 	//-------------------------------------------------------------------------
 	bool threadsAreRunning = true;
 	//-------------------------------------------------------------------------
+	sambag::com::RecursiveMutex timerLock;
+	//-------------------------------------------------------------------------
 	void timerThreadClbk() {
 		while (threadsAreRunning) {
 			io.run();
@@ -82,7 +85,7 @@ void X11WindowToolkit::startTimer(Timer::Ptr tm) {
 	Timer::TimeType ms = tm->getDelay();
 	int repetitions = tm->getNumRepetitions();
 	TimerImpl *t = new TimerImpl(io, boost::posix_time::millisec(ms));
-	toInvoke.insert( std::make_pair(t, tm) );
+	toInvoke.insert( ToInvoke::value_type(t, tm) );
 	t->async_wait(
 		boost::bind(&timerCallback,
 		boost::asio::placeholders::error,
@@ -94,37 +97,48 @@ void X11WindowToolkit::startTimer(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
-
+	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
+		ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
+		if (it==toInvoke.right.end()) // timerImpl not found
+			return;
+		TimerImpl *timerImpl = it->second;
+		timerImpl->cancel();
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::timerCallback(const boost::system::error_code&,
-		TimerImpl *timer, long ms, int repetitions)
+		TimerImpl *timerImpl, long ms, int repetitions)
 {
-	ToInvoke::iterator it = toInvoke.find(timer);
-	SAMBAG_ASSERT(it!=toInvoke.end());
-	it->second->timedExpired();
-	if (repetitions == 0 || !threadsAreRunning) {
-		it->second->__setRunningByToolkit_(false);
-		toInvoke.erase(it);
-		delete timer;
-		return;
-	}
-	if (repetitions > 0)
-		--repetitions;
-	timer->expires_at(timer->expires_at() + boost::posix_time::millisec(ms));
-	timer->async_wait(
-		boost::bind(&timerCallback,
-		boost::asio::placeholders::error,
-		timer,
-		ms,
-		repetitions)
-	);
+	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
+		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
+		if (it==toInvoke.left.end())
+			return;
+		it->second->timedExpired();
+		if (repetitions == 0 || !threadsAreRunning) {
+			it->second->__setRunningByToolkit_(false);
+			toInvoke.left.erase(it);
+			delete timerImpl;
+			return;
+		}
+		if (repetitions > 0)
+			--repetitions;
+		timerImpl->expires_at(timerImpl->expires_at() + boost::posix_time::millisec(ms));
+		timerImpl->async_wait(
+			boost::bind(&timerCallback,
+			boost::asio::placeholders::error,
+			timerImpl,
+			ms,
+			repetitions)
+		);
+	SAMBAG_END_SYNCHRONIZED
 }
 //-------------------------------------------------------------------------
 void X11WindowToolkit::closeAllTimer() {
-	BOOST_FOREACH(ToInvoke::value_type &v, toInvoke) {
-		v.first->cancel();
-	}
+	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
+		BOOST_FOREACH(ToInvoke::left_map::value_type &v, toInvoke.left) {
+			v.first->cancel();
+		}
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::mainLoop() {

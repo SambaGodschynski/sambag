@@ -997,4 +997,14 @@ Rectangle AComponent::getVisibleRect() const {
 	computeVisibleRect(res);
 	return res;
 }
+//-----------------------------------------------------------------------------
+void AComponent::drawToOffscreen(IDrawContext::Ptr cn,
+		const Rectangle &rect, const Point2D &max)
+{
+	SAMBA_LOG_NOT_YET_IMPL();
+}
+//-----------------------------------------------------------------------------
+void AComponent::drawForceDoubleBuffered(IDrawContext::Ptr cn) {
+	SAMBA_LOG_NOT_YET_IMPL();
+}
 }}} // namespace(s)

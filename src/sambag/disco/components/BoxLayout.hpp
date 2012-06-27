@@ -66,7 +66,7 @@ private:
 	SizeRequirements xTotal;
 	SizeRequirements yTotal;
 	//-------------------------------------------------------------------------
-	sambag::com::Mutex lock;
+	sambag::com::RecursiveMutex lock;
 	//-------------------------------------------------------------------------
 	void checkContainer(AComponentPtr comp) const;
 	//-------------------------------------------------------------------------

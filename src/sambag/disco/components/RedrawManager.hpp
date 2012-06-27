@@ -47,7 +47,7 @@ protected:
 			Components &roots);
 private:
 	//-------------------------------------------------------------------------
-	mutable sambag::com::Mutex lock;
+	mutable sambag::com::RecursiveMutex lock;
 	//-------------------------------------------------------------------------
 	ComponentMap hwDirtyComponents;
 	ComponentMap dirtyComponents;

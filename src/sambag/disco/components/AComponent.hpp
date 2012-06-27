@@ -77,13 +77,14 @@ class AComponent: public IDrawable,
 friend class RedrawManager;
 friend class RootPane;
 friend class AContainer;
+friend class Viewport; // used for drawForceDoubleBuffered call
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AComponent> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<AComponent> WPtr;
 	//-------------------------------------------------------------------------
-	typedef sambag::com::Mutex Lock;
+	typedef sambag::com::RecursiveMutex Lock;
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<std::string, AbstractType::Ptr> PropertyMap;
 	//-------------------------------------------------------------------------
@@ -184,6 +185,22 @@ protected:
 	IBorder::Ptr border;
 	//-------------------------------------------------------------------------
 	virtual std::string parameterString() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * Draws to the specified context.  This does not set the clip and it
+	 * does not adjust the Context in anyway, callers must do that first.
+	 */
+	void drawToOffscreen(IDrawContext::Ptr cn,
+			const Rectangle &rect, const Point2D &max);
+	//-------------------------------------------------------------------------
+	/**
+	 * paint forcing use of the double buffer.  This is used for historical
+	 * reasons: Viewport, when scrolling, previously directly invoked paint
+	 * while turning off double buffering at the RepaintManager level, this
+	 * codes simulates that.
+	 * @param cn
+	 */
+	void drawForceDoubleBuffered(IDrawContext::Ptr cn);
 private:
 	//-------------------------------------------------------------------------
 	PropertyMap propertyMap;

@@ -33,11 +33,14 @@ void trackMouse(void *src, const sdc::events::MouseEvent &ev);
 void onMouse(void *src, const sdc::events::MouseEvent &ev);
 void onButton(void *src, const sdc::events::ActionEvent &ev);
 void onClearTxtField(void *src, const sdc::events::ActionEvent &ev);
+void stopTimer(void *src, const sdc::events::ActionEvent &ev);
+void startTimer(void *src, const sdc::events::ActionEvent &ev);
 
 
 sdc::FramedWindow::Ptr win;
 sdc::FramedWindow::Ptr win2;
 sdc::PopupMenu::Ptr popup;
+sdc::Timer::Ptr timerInf;
 
 static const std::string INPUT_LABEL = "inputLabel";
 static const int INPUT_LABEL_SIZE = 40;
@@ -57,6 +60,18 @@ void createPopup() {
 			continue;
 		btn->EventSender<events::ActionEvent>::addEventListener(&onClearTxtField);
 	}
+
+	MenuItem::Ptr btn = MenuItem::create();
+	btn->setText("start Timer");
+	popup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(&startTimer);
+
+	btn = MenuItem::create();
+	btn->setText("stop Timer");
+	popup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(&stopTimer);
+
+
 	Menu::Ptr menu = Menu::create();
 	menu->setText("feuer feuer");
 	for (size_t i=0; i<10; ++i) {
@@ -128,6 +143,15 @@ void createACMEPane() {
 	label->getFont().setFontFace("monospace").setSize(INPUT_LABEL_SIZE);
 	con->add(label);
 	con->addTag(label, INPUT_LABEL);
+}
+
+void stopTimer(void *src, const sdc::events::ActionEvent &ev) {
+	if (timerInf)
+		timerInf->stop();
+}
+void startTimer(void *src, const sdc::events::ActionEvent &ev) {
+	if (timerInf)
+		timerInf->start();
 }
 
 void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
@@ -241,10 +265,10 @@ void timedCallbackOnce(void *src, const sdc::TimerEvent &ev) {
 void initTimer() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	Timer::Ptr timer = Timer::create(10000);
-	timer->setNumRepetitions(-1);
-	timer->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
-	timer->start();
+	timerInf = Timer::create(10000);
+	timerInf->setNumRepetitions(-1);
+	timerInf->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
+	timerInf->start();
 
 	Timer::Ptr timer2 = Timer::create(1000);
 	timer2->setNumRepetitions(4);
