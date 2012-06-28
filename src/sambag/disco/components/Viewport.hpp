@@ -72,7 +72,7 @@ private:
 	 * This is set to true in <code>setViewPosition</code>
 	 * if doing a window blit and the viewport is obscured.
 	 */
-	bool repaintAll;
+	sambag::com::ArithmeticWrapper<bool> repaintAll;
 	//-------------------------------------------------------------------------
 	/**
 	 * This is set to true in paint, if <code>repaintAll</code>
@@ -81,7 +81,7 @@ private:
 	 * repaint manager is not cleared which then allows for the repaint
 	 * previously invoked to succeed.
 	 */
-	bool waitingForRepaint;
+	sambag::com::ArithmeticWrapper<bool> waitingForRepaint;
 	//-------------------------------------------------------------------------
 	/**
 	 * Instead of directly invoking repaint, a <code>Timer</code>
@@ -92,12 +92,12 @@ private:
 	/**
 	 * Set to true in paintView when paint is invoked.
 	 */
-	bool inBlitPaint;
+	sambag::com::ArithmeticWrapper<bool> inBlitPaint;
 	//-------------------------------------------------------------------------
 	/**
 	 * Whether or not a valid view has been installed.
 	 */
-	bool hasHadValidView;
+	sambag::com::ArithmeticWrapper<bool> hasHadValidView;
 	//-------------------------------------------------------------------------
 	/**
 	 * The <code>scrollUnderway</code> flag is used for components like

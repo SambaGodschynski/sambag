@@ -110,10 +110,60 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_CLIENTPROPERTY;
 	//-------------------------------------------------------------------------
-	static const std::string PROPERTY_SIZE;
+	static const std::string PROPERTY_BOUNDS;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_FONT;
+	enum Flag {
+		IS_DOUBLE_BUFFERED = 0,
+		ANCESTOR_USING_BUFFER,
+		IS_PAINTING_TILE,
+		IS_OPAQUE,
+		KEY_EVENTS_ENABLED,
+		FOCUS_INPUTMAP_CREATED,
+		ANCESTOR_INPUTMAP_CREATED,
+		WIF_INPUTMAP_CREATED,
+		ACTIONMAP_CREATED,
+		CREATED_DOUBLE_BUFFER,
+		// bit 10 is free
+		IS_PRINTING = 11,
+		IS_PRINTING_ALL,
+		IS_REPAINTING,
+		WRITE_OBJ_COUNTER_FIRST,
+		RESERVED_1,
+		RESERVED_2,
+		RESERVED_3,
+		RESERVED_4,
+		RESERVED_5,
+		RESERVED_6,
+		WRITE_OBJ_COUNTER_LAST,
+		REQUEST_FOCUS_DISABLED,
+		INHERITS_POPUP_MENU,
+		OPAQUE_SET,
+		AUTOSCROLLS_SET,
+		FOCUS_TRAVERSAL_KEYS_FORWARD_SET,
+		FOCUS_TRAVERSAL_KEYS_BACKWARD_SET,
+		REVALIDATE_RUNNABLE_SCHEDULED
+};// Flags
 protected:
+	//-------------------------------------------------------------------------
+	/**
+	 * If the specified rectangle is completely obscured by any of this
+	 * component's opaque children then returns true.  Only direct children
+	 * are considered, more distant descendants are ignored.  A
+	 * <code>JComponent</code> is opaque if
+	 * <code>JComponent.isOpaque()</code> returns true, other lightweight
+	 * components are always considered transparent, and heavyweight components
+	 * are always considered opaque.
+	 *
+	 * @param x  x value of specified rectangle
+	 * @param y  y value of specified rectangle
+	 * @param width  width of specified rectangle
+	 * @param height height of specified rectangle
+	 * @return true if the specified rectangle is obscured by an opaque child
+	 */
+	virtual bool rectangleIsObscured(const Rectangle &r) {
+		return false;
+	}
 	//-------------------------------------------------------------------------
 	Font font;
 	//-------------------------------------------------------------------------
@@ -202,6 +252,12 @@ protected:
 	 */
 	void drawForceDoubleBuffered(IDrawContext::Ptr cn);
 private:
+	//-------------------------------------------------------------------------
+	unsigned int flags;
+	//-------------------------------------------------------------------------
+	void setFlag(Flag aFlag, bool b);
+	//-------------------------------------------------------------------------
+	bool getFlag(unsigned int aFlag) const;
 	//-------------------------------------------------------------------------
 	PropertyMap propertyMap;
 	//-------------------------------------------------------------------------
@@ -463,6 +519,8 @@ public: /* END should be protected  */
 	 */
 	static const float RIGHT_ALIGNMENT = 1.0f;
 public:
+	//-----------------------------------------------------------------------------
+	virtual bool isDrawing() const;
 	//-----------------------------------------------------------------------------
 	virtual bool contains(Point2D p) const;
 	//-----------------------------------------------------------------------------

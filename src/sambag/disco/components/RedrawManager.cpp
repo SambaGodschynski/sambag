@@ -51,20 +51,27 @@ void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 		dirtyComponents.insert(std::make_pair(c, r));
 	SAMBAG_END_SYNCHRONIZED
 }
+//-------------------------------------------------------------------------
+void RedrawManager::updateDirtyComponent(AComponentPtr c,
+		const Rectangle &r)
+{
+	dirtyComponents[c] = r;
+}
 //-----------------------------------------------------------------------------
 bool RedrawManager::extendDirtyRegion(AComponentPtr c, const Rectangle &rect) {
 	SAMBAG_BEGIN_SYNCHRONIZED(lock)
-	ComponentMap::iterator it = dirtyComponents.find(c);
-	if (it==dirtyComponents.end())
-		return false;
-	// A non-null r implies c is already marked as dirty,
-	// and that the parent is valid. Therefore we can
-	// just union the rect and bail.
-	Rectangle &r = it->second;
-	// compute union
-	r = Rectangle(minimize(rect.x0(), r.x0()),
-		Point2D(maximize(rect.x1(), r.x1())));
-	return true;
+		ComponentMap::iterator it = dirtyComponents.find(c);
+		if (it==dirtyComponents.end())
+			return false;
+		// A non-null r implies c is already marked as dirty,
+		// and that the parent is valid. Therefore we can
+		// just union the rect and bail.
+		Rectangle r = it->second;
+		// compute union
+		r = Rectangle(minimize(rect.x0(), r.x0()),
+			Point2D(maximize(rect.x1(), r.x1())));
+		updateDirtyComponent(c, r);
+		return true;
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
@@ -242,6 +249,7 @@ void RedrawManager::collectDirtyComponents(ComponentMap &dirtyComponents,
 		//computeUnion(tmp.x, tmp.y, tmp.width, tmp.height, r);
 		r = Rectangle(minimize(tmp.x0(), r.x0()),
 			Point2D(maximize(tmp.x1(), r.x1())));
+		updateDirtyComponent(rootDirtyComponent, r);
 	}
 
 	// If we haven't seen this root before, then we need to add it to the
@@ -303,8 +311,10 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 			// If the Graphics goes away, it means someone disposed of
 			// the window, don't do anything.
 			if (cn) {
+				cn->save();
 				g.setClip(rect);
 				dirtyComponent->draw(g.getPtr());
+				cn->restore();
 			}
 		}
 		//// If the repaintRoot has been set, service it now and
@@ -369,8 +379,16 @@ bool RedrawManager::isDrawing() const {
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::draw(AComponentPtr paintingComponent,
-		AComponentPtr bufferComponent, IDrawContext::Ptr g, const Rectangle &r)
+		AComponentPtr bufferComponent, IDrawContext::Ptr cn, const Rectangle &r)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+	//if (!paintManager.paint(paintingComponent, bufferComponent, g, x, y, w, h)) {
+	cn->setClip(r);
+	paintingComponent->drawToOffscreen(cn, r, r.x1());
+}
+//-----------------------------------------------------------------------------
+void RedrawManager::copyArea(AComponentPtr c, IDrawContext::Ptr cn,
+		const Rectangle &src, const Point2D &dst, bool clip)
+{
+	cn->copyAreaTo(cn, src, dst);
 }
 }}} // RedrawManager::RedrawManager::namespace(s)

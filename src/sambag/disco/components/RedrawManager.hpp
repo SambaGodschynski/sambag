@@ -47,6 +47,8 @@ protected:
 			Components &roots);
 private:
 	//-------------------------------------------------------------------------
+	void updateDirtyComponent(AComponentPtr c, const Rectangle &r);
+	//-------------------------------------------------------------------------
 	mutable sambag::com::RecursiveMutex lock;
 	//-------------------------------------------------------------------------
 	ComponentMap hwDirtyComponents;
@@ -217,6 +219,9 @@ public:
 	 * Validate all of the components that have been marked invalid.
 	 */
 	void validateInvalidComponents();
+	//-------------------------------------------------------------------------
+	void copyArea(AComponentPtr c, IDrawContext::Ptr cn, const Rectangle &src,
+			const Point2D &dst, bool clip);
 }; // RedrawManager
 }}} // namespace(s)
 

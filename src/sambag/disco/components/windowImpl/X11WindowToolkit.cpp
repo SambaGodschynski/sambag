@@ -31,7 +31,8 @@ X11WindowToolkit::X11WindowToolkit() {
 //-----------------------------------------------------------------------------
 X11WindowToolkit::~X11WindowToolkit() {
 	if (globals.display) {
-		XCloseDisplay(globals.display);
+		// TODO: XCloseDisplay causes segmentation fault
+		//XCloseDisplay(globals.display);
 		globals.display = NULL;
 	}
 }
@@ -102,6 +103,7 @@ void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
 		if (it==toInvoke.right.end()) // timerImpl not found
 			return;
 		TimerImpl *timerImpl = it->second;
+		tm->__setRunningByToolkit_(false);
 		timerImpl->cancel();
 	SAMBAG_END_SYNCHRONIZED
 }
@@ -113,9 +115,13 @@ void X11WindowToolkit::timerCallback(const boost::system::error_code&,
 		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
 		if (it==toInvoke.left.end())
 			return;
-		it->second->timedExpired();
-		if (repetitions == 0 || !threadsAreRunning) {
-			it->second->__setRunningByToolkit_(false);
+		Timer::Ptr tm = it->second;
+		tm->timedExpired();
+		if (repetitions == 0 ||
+			!threadsAreRunning ||
+			!tm->isRunning()) // stop forced
+		{
+			tm->__setRunningByToolkit_(false);
 			toInvoke.left.erase(it);
 			delete timerImpl;
 			return;

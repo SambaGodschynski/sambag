@@ -22,4 +22,8 @@ Button::Button() {
 ui::AComponentUIPtr Button::getComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Button>();
 }
+//-----------------------------------------------------------------------------
+std::string Button::parameterString() const {
+	return getText() + ", " + Super::parameterString();
+}
 }}} // namespace(s)

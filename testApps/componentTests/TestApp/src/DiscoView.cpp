@@ -20,6 +20,7 @@
 #include <sambag/disco/components/PopupMenu.hpp>
 #include <sambag/disco/components/Label.hpp>
 #include <sambag/disco/components/MenuSelectionManager.hpp>
+#include <sambag/disco/components/Viewport.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
@@ -39,6 +40,7 @@ void startTimer(void *src, const sdc::events::ActionEvent &ev);
 
 sdc::FramedWindow::Ptr win;
 sdc::FramedWindow::Ptr win2;
+sdc::FramedWindow::Ptr win3;
 sdc::PopupMenu::Ptr popup;
 sdc::Timer::Ptr timerInf;
 
@@ -105,11 +107,56 @@ void createPopup() {
 	popup->add(menu);
 }
 
-void createACMEPane() {
+boost::weak_ptr<sdc::Viewport> viewport;
+
+void scrollDown(void *src, const sdc::TimerEvent &ev) {
+	sdc::Viewport::Ptr vp = viewport.lock();
+	if (!vp)
+		return;
+	sd::Point2D p = vp->getViewPosition();
+	p.y( p.y() + 0.5 );
+	vp->setViewPosition(p);
+}
+
+void createSurpriseWindow() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win3 = sdc::FramedWindow::create(win);
+	win3->setTitle("Surprise Window");
+	win3->setWindowBounds(Rectangle(110,100,430,280));
+	const int NUM = 1000;
+	AContainerPtr con = Panel::create();
+	con->setSize(Dimension(300, 1000));
+	sdc::Viewport::Ptr vp = Viewport::create();
+	viewport = vp;
+	vp->setView(con);
+	//vp->setScrollMode(Viewport::SIMPLE_SCROLL_MODE);
+	//vp->setScrollMode(Viewport::BACKINGSTORE_SCROLL_MODE);
+	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
+	//con->setLayout(ALayoutManagerPtr());
+	win3->getRootPane()->add(vp);
+	for (int i=0; i<NUM; ++i) {
+		std::stringstream ss;
+		ss << i;
+		Label::Ptr el = Label::create();
+		el->setText(ss.str());
+		el->setFont(el->getFont().setSize((i+1)*0.9));
+		con->add(el);
+	}
+	Timer::Ptr timer = Timer::create(10);
+	timer->setNumRepetitions(-1);
+	timer->EventSender<TimerEvent>::addTrackedEventListener(
+		&scrollDown,
+		viewport
+	);
+	timer->start();
+}
+
+void createACMEWindow() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	win2 = sdc::FramedWindow::create(win);
-	win2->setTitle("ACME panel");
+	win2->setTitle("ACME Window");
 	win2->setWindowBounds(Rectangle(110,100,430,280));
 
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
@@ -144,6 +191,7 @@ void createACMEPane() {
 	con->add(label);
 	con->addTag(label, INPUT_LABEL);
 }
+
 
 void stopTimer(void *src, const sdc::events::ActionEvent &ev) {
 	if (timerInf)
@@ -228,10 +276,20 @@ void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	if (!win2) {
-		createACMEPane();
+		createACMEWindow();
 	}
 	win2->getRootPane()->validate();
 	win2->open();
+}
+
+void onSurpriseClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	if (!win3) {
+		createSurpriseWindow();
+	}
+	win3->getRootPane()->validate();
+	win3->open();
 }
 
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
@@ -294,6 +352,12 @@ int main() {
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
+		btn->getFont().setFontFace("monospace");
+		win->getRootPane()->add(btn);
+
+		btn = Button::create();
+		btn->setText("open Surprise Panel");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onSurpriseClicked);
 		btn->getFont().setFontFace("monospace");
 		win->getRootPane()->add(btn);
 

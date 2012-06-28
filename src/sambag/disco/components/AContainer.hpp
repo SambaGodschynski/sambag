@@ -135,21 +135,6 @@ protected:
 	ObscuredState
 	getObscuredState(int compIndex, const Rectangle &rect) const;
 	//-------------------------------------------------------------------------
-	/**
-	 * If the specified rectangle is completely obscured by any of this
-	 * component's opaque children then returns true.  Only direct children
-	 * are considered, more distant descendants are ignored.  A
-	 * <code>JComponent</code> is opaque if
-	 * <code>JComponent.isOpaque()</code> returns true, other lightweight
-	 * components are always considered transparent, and heavyweight components
-	 * are always considered opaque.
-	 *
-	 * @param x  x value of specified rectangle
-	 * @param y  y value of specified rectangle
-	 * @param width  width of specified rectangle
-	 * @param height height of specified rectangle
-	 * @return true if the specified rectangle is obscured by an opaque child
-	 */
 	virtual bool rectangleIsObscured(const Rectangle &r);
 public:
 	//-------------------------------------------------------------------------

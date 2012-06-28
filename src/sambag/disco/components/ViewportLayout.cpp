@@ -44,7 +44,7 @@ void ViewportLayout::layoutContainer(AContainerPtr parent) {
 	Dimension viewPrefSize = view->getPreferredSize();
 	Dimension vpSize = vp->getSize();
 	Dimension extentSize = vp->toViewCoordinates(vpSize);
-	Dimension viewSize = Dimension(viewPrefSize);
+	Dimension viewSize = viewPrefSize;
 
 	if (scrollable) {
 		if (scrollable->getScrollableTracksViewportWidth()) {

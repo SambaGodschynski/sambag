@@ -20,6 +20,7 @@ namespace sambag { namespace disco { namespace components {
 class Button : public AButton<DefaultButtonModell> {
 //=============================================================================
 public:
+	typedef AButton<DefaultButtonModell> Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Button> Ptr;
 	//-------------------------------------------------------------------------
@@ -28,6 +29,8 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	Button();
+	//-------------------------------------------------------------------------
+	virtual std::string parameterString() const;
 public:
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Button)
 }; // Button

@@ -73,9 +73,10 @@ inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
 	if (needUpdate) {
+		needUpdate=false;
 		clearBuffer();
 		root->draw(root->getDrawContext());
-		needUpdate=false;
+		cn->drawSurface(bff);
 		return;
 	}
 	RedrawManager::currentManager(root)->drawDirtyRegions();

@@ -17,7 +17,7 @@ namespace sambag { namespace disco { namespace components {
 //  Class Viewport
 //=============================================================================
 //-----------------------------------------------------------------------------
-Viewport::Viewport() {
+Viewport::Viewport() : scrollMode(BLIT_SCROLL_MODE) {
 	setName("Viewport");
 	setLayout(createLayoutManager());
 	setOpaque(true);
@@ -276,8 +276,13 @@ void Viewport::draw(IDrawContext::Ptr cn) {
 		// same size, otherwise when scrolling the backing image
 		// the region outside of the clipped region will not be painted,
 		// and result in empty areas.
-		backingStoreImage =
-				getDiscoFactory()->createImageSurface(width, height);
+		try {
+			backingStoreImage =
+					getDiscoFactory()->createImageSurface(width, height);
+		} catch (...) {
+			setScrollMode(Viewport::BLIT_SCROLL_MODE);
+			return;
+		}
 		Rectangle clip = cn->clipExtends();
 		if (clip.width() != width || clip.height() != height) {
 			if (!isOpaque()) {
@@ -541,8 +546,8 @@ void Viewport::setView(AComponentPtr view) {
 	 * Note that removeAll() isn't used here because it
 	 * doesn't call remove()
 	 */
-	size_t n = getComponentCount();
-	for (size_t i = n - 1; i >= 0; --i) {
+	int n = getComponentCount();
+	for (int i = n - 1; i >= 0; --i) {
 		remove(getComponent(i));
 	}
 
@@ -721,15 +726,122 @@ void Viewport::blitDoubleBuffered(AComponentPtr view, IDrawContext::Ptr cn,
 		const Coordinate &blitToX, const Coordinate &blitToY,
 		const Coordinate &blitW, const Coordinate &blitH)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+	// NOTE:
+	//   blitFrom/blitTo are in JViewport coordinates system
+	//     not the views coordinate space.
+	//   clip* are in the views coordinate space.
+	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	Coordinate bdx = blitToX - blitFromX;
+	Coordinate bdy = blitToY - blitFromY;
+
+	// Shift the scrolled region
+	rm->copyArea(getPtr(), cn,
+		Rectangle(blitFromX, blitFromY, blitW, blitH),
+		Point2D(bdx, bdy), false);
+
+	// Paint the newly exposed region.
+	Coordinate x = view->getX();
+	Coordinate y = view->getY();
+	cn->translate(Point2D(x, y));
+	cn->setClip(Rectangle(clipX, clipY, clipW, clipH));
+	view->drawForceDoubleBuffered(cn);
+	cn->translate(Point2D(-x, -y));
 }
 //-----------------------------------------------------------------------------
 void Viewport::drawView(IDrawContext::Ptr cn) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Rectangle clip = cn->clipExtends();
+	AComponentPtr view = getView();
+
+	if (view->getWidth() >= getWidth()) {
+		// Graphics is relative to JViewport, need to map to view's
+		// coordinates space.
+		Coordinate x = view->getX();
+		Coordinate y = view->getY();
+		cn->translate(Point2D(x, y));
+		cn->setClip(Rectangle(clip.x0().x() - x, clip.x0().y() - y,
+				clip.width(), clip.height()));
+		view->drawForceDoubleBuffered(cn);
+		cn->translate(Point2D(-x, -y));
+		cn->setClip(Rectangle(clip.x0().x(),
+				clip.x0().y(), clip.width(), clip.height()));
+	} else {
+		// To avoid any problems that may result from the viewport being
+		// bigger than the view we start painting from the viewport.
+		inBlitPaint = true;
+		drawForceDoubleBuffered(cn);
+		inBlitPaint = false;
+	}
 }
 //-----------------------------------------------------------------------------
 bool Viewport::canUseWindowBlitter() {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	if (!isShowing() || !getView()) {
+		return false;
+	}
+	if (isDrawing()) {
+		// We're in the process of painting, don't blit. If we were
+		// to blit we would draw on top of what we're already drawing,
+		// so bail.
+		return false;
+	}
+
+	Rectangle dirtyRegion =
+			RedrawManager::currentManager(getPtr())->getDirtyRegion(
+					getParent());
+
+	if (dirtyRegion.width() > 0 && dirtyRegion.height() > 0) {
+		// Part of the scrollpane needs to be repainted too, don't blit.
+		return false;
+	}
+
+	Rectangle clip(0, 0, getWidth(), getHeight());
+	Rectangle oldClip;
+	Rectangle tmp2;
+	AContainerPtr parent;
+	AComponentPtr lastParent;
+	Coordinate x, y, w, h;
+
+	for (parent = getPtr(); parent; parent
+			= parent->getParent()) {
+		x = parent->getX();
+		y = parent->getY();
+		w = parent->getWidth();
+		h = parent->getHeight();
+
+		oldClip = clip;
+		//SwingUtilities.computeIntersection(0, 0, w, h, clip);
+		boost::geometry::intersection<Rectangle::Base,
+		Rectangle::Base, Rectangle::Base>(Rectangle(0,0,w,h), clip, clip);
+		if (clip == oldClip)
+			return false;
+
+		if (lastParent) {
+			const AContainer::Components &comps = parent->getComponents();
+			int index = 0;
+			for (int i = comps.size() - 1; i >= 0; --i) {
+				if (comps[i] == lastParent) {
+					index = i - 1;
+					break;
+				}
+			}
+
+			while (index >= 0) {
+				tmp2 = comps[index]->getBounds();
+				//if (tmp2.intersects(clip))
+				if (boost::geometry::intersects<Rectangle::Base,
+						Rectangle::Base>(tmp2, clip))
+					return false;
+				index--;
+			}
+		}
+//		clip.x += x;
+//		clip.y += y;
+		clip.translate(Point2D(x,y));
+		lastParent = parent;
+	}
+	if (!parent) {
+		// No Window parent.
+		return false;
+	}
+	return true;
 }
 }}} // namespace(s)

@@ -46,7 +46,7 @@ const std::string AComponent::PROPERTY_ENABLED = "enabled";
 //-----------------------------------------------------------------------------
 const std::string  AComponent::PROPERTY_CLIENTPROPERTY = "client_property";
 //-----------------------------------------------------------------------------
-const std::string AComponent::PROPERTY_SIZE = "size";
+const std::string AComponent::PROPERTY_BOUNDS = "size";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_FONT = "font";
 //-----------------------------------------------------------------------------
@@ -387,7 +387,6 @@ bool AComponent::isForegroundSet() const {
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawChildren(IDrawContext::Ptr context) {
-	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw() {
@@ -519,8 +518,7 @@ void AComponent::setBounds(const Rectangle &r) {
 		if (parent) {
 			parent->__invalidateIfValid_();
 		}
-		// TODO: events
-		// notifyNewBounds(resized, moved);
+		firePropertyChanged(PROPERTY_BOUNDS, oldBounds, r);
 		redrawParentIfNeeded(oldBounds);
 	SAMBAG_END_SYNCHRONIZED
 }
@@ -711,7 +709,7 @@ void AComponent::setSize(const Dimension &d) {
 		if (parent) {
 			parent->__invalidateIfValid_();
 		}
-		firePropertyChanged(PROPERTY_SIZE, old, d);
+		firePropertyChanged(PROPERTY_BOUNDS, old, d);
 		redrawParentIfNeeded(oldBounds);
 	SAMBAG_END_SYNCHRONIZED
 }
@@ -1001,10 +999,68 @@ Rectangle AComponent::getVisibleRect() const {
 void AComponent::drawToOffscreen(IDrawContext::Ptr cn,
 		const Rectangle &rect, const Point2D &max)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+
+	Coordinate x = rect.x0().x(),
+		y = rect.x0().y(),
+		w = rect.width(),
+		h = rect.height(),
+		maxX = max.x(),
+		maxY = max.y();
+
+	setFlag(ANCESTOR_USING_BUFFER, true);
+	if ((y + h) < maxY || (x + w) < maxX) {
+		setFlag(IS_PAINTING_TILE, true);
+
+		if (getFlag(IS_REPAINTING)) {
+			// Called from paintImmediately (RepaintManager) to fill
+			// repaint request
+			draw(cn);
+		} else {
+			// Called from paint() to repair damage
+			if (!rectangleIsObscured(rect)) {
+				drawComponent(cn);
+				drawBorder(cn);
+			}
+			drawChildren(cn);
+		}
+	}
+	setFlag(ANCESTOR_USING_BUFFER, false);
+	setFlag(IS_PAINTING_TILE, false);
+
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawForceDoubleBuffered(IDrawContext::Ptr cn) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	Rectangle clip = cn->clipExtends();
+	setFlag(IS_REPAINTING, true);
+	rm->draw(getPtr(), getPtr(), cn, clip);
+	setFlag(IS_REPAINTING, false);
 }
+//-----------------------------------------------------------------------------
+bool AComponent::isDrawing() const {
+	if (getFlag(ANCESTOR_USING_BUFFER))
+		return true;
+	AContainerPtr component = boost::shared_dynamic_cast<AContainer>(getPtr());
+	while (component) {
+		if (component->getFlag(ANCESTOR_USING_BUFFER)) {
+			return true;
+		}
+		component = component->getParent();
+	}
+	return false;
+}
+//-----------------------------------------------------------------------------
+void AComponent::setFlag(Flag aFlag, bool b) {
+	if (b) {
+		flags |= (1 << aFlag);
+	} else {
+		flags &= ~(1 << aFlag);
+	}
+}
+//-----------------------------------------------------------------------------
+bool AComponent::getFlag(unsigned int aFlag) const {
+	unsigned int mask = (1 << aFlag);
+	return ((flags & mask) == mask);
+}
+
 }}} // namespace(s)

@@ -470,9 +470,10 @@ void AContainer::drawChildren(IDrawContext::Ptr context) {
 			if (!sg.hitClip(cr)) // formally g !!
 				continue;
 			if (i > 0) {
+				Rectangle tmp;
 				boost::geometry::intersection<Rectangle::Base,
-				Rectangle::Base, Rectangle::Base> (cr, clipBounds, cr);
-				if(getObscuredState(i, cr) == COMPLETELY_OBSCURED) {
+				Rectangle::Base, Rectangle::Base> (cr, clipBounds, tmp);
+				if(getObscuredState(i, tmp) == COMPLETELY_OBSCURED) {
 					continue;
 				}
 			} // if (i>0)
