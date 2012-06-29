@@ -102,11 +102,8 @@ onMouseEntered(Menu::Ptr item)
 		setupPostTimer(item);
 	}
 }
-//-----------------------------------------------------------------------------
-struct CallLater : public Timer {
-	typedef boost::shared_ptr<CallLater> Ptr;
-	Menu::Ptr item;
-	static void executeNow(Menu::Ptr item) {
+namespace {
+	void executePopup(Menu::Ptr item) {
 		MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
 		IMenuElement::MenuElements path = defaultManager.getSelectedPath();
 		if (path.size() > 0 && path[path.size() - 1] == item) {
@@ -115,31 +112,24 @@ struct CallLater : public Timer {
 			defaultManager.setSelectedPath(path);
 		}
 	}
-	/**
-	 * @override
-	 */
-	virtual void timedExpired() {
-		executeNow(item);
-		Timer::timedExpired();
-	}
-	static Ptr create(Menu::Ptr item, const Timer::TimeType &time) {
-		Ptr neu(new CallLater());
-		neu->self = neu;
-		neu->item = item;
-		neu->setDelay(time);
-		return neu;
-	}
-};
+}
+//-----------------------------------------------------------------------------
+void popupTimerExpired(void *src, const TimerEvent &ev, Menu::Ptr item) {
+	executePopup(item);
+}
 //-----------------------------------------------------------------------------
 template <class ComponentModell>
 void BasicMenuListener<ComponentModell>::
 setupPostTimer(Menu::Ptr item)
 {
 	if (item->getDelay() == 0) {
-		CallLater::executeNow(item);
+		executePopup(item);
 		return;
 	}
-	CallLater::Ptr timer = CallLater::create(item, item->getDelay());
+	Timer::Ptr timer = Timer::create(item->getDelay());
+	timer->EventSender<TimerEvent>::addEventListener(
+			boost::bind(&popupTimerExpired, _1, _2, item)
+	);
 	timer->start();
 }
 //-----------------------------------------------------------------------------

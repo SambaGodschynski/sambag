@@ -49,6 +49,11 @@ sdc::Timer::Ptr timerInf;
 
 static const std::string INPUT_LABEL = "inputLabel";
 static const int INPUT_LABEL_SIZE = 40;
+static const float FFF = 10.f;
+static const float FF = 5.f;
+static const float F = 1.f;
+
+float currScrollSpeed = F;
 
 void createAcmePopup() {
 	using namespace sambag::disco::components;
@@ -111,14 +116,11 @@ void createAcmePopup() {
 }
 
 void setScrolling(void *src, const sdc::events::ActionEvent &ev, float scrolling) {
-
+	currScrollSpeed = scrolling;
 }
 
 void createSurprisePopup() {
 	using namespace sambag::disco::components;
-	const float FFF = 10.f;
-	const float FF = 5.f;
-	const float F = 1.f;
 	surprisePopup = PopupMenu::create(win3->getRootPane());
 	MenuItem::Ptr btn = MenuItem::create();
 	btn->setText("---");
@@ -167,11 +169,13 @@ void createSurprisePopup() {
 boost::weak_ptr<sdc::Viewport> viewport;
 
 void scrollDown(void *src, const sdc::TimerEvent &ev) {
+	if (currScrollSpeed == 0.f)
+		return;
 	sdc::Viewport::Ptr vp = viewport.lock();
 	if (!vp)
 		return;
 	sd::Point2D p = vp->getViewPosition();
-	p.y( p.y() + 0.5 );
+	p.y( p.y() + currScrollSpeed );
 	vp->setViewPosition(p);
 }
 
