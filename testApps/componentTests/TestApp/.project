@@ -31,7 +31,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/DiscoSvgViewer/Debug}</value>
+					<value>${workspace_loc:/DiscoSvgViewer/Release}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
@@ -80,11 +80,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/TestComponents.cpp</name>
-			<type>1</type>
-			<location>/home/samba/workspace/sambag/src/sambag/disco/components/tests/TestComponents.cpp</location>
-		</link>
-	</linkedResources>
 </projectDescription>

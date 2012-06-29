@@ -27,18 +27,16 @@ MouseEvent::MouseEvent(AComponentPtr source, const Point2D &p
 	buttons(buttons),
 	type(type)
 {
-}
-//-----------------------------------------------------------------------------
-MouseEvent::MouseEvent(AComponentPtr source, const MouseEvent &ev) :
-	source(source),
-	p(ev.p),
-	buttons(ev.buttons),
-	type(ev.type)
-{
+	if (source)
+		screenLocation = source->getLocationOnScreen(p);
 }
 //-----------------------------------------------------------------------------
 const Point2D & MouseEvent::getLocation() const {
 	return p;
+}
+//-----------------------------------------------------------------------------
+const Point2D & MouseEvent::getLocationOnScreen() const {
+	return screenLocation;
 }
 //-----------------------------------------------------------------------------
 int MouseEvent::getButtons() const {

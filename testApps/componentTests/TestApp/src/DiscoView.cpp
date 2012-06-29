@@ -36,20 +36,23 @@ void onButton(void *src, const sdc::events::ActionEvent &ev);
 void onClearTxtField(void *src, const sdc::events::ActionEvent &ev);
 void stopTimer(void *src, const sdc::events::ActionEvent &ev);
 void startTimer(void *src, const sdc::events::ActionEvent &ev);
+void onAcmeMouse(void *src, const sdc::events::MouseEvent &ev);
+void onSurpriseMouse(void *src, const sdc::events::MouseEvent &ev);
 
 
 sdc::FramedWindow::Ptr win;
 sdc::FramedWindow::Ptr win2;
 sdc::FramedWindow::Ptr win3;
-sdc::PopupMenu::Ptr popup;
+sdc::PopupMenu::Ptr acmePopup;
+sdc::PopupMenu::Ptr surprisePopup;
 sdc::Timer::Ptr timerInf;
 
 static const std::string INPUT_LABEL = "inputLabel";
 static const int INPUT_LABEL_SIZE = 40;
 
-void createPopup() {
+void createAcmePopup() {
 	using namespace sambag::disco::components;
-	popup = PopupMenu::create(win2->getRootPane());
+	acmePopup = PopupMenu::create(win2->getRootPane());
 	const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
@@ -57,7 +60,7 @@ void createPopup() {
 	for (int i = 0; i < NUM; ++i) {
 		MenuItem::Ptr btn = MenuItem::create();
 		btn->setText(items[i]);
-		popup->add(btn);
+		acmePopup->add(btn);
 		if (items[i] != CLEAR)
 			continue;
 		btn->EventSender<events::ActionEvent>::addEventListener(&onClearTxtField);
@@ -65,12 +68,12 @@ void createPopup() {
 
 	MenuItem::Ptr btn = MenuItem::create();
 	btn->setText("start Timer");
-	popup->add(btn);
+	acmePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(&startTimer);
 
 	btn = MenuItem::create();
 	btn->setText("stop Timer");
-	popup->add(btn);
+	acmePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(&stopTimer);
 
 
@@ -83,7 +86,7 @@ void createPopup() {
 		btn->setText(ss.str());
 		menu->add(btn);
 	}
-	popup->add(menu);
+	acmePopup->add(menu);
 
 	menu = Menu::create();
 	menu->setText("wasser");
@@ -104,7 +107,61 @@ void createPopup() {
 		subsub->add(btn);
 	}
 	menu->add(subsub);
-	popup->add(menu);
+	acmePopup->add(menu);
+}
+
+void setScrolling(void *src, const sdc::events::ActionEvent &ev, float scrolling) {
+
+}
+
+void createSurprisePopup() {
+	using namespace sambag::disco::components;
+	const float FFF = 10.f;
+	const float FF = 5.f;
+	const float F = 1.f;
+	surprisePopup = PopupMenu::create(win3->getRootPane());
+	MenuItem::Ptr btn = MenuItem::create();
+	btn->setText("---");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, -FFF)
+	);
+	btn = MenuItem::create();
+	btn->setText("--");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, -FF)
+	);
+	btn = MenuItem::create();
+	btn->setText("-");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, -F)
+	);
+	btn = MenuItem::create();
+	btn->setText("0");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, 0.f)
+	);
+	btn = MenuItem::create();
+	btn->setText("+");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, F)
+	);
+	btn = MenuItem::create();
+	btn->setText("++");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, FF)
+	);
+	btn = MenuItem::create();
+	btn->setText("+++");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, FFF)
+	);
 }
 
 boost::weak_ptr<sdc::Viewport> viewport;
@@ -124,8 +181,16 @@ void createSurpriseWindow() {
 	win3 = sdc::FramedWindow::create(win);
 	win3->setTitle("Surprise Window");
 	win3->setWindowBounds(Rectangle(110,100,430,280));
+
 	const int NUM = 1000;
 	AContainerPtr con = Panel::create();
+
+	con->EventSender<sdc::events::MouseEvent>::
+			addEventListener(&onSurpriseMouse);
+
+	con->EventSender<sdc::events::MouseEvent>::
+			addEventListener(&trackMouse);
+
 	con->setSize(Dimension(300, 1000));
 	sdc::Viewport::Ptr vp = Viewport::create();
 	viewport = vp;
@@ -160,7 +225,7 @@ void createACMEWindow() {
 	win2->setWindowBounds(Rectangle(110,100,430,280));
 
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
-			addEventListener(&onMouse);
+			addEventListener(&onAcmeMouse);
 	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&trackMouse);
 
@@ -225,17 +290,15 @@ void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	std::cout<<ev.getSource()->toString()<<" | "<<scr<<" / "<<comp<<std::endl;
 }
 
-void onMouse(void *src, const sdc::events::MouseEvent &ev) {
+void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
+	static PopupMenuPtr currPopup;
 	if (ev.getType() != events::MouseEvent::MOUSE_CLICKED)
 		return;
 	if (ev.getButtons() != sdc::events::MouseEvent::BUTTON2) {
-		if (popup)
-			popup->hidePopup();
+		if (currPopup)
+			currPopup->hidePopup();
 		return;
-	}
-	if (!popup) {
-		createPopup();
 	}
 	if (!popup->isPopupVisible()) {
 		MenuSelectionManager &m = MenuSelectionManager::defaultManager();
@@ -244,9 +307,24 @@ void onMouse(void *src, const sdc::events::MouseEvent &ev) {
 		p.push_back(popup);
 		m.setSelectedPath(p);
 		popup->showPopup(
-			win2->getRootPane()->getLocationOnScreen(ev.getLocation())
+			ev.getLocationOnScreen()
 		);
 	}
+	currPopup = popup;
+}
+
+void onAcmeMouse(void *src, const sdc::events::MouseEvent &ev) {
+	if (!acmePopup) {
+		createAcmePopup();
+	}
+	handlePopupMouse(acmePopup, ev);
+}
+
+void onSurpriseMouse(void *src, const sdc::events::MouseEvent &ev) {
+	if (!surprisePopup) {
+		createSurprisePopup();
+	}
+	handlePopupMouse(surprisePopup, ev);
 }
 
 void onButton(void *src, const sdc::events::ActionEvent &ev) {

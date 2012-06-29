@@ -73,7 +73,7 @@ bool RootPane::isShowing() const {
 //-----------------------------------------------------------------------------
 void RootPane::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
-	AContainer::processMouseEvent(MouseEvent(getPtr(), ev));
+	AContainer::processMouseEvent(ev);
 }
 //-----------------------------------------------------------------------------
 bool RootPane::isValidateRoot() const {

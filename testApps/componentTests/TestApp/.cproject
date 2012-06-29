@@ -551,12 +551,14 @@
 									<listOptionValue builtIn="false" value="boost_filesystem"/>
 									<listOptionValue builtIn="false" value="boost_timer"/>
 									<listOptionValue builtIn="false" value="boost_program_options"/>
+									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="dl"/>
 									<listOptionValue builtIn="false" value="ticppd"/>
 									<listOptionValue builtIn="false" value="cairo"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1191274765" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/samba/clibs/sambag/lib/Release"/>
+									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
 									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
 								</option>

@@ -623,8 +623,10 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 	if (target == lastMouseTarget)
 		return;
 	if (lastMouseTarget) {
-		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
-				ev.getButtons(), MouseEvent::MOUSE_EXITED);
+//		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
+//				ev.getButtons(), MouseEvent::MOUSE_EXITED);
+		MouseEvent nev = ev;
+		nev.updateSoure(getPtr()).updateType(MouseEvent::MOUSE_EXITED);
 		retargetMouseEvent(lastMouseTarget, nev);
 		lastMouseTarget->EventSender<MouseEvent>::notifyListeners(
 				lastMouseTarget.get(),
@@ -632,8 +634,10 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		);
 	}
 	if (target) {
-		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
-				ev.getButtons(), MouseEvent::MOUSE_ENTERED);
+//		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
+//				ev.getButtons(), MouseEvent::MOUSE_ENTERED);
+		MouseEvent nev = ev;
+		nev.updateSoure(getPtr()).updateType(MouseEvent::MOUSE_ENTERED);
 		retargetMouseEvent(target, nev);
 		 target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
 	}
@@ -648,7 +652,9 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 		AComponent::processMouseEvent(ev);
 		return;
 	}
-	MouseEvent nev = MouseEvent(getPtr(), ev);
+	// MouseEvent nev = MouseEvent(getPtr(), ev);
+	MouseEvent nev = ev;
+	nev.updateSoure(getPtr());
 	retargetMouseEvent(target, nev);
 	target->processMouseEvent(nev);
 }
@@ -662,7 +668,8 @@ void AContainer::retargetMouseEvent(AComponentPtr c, events::MouseEvent &ev)
 	for(component = c; component; component = component->getParent()) {
 		boost::geometry::subtract_point(p, component->getLocation());
 	}
-	ev = MouseEvent(c, p, ev.getButtons(), ev.getType());
+	//ev = MouseEvent(c, p, ev.getButtons(), ev.getType());
+	ev.updateSoure(c).updateLocation(p);
 }
 //-----------------------------------------------------------------------------
 std::string AContainer::parameterString() const {
