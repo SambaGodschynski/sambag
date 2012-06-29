@@ -1095,9 +1095,19 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1115996079" name="/" resourcePath="src/sambag/xml/tests">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.471881820" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.424854241" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.964040743"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1087769480" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1797144166" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.631390069" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1681850816" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1774429094" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
+						<entry excluding="src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -1606,9 +1616,19 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034.999002178" name="/" resourcePath="src/sambag/xml/tests">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1193910722" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1282828179" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.1385507974"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1386297873" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1504303465"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.126078104" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1253948484"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1706742294" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1412837044"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.537776567" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.223321594"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.488604266" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.1851360824"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
+						<entry excluding="src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

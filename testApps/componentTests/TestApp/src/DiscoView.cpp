@@ -49,9 +49,10 @@ sdc::Timer::Ptr timerInf;
 
 static const std::string INPUT_LABEL = "inputLabel";
 static const int INPUT_LABEL_SIZE = 40;
-static const float FFF = 10.f;
-static const float FF = 5.f;
-static const float F = 1.f;
+static const float FFFF = 5.f;
+static const float FFF = 1.f;
+static const float FF = .5f;
+static const float F = .1f;
 
 float currScrollSpeed = F;
 
@@ -116,67 +117,92 @@ void createAcmePopup() {
 }
 
 void setScrolling(void *src, const sdc::events::ActionEvent &ev, float scrolling) {
-	currScrollSpeed = scrolling;
+	if (scrolling==0)
+		currScrollSpeed = 0;
+	currScrollSpeed += scrolling;
 }
 
 void createSurprisePopup() {
 	using namespace sambag::disco::components;
 	surprisePopup = PopupMenu::create(win3->getRootPane());
+	//
 	MenuItem::Ptr btn = MenuItem::create();
+	btn->setText("----");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, -FFFF)
+	);
+	//
+	btn = MenuItem::create();
 	btn->setText("---");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, -FFF)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("--");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, -FF)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("-");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, -F)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("0");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, 0.f)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("+");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, F)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("++");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, FF)
 	);
+	//
 	btn = MenuItem::create();
 	btn->setText("+++");
 	surprisePopup->add(btn);
 	btn->EventSender<events::ActionEvent>::addEventListener(
 		boost::bind(&setScrolling, _1, _2, FFF)
 	);
+	//
+	btn = MenuItem::create();
+	btn->setText("++++");
+	surprisePopup->add(btn);
+	btn->EventSender<events::ActionEvent>::addEventListener(
+		boost::bind(&setScrolling, _1, _2, FFFF)
+	);
 }
 
 boost::weak_ptr<sdc::Viewport> viewport;
 
-void scrollDown(void *src, const sdc::TimerEvent &ev) {
+void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
 	if (currScrollSpeed == 0.f)
 		return;
 	sdc::Viewport::Ptr vp = viewport.lock();
 	if (!vp)
 		return;
-	sd::Point2D p = vp->getViewPosition();
-	p.y( p.y() + currScrollSpeed );
-	vp->setViewPosition(p);
+	SAMBAG_BEGIN_SYNCHRONIZED(vp->getTreeLock())
+		sd::Point2D p = vp->getViewPosition();
+		p.y( p.y() + currScrollSpeed );
+		vp->setViewPosition(p);
+	SAMBAG_END_SYNCHRONIZED
 }
 
 void createSurpriseWindow() {
@@ -186,7 +212,7 @@ void createSurpriseWindow() {
 	win3->setTitle("Surprise Window");
 	win3->setWindowBounds(Rectangle(110,100,430,280));
 
-	const int NUM = 1000;
+	const int NUM = 2000;
 	AContainerPtr con = Panel::create();
 
 	con->EventSender<sdc::events::MouseEvent>::
@@ -215,7 +241,7 @@ void createSurpriseWindow() {
 	Timer::Ptr timer = Timer::create(10);
 	timer->setNumRepetitions(-1);
 	timer->EventSender<TimerEvent>::addTrackedEventListener(
-		&scrollDown,
+		&onScrollTimer,
 		viewport
 	);
 	timer->start();
