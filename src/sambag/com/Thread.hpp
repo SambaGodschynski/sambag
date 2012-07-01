@@ -20,7 +20,7 @@ namespace sambag { namespace com {
 }} // namespaces
 
 #define SAMBAG_DEADLOCK_EXCEPTION sambag::com::DeadLockException()
-#define SAMBAG_LOCK_TIMEOUT 10
+#define SAMBAG_LOCK_TIMEOUT 2
 
 #define SAMBAG_TRY_TO_LOCK_TIMED(mutex) boost::unique_lock<sambag::com::Mutex> __lock( (mutex), boost::try_to_lock);\
 	if (!__lock.owns_lock()) { __lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(SAMBAG_LOCK_TIMEOUT)); }\
