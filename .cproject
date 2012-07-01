@@ -5,90 +5,89 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.1378312401">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.1378312401" moduleId="org.eclipse.cdt.core.settings" name="Debug">
-				<externalSettings>
-					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
-					</externalSetting>
-				</externalSettings>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
+<externalSettings>
+<externalSetting>
+<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
+<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
+<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
+</externalSetting>
+</externalSettings>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401" name="Debug" parent="cdt.managedbuild.config.gnu.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401." name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.2123282311" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.939265245" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
-							<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.687174341" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1449163758" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
-								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.483506187" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
-									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.2122029999" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
-									<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.294104932" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.208906726" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.exe.debug.option.debugging.level.764672306" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.1363968518" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2040320523" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1727469015" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2110725256" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
-								<option id="gnu.cpp.link.option.libs.337670248" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="dl"/>
-									<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value="boost_regex"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
-									<listOptionValue builtIn="false" value="cairo"/>
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="ticppd"/>
-									<listOptionValue builtIn="false" value="cppunit"/>
-									<listOptionValue builtIn="false" value="boost_filesystem"/>
-									<listOptionValue builtIn="false" value="boost_signals"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.242609843" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
-								</option>
-								<option id="gnu.cpp.link.option.other.285420063" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1587039989" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.520362805" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1655392188" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry excluding="testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
+<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401" name="Debug" parent="cdt.managedbuild.config.gnu.exe.debug">
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401." name="/" resourcePath="">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.2123282311" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.939265245" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.687174341" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.1449163758" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.461895746" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.483506187" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1351386721" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.include.paths.210186176" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
+<listOptionValue builtIn="false" value="/usr/include/cairo"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
+</option>
+<option id="gnu.cpp.compiler.option.preprocessor.def.2122029999" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
+<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1581502956" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.294104932" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.208906726" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.exe.debug.option.debugging.level.764672306" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.include.paths.1363968518" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2040320523" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1727469015" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.2110725256" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
+<option id="gnu.cpp.link.option.libs.337670248" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<listOptionValue builtIn="false" value="dl"/>
+<listOptionValue builtIn="false" value="lua"/>
+<listOptionValue builtIn="false" value="boost_regex"/>
+<listOptionValue builtIn="false" value="boost_system"/>
+<listOptionValue builtIn="false" value="cairo"/>
+<listOptionValue builtIn="false" value="boost_thread"/>
+<listOptionValue builtIn="false" value="ticppd"/>
+<listOptionValue builtIn="false" value="cppunit"/>
+<listOptionValue builtIn="false" value="boost_filesystem"/>
+<listOptionValue builtIn="false" value="boost_signals"/>
+</option>
+<option id="gnu.cpp.link.option.paths.242609843" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
+</option>
+<option id="gnu.cpp.link.option.other.285420063" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1587039989" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+</inputType>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.520362805" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1655392188" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<sourceEntries>
+<entry excluding="testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
+</configuration>
+</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
@@ -515,16 +514,15 @@
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.release.1491884157">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.1491884157" moduleId="org.eclipse.cdt.core.settings" name="Release">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
+<externalSettings/>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.release.1491884157" name="Release" parent="cdt.managedbuild.config.gnu.exe.release">
 					<folderInfo id="cdt.managedbuild.config.gnu.exe.release.1491884157." name="/" resourcePath="">
@@ -1016,101 +1014,127 @@
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579" moduleId="org.eclipse.cdt.core.settings" name="DebugTestApp">
-				<externalSettings>
-					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
-					</externalSetting>
-				</externalSettings>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
+<externalSettings>
+<externalSetting>
+<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
+<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
+<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
+</externalSetting>
+</externalSettings>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579" name="DebugTestApp" parent="cdt.managedbuild.config.gnu.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579." name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1369322110" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.1593702971" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
-							<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.1142469652" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.964040743" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
-								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.673768848" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.217029445" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.include.paths.735810889" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
-									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.538998622" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
-									<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.174330262" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1274186492" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.exe.debug.option.debugging.level.848130144" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.1830196213" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1460203788" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
-								<option id="gnu.cpp.link.option.libs.2021161009" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="dl"/>
-									<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value="boost_regex"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
-									<listOptionValue builtIn="false" value="cairo"/>
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="ticppd"/>
-									<listOptionValue builtIn="false" value="cppunit"/>
-									<listOptionValue builtIn="false" value="boost_filesystem"/>
-									<listOptionValue builtIn="false" value="boost_signals"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.1626996814" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
-								</option>
-								<option id="gnu.cpp.link.option.other.1724918217" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.82475024" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.286414811" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1115996079" name="/" resourcePath="src/sambag/xml/tests">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.471881820" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.424854241" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.964040743"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1087769480" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1797144166" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.631390069" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1681850816" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1774429094" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
-						<entry excluding="src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
+<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579" name="DebugTestApp" parent="cdt.managedbuild.config.gnu.exe.debug">
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579." name="/" resourcePath="">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1369322110" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.1593702971" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.1142469652" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.964040743" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.673768848" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.217029445" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.include.paths.735810889" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
+<listOptionValue builtIn="false" value="/usr/include/cairo"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
+</option>
+<option id="gnu.cpp.compiler.option.preprocessor.def.538998622" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
+<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.174330262" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1274186492" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.exe.debug.option.debugging.level.848130144" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.include.paths.1830196213" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1460203788" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
+<option id="gnu.cpp.link.option.libs.2021161009" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<listOptionValue builtIn="false" value="dl"/>
+<listOptionValue builtIn="false" value="lua"/>
+<listOptionValue builtIn="false" value="boost_regex"/>
+<listOptionValue builtIn="false" value="boost_system"/>
+<listOptionValue builtIn="false" value="cairo"/>
+<listOptionValue builtIn="false" value="boost_thread"/>
+<listOptionValue builtIn="false" value="ticppd"/>
+<listOptionValue builtIn="false" value="cppunit"/>
+<listOptionValue builtIn="false" value="boost_filesystem"/>
+<listOptionValue builtIn="false" value="boost_signals"/>
+</option>
+<option id="gnu.cpp.link.option.paths.1626996814" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
+</option>
+<option id="gnu.cpp.link.option.other.1724918217" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.82475024" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+</inputType>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.286414811" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1681374448" name="/" resourcePath="src/sambag/disco/components/tests">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.701438350" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.1732967904" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.964040743"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1833943212" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655">
+<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.848456990" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1232538550" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.821963964" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.678841206" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601">
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1147294800" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.exe.debug.option.debugging.level.1433026970" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.487530077" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.618699021" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.984631682" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1211802465" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1210156190" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1115996079" name="/" resourcePath="src/sambag/xml/tests">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.471881820" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.424854241" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.964040743"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1087769480" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.658789655">
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1312423911" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1797144166" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.857570601">
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.914482176" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.631390069" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1802425152"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1681850816" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.272544779"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1774429094" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.447844333">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1446971236" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<sourceEntries>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
+<entry excluding="src/sambag/disco/components/tests|src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
+</configuration>
+</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
@@ -1537,101 +1561,106 @@
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034" moduleId="org.eclipse.cdt.core.settings" name="ReleaseTestApp">
-				<externalSettings>
-					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
-					</externalSetting>
-				</externalSettings>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
+<externalSettings>
+<externalSetting>
+<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/sambag"/>
+<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/sambag/Debug"/>
+<entry flags="RESOLVED" kind="libraryFile" name="sambag"/>
+</externalSetting>
+</externalSettings>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034" name="ReleaseTestApp" parent="cdt.managedbuild.config.gnu.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034." name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.395952083" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.596583255" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
-							<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.1739974492" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1385507974" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1504303465" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
-								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1539039063" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1432250075" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.include.paths.1442163442" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
-									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1966116421" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
-									<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1198024413" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1253948484" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1509418056" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.exe.debug.option.debugging.level.2079328039" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.paths.131806891" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.520594123" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1412837044" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.223321594" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
-								<option id="gnu.cpp.link.option.libs.2054020299" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="dl"/>
-									<listOptionValue builtIn="false" value="lua"/>
-									<listOptionValue builtIn="false" value="boost_regex"/>
-									<listOptionValue builtIn="false" value="boost_system"/>
-									<listOptionValue builtIn="false" value="cairo"/>
-									<listOptionValue builtIn="false" value="boost_thread"/>
-									<listOptionValue builtIn="false" value="ticppd"/>
-									<listOptionValue builtIn="false" value="cppunit"/>
-									<listOptionValue builtIn="false" value="boost_filesystem"/>
-									<listOptionValue builtIn="false" value="boost_signals"/>
-								</option>
-								<option id="gnu.cpp.link.option.paths.113617342" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
-									<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
-								</option>
-								<option id="gnu.cpp.link.option.other.1572685709" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.74077735" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1851360824" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1524271115" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034.999002178" name="/" resourcePath="src/sambag/xml/tests">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1193910722" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1282828179" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.1385507974"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1386297873" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1504303465"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.126078104" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1253948484"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1706742294" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1412837044"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.537776567" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.223321594"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.488604266" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.1851360824"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
-						<entry excluding="src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
+<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034" name="ReleaseTestApp" parent="cdt.managedbuild.config.gnu.exe.debug">
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034." name="/" resourcePath="">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.395952083" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.596583255" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+<builder buildPath="${workspace_loc:/sambag/Debug}" id="cdt.managedbuild.target.gnu.builder.exe.debug.1739974492" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" stopOnErr="false" superClass="cdt.managedbuild.target.gnu.builder.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.1385507974" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1504303465" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1539039063" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1432250075" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+<option id="gnu.cpp.compiler.option.include.paths.1442163442" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/workspace/sambag/src"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/include"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/lua/src"/>
+<listOptionValue builtIn="false" value="/usr/include/cairo"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml"/>
+</option>
+<option id="gnu.cpp.compiler.option.preprocessor.def.1966116421" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+<listOptionValue builtIn="false" value="BOOST_UBLAS_TYPE_CHECK=0"/>
+<listOptionValue builtIn="false" value="DISCO_USE_X11"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1198024413" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1253948484" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
+<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1509418056" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
+<option id="gnu.c.compiler.exe.debug.option.debugging.level.2079328039" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+<option id="gnu.c.compiler.option.include.paths.131806891" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="/home/samba/clibs/sqlite"/>
+</option>
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.520594123" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1412837044" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.223321594" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
+<option id="gnu.cpp.link.option.libs.2054020299" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+<listOptionValue builtIn="false" value="dl"/>
+<listOptionValue builtIn="false" value="lua"/>
+<listOptionValue builtIn="false" value="boost_regex"/>
+<listOptionValue builtIn="false" value="boost_system"/>
+<listOptionValue builtIn="false" value="cairo"/>
+<listOptionValue builtIn="false" value="boost_thread"/>
+<listOptionValue builtIn="false" value="ticppd"/>
+<listOptionValue builtIn="false" value="cppunit"/>
+<listOptionValue builtIn="false" value="boost_filesystem"/>
+<listOptionValue builtIn="false" value="boost_signals"/>
+</option>
+<option id="gnu.cpp.link.option.paths.113617342" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+<listOptionValue builtIn="false" value="/home/samba/clibs/tinyxml/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/loki/lib"/>
+<listOptionValue builtIn="false" value="/home/samba/clibs/boost/stage/lib"/>
+</option>
+<option id="gnu.cpp.link.option.other.1572685709" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other"/>
+<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.74077735" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+</inputType>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1851360824" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1524271115" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1378312401.1259491579.1800380034.999002178" name="/" resourcePath="src/sambag/xml/tests">
+<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1193910722" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+<tool id="cdt.managedbuild.tool.gnu.archiver.base.1282828179" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.1385507974"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1386297873" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1504303465">
+<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.527914441" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.126078104" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1253948484">
+<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2002916107" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+</tool>
+<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1706742294" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1412837044"/>
+<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.537776567" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.223321594"/>
+<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.488604266" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.1851360824">
+<inputType id="cdt.managedbuild.tool.gnu.assembler.input.959300478" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+</tool>
+</toolChain>
+</folderInfo>
+<sourceEntries>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="testApps/componentTests/TestApp"/>
+<entry excluding="src/sambag/xml/tests|src/sambag/math/tests|src/sambag/lua/tests|src/sambag/disco/tests|src/sambag/cpsqlite/tests|src/sambag/com/tests|testApps/sambag_tests.cpp|testApps/componentTests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
+</configuration>
+</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
@@ -2058,6 +2087,6 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="sambag.cdt.managedbuild.target.gnu.exe.458725039" name="Executable" projectType="cdt.managedbuild.target.gnu.exe"/>
-	</storageModule>
+<project id="sambag.cdt.managedbuild.target.gnu.exe.458725039" name="Executable" projectType="cdt.managedbuild.target.gnu.exe"/>
+</storageModule>
 </cproject>

@@ -70,8 +70,8 @@ void AComponent::checkTreeLock() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::contains(Point2D p) const {
-//	if (ui)
-//		return ui->contains(getPtr(), p);
+	if (ui)
+		return ui->contains(getPtr(), p);
 	const Coordinate &width = bounds.getWidth();
 	const Coordinate &height = bounds.getHeight();
 	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);

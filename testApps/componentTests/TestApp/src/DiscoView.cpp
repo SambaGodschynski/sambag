@@ -212,7 +212,7 @@ void createSurpriseWindow() {
 	win3->setTitle("Surprise Window");
 	win3->setWindowBounds(Rectangle(110,100,430,280));
 
-	const int NUM = 2000;
+	const int NUM = 1000;
 	AContainerPtr con = Panel::create();
 
 	con->EventSender<sdc::events::MouseEvent>::

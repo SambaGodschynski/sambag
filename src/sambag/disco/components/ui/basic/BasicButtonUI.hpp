@@ -29,6 +29,8 @@ class BasicButtonUI : public IButtonUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef IButtonUI Super;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<BasicButtonUI<ButtonModell> > Ptr;
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
@@ -39,6 +41,8 @@ private:
 	//-------------------------------------------------------------------------
 	IPattern::Ptr bk, roll, press;
 public:
+	//-------------------------------------------------------------------------
+	virtual bool contains(AComponent::Ptr c, const Point2D &p);
 	//-------------------------------------------------------------------------
 	void onButtonStateChanged(void *src, const
 			typename AbstractButton::StateChangedEvent &ev);
@@ -186,7 +190,13 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	Rectangle txtEx = cn->textExtends(b->getText());
 	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
 }
-
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+bool BasicButtonUI<ButtonModell>::contains(AComponent::Ptr c,
+		const Point2D &p)
+{
+	return Super::contains(c, p);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 }}}}} // namespace(s)

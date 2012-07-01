@@ -14,8 +14,11 @@ namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
 //-----------------------------------------------------------------------------
 bool AComponentUI::contains(AComponent::Ptr c, const Point2D &p) {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	if (!c)
+		return false;
+	const Coordinate &width = c->getBounds().getWidth();
+	const Coordinate &height = c->getBounds().getHeight();
+	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);
 }
 //-----------------------------------------------------------------------------
 int AComponentUI::getBaseline(AComponent::Ptr c, int width, int height) {
