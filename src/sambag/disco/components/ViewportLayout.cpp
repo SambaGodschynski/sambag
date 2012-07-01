@@ -62,7 +62,7 @@ void ViewportLayout::layoutContainer(AContainerPtr parent) {
 	 * the view when the width of the view is smaller than the
 	 * container.
 	 */
-	if (scrollable || vp->getParent() ) {
+	if (!scrollable || !vp->getParent() ) {
 		if ((viewPosition.x() + extentSize.width()) > viewSize.width()) {
 			viewPosition.x(std::max((Number)0, viewSize.width() - extentSize.width()));
 		}
@@ -77,15 +77,16 @@ void ViewportLayout::layoutContainer(AContainerPtr parent) {
 									(Number)viewPosition.x())));
 		}
 	}
-
-	/* If the new viewport size would leave empty space below the
-	 * view, bottom justify the view or top justify the view when
-	 * the height of the view is smaller than the container.
-	 */
-	if ((viewPosition.y() + extentSize.height()) > viewSize.height()) {
-		viewPosition.y( std::max((Number)0,
-			viewSize.height() - extentSize.height()));
-	}
+//  TODO: code below causes reset viewposition to 0,0 after bounds
+//  changed.
+//	/* If the new viewport size would leave empty space below the
+//	 * view, bottom justify the view or top justify the view when
+//	 * the height of the view is smaller than the container.
+//	 */
+//	if ((viewPosition.y() + extentSize.height()) > viewSize.height()) {
+//		viewPosition.y( std::max((Number)0,
+//			viewSize.height() - extentSize.height()));
+//	}
 
 	/* If we haven't been advised about how the viewports size
 	 * should change wrt to the viewport, i.e. if the view isn't
