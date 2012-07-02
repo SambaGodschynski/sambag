@@ -17,10 +17,10 @@
 #include "Common.hpp"
 
 // TODO: remove string conv.
-#define SAMBAG_THROW(obj, what) {		\
+#define SAMBAG_THROW(type, what) {		\
 		std::stringstream ss;				\
 		ss<<__LINE__;						\
-		throw obj((what), std::string(__FILE__), ss.str()); \
+		throw type((what), std::string(__FILE__), ss.str()); \
 	}
 #define SAMBAG_WARN(what) sambag::com::warn((what))
 

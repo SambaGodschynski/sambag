@@ -10,7 +10,7 @@
 
 #include "sambag/com/Common.hpp"
 #include <string>
-
+#include <ostream>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -52,7 +52,10 @@ struct Coordinate {
 	//-------------------------------------------------------------------------
 	std::string toString() const;
 };
-
+inline std::ostream & operator<<(std::ostream &os, const Coordinate &obj) {
+	os << obj.toString();
+	return os;
+}
 }} // namespaces
 
 

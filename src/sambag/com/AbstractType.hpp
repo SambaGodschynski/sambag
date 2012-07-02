@@ -18,6 +18,7 @@ namespace sambag { namespace com {
 /** 
   * @class AbstractType.
   * Use this instead of unsafe void* constructions.
+  * TODO: rename to ArbitraryType
   */
 class AbstractType {
 //=============================================================================
