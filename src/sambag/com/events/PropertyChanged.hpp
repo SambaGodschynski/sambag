@@ -9,7 +9,7 @@
 #define SAMBAG_PROPERTYCHANGED_H
 
 #include <sambag/com/Exception.hpp>
-#include <sambag/com/AbstractType.hpp>
+#include <sambag/com/ArbitraryType.hpp>
 #include <utility>
 #include <string>
 
@@ -24,7 +24,7 @@ private:
 	//-------------------------------------------------------------------------
 	std::string name;
 	//-------------------------------------------------------------------------
-	AbstractType::Ptr content;
+	ArbitraryType::Ptr content;
 public:
 	//-------------------------------------------------------------------------
 	const std::string & getPropertyName() const {

@@ -14,7 +14,7 @@
 #include <map>
 #include "AComponentUI.hpp"
 #include <sambag/disco/components/Forward.hpp>
-#include <sambag/com/AbstractType.hpp>
+#include <sambag/com/ArbitraryType.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================

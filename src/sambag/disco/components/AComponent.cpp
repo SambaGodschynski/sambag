@@ -843,16 +843,16 @@ void AComponent::setBorder(IBorder::Ptr br) {
 	}
 }
 //-----------------------------------------------------------------------------
-AbstractType::Ptr AComponent::getClientProperty(const std::string &key) const
+ArbitraryType::Ptr AComponent::getClientProperty(const std::string &key) const
 {
 	PropertyMap::const_iterator it = propertyMap.find(key);
 	if (it==propertyMap.end())
-		return AbstractType::Ptr();
+		return ArbitraryType::Ptr();
 	return it->second;
 }
 //-----------------------------------------------------------------------------
 void AComponent::putClientPropertyImpl(const std::string &key,
-		AbstractType::Ptr value)
+		ArbitraryType::Ptr value)
 {
 	PropertyMap::iterator it = propertyMap.find(key);
 	if (it==propertyMap.end()) {
@@ -862,11 +862,11 @@ void AComponent::putClientPropertyImpl(const std::string &key,
 		boost::tie(it, inserted) =
 			propertyMap.insert(std::make_pair(key, value));
 		SAMBAG_ASSERT(inserted);
-		clientPropertyChanged(key, AbstractType::Ptr(), value);
-		firePropertyChanged(PROPERTY_CLIENTPROPERTY, AbstractType::Ptr(), value);
+		clientPropertyChanged(key, ArbitraryType::Ptr(), value);
+		firePropertyChanged(PROPERTY_CLIENTPROPERTY, ArbitraryType::Ptr(), value);
 		return;
 	}
-	AbstractType::Ptr old = it->second;
+	ArbitraryType::Ptr old = it->second;
 	if (!value) {
 		propertyMap.erase(it);
 		clientPropertyChanged(key, old, value);

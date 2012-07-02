@@ -33,16 +33,16 @@ UIManager & UIManager::instance() {
 	return UIManagerHolder::Instance();
 }
 //-----------------------------------------------------------------------------
-AbstractType::Ptr UIManager::getProperty(const std::string &key) const
+ArbitraryType::Ptr UIManager::getProperty(const std::string &key) const
 {
 	PropertyMap::const_iterator it = propertyMap.find(key);
 	if (it==propertyMap.end())
-		return AbstractType::Ptr();
+		return ArbitraryType::Ptr();
 	return it->second;
 }
 //-----------------------------------------------------------------------------
 void UIManager::putPropertyImpl(const std::string &key,
-		AbstractType::Ptr value)
+		ArbitraryType::Ptr value)
 {
 	PropertyMap::iterator it = propertyMap.find(key);
 	if (it==propertyMap.end()) {
@@ -54,7 +54,7 @@ void UIManager::putPropertyImpl(const std::string &key,
 		SAMBAG_ASSERT(inserted);
 		return;
 	}
-	AbstractType::Ptr old = it->second;
+	ArbitraryType::Ptr old = it->second;
 	if (!value) {
 		propertyMap.erase(it);
 		return;

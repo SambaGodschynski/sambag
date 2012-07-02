@@ -40,9 +40,9 @@ void onAcmeMouse(void *src, const sdc::events::MouseEvent &ev);
 void onSurpriseMouse(void *src, const sdc::events::MouseEvent &ev);
 
 
-sdc::FramedWindow::Ptr win;
-sdc::FramedWindow::Ptr win2;
-sdc::FramedWindow::Ptr win3;
+std::vector<sdc::FramedWindow::Ptr> win =
+		std::vector<sdc::FramedWindow::Ptr>(4);
+
 sdc::PopupMenu::Ptr acmePopup;
 sdc::PopupMenu::Ptr surprisePopup;
 sdc::Timer::Ptr timerInf;
@@ -58,7 +58,7 @@ float currScrollSpeed = F;
 
 void createAcmePopup() {
 	using namespace sambag::disco::components;
-	acmePopup = PopupMenu::create(win2->getRootPane());
+	acmePopup = PopupMenu::create(win[1]->getRootPane());
 	const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
@@ -124,7 +124,7 @@ void setScrolling(void *src, const sdc::events::ActionEvent &ev, float scrolling
 
 void createSurprisePopup() {
 	using namespace sambag::disco::components;
-	surprisePopup = PopupMenu::create(win3->getRootPane());
+	surprisePopup = PopupMenu::create(win[2]->getRootPane());
 	//
 	MenuItem::Ptr btn = MenuItem::create();
 	btn->setText("----");
@@ -192,6 +192,14 @@ void createSurprisePopup() {
 
 boost::weak_ptr<sdc::Viewport> viewport;
 
+void createBorderlineWindow() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[3] = sdc::FramedWindow::create(win[0]);
+	win[3]->setTitle("Borderline Window");
+	win[3]->setWindowBounds(Rectangle(110,100,430,280));
+}
+
 void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
 	if (currScrollSpeed == 0.f)
 		return;
@@ -208,9 +216,9 @@ void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
 void createSurpriseWindow() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	win3 = sdc::FramedWindow::create(win);
-	win3->setTitle("Surprise Window");
-	win3->setWindowBounds(Rectangle(110,100,430,280));
+	win[2] = sdc::FramedWindow::create(win[0]);
+	win[2]->setTitle("Surprise Window");
+	win[2]->setWindowBounds(Rectangle(110,100,430,280));
 
 	const int NUM = 1000;
 	AContainerPtr con = Panel::create();
@@ -229,7 +237,7 @@ void createSurpriseWindow() {
 	//vp->setScrollMode(Viewport::BACKINGSTORE_SCROLL_MODE);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
 	//con->setLayout(ALayoutManagerPtr());
-	win3->getRootPane()->add(vp);
+	win[2]->getRootPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {
 		std::stringstream ss;
 		ss << i;
@@ -250,16 +258,16 @@ void createSurpriseWindow() {
 void createACMEWindow() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	win2 = sdc::FramedWindow::create(win);
-	win2->setTitle("ACME Window");
-	win2->setWindowBounds(Rectangle(110,100,430,280));
+	win[1] = sdc::FramedWindow::create(win[0]);
+	win[1]->setTitle("ACME Window");
+	win[1]->setWindowBounds(Rectangle(110,100,430,280));
 
-	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
+	win[1]->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onAcmeMouse);
-	win2->getRootPane()->EventSender<sdc::events::MouseEvent>::
+	win[1]->getRootPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&trackMouse);
 
-	RootPanePtr con = win2->getRootPane();
+	RootPanePtr con = win[1]->getRootPane();
 	for (int i = 0; i < 10; ++i) {
 		std::stringstream ss;
 		ss << i;
@@ -300,14 +308,14 @@ void startTimer(void *src, const sdc::events::ActionEvent &ev) {
 void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 	using namespace sambag::disco::components;
 	std::list<AComponentPtr> l;
-	win2->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
+	win[1]->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
 	if (l.empty())
 		return;
 	Label::Ptr label = boost::shared_dynamic_cast<Label>(l.back());
 	if (!label)
 		return;
 	label->setText("");
-	win2->getRootPane()->validate();
+	win[1]->getRootPane()->validate();
 	label->getFont().setSize(INPUT_LABEL_SIZE);
 }
 
@@ -365,7 +373,7 @@ void onButton(void *src, const sdc::events::ActionEvent &ev) {
 		return;
 	}
 	std::list<AComponentPtr> l;
-	win2->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
+	win[1]->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
 	if (l.empty())
 		return;
 	Label::Ptr label = boost::shared_dynamic_cast<Label>(l.back());
@@ -376,38 +384,48 @@ void onButton(void *src, const sdc::events::ActionEvent &ev) {
 	if (txt.length() > 15) {
 		label->getFont().setSize( (15 / (float)txt.length()) * INPUT_LABEL_SIZE );
 	}
-	win2->getRootPane()->validate();
-	win2->getRootPane()->redraw();
+	win[1]->getRootPane()->validate();
+	win[1]->getRootPane()->redraw();
 }
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	if (!win2) {
+	if (!win[1]) {
 		createACMEWindow();
 	}
-	win2->getRootPane()->validate();
-	win2->open();
+	win[1]->getRootPane()->validate();
+	win[1]->open();
 }
 
 void onSurpriseClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	if (!win3) {
+	if (!win[2]) {
 		createSurpriseWindow();
 	}
-	win3->getRootPane()->validate();
-	win3->open();
+	win[2]->getRootPane()->validate();
+	win[2]->open();
+}
+
+void onBorderlineClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	if (!win[3]) {
+		createBorderlineWindow();
+	}
+	win[3]->getRootPane()->validate();
+	win[3]->open();
 }
 
 void onByeClicked ( void *src, const sdc::events::ActionEvent &ac) {
-	if (win)
-		win->close();
+	if (win[0])
+		win[0]->close();
 }
 
 void onMainClose(void*, const sdc::OnCloseEvent &ev) {
-	if (win2)
-		win2->close();
+	if (win[1])
+		win[1]->close();
 }
 
 void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
@@ -453,31 +471,37 @@ int main() {
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
 	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
-		win = sdc::FramedWindow::create();
-		win->setWindowBounds(Rectangle(100,100,230,200));
-		win->setTitle("Messerschmitz 1.0");
+		win[0] = sdc::FramedWindow::create();
+		win[0]->setWindowBounds(Rectangle(100,100,230,200));
+		win[0]->setTitle("Messerschmitz 1.0");
 
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
 		btn->getFont().setFontFace("monospace");
-		win->getRootPane()->add(btn);
+		win[0]->getRootPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("open Surprise Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onSurpriseClicked);
 		btn->getFont().setFontFace("monospace");
-		win->getRootPane()->add(btn);
+		win[0]->getRootPane()->add(btn);
+
+		btn = Button::create();
+		btn->setText("open Borderline Panel");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBorderlineClicked);
+		btn->getFont().setFontFace("monospace");
+		win[0]->getRootPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("tschüß");
 		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
-		win->getRootPane()->add(btn);
+		win[0]->getRootPane()->add(btn);
 
-		win->validate();
-		win->pack();
-		win->open();
+		win[0]->validate();
+		win[0]->pack();
+		win[0]->open();
 
 		MenuSelectionManager::defaultManager().
 		EventSender<MenuSelectionManagerChanged>::addEventListener
@@ -485,7 +509,7 @@ int main() {
 
 		sdc::Window::startMainLoop();
 	}
-	win.reset();
+	win[0].reset();
 	std::cout<<"bye"<<std::endl;
 }
 

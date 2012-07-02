@@ -23,7 +23,7 @@
 #include "Forward.hpp"
 #include "IBorder.hpp"
 #include <boost/unordered_map.hpp>
-#include <sambag/com/AbstractType.hpp>
+#include <sambag/com/ArbitraryType.hpp>
 #include <sstream>
 
 
@@ -86,7 +86,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef sambag::com::RecursiveMutex Lock;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<std::string, AbstractType::Ptr> PropertyMap;
+	typedef boost::unordered_map<std::string, ArbitraryType::Ptr> PropertyMap;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_NAME;
 	//-------------------------------------------------------------------------
@@ -417,7 +417,7 @@ protected:
 	 * @param newValue
 	 */
 	virtual void clientPropertyChanged(const std::string &key,
-			AbstractType::Ptr oldValue, AbstractType::Ptr newValue) {}
+			ArbitraryType::Ptr oldValue, ArbitraryType::Ptr newValue) {}
 
 protected: // TODO: remove mangeling
 	//-------------------------------------------------------------------------
@@ -1145,7 +1145,7 @@ public:
 	 * @return the value of this property or <code>null</code>
 	 * @see #putClientProperty
 	 */
-	AbstractType::Ptr getClientProperty(const std::string &key) const;
+	ArbitraryType::Ptr getClientProperty(const std::string &key) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Adds an arbitrary key/value "client property" to this component.
@@ -1170,7 +1170,7 @@ public:
 	 * @see #getClientProperty
 	 * @see #addPropertyChangeListener
 	 */
-	void putClientPropertyImpl(const std::string &key, AbstractType::Ptr value);
+	void putClientPropertyImpl(const std::string &key, ArbitraryType::Ptr value);
 protected:
 	//-------------------------------------------------------------------------
 	static void computeVisibleRect(AComponent::Ptr, Rectangle &out);

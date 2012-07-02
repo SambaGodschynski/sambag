@@ -13,7 +13,7 @@
 #include "ALookAndFeel.hpp"
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/components/RootPane.hpp>
-#include <sambag/com/AbstractType.hpp>
+#include <sambag/com/ArbitraryType.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 
@@ -26,7 +26,7 @@ class UIManager {
 friend struct Loki::CreateUsingNew<UIManager>;
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<std::string, AbstractType::Ptr> PropertyMap;
+	typedef boost::unordered_map<std::string, ArbitraryType::Ptr> PropertyMap;
 protected:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<RootPane::Ptr, ALookAndFeelPtr> LafMap;
@@ -47,9 +47,9 @@ public:
 	template <typename T>
 	void getProperty(const std::string &name, T &out) const;
 	//-------------------------------------------------------------------------
-	AbstractType::Ptr getProperty(const std::string &key) const;
+	ArbitraryType::Ptr getProperty(const std::string &key) const;
 	//-------------------------------------------------------------------------
-	void putPropertyImpl(const std::string &key, AbstractType::Ptr value);
+	void putPropertyImpl(const std::string &key, ArbitraryType::Ptr value);
 	//-------------------------------------------------------------------------
 	static UIManager & instance();
 	//-------------------------------------------------------------------------
