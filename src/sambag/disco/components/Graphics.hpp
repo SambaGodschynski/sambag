@@ -186,6 +186,9 @@ public:
 	 * @param d
 	 */
 	void copyArea(const Rectangle &src, const Point2D &delta);
+	//-------------------------------------------------------------------------
+	void drawLine(const Coordinate &x0, const Coordinate &y0,
+			const Coordinate &x1, const Coordinate &y1 );
 }; // Graphics
 //=============================================================================
 /**

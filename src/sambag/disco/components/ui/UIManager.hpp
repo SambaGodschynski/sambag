@@ -76,6 +76,9 @@ void UIManager::getProperty(const std::string &name, T &out) const {
 	if (val)
 		out = *val;
 }
+inline UIManager & getUIManager() {
+	return UIManager::instance();
+}
 }}}} // namespace(s)
 
 #endif /* SAMBAG_UIMANAGER_H */

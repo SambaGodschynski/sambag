@@ -22,6 +22,10 @@ Scrollbar::Scrollbar(Scrollbar::Orientation orientation, const Coordinate &value
 	this->unitIncrement = 1;
 	this->blockIncrement = (extent == 0) ? (Coordinate)1. : extent;
 	this->orientation = orientation;
+	this->setValue(value);
+	this->setExtent(extent);
+	this->setMinimum(min);
+	this->setMaximum(max);
 	//setRequestFocusEnabled(false);
 }
 //-----------------------------------------------------------------------------

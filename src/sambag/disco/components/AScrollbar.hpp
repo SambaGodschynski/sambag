@@ -19,7 +19,7 @@ namespace sambag { namespace disco { namespace components {
   * @class AScrollbar.
   */
 template<class ComponentModel>
-class AScrollbar : public AContainer  {
+class AScrollbar : public AContainer, public ComponentModel {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

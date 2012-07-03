@@ -1,40 +1,48 @@
 /*
- * BasicLookAndFeel.hpp
+ * BasicArrowButton.hpp
  *
- *  Created on: Tue Jun  5 07:33:20 2012
+ *  Created on: Tue Jul  3 15:29:39 2012
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_BASICLOOKANDFEEL_H
-#define SAMBAG_BASICLOOKANDFEEL_H
+#ifndef SAMBAG_BASICARROWBUTTON_H
+#define SAMBAG_BASICARROWBUTTON_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/components/ui/ALookAndFeel.hpp>
+#include <sambag/disco/components/Button.hpp>
+
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
 //=============================================================================
 /** 
-  * @class BasicLookAndFeel.
+  * @class BasicArrowButton.
   */
-class BasicLookAndFeel : public ALookAndFeel {
+class BasicArrowButton : public Button {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicLookAndFeel> Ptr;
+	typedef Button Super;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<BasicArrowButton> Ptr;
+	//-------------------------------------------------------------------------
+	enum Direction {
+		NORTH, WEST, SOUTH, EAST
+	};
 protected:
 	//-------------------------------------------------------------------------
-	BasicLookAndFeel();
+	Direction direction;
 	//-------------------------------------------------------------------------
-	void installComponents();
-	//-------------------------------------------------------------------------
-	void installDefaults();
+	BasicArrowButton(Direction direction);
 private:
 public:
 	//-------------------------------------------------------------------------
-	static Ptr create() {
-		return Ptr(new BasicLookAndFeel());
+	static Ptr create(Direction direction) {
+		Ptr res(new BasicArrowButton(direction));
+		res->self = res;
+		res->constructorAlt();
+		return res;
 	}
-}; // BasicLookAndFeel
+}; // BasicArrowButton
 }}}}} // namespace(s)
 
-#endif /* SAMBAG_BASICLOOKANDFEEL_H */
+#endif /* SAMBAG_BASICARROWBUTTON_H */

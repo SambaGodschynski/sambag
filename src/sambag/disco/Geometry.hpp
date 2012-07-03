@@ -246,6 +246,26 @@ public:
 		max_corner().y(min_corner().y() + h);
 	}
 };
+//-----------------------------------------------------------------------------
+inline Rectangle union_(const Rectangle &a, const Rectangle &b) {
+	/*
+	 * boost geometries alg. unfortunately doesn't work:
+	 * no type named ‘const_reference’ in
+	 * ‘class boost::geometry::model::box<boost::geometry::model::d2::
+	 * 		point_xy<sambag::disco::Coordinate> >’
+	 */
+	return Rectangle(
+			minimize(a.x0(), b.x0()),
+			maximize(a.x1(), b.x1())
+	);
+}
+//-----------------------------------------------------------------------------
+inline Rectangle intersect(const Rectangle &a, const Rectangle &b) {
+	Rectangle res;
+	boost::geometry::intersection<Rectangle::Base,
+		Rectangle::Base, Rectangle::Base> (a, b, res);
+	return res;
+}
 //=============================================================================
 inline std::ostream & operator << (std::ostream &os, const Rectangle &r)
 {

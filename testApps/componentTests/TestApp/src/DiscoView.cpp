@@ -21,6 +21,7 @@
 #include <sambag/disco/components/Label.hpp>
 #include <sambag/disco/components/MenuSelectionManager.hpp>
 #include <sambag/disco/components/Viewport.hpp>
+#include <sambag/disco/components/Scrollbar.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
@@ -198,6 +199,19 @@ void createBorderlineWindow() {
 	win[3] = sdc::FramedWindow::create(win[0]);
 	win[3]->setTitle("Borderline Window");
 	win[3]->setWindowBounds(Rectangle(110,100,430,280));
+	Scrollbar::Ptr scr = Scrollbar::create(
+			Scrollbar::HORIZONTAL, 0, 0, 0, 100
+	);
+	scr->setPreferredSize(Dimension(250, 25));
+	AContainerPtr c = Panel::create();
+	c->setSize(Dimension(300,300));
+	c->add(scr);
+
+	scr = Scrollbar::create(Scrollbar::VERTICAL, 50, 0, 0, 100);
+	scr->setPreferredSize(Dimension(20, 250));
+	c->add(scr);
+
+	win[3]->getRootPane()->add(c);
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev) {

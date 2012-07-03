@@ -36,4 +36,12 @@ void Graphics::copyArea(const Rectangle &src, const Point2D &d) {
 	boost::geometry::add_point(where, d);
 	copyAreaTo(cn, src, where);
 }
+//-------------------------------------------------------------------------
+void Graphics::drawLine(const Coordinate &x0, const Coordinate &y0,
+		const Coordinate &x1, const Coordinate &y1 )
+{
+	moveTo(Point2D(x0, y0));
+	lineTo(Point2D(x1, y1));
+	stroke();
+}
 }}} // namespace(s)
