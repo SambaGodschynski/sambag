@@ -17,6 +17,17 @@
 #include <sambag/com/ArbitraryType.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
+// UICreator helper classes
+struct IUICreator {
+	typedef boost::shared_ptr<IUICreator> Ptr;
+	virtual AComponentUI::Ptr createUI() = 0;
+};
+template <class ConcreteUI>
+struct UICreator : public IUICreator {
+	virtual AComponentUI::Ptr createUI() {
+		return ConcreteUI::create();
+	}
+};
 //=============================================================================
 /** 
   * @class ALookAndFeel.
@@ -33,7 +44,7 @@ private:
 	/**
 	 * relation between Component types and their creators
 	 */
-	typedef std::map<Loki::TypeInfo, AComponentUI::Ptr> UIMap;
+	typedef std::map<Loki::TypeInfo, IUICreator::Ptr> UIMap;
 	//-------------------------------------------------------------------------
 	UIMap uiMap;
 protected:
@@ -56,7 +67,7 @@ public:
 template <typename Component, typename ComponentUI>
 void ALookAndFeel::registerComponentUI() {
 	Loki::TypeInfo info(typeid(Component));
-	uiMap[info] = ComponentUI::create();
+	uiMap[info] = IUICreator::Ptr(new UICreator<ComponentUI>() );
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteComponent>
@@ -65,7 +76,7 @@ AComponentUI::Ptr ALookAndFeel::getUI() const {
 	if (it==uiMap.end()) {
 		return AComponentUI::Ptr();
 	}
-	return it->second;
+	return it->second->createUI();
 }
 }}}} // namespace(s)
 
