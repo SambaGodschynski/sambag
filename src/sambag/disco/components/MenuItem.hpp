@@ -27,8 +27,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<MenuItem> Ptr;
 	//-------------------------------------------------------------------------
-	typedef DefaultButtonModell Modell;
-	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_DELAY;
@@ -45,7 +43,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
-		return AButton<Modell>::toString();
+		return AButton<Model>::toString();
 	}
 	//-------------------------------------------------------------------------
 	void setDelay(int newDelay);

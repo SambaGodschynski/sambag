@@ -33,7 +33,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<APopupMenu> Ptr;
 	//-------------------------------------------------------------------------
-	typedef SingleSelectionModell Modell;
+	typedef SingleSelectionModell Model;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_POPUP_LOCATION;
 private:

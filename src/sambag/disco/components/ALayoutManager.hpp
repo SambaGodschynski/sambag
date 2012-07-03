@@ -61,13 +61,13 @@ public:
 	 *
 	 * @param comp
 	 */
-	 virtual void addLayoutComponent(AComponentPtr comp) = 0;
+	 virtual void addLayoutComponent(AComponentPtr comp) {}
 	//-------------------------------------------------------------------------
 	/**
 	 * Lays out the specified container.
 	 * @param parent
 	 */
-	virtual void layoutContainer(AContainerPtr parent) = 0;
+	virtual void layoutContainer(AContainerPtr parent) {}
 	//-------------------------------------------------------------------------
 	/**
 	 * Calculates the minimum size dimensions for the specified container,
@@ -119,7 +119,9 @@ public:
 		return Coordinate(NULL_NUMBER);
 	}
 	//-----------------------------------------------------------------------------
-	virtual std::string toString() const = 0;
+	virtual std::string toString() const {
+		return "ALayoutManager";
+	}
 
 }; // ALayoutManager
 }}} // namespace(s)
