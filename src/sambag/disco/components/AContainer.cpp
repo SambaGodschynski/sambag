@@ -647,7 +647,34 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
+
+
+	if (ev.getType() == MouseEvent::MOUSE_DRAGGED) {
+		if(!lastMouseTarget)
+			return;
+		events::MouseEvent nev = ev;
+		retargetMouseEvent(lastMouseTarget, nev);
+		if (lastMouseTarget==getPtr())
+			AComponent::processMouseEvent(nev);
+		else
+			lastMouseTarget->processMouseEvent(nev);
+		return;
+	}
+
+	if (ev.getType() == MouseEvent::MOUSE_RELEASED) {
+		if(lastMouseTarget) {
+			events::MouseEvent nev = ev;
+			retargetMouseEvent(lastMouseTarget, nev);
+			if (lastMouseTarget==getPtr())
+				AComponent::processMouseEvent(nev);
+			else
+				lastMouseTarget->processMouseEvent(nev);
+			return;
+		}
+	}
+
 	trackMouseEnterEvents(target, ev);
+
 	if (!target || target == getPtr()) {
 		AComponent::processMouseEvent(ev);
 		return;

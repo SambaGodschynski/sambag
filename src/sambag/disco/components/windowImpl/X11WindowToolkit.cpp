@@ -83,7 +83,7 @@ namespace { // thread / timer stuff
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::startTimer(Timer::Ptr tm) {
-	Timer::TimeType ms = tm->getDelay();
+	Timer::TimeType ms = tm->getInitialDelay();
 	int repetitions = tm->getNumRepetitions();
 	TimerImpl *t = new TimerImpl(io, boost::posix_time::millisec(ms));
 	toInvoke.insert( ToInvoke::value_type(t, tm) );
@@ -91,7 +91,6 @@ void X11WindowToolkit::startTimer(Timer::Ptr tm) {
 		boost::bind(&timerCallback,
 		boost::asio::placeholders::error,
 		t,
-		ms,
 		repetitions)
 	);
 	tm->__setRunningByToolkit_(true);
@@ -109,7 +108,7 @@ void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::timerCallback(const boost::system::error_code&,
-		TimerImpl *timerImpl, long ms, int repetitions)
+		TimerImpl *timerImpl, int repetitions)
 {
 	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
 		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
@@ -128,12 +127,12 @@ void X11WindowToolkit::timerCallback(const boost::system::error_code&,
 		}
 		if (repetitions > 0)
 			--repetitions;
+		long ms = tm->getDelay();
 		timerImpl->expires_at(timerImpl->expires_at() + boost::posix_time::millisec(ms));
 		timerImpl->async_wait(
 			boost::bind(&timerCallback,
 			boost::asio::placeholders::error,
 			timerImpl,
-			ms,
 			repetitions)
 		);
 	SAMBAG_END_SYNCHRONIZED

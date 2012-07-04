@@ -292,6 +292,8 @@ void createACMEWindow() {
 				addEventListener(&trackMouse);
 		btn->setText(ss.str());
 		btn->getFont().setFontFace("monospace");
+		btn->EventSender<sdc::events::MouseEvent>::
+				addEventListener(&trackMouse);
 		con->add(btn);
 	}
 	for (int i = 0; i < 26; ++i) {
@@ -301,6 +303,8 @@ void createACMEWindow() {
 				addEventListener(&onButton);
 		btn->setText(std::string(c));
 		btn->getFont().setFontFace("monospace");
+		btn->EventSender<sdc::events::MouseEvent>::
+				addEventListener(&trackMouse);
 		con->add(btn);
 	}
 	Label::Ptr label = Label::create();
@@ -336,10 +340,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	//std::cout<<ev.toString()<<std::endl;
-	Point2D scr = ev.getSource()->getLocationOnScreen(ev.getLocation());
-	Point2D comp = ev.getSource()->getLocationOnComponent(scr);
-	std::cout<<ev.getSource()->toString()<<" | "<<scr<<" / "<<comp<<std::endl;
+	std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {

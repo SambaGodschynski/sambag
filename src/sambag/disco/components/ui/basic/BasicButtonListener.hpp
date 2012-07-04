@@ -56,6 +56,10 @@ void BasicButtonListener<ButtonModell>::
 		b->setButtonPressed(false);
 		if (!oldState)
 			break;
+		if (!b->contains(ev.getLocation())) {// mouse moved out
+			b->setButtonRollover(false);
+			break;
+		}
 		sambag::com::ICommand::Ptr c =
 				b->getButtonCommand();
 		if (c)

@@ -40,7 +40,7 @@ private:
 		boost::bimaps::unordered_set_of<Timer::Ptr> > ToInvoke;
 	//-------------------------------------------------------------------------
 	static void timerCallback(const boost::system::error_code&,
-			TimerImpl* timer, long ms, int repetitions);
+			TimerImpl* timer, int repetitions);
 	//-------------------------------------------------------------------------
 	static ToInvoke toInvoke;
 	//-------------------------------------------------------------------------

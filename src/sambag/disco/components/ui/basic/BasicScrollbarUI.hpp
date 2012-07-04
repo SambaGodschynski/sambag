@@ -176,7 +176,24 @@ private:
 	void configureScrollBarColors();
 	//-------------------------------------------------------------------------
 	// delay in milli seconds
-	sambag::com::ArithmeticWrapper<long, 60> scrollSpeedThrottle ;
+	sambag::com::ArithmeticWrapper<long, 60> scrollSpeedThrottle;
+	//-------------------------------------------------------------------------
+	static void scrollByUnits(typename ScrollBarType::Ptr scrollbar,
+			typename ScrollBarType::Direction direction, int units,
+			bool limitToBlock);
+	//-------------------------------------------------------------------------
+	static void scrollByBlock(typename ScrollBarType::Ptr scrollbar,
+			typename ScrollBarType::Direction direction);
+	//-------------------------------------------------------------------------
+	void scrollByBlock(typename ScrollBarType::Direction direction) {
+		scrollByBlock(scrollbar, direction);
+		trackHighlight = (direction == ScrollBarType::INCR) ?
+				INCREASE_HIGHLIGHT : DECREASE_HIGHLIGHT;
+		scrollbar->redraw(getTrackBounds());
+	}
+	void scrollByUnit(typename ScrollBarType::Direction direction) {
+		scrollByUnits(scrollbar, direction, 1, false);
+	}
 public:
 	//-------------------------------------------------------------------------
 	virtual bool contains(AComponent::Ptr c, const Point2D &p);
@@ -234,15 +251,29 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	struct ScrollListener {
+		typedef BasicScrollbarUI<ComponentModell> ParentType;
+		ParentType &parent;
+		typename ScrollBarType::Direction direction;
+		bool useBlockIncrement;
+		ScrollListener(ParentType &parent) : parent(parent) {
+			direction = ScrollBarType::INCR;
+			useBlockIncrement = false;
+		}
+		void setDirection(typename ScrollBarType::Direction direction) {
+			this->direction = direction;
+		}
+		void setScrollByBlock(bool block)
+			{useBlockIncrement = block;
+		}
 		void onScrollTimer(void *src, const Timer::Event &ev);
 	};
 	//-------------------------------------------------------------------------
 	ScrollListener scrollListener;
 public:
 	//-------------------------------------------------------------------------
-	void onArrowIncr(void *src, const events::ActionEvent &ev);
+	BasicScrollbarUI() : scrollListener(ScrollListener(*this)) {}
 	//-------------------------------------------------------------------------
-	void onArrowDecr(void *src, const events::ActionEvent &ev);
+	void onArrowBtn(void *src, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	void onTrack(void *src, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
@@ -348,17 +379,24 @@ template <class M>
 void BasicScrollbarUI<M>::installListeners() {
 
 	if (incrButton) {
-		incrButton->EventSender<events::ActionEvent>::addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onArrowIncr, this, _1, _2),
+		incrButton->EventSender<events::MouseEvent>::addTrackedEventListener(
+			boost::bind(&BasicScrollbarUI<M>::onArrowBtn, this, _1, _2),
 			self
 		);
 	}
 	if (decrButton) {
-		decrButton->EventSender<events::ActionEvent>::addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onArrowDecr, this, _1, _2),
+		decrButton->EventSender<events::MouseEvent>::addTrackedEventListener(
+			boost::bind(&BasicScrollbarUI<M>::onArrowBtn, this, _1, _2),
 			self
 		);
 	}
+
+	if (scrollbar)
+		scrollbar->EventSender<DefaultBoundedRangeModelChanged>::
+		addTrackedEventListener(
+			boost::bind(&BasicScrollbarUI<M>::onModelChanged, this, _1, _2),
+			self
+		);
 
 	//scrollListener = createScrollListener();
 	scrollTimer = Timer::create(scrollSpeedThrottle);
@@ -366,6 +404,8 @@ void BasicScrollbarUI<M>::installListeners() {
 		boost::bind(&ScrollListener::onScrollTimer, &scrollListener, _1, _2),
 		self
 	);
+	scrollTimer->setNumRepetitions(-1);
+	scrollTimer->setInitialDelay(300);
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -655,10 +695,10 @@ void BasicScrollbarUI<M>::setThumbBounds(const Rectangle &r) {
 	/* Update thumbRect, and repaint the union of x,y,w,h and
 	 * the old thumbRect.
 	 */
-	Rectangle nr = union_(thumbRect, r);
+	//Rectangle nr = union_(thumbRect, r);
 	thumbRect = r;
 	//scrollbar->redraw(Rectangle(minX, minY, maxX - minX, maxY - minY));
-	scrollbar->redraw(nr);
+	scrollbar->redraw();
 
 	// Once there is API to determine the mouse location this will need
 	// to be changed.
@@ -666,17 +706,38 @@ void BasicScrollbarUI<M>::setThumbBounds(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 template <class M>
-void BasicScrollbarUI<M>::onArrowIncr(void *src,
-		const events::ActionEvent &ev)
+void BasicScrollbarUI<M>::onArrowBtn(void *src,
+		const events::MouseEvent &ev)
 {
-	std::cout<<"incr"<<std::endl;
-}
-//-----------------------------------------------------------------------------
-template <class M>
-void BasicScrollbarUI<M>::onArrowDecr(void *src,
-		const events::ActionEvent &ev)
-{
-	std::cout<<"decr"<<std::endl;
+	if (ev.getType() == events::MouseEvent::MOUSE_PRESSED) {
+		if (!scrollbar->isEnabled()) {
+			return;
+		}
+		// not an unmodified left mouse button
+		//if(e.getModifiers() != InputEvent.BUTTON1_MASK) {return; }
+		if (ev.getButtons() != ev.BUTTON1) {
+			return;
+		}
+
+		typename ScrollBarType::Direction direction =
+				(ev.getSource() == incrButton) ?
+						ScrollBarType::INCR: ScrollBarType::DECR;
+
+		scrollByUnit(direction);
+		scrollTimer->stop();
+		scrollListener.setDirection(direction);
+		scrollListener.setScrollByBlock(false);
+		scrollTimer->start();
+		//TODO: Focus
+//		if (!scrollbar->hasFocus() && scrollbar->isRequestFocusEnabled()) {
+//			scrollbar->requestFocus();
+//		}
+	}
+
+	if (ev.getType() == events::MouseEvent::MOUSE_RELEASED) {
+		scrollTimer->stop();
+		scrollbar->setValueIsAdjusting(false);
+	}
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -688,14 +749,120 @@ template <class M>
 void BasicScrollbarUI<M>::onModelChanged(void *src,
 		const DefaultBoundedRangeModelChanged &ev)
 {
-
+	 layoutContainer(scrollbar);
 }
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::ScrollListener::onScrollTimer(void *src,
 		const Timer::Event &ev)
 {
+	if (useBlockIncrement) {
+		parent.scrollByBlock(direction);
+		// Stop scrolling if the thumb catches up with the mouse
+		if (parent.scrollbar->getOrientation() == ScrollBarType::VERTICAL) {
+			if (direction == ScrollBarType::INCR) {
+//				if (parent.getThumbBounds().x0().y() + parent.getThumbBounds().height()
+//						>= parent.trackListener.currentMouseY)
+//					ev.getSource()->stop();
+//			} else if (parent.getThumbBounds().x0().y() <= parent.trackListener.currentMouseY) {
+//				ev.getSource()->stop();
+			}
+		} else {
+//			if ((direction ==ScrollBarType::INCR && !parent.isMouseAfterThumb())
+//					|| (direction == ScrollBarType::DECR
+//					&& !parent.isMouseBeforeThumb()))
+//			{
+//
+//				ev.getSource()->stop();
+//			}
+		}
+	} else {
+		parent.scrollByUnit(direction);
+	}
 
+	if (direction == ScrollBarType::INCR && parent.scrollbar->getValue() +
+			parent.scrollbar->getVisibleAmount()
+			>= parent.scrollbar->getMaximum())
+	{
+		ev.getSource()->stop();
+	}
+	else if (direction == ScrollBarType::DECR && parent.scrollbar->getValue()
+			<= parent.scrollbar->getMinimum())
+	{
+		ev.getSource()->stop();
+	}
+}
+//-----------------------------------------------------------------------------
+template <class M>
+void BasicScrollbarUI<M>::scrollByUnits(typename ScrollBarType::Ptr scrollbar,
+		typename ScrollBarType::Direction direction, int units,
+		bool limitToBlock)
+{
+	// This method is called from BasicScrollPaneUI to implement wheel
+	// scrolling, as well as from scrollByUnit().
+	Coordinate delta;
+	Coordinate limit = -1.;
+
+	if (limitToBlock) {
+		if (direction == ScrollBarType::DECR) {
+			limit = scrollbar->getValue() - scrollbar->getBlockIncrement(
+					direction);
+		} else {
+			limit = scrollbar->getValue() + scrollbar->getBlockIncrement(
+					direction);
+		}
+	}
+
+	for (int i = 0; i < units; ++i) {
+		if (direction == ScrollBarType::INCR) {
+			delta = scrollbar->getUnitIncrement(direction);
+		} else {
+			delta = -scrollbar->getUnitIncrement(direction);
+		}
+
+		Coordinate oldValue = scrollbar->getValue();
+		Coordinate newValue = oldValue + delta;
+
+		// Check for overflow.
+		if (delta > 0. && newValue < oldValue) {
+			newValue = scrollbar->getMaximum();
+		} else if (delta < 0. && newValue > oldValue) {
+			newValue = scrollbar->getMinimum();
+		}
+		if (oldValue == newValue) {
+			break;
+		}
+
+		if (limitToBlock && i > 0) {
+			SAMBAG_ASSERT(limit != -1);
+			if ((direction < 0 && newValue < limit) || (direction > 0
+					&& newValue > limit)) {
+				break;
+			}
+		}
+		scrollbar->setValue(newValue);
+	}
+}
+//-----------------------------------------------------------------------------
+template <class M>
+void BasicScrollbarUI<M>::scrollByBlock(typename ScrollBarType::Ptr scrollbar,
+		typename ScrollBarType::Direction direction)
+{
+	// This method is called from BasicScrollPaneUI to implement wheel
+	// scrolling, and also from scrollByBlock().
+	Coordinate oldValue = scrollbar->getValue();
+	Coordinate blockIncrement = scrollbar->getBlockIncrement(direction);
+	Coordinate delta = blockIncrement *
+			((direction == ScrollBarType::INCR) ? +1. : -1.);
+	Coordinate newValue = oldValue + delta;
+
+	// Check for overflow.
+	if (delta > 0 && newValue < oldValue) {
+		newValue = scrollbar->getMaximum();
+	} else if (delta < 0 && newValue > oldValue) {
+		newValue = scrollbar->getMinimum();
+	}
+	scrollbar->setValue(newValue);
 }
 }}}}} // namespace(s)
 

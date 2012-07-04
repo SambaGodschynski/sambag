@@ -16,6 +16,7 @@ namespace sambag { namespace disco { namespace components {
 Timer::Timer() :
 	repetitions(0),
 	delay(1),
+	initialDelay(-1),
 	running(false)
 {
 
@@ -29,6 +30,8 @@ Timer::Ptr Timer::create(const TimeType &ms) {
 }
 //-----------------------------------------------------------------------------
 void Timer::start() {
+	if (initialDelay==-1)
+		initialDelay = delay;
 	getWindowToolkit()->startTimer(getPtr());
 }
 //-----------------------------------------------------------------------------
@@ -46,6 +49,10 @@ bool Timer::isRunning() const {
 //-----------------------------------------------------------------------------
 void Timer::setDelay(const TimeType &_delay) {
 	delay = _delay;
+}
+//-----------------------------------------------------------------------------
+void Timer::setInitialDelay(const TimeType &_delay) {
+	initialDelay = _delay;
 }
 //-----------------------------------------------------------------------------
 void Timer::timedExpired() {

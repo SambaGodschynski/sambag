@@ -44,7 +44,7 @@ protected:
 	//-------------------------------------------------------------------------
 	int repetitions;
 	//-------------------------------------------------------------------------
-	TimeType delay;
+	TimeType delay, initialDelay;
 	//-------------------------------------------------------------------------
 	WPtr self;
 	//-------------------------------------------------------------------------
@@ -75,8 +75,17 @@ public:
 	 */
 	virtual void setDelay(const TimeType &delay);
 	//-------------------------------------------------------------------------
+	/**
+	 * @param delay in ms
+	 */
+	virtual void setInitialDelay(const TimeType &delay);
+	//-------------------------------------------------------------------------
 	virtual const TimeType & getDelay() const {
 		return delay;
+	}
+	//-------------------------------------------------------------------------
+	virtual const TimeType & getInitialDelay() const {
+		return initialDelay;
 	}
 	//-------------------------------------------------------------------------
 	virtual int getNumRepetitions() const {
