@@ -51,8 +51,8 @@ void BasicLookAndFeel::installDefaults() {
 	// TODO: impl. lazy init e.g. -> lookAndFeel->install("Colors")
 	m.putProperty("ScrollBar.minimumThumbSize", Dimension(15., 15.));
 	m.putProperty("ScrollBar.maximumThumbSize", Dimension(20., 20.));
-	m.putProperty("ScrollBar.incrementButtonGap", Coordinate(1.));
-	m.putProperty("ScrollBar.decrementButtonGap", Coordinate(1.));
+	m.putProperty("ScrollBar.incrementButtonGap", Coordinate(5.));
+	m.putProperty("ScrollBar.decrementButtonGap", Coordinate(5.));
 	m.putProperty("ScrollBar.thumbHighlight", HtmlColors::getColor("lightblue"));
 	m.putProperty("ScrollBar.thumbShadow", HtmlColors::getColor("darkgrey"));
 	m.putProperty("ScrollBar.thumbDarkShadow", HtmlColors::getColor("black"));

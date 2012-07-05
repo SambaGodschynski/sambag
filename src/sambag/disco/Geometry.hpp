@@ -245,6 +245,15 @@ public:
 	void height(const Coordinate &h) {
 		max_corner().y(min_corner().y() + h);
 	}
+	//-------------------------------------------------------------------------
+	bool isEmpty() const {
+		return boost::geometry::equals(x0(), x1());
+	}
+	//-------------------------------------------------------------------------
+	bool contains(const Point2D &p) const {
+		return p.x() > x0().x() && p.y() > x0().y() &&
+				p.x() < x1().x() && p.y() < x1().y();
+	}
 };
 //-----------------------------------------------------------------------------
 inline Rectangle union_(const Rectangle &a, const Rectangle &b) {

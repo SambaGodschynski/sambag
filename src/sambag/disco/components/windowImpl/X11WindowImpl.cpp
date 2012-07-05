@@ -248,9 +248,9 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 		if (event.xbutton.button == Button1)
 			buttons |= 1;
 		if (event.xbutton.button == Button2)
-			buttons |= 2;
-		if (event.xbutton.button == Button3)
 			buttons |= 4;
+		if (event.xbutton.button == Button3)
+			buttons |= 2;
 		mx = event.xbutton.x;
 		my = event.xbutton.y;
 		src->handleMouseButtonPressEvent(mx, my, buttons);
@@ -262,9 +262,9 @@ void X11WindowImpl::handleEvent(XEvent &event) {
 		if (event.xbutton.button == Button1)
 			buttons |= 1;
 		if (event.xbutton.button == Button2)
-			buttons |= 2;
-		if (event.xbutton.button == Button3)
 			buttons |= 4;
+		if (event.xbutton.button == Button3)
+			buttons |= 2;
 		mx = event.xbutton.x;
 		my = event.xbutton.y;
 		src->handleMouseButtonReleaseEvent(mx, my, buttons);

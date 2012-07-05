@@ -72,7 +72,7 @@ namespace { // thread / timer stuff
 	//-------------------------------------------------------------------------
 	sambag::com::RecursiveMutex timerLock;
 	//-------------------------------------------------------------------------
-	void timerThreadClbk() {
+	void timerThreadClbk() { //TODO: impl. 1 thread per timer
 		while (threadsAreRunning) {
 			io.run();
 			io.reset();

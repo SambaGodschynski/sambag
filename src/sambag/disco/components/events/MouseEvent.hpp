@@ -11,7 +11,6 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/Geometry.hpp>
-
 namespace sambag { namespace disco { namespace components { namespace events {
 
 //=============================================================================
@@ -26,19 +25,21 @@ public:
 	// Indicates mouse button #1; used by getButton().
 	static const int	BUTTON1 = 1;
 	// Indicates mouse button #2; used by getButton().
-	static const int	BUTTON2 = 1<<2;
+	static const int	BUTTON2 = 1<<1;
 	// Indicates mouse button #3; used by getButton().
-	static const int	BUTTON3 = 1<<3;
+	static const int	BUTTON3 = 1<<2;
 	enum Type {
-		MOUSE_CLICKED,
-		MOUSE_DRAGGED,
-		MOUSE_ENTERED,
-		MOUSE_EXITED,
-		MOUSE_MOVED,
-		MOUSE_PRESSED,
-		MOUSE_RELEASED,
-		MOUSE_WHEEL,
-		NONE
+		NONE,
+		MOUSE_CLICKED = 1,
+		MOUSE_DRAGGED = 1 << 1,
+		MOUSE_ENTERED = 1 << 2,
+		MOUSE_EXITED = 1 << 3,
+		MOUSE_MOVED = 1 << 4,
+		MOUSE_PRESSED = 1 << 5,
+		MOUSE_RELEASED = 1 << 6,
+		MOUSE_WHEEL = 1 << 7,
+		ALL_EVENTS = MOUSE_PRESSED | MOUSE_RELEASED | MOUSE_CLICKED |
+		MOUSE_MOVED | MOUSE_DRAGGED | MOUSE_ENTERED | MOUSE_EXITED | MOUSE_WHEEL
 	};
 private:
 	//-------------------------------------------------------------------------
@@ -93,7 +94,104 @@ public:
 		buttons = _new;
 		return *this;
 	}
-
+};
+///////////////////////////////////////////////////////////////////////////////
+namespace {
+//-----------------------------------------------------------------------------
+template <int V>
+struct Int2Type { enum { Value = V }; };
+//-----------------------------------------------------------------------------
+typedef MouseEvent Me;
+template <class L>
+void pressed(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void pressed(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_PRESSED> d) {
+	l.mousePressed(ev);
+}
+template <class L>
+void released(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void released(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_RELEASED> d) {
+	l.mouseReleased(ev);
+}
+template <class L>
+void entered(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void entered(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_ENTERED> d) {
+	l.mouseEntered(ev);
+}
+template <class L>
+void exited(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void exited(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_EXITED> d) {
+	l.mouseExited(ev);
+}
+template <class L>
+void clicked(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void clicked(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_CLICKED> d) {
+	l.mouseClicked(ev);
+}
+template <class L>
+void moved(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void moved(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_MOVED> d) {
+	l.mouseMoved(ev);
+}
+template <class L>
+void dragged(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void dragged(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_DRAGGED> d) {
+	l.mouseDragged(ev);
+}
+template <class L>
+void wheel(const MouseEvent &ev, L &l, Int2Type<0> d){}
+template <class L>
+void wheel(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_WHEEL> d) {
+	l.mouseWheelMoved(ev);
+}
+} // namespace
+//=============================================================================
+/**
+ * Helper class for MouseEvent.
+ * Delegates mouse events to fitting MouseEventListener methods.
+ *
+ */
+template<int FilterValue = Me::ALL_EVENTS>
+struct MouseEventSwitch {
+//=============================================================================
+	enum { Filter = FilterValue };
+ 	template <class MouseEventListener>
+	static void delegate(const MouseEvent &ev, MouseEventListener &l) {
+		switch (ev.getType()) {
+		case MouseEvent::MOUSE_PRESSED:
+			pressed(ev, l, Int2Type<Me::MOUSE_PRESSED&Filter>());
+			break;
+		case MouseEvent::MOUSE_RELEASED:
+			released(ev, l, Int2Type<Me::MOUSE_RELEASED&Filter>());
+			break;
+		case MouseEvent::MOUSE_CLICKED:
+			clicked(ev, l, Int2Type<Me::MOUSE_CLICKED&Filter>());
+			break;
+		case MouseEvent::MOUSE_ENTERED:
+			entered(ev, l, Int2Type<Me::MOUSE_ENTERED&Filter>());
+			break;
+		case MouseEvent::MOUSE_EXITED:
+			exited(ev, l, Int2Type<Me::MOUSE_EXITED&Filter>());
+			break;
+		case MouseEvent::MOUSE_MOVED:
+			moved(ev, l, Int2Type<Me::MOUSE_MOVED&Filter>());
+			break;
+		case MouseEvent::MOUSE_DRAGGED:
+			dragged(ev, l, Int2Type<Me::MOUSE_DRAGGED&Filter>());
+			break;
+		case MouseEvent::MOUSE_WHEEL:
+			wheel(ev, l, Int2Type<Me::MOUSE_WHEEL&Filter>());
+			break;
+		default:
+			break;
+		}
+	}
 };
 }}}} // namespace(s)
 

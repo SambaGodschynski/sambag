@@ -652,12 +652,13 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	if (ev.getType() == MouseEvent::MOUSE_DRAGGED) {
 		if(!lastMouseTarget)
 			return;
-		events::MouseEvent nev = ev;
-		retargetMouseEvent(lastMouseTarget, nev);
 		if (lastMouseTarget==getPtr())
-			AComponent::processMouseEvent(nev);
-		else
+			AComponent::processMouseEvent(ev);
+		else {
+			events::MouseEvent nev = ev;
+			retargetMouseEvent(lastMouseTarget, nev);
 			lastMouseTarget->processMouseEvent(nev);
+		}
 		return;
 	}
 
