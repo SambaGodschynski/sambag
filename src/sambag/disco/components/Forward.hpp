@@ -20,7 +20,7 @@ namespace sambag { namespace disco { namespace components {
 	class Panel; typedef boost::shared_ptr<Panel> PanelPtr;
 	class RootPane; typedef boost::shared_ptr<RootPane> RootPanePtr;
 	class Scrollbar; typedef boost::shared_ptr<Scrollbar> ScrollbarPtr;
-	class Scrollpane; typedef boost::shared_ptr<Scrollpane> ScrollpanePtr;
+	class ScrollPane; typedef boost::shared_ptr<ScrollPane> ScrollPanePtr;
 	class Viewport; typedef boost::shared_ptr<Viewport> ViewportPtr;
 	class RedrawManager; typedef boost::shared_ptr<RedrawManager> RedrawManagerPtr;
 	class AWindowImpl; typedef boost::shared_ptr<AWindowImpl> AWindowPtr;

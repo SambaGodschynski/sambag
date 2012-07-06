@@ -69,7 +69,7 @@ public:
 		UPPER_TRAILING_CORNER
 	};
 
-	enum ScrollbarPolicy {
+	enum VerticalScrollbarPolicy {
 		/**
 		 * Used to set the vertical scroll bar policy so that
 		 * vertical scrollbars are displayed only when needed.
@@ -84,8 +84,10 @@ public:
 		 * Used to set the vertical scroll bar policy so that
 		 * vertical scrollbars are always displayed.
 		 */
-		VERTICAL_SCROLLBAR_ALWAYS,
+		VERTICAL_SCROLLBAR_ALWAYS
+	};
 
+	enum HorizontalScrollbarPolicy {
 		/**
 		 * Used to set the horizontal scroll bar policy so that
 		 * horizontal scrollbars are displayed only when needed.
@@ -104,10 +106,10 @@ public:
 	};
 	//-------------------------------------------------------------------------
 	/** Identifies the vertical scroll bar policy property. */
-	String VERTICAL_SCROLLBAR_POLICY = "VERTICAL_SCROLLBAR_POLICY";
+	static const std::string PROPERTY_VERTICAL_SCROLLBAR_POLICY;
 	//-------------------------------------------------------------------------
 	/** Identifies the horizontal scroll bar policy property. */
-	String HORIZONTAL_SCROLLBAR_POLICY = "HORIZONTAL_SCROLLBAR_POLICY";
+	static const std::string PROPERTY_HORIZONTAL_SCROLLBAR_POLICY;
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
