@@ -1,0 +1,10 @@
+type name = value;
+\w+\s+(\w+)\s+=\s*.+;		used for: convert list of variables into enum	
+
+functionName(xxx)
+(?s)(\w+\(.*?\))		: prepend Class:: before function name 
+
+/**
+ * xxx
+ */
+/\*\*(\R.*?)*\*/\R 		: remove doxy comment

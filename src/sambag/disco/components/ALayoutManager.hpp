@@ -65,6 +65,8 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Lays out the specified container.
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
 	 * @param parent
 	 */
 	virtual void layoutContainer(AContainerPtr parent) {}
@@ -72,6 +74,8 @@ public:
 	/**
 	 * Calculates the minimum size dimensions for the specified container,
 	 * given the components it contains.
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
 	 * @param parent
 	 * @return
 	 */
@@ -83,6 +87,8 @@ public:
 	 * Calculates the maximum size dimensions for the specified container,
 	 * given the components it contains.
 	 * @param parent
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
 	 * @return
 	 */
 	virtual Dimension maximumLayoutSize(AContainerPtr parent) {
@@ -92,6 +98,8 @@ public:
 	/**
 	 * Calculates the preferred size dimensions for the specified container,
 	 * given the components it contains.
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
 	 * @param parent
 	 * @return
 	 */
@@ -110,15 +118,27 @@ public:
 	 * @param comp
 	 */
 	virtual void invalidateLayout(AContainerPtr target) {}
-	//-----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+	/**
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
+	 * @param target
+	 * @return
+	 */
 	virtual Coordinate getLayoutAlignmentY(AContainerPtr target) {
 		return Coordinate(NULL_NUMBER);
 	}
-	//-----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+	/**
+	 * @note: not const because its not sure that derived classes can comply
+	 * the const rules.
+	 * @param target
+	 * @return
+	 */
 	virtual Coordinate getLayoutAlignmentX(AContainerPtr target) {
 		return Coordinate(NULL_NUMBER);
 	}
-	//-----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return "ALayoutManager";
 	}
