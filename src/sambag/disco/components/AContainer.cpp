@@ -109,13 +109,15 @@ void AContainer::dispatchAddEvents(AComponent::Ptr comp) {
 			getPtr(), HierarchyEvent::PARENT_CHANGED);
 }
 //-----------------------------------------------------------------------------
-AComponent::Ptr AContainer::add(AComponent::Ptr comp, int index) {
+AComponent::Ptr AContainer::add(AComponent::Ptr comp, int index,
+		com::ArbitraryType::Ptr constraint)
+{
 	if (!comp)
 		return AComponent::Ptr();
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		addComponent(comp, index);
 		if (layoutMgr)
-			layoutMgr->addLayoutComponent(comp);
+			layoutMgr->addLayoutComponent(comp, constraint);
 	SAMBAG_END_SYNCHRONIZED
 	dispatchAddEvents(comp);
 	return comp;

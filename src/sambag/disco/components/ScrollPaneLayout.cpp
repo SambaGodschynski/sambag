@@ -6,17 +6,23 @@
  */
 
 #include "ScrollPaneLayout.hpp"
+#include "Viewport.hpp"
+#include "ScrollPane.hpp"
+#include "Scrollbar.hpp"
+#include <sambag/com/exceptions/IllegalArgumentException.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class ScrollPaneLayout
 //=============================================================================
 //-----------------------------------------------------------------------------
-AComponentPtr ScrollPaneLayout::addSingletonAComponentPtr(
+AComponentPtr ScrollPaneLayout::addSingletonComponent(
 		AComponentPtr oldC, AComponentPtr newC)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return AComponentPtr();
+	if (!oldC && oldC != newC) {
+		oldC->getParent()->remove(oldC);
+	}
+	return newC;
 }
 //-----------------------------------------------------------------------------
 void ScrollPaneLayout::adjustForVSB(bool wantsVSB, const Rectangle &available,
@@ -31,10 +37,39 @@ void ScrollPaneLayout::adjustForHSB(bool wantsHSB, const Rectangle &available,
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
-void ScrollPaneLayout::addLayoutComponent(const std::string &s,
-		AComponentPtr c)
+void ScrollPaneLayout::addLayoutComponent(AComponentPtr c,
+	ArbitraryType::Ptr constraint)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+	ScrollPane::Area location;
+	com::get(constraint, location);
+	switch(location) {
+	case ScrollPane::VIEWPORT:
+		viewport = boost::shared_dynamic_cast<Viewport>(
+			addSingletonComponent(viewport, c));
+	case ScrollPane::VERTICAL_SCROLLBAR:
+		vsb = boost::shared_dynamic_cast<Scrollbar>(
+			addSingletonComponent(vsb, c));
+	case ScrollPane::HORIZONTAL_SCROLLBAR:
+		hsb = boost::shared_dynamic_cast<Scrollbar>(
+			addSingletonComponent(hsb, c));
+	case ScrollPane::ROW_HEADER:
+		rowHead = boost::shared_dynamic_cast<Viewport>(
+			addSingletonComponent(rowHead, c));
+	case ScrollPane::COLUMN_HEADER:
+		colHead = boost::shared_dynamic_cast<Viewport>(
+				addSingletonComponent(colHead, c));
+	case ScrollPane::LOWER_LEFT_CORNER:
+		lowerLeft = addSingletonComponent(lowerLeft, c);
+	case ScrollPane::LOWER_RIGHT_CORNER:
+		lowerRight = addSingletonComponent(lowerRight, c);
+	case ScrollPane::UPPER_LEFT_CORNER:
+		upperLeft = addSingletonComponent(upperLeft, c);
+	case ScrollPane::UPPER_RIGHT_CORNER:
+		upperRight = addSingletonComponent(upperRight, c);
+	default:
+		SAMBAG_THROW(com::exceptions::IllegalArgumentException,
+				"invalid layout key");
+	}
 }
 //-----------------------------------------------------------------------------
 ViewportPtr ScrollPaneLayout::getColumnHeader() const {
@@ -89,6 +124,7 @@ Dimension ScrollPaneLayout::
 	preferredLayoutSize(AContainerPtr parent)
 {
 	SAMBA_LOG_NOT_YET_IMPL();
+	return Dimension();
 }
 //-----------------------------------------------------------------------------
 void ScrollPaneLayout::removeLayoutComponent(AComponentPtr c) {
@@ -108,6 +144,16 @@ void ScrollPaneLayout::
 }
 //-----------------------------------------------------------------------------
 void ScrollPaneLayout::syncWithScrollPane(ScrollPanePtr sp) {
-	SAMBA_LOG_NOT_YET_IMPL();
+//	viewport = sp->getViewport();
+//	vsb = sp->getVerticalScrollBar();
+//	hsb = sp>getHorizontalScrollBar();
+//	rowHead = sp->getRowHeader();
+//	colHead = sp->getColumnHeader();
+//	lowerLeft = sp->getCorner(ScrollPane::LOWER_LEFT_CORNER);
+//	lowerRight = sp->getCorner(ScrollPane::LOWER_RIGHT_CORNER);
+//	upperLeft = sp->getCorner(ScrollPane::UPPER_LEFT_CORNER);
+//	upperRight = sp->getCorner(ScrollPane::UPPER_RIGHT_CORNER);
+//	vsbPolicy = sp->getVerticalScrollBarPolicy();
+//	hsbPolicy = sp->getHorizontalScrollBarPolicy();
 }
 }}} // ScrollPaneLayout::namespace(s)

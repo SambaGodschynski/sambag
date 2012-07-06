@@ -32,7 +32,7 @@ protected:
 	/**
 	 * Removes an existing AComponentPtr.
 	 */
-	AComponentPtr addSingletonAComponentPtr(AComponentPtr oldC,
+	AComponentPtr addSingletonComponent(AComponentPtr oldC,
 			AComponentPtr newC);
 	//-------------------------------------------------------------------------
 	/**
@@ -143,7 +143,8 @@ public:
 	 * @param s
 	 * @param c
 	 */
-	virtual void addLayoutComponent(const std::string &s, AComponentPtr c);
+	virtual void addLayoutComponent(AComponentPtr comp,
+			 ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the ViewportPtr object that is the column header.

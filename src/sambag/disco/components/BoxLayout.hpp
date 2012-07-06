@@ -91,7 +91,8 @@ public:
 	 * Not used by this class.
 	 * @param comp the component
 	 */
-	void addLayoutComponent(AComponentPtr comp);
+	void addLayoutComponent(AComponentPtr comp,
+			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
 	 * Not used by this class.

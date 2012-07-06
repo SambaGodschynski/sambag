@@ -161,11 +161,8 @@ public:
 	 * @param index
 	 * @return the component argument
 	 */
-	virtual AComponent::Ptr add(AComponent::Ptr comp, int index = -1);
-	//-------------------------------------------------------------------------
-	template<class LayoutManager, class Constraint>
-	AComponent::Ptr add(AComponent::Ptr comp, const Constraint &c,
-			int index = -1);
+	virtual AComponent::Ptr add(AComponent::Ptr comp, int index = -1,
+			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
 	 *  Causes this container to lay out its components.
@@ -372,20 +369,6 @@ public:
 	 */
 	virtual void validateTree();
 }; // AContainer
-//=============================================================================
-template<class LayoutManager, class Constraint>
-AComponent::Ptr AContainer::add(AComponent::Ptr comp, const Constraint &c,
-		int index) {
-	if (!comp)
-		return AComponent::Ptr();
-	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-		addComponent(comp, index);
-		if (layoutMgr)
-			layoutMgr->addLayoutComponent<LayoutManager> (comp, c);
-	SAMBAG_END_SYNCHRONIZED
-	dispatchAddEvents(comp);
-	return comp;
-}
 }}} // namespace(s)
 
 #endif /* SAMBAG_ACONTAINER_H */

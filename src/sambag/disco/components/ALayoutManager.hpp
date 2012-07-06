@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include "Forward.hpp"
+#include <sambag/com/ArbitraryType.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -44,24 +45,10 @@ public:
 	/**
 	 *
 	 * @param comp
-	 * @param c
-	 */	template<class LayoutMng, class Constraint>
-	void addLayoutComponent(AComponentPtr comp, const Constraint &c) {
-		boost::shared_ptr<LayoutMng> lm =
-				boost::shared_dynamic_cast<LayoutMng>(getPtr());
-		if (!lm) {
-			// layout manager dosen't match add without constraint
-			addLayoutComponent(comp);
-			return;
-		}
-		lm->LayoutMng::addLayoutComponentImpl(comp, c);
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 *
-	 * @param comp
+	 * @param constraint
 	 */
-	 virtual void addLayoutComponent(AComponentPtr comp) {}
+	 virtual void addLayoutComponent(AComponentPtr comp,
+		ArbitraryType::Ptr constraint = ArbitraryType::Ptr()) {}
 	//-------------------------------------------------------------------------
 	/**
 	 * Lays out the specified container.

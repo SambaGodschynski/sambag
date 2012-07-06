@@ -43,7 +43,8 @@ public:
 	 * @param name
 	 * @param c
 	 */
-	virtual void addLayoutComponent(AComponentPtr c);
+	virtual void addLayoutComponent(AComponentPtr comp,
+		com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
 	 * Called by the AWT when the specified container needs to be laid out.

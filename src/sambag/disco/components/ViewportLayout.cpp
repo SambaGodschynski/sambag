@@ -26,7 +26,9 @@ ViewportLayout::Ptr ViewportLayout::getSharedInstance() {
 ViewportLayout::ViewportLayout() {
 }
 //-----------------------------------------------------------------------------
-void ViewportLayout::addLayoutComponent(AComponentPtr c) {
+void ViewportLayout::addLayoutComponent(AComponentPtr comp,
+	com::ArbitraryType::Ptr constraint)
+{
 }
 //-----------------------------------------------------------------------------
 void ViewportLayout::layoutContainer(AContainerPtr parent) {

@@ -182,15 +182,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * Adds the specified component to the layout.
-	 * Not used by this class.
-	 * @param name the name of the component
-	 * @param comp the component to be added
-	 */
-	virtual void addLayoutComponent(AComponentPtr comp) {
-	}
-	//-------------------------------------------------------------------------
-	/**
 	 * Removes the specified component from the layout.
 	 * Not used by this class.
 	 * @param comp the component to remove
