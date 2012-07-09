@@ -1,10 +1,24 @@
 type name = value;
 \w+\s+(\w+)\s+=\s*.+;		used for: convert list of variables into enum	
-
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 functionName(xxx)
 (?s)(\w+\(.*?\))		: prepend Class:: before function name 
-
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 /**
  * xxx
  */
 /\*\*(\R.*?)*\*/\R 		: remove doxy comment
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+else if (key.equals(LOWER_RIGHT_CORNER)) {
+(?-i).*(if){0,1} (else){0,1} (if){0,1}.*?([A-Z_]+).*	: change if then else
+							  into switch case
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+availR.x += vpbInsets.left;
+([a-z.]+)\s*([+-])=(.*);	: replace x+=y into x.(x+y) using
+				  $1( $1() $2 $3); 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+(left|right|bottom|top|x|y|width|height)		: append() to x,y ...
+						          using $1()
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+(\w+)\.(x|y)	: rectangle.x() => rectangle.x0().x() using $1.x0()$1

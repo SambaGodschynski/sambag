@@ -27,7 +27,9 @@ namespace sambag { namespace disco {
 struct Coordinate {
 //=============================================================================
 	//-------------------------------------------------------------------------
-	enum Type {
+	enum Type { // TODO: remove types; different types has to impl. as
+				// deveriates or templ. deveriates e.g:
+				// WeightetCoordinate<PX>
 			NONE,
 			PX,
 			IN,
@@ -51,6 +53,10 @@ struct Coordinate {
 	}
 	//-------------------------------------------------------------------------
 	std::string toString() const;
+	//-------------------------------------------------------------------------
+	void operator +=(const Coordinate &v) {
+		value +=v;
+	}
 };
 inline std::ostream & operator<<(std::ostream &os, const Coordinate &obj) {
 	os << obj.toString();

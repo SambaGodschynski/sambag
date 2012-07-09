@@ -118,7 +118,7 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	void adjustForVSB(bool wantsVSB, const Rectangle &available,
-			const Rectangle &vsbR, const Insets &vpbInsets, bool leftToRight);
+			const Rectangle &vsbR, const Insets &vpbInsets);
 	//-------------------------------------------------------------------------
 	/**
 	 * Adjusts the <code>Rectangle</code> <code>available</code> based on if
@@ -157,7 +157,7 @@ public:
 	 * @param key
 	 * @return
 	 */
-	AComponentPtr getCorner(const std::string &key) const;
+	AComponentPtr getCorner(ScrollPane::Area loc) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the ScrollbarPtr object that handles horizontal scrolling.
@@ -216,6 +216,8 @@ public:
 	 * @return
 	 */
 	virtual Dimension preferredLayoutSize(AContainerPtr parent);
+	//-------------------------------------------------------------------------
+	virtual Dimension minimumLayoutSize(AContainerPtr parent);
 	//-------------------------------------------------------------------------
 	/**
 	 * Removes the specified AComponentPtr from the layout.
