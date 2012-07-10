@@ -18,9 +18,8 @@
 
 // TODO: remove string conv.
 #define SAMBAG_THROW(type, what) {		\
-		std::stringstream ss;				\
-		ss<<__LINE__;						\
-		throw type((what), std::string(__FILE__), ss.str()); \
+		throw type( (what), std::string(__FILE__), \
+			sambag::com::toString(__LINE__) ); \
 	}
 #define SAMBAG_WARN(what) sambag::com::warn((what))
 

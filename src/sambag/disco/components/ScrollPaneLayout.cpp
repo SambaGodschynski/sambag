@@ -12,6 +12,7 @@
 #include "IScrollable.hpp"
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include "IBorder.hpp"
+#include "ui/UIManager.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -27,16 +28,37 @@ AComponentPtr ScrollPaneLayout::addSingletonComponent(
 	return newC;
 }
 //-----------------------------------------------------------------------------
-void ScrollPaneLayout::adjustForVSB(bool wantsVSB, const Rectangle &available,
-		const Rectangle &vsbR, const Insets &vpbInsets)
+void ScrollPaneLayout::adjustForVSB(bool wantsVSB,
+		Rectangle &available, Rectangle &vsbR,
+		const Insets &vpbInsets)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Coordinate oldWidth = vsbR.width();
+	if (wantsVSB) {
+		Coordinate vsbWidth = std::max((Coordinate)0,
+				std::min(vsb->getPreferredSize().width(), available.width()));
+
+		available.width( available.width() -  vsbWidth);
+		vsbR.width(vsbWidth);
+		vsbR.x0().x(available.x0().x() + available.width() + vpbInsets.right());
+	} else {
+		available.width( available.width() + oldWidth);
+	}
 }
 //-----------------------------------------------------------------------------
-void ScrollPaneLayout::adjustForHSB(bool wantsHSB, const Rectangle &available,
-		const Rectangle &hsbR, const Insets &vpbInsets)
+void ScrollPaneLayout::adjustForHSB(bool wantsHSB, Rectangle &available,
+		Rectangle &hsbR, const Insets &vpbInsets)
 {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Coordinate oldHeight = hsbR.height();
+	if (wantsHSB) {
+		Coordinate hsbHeight = std::max((Coordinate)0,
+				std::min(available.height(), hsb->getPreferredSize().height()));
+
+		available.height( available.height() -  hsbHeight);
+		hsbR.x0().y(available.x0().y() + available.height() + vpbInsets.bottom());
+		hsbR.height(hsbHeight);
+	} else {
+		available.height( available.height() +  oldHeight);
+	}
 }
 //-----------------------------------------------------------------------------
 void ScrollPaneLayout::addLayoutComponent(AComponentPtr c,
@@ -211,7 +233,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 			: Dimension(0, 0);
 
 	Dimension extentSize = (viewport) ? viewport->toViewCoordinates(
-			availR->getSize()) : Dimension(0, 0);
+			availR.getSize()) : Dimension(0, 0);
 
 	bool viewTracksViewportWidth = false;
 	bool viewTracksViewportHeight = false;
@@ -234,7 +256,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 
 	Rectangle vsbR(0, availR.x0().y() - vpbInsets.top(), 0, 0);
 
-	boolean vsbNeeded;
+	bool vsbNeeded;
 	if (isEmpty) {
 		vsbNeeded = false;
 	} else if (vsbPolicy == ScrollPane::VERTICAL_SCROLLBAR_ALWAYS) {
@@ -247,7 +269,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	}
 
 	if (vsb && vsbNeeded) {
-		adjustForVSB(true, availR, vsbR, vpbInsets, leftToRight);
+		adjustForVSB(true, availR, vsbR, vpbInsets);
 		extentSize = viewport->toViewCoordinates(availR.getSize());
 	}
 
@@ -281,7 +303,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 		if (vsb && !vsbNeeded && (vsbPolicy
 				!= ScrollPane::VERTICAL_SCROLLBAR_NEVER)) {
 
-			extentSize = viewport->toViewCoordinates(availR->getSize());
+			extentSize = viewport->toViewCoordinates(availR.getSize());
 			vsbNeeded = viewPrefSize.height() > extentSize.height();
 
 			if (vsbNeeded) {
@@ -370,10 +392,10 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 
 	if (vsb) {
 		if (vsbNeeded) {
-			if (colHead != null && UIManager.getBoolean(
-					"ScrollPane.fillUpperCorner")) {
-				if ((leftToRight && upperRight) || (!leftToRight
-						&& upperLeft)) {
+			bool fill = false;
+			ui::getUIManager().getProperty("ScrollPane.fillUpperCorner", fill);
+			if (colHead && fill) {
+				if (upperRight) {
 					// This is used primarily for GTK L&F, which needs to
 					// extend the vertical scrollbar to fill the upper
 					// corner near the column header.  Note that we skip
@@ -392,18 +414,16 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 
 	if (hsb) {
 		if (hsbNeeded) {
-			if (rowHead != null && UIManager.getBoolean(
-					"ScrollPane.fillLowerCorner")) {
-				if ((leftToRight && lowerLeft) || (!leftToRight
-						&& lowerRight)) {
+			bool fill = false;
+			ui::getUIManager().getProperty("ScrollPane.fillLowerCorner", fill);
+			if (rowHead && fill) {
+				if (lowerLeft) {
 					// This is used primarily for GTK L&F, which needs to
 					// extend the horizontal scrollbar to fill the lower
 					// corner near the row header.  Note that we skip
 					// this step (and use the default behavior) if the
 					// user has set a custom corner component.
-					if (leftToRight) {
-						hsbR.x0().x(rowHeadR.x0().x());
-					}
+					hsbR.x0().x(rowHeadR.x0().x());
 					hsbR.width( hsbR.width() + rowHeadR.width());
 				}
 			}
@@ -415,23 +435,23 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	}
 
 	if (lowerLeft) {
-		lowerLeft->setBounds(leftToRight ? rowHeadR.x0().x() : vsbR.x0().x(), hsbR.x0().y(),
-				leftToRight ? rowHeadR.width() : vsbR.width(), hsbR.height());
+		lowerLeft->setBounds(rowHeadR.x0().x(), hsbR.x0().y(),
+			rowHeadR.width(), hsbR.height());
 	}
 
 	if (lowerRight) {
-		lowerRight.setBounds(leftToRight ? vsbR.x0().x() : rowHeadR.x0().x(), hsbR.x0().y(),
-				leftToRight ? vsbR.width() : rowHeadR.width(), hsbR.height());
+		lowerRight->setBounds(vsbR.x0().x(), hsbR.x0().y(),
+				vsbR.width(), hsbR.height());
 	}
 
-	if (upperLeft != null) {
-		upperLeft.setBounds(leftToRight ? rowHeadR.x0().x() : vsbR.x0().x(), colHeadR.x0().y(),
-				leftToRight ? rowHeadR.width() : vsbR.width(), colHeadR.height());
+	if (upperLeft) {
+		upperLeft->setBounds(rowHeadR.x0().x(), colHeadR.x0().y(),
+				rowHeadR.width(), colHeadR.height());
 	}
 
-	if (upperRight != null) {
-		upperRight.setBounds(leftToRight ? vsbR.x0().x() : rowHeadR.x0().x(), colHeadR.x0().y(),
-				leftToRight ? vsbR.width() : rowHeadR.width(), colHeadR.height());
+	if (upperRight) {
+		upperRight->setBounds(vsbR.x0().x(), colHeadR.x0().y(),
+				vsbR.width(), colHeadR.height());
 	}
 }
 //-----------------------------------------------------------------------------
@@ -495,7 +515,7 @@ Dimension ScrollPaneLayout::
 	}
 
 	if ((colHead) && colHead->isVisible()) {
-		prefHeight = prefHeight + colHead->getPreferredSize().height;
+		prefHeight = prefHeight + colHead->getPreferredSize().height();
 	}
 
 	/* If a scrollbar is going to appear, factor its preferred size in.
@@ -525,7 +545,7 @@ Dimension ScrollPaneLayout::
 				boost::shared_dynamic_cast<IScrollable>(view);
 			if (scrollable) {
 				canScroll
-						= !scollable->getScrollableTracksViewportHeight();
+						= !scrollable->getScrollableTracksViewportHeight();
 			}
 			if (canScroll && (viewSize.height() > extentSize.height())) {
 				prefWidth += vsb->getPreferredSize().width();
@@ -594,7 +614,7 @@ Dimension ScrollPaneLayout::minimumLayoutSize(AContainerPtr parent) {
 	}
 
 	if ((colHead) && colHead->isVisible()) {
-		Dimension size = colHead.getMinimumSize();
+		Dimension size = colHead->getMinimumSize();
 		minWidth = std::max(minWidth, size.width());
 		minHeight += size.height();
 	}

@@ -29,9 +29,9 @@ public:
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
-	Scrollbar(Orientation orientation, const Coordinate &value,
-			const Coordinate &extent, const Coordinate &min,
-			const Coordinate &max);
+	Scrollbar(Orientation orientation, const Coordinate &value = 0.,
+			const Coordinate &extent = 10., const Coordinate &min = 0.,
+			const Coordinate &max = 100.);
 private:
 public:
 	//-------------------------------------------------------------------------

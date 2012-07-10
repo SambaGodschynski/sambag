@@ -60,6 +60,12 @@ inline Number getNullInteger() {
 	return DBL_MAX;
 }
 //-----------------------------------------------------------------------------
+template<typename T>
+std::string toString(const T &v) {
+	std::stringstream ss;
+	ss << v;
+	return ss.str();
+}
 }} // namespaces
 
 #endif /* COMMON_HPP_ */

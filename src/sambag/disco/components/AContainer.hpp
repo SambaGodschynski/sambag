@@ -165,6 +165,28 @@ public:
 			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
+	 * convenience version of add
+	 * @param comp
+	 * @param v
+	 * @param index
+	 */
+	template <typename T>
+	void add(AComponent::Ptr comp, const T &v, int index /*no default!*/) {
+		add (comp, index, com::ConcreteType<T>::create(v));
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * convenience version of add
+	 * @param comp
+	 * @param v
+	 * @param index
+	 */
+	template <typename T>
+	void addBack(AComponent::Ptr comp, const T &v) {
+		add(comp, -1, com::ConcreteType<T>::create(v));
+	}
+	//-------------------------------------------------------------------------
+	/**
 	 *  Causes this container to lay out its components.
 	 */
 	virtual void doLayout();

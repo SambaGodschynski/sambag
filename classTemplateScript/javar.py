@@ -143,7 +143,7 @@ class mywidgets:
         
     def listfr(self, frame, name):
         textfr = Frame(frame)
-        text = Listbox(textfr,height = 15,width = 80,background='white',
+        text = Listbox(textfr,height = 30,width = 80,background='white',
                        selectmode=MULTIPLE, state=NORMAL)
         setattr(self, name, text)
         scroll = Scrollbar(textfr)

@@ -29,6 +29,12 @@ public:
 	typedef ScrollPane::HorizontalScrollbarPolicy HorizontalScrollbarPolicy;
 protected:
 	//-------------------------------------------------------------------------
+	ScrollPaneLayout() :
+		vsbPolicy(ScrollPane::VERTICAL_SCROLLBAR_AS_NEEDED),
+		hsbPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_AS_NEEDED)
+	{
+	}
+	//-------------------------------------------------------------------------
 	/**
 	 * Removes an existing AComponentPtr.
 	 */
@@ -117,8 +123,8 @@ protected:
 	HorizontalScrollbarPolicy hsbPolicy;
 private:
 	//-------------------------------------------------------------------------
-	void adjustForVSB(bool wantsVSB, const Rectangle &available,
-			const Rectangle &vsbR, const Insets &vpbInsets);
+	void adjustForVSB(bool wantsVSB, Rectangle &available,
+			Rectangle &vsbR, const Insets &vpbInsets);
 	//-------------------------------------------------------------------------
 	/**
 	 * Adjusts the <code>Rectangle</code> <code>available</code> based on if
@@ -128,14 +134,12 @@ private:
 	 * the hsb.  This is only called when <code>wantsHSB</code> has
 	 * changed, eg you shouldn't invoked adjustForHSB(true) twice.
 	 */
-	void adjustForHSB(bool wantsHSB, const Rectangle &available,
-			const Rectangle &hsbR, const Insets &vpbInsets);
+	void adjustForHSB(bool wantsHSB, Rectangle &available,
+			Rectangle &hsbR, const Insets &vpbInsets);
 public:
 	//-------------------------------------------------------------------------
-	ScrollPaneLayout() :
-		vsbPolicy(ScrollPane::VERTICAL_SCROLLBAR_AS_NEEDED),
-		hsbPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_AS_NEEDED)
-	{
+	static Ptr create() {
+		return Ptr(new ScrollPaneLayout());
 	}
 	//-------------------------------------------------------------------------
 	/**
