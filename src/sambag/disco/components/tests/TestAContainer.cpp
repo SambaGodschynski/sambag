@@ -34,17 +34,6 @@ void TestAContainer::tearDown() {
 
 }
 //-----------------------------------------------------------------------------
-void TestAContainer::testLayoutManager01() {
-	// test only Layoutmananger's template constraint approach
-	using namespace sambag::disco::components;
-	ALayoutManager::Ptr lm = TestLayoutManager::create();
-	con->setLayout(lm);
-	con->add(AComponent::Ptr());
-	con->add(AComponent::Ptr(), 1);
-	con->add<TestLayoutManager>(AComponent::Ptr(), 1);
-	con->add<TestLayoutManager>(AComponent::Ptr(), 1, -1);
-}
-//-----------------------------------------------------------------------------
 void TestAContainer::test_toString() {
 	std::string str("[TestContainer,0,0,500x550,invalid,alignmentX=0.5,alignmentY=0.5]");
 	CPPUNIT_ASSERT_EQUAL(str, con->toString());

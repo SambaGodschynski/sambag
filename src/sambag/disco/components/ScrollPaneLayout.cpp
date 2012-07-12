@@ -22,7 +22,7 @@ namespace sambag { namespace disco { namespace components {
 AComponentPtr ScrollPaneLayout::addSingletonComponent(
 		AComponentPtr oldC, AComponentPtr newC)
 {
-	if (!oldC && oldC != newC) {
+	if (oldC && oldC != newC) {
 		oldC->getParent()->remove(oldC);
 	}
 	return newC;
@@ -70,29 +70,39 @@ void ScrollPaneLayout::addLayoutComponent(AComponentPtr c,
 	case ScrollPane::VIEWPORT:
 		viewport = boost::shared_dynamic_cast<Viewport>(
 			addSingletonComponent(viewport, c));
+		break;
 	case ScrollPane::VERTICAL_SCROLLBAR:
 		vsb = boost::shared_dynamic_cast<Scrollbar>(
 			addSingletonComponent(vsb, c));
+		break;
 	case ScrollPane::HORIZONTAL_SCROLLBAR:
 		hsb = boost::shared_dynamic_cast<Scrollbar>(
 			addSingletonComponent(hsb, c));
+		break;
 	case ScrollPane::ROW_HEADER:
 		rowHead = boost::shared_dynamic_cast<Viewport>(
 			addSingletonComponent(rowHead, c));
+		break;
 	case ScrollPane::COLUMN_HEADER:
 		colHead = boost::shared_dynamic_cast<Viewport>(
 				addSingletonComponent(colHead, c));
+		break;
 	case ScrollPane::LOWER_LEFT_CORNER:
 		lowerLeft = addSingletonComponent(lowerLeft, c);
+		break;
 	case ScrollPane::LOWER_RIGHT_CORNER:
 		lowerRight = addSingletonComponent(lowerRight, c);
+		break;
 	case ScrollPane::UPPER_LEFT_CORNER:
 		upperLeft = addSingletonComponent(upperLeft, c);
+		break;
 	case ScrollPane::UPPER_RIGHT_CORNER:
 		upperRight = addSingletonComponent(upperRight, c);
+		break;
 	default:
 		SAMBAG_THROW(com::exceptions::IllegalArgumentException,
 				"invalid layout key");
+		break;
 	}
 }
 //-----------------------------------------------------------------------------
@@ -242,7 +252,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	// Don't bother checking the Scrollable methods if there is no room
 	// for the viewport, we aren't going to show any scrollbars in this
 	// case anyway.
-	if (!isEmpty && view) {
+	if (!isEmpty && sv) {
 		viewTracksViewportWidth = sv->getScrollableTracksViewportWidth();
 		viewTracksViewportHeight = sv->getScrollableTracksViewportHeight();
 	} else {
@@ -481,7 +491,7 @@ Dimension ScrollPaneLayout::
 	if (viewport) {
 		extentSize = viewport->getPreferredSize();
 		view = viewport->getView();
-		if (!view) {
+		if (view) {
 			viewSize = view->getPreferredSize();
 		} else {
 			viewSize = Dimension();
@@ -673,16 +683,16 @@ void ScrollPaneLayout::
 }
 //-----------------------------------------------------------------------------
 void ScrollPaneLayout::syncWithScrollPane(ScrollPanePtr sp) {
-//	viewport = sp->getViewport();
-//	vsb = sp->getVerticalScrollBar();
-//	hsb = sp>getHorizontalScrollBar();
-//	rowHead = sp->getRowHeader();
-//	colHead = sp->getColumnHeader();
-//	lowerLeft = sp->getCorner(ScrollPane::LOWER_LEFT_CORNER);
-//	lowerRight = sp->getCorner(ScrollPane::LOWER_RIGHT_CORNER);
-//	upperLeft = sp->getCorner(ScrollPane::UPPER_LEFT_CORNER);
-//	upperRight = sp->getCorner(ScrollPane::UPPER_RIGHT_CORNER);
-//	vsbPolicy = sp->getVerticalScrollBarPolicy();
-//	hsbPolicy = sp->getHorizontalScrollBarPolicy();
+	viewport = sp->getViewport();
+	vsb = sp->getVerticalScrollBar();
+	hsb = sp->getHorizontalScrollBar();
+	rowHead = sp->getRowHeader();
+	colHead = sp->getColumnHeader();
+	lowerLeft = sp->getCorner(ScrollPane::LOWER_LEFT_CORNER);
+	lowerRight = sp->getCorner(ScrollPane::LOWER_RIGHT_CORNER);
+	upperLeft = sp->getCorner(ScrollPane::UPPER_LEFT_CORNER);
+	upperRight = sp->getCorner(ScrollPane::UPPER_RIGHT_CORNER);
+	vsbPolicy = sp->getVerticalScrollBarPolicy();
+	hsbPolicy = sp->getHorizontalScrollBarPolicy();
 }
 }}} // ScrollPaneLayout::namespace(s)

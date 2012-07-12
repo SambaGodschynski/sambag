@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "AContainer.hpp"
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -21,6 +22,8 @@ class Panel : public AContainer {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Panel> Ptr;
+	//-------------------------------------------------------------------------
+	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
 	Panel();

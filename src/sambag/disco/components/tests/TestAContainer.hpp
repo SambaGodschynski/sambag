@@ -17,7 +17,6 @@ class TestAContainer : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestAContainer );
-	CPPUNIT_TEST( testLayoutManager01 );
 	CPPUNIT_TEST(test_add);
 	CPPUNIT_TEST(test_doLayout);
 	CPPUNIT_TEST(test_getComponentAt);
@@ -42,7 +41,6 @@ private:
 private:
 	sambag::disco::components::AContainerPtr con;
 public:
-	void testLayoutManager01();
 	void setUp();
 	void tearDown();
 	void test_add();

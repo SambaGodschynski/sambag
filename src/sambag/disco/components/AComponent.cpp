@@ -47,7 +47,9 @@ const std::string AComponent::PROPERTY_BOUNDS = "size";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_FONT = "font";
 //-----------------------------------------------------------------------------
-AComponent::AComponent() {
+const std::string AComponent::PROPERTY_OPAQUE = "opaque";
+//-----------------------------------------------------------------------------
+AComponent::AComponent() : flags(0) {
 
 }
 //-----------------------------------------------------------------------------
@@ -342,7 +344,14 @@ bool AComponent::isFocusOwner() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isOpaque() const {
-	return false;
+	return getFlag(IS_OPAQUE);
+}
+//-----------------------------------------------------------------------------
+void AComponent::setOpaque(bool isOpaque) {
+	bool oldValue = getFlag(IS_OPAQUE);
+	setFlag(IS_OPAQUE, isOpaque);
+	setFlag(OPAQUE_SET, true);
+	firePropertyChanged(PROPERTY_OPAQUE, oldValue, isOpaque);
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isShowing() const {
@@ -387,7 +396,7 @@ void AComponent::drawChildren(IDrawContext::Ptr context) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw() {
-	if (!parent)
+	/*if (!parent)
 			return;
 	Rectangle r(0, 0, getWidth(),  getHeight());
 		// Needs to be translated to parent coordinates since
@@ -416,7 +425,8 @@ void AComponent::redraw() {
 
 		Number px = thisX + x;
 		Number py = thisY + y;
-		parent->redraw(Rectangle(px, py, pwidth, pheight));
+		parent->redraw(Rectangle(px, py, pwidth, pheight));*/
+	redraw(Rectangle (0, 0, getWidth(),  getHeight()));
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw(const Rectangle &r) {
@@ -691,24 +701,7 @@ void AComponent::setName(const std::string &name) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setSize(const Dimension &d) {
-	SAMBAG_BEGIN_SYNCHRONIZED (getTreeLock())
-		bool resized = (bounds.getWidth() != d.width())
-				|| (bounds.getHeight() != d.height());
-		if (!resized) {
-			return;
-		}
-		Dimension old = getSize();
-		Rectangle oldBounds = bounds;
-		bounds.setWidth(d.width());
-		bounds.setHeight(d.height());
-		isPacked = false;
-		invalidate();
-		if (parent) {
-			parent->__invalidateIfValid_();
-		}
-		firePropertyChanged(PROPERTY_BOUNDS, old, d);
-		redrawParentIfNeeded(oldBounds);
-	SAMBAG_END_SYNCHRONIZED
+	setBounds(Rectangle(bounds.x0(), d.width(), d.height()));
 }
 //-----------------------------------------------------------------------------
 void AComponent::setVisible(bool b) {

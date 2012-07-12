@@ -10,7 +10,6 @@
 #include "Viewport.hpp"
 #include "ScrollPaneLayout.hpp"
 
-
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class ScrollPane::MyScrollbar
@@ -50,27 +49,46 @@ const std::string ScrollPane::PROPERTY_HORIZONTAL_SCROLLBAR =
 //-----------------------------------------------------------------------------
 const std::string ScrollPane::PROPERTY_VIEWPORT = "viewport";
 //-----------------------------------------------------------------------------
+const std::string ScrollPane::PROPERTY_VIEWPORT_BORDER;
+//-----------------------------------------------------------------------------
+const std::string ScrollPane::PROPERTY_ROWHEADER;
+//-----------------------------------------------------------------------------
+const std::string ScrollPane::PROPERTY_COLUMNHEADER;
+//-----------------------------------------------------------------------------
+const std::string ScrollPane::PROPERTY_CORNER;
+//-----------------------------------------------------------------------------
+const std::string ScrollPane::PROPERTY_WHEELSCROLLING_ENABLED;
+//-----------------------------------------------------------------------------
 ScrollPane::ScrollPane::ScrollPane() :
 	verticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED),
 	horizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED)
 {
 }
 //-----------------------------------------------------------------------------
-ScrollPane::ScrollPane::ScrollPane(AComponentPtr view,
-		ScrollPane::VerticalScrollbarPolicy vsbPolicy,
-		ScrollPane::HorizontalScrollbarPolicy hsbPolicy):
-	verticalScrollBarPolicy(vsbPolicy),
-	horizontalScrollBarPolicy(hsbPolicy)
-{
+void ScrollPane::constructorAlt() {
 	setLayout(ScrollPaneLayout::create());
-	setVerticalScrollBarPolicy(vsbPolicy);
-	setHorizontalScrollBarPolicy(hsbPolicy);
+	setVerticalScrollBarPolicy(verticalScrollBarPolicy);
+	setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
 	setViewport(createViewport());
 	setVerticalScrollBar(createVerticalScrollBar());
 	setHorizontalScrollBar(createHorizontalScrollBar());
-	if (view) {
-		setViewportView(view);
+	setOpaque(true);
+	setName("ScrollPane");
+}
+//-----------------------------------------------------------------------------
+void ScrollPane::setLayout(ALayoutManagerPtr layout) {
+	ScrollPaneLayout::Ptr _layout =
+			boost::shared_dynamic_cast<ScrollPaneLayout>(layout);
+	if (_layout) {
+		Super::setLayout(layout);
+		_layout->syncWithScrollPane(getPtr());
+		return;
+	} else if (!layout) {
+		Super::setLayout(layout);
+		return;
 	}
+	SAMBAG_THROW(com::exceptions::IllegalArgumentException,
+		"LayoutManager must be a ScrollPaneLayout");
 }
 //-----------------------------------------------------------------------------
 ScrollbarPtr ScrollPane::createHorizontalScrollBar() {
@@ -130,9 +148,12 @@ ScrollPane::Ptr ScrollPane::create(AComponentPtr view,
 		ScrollPane::VerticalScrollbarPolicy vsbPolicy,
 		ScrollPane::HorizontalScrollbarPolicy hsbPolicy)
 {
-	Ptr res(new ScrollPane(view, vsbPolicy, hsbPolicy));
+	Ptr res(new ScrollPane());
 	res->self = res;
 	res->constructorAlt();
+	if (view) {
+		res->setViewportView(view);
+	}
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -143,46 +164,98 @@ ScrollPane::ScrollPane::getComponentUI(ui::ALookAndFeelPtr laf) const
 }
 //-----------------------------------------------------------------------------
 bool ScrollPane::isValidateRoot() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
+	return true;
 }
 //-----------------------------------------------------------------------------
 ScrollPane::VerticalScrollbarPolicy
 ScrollPane::getVerticalScrollBarPolicy() const
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return VERTICAL_SCROLLBAR_NEVER;
+	return verticalScrollBarPolicy;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setVerticalScrollBarPolicy(
-		ScrollPane::VerticalScrollbarPolicy policy) {
-	SAMBA_LOG_NOT_YET_IMPL();
+		ScrollPane::VerticalScrollbarPolicy policy)
+{
+	VerticalScrollbarPolicy old = verticalScrollBarPolicy;
+	verticalScrollBarPolicy = policy;
+	firePropertyChanged(PROPERTY_VERTICAL_SCROLLBAR_POLICY, old, policy);
+	revalidate();
+	redraw();
 }
 //-----------------------------------------------------------------------------
 ScrollPane::HorizontalScrollbarPolicy
 ScrollPane::getHorizontalScrollBarPolicy() const
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return HORIZONTAL_SCROLLBAR_NEVER;
+	return horizontalScrollBarPolicy;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setHorizontalScrollBarPolicy(
-		ScrollPane::HorizontalScrollbarPolicy p) {
-	SAMBA_LOG_NOT_YET_IMPL();
+		ScrollPane::HorizontalScrollbarPolicy policy)
+{
+	HorizontalScrollbarPolicy old = horizontalScrollBarPolicy;
+	horizontalScrollBarPolicy = policy;
+	firePropertyChanged(PROPERTY_HORIZONTAL_SCROLLBAR_POLICY, old, policy);
+	revalidate();
+	redraw();
 }
 //-----------------------------------------------------------------------------
 IBorder::Ptr ScrollPane::getViewportBorder() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return IBorder::Ptr();
+	return viewportBorder;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setViewportBorder(IBorder::Ptr viewportBorder) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	IBorder::Ptr oldValue = this->viewportBorder;
+	this->viewportBorder = viewportBorder;
+	firePropertyChanged(PROPERTY_VIEWPORT_BORDER, oldValue, viewportBorder);
 }
 //-----------------------------------------------------------------------------
 Rectangle ScrollPane::getViewportBorderBounds() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_RECTANGLE;
+	Rectangle borderR(getSize());
+
+	Insets insets = getInsets();
+	borderR.x0().x(insets.left());
+	borderR.x0().y(insets.top());
+	borderR.width( borderR.width() - insets.left() + insets.right());
+	borderR.height( borderR.height() - insets.top() + insets.bottom());
+
+	/* If there's a visible column header remove the space it
+	 * needs from the top of borderR.
+	 */
+	Viewport::Ptr colHead = getColumnHeader();
+	if (colHead && colHead->isVisible()) {
+		Coordinate colHeadHeight = colHead->getHeight();
+		borderR.x0().y( borderR.x0().y() + colHeadHeight);
+		borderR.height( borderR.height() - colHeadHeight);
+	}
+
+	/* If there's a visible row header remove the space it needs
+	 * from the left of borderR.
+	 */
+	Viewport::Ptr rowHead = getRowHeader();
+	if (rowHead && rowHead->isVisible()) {
+		Coordinate rowHeadWidth = rowHead->getWidth();
+		borderR.x0().x( borderR.x0().x() + rowHeadWidth);
+		borderR.width( borderR.width() - rowHeadWidth);
+	}
+
+	/* If there's a visible vertical scrollbar remove the space it needs
+	 * from the width of borderR.
+	 */
+	ScrollbarPtr vsb = getVerticalScrollBar();
+	if (vsb && vsb->isVisible()) {
+		Coordinate vsbWidth = vsb->getWidth();
+		borderR.width( borderR.width() - vsbWidth);
+	}
+
+	/* If there's a visible horizontal scrollbar remove the space it needs
+	 * from the height of borderR.
+	 */
+	ScrollbarPtr hsb = getHorizontalScrollBar();
+	if (hsb && hsb->isVisible()) {
+		borderR.height( borderR.height() - hsb->getHeight());
+	}
+
+	return borderR;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setViewportView(AComponentPtr view) {
@@ -193,42 +266,110 @@ void ScrollPane::setViewportView(AComponentPtr view) {
 }
 //-----------------------------------------------------------------------------
 ViewportPtr ScrollPane::getRowHeader() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Viewport::Ptr();
+	return rowHeader;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setRowHeader(ViewportPtr rowHeader) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Viewport::Ptr old = getRowHeader();
+	this->rowHeader = rowHeader;
+	if (rowHeader) {
+		addBack(rowHeader, ROW_HEADER);
+	} else if (old) {
+		remove(old);
+	}
+	firePropertyChanged(PROPERTY_ROWHEADER, old, rowHeader);
+	revalidate();
+	redraw();
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setRowHeaderView(AComponentPtr view) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (!getRowHeader()) {
+		setRowHeader(createViewport());
+	}
+	getRowHeader()->setView(view);
 }
 //-----------------------------------------------------------------------------
 ViewportPtr ScrollPane::getColumnHeader() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return Viewport::Ptr();
+	return columnHeader;
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setColumnHeader(ViewportPtr columnHeader) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	ViewportPtr old = getColumnHeader();
+	this->columnHeader = columnHeader;
+	if (columnHeader) {
+		addBack(columnHeader, COLUMN_HEADER);
+	} else if (old) {
+		remove(old);
+	}
+	firePropertyChanged(PROPERTY_COLUMNHEADER, old, columnHeader);
+	revalidate();
+	redraw();
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setColumnHeaderView(AComponentPtr view) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	if (!getColumnHeader()) {
+		setColumnHeader(createViewport());
+	}
+	getColumnHeader()->setView(view);
 }
 //-----------------------------------------------------------------------------
 AComponentPtr ScrollPane::getCorner(Area loc) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	switch (loc) {
+	case LOWER_LEADING_CORNER:
+	case LOWER_LEFT_CORNER:
+		return lowerLeft;
+	case LOWER_TRAILING_CORNER:
+	case LOWER_RIGHT_CORNER:
+		return lowerRight;
+	case UPPER_LEADING_CORNER:
+	case UPPER_LEFT_CORNER:
+		return upperLeft;
+	case UPPER_TRAILING_CORNER:
+	case UPPER_RIGHT_CORNER:
+		return upperRight;
+	default:
+		SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+			"bad location.");
+	}
 	return AComponentPtr();
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setCorner(ScrollPane::Area loc, AComponentPtr corner) {
-	SAMBA_LOG_NOT_YET_IMPL();
-}
-//-----------------------------------------------------------------------------
-void ScrollPane::setComponentOrientation(Scrollbar::Orientation co) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	AComponentPtr old;
+	switch (loc) {
+	case LOWER_LEADING_CORNER:
+	case LOWER_LEFT_CORNER:
+		old = lowerLeft;
+		lowerLeft = corner;
+		break;
+	case LOWER_TRAILING_CORNER:
+	case LOWER_RIGHT_CORNER:
+		old = lowerLeft;
+		lowerRight = corner;
+		break;
+	case UPPER_LEADING_CORNER:
+	case UPPER_LEFT_CORNER:
+		old = lowerLeft;
+		upperLeft = corner;
+		break;
+	case UPPER_TRAILING_CORNER:
+	case UPPER_RIGHT_CORNER:
+		old = lowerLeft;
+		upperRight = corner;
+		break;
+	default:
+		SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+			"bad location.");
+	}
+	if (old) {
+		remove(old);
+	}
+	if (corner) {
+		addBack(corner, loc);
+	}
+	firePropertyChanged(PROPERTY_CORNER, old, corner);
+	revalidate();
+	redraw();
 }
 //-----------------------------------------------------------------------------
 std::string ScrollPane::paramString() const {
@@ -237,7 +378,15 @@ std::string ScrollPane::paramString() const {
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::resetViewPort() {
-	SAMBA_LOG_NOT_YET_IMPL();
+//	if (viewPort) {
+//		viewPort.removeChangeListener(this);
+//		viewPort.removePropertyChangeListener(this);
+//	}
+//	viewPort = JScrollPane.this.getViewport();
+//	if (viewPort) {
+//		viewPort.addChangeListener(this);
+//		viewPort.addPropertyChangeListener(this);
+//	}
 }
 
 }}} // ScrollPane::namespace(s)

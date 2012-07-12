@@ -13,6 +13,8 @@
 #include "BasicLabelUI.hpp"
 #include "BasicMenuUI.hpp"
 #include "BasicScrollbarUI.hpp"
+#include "BasicPanelUI.hpp"
+#include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
@@ -22,6 +24,7 @@
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/disco/svg/HtmlColors.hpp>
+#include <sambag/disco/components/Viewport.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -41,12 +44,17 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Label, BasicLabelUI>();
 	registerComponentUI<Menu, BasicMenuUI<Menu::Model> >();
 	registerComponentUI<Scrollbar, BasicScrollbarUI<Scrollbar::Model> >();
+	registerComponentUI<Panel, BasicPanelUI >();
+	registerComponentUI<Viewport, BasicPanelUI >();
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
 	UIManager &m = getUIManager();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
+	m.putProperty("global.background", HtmlColors::getColor("red"));
+	m.putProperty("global.foreground", HtmlColors::getColor("white"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
 	// TODO: impl. lazy init e.g. -> lookAndFeel->install("Colors")
 	m.putProperty("ScrollBar.minimumThumbSize", Dimension(15., 15.));

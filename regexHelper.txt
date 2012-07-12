@@ -22,3 +22,9 @@ availR.x += vpbInsets.left;
 						          using $1()
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 (\w+)\.(x|y)	: rectangle.x() => rectangle.x0().x() using $1.x0()$1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+if \s*\(\s*([a-zA-Z0-9_]+?)\s*instanceof\s*([a-zA-Z0-9_]+).*\R :
+
+	if (a instance of B) { => B::Ptr _a boost::shared_dynamic_cast<B>(a) ...
+using:
+$2::Ptr _$1 = boost::shared_dynamic_cast<$2>($1);\Rif (_$1) {\R\t

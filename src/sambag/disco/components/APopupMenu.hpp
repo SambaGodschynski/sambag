@@ -148,7 +148,7 @@ void APopupMenu<SM>::initWindow() {
 		parentW = boost::shared_dynamic_cast<Window>(pc);
 	}
 	window = Window::create(parentW);
-	window->getRootPane()->add(getPtr());
+	window->getContentPane()->add(getPtr());
 	window->setWindowLocation(location);
 }
 //-----------------------------------------------------------------------------

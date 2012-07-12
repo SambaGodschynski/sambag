@@ -7,6 +7,7 @@
 
 #include "AComponentUI.hpp"
 #include <sambag/disco/components/AComponent.hpp>
+#include "UIManager.hpp"
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
@@ -39,6 +40,12 @@ Dimension AComponentUI::getPreferredSize(AComponent::Ptr c) {
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::installUI(AComponent::Ptr c) {
+	UIManager &m = getUIManager();
+	ColorRGBA col;
+	m.getProperty("global.background", col);
+	c->setBackground(col);
+	m.getProperty("global.foreground", col);
+	c->setForeground(col);
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::draw(IDrawContext::Ptr cn, AComponent::Ptr c) {

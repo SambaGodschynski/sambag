@@ -16,13 +16,13 @@ namespace components { namespace ui { namespace basic {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void BasicLabelUI::installUI(AComponentPtr c) {
-
+	Super::installUI(c);
 }
 //-----------------------------------------------------------------------------
 void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	Label::Ptr l = boost::shared_dynamic_cast<Label>(c);
 	cn->setFont(l->getFont());
-	cn->setFillColor(ColorRGBA(0,0,0));
+	cn->setFillColor(c->getForeground());
 	Rectangle txtEx = cn->textExtends(l->getText());
 	cn->moveTo(Point2D(0,  c->getHeight() / 2.0 + txtEx.getHeight() / 2.0 ));
 	cn->textPath(l->getText());

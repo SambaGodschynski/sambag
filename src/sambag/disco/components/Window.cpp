@@ -58,8 +58,12 @@ AContainerPtr Window::getRootContainer() const {
 	return getPtr();
 }
 //-----------------------------------------------------------------------------
-components::RootPane::Ptr Window::getRootPane() const {
+RootPane::Ptr Window::getRootPane() const {
 	return rootPane;
+}
+//-----------------------------------------------------------------------------
+Panel::Ptr Window::getContentPane() const {
+	return getRootPane()->getContentPane();
 }
 //-----------------------------------------------------------------------------
 void Window::setWindowBounds(const Rectangle &r) {

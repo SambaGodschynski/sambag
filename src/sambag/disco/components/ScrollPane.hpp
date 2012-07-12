@@ -119,6 +119,16 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_VIEWPORT;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_VIEWPORT_BORDER;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ROWHEADER;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_COLUMNHEADER;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_CORNER;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_WHEELSCROLLING_ENABLED;
+	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ScrollPane> Ptr;
@@ -126,8 +136,7 @@ public:
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
-	ScrollPane(AComponentPtr view, VerticalScrollbarPolicy vsbPolicy,
-			HorizontalScrollbarPolicy hsbPolicy);
+	virtual void constructorAlt();
 	//-------------------------------------------------------------------------
 	ScrollPane();
 private:
@@ -245,6 +254,10 @@ protected:
 	AComponentPtr upperRight;
 public:
 	//-------------------------------------------------------------------------
+	void setBounds(const Rectangle &r) {
+		Super::setBounds(r);
+	}
+	//-------------------------------------------------------------------------
 	virtual ScrollbarPtr createHorizontalScrollBar();
 	//-------------------------------------------------------------------------
 	virtual ScrollbarPtr createVerticalScrollBar();
@@ -292,6 +305,8 @@ public:
 	ScrollbarPtr getVerticalScrollBar() const {
 		return verticalScrollBar;
 	}
+	//-------------------------------------------------------------------------
+	virtual void setLayout(ALayoutManagerPtr layout);
 	//-------------------------------------------------------------------------
 	/**
 	* Returns the current <code>Viewport</code>.
@@ -567,15 +582,6 @@ public:
 	 * @exception IllegalArgumentException if corner key is invalid
 	 */
 	virtual void setCorner(Area loc, AComponentPtr corner);
-	//-------------------------------------------------------------------------
-	/**
-	 * Sets the orientation for the vertical and horizontal
-	 * scrollbars as determined by the
-	 * <code>ComponentOrientation</code> argument.
-	 *
-	 * @see java.awt.ComponentOrientation
-	 */
-	virtual void setComponentOrientation(Scrollbar::Orientation co);
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns a string representation of this <code>ScrollPane</code>.

@@ -22,7 +22,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class RootPane.
   */
-class RootPane : public Panel {
+class RootPane : public AContainer {
 //=============================================================================
 friend class ui::UIManager;
 friend class sambag::disco::components::Window;
@@ -33,14 +33,20 @@ public:
 	static const std::string PROPERTY_SURFACE;
 protected:
 	//-------------------------------------------------------------------------
+	virtual void constructorAlt();
+	//-------------------------------------------------------------------------
 	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();
 	}
 	//-------------------------------------------------------------------------
 	RootPane(ISurface::Ptr surface);
-	//-------------------------------------------------------------------------
-	virtual void redrawParentIfNeeded(const Rectangle &r);
 private:
+	//-------------------------------------------------------------------------
+	class RootLayout;
+	//-------------------------------------------------------------------------
+	Panel::Ptr createContentPane();
+	//-------------------------------------------------------------------------
+	Panel::Ptr contentPane;
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_multimap<std::string, AComponentPtr> TagMap;
 	//-------------------------------------------------------------------------
@@ -48,6 +54,10 @@ private:
 	//-------------------------------------------------------------------------
 	ISurface::Ptr surface;
 public:
+	//-------------------------------------------------------------------------
+	virtual void setContentPane(Panel::Ptr c);
+	//-------------------------------------------------------------------------
+	virtual Panel::Ptr getContentPane() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * adds tag, component relation.
@@ -81,8 +91,6 @@ public:
 	virtual bool isShowing() const;
 	//-------------------------------------------------------------------------
 	void processMouseEvent(const events::MouseEvent &ev);
-	//-------------------------------------------------------------------------
-	virtual void draw(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------
 	void setSurface(ISurface::Ptr _surface);
 	//-------------------------------------------------------------------------

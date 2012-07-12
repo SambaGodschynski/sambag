@@ -115,7 +115,9 @@ public:
 		return boost::shared_dynamic_cast<Window>(self.lock());
 	}
 	//-------------------------------------------------------------------------
-	components::RootPane::Ptr getRootPane() const;
+	RootPane::Ptr getRootPane() const;
+	//-------------------------------------------------------------------------
+	Panel::Ptr getContentPane() const;
 	//-------------------------------------------------------------------------
 	virtual void open();
 	//-------------------------------------------------------------------------

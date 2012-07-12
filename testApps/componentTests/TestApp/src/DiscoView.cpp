@@ -22,6 +22,7 @@
 #include <sambag/disco/components/MenuSelectionManager.hpp>
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
+#include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
@@ -42,7 +43,7 @@ void onSurpriseMouse(void *src, const sdc::events::MouseEvent &ev);
 
 
 std::vector<sdc::FramedWindow::Ptr> win =
-		std::vector<sdc::FramedWindow::Ptr>(4);
+		std::vector<sdc::FramedWindow::Ptr>(5);
 
 sdc::PopupMenu::Ptr acmePopup;
 sdc::PopupMenu::Ptr surprisePopup;
@@ -59,7 +60,7 @@ float currScrollSpeed = F;
 
 void createAcmePopup() {
 	using namespace sambag::disco::components;
-	acmePopup = PopupMenu::create(win[1]->getRootPane());
+	acmePopup = PopupMenu::create(win[1]->getContentPane());
 	const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
@@ -125,7 +126,7 @@ void setScrolling(void *src, const sdc::events::ActionEvent &ev, float scrolling
 
 void createSurprisePopup() {
 	using namespace sambag::disco::components;
-	surprisePopup = PopupMenu::create(win[2]->getRootPane());
+	surprisePopup = PopupMenu::create(win[2]->getContentPane());
 	//
 	MenuItem::Ptr btn = MenuItem::create();
 	btn->setText("----");
@@ -211,7 +212,8 @@ void createBorderlineWindow() {
 	scr->setPreferredSize(Dimension(20, 250));
 	c->add(scr);
 
-	win[3]->getRootPane()->add(c);
+	win[3]->getContentPane()->add(c);
+
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
@@ -251,7 +253,7 @@ void createSurpriseWindow() {
 	//vp->setScrollMode(Viewport::BACKINGSTORE_SCROLL_MODE);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
 	//con->setLayout(ALayoutManagerPtr());
-	win[2]->getRootPane()->add(vp);
+	win[2]->getContentPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {
 		std::stringstream ss;
 		ss << i;
@@ -269,6 +271,48 @@ void createSurpriseWindow() {
 	timer->start();
 }
 
+void printCompInfos(sdc::AComponent::Ptr c) {
+	using namespace sambag::com;
+	struct P {
+		static void print(const std::string &str, int ident) {
+			while (ident-->0)
+				std::cout<<'\t';
+			std::cout<<str<<std::endl;
+		}
+	};
+	P::print(c->getName() + ":",0);
+	P::print("size: " + toString(c->getSize()),1);
+	P::print("preferred size:" + toString(c->getPreferredSize()),1);
+}
+
+void createScrollercoasterWindow() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[4] = sdc::FramedWindow::create(win[0]);
+	win[4]->setTitle("ScrollerCoaster Window");
+	win[4]->setWindowBounds(Rectangle(110,100,430,280));
+
+	const int NUM = 1000;
+	AContainerPtr con = Panel::create();
+	//con->setSize(Dimension(300, 1000));
+	sdc::ScrollPane::Ptr vp = ScrollPane::create(con);
+	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
+	win[4]->getContentPane()->add(vp);
+	for (int i=0; i<NUM; ++i) {
+		std::stringstream ss;
+		ss << i;
+		Label::Ptr el = Label::create();
+		el->setText(ss.str());
+		el->setFont(el->getFont().setSize((i+1)*0.9));
+		con->add(el);
+	}
+	win[4]->getContentPane()->validate();
+	std::cout<<vp->getBounds()<<std::endl;
+	printCompInfos(win[4]->getContentPane());
+	printCompInfos(vp);
+	printCompInfos(con);
+}
+
 void createACMEWindow() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
@@ -276,12 +320,12 @@ void createACMEWindow() {
 	win[1]->setTitle("ACME Window");
 	win[1]->setWindowBounds(Rectangle(110,100,430,280));
 
-	win[1]->getRootPane()->EventSender<sdc::events::MouseEvent>::
+	win[1]->getContentPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onAcmeMouse);
-	win[1]->getRootPane()->EventSender<sdc::events::MouseEvent>::
+	win[1]->getContentPane()->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&trackMouse);
 
-	RootPanePtr con = win[1]->getRootPane();
+	Panel::Ptr con = win[1]->getContentPane();
 	for (int i = 0; i < 10; ++i) {
 		std::stringstream ss;
 		ss << i;
@@ -310,7 +354,7 @@ void createACMEWindow() {
 	Label::Ptr label = Label::create();
 	label->getFont().setFontFace("monospace").setSize(INPUT_LABEL_SIZE);
 	con->add(label);
-	con->addTag(label, INPUT_LABEL);
+	win[1]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
 
@@ -399,8 +443,8 @@ void onButton(void *src, const sdc::events::ActionEvent &ev) {
 	if (txt.length() > 15) {
 		label->getFont().setSize( (15 / (float)txt.length()) * INPUT_LABEL_SIZE );
 	}
-	win[1]->getRootPane()->validate();
-	win[1]->getRootPane()->redraw();
+	win[1]->getContentPane()->validate();
+	win[1]->getContentPane()->redraw();
 }
 
 void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
@@ -409,7 +453,7 @@ void onAhaClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (!win[1]) {
 		createACMEWindow();
 	}
-	win[1]->getRootPane()->validate();
+	win[1]->getContentPane()->validate();
 	win[1]->open();
 }
 
@@ -419,8 +463,18 @@ void onSurpriseClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (!win[2]) {
 		createSurpriseWindow();
 	}
-	win[2]->getRootPane()->validate();
+	win[2]->getContentPane()->validate();
 	win[2]->open();
+}
+
+void onScrollerClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	if (!win[4]) {
+		createScrollercoasterWindow();
+	}
+	win[4]->getContentPane()->validate();
+	win[4]->open();
 }
 
 void onBorderlineClicked ( void *src, const sdc::events::ActionEvent &ac) {
@@ -429,7 +483,7 @@ void onBorderlineClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	if (!win[3]) {
 		createBorderlineWindow();
 	}
-	win[3]->getRootPane()->validate();
+	win[3]->getContentPane()->validate();
 	win[3]->open();
 }
 
@@ -494,25 +548,31 @@ int main() {
 		btn->setText("open ACME Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
 		btn->getFont().setFontFace("monospace");
-		win[0]->getRootPane()->add(btn);
+		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("open Surprise Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onSurpriseClicked);
 		btn->getFont().setFontFace("monospace");
-		win[0]->getRootPane()->add(btn);
+		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("open Borderline Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBorderlineClicked);
 		btn->getFont().setFontFace("monospace");
-		win[0]->getRootPane()->add(btn);
+		win[0]->getContentPane()->add(btn);
+
+		btn = Button::create();
+		btn->setText("open Scrollercoaster");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onScrollerClicked);
+		btn->getFont().setFontFace("monospace");
+		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("tschüß");
 		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
-		win[0]->getRootPane()->add(btn);
+		win[0]->getContentPane()->add(btn);
 
 		win[0]->validate();
 		win[0]->pack();

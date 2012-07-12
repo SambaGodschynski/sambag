@@ -113,6 +113,9 @@ public:
 	static const std::string PROPERTY_BOUNDS;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_FONT;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_OPAQUE;
+	//-------------------------------------------------------------------------
 	enum Flag {
 		IS_DOUBLE_BUFFERED = 0,
 		ANCESTOR_USING_BUFFER,
@@ -906,7 +909,7 @@ protected:
 	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
 	//-------------------------------------------------------------------------
-	virtual void setOpaque(bool b) {}
+	virtual void setOpaque(bool b);
 	//-------------------------------------------------------------------------
 	/**
 	 * converts component location to screen location.
