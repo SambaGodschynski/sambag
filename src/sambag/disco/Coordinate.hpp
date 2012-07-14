@@ -57,6 +57,18 @@ struct Coordinate {
 	void operator +=(const Coordinate &v) {
 		value +=v;
 	}
+	//-------------------------------------------------------------------------
+	void operator -=(const Coordinate &v) {
+		value -=v;
+	}
+	//-------------------------------------------------------------------------
+	void operator *=(const Coordinate &v) {
+		value *=v;
+	}
+	//-------------------------------------------------------------------------
+	void operator /=(const Coordinate &v) {
+		value /=v;
+	}
 };
 inline std::ostream & operator<<(std::ostream &os, const Coordinate &obj) {
 	os << obj.toString();

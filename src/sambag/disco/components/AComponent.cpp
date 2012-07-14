@@ -396,36 +396,6 @@ void AComponent::drawChildren(IDrawContext::Ptr context) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw() {
-	/*if (!parent)
-			return;
-	Rectangle r(0, 0, getWidth(),  getHeight());
-		// Needs to be translated to parent coordinates since
-		// a parent native container provides the actual repaint
-		// services.  Additionally, the request is restricted to
-		// the bounds of the component.
-		Number x = r.x0().x(), y = r.x0().y(), width = r.getWidth(), height =
-				r.getHeight();
-		Number thisX = bounds.x0().x(), thisY = bounds.x0().y(), thisWidth =
-				bounds.getWidth(), thisHeight = bounds.getHeight();
-		if (x < 0) {
-			width += x;
-			x = 0;
-		}
-		if (y < 0) {
-			height += y;
-			y = 0;
-		}
-
-		Number pwidth = (width > thisWidth) ? thisWidth : width;
-		Number pheight = (height > thisHeight) ? thisHeight : height;
-
-		if (pwidth <= 0 || pheight <= 0) {
-			return;
-		}
-
-		Number px = thisX + x;
-		Number py = thisY + y;
-		parent->redraw(Rectangle(px, py, pwidth, pheight));*/
 	redraw(Rectangle (0, 0, getWidth(),  getHeight()));
 }
 //-----------------------------------------------------------------------------

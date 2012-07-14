@@ -13,6 +13,8 @@ functionName(xxx)
 else if (key.equals(LOWER_RIGHT_CORNER)) {
 (?-i).*(if){0,1} (else){0,1} (if){0,1}.*?([A-Z_]+).*	: change if then else
 							  into switch case
+							  using: case $4:
+
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 availR.x += vpbInsets.left;
 ([a-z.]+)\s*([+-])=(.*);	: replace x+=y into x.(x+y) using
@@ -28,3 +30,10 @@ if \s*\(\s*([a-zA-Z0-9_]+?)\s*instanceof\s*([a-zA-Z0-9_]+).*\R :
 	if (a instance of B) { => B::Ptr _a boost::shared_dynamic_cast<B>(a) ...
 using:
 $2::Ptr _$1 = boost::shared_dynamic_cast<$2>($1);\Rif (_$1) {\R\t
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+public static final String NORTH  = "North";
+(?-i).*?([A-Z_]+)\s*=.*?;  			: extract NORTH
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+dim.height = a + b;
+(left|right|bottom|top|x|y|width|height)\s*=(.*?);
+removes = and encloses a+b with braces using : $1( $2 );

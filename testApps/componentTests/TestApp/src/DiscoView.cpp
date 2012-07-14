@@ -222,7 +222,7 @@ void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
 	sdc::Viewport::Ptr vp = viewport.lock();
 	if (!vp)
 		return;
-	SAMBAG_BEGIN_SYNCHRONIZED(vp->getTreeLock())
+	SAMBAG_BEGIN_SYNCHRONIZED(win[2]->getRootPane()->getTreeLock())
 		sd::Point2D p = vp->getViewPosition();
 		p.y( p.y() + currScrollSpeed );
 		vp->setViewPosition(p);
@@ -238,6 +238,7 @@ void createSurpriseWindow() {
 
 	const int NUM = 1000;
 	AContainerPtr con = Panel::create();
+	//con->setOpaque(false);
 
 	con->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onSurpriseMouse);
@@ -320,12 +321,15 @@ void createACMEWindow() {
 	win[1]->setTitle("ACME Window");
 	win[1]->setWindowBounds(Rectangle(110,100,430,280));
 
-	win[1]->getContentPane()->EventSender<sdc::events::MouseEvent>::
+
+	Panel::Ptr con = Panel::create();
+	win[1]->getContentPane()->add(con);
+
+	con->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&onAcmeMouse);
-	win[1]->getContentPane()->EventSender<sdc::events::MouseEvent>::
+	con->EventSender<sdc::events::MouseEvent>::
 			addEventListener(&trackMouse);
 
-	Panel::Ptr con = win[1]->getContentPane();
 	for (int i = 0; i < 10; ++i) {
 		std::stringstream ss;
 		ss << i;
@@ -543,6 +547,7 @@ int main() {
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setWindowBounds(Rectangle(100,100,230,200));
 		win[0]->setTitle("Messerschmitz 1.0");
+		win[0]->getContentPane()->setLayout(FlowLayout::create());
 
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");

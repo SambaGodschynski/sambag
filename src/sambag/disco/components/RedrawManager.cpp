@@ -8,6 +8,8 @@
 #include "RedrawManager.hpp"
 #include "AContainer.hpp"
 #include "Graphics.hpp"
+#include <algorithm>
+#include <boost/foreach.hpp>
 namespace sambag { namespace disco { namespace components {
 namespace {
 	RedrawManager::Ptr holder;
@@ -261,11 +263,35 @@ void RedrawManager::collectDirtyComponents(ComponentMap &dirtyComponents,
 	}
 }
 //-----------------------------------------------------------------------------
+/**
+ * Simply mapA = mapB ocurrs:
+ * boost/unordered/detail/buckets.hpp:454:
+ * void boost::unordered::detail::buckets<A, Bucket, Node>::delete_buckets()
+ * [with A = std::allocator<std::pair<const boost::shared_ptr<sambag::disco::
+ * components::AComponent>, sambag::disco::Rectangle> >, Bucket = boost::unordered::detail::ptr_bucket,
+ * Node = boost::unordered::detail::ptr_node<std::pair<const boost::
+ * shared_ptr<sambag::disco::components::AComponent>, sambag::disco::Rectangle> >]:
+ * Assertion `!this->size_' failed.
+ * @param src
+ * @param dst
+ */
+template <class Map>
+void copyMap(const Map &src, Map &dst) {
+	BOOST_FOREACH(const typename Map::value_type v, src) {
+		dst.insert(v);
+	}
+}
+//-----------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions() {
 	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
-		ComponentMap tmp = tmpDirtyComponents;
-		tmpDirtyComponents = dirtyComponents;
-		dirtyComponents = tmp;
+
+		ComponentMap tmp;
+		// tmp = tmpDirtyComponents;
+		copyMap(tmpDirtyComponents, tmp);
+		// tmpDirtyComponents = dirtyComponents;
+		copyMap(dirtyComponents, tmpDirtyComponents);
+		// dirtyComponents = tmp;
+		copyMap(tmp, dirtyComponents) ;
 		dirtyComponents.clear();
 	SAMBAG_END_SYNCHRONIZED
 	drawDirtyRegions(tmpDirtyComponents);

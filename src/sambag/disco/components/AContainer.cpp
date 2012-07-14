@@ -433,7 +433,7 @@ bool AContainer::rectangleIsObscured(const Rectangle &r) {
 				boost::geometry::within<Rectangle::Base, Rectangle::Base>
 					(r, cr);
 		if (within && child->isVisible()) {
-			return child->isOpaque();
+			return false; //TODO: child->isOpaque();
 		}
 	}
 	return false;

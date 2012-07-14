@@ -14,6 +14,7 @@
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include <sambag/disco/svg/HtmlColors.hpp>
+#include "BorderLayout.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -176,6 +177,7 @@ RootPane::RootPane(ISurface::Ptr surface) : surface(surface) {
 Panel::Ptr RootPane::createContentPane() {
 	Panel::Ptr contentPane = Panel::create();
 	contentPane->setName(getName() + " conetent pane");
+	contentPane->setLayout(BorderLayout::create());
 	return contentPane;
 }
 //-----------------------------------------------------------------------------
