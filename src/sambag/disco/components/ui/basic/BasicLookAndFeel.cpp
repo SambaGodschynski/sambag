@@ -14,6 +14,7 @@
 #include "BasicMenuUI.hpp"
 #include "BasicScrollbarUI.hpp"
 #include "BasicPanelUI.hpp"
+#include "BasicScrollPaneUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -47,7 +48,7 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Scrollbar, BasicScrollbarUI<Scrollbar::Model> >();
 	registerComponentUI<Panel, BasicPanelUI >();
 	registerComponentUI<Viewport, BasicPanelUI >();
-	registerComponentUI<ScrollPane, BasicPanelUI >();
+	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {

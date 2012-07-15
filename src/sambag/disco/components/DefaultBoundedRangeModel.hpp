@@ -30,6 +30,8 @@ class DefaultBoundedRangeModel :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef DefaultBoundedRangeModelChanged StateChangedEvent;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<DefaultBoundedRangeModel> Ptr;
 protected:
 	void fireStateChanged() {

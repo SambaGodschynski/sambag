@@ -21,6 +21,13 @@ namespace sambag { namespace disco { namespace components {
 class ScrollPane : public AContainer {
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * TODO: it would be more consequence to impl. the ScrollPane class using
+	 * ScrollBarModel template param.
+	 */
+	typedef DefaultBoundedRangeModel ScrollbarModel;
+	//-------------------------------------------------------------------------
 	enum Area {
 		/**
 		 * Identifies a "viewport" or display area, within which
@@ -284,6 +291,8 @@ public:
 	 */
 	virtual void setVerticalScrollBar(ScrollbarPtr scrollbar);
 	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr< AScrollbar<ScrollbarModel> > AScrollbarPtr;
+	//-------------------------------------------------------------------------
 	/**
 	 * Returns the horizontal scroll bar that controls the viewport's
 	 * horizontal view position.
@@ -291,7 +300,7 @@ public:
 	 * @return the <code>horizontalScrollBar</code> property
 	 * @see #setHorizontalScrollBar
 	 */
-	ScrollbarPtr getHorizontalScrollBar() const {
+	AScrollbarPtr getHorizontalScrollBar() const {
 		return horizontalScrollBar;
 	}
 	//-------------------------------------------------------------------------
@@ -302,7 +311,7 @@ public:
 	 * @return the <code>verticalScrollBar</code> property
 	 * @see #setHorizontalScrollBar
 	 */
-	ScrollbarPtr getVerticalScrollBar() const {
+	AScrollbarPtr getVerticalScrollBar() const {
 		return verticalScrollBar;
 	}
 	//-------------------------------------------------------------------------

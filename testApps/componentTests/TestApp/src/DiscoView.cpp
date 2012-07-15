@@ -235,6 +235,7 @@ void createSurpriseWindow() {
 	win[2] = sdc::FramedWindow::create(win[0]);
 	win[2]->setTitle("Surprise Window");
 	win[2]->setWindowBounds(Rectangle(110,100,430,280));
+	win[2]->getContentPane()->setLayout(FlowLayout::create());
 
 	const int NUM = 1000;
 	AContainerPtr con = Panel::create();

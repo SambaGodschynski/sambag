@@ -811,7 +811,7 @@ bool Viewport::canUseWindowBlitter() {
 		//SwingUtilities.computeIntersection(0, 0, w, h, clip);
 		boost::geometry::intersection<Rectangle::Base,
 		Rectangle::Base, Rectangle::Base>(Rectangle(0,0,w,h), clip, clip);
-		if (clip == oldClip)
+		if (clip != oldClip)
 			return false;
 
 		if (lastParent) {

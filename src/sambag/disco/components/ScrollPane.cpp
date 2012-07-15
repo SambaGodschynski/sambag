@@ -9,12 +9,16 @@
 #include "ui/ALookAndFeel.hpp"
 #include "Viewport.hpp"
 #include "ScrollPaneLayout.hpp"
+#include "IScrollable.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class ScrollPane::MyScrollbar
 //=============================================================================
 class ScrollPane::MyScrollbar : public Scrollbar {
+private:
+	//-------------------------------------------------------------------------
+	typedef Scrollbar Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ScrollPane::MyScrollbar> Ptr;
 	//-------------------------------------------------------------------------
@@ -22,7 +26,65 @@ class ScrollPane::MyScrollbar : public Scrollbar {
 	//-------------------------------------------------------------------------
 	MyScrollbar(ScrollPane &parent, Scrollbar::Orientation o) :
 		Scrollbar(o), parent(parent) {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Set to true when the unit increment has been explicitly set.
+	 * If this is false the viewport's view is obtained and if it
+	 * is an instance of <code>Scrollable</code> the unit increment
+	 * from it is used.
+	 */
+	sambag::com::ArithmeticWrapper<bool> unitIncrementSet;
+	//-------------------------------------------------------------------------
+	/**
+	 * Set to true when the block increment has been explicitly set.
+	 * If this is false the viewport's view is obtained and if it
+	 * is an instance of <code>Scrollable</code> the block increment
+	 * from it is used.
+	 */
+	sambag::com::ArithmeticWrapper<bool> blockIncrementSet;
 public:
+	//-------------------------------------------------------------------------
+	Coordinate getUnitIncrement(Direction direction) const {
+		Viewport::Ptr vp = parent.getViewport();
+		IScrollable::Ptr sc =
+				boost::shared_dynamic_cast<IScrollable>(vp->getView());
+		if (!unitIncrementSet && vp && sc) {
+			Rectangle vr = vp->getViewRect();
+			return sc->getScrollableUnitIncrement(vr, (int)getOrientation(),
+					(int)direction);
+		} else {
+			return Super::getUnitIncrement(direction);
+		}
+	}
+	//-------------------------------------------------------------------------
+	void setUnitIncrement(const Coordinate &unitIncrement) {
+		unitIncrementSet = true;
+		Super::setUnitIncrement(unitIncrement);
+	}
+	//-------------------------------------------------------------------------
+	Coordinate getBlockIncrement(const Coordinate &direction) const{
+		Viewport::Ptr vp = parent.getViewport();
+		if (blockIncrementSet || !vp) {
+			return Super::getBlockIncrement(direction);
+		}
+		IScrollable::Ptr sc =
+				boost::shared_dynamic_cast<IScrollable>(vp->getView());
+		if (sc) {
+			Rectangle vr = vp->getViewRect();
+			return sc->getScrollableBlockIncrement(vr, (int)getOrientation(),
+					(int)direction);
+		}
+		if (getOrientation() == VERTICAL) {
+			return vp->getExtentSize().height();
+		} else {
+			return vp->getExtentSize().width();
+		}
+	}
+	//-------------------------------------------------------------------------
+	void setBlockIncrement(const Coordinate &blockIncrement) {
+		blockIncrementSet = true;
+		Super::setBlockIncrement(blockIncrement);
+	}
 	//-------------------------------------------------------------------------
 	static Ptr create(ScrollPane &parent, Scrollbar::Orientation o) {
 		Ptr res(new MyScrollbar(parent, o));
@@ -100,24 +162,26 @@ ScrollbarPtr ScrollPane::createVerticalScrollBar() {
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setHorizontalScrollBar(ScrollbarPtr scrollbar) {
-	ScrollbarPtr old = getHorizontalScrollBar();
+	AScrollbarPtr old = getHorizontalScrollBar();
 	horizontalScrollBar = scrollbar;
 	if (horizontalScrollBar) {
 		addBack(horizontalScrollBar, HORIZONTAL_SCROLLBAR);
 	} else if (!old) {
 		remove(old);
 	}
-	firePropertyChanged(PROPERTY_HORIZONTAL_SCROLLBAR, old, horizontalScrollBar);
+	firePropertyChanged(PROPERTY_HORIZONTAL_SCROLLBAR, old,
+		(AScrollbarPtr)horizontalScrollBar);
 
 	revalidate();
 	redraw();
 }
 //-----------------------------------------------------------------------------
 void ScrollPane::setVerticalScrollBar(ScrollbarPtr scrollbar) {
-	ScrollbarPtr old = getVerticalScrollBar();
+	AScrollbarPtr old = getVerticalScrollBar();
 	verticalScrollBar = scrollbar;
 	addBack(verticalScrollBar, VERTICAL_SCROLLBAR);
-	firePropertyChanged(PROPERTY_VERTICAL_SCROLLBAR, old, verticalScrollBar);
+	firePropertyChanged(PROPERTY_VERTICAL_SCROLLBAR, old,
+			(AScrollbarPtr)verticalScrollBar);
 
 	revalidate();
 	redraw();
@@ -241,7 +305,7 @@ Rectangle ScrollPane::getViewportBorderBounds() const {
 	/* If there's a visible vertical scrollbar remove the space it needs
 	 * from the width of borderR.
 	 */
-	ScrollbarPtr vsb = getVerticalScrollBar();
+	AScrollbarPtr vsb = getVerticalScrollBar();
 	if (vsb && vsb->isVisible()) {
 		Coordinate vsbWidth = vsb->getWidth();
 		borderR.width( borderR.width() - vsbWidth);
@@ -250,7 +314,7 @@ Rectangle ScrollPane::getViewportBorderBounds() const {
 	/* If there's a visible horizontal scrollbar remove the space it needs
 	 * from the height of borderR.
 	 */
-	ScrollbarPtr hsb = getHorizontalScrollBar();
+	AScrollbarPtr hsb = getHorizontalScrollBar();
 	if (hsb && hsb->isVisible()) {
 		borderR.height( borderR.height() - hsb->getHeight());
 	}

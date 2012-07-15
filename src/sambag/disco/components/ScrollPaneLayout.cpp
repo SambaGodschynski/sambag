@@ -38,8 +38,8 @@ void ScrollPaneLayout::adjustForVSB(bool wantsVSB,
 				std::min(vsb->getPreferredSize().width(), available.width()));
 
 		available.width( available.width() -  vsbWidth);
-		vsbR.width(vsbWidth);
 		vsbR.x0().x(available.x0().x() + available.width() + vpbInsets.right());
+		vsbR.width(vsbWidth);
 	} else {
 		available.width( available.width() + oldWidth);
 	}
@@ -125,7 +125,9 @@ AComponentPtr ScrollPaneLayout::getCorner(ScrollPane::Area loc) const {
 	}
 }
 //-----------------------------------------------------------------------------
-ScrollbarPtr ScrollPaneLayout::getHorizontalScrollBar() const {
+ScrollPaneLayout::AScrollbarPtr
+ScrollPaneLayout::getHorizontalScrollBar() const
+{
 	 return hsb;
 }
 //-----------------------------------------------------------------------------
@@ -139,7 +141,9 @@ ViewportPtr ScrollPaneLayout::getRowHeader() const {
 	return rowHead;
 }
 //-----------------------------------------------------------------------------
-ScrollbarPtr ScrollPaneLayout::getVerticalScrollBar() const {
+ScrollPaneLayout::AScrollbarPtr
+ScrollPaneLayout::getVerticalScrollBar() const
+{
 	return vsb;
 }
 //-----------------------------------------------------------------------------
@@ -167,8 +171,8 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	Insets insets = parent->getInsets();
 	availR.x0().x( insets.left() );
 	availR.x0().y( insets.top() );
-	availR.width( availR.width() - insets.left() + insets.right() );
-	availR.height( availR.height() - insets.top() + insets.bottom() );
+	availR.width( availR.width() - (insets.left() + insets.right() ));
+	availR.height( availR.height() - (insets.top() + insets.bottom() ));
 
 	/* If there's a visible column header remove the space it
 	 * needs from the top of availR.  The column header is treated

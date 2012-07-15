@@ -27,6 +27,7 @@ public:
 	typedef boost::shared_ptr<ScrollPaneLayout> Ptr;
 	typedef ScrollPane::VerticalScrollbarPolicy VerticalScrollbarPolicy;
 	typedef ScrollPane::HorizontalScrollbarPolicy HorizontalScrollbarPolicy;
+	typedef ScrollPane::AScrollbarPtr AScrollbarPtr;
 protected:
 	//-------------------------------------------------------------------------
 	ScrollPaneLayout() :
@@ -53,14 +54,14 @@ protected:
 	 * Default is a <code>ScrollbarPtr</code>.
 	 * @see ScrollPane#setVerticalScrollBar
 	 */
-	ScrollbarPtr vsb;
+	AScrollbarPtr vsb;
 	//-------------------------------------------------------------------------
 	/**
 	 * The scrollpane's horizontal scrollbar child.
 	 * Default is a <code>ScrollbarPtr</code>.
 	 * @see ScrollPane#setHorizontalScrollBar
 	 */
-	ScrollbarPtr hsb;
+	AScrollbarPtr hsb;
 	//-------------------------------------------------------------------------
 	/**
 	 * The row header child.  Default is <code>null</code>.
@@ -167,7 +168,7 @@ public:
 	 * Returns the ScrollbarPtr object that handles horizontal scrolling.
 	 * @return
 	 */
-	ScrollbarPtr getHorizontalScrollBar() const;
+	AScrollbarPtr getHorizontalScrollBar() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the horizontal scrollbar-display policy.
@@ -185,7 +186,7 @@ public:
 	 * Returns the ScrollbarPtr object that handles vertical scrolling.
 	 * @return
 	 */
-	ScrollbarPtr getVerticalScrollBar() const;
+	AScrollbarPtr getVerticalScrollBar() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the vertical scrollbar-display policy.

@@ -92,7 +92,7 @@ public:
 	 * @see #setValue
 	 * @see Scrollable#getScrollableUnitIncrement
 	 */
-	const Coordinate & getUnitIncrement(Direction direction) const {
+	Coordinate getUnitIncrement(Direction direction) const {
 		return unitIncrement;
 	}
 	//-------------------------------------------------------------------------
@@ -133,7 +133,7 @@ public:
 	 * @see #setValue
 	 * @see Scrollable#getScrollableBlockIncrement
 	 */
-	const Coordinate & getBlockIncrement(const Coordinate &direction) const
+	Coordinate getBlockIncrement(const Coordinate &direction) const
 	{
 		return blockIncrement;
 	}
@@ -150,8 +150,8 @@ public:
 	 * description: The scrollbar's block increment.
 	 */
 	void setBlockIncrement(const Coordinate &blockIncrement) {
-		int oldValue = this.blockIncrement;
-		this.blockIncrement = blockIncrement;
+		Coordinate oldValue = this->blockIncrement;
+		this->blockIncrement = blockIncrement;
 		firePropertyChanged(PROPERTY_BLOCKINCREMENT, oldValue, blockIncrement);
 	}
 	//-------------------------------------------------------------------------
@@ -160,7 +160,7 @@ public:
 	 * @see Adjustable#getUnitIncrement
 	 * @see #getUnitIncrement(int)
 	 */
-	const Coordinate & getUnitIncrement() const {
+	Coordinate getUnitIncrement() const {
 		return unitIncrement;
 	}
 	//-------------------------------------------------------------------------
@@ -169,7 +169,7 @@ public:
 	 * @see Adjustable#getBlockIncrement
 	 * @see #getBlockIncrement(int)
 	 */
-	const Coordinate & getBlockIncrement() const {
+	Coordinate getBlockIncrement() const {
 		return blockIncrement;
 	}
 	//-------------------------------------------------------------------------
@@ -180,7 +180,7 @@ public:
 	 *
 	 * @return the value of the model's extent property
 	 */
-	const Coordinate & getVisibleAmount() const {
+	Coordinate getVisibleAmount() const {
 		return Model::getExtent();
 	}
 	//-------------------------------------------------------------------------
