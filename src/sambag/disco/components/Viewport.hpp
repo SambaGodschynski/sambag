@@ -33,6 +33,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
+	typedef ViewportChanged StateChangedEvent;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Viewport> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;

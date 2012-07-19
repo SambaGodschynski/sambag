@@ -294,25 +294,23 @@ void createScrollercoasterWindow() {
 	win[4]->setTitle("ScrollerCoaster Window");
 	win[4]->setWindowBounds(Rectangle(110,100,430,280));
 
-	const int NUM = 1000;
+	const int NUM = 500;
 	AContainerPtr con = Panel::create();
 	//con->setSize(Dimension(300, 1000));
 	sdc::ScrollPane::Ptr vp = ScrollPane::create(con);
+	//vp->setHorizontalScrollBarPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_NEVER);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
 	win[4]->getContentPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {
 		std::stringstream ss;
-		ss << i;
+		ss << i+1;
 		Label::Ptr el = Label::create();
 		el->setText(ss.str());
-		el->setFont(el->getFont().setSize((i+1)*0.9));
+		el->setFont(el->getFont().setSize((NUM-i)*0.9));
 		con->add(el);
 	}
 	win[4]->getContentPane()->validate();
 	std::cout<<vp->getBounds()<<std::endl;
-	printCompInfos(win[4]->getContentPane());
-	printCompInfos(vp);
-	printCompInfos(con);
 }
 
 void createACMEWindow() {

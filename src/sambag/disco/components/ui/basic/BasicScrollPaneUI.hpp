@@ -11,7 +11,8 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
-
+#include <sambag/disco/components/Viewport.hpp>
+#include <sambag/disco/components/Forward.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -33,7 +34,13 @@ protected:
 	WPtr self;
 	//-------------------------------------------------------------------------
 	BasicScrollPaneUI(){}
+	//-------------------------------------------------------------------------
+	void syncScrollPaneWithViewport();
 private:
+	//-------------------------------------------------------------------------
+	ScrollPanePtr scrollpane;
+	//-------------------------------------------------------------------------
+	Coordinate oldExtent;
 public:
 	//-------------------------------------------------------------------------
 	virtual void installUI(AComponentPtr c);
@@ -45,12 +52,13 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void vsbStateChanged(void *src,
-		const ScrollPane::ScrollbarModel::StateChangedEvent &ev,
-		ScrollPanePtr pane);
+		const ScrollPane::ScrollbarModel::StateChangedEvent &ev);
 	//-------------------------------------------------------------------------
 	void hsbStateChanged(void *src,
-		const ScrollPane::ScrollbarModel::StateChangedEvent &ev,
-		ScrollPanePtr pane);
+		const ScrollPane::ScrollbarModel::StateChangedEvent &ev);
+	//-------------------------------------------------------------------------
+	void viewportStateChanged(void *src,
+			const Viewport::StateChangedEvent &ev);
 }; // BasicScrollPaneUI
 }}}}} // namespace(s)
 #endif /* SAMBAG_BASICSCROLLPANEUI_H */

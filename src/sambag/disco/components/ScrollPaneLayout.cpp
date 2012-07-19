@@ -409,7 +409,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 			bool fill = false;
 			ui::getUIManager().getProperty("ScrollPane.fillUpperCorner", fill);
 			if (colHead && fill) {
-				if (upperRight) {
+				if (!upperRight) {
 					// This is used primarily for GTK L&F, which needs to
 					// extend the vertical scrollbar to fill the upper
 					// corner near the column header.  Note that we skip
@@ -431,7 +431,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 			bool fill = false;
 			ui::getUIManager().getProperty("ScrollPane.fillLowerCorner", fill);
 			if (rowHead && fill) {
-				if (lowerLeft) {
+				if (!lowerLeft) {
 					// This is used primarily for GTK L&F, which needs to
 					// extend the horizontal scrollbar to fill the lower
 					// corner near the row header.  Note that we skip

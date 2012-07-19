@@ -509,11 +509,10 @@ template <class M>
 void BasicScrollbarUI<M>::drawThumb(IDrawContext::Ptr cn,
 		AComponentPtr c, const Rectangle &thumbBounds)
 {
-
+	Rectangle r = cn->clipExtends();
 	if (!scrollbar->isEnabled()) {
 		return;
 	}
-
 	Graphics g(cn);
 
 	Coordinate w = thumbBounds.width();
@@ -1118,7 +1117,7 @@ TrackListener::setValueFrom(const events::MouseEvent &ev) {
 		if (scrollbar->getOrientation() == ScrollBarType::VERTICAL) {
 			scrollbar->setValue(scrollbar->getMaximum() - scrollbar->getExtent());
 		} else {
-			scrollbar->setValue(scrollbar->getMinimum());
+			scrollbar->setValue(scrollbar->getMaximum());
 		}
 	} else {
 		Coordinate valueMax = scrollbar->getMaximum() - scrollbar->getExtent();
