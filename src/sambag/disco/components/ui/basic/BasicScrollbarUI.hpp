@@ -509,7 +509,6 @@ template <class M>
 void BasicScrollbarUI<M>::drawThumb(IDrawContext::Ptr cn,
 		AComponentPtr c, const Rectangle &thumbBounds)
 {
-	Rectangle r = cn->clipExtends();
 	if (!scrollbar->isEnabled()) {
 		return;
 	}

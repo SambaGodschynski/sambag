@@ -360,6 +360,7 @@ void Viewport::remove(AComponentPtr child) {
 }
 //-----------------------------------------------------------------------------
 void Viewport::redraw(const Rectangle &r) {
+//  TODO: only a workarund see: #171
 //	AContainerPtr parent = getParent();
 //	if(parent) {
 //		Rectangle d(
@@ -369,16 +370,7 @@ void Viewport::redraw(const Rectangle &r) {
 //		parent->redraw(d);
 //	}
 //	else
-//		Super::redraw(r);
-	/**
-	 * orig.:
-	 * Always repaint in the parents coordinate system to make sure
-	 * only one paint is performed by the <code>RepaintManager</code>.
-	 * but:
-	 * the orig. approach dosen't redraws the scrollbars when viewport is
-	 * smaller than the scrollpane avail. rect.
-	 */
-	Super::redraw(r);
+		Super::redraw(r);
 }
 //-----------------------------------------------------------------------------
 void Viewport::setBounds(const Rectangle &r) {
