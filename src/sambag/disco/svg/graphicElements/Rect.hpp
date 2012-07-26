@@ -1,32 +1,36 @@
 /*
- * GraphicElement.hpp
+ * Rect.hpp
  *
- *  Created on: 20.09.2011
+ *  Created on: 22.09.2011
  *      Author: samba
  */
 
-#ifndef DISCO_LINE_HPP_
-#define DISCO_LINE_HPP_
+#ifndef RECT_HPP_
+#define RECT_HPP_
 
 #include "GraphicElement.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Line : public GraphicElement {
+class Rect : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Line> Ptr;
+	typedef boost::shared_ptr<Rect> Ptr;
 private:
+	//-------------------------------------------------------------------------
+	void _rect(IDrawContext::Ptr context);
 protected:
 	//-------------------------------------------------------------------------
-	Point2D p0, p1;
+	Rectangle rect;
 	//-------------------------------------------------------------------------
-	Line();
+	Point2D r; // roudned rect radius
+	//-------------------------------------------------------------------------
+	Rect();
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
-			return "Line";
+		return "Rect";
 	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -37,28 +41,29 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create()
 	{
-		Ptr neu(new Line());
+		Ptr neu(new Rect());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getP0() const { return p0; }
+	const Rectangle & getRectangle() const { return rect; }
 	//-------------------------------------------------------------------------
-	const Point2D & getP1() const { return p1; }
+	void setRectangle(const Rectangle &r)  { rect = r; }
 	//-------------------------------------------------------------------------
-	void setP0(const Point2D &p)  { p0 = p; }
+	const Point2D & getRadius() const { return r; }
 	//-------------------------------------------------------------------------
-	void setP1(const Point2D &p)  { p1 = p; }
+	void setRadius(const Point2D &_r)  { r = _r; }
 	//-------------------------------------------------------------------------
-	virtual ~Line();
+	virtual ~Rect();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
-		return Rectangle(p0, p1);
+		return rect;
 	}
 };
 
-}}} // namespace
+}}}} // namespace
 
-#endif /* GRAPHICELEMENT_HPP_ */
+
+#endif /* RECT_HPP_ */

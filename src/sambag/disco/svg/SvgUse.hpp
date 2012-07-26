@@ -10,7 +10,7 @@
 
 #include "Svg.hpp"
 #include "sambag/com/Common.hpp"
-#include "sambag/disco/graphicElements/RefElement.hpp"
+#include "graphicElements/RefElement.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 
@@ -27,7 +27,7 @@ private:
 	//-------------------------------------------------------------------------
 	std::string href;
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::RefElement::Ptr object;
+	sambag::disco::svg::graphicElements::RefElement::Ptr object;
 	//-------------------------------------------------------------------------
 	/**
 	 * gets the element with the given href id and puts into object.

@@ -1,37 +1,34 @@
 /*
- * RefElement.hpp
+ * GraphicElement.hpp
  *
- *  Created on: 07.10.2011
+ *  Created on: 20.09.2011
  *      Author: samba
  */
 
-#ifndef REFELEMENT_HPP_
-#define REFELEMENT_HPP_
+#ifndef DISCO_ARC_HPP_
+#define DISCO_ARC_HPP_
 
-#include "sambag/disco/graphicElements/GraphicElement.hpp"
-#include "SceneGraph.hpp"
+#include "GraphicElement.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-/**
- * Class RefElement.
- * Graphic element which contains another GraphicElement to draw.
- */
-class RefElement : public GraphicElement {
+class Arc : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<RefElement> Ptr;
+	typedef boost::shared_ptr<Arc> Ptr;
 private:
-	//-------------------------------------------------------------------------
-	IDrawable::Ptr ref;
 protected:
 	//-------------------------------------------------------------------------
-	RefElement(){}
+	Point2D c;
+	//-------------------------------------------------------------------------
+	Point2D r;
+	//-------------------------------------------------------------------------
+	Arc(){}
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
-		return "RefElement["+ (!ref ? "NULL" : "&" + ref->toString()) +"]";
+			return "Arc";
 	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -42,31 +39,26 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create()
 	{
-		Ptr neu(new RefElement());
+		Ptr neu(new Arc());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setReference(IDrawable::Ptr r) {
-		ref = r;
-	}
+	const Point2D & getCenter() const { return c; }
 	//-------------------------------------------------------------------------
-	IDrawable::Ptr getReference() const  { return ref; }
+	const Point2D & getRadius() const { return r; }
 	//-------------------------------------------------------------------------
-	virtual ~RefElement(){}
+	void setCenter(const Point2D &_c)  { c = _c; }
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context ) {
-		if (ref)
-			ref->draw(context);
-	}
+	void setRadius(const Point2D &_r)  { r = _r; }
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		if (!ref) return NULL_RECTANGLE;
-		return ref->getBoundingBox();
-	}
+	virtual ~Arc(){}
+	//-------------------------------------------------------------------------
+	virtual void draw( IDrawContext::Ptr context );
+	//-------------------------------------------------------------------------
+	virtual Rectangle getBoundingBox() const ;
 };
 
-}}} // namespace
+}}}} // namespace
 
-
-#endif /* REFELEMENT_HPP_ */
+#endif /* DISCO_CIRCLE_HPP_ */

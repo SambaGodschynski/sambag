@@ -7,7 +7,7 @@
 
 #include "Line.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class Line
@@ -26,4 +26,4 @@ void Line::draw( IDrawContext::Ptr cn ) {
 	cn->stroke();
 }
 
-}}}
+}}}}

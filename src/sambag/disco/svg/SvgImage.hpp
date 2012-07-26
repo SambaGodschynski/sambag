@@ -9,7 +9,7 @@
 #define DISCO_SVGIMAGE_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Image.hpp"
+#include "graphicElements/Image.hpp"
 #include "AttributeParser.hpp"
 
 
@@ -34,10 +34,10 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Image::Ptr image;
+	sambag::disco::svg::graphicElements::Image::Ptr image;
 	//-------------------------------------------------------------------------
 	SvgImage() {
-		image = sambag::disco::graphicElements::Image::create();
+		image = sambag::disco::svg::graphicElements::Image::create();
 	}
 public:
 	//-------------------------------------------------------------------------

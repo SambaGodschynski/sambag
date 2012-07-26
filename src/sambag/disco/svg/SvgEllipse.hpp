@@ -9,7 +9,7 @@
 #define SVGELLIPSE_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Arc.hpp"
+#include "graphicElements/Arc.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -30,7 +30,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Arc::Ptr ellipse;
+	sambag::disco::svg::graphicElements::Arc::Ptr ellipse;
 	//-------------------------------------------------------------------------
 	SvgEllipse();
 public:

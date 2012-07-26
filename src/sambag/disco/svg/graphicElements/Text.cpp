@@ -7,7 +7,7 @@
 
 #include "Text.hpp"
 #include "sambag/com/Common.hpp"
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class Text
@@ -42,4 +42,4 @@ void Text::draw( IDrawContext::Ptr cn ) {
 	}
 }
 
-}}}
+}}}}

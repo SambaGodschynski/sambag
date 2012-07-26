@@ -11,7 +11,7 @@
 #include "PointContainer.hpp"
 #include <boost/assign/list_of.hpp>
 #include <fstream>
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class Rect
@@ -97,4 +97,4 @@ void Rect::draw( IDrawContext::Ptr cn ) {
 	}
 }
 
-}}}
+}}}}

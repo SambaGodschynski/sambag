@@ -9,7 +9,7 @@
 #define SVGCIRCLE_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Arc.hpp"
+#include "graphicElements/Arc.hpp"
 
 
 namespace sambag { namespace disco { namespace svg {
@@ -29,7 +29,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Arc::Ptr circle;
+	sambag::disco::svg::graphicElements::Arc::Ptr circle;
 	//-------------------------------------------------------------------------
 	SvgCircle();
 public:

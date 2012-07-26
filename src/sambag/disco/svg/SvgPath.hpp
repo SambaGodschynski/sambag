@@ -9,11 +9,11 @@
 #define DISCO_SVG_PATH_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Path.hpp"
+#include "graphicElements/Path.hpp"
 
 
 namespace sambag { namespace disco { namespace svg {
-using sambag::disco::graphicElements::pathInstruction::PathInstructions;
+using sambag::disco::svg::graphicElements::pathInstruction::PathInstructions;
 //=============================================================================
 class SvgPath : public SvgObject {
 //=============================================================================
@@ -26,7 +26,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Path::Ptr path;
+	sambag::disco::svg::graphicElements::Path::Ptr path;
 	//-------------------------------------------------------------------------
 	SvgPath();
 public:

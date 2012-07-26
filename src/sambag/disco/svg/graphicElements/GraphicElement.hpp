@@ -5,60 +5,50 @@
  *      Author: samba
  */
 
-#ifndef DISCO_ARC_HPP_
-#define DISCO_ARC_HPP_
+#ifndef GRAPHICELEMENT_HPP_
+#define GRAPHICELEMENT_HPP_
 
-#include "GraphicElement.hpp"
+#include "sambag/disco/IDrawContext.hpp"
+#include "sambag/com/Common.hpp"
+#include "sambag/disco/IDrawable.hpp"
+#include "sambag/disco/Coordinate.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Arc : public GraphicElement {
+// Abstract base class for all graphic elements.
+class GraphicElement : public IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Arc> Ptr;
+	typedef boost::shared_ptr<GraphicElement> Ptr;
 private:
 protected:
 	//-------------------------------------------------------------------------
-	Point2D c;
+	GraphicElement();
 	//-------------------------------------------------------------------------
-	Point2D r;
+	boost::weak_ptr<GraphicElement> __self;
 	//-------------------------------------------------------------------------
-	Arc(){}
+	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
-	std::string toString() const {
-			return "Arc";
+	// TODO: draw path method. which saves the path data on first call
+	// and restores saved data on the others.
+	//-------------------------------------------------------------------------
+	std::string toString() const = 0;
+	//-------------------------------------------------------------------------
+	virtual Ptr clone() const = 0;
+	//-------------------------------------------------------------------------
+	virtual ~GraphicElement();
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return __self.lock();
 	}
 	//-------------------------------------------------------------------------
-	virtual GraphicElement::Ptr clone() const {
-		Ptr neu = create();
-		*neu = *this;
-		return neu;
-	}
+	virtual void draw( IDrawContext::Ptr context ) = 0;
 	//-------------------------------------------------------------------------
-	static Ptr create()
-	{
-		Ptr neu(new Arc());
-		neu->__setSelf(neu);
-		return neu;
-	}
-	//-------------------------------------------------------------------------
-	const Point2D & getCenter() const { return c; }
-	//-------------------------------------------------------------------------
-	const Point2D & getRadius() const { return r; }
-	//-------------------------------------------------------------------------
-	void setCenter(const Point2D &_c)  { c = _c; }
-	//-------------------------------------------------------------------------
-	void setRadius(const Point2D &_r)  { r = _r; }
-	//-------------------------------------------------------------------------
-	virtual ~Arc(){}
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const ;
+	virtual Rectangle getBoundingBox() const = 0;
 };
 
-}}} // namespace
+}}}} // namespace
 
-#endif /* DISCO_CIRCLE_HPP_ */
+#endif /* GRAPHICELEMENT_HPP_ */

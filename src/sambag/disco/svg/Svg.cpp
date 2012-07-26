@@ -62,7 +62,7 @@ void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj) {
 void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,
 	const SvgObject::Stroke_tag & )
 {
-	using sambag::disco::graphicElements::Style;
+	using sambag::disco::svg::graphicElements::Style;
 
 	// check whether referenced by id
 	std::string id = AttributeParser::getUrl(colorStr);
@@ -99,7 +99,7 @@ void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
 		return;
 	}
 
-	using sambag::disco::graphicElements::Style;
+	using sambag::disco::svg::graphicElements::Style;
 	ColorRGBA color;
 	AttributeParser::parseColor(colorStr, color);
 	if (color==ColorRGBA::NULL_COLOR) return;

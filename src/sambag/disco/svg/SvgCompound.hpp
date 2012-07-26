@@ -9,7 +9,7 @@
 #define SVG_COMPOUNDELEMENT_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Compound.hpp"
+#include "graphicElements/Compound.hpp"
 #include "sambag/com/Common.hpp"
 #include <list>
 
@@ -27,10 +27,10 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Compound::Ptr combo;
+	sambag::disco::svg::graphicElements::Compound::Ptr combo;
 	//-------------------------------------------------------------------------
 	SvgCompound(){
-		combo = sambag::disco::graphicElements::Compound::create();
+		combo = sambag::disco::svg::graphicElements::Compound::create();
 	}
 public:
 	//-------------------------------------------------------------------------

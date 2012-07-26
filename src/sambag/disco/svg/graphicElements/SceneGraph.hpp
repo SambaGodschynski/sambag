@@ -10,7 +10,7 @@
 
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/IDrawable.hpp"
-#include "sambag/disco/graphicElements/Style.hpp"
+#include "Style.hpp"
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -21,7 +21,7 @@
 #include <boost/graph/copy.hpp>
 #include <boost/algorithm/string.hpp>
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 /**
  * @class interface for ProcessListProcessors.
@@ -905,7 +905,7 @@ void SceneGraph::getElementsByTag(const Tag & tagName, Container &c) {
 		c.push_back(getSceneGraphElement(it->second));
 	}
 }
-}}} // namespace
+}}}} // namespace
 
 
 #endif /* SCENEGRAPH_HPP_ */

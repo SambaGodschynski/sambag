@@ -10,11 +10,11 @@
 
 
 #include "sambag/com/Common.hpp"
-#include "sambag/disco/graphicElements/GraphicElement.hpp"
+#include "graphicElements/GraphicElement.hpp"
 #include "sambag/xml/XML2Obj.hpp"
 #include "AttributeParser.hpp"
 #include "boost/flyweight.hpp"
-#include "sambag/disco/graphicElements/SceneGraph.hpp"
+#include "graphicElements/SceneGraph.hpp"
 #include "StyleParser.hpp"
 #include <list>
 
@@ -77,7 +77,7 @@ public:
 	//-------------------------------------------------------------------------
 	struct DashOffsetStyle_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
-	struct Style_tag { typedef disco::graphicElements::Style Type; };
+	struct Style_tag { typedef disco::svg::graphicElements::Style Type; };
 	//-------------------------------------------------------------------------
 	struct StrokeLineCap_tag { typedef IDrawContext::LineCapStyle Type; };
 	//-------------------------------------------------------------------------
@@ -118,9 +118,9 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	virtual void
-	copyStyleToGraphicElement(const sambag::disco::graphicElements::Style &b)
+	copyStyleToGraphicElement(const sambag::disco::svg::graphicElements::Style &b)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		getRelatedSceneGraph()->setStyleTo(obj, b);
@@ -202,7 +202,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const StrokeWidth_tag::Type &width, const StrokeWidth_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -231,7 +231,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const OpacityStyle_tag::Type &strV, const OpacityStyle_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -245,7 +245,7 @@ public:
 	virtual void set( const StrokeOpacityStyle_tag::Type &strV,
 			const StrokeOpacityStyle_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -258,7 +258,7 @@ public:
 	virtual void set( const FillOpacityStyle_tag::Type &strV,
 			const FillOpacityStyle_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -270,7 +270,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void set( const Style_tag::Type &style, const Style_tag&)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		copyStyleToGraphicElement(style);
@@ -278,7 +278,7 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
 	//-------------------------------------------------------------------------
 	virtual void set( const FontFamily_tag::Type &v, const FontFamily_tag & ) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -287,7 +287,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const FontSize_tag::Type &v, const FontSize_tag & ) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -296,7 +296,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const FontWeight_tag::Type &v, const FontWeight_tag & ) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -305,7 +305,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const FontStyle_tag::Type &v, const FontStyle_tag & ) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -314,7 +314,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const DashArrayStyle_tag::Type &v, const DashArrayStyle_tag &) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -329,7 +329,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const DashOffsetStyle_tag::Type &v, const DashOffsetStyle_tag &) {
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -342,7 +342,7 @@ public:
 	virtual void set( const StrokeLineCap_tag::Type &v,
 			const StrokeLineCap_tag &)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -353,7 +353,7 @@ public:
 	virtual void set( const StrokeLineJoin_tag::Type &v,
 			const StrokeLineJoin_tag &)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);
@@ -364,7 +364,7 @@ public:
 	virtual void set( const StrokeMiterLimit::Type &v,
 			const StrokeMiterLimit &)
 	{
-		using sambag::disco::graphicElements::Style;
+		using sambag::disco::svg::graphicElements::Style;
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		Style neu = getRelatedSceneGraph()->getStyleOf(obj);

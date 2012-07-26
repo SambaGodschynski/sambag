@@ -10,7 +10,7 @@
 
 #include "GraphicElement.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 class Image : public GraphicElement {
 //=============================================================================
@@ -85,6 +85,6 @@ public:
 	}
 };
 
-}}} // namespace
+}}}} // namespace
 
 #endif /* IMAGE_HPP_ */

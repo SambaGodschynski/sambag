@@ -7,7 +7,7 @@
 
 #include "SvgUse.hpp"
 #include "SvgRoot.hpp"
-#include "sambag/disco/graphicElements/SceneGraphHelper.hpp"
+#include "graphicElements/SceneGraphHelper.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 
@@ -20,7 +20,7 @@ SvgUse::SvgUse() {
 }
 //-----------------------------------------------------------------------------
 void SvgUse::solveHRef() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(getRoot());
 	GraphicElement::Ptr ref =
 		boost::shared_dynamic_cast<GraphicElement>(getRelatedSceneGraph()->getElementById(href) );

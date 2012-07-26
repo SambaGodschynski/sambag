@@ -13,7 +13,7 @@
 #include "sambag/disco/Font.hpp"
 #include "sambag/disco/ColorRGBA.hpp"
 #include "sambag/disco/Dash.hpp"
-#include "sambag/disco/graphicElements/PointContainer.hpp"
+#include "graphicElements/PointContainer.hpp"
 #include "sambag/disco/IDrawContext.hpp"
 #include <map>
 #include "sambag/math/Matrix.hpp"
@@ -29,9 +29,9 @@
 
 namespace sambag { namespace disco { namespace svg {
 using namespace sambag::com;
-using namespace sambag::disco::graphicElements;
-using sambag::disco::graphicElements::pathInstruction::PathInstructions;
-using sambag::disco::graphicElements::pathInstruction::PointContainer;
+using namespace sambag::disco::svg::graphicElements;
+using sambag::disco::svg::graphicElements::pathInstruction::PathInstructions;
+using sambag::disco::svg::graphicElements::pathInstruction::PointContainer;
 //=============================================================================
 // parser
 //=============================================================================
@@ -134,11 +134,11 @@ extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
 extern std::istream & operator>>(std::istream&, sambag::math::Matrix&);
 extern std::istream & operator>>(
 		std::istream&,
-		sambag::disco::graphicElements::pathInstruction::PathInstructions &
+		sambag::disco::svg::graphicElements::pathInstruction::PathInstructions &
 );
 extern std::istream & operator>>(
 	std::istream&,
-	sambag::disco::graphicElements::pathInstruction::PointContainer &
+	sambag::disco::svg::graphicElements::pathInstruction::PointContainer &
 );
 extern std::istream & operator>>(
 	std::istream&,

@@ -7,7 +7,7 @@
 
 #include "Arc.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // class Circle
 //=============================================================================
@@ -48,4 +48,4 @@ Rectangle Arc::getBoundingBox() const {
 	boost::geometry::multiply_value(size, 2.);
 	return Rectangle(p0, size.x(), size.y());
 }
-}}}
+}}}}

@@ -9,7 +9,7 @@
 #include "sambag/com/FileHandler.hpp"
 #include "sambag/disco/IDiscoFactory.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // class Image
 //=============================================================================
@@ -41,4 +41,4 @@ void Image::draw( IDrawContext::Ptr cn ) {
 	));
 	cn->drawSurface(image, opacity);
 }
-}}}
+}}}}

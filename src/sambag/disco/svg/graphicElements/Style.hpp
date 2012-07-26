@@ -33,7 +33,7 @@ extern size_t hash_value(const sambag::disco::Font &o);
 #define FLYWEIGHT(type, name) type (name)
 #endif
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 /**
@@ -273,6 +273,6 @@ public:
 	}
 
 };
-}}} // namespace
+}}}} // namespace
 
 #endif /* STYLE_H_ */

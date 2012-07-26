@@ -12,7 +12,7 @@
 #include <limits.h>
 #include <limits>
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // class ProcessDrawable
 //=============================================================================
@@ -272,4 +272,4 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
 	}
 	return res;
 }
-}}} // namespaces
+}}}} // namespaces

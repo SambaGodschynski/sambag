@@ -9,7 +9,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/assign/list_inserter.hpp>
 #include "sambag/com/Common.hpp"
-#include "sambag/disco/graphicElements/Style.hpp"
+#include "graphicElements/Style.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================

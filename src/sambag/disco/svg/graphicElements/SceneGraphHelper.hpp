@@ -16,7 +16,7 @@
 #include "RefElement.hpp"
 
 namespace {
-using namespace sambag::disco::graphicElements;
+using namespace sambag::disco::svg::graphicElements;
 //-----------------------------------------------------------------------------
 template <typename Container>
 void getGraphElements(const std::string &a,
@@ -79,7 +79,7 @@ void getGraphElements(const std::string &a,
 }
 } // namespace
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // SceneGraph Helper
 //=============================================================================
@@ -197,6 +197,6 @@ extern void addToGraphAsReference( SceneGraph::Ptr src,
 	}
 }
 
-}} // namespace
+}}}} // namespace
 
 #endif /* SCENEGRAPHHELPER_HPP_ */

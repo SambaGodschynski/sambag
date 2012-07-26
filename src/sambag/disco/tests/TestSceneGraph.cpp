@@ -11,11 +11,11 @@
 #include <list>
 #include <sstream>
 #include <vector>
-#include "sambag/disco/graphicElements/SceneGraph.hpp"
-#include "sambag/disco/graphicElements/Image.hpp"
+#include "sambag/disco/svg/graphicElements/SceneGraph.hpp"
+#include "sambag/disco/svg/graphicElements/Image.hpp"
 #include "sambag/com/Common.hpp"
 #include "sambag/math/Matrix.hpp"
-#include "sambag/disco/graphicElements/SceneGraphHelper.hpp"
+#include "sambag/disco/svg/graphicElements/SceneGraphHelper.hpp"
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSceneGraph );
@@ -27,7 +27,7 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testConstructor() {
 	using namespace sambag::disco;
-	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
+	svg::graphicElements::SceneGraph::Ptr g = svg::graphicElements::SceneGraph::create();
 	CPPUNIT_ASSERT(g);
 	CPPUNIT_ASSERT_EQUAL(std::string("{}"), g->processListAsString());
 }
@@ -40,7 +40,7 @@ void TestSceneGraph::testConstructor() {
  *		i4  i5
  */
 void TestSceneGraph::testBuildGraph() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
 	Image::Ptr i1 = Image::create();
@@ -94,7 +94,7 @@ void TestSceneGraph::testBuildGraph() {
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testTransformNode() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	using namespace sambag::math;
 	SceneGraph::Ptr g = SceneGraph::create();
@@ -118,7 +118,7 @@ void TestSceneGraph::testTransformNode() {
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testStyleNode() {
 	using namespace sambag::disco;
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
@@ -139,7 +139,7 @@ void TestSceneGraph::testStyleNode() {
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testIdAndClassRelations() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	using namespace sambag::disco;
 	SceneGraph::Ptr g = SceneGraph::create();
@@ -189,7 +189,7 @@ void TestSceneGraph::testIdAndClassRelations() {
  *		i4  i5
  */
 void TestSceneGraph::testGetChildrenOf() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::disco;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
@@ -244,7 +244,7 @@ void TestSceneGraph::testGetChildrenOf() {
  *		i4  i5
  */
 void TestSceneGraph::testGetChildrenOfFiltered() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::disco;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
@@ -305,7 +305,7 @@ void TestSceneGraph::testGetChildrenOfFiltered() {
  *		i4  i5
  */
 void TestSceneGraph::testCopySubGraph() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::disco;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements

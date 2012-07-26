@@ -40,7 +40,7 @@ public:
 		return stop;
 	}
 	//-------------------------------------------------------------------------
-	GraphicElement::Ptr getGraphicElement() const {
+	svg::GraphicElement::Ptr getGraphicElement() const {
 		return GraphicElement::Ptr();
 	}
 	//-------------------------------------------------------------------------

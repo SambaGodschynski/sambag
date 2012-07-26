@@ -8,7 +8,7 @@
 #ifndef DISCO_STYLEPARSER_HPP_
 #define DISCO_STYLEPARSER_HPP_
 
-#include "sambag/disco/graphicElements/Style.hpp"
+#include "graphicElements/Style.hpp"
 #include <list>
 #include <map>
 namespace sambag { namespace disco { namespace svg {
@@ -25,7 +25,7 @@ public:
 	 * @param styleValue
 	 */
 	typedef void (*SetStyleAttributeFunc) (
-			disco::graphicElements::Style& style,
+			disco::svg::graphicElements::Style& style,
 			const std::string& styleValue
 	);
 private:
@@ -56,5 +56,5 @@ public:
  * @param out_Style
  * @return stream
  */
-extern std::istream & operator>>(std::istream&, sambag::disco::graphicElements::Style&);
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::graphicElements::Style&);
 #endif /* STYLEPARSER_HPP_ */

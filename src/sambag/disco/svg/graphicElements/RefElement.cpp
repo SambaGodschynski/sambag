@@ -13,10 +13,10 @@
 
 using namespace boost;
 using namespace sambag;
-using namespace sambag::disco::graphicElements;
+using namespace sambag::disco::svg::graphicElements;
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // class RefElement
 //=============================================================================
-}}} // namespace
+}}}} // namespace

@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 SvgText::SvgText() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	text = Text::create();
 }
 //-----------------------------------------------------------------------------

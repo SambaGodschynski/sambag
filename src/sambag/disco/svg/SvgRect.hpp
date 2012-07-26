@@ -9,7 +9,7 @@
 #define SVGRECT_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Rect.hpp"
+#include "graphicElements/Rect.hpp"
 
 
 namespace sambag { namespace disco { namespace svg {
@@ -35,10 +35,10 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Rect::Ptr rect;
+	sambag::disco::svg::graphicElements::Rect::Ptr rect;
 	//-------------------------------------------------------------------------
 	SvgRect() {
-		using namespace sambag::disco::graphicElements;
+		using namespace sambag::disco::svg::graphicElements;
 		rect = Rect::create();
 	}
 public:

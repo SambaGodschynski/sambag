@@ -7,13 +7,14 @@
 
 #include "SvgStyle.hpp"
 #include "StyleParser.hpp"
-#include "sambag/disco/graphicElements/SceneGraphHelper.hpp"
+#include "graphicElements/SceneGraphHelper.hpp"
 #include <list>
 #include <string>
 #include <boost/algorithm/string_regex.hpp>
 #include <istream>
 #include <iostream>
 #include <sstream>
+#include "AttributeParser.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //-----------------------------------------------------------------------------

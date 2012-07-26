@@ -12,7 +12,7 @@
 #include "sambag/com/Common.hpp"
 #include "ostream"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 /**
  * Point container for the path element. Every point can be related to a
@@ -49,7 +49,7 @@ typedef std::list<PathInstruction> PathInstructions;
 extern bool isCubic ( InstructionOp op );
 extern bool isQuadratic ( InstructionOp op );
 
-}}}} // namespace
+}}}}} // namespace
 
 /**
  * for debugging.
@@ -57,7 +57,7 @@ extern bool isQuadratic ( InstructionOp op );
  */
 extern std::ostream & operator<<(
 		std::ostream &,
-		const sambag::disco::graphicElements::pathInstruction::PathInstructions&
+		const sambag::disco::svg::graphicElements::pathInstruction::PathInstructions&
 );
 
 #endif /* PATHINSTRUCTION_HPP_ */

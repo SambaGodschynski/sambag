@@ -31,7 +31,9 @@ using namespace sambag::disco;
  * @param properties
  * @param outStyle
  */
-void parseStyleProperties( const std::string &properties, graphicElements::Style& outStyle) {
+void parseStyleProperties( const std::string &properties,
+		svg::graphicElements::Style& outStyle)
+{
 	using namespace sambag::disco::svg;
 	if (properties.length()==0) return;
 	std::string inStr = properties;
@@ -59,7 +61,7 @@ void parseStyleProperties( const std::string &properties, graphicElements::Style
 // stream operators
 //=============================================================================
 //-----------------------------------------------------------------------------
-std::istream & operator>>(std::istream& istr, sambag::disco::graphicElements::Style& style) {
+std::istream & operator>>(std::istream& istr, sambag::disco::svg::graphicElements::Style& style) {
 	using namespace sambag::disco;
 	std::string str;
 	svg::AttributeParser::getWholeString(istr, str);

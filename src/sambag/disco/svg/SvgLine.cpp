@@ -14,7 +14,7 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 SvgLine::SvgLine() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	line = Line::create();
 }
 //-----------------------------------------------------------------------------

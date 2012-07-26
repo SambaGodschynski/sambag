@@ -12,7 +12,7 @@
 #include "sambag/com/Common.hpp"
 #include <list>
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 /**
@@ -47,7 +47,7 @@ public:
 	}
 };
 
-}}} // namespaces
+}}}} // namespaces
 
 
 #endif /* COMPOUNDELEMENT_HPP_ */

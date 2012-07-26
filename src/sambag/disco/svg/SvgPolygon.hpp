@@ -9,13 +9,13 @@
 #define DISCO_POLYGON_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Path.hpp"
-#include "sambag/disco/graphicElements/PointContainer.hpp"
+#include "graphicElements/Path.hpp"
+#include "graphicElements/PointContainer.hpp"
 #include "sambag/com/Common.hpp"
 #include "sambag/com/Helper.hpp"
 #include <boost/tuple/tuple.hpp>
 namespace sambag { namespace disco { namespace svg {
-using sambag::disco::graphicElements::pathInstruction::PointContainer;
+using sambag::disco::svg::graphicElements::pathInstruction::PointContainer;
 //=============================================================================
 class SvgPolygon : public SvgObject {
 //=============================================================================
@@ -28,10 +28,10 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Path::Ptr path;
+	sambag::disco::svg::graphicElements::Path::Ptr path;
 	//-------------------------------------------------------------------------
 	SvgPolygon() {
-		path = sambag::disco::graphicElements::Path::create();
+		path = sambag::disco::svg::graphicElements::Path::create();
 	}
 public:
 	//-------------------------------------------------------------------------
@@ -50,7 +50,7 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const Points_tag::Type &_v, Points_tag ) {
-		using namespace sambag::disco::graphicElements::pathInstruction;
+		using namespace sambag::disco::svg::graphicElements::pathInstruction;
 		Points_tag::Type v = _v;
 		Points_tag::Type p0;
 		if (v.empty()) return;

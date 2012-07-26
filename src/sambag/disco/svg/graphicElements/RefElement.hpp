@@ -1,36 +1,37 @@
 /*
- * Rect.hpp
+ * RefElement.hpp
  *
- *  Created on: 22.09.2011
+ *  Created on: 07.10.2011
  *      Author: samba
  */
 
-#ifndef RECT_HPP_
-#define RECT_HPP_
+#ifndef REFELEMENT_HPP_
+#define REFELEMENT_HPP_
 
 #include "GraphicElement.hpp"
+#include "SceneGraph.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Rect : public GraphicElement {
+/**
+ * Class RefElement.
+ * Graphic element which contains another GraphicElement to draw.
+ */
+class RefElement : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Rect> Ptr;
+	typedef boost::shared_ptr<RefElement> Ptr;
 private:
 	//-------------------------------------------------------------------------
-	void _rect(IDrawContext::Ptr context);
+	IDrawable::Ptr ref;
 protected:
 	//-------------------------------------------------------------------------
-	Rectangle rect;
-	//-------------------------------------------------------------------------
-	Point2D r; // roudned rect radius
-	//-------------------------------------------------------------------------
-	Rect();
+	RefElement(){}
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
-		return "Rect";
+		return "RefElement["+ (!ref ? "NULL" : "&" + ref->toString()) +"]";
 	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -41,29 +42,31 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create()
 	{
-		Ptr neu(new Rect());
+		Ptr neu(new RefElement());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Rectangle & getRectangle() const { return rect; }
+	void setReference(IDrawable::Ptr r) {
+		ref = r;
+	}
 	//-------------------------------------------------------------------------
-	void setRectangle(const Rectangle &r)  { rect = r; }
+	IDrawable::Ptr getReference() const  { return ref; }
 	//-------------------------------------------------------------------------
-	const Point2D & getRadius() const { return r; }
+	virtual ~RefElement(){}
 	//-------------------------------------------------------------------------
-	void setRadius(const Point2D &_r)  { r = _r; }
-	//-------------------------------------------------------------------------
-	virtual ~Rect();
-	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
+	virtual void draw( IDrawContext::Ptr context ) {
+		if (ref)
+			ref->draw(context);
+	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
-		return rect;
+		if (!ref) return NULL_RECTANGLE;
+		return ref->getBoundingBox();
 	}
 };
 
-}}} // namespace
+}}}} // namespace
 
 
-#endif /* RECT_HPP_ */
+#endif /* REFELEMENT_HPP_ */

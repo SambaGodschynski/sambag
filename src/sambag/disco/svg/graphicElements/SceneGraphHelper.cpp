@@ -9,7 +9,7 @@
 #include "RefElement.hpp"
 
 namespace {
-using namespace sambag::disco::graphicElements;
+using namespace sambag::disco::svg::graphicElements;
 //=============================================================================
 /**
  * @class CopyVisitor
@@ -68,7 +68,7 @@ public:
 }// namespace
 
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // SceneGraph Helper
 //=============================================================================
@@ -122,4 +122,4 @@ void copySubGraph(SceneGraph::Ptr src,
 	CopyVisitor vis(src, dst, start);
 	boost::breadth_first_search(src->getGraphImpl(), start, boost::visitor(vis));
 }
-}} // namespace
+}}}} // namespace

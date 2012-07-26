@@ -8,7 +8,7 @@
 #include "Compound.hpp"
 #include "sambag/com/Common.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class Compound
@@ -32,5 +32,5 @@ GraphicElement::Ptr Compound::clone() const {
 //-----------------------------------------------------------------------------
 void Compound::draw( IDrawContext::Ptr cn ) {
 }
-}}}
+}}}}
 

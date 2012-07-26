@@ -109,7 +109,7 @@ void processTransformStrings( const std::string &cmd, const std::string &values,
 void processPathStrings(
 		const std::string &cmd,
 		const std::string &values,
-		sambag::disco::graphicElements::pathInstruction::PathInstructions &pI)
+		sambag::disco::svg::graphicElements::pathInstruction::PathInstructions &pI)
 {
 	using namespace graphicElements::pathInstruction;
 	if (cmd=="") return;
@@ -438,7 +438,7 @@ std::istream & operator>>(std::istream& istr, sambag::math::Matrix &m) {
 //-----------------------------------------------------------------------------
 std::istream & operator>>(
 	std::istream& istr,
-    sambag::disco::graphicElements::pathInstruction::PathInstructions &pI)
+    sambag::disco::svg::graphicElements::pathInstruction::PathInstructions &pI)
 {
 	using namespace sambag::disco::svg;
 	std::string str;
@@ -449,7 +449,7 @@ std::istream & operator>>(
 //-----------------------------------------------------------------------------
 std::istream & operator>>(
 	std::istream& istr,
-    sambag::disco::graphicElements::pathInstruction::PointContainer &pC)
+    sambag::disco::svg::graphicElements::pathInstruction::PointContainer &pC)
 {
 	using namespace sambag::disco::svg;
 	std::string str;

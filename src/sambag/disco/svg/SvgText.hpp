@@ -8,7 +8,7 @@
 #ifndef SVGTEXT_HPP_
 #define SVGTEXT_HPP_
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Text.hpp"
+#include "graphicElements/Text.hpp"
 
 
 // TODO: tspan
@@ -29,7 +29,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Text::Ptr text;
+	sambag::disco::svg::graphicElements::Text::Ptr text;
 	//-------------------------------------------------------------------------
 	SvgText();
 public:

@@ -14,18 +14,19 @@
 #include "sambag/disco/IDiscoFactory.hpp"
 
 
-namespace sambag { namespace disco { namespace graphicElements { namespace pathHelper {
+namespace sambag { namespace disco { namespace svg {
+namespace graphicElements { namespace pathHelper {
 extern boost::tuple<Number, Number, Number, Number, Number, Number> fromEndpointToCenter(
 		Number x1, Number y1, Number x2, Number y2,
 		Number rx, Number ry, Number phi,
 		Number fA, Number fS);
-}}}}
+}}}}}
 
 
 namespace { // path impl.
 using namespace sambag;
 using namespace sambag::disco;
-using namespace sambag::disco::graphicElements;
+using namespace sambag::disco::svg::graphicElements;
 using pathInstruction::PointContainer;
 using namespace boost;
 //-----------------------------------------------------------------------------
@@ -406,7 +407,7 @@ DrawReturn _draw<pathInstruction::ARC_ABS> (IDrawContext::Ptr cn,
 		pathInstruction::PointContainer::const_iterator &end,
 		const DrawReturn &previousReturned)
 {
-	using namespace sambag::disco::graphicElements::pathHelper;
+	using namespace sambag::disco::svg::graphicElements::pathHelper;
 	while (it!=end) {
 		Number rx=0, ry=0, x_axis_rot=0, arc_flag=0, sweep_flag=0, x=0, y=0;
 		tie(rx,ry,x_axis_rot,arc_flag,sweep_flag,x,y) =
@@ -441,7 +442,7 @@ DrawReturn _draw<pathInstruction::ARC_REL> (IDrawContext::Ptr cn,
 		pathInstruction::PointContainer::const_iterator &end,
 		const DrawReturn &previousReturned)
 {
-	using namespace sambag::disco::graphicElements::pathHelper;
+	using namespace sambag::disco::svg::graphicElements::pathHelper;
 	while (it!=end) {
 		Number rx=0, ry=0, x_axis_rot=0, arc_flag=0, sweep_flag=0, x=0, y=0;
 		tie(rx,ry,x_axis_rot,arc_flag,sweep_flag,x,y) =
@@ -472,10 +473,10 @@ DrawReturn _draw<pathInstruction::ARC_REL> (IDrawContext::Ptr cn,
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-}
+}// namespace
 
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class Path
@@ -607,4 +608,4 @@ Rectangle Path::getBoundingBox() const {
 	return context->pathExtends();
 }
 
-}}}
+}}}}

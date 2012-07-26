@@ -18,7 +18,7 @@
 #include <sstream>
 #include <algorithm>
 #include <boost/assign/std/vector.hpp>
-#include "sambag/disco/graphicElements/RefElement.hpp"
+#include "sambag/disco/svg/graphicElements/RefElement.hpp"
 #include "sambag/disco/IDiscoFactory.hpp"
 
 // Registers the fixture into the 'registry'
@@ -77,7 +77,7 @@ void TestSvg::tearDown() {
 //-----------------------------------------------------------------------------
 void TestSvg::testStyleAdd() {
 	using namespace sambag::disco;
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	Style nullStyle;
 	Style values;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -114,12 +114,12 @@ void TestSvg::testSvgFirstElements() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> manipulate object
 	IDrawable::Ptr text = g->getElementById("#text");
 	CPPUNIT_ASSERT(text);
-	graphicElements::SceneGraph::StylePtr textStyle = g->getStyleRef(text);
+	svg::graphicElements::SceneGraph::StylePtr textStyle = g->getStyleRef(text);
 	textStyle->fillColor(ColorRGBA(0,1,0));
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -142,7 +142,7 @@ void TestSvg::testSvgTransform01() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgTransform01", TEST_SVG,  surface, html);
 }
@@ -162,7 +162,7 @@ void TestSvg::testSvgTransform02() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgTransform02", TEST_SVG,  surface, html);
 }
@@ -182,7 +182,7 @@ void TestSvg::testSvgTransform03() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgTransform03", TEST_SVG,  surface, html);
 }
@@ -202,7 +202,7 @@ void TestSvg::testSvgTransform04() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 150);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgTransform04", TEST_SVG,  surface, html);
 }
@@ -222,7 +222,7 @@ void TestSvg::testSvgTransform05() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 150);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgTransform05", TEST_SVG,  surface, html);
 }
@@ -242,7 +242,7 @@ void TestSvg::testSvgPath() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	g->draw(context); // draw 2 times: drawInstructions, drawPath
 	testSvg("testSvgPath01", TEST_SVG,  surface, html);
@@ -263,7 +263,7 @@ void TestSvg::testSvgPath02() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath02", TEST_SVG,  surface, html);
 }
@@ -283,7 +283,7 @@ void TestSvg::testSvgPath03() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath03", TEST_SVG,  surface, html);
 }
@@ -303,7 +303,7 @@ void TestSvg::testSvgPath04() {
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath04", TEST_SVG,  surface, html);
 }
@@ -323,7 +323,7 @@ void TestSvg::testSvgPath04b() {
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath04b", TEST_SVG,  surface, html);
 }
@@ -343,7 +343,7 @@ void TestSvg::testSvgPath05() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath05", TEST_SVG,  surface, html);
 }
@@ -363,7 +363,7 @@ void TestSvg::testSvgPath05b() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 600);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath05b", TEST_SVG,  surface, html);
 }
@@ -383,7 +383,7 @@ void TestSvg::testSvgPath06() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1000, 1000);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPath06", TEST_SVG,  surface, html);
 }
@@ -403,7 +403,7 @@ void TestSvg::testSvgPathValues() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testPathValues", TEST_SVG,  surface, html);
 }
@@ -423,7 +423,7 @@ void TestSvg::testSvgPolyline() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPolyline", TEST_SVG,  surface, html);
 }
@@ -443,7 +443,7 @@ void TestSvg::testSvgPolygon() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgPolygon", TEST_SVG,  surface, html);
 }
@@ -463,7 +463,7 @@ void TestSvg::testSvgStdFill() {
 	IImageSurface::Ptr surface = fac->createImageSurface(400, 120);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgStdFill", TEST_SVG,  surface, html);
 }
@@ -483,7 +483,7 @@ void TestSvg::testSvgArc() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgArc", TEST_SVG,  surface, html);
 }
@@ -503,7 +503,7 @@ void TestSvg::testSvgUse() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 525);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgUse", TEST_SVG,  surface, html);
 }
@@ -523,7 +523,7 @@ void TestSvg::testSvgFont() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgFont", TEST_SVG,  surface, html);
 }
@@ -543,7 +543,7 @@ void TestSvg::testSvgOpacity() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 350);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgOpacity", TEST_SVG,  surface, html,
 		"can't draw correctly the second circle pair on the bottom left."
@@ -565,7 +565,7 @@ void TestSvg::testSvgImage() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgImage", TEST_SVG,  surface, html);
 }
@@ -585,7 +585,7 @@ void TestSvg::testSvgStyle() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgStyle", TEST_SVG,  surface, html);
 }
@@ -605,7 +605,7 @@ void TestSvg::testSvgStyle2() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 500);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgStyle2", TEST_SVG,  surface, html);
 }
@@ -625,7 +625,7 @@ void TestSvg::testLineCapStyle() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 200);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgLinecapStyle", TEST_SVG,  surface, html);
 }
@@ -645,7 +645,7 @@ void TestSvg::testLineJoinStyle() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 350);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgLinejoinStyle", TEST_SVG,  surface, html);
 }
@@ -665,7 +665,7 @@ void TestSvg::testSvgGradient() {
 	IImageSurface::Ptr surface = fac->createImageSurface(800, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testSvgGradient01", TEST_SVG,  surface, html);
 }
@@ -686,7 +686,7 @@ void TestSvg::testBoundingBoxes() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 900);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw boxes
 	// get all of class=="bBox"
@@ -726,7 +726,7 @@ void TestSvg::testIssue146() {
 	IImageSurface::Ptr surface = fac->createImageSurface(500, 500);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	testSvg("testIssue146",
 			TEST_SVG,

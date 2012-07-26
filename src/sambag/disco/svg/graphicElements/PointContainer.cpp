@@ -8,7 +8,7 @@
 #include "PointContainer.hpp"
 #include "sambag/com/Common.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 namespace pathInstruction {
 //=============================================================================
@@ -25,10 +25,10 @@ bool isQuadratic ( InstructionOp op ) {
 
 }
 
-}}}} // namespace
+}}}}} // namespace
 
 namespace {
-using namespace sambag::disco::graphicElements::pathInstruction;
+using namespace sambag::disco::svg::graphicElements::pathInstruction;
 using namespace sambag::com;
 /**
  * @param op
@@ -64,9 +64,9 @@ std::string getInstructionAsString(InstructionOp op) {
 //-----------------------------------------------------------------------------
 extern std::ostream & operator<<(
 	std::ostream &os,
-	const sambag::disco::graphicElements::pathInstruction::PathInstructions& pIs)
+	const sambag::disco::svg::graphicElements::pathInstruction::PathInstructions& pIs)
 {
-	using namespace sambag::disco::graphicElements::pathInstruction;
+	using namespace sambag::disco::svg::graphicElements::pathInstruction;
 	using namespace sambag::com;
 	os<<"<path d=\"";
 	boost_for_each(const PathInstruction &pi, pIs) {

@@ -15,7 +15,7 @@
 namespace { // setter
 using namespace sambag::disco;
 using namespace sambag::com;
-using sambag::disco::graphicElements::Style;
+using sambag::disco::svg::graphicElements::Style;
 //-----------------------------------------------------------------------------
 void setStrokeColor( Style &style, const std::string &value ) {
 	std::stringstream is;

@@ -14,7 +14,7 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 SvgPath::SvgPath() {
-	path = sambag::disco::graphicElements::Path::create();
+	path = sambag::disco::svg::graphicElements::Path::create();
 }
 //-----------------------------------------------------------------------------
 SvgPath::~SvgPath() {

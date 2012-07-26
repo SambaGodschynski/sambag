@@ -41,7 +41,7 @@ size_t hash_value(const sambag::disco::Font &o) {
 }
 } // namespace boost
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 namespace {
 Style createDefaultStyle() {
 	Style neu;
@@ -138,4 +138,4 @@ const Style & Style::getNullStyle() {
 }
 
 
-}}} // namespaces
+}}}} // namespaces

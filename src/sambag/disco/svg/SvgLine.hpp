@@ -9,7 +9,7 @@
 #define DISCO_SVGLINE_HPP_
 
 #include "Svg.hpp"
-#include "sambag/disco/graphicElements/Line.hpp"
+#include "graphicElements/Line.hpp"
 
 
 namespace sambag { namespace disco { namespace svg {
@@ -31,7 +31,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	sambag::disco::graphicElements::Line::Ptr line;
+	sambag::disco::svg::graphicElements::Line::Ptr line;
 	//-------------------------------------------------------------------------
 	SvgLine();
 public:

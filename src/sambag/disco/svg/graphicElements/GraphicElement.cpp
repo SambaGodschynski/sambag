@@ -7,7 +7,7 @@
 
 #include "GraphicElement.hpp"
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
 // class GraphicElement
@@ -19,4 +19,4 @@ GraphicElement::GraphicElement() {
 //-----------------------------------------------------------------------------
 GraphicElement::~GraphicElement() {
 }
-}}} // namespaces
+}}}} // namespaces

@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 SvgCircle::SvgCircle() {
-	using namespace sambag::disco::graphicElements;
+	using namespace sambag::disco::svg::graphicElements;
 	circle = Arc::create();
 }
 //-----------------------------------------------------------------------------

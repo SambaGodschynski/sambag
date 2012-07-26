@@ -1,39 +1,32 @@
 /*
- * Text.hpp
+ * GraphicElement.hpp
  *
- *  Created on: 24.09.2011
+ *  Created on: 20.09.2011
  *      Author: samba
  */
 
-#ifndef TEXT_HPP_
-#define TEXT_HPP_
+#ifndef DISCO_LINE_HPP_
+#define DISCO_LINE_HPP_
 
 #include "GraphicElement.hpp"
-#include <string>
 
-namespace sambag { namespace disco { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Text : public GraphicElement {
+class Line : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Text> Ptr;
+	typedef boost::shared_ptr<Line> Ptr;
 private:
-	//-------------------------------------------------------------------------
-	void drawPath(IDrawContext::Ptr cn);
 protected:
 	//-------------------------------------------------------------------------
-	Point2D pos;
+	Point2D p0, p1;
 	//-------------------------------------------------------------------------
-	sambag::disco::Path::Ptr storedPath;
-	//-------------------------------------------------------------------------
-	std::string text;
-	//-------------------------------------------------------------------------
-	Text();
+	Line();
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const {
-		return "Text[" + text + "]";
+			return "Line";
 	}
 	//-------------------------------------------------------------------------
 	virtual GraphicElement::Ptr clone() const {
@@ -44,35 +37,28 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create()
 	{
-		Ptr neu(new Text());
+		Ptr neu(new Line());
 		neu->__setSelf(neu);
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setPos( const Point2D &p ) {
-		pos = p;
-	}
+	const Point2D & getP0() const { return p0; }
 	//-------------------------------------------------------------------------
-	const Point2D & getPos() const {
-		return pos;
-	}
+	const Point2D & getP1() const { return p1; }
 	//-------------------------------------------------------------------------
-	const std::string & getText() const { return text; }
+	void setP0(const Point2D &p)  { p0 = p; }
 	//-------------------------------------------------------------------------
-	void setText(const std::string &t)  {
-		text = t;
-		storedPath.reset();
-	}
+	void setP1(const Point2D &p)  { p1 = p; }
 	//-------------------------------------------------------------------------
-	virtual ~Text();
+	virtual ~Line();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox() const {
-		return Rectangle();
+		return Rectangle(p0, p1);
 	}
 };
 
-}}} // namespace
+}}}} // namespace
 
-#endif /* TEXT_HPP_ */
+#endif /* GRAPHICELEMENT_HPP_ */
