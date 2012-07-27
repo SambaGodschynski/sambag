@@ -17,6 +17,7 @@
 #include "sambag/disco/IDrawContext.hpp"
 #include <map>
 #include "sambag/math/Matrix.hpp"
+#include "units/Units.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -63,6 +64,8 @@ public:
 	static void parseTransform(const std::string &str, sambag::math::Matrix&);
 	//-------------------------------------------------------------------------
 	static void parseCoordinate(const std::string &str, Coordinate&);
+	//-------------------------------------------------------------------------
+	static void parseUnit(const std::string &str, units::Unit&);
 	//-------------------------------------------------------------------------
 	static void parsePathInstructions(const std::string &str, PathInstructions&);
 	//-------------------------------------------------------------------------
@@ -127,6 +130,7 @@ public:
 //=============================================================================
 // stream operators
 //=============================================================================
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::units::Unit&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Coordinate&);
 extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);

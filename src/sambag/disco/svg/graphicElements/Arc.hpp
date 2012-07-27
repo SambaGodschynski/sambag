@@ -9,6 +9,7 @@
 #define DISCO_ARC_HPP_
 
 #include "GraphicElement.hpp"
+#include <sambag/disco/svg/units/Units.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -20,9 +21,9 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	Point2D c;
+	units::Point c;
 	//-------------------------------------------------------------------------
-	Point2D r;
+	units::Point r;
 	//-------------------------------------------------------------------------
 	Arc(){}
 public:
@@ -44,19 +45,23 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getCenter() const { return c; }
+	const units::Point & getCenter() const { return c; }
 	//-------------------------------------------------------------------------
-	const Point2D & getRadius() const { return r; }
+	const units::Point & getRadius() const { return r; }
 	//-------------------------------------------------------------------------
-	void setCenter(const Point2D &_c)  { c = _c; }
+	units::Point & getCenter() { return c; }
 	//-------------------------------------------------------------------------
-	void setRadius(const Point2D &_r)  { r = _r; }
+	units::Point & getRadius() { return r; }
+	//-------------------------------------------------------------------------
+	void setCenter(const units::Point &_c)  { c = _c; }
+	//-------------------------------------------------------------------------
+	void setRadius(const units::Point &_r)  { r = _r; }
 	//-------------------------------------------------------------------------
 	virtual ~Arc(){}
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const ;
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const ;
 };
 
 }}}} // namespace

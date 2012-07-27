@@ -20,13 +20,13 @@ public:
 	typedef boost::shared_ptr<SvgEllipse> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct CX_tag { typedef Coordinate Type; };
+	struct CX_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct CY_tag { typedef Coordinate Type; };
+	struct CY_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct RX_tag { typedef Coordinate Type; };
+	struct RX_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct RY_tag { typedef Coordinate Type; };
+	struct RY_tag { typedef units::Unit Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
@@ -50,27 +50,19 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const CX_tag::Type &coord, CX_tag ) {
-		Point2D p = ellipse->getCenter();
-		p.x(coord);
-		ellipse->setCenter(p);
+		ellipse->getCenter().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const CY_tag::Type &coord, CY_tag ) {
-		Point2D p = ellipse->getCenter();
-		p.y(coord);
-		ellipse->setCenter(p);
+		ellipse->getCenter().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const RX_tag::Type &coord, RX_tag ) {
-		Point2D p = ellipse->getRadius();
-		p.x(coord);
-		ellipse->setRadius(p);
+		ellipse->getRadius().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const RY_tag::Type &coord, RY_tag ) {
-		Point2D p = ellipse->getRadius();
-		p.y(coord);
-		ellipse->setRadius(p);
+		ellipse->getRadius().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

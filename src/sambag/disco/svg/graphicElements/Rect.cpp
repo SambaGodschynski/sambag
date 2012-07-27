@@ -17,7 +17,7 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 // class Rect
 //=============================================================================
 //-----------------------------------------------------------------------------
-Rect::Rect() : rect(Rectangle(0,0,0,0)), r(Point2D(0,0)) {
+Rect::Rect() {
 
 }
 //-----------------------------------------------------------------------------
@@ -26,16 +26,17 @@ Rect::~Rect() {
 //-----------------------------------------------------------------------------
 void Rect::_rect(IDrawContext::Ptr cn) {
 	if (r.x() == 0.0 || r.y() == 0.0 ) {
-		cn->rect(rect);
+		cn->rect(rect.solve(cn));
 		return;
 	}
 	/*
 	  Mathematically, a 'rect' element can be mapped to an equivalent 'path' element as follows:
 	 */
-	Number x = rect.x0().x();
-	Number y = rect.x0().y();
-	Number w = rect.getWidth();
-	Number h = rect.getHeight();
+	Rectangle sr = rect.solve(cn);
+	Number x = sr.x0().x();
+	Number y = sr.x0().y();
+	Number w = sr.getWidth();
+	Number h = sr.getHeight();
 	Number rx = r.x();
 	Number ry = r.y();
 	using namespace pathInstruction;
@@ -81,6 +82,7 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 	pC = list_of(rx)(ry)(0)(0)(1)(x+rx)(y);
 	pI.push_back( std::make_pair(pC, ARC_ABS));
 	// draw path
+	// TODO: avoid frequently recreating of path!
 	graphicElements::Path::Ptr path = graphicElements::Path::create();
 	path->setPathInstructions(pI);
 	path->appendPathToContext(cn);

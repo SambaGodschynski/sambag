@@ -9,6 +9,7 @@
 #define TEXT_HPP_
 
 #include "GraphicElement.hpp"
+#include <sambag/disco/svg/units/Units.hpp>
 #include <string>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
@@ -23,7 +24,7 @@ private:
 	void drawPath(IDrawContext::Ptr cn);
 protected:
 	//-------------------------------------------------------------------------
-	Point2D pos;
+	units::Point pos;
 	//-------------------------------------------------------------------------
 	sambag::disco::Path::Ptr storedPath;
 	//-------------------------------------------------------------------------
@@ -49,11 +50,15 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	void setPos( const Point2D &p ) {
+	void setPos( const units::Point &p ) {
 		pos = p;
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getPos() const {
+	const units::Point & getPos() const {
+		return pos;
+	}
+	//-------------------------------------------------------------------------
+	units::Point & getPos() {
 		return pos;
 	}
 	//-------------------------------------------------------------------------
@@ -68,7 +73,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
 		return Rectangle();
 	}
 };

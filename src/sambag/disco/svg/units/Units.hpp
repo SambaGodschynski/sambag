@@ -44,14 +44,15 @@ public:
 	Unit(const Coordinate &v = 0) : value(v), type(NONE) {}
 	//-------------------------------------------------------------------------
 	/**
-	 * delivers coordinates pixelvalue. To resolve relative unit types
+	 * delivers coordinates pixelvalue. To solve relative unit types
 	 * an IDrawContext object is needed.
 	 * @param cn
+	 * @param absolute is needed to solve percent value type.
 	 * @return
 	 */
-	Coordinate getPixelValue(IDrawContext::Ptr cn) const;
+	Coordinate solve(IDrawContext::Ptr cn, Coordinate absolute = NULL_NUMBER) const;
 	//-------------------------------------------------------------------------
-	void setPixelValue(const Coordinate &v) { value = v; }
+	void setValue(const Coordinate &v) { value = v; }
 	//-------------------------------------------------------------------------
 	Type getType() const { return type; }
 	//-------------------------------------------------------------------------
@@ -78,6 +79,8 @@ public:
 	Unit & y() { return _y; }
 	//-------------------------------------------------------------------------
 	void y(const Unit &v) { _y = v; }
+	//-------------------------------------------------------------------------
+	sambag::disco::Point2D solve(IDrawContext::Ptr cn) const;
 };
 //=============================================================================
 class Dimension {
@@ -98,9 +101,11 @@ public:
 	Unit & height() { return dimension.y(); }
 	//-------------------------------------------------------------------------
 	void height(const Unit &v) { dimension.y(v); }
+	//-------------------------------------------------------------------------
+	sambag::disco::Dimension solve(IDrawContext::Ptr cn) const;
 };
 //=============================================================================
-class Rect {
+class Rectangle {
 //=============================================================================
 private:
 	//-------------------------------------------------------------------------
@@ -119,6 +124,8 @@ public:
 	Dimension & size() { return _size; }
 	//-------------------------------------------------------------------------
 	void size(const Dimension &v) { _size = v; }
+	//-------------------------------------------------------------------------
+	sambag::disco::Rectangle solve(IDrawContext::Ptr cn) const;
 
 };
 }}}}

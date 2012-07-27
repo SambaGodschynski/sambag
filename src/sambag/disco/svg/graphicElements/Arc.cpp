@@ -13,6 +13,15 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Arc::draw( IDrawContext::Ptr cn ) {
+	Point2D r;
+	if (this->r.y().getType() == units::Unit::NONE) { // in case of circle
+		// solve a single coord. has a different result to solve a point.
+		r.x(this->r.x().solve(cn));
+		r.y(r.x());
+	} else {
+		r = this->r.solve(cn);
+	}
+	Point2D c = this->c.solve(cn);
 	Matrix tmp(3,3);
 	cn->getMatrix(tmp);
 	cn->translate(c);
@@ -41,11 +50,18 @@ void Arc::draw( IDrawContext::Ptr cn ) {
 	}
 }
 //-----------------------------------------------------------------------------
-Rectangle Arc::getBoundingBox() const {
-	Point2D p0 = c;
-	boost::geometry::subtract_point(p0, r);
-	Point2D size = r;
-	boost::geometry::multiply_value(size, 2.);
-	return Rectangle(p0, size.x(), size.y());
+Rectangle Arc::getBoundingBox(IDrawContext::Ptr cn) const {
+	Point2D _r;
+	if (this->r.y().getType() == units::Unit::NONE) { // in case of circle
+		// solve a single coord. has a different result to solve a point.
+		_r.x(this->r.x().solve(cn));
+		_r.y(_r.x());
+	} else {
+		_r = this->r.solve(cn);
+	}
+	Point2D p0 = c.solve(cn);
+	boost::geometry::subtract_point(p0, _r);
+	boost::geometry::multiply_value(_r, 2.);
+	return Rectangle(p0, _r.x(), _r.y());
 }
 }}}}

@@ -22,7 +22,7 @@ Line::~Line() {
 void Line::draw( IDrawContext::Ptr cn ) {
 	if ( !cn->isStroked() )
 		return;
-	cn->moveTo(p0); cn->lineTo(p1);
+	cn->moveTo(p0.solve(cn)); cn->lineTo(p1.solve(cn));
 	cn->stroke();
 }
 

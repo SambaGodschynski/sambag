@@ -23,9 +23,9 @@ public:
 	typedef boost::shared_ptr<SvgText> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Coordinate Type; };
+	struct X_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Coordinate Type; };
+	struct Y_tag { typedef units::Unit Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
@@ -54,15 +54,11 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, X_tag ) {
-		Point2D pos = text->getPos();
-		pos.x(coord);
-		text->setPos(pos);
+		text->getPos().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y_tag::Type &coord, Y_tag ) {
-		Point2D pos = text->getPos();
-		pos.y(coord);
-		text->setPos(pos);
+		text->getPos().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

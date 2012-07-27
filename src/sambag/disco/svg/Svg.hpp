@@ -17,6 +17,7 @@
 #include "graphicElements/SceneGraph.hpp"
 #include "StyleParser.hpp"
 #include <list>
+#include "units/Units.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;

@@ -11,7 +11,6 @@
 #include "Svg.hpp"
 #include "graphicElements/Rect.hpp"
 
-
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 class SvgRect : public SvgObject {
@@ -21,13 +20,13 @@ public:
 	typedef boost::shared_ptr<SvgRect> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Coordinate Type; };
+	struct X_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Coordinate Type; };
+	struct Y_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct WIDTH_tag { typedef Coordinate Type; };
+	struct WIDTH_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct HEIGHT_tag { typedef Coordinate Type; };
+	struct HEIGHT_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
 	struct RX_tag { typedef Coordinate Type; };
 	//-------------------------------------------------------------------------
@@ -58,32 +57,23 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, X_tag ) {
-		Rectangle r = rect->getRectangle();
-		Point2D p = r.x0();
-		p.x(coord);
-		r.translate(p);
-		rect->setRectangle(r);
-
+		units::Rectangle &r = rect->getRectangle();
+		r.x0().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y_tag::Type &coord, Y_tag ) {
-		Rectangle r = rect->getRectangle();
-		Point2D p = r.x0();
-		p.y(coord);
-		r.translate(p);
-		rect->setRectangle(r);
+		units::Rectangle &r = rect->getRectangle();
+		r.x0().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const WIDTH_tag::Type &w, WIDTH_tag ) {
-		Rectangle r = rect->getRectangle();
-		r.setWidth(w);
-		rect->setRectangle(r);
+		units::Rectangle &r = rect->getRectangle();
+		r.size().width(w);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const HEIGHT_tag::Type &h, HEIGHT_tag ) {
-		Rectangle r = rect->getRectangle();
-		r.setHeight(h);
-		rect->setRectangle(r);
+		units::Rectangle &r = rect->getRectangle();
+		r.size().height(h);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const RX_tag::Type &x, RX_tag ) {

@@ -106,7 +106,6 @@ void TestSvg::testSvgFirstElements() {
 	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
-	CPPUNIT_ASSERT_EQUAL(Coordinate::CM, rootObject->getSize().getWidth().type);
 	CPPUNIT_ASSERT_EQUAL(12., (Number)rootObject->getSize().getWidth());
 	CPPUNIT_ASSERT_EQUAL(4., (Number)rootObject->getSize().getHeight());
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -704,7 +703,7 @@ void TestSvg::testBoundingBoxes() {
 	boost_for_each(IDrawable::Ptr obj, l) {
 		//if (!boost::shared_dynamic_cast<graphicElements::RefElement>(obj))
 		//	continue;
-		context->rect(g->getBoundingBox(obj));
+		context->rect(g->getBoundingBox(obj, context));
 		context->stroke();
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -734,5 +733,25 @@ void TestSvg::testIssue146() {
 			html,
 			"see <a href='http://beta.vstforx.de/view.php?id=146'>issue#146</a>"
 	);
+}
+//-----------------------------------------------------------------------------
+void TestSvg::testUnits() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+	static const std::string TEST_SVG = IN_FOLDER + "testUnits.svg";
+	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+	svg::SvgBuilder builder;
+	svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<svg::SvgRoot, svg::SvgObject>
+			( builder.buildSvgFromFilename(TEST_SVG) );
+	CPPUNIT_ASSERT(rootObject);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	IDiscoFactory *fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	g->draw(context);
+	testSvg("testUnits", TEST_SVG, surface, html);
 }
 } //namespaces

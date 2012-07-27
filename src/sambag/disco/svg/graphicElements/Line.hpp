@@ -9,6 +9,7 @@
 #define DISCO_LINE_HPP_
 
 #include "GraphicElement.hpp"
+#include <sambag/disco/svg/units/Units.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -20,7 +21,7 @@ public:
 private:
 protected:
 	//-------------------------------------------------------------------------
-	Point2D p0, p1;
+	units::Point p0, p1;
 	//-------------------------------------------------------------------------
 	Line();
 public:
@@ -42,20 +43,24 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Point2D & getP0() const { return p0; }
+	const units::Point & getP0() const { return p0; }
 	//-------------------------------------------------------------------------
-	const Point2D & getP1() const { return p1; }
+	const units::Point & getP1() const { return p1; }
 	//-------------------------------------------------------------------------
-	void setP0(const Point2D &p)  { p0 = p; }
+	units::Point & getP0() { return p0; }
 	//-------------------------------------------------------------------------
-	void setP1(const Point2D &p)  { p1 = p; }
+	units::Point & getP1() { return p1; }
+	//-------------------------------------------------------------------------
+	void setP0(const units::Point &p)  { p0 = p; }
+	//-------------------------------------------------------------------------
+	void setP1(const units::Point &p)  { p1 = p; }
 	//-------------------------------------------------------------------------
 	virtual ~Line();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		return Rectangle(p0, p1);
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
+		return Rectangle(p0.solve(cn), p1.solve(cn));
 	}
 };
 

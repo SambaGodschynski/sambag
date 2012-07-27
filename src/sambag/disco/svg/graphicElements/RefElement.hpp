@@ -60,9 +60,9 @@ public:
 			ref->draw(context);
 	}
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const {
 		if (!ref) return NULL_RECTANGLE;
-		return ref->getBoundingBox();
+		return ref->getBoundingBox(context);
 	}
 };
 

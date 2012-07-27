@@ -21,7 +21,7 @@ void Image::loadImage() {
 //-----------------------------------------------------------------------------
 void Image::drawPlaceholder(IDrawContext::Ptr cn) {
 	cn->setFillColor(ColorRGBA());
-	cn->rect(outline);
+	cn->rect(outline.solve(cn));
 	cn->fill();
 }
 //-----------------------------------------------------------------------------
@@ -33,6 +33,7 @@ void Image::draw( IDrawContext::Ptr cn ) {
 			return;
 		}
 	}
+	Rectangle outline = this->outline.solve(cn);
 	cn->translate(outline.x0());
 	Rectangle orgSz = image->getSize();
 	cn->scale( Point2D(

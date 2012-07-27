@@ -240,19 +240,31 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	boost::match_results<std::string::const_iterator> what;
 	boost::regex re("([0-9e.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
-	c.value = string2Number(what[1], 0.f); //value
+	c.value = string2Number(what[1], 0.f);
+}
+//-----------------------------------------------------------------------------
+void AttributeParser::parseUnit(const std::string &str, units::Unit &c) {
+	using namespace units;
+	if (str.length()==0) return;
+	std::string::const_iterator begin = str.begin();
+	std::string::const_iterator end = str.end();
+	boost::match_results<std::string::const_iterator> what;
+	boost::regex re("([0-9e.-]+)([a-z%]*)");
+	regex_search(begin, end, what, re);
+	c.setValue(string2Number(what[1], 0.f)); //value
+	c.setType(Unit::PX);
 
 	if (what[2].length() > 0) {
 		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
-		if (m=="px") c.type = Coordinate::PX;
-		if (m=="in") c.type = Coordinate::IN;
-		if (m=="cm") c.type = Coordinate::CM;
-		if (m=="mm") c.type = Coordinate::MM;
-		if (m=="pt") c.type = Coordinate::PT;
-		if (m=="pc") c.type = Coordinate::PC;
-		if (m=="em") c.type = Coordinate::EM;
-		if (m=="ex") c.type = Coordinate::EX;
-		if (m=="%") c.type = Coordinate::PERCENT;
+		// see above // if (m=="px") c.setType(Unit::PX);
+		if (m=="in") c.setType(Unit::IN);
+		if (m=="cm") c.setType(Unit::CM);
+		if (m=="mm") c.setType(Unit::MM);
+		if (m=="pt") c.setType(Unit::PT);
+		if (m=="pc") c.setType(Unit::PC);
+		if (m=="em") c.setType(Unit::EM);
+		if (m=="ex") c.setType(Unit::EX);
+		if (m=="%") c.setType(Unit::PERCENT);
 	}
 }
 //-----------------------------------------------------------------------------
@@ -389,7 +401,16 @@ std::string AttributeParser::getUrl(const std::string &url) {
 // stream operators
 //=============================================================================
 //-----------------------------------------------------------------------------
-extern std::istream & operator>>(std::istream& istr, sambag::disco::Coordinate &c) {
+std::istream & operator>>(std::istream& istr, sambag::disco::svg::units::Unit &c)
+{
+	std::string in;
+	AttributeParser::getWholeString(istr, in);
+	AttributeParser::prepareString(in);
+	AttributeParser::parseUnit(in, c);
+	return istr;
+}
+//-----------------------------------------------------------------------------
+std::istream & operator>>(std::istream& istr, sambag::disco::Coordinate &c) {
 	std::string in;
 	AttributeParser::getWholeString(istr, in);
 	AttributeParser::prepareString(in);
@@ -458,7 +479,7 @@ std::istream & operator>>(
 	return istr;
 }
 //-----------------------------------------------------------------------------
-extern std::istream & operator>>(
+std::istream & operator>>(
 	std::istream &istr,
 	sambag::disco::IDrawContext::LineCapStyle &v
 )

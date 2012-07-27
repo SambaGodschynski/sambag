@@ -21,13 +21,13 @@ public:
 	typedef boost::shared_ptr<SvgLine> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X1_tag { typedef Coordinate Type; };
+	struct X1_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Y1_tag { typedef Coordinate Type; };
+	struct Y1_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct X2_tag { typedef Coordinate Type; };
+	struct X2_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Y2_tag { typedef Coordinate Type; };
+	struct Y2_tag { typedef units::Unit Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
@@ -51,27 +51,19 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X1_tag::Type &coord, X1_tag ) {
-		Point2D p = line->getP0();
-		p.x(coord);
-		line->setP0(p);
+		line->getP0().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y1_tag::Type &coord, Y1_tag ) {
-		Point2D p = line->getP0();
-		p.y(coord);
-		line->setP0(p);
+		line->getP0().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const X2_tag::Type &coord, X2_tag ) {
-		Point2D p = line->getP1();
-		p.x(coord);
-		line->setP1(p);
+		line->getP1().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y2_tag::Type &coord, Y2_tag ) {
-		Point2D p = line->getP1();
-		p.y(coord);
-		line->setP1(p);
+		line->getP1().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

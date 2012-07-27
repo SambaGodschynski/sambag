@@ -20,24 +20,9 @@ namespace sambag { namespace disco {
 struct Coordinate {
 //=============================================================================
 	//-------------------------------------------------------------------------
-	enum Type { // TODO: remove types
-			NONE,
-			PX,
-			IN,
-			CM,
-			MM,
-			PT,
-			PC,
-			EM,
-			EX,
-			PERCENT
-		};
-	//-------------------------------------------------------------------------
 	sambag::com::Number value;
 	//-------------------------------------------------------------------------
-	Type type;
-	//-------------------------------------------------------------------------
-	Coordinate(const sambag::com::Number value=0) : value(value), type(NONE) {}
+	Coordinate(const sambag::com::Number value=0) : value(value) {}
 	//-------------------------------------------------------------------------
 	operator sambag::com::Number() const {
 		return value;

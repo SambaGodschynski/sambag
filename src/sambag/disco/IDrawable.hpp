@@ -24,9 +24,9 @@ public:
 	typedef boost::shared_ptr<IDrawable> Ptr;
 	//-------------------------------------------------------------------------
 	// TODO: make const
-	virtual void draw( IDrawContext::Ptr context ) = 0;
+	virtual void draw(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const = 0;
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * for testing and debugging

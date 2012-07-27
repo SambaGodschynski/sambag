@@ -22,13 +22,13 @@ public:
 	typedef boost::shared_ptr<SvgImage> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct X_tag { typedef Coordinate Type; };
+	struct X_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Y_tag { typedef Coordinate Type; };
+	struct Y_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Width_tag { typedef Coordinate Type; };
+	struct Width_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Height_tag { typedef Coordinate Type; };
+	struct Height_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
 	struct HRef_tag { typedef std::string Type; };
 private:
@@ -57,31 +57,19 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const X_tag::Type &coord, const X_tag& ) {
-		Rectangle r = image->getOutline();
-		Point2D p = r.x0();
-		p.x(coord);
-		r.translate(p);
-		image->setOutline(r);
+		image->getOutline().x0().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Y_tag::Type &coord, const Y_tag& ) {
-		Rectangle r = image->getOutline();
-		Point2D p = r.x0();
-		p.y(coord);
-		r.translate(p);
-		image->setOutline(r);
+		image->getOutline().x0().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Width_tag::Type &val, const Width_tag& ) {
-		Rectangle r = image->getOutline();
-		r.setWidth(val);
-		image->setOutline(r);
+		image->getOutline().size().width(val);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const Height_tag::Type &val, const Height_tag& ) {
-		Rectangle r = image->getOutline();
-		r.setHeight(val);
-		image->setOutline(r);
+		image->getOutline().size().height(val);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const HRef_tag::Type &v, const HRef_tag& ) {

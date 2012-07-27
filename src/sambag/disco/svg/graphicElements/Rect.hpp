@@ -9,6 +9,7 @@
 #define RECT_HPP_
 
 #include "GraphicElement.hpp"
+#include <sambag/disco/svg/units/Units.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -22,7 +23,7 @@ private:
 	void _rect(IDrawContext::Ptr context);
 protected:
 	//-------------------------------------------------------------------------
-	Rectangle rect;
+	units::Rectangle rect;
 	//-------------------------------------------------------------------------
 	Point2D r; // roudned rect radius
 	//-------------------------------------------------------------------------
@@ -46,9 +47,11 @@ public:
 		return neu;
 	}
 	//-------------------------------------------------------------------------
-	const Rectangle & getRectangle() const { return rect; }
+	const units::Rectangle & getRectangle() const { return rect; }
 	//-------------------------------------------------------------------------
-	void setRectangle(const Rectangle &r)  { rect = r; }
+	units::Rectangle & getRectangle() { return rect; }
+	//-------------------------------------------------------------------------
+	void setRectangle(const units::Rectangle &r)  { rect = r; }
 	//-------------------------------------------------------------------------
 	const Point2D & getRadius() const { return r; }
 	//-------------------------------------------------------------------------
@@ -58,8 +61,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		return rect;
+	virtual Rectangle getBoundingBox( IDrawContext::Ptr context ) const {
+		return rect.solve(context);
 	}
 };
 

@@ -249,9 +249,11 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 	}
 }
 //-----------------------------------------------------------------------------
-Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
+Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
+	IDrawContext::Ptr cn) const
+{
 	// TODO: concern transformations
-	Rectangle res = obj->getBoundingBox();
+	Rectangle res = obj->getBoundingBox(cn);
 	if (res==NULL_RECTANGLE) {
 		typedef std::numeric_limits<Number> L;
 		res = Rectangle::Base(
@@ -262,7 +264,7 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
 	std::list<SceneGraphElement> l;
 	getChildren(obj, l, true);
 	boost_for_each(SceneGraphElement o, l) {
-		Rectangle r = o->getBoundingBox();
+		Rectangle r = o->getBoundingBox(cn);
 		if (r==NULL_RECTANGLE)
 			continue;
 		res = Rectangle::Base(

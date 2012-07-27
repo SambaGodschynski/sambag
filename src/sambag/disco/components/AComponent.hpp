@@ -547,10 +547,10 @@ public:
 	virtual const Rectangle & getBounds() const;
 	//-------------------------------------------------------------------------
 	/**
-	 * implements IDrawable
+	 * implements IDrawable::getBoundingBox()
 	 * @return
 	 */
-	virtual Rectangle getBoundingBox() const {
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
 		return getBounds();
 	}
 	//-------------------------------------------------------------------------

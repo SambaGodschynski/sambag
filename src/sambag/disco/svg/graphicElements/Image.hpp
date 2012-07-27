@@ -9,6 +9,7 @@
 #define IMAGE_HPP_
 
 #include "GraphicElement.hpp"
+#include <sambag/disco/svg/units/Units.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -24,7 +25,7 @@ protected:
 	//-------------------------------------------------------------------------
 	ISurface::Ptr image;
 	//-------------------------------------------------------------------------
-	Rectangle outline;
+	units::Rectangle outline;
 	//-------------------------------------------------------------------------
 	std::string uri;
 	//-------------------------------------------------------------------------
@@ -72,16 +73,18 @@ public:
 	 * @return representing rectangle of image.
 	 * Its the same like @see getBounds
 	 */
-	const Rectangle & getOutline() const { return outline; }
+	const units::Rectangle & getOutline() const { return outline; }
 	//-------------------------------------------------------------------------
-	void setOutline(const Rectangle &out)  { outline = out; }
+	units::Rectangle & getOutline() { return outline; }
+	//-------------------------------------------------------------------------
+	void setOutline(const units::Rectangle &out)  { outline = out; }
 	//-------------------------------------------------------------------------
 	virtual ~Image(){}
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox() const {
-		return outline;
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
+		return outline.solve(cn);
 	}
 };
 

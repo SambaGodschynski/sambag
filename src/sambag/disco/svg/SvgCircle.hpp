@@ -21,11 +21,11 @@ public:
 	typedef boost::shared_ptr<SvgCircle> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct CX_tag { typedef Coordinate Type; };
+	struct CX_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct CY_tag { typedef Coordinate Type; };
+	struct CY_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct R_tag { typedef Coordinate Type; };
+	struct R_tag { typedef units::Unit Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
@@ -49,22 +49,16 @@ public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
 	virtual void set( const CX_tag::Type &coord, CX_tag ) {
-		Point2D p = circle->getCenter();
-		p.x(coord);
-		circle->setCenter(p);
+		 circle->getCenter().x(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const CY_tag::Type &coord, CY_tag ) {
-		Point2D p = circle->getCenter();
-		p.y(coord);
-		circle->setCenter(p);
+		circle->getCenter().y(coord);
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const R_tag::Type &coord, R_tag ) {
-		Point2D p = circle->getRadius();
-		p.x(coord);
-		p.y(coord);
-		circle->setRadius(p);
+		circle->getRadius().x(coord);
+		circle->getRadius().y().setType(units::Unit::NONE);
 	}
 	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {

@@ -51,12 +51,5 @@ void TestGeometrics::testRectangle() {
 	CPPUNIT_ASSERT(Dimension(10., 10.) == r.getDimension());
 	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x0());
 	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x1());
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<check storing coordinate type
-	r = Rectangle();
-	Coordinate c = 20.;
-	c.type = Coordinate::CM;
-	r.setWidth(c);
-	Coordinate c2 = r.getWidth();
-	CPPUNIT_ASSERT_EQUAL(Coordinate::CM, c2.type);
 }
 } // namespace

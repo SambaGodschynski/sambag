@@ -699,7 +699,8 @@ public:
 	 * @param obj
 	 * @return a union rectangle of objects bounding box and it's sub objects.
 	 */
-	Rectangle getBoundingBox(SceneGraphElement obj) const;
+	Rectangle getBoundingBox(SceneGraphElement obj,
+			IDrawContext::Ptr context) const;
 };
 //=============================================================================
 /**

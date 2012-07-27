@@ -49,6 +49,7 @@ private:
 	CPPUNIT_TEST( testLineCapStyle );
 	CPPUNIT_TEST( testLineJoinStyle );
 	CPPUNIT_TEST( testIssue146 );
+	CPPUNIT_TEST( testUnits );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	TestSvg();
@@ -86,6 +87,7 @@ public:
 	void testBoundingBoxes();
 	void testStyleAdd();
 	void testIssue146();
+	void testUnits();
 };
 
 } // namespace
