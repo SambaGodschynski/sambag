@@ -49,6 +49,16 @@ const std::string AComponent::PROPERTY_FONT = "font";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_OPAQUE = "opaque";
 //-----------------------------------------------------------------------------
+const float AComponent::TOP_ALIGNMENT = 0.0f;
+//-----------------------------------------------------------------------------
+const float AComponent::CENTER_ALIGNMENT = 0.5f;
+//-----------------------------------------------------------------------------
+const float AComponent::BOTTOM_ALIGNMENT = 1.0f;
+//-----------------------------------------------------------------------------
+const float AComponent::LEFT_ALIGNMENT = 0.0f;
+//-----------------------------------------------------------------------------
+const float AComponent::RIGHT_ALIGNMENT = 1.0f;
+//-----------------------------------------------------------------------------
 AComponent::AComponent() : flags(0) {
 
 }
@@ -180,7 +190,7 @@ const std::string & AComponent::getName() const {
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getParent() const {
-	return parent;
+	return _parent.lock();
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getPreferredSize() {
@@ -219,6 +229,7 @@ const Coordinate & AComponent::getY() const {
 IDrawContext::Ptr AComponent::getDrawContext() const {
 	// need to translate coordinate spaces and clip relative
 	// to the parent.
+	AContainerPtr parent = getParent();
 	if (!parent)
 		return IDrawContext::Ptr();
 	IDrawContext::Ptr cn = parent->getDrawContext();
@@ -234,7 +245,7 @@ ColorRGBA AComponent::getBackground() const {
 	if (background != ColorRGBA::NULL_COLOR) {
 		return background;
 	}
-	AContainer::Ptr parent = this->parent;
+	AContainerPtr parent = getParent();
 	return (parent) ? parent->getBackground() : ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
@@ -243,7 +254,7 @@ ColorRGBA AComponent::getForeground() const {
 	if (foreground != ColorRGBA::NULL_COLOR) {
 		return foreground;
 	}
-	AContainer::Ptr parent = this->parent;
+	AContainerPtr parent = getParent();
 	return (parent) ? parent->getForeground() : ColorRGBA::NULL_COLOR;
 }
 //-----------------------------------------------------------------------------
@@ -252,7 +263,7 @@ AComponent::Lock & AComponent::getTreeLock() const {
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getRootContainer() const {
-	AContainer::Ptr p = parent;
+	AContainer::Ptr p = getParent();
 	if (!p)
 		return AContainerPtr();
 	while (p->getParent()) {
@@ -266,6 +277,7 @@ Point2D AComponent::getLocationOnScreen(const Point2D &p) const {
 		return NULL_POINT2D;
  	Point2D tmp = p;
  	boost::geometry::add_point(tmp, getLocation());
+	AContainerPtr parent = getParent();
 	if (!parent)
 		return tmp;
 	boost::geometry::add_point(tmp, parent->getLocationOnScreen(Point2D(0,0)));
@@ -323,7 +335,7 @@ void AComponent::invalidate() {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isDisplayable() const {
-	AContainer::Ptr p = parent;
+	AContainer::Ptr p = getParent();
 	if (!p)
 		return false;
 	return p->isDisplayable();
@@ -356,6 +368,7 @@ void AComponent::setOpaque(bool isOpaque) {
 //-----------------------------------------------------------------------------
 bool AComponent::isShowing() const {
 	if (visible) {
+		AContainerPtr parent = getParent();
 		if (parent)
 			return parent->isShowing();
 	}
@@ -371,6 +384,7 @@ bool AComponent::isVisible() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isRecursivelyVisible() const {
+	AContainerPtr parent = getParent();
 	if (!parent)
 		return visible;
 	return visible && parent->isRecursivelyVisible();
@@ -446,6 +460,7 @@ void AComponent::draw(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::redrawParentIfNeeded(const Rectangle &r) {
+	AContainerPtr parent = getParent();
 	if (parent && isShowing()) {
 		// Have the parent redraw the area this component occupied.
 		parent->redraw(r);
@@ -455,6 +470,7 @@ void AComponent::redrawParentIfNeeded(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::invalidateParent() {
+	AContainerPtr parent = getParent();
 	if (parent) {
 		parent->__invalidateIfValid_();
 	}
@@ -492,6 +508,7 @@ void AComponent::setBounds(const Rectangle &r) {
 			isPacked = false;
 			invalidate();
 		}
+		AContainerPtr parent = getParent();
 		if (parent) {
 			parent->__invalidateIfValid_();
 		}
@@ -568,7 +585,7 @@ void AComponent::show() {
 		visible = true;
 		//TODO:
 		//mixOnShowing();
-
+		AContainerPtr parent = getParent();
 		__dispatchHierarchyEvents_(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
 				parent, HierarchyEvent::SHOWING_CHANGED);
 
@@ -577,7 +594,6 @@ void AComponent::show() {
 		/*ComponentEvent e = new ComponentEvent(this,
 		 ComponentEvent.COMPONENT_SHOWN);*/
 		//Toolkit.getEventQueue().postEvent(e);
-		AContainer::Ptr parent = this->parent;
 		if (parent)
 			parent->invalidate();
 
@@ -598,6 +614,7 @@ void AComponent::hide() {
 		 if (containsFocus() && KeyboardFocusManager.isAutoFocusTransferEnabled()) {
 		 transferFocus(true);
 		 }*/
+		AContainerPtr parent = getParent();
 		__dispatchHierarchyEvents_(HierarchyEvent::HIERARCHY_CHANGED, self.lock(),
 				parent, HierarchyEvent::SHOWING_CHANGED);
 		redraw();
@@ -610,7 +627,6 @@ void AComponent::hide() {
 		 Toolkit.getEventQueue().postEvent(e);
 		 }
 		 */
-		AContainer::Ptr parent = this->parent;
 		if (parent)
 			parent->invalidate();
 

@@ -27,20 +27,18 @@ namespace sambag { namespace com {
   * class AClass {
   * 	ArithmeticWrapper<int> value; // initializes with 0
   * 	ArithmeticWrapper<int, 1> value; // initializes with 1
-  * 	ArithmeticWrapper<float, 1, 2> value; // initializes with 0.5
   * };
   */
-template <typename T, int Nominator=0, int Denominator = 1>
+template <typename T, int Nominator=0>
 class ArithmeticWrapper {
 //=============================================================================
 BOOST_STATIC_ASSERT(boost::is_arithmetic<T>::value);
-BOOST_STATIC_ASSERT(Denominator!=0);
 private:
 	//-------------------------------------------------------------------------
 	T value;
 public:
 	//-------------------------------------------------------------------------
-	ArithmeticWrapper(T value = (T)Nominator/(T)Denominator) :
+	ArithmeticWrapper(T value = (T)Nominator) :
 		value(value) {}
 	//-------------------------------------------------------------------------
 	inline operator T() const {

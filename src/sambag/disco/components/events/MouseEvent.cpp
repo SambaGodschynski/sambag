@@ -50,14 +50,15 @@ AComponentPtr MouseEvent::getSource() const {
 MouseEvent::Type MouseEvent::getType() const {
 	return type;
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 std::string MouseEvent::toString() const {
 	return "MouseEvent(" + paramString() + ")";
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 std::string MouseEvent::paramString() const {
 	std::stringstream ss;
-	ss<<source->getName()<<", "<<p<<", ";
+	ss << (getSource() ? getSource()->getName() : std::string("no source"));
+	ss <<", "<<p<<", ";
 	switch(type) {
 	case MOUSE_CLICKED:
 		ss<<"MOUSE_CLICKED"; break;

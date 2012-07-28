@@ -15,8 +15,9 @@ namespace sambag { namespace disco { namespace components { namespace events {
 /** 
   * @class HierachyEvent.
   */
-struct HierarchyEvent {
+class HierarchyEvent {
 //=============================================================================
+public:
 	enum Type {
 		// The event type indicating an ancestor-Container was moved.
 		ANCESTOR_MOVED		= 1,
@@ -39,11 +40,13 @@ struct HierarchyEvent {
 		// to a change in the showing state of the hierarchy.
 		SHOWING_CHANGED = 1<<8
 	};
+private:
 	AComponentPtr source;
 	Type type;
 	AComponentPtr changed;
 	AContainerPtr changedParent;
 	size_t changeFlags;
+public:
 	HierarchyEvent( AComponentPtr source,
 			Type type,
 			AComponentPtr changed,
@@ -55,6 +58,18 @@ struct HierarchyEvent {
 	  changedParent(changedParent),
 	  changeFlags(changeFlags)
 	{
+	}
+	AContainerPtr getChangedParent() const  {
+		return changedParent;
+	}
+	AComponentPtr getChanged() const {
+		return changed;
+	}
+	AComponentPtr getSource() const {
+		return source;
+	}
+	size_t getChangedFlags() const {
+		return changeFlags;
 	}
 }; // HierarchyEvent
 }}}} // namespace(s)

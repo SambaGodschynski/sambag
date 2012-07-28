@@ -181,7 +181,7 @@ protected:
 	 * The parent of the object. It may be null.
 	 * for top-level components.
 	 */
-	AContainerPtr parent;
+	AContainerWPtr _parent;
 	//-------------------------------------------------------------------------
 	/**
 	 * The bounds of this Component
@@ -436,7 +436,7 @@ protected: // TODO: remove mangeling
 	}
 	//-------------------------------------------------------------------------
 	void __updateParent_(AContainerPtr cn) {
-		parent = cn;
+		_parent = cn;
 	}
 	//-------------------------------------------------------------------------
 	virtual int __dispatchHierarchyEvents_(events::HierarchyEvent::Type id,
@@ -490,7 +490,7 @@ public: /* END should be protected  */
 	 * Specifies an alignment to the top of the component.
 	 * @see     getAlignmentY
 	 */
-	static const float TOP_ALIGNMENT = 0.0f;
+	static const float TOP_ALIGNMENT;
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentY</code> and
@@ -499,28 +499,28 @@ public: /* END should be protected  */
 	 * @see     getAlignmentX
 	 * @see     getAlignmentY
 	 */
-	static const float CENTER_ALIGNMENT = 0.5f;
+	static const float CENTER_ALIGNMENT;
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentY</code>.
 	 * Specifies an alignment to the bottom of the component.
 	 * @see     getAlignmentY
 	 */
-	static const float BOTTOM_ALIGNMENT = 1.0f;
+	static const float BOTTOM_ALIGNMENT;
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentX</code>.
 	 * Specifies an alignment to the left side of the component.
 	 * @see     getAlignmentX
 	 */
-	static const float LEFT_ALIGNMENT = 0.0f;
+	static const float LEFT_ALIGNMENT;
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentX</code>.
 	 * Specifies an alignment to the right side of the component.
 	 * @see     getAlignmentX
 	 */
-	static const float RIGHT_ALIGNMENT = 1.0f;
+	static const float RIGHT_ALIGNMENT;
 public:
 	//-----------------------------------------------------------------------------
 	virtual bool isDrawing() const;

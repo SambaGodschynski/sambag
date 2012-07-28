@@ -24,13 +24,25 @@ public:
 		//This event indicates that a component was removed from the container.
 		COMPONENT_REMOVED
 	};
+private:
 	AContainerPtr origin;
 	Type type;
 	AComponentPtr child;
+public:
 	ContainerEvent(AContainerPtr origin, Type type, AComponentPtr child) :
 		origin(origin),
 		type(type),
 		child(child) {}
+	AContainerPtr getOrigin() const  {
+		return origin;
+	}
+	AComponentPtr getChild() const {
+		return child;
+	}
+	Type getType() const {
+		return type;
+	}
+
 }; // ContainerEvent
 }}}} // namespace(s)
 

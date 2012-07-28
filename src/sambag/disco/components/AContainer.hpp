@@ -73,7 +73,7 @@ private:
 	//-------------------------------------------------------------------------
 	Dimension getPreferredSizeAlt();
 	//-------------------------------------------------------------------------
-	AComponentPtr lastMouseTarget;
+	AComponentWPtr _lastMouseTarget;
 	//-------------------------------------------------------------------------
 	void trackMouseEnterEvents(AComponentPtr target,
 			const events::MouseEvent &ev);

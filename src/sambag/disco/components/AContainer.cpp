@@ -24,7 +24,6 @@ AContainer::AContainer() {
 }
 //-----------------------------------------------------------------------------
 AContainer::~AContainer() {
-
 }
 //-----------------------------------------------------------------------------
 int AContainer::__countHierarchyMembers_() const {
@@ -51,7 +50,7 @@ void AContainer::checkAddToSelf(AComponent::Ptr comp) const {
 	AContainer::Ptr tmp = boost::shared_dynamic_cast<AContainer>(comp);
 	if (!tmp)
 		return;
-	for (AContainer::Ptr cn = getPtr(); cn; cn = cn->parent) {
+	for (AContainer::Ptr cn = getPtr(); cn; cn = cn->getParent()) {
 		if (cn == comp) {
 			SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
 					"adding container's parent to itself");
@@ -207,6 +206,7 @@ void AContainer::adjustDescendants(int num) {
 }
 //-----------------------------------------------------------------------------
 void AContainer::adjustDecendantsOnParent(int num) {
+	AContainerPtr parent = getParent();
 	if (!parent)
 		return;
 	parent->adjustDescendants(num);
@@ -622,6 +622,7 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		const events::MouseEvent &ev)
 {
 	using namespace events;
+	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
 	if (target == lastMouseTarget)
 		return;
 	if (lastMouseTarget) {
@@ -649,7 +650,7 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	using namespace events;
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
-
+	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
 
 	if (ev.getType() == MouseEvent::MOUSE_DRAGGED) {
 		if(!lastMouseTarget)

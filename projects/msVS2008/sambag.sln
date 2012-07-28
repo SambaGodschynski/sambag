@@ -1,18 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag", "sambag\sambag.vcproj", "{8EE5989A-5379-4923-ABDA-6CA97180A74E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_lib", "sambag\sambag.vcproj", "{8EE5989A-5379-4923-ABDA-6CA97180A74E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_tests", "..\..\testApps\msVS2008\sambag_tests\sambag_tests.vcproj", "{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Library|Win32 = Library|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Debug|Win32.Build.0 = Debug|Win32
+		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Library|Win32.ActiveCfg = Library|Win32
+		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Library|Win32.Build.0 = Library|Win32
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Release|Win32.ActiveCfg = Release|Win32
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Release|Win32.Build.0 = Release|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Debug|Win32.Build.0 = Debug|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Library|Win32.ActiveCfg = Library|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Library|Win32.Build.0 = Library|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Release|Win32.ActiveCfg = Release|Win32
+		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

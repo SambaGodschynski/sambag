@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="sambag_tests"
-	ProjectGUID="{8EE5989A-5379-4923-ABDA-6CA97180A74E}"
+	ProjectGUID="{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}"
 	RootNamespace="sambag_tests"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_UBLAS_TYPE_CHECK=0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -113,8 +113,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_UBLAS_TYPE_CHECK=0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -540,11 +540,63 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestArithmeticWrapper.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestArithmeticWrapper.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\com\tests\TestHelper.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\com\tests\TestHelper.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestPropertyChanged.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestPropertyChanged.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestThread.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\tests\TestThread.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="events"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\ChangedEvent.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\Events.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\PropertyChanged.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="exceptions"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalArgumentException.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalStateException.hpp"
 						>
 					</File>
 				</Filter>
@@ -677,116 +729,604 @@
 					>
 				</File>
 				<Filter
-					Name="graphicElements"
+					Name="components"
 					>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Arc.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AButton.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Arc.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AButton.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Compound.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AComponent.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Compound.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AComponent.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AContainer.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\GraphicElement.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AContainer.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Image.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ActionMap.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Image.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ActionMap.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Line.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ALayoutManager.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Line.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ALayoutManager.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Path.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\APopupMenu.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Path.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\AScrollbar.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\PathHelper.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\BorderLayout.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\PointContainer.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\BorderLayout.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\PointContainer.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\BoxLayout.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Rect.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\BoxLayout.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Rect.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\Button.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\RefElement.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\Button.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\RefElement.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ButtonGroup.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraph.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\ButtonGroup.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraph.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultBoundedRangeModel.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraphHelper.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultBoundedRangeModel.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\SceneGraphHelper.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultButtonModell.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Style.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultButtonModell.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Style.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultSingleSelectionModell.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Text.cpp"
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultSingleSelectionModell.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\src\sambag\disco\graphicElements\Text.hpp"
+						RelativePath="..\..\..\src\sambag\disco\components\FlowLayout.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\FlowLayout.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Forward.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\FramedWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\FramedWindow.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Graphics.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Graphics.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\IBorder.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\IBorder.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\IMenuElement.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\IScrollable.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Label.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Label.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\List.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\List.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Menu.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Menu.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MenuItem.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MenuItem.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MenuSelectionManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MenuSelectionManager.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MessageBox.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\MessageBox.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Panel.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Panel.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\PopupMenu.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\PopupMenu.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\RedrawManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\RedrawManager.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\RootPane.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\RootPane.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Scrollbar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Scrollbar.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ScrollPane.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ScrollPane.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ScrollPaneLayout.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ScrollPaneLayout.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\SizeRequirements.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\SizeRequirements.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Timer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Timer.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Viewport.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Viewport.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ViewportLayout.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ViewportLayout.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Window.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Window.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\WindowToolkit.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\WindowToolkit.hpp"
+						>
+					</File>
+					<Filter
+						Name="ui"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\AComponentUI.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\AComponentUI.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\ALookAndFeel.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\ALookAndFeel.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\DefaultMenuLayout.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\DefaultMenuLayout.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\IButtonUI.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\UIManager.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\UIManager.hpp"
+							>
+						</File>
+						<Filter
+							Name="basic"
+							>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicArrowButton.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicArrowButton.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicButtonListener.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicButtonUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicLabelUI.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicLabelUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicLookAndFeel.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicLookAndFeel.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicMenuItemListener.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicMenuItemUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicMenuListener.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicMenuUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicPanelUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicPopupMenuUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicScrollbarUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicScrollPaneUI.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicScrollPaneUI.hpp"
+								>
+							</File>
+						</Filter>
+					</Filter>
+					<Filter
+						Name="events"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\ActionEvent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\ContainerEvent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\ContainerEvent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\HierarchyEvent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\HierarchyEvent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEvent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEvent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEventCreator.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEventCreator.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="windowImpl"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\AWindowImpl.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\BufferedDrawPolicy.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\WindowImpl.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\WindowTestToolkit.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\WindowTestToolkit.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\X11WindowImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\X11WindowImpl.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\X11WindowToolkit.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\X11WindowToolkit.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="tests"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestAComponent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestAComponent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestAContainer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestAContainer.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestComponents.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestComponents.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestConcreteComponents.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestConcreteComponents.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestFlowLayout.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestFlowLayout.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestHelper.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestLookAndFeel.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestLookAndFeel.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestMouseEvent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestMouseEvent.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestPopupMenu.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestPopupMenu.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestRootPane.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestRootPane.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestUIManager.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestUIManager.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestWindow.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\tests\TestWindow.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="tests"
@@ -1023,6 +1563,130 @@
 						RelativePath="..\..\..\src\sambag\disco\svg\SvgUse.hpp"
 						>
 					</File>
+					<Filter
+						Name="graphicElements"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Arc.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Arc.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Compound.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Compound.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\GraphicElement.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\GraphicElement.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Image.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Image.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Line.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Line.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Path.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Path.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\PathHelper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\PointContainer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\PointContainer.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Rect.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Rect.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\RefElement.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\RefElement.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\SceneGraph.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\SceneGraph.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\SceneGraphHelper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\SceneGraphHelper.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Style.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Style.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Text.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\graphicElements\Text.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="units"
+						>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\units\Units.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\svg\units\Units.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

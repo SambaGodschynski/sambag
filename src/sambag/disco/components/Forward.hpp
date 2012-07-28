@@ -9,13 +9,15 @@
 #define FORWARD_HPP_
 
 #include <boost/shared_ptr.hpp>
-
+#include <boost/weak_ptr.hpp>
 //=============================================================================
 // Forward declarations of some important classes
 //=============================================================================
 namespace sambag { namespace disco { namespace components {
 	class AComponent; typedef boost::shared_ptr<AComponent> AComponentPtr;
+					  typedef boost::weak_ptr<AComponent> AComponentWPtr;
 	class AContainer; typedef boost::shared_ptr<AContainer> AContainerPtr;
+					  typedef boost::weak_ptr<AContainer> AContainerWPtr;
 	class ALayoutManager; typedef boost::shared_ptr<ALayoutManager> ALayoutManagerPtr;
 	class Panel; typedef boost::shared_ptr<Panel> PanelPtr;
 	class RootPane; typedef boost::shared_ptr<RootPane> RootPanePtr;

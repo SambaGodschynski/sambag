@@ -29,7 +29,7 @@ struct Deadlock {
 					// value to low -> no deadlock
 					sambag::com::wait(5);
 			SAMBAG_END_SYNCHRONIZED
-		} catch (const sambag::com::DeadLockException &ex) {
+		} catch (const sambag::com::DeadLockException &) {
 			deadlockExThrown = true;
 		}
 	}

@@ -182,7 +182,7 @@ void RedrawManager::adjustRoots(AComponentPtr root,
 void RedrawManager::collectDirtyComponents(ComponentMap &dirtyComponents,
 		AComponentPtr dirtyComponent, Components &roots)
 {
-	int dx, dy, rootDx, rootDy;
+	Coordinate dx, dy, rootDx, rootDy;
 	AComponentPtr component, rootDirtyComponent, parent;
 	Rectangle cBounds, tmp;
 

@@ -121,7 +121,7 @@ const std::string ScrollPane::PROPERTY_CORNER;
 //-----------------------------------------------------------------------------
 const std::string ScrollPane::PROPERTY_WHEELSCROLLING_ENABLED;
 //-----------------------------------------------------------------------------
-ScrollPane::ScrollPane::ScrollPane() :
+ScrollPane::ScrollPane() :
 	verticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED),
 	horizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED)
 {
@@ -222,7 +222,7 @@ ScrollPane::Ptr ScrollPane::create(AComponentPtr view,
 }
 //-----------------------------------------------------------------------------
 ui::AComponentUIPtr
-ScrollPane::ScrollPane::getComponentUI(ui::ALookAndFeelPtr laf) const
+ScrollPane::getComponentUI(ui::ALookAndFeelPtr laf) const
 {
 	return laf->getUI<ScrollPane>();
 }

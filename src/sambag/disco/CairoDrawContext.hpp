@@ -473,7 +473,9 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual bool hasCurrentPoint() const {
-		return cairo_has_current_point(context);
+		if(cairo_has_current_point(context))
+			return true;
+		return false;
 	}
 	//-------------------------------------------------------------------------
 	virtual void clip() {

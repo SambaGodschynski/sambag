@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
+#include <loki/Singleton.h>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -19,6 +20,7 @@ namespace sambag { namespace disco { namespace components {
   */
 class WindowTestToolkit : public WindowToolkit {
 //=============================================================================
+friend struct Loki::CreateUsingNew<WindowTestToolkit>;
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<WindowTestToolkit> Ptr;

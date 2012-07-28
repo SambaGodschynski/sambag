@@ -20,4 +20,14 @@ AWindowPtr WindowTestToolkit::createWindowImpl() const {
 Dimension WindowTestToolkit::getScreenSize() const {
 	return Dimension(1024, 768);
 }
+#ifndef DISCO_USE_WIN32
+#ifndef DISCO_USE_X11
+// .. add other
+///////////////////////////////////////////////////////////////////////////////
+WindowToolkit * _getWindowToolkitImpl() {
+	typedef Loki::SingletonHolder<WindowTestToolkit> FactoryHolder;
+	return &FactoryHolder::Instance();
+}
+#endif
+#endif
 }}} // namespace(s)
