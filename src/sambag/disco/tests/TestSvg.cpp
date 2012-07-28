@@ -566,7 +566,8 @@ void TestSvg::testSvgImage() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
 	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
-	testSvg("testSvgImage", TEST_SVG,  surface, html);
+	testSvg("testSvgImage", TEST_SVG,  surface, html,
+			"svg root needs path data to find image file.");
 }
 //-----------------------------------------------------------------------------
 void TestSvg::testSvgStyle() {
