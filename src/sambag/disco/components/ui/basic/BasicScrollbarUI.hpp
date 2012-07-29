@@ -307,13 +307,20 @@ private:
 		};
 	};
 	//-------------------------------------------------------------------------
-	ScrollListener scrollListener;
+	ScrollListener *scrollListener;
 	//-------------------------------------------------------------------------
-	TrackListener trackListener;
+	TrackListener *trackListener;
 public:
 	//-------------------------------------------------------------------------
-	BasicScrollbarUI() : scrollListener(ScrollListener(*this)),
-	trackListener(TrackListener(*this)) {}
+	BasicScrollbarUI() {
+		scrollListener = new ScrollListener(ScrollListener(*this));
+		trackListener = new TrackListener(TrackListener(*this));
+	}
+	//-------------------------------------------------------------------------
+	~BasicScrollbarUI() {
+		delete scrollListener;
+		delete trackListener;
+	}
 	//-------------------------------------------------------------------------
 	void onArrowBtn(void *src, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
@@ -454,7 +461,7 @@ void BasicScrollbarUI<M>::installListeners() {
 	//scrollListener = createScrollListener();
 	scrollTimer = Timer::create(scrollSpeedThrottle);
 	scrollTimer->EventSender<Timer::Event>::addTrackedEventListener(
-		boost::bind(&ScrollListener::onScrollTimer, &scrollListener, _1, _2),
+		boost::bind(&ScrollListener::onScrollTimer, scrollListener, _1, _2),
 		self
 	);
 	scrollTimer->setNumRepetitions(-1);
@@ -786,8 +793,8 @@ void BasicScrollbarUI<M>::onArrowBtn(void *src,
 
 		scrollByUnit(direction);
 		scrollTimer->stop();
-		scrollListener.setDirection(direction);
-		scrollListener.setScrollByBlock(false);
+		scrollListener->setDirection(direction);
+		scrollListener->setScrollByBlock(false);
 		scrollTimer->start();
 		//TODO: Focus
 //		if (!scrollbar->hasFocus() && scrollbar->isRequestFocusEnabled()) {
@@ -805,7 +812,7 @@ template <class M>
 void BasicScrollbarUI<M>::onTrack(void *src, const events::MouseEvent &ev)
 {
 	events::MouseEventSwitch<TrackListener::Filter>::
-		delegate(ev, trackListener);
+		delegate(ev, *trackListener);
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -826,10 +833,10 @@ void BasicScrollbarUI<M>::ScrollListener::onScrollTimer(void *src,
 			if (direction == ScrollBarType::INCR) {
 				if (parent.getThumbBounds().x0().y() +
 						parent.getThumbBounds().height()
-							>= parent.trackListener.currentMouseY)
+							>= parent.trackListener->currentMouseY)
 					ev.getSource()->stop();
 			} else if (parent.getThumbBounds().x0().y() <=
-					parent.trackListener.currentMouseY) {
+					parent.trackListener->currentMouseY) {
 				ev.getSource()->stop();
 			}
 		} else {
@@ -944,12 +951,12 @@ bool BasicScrollbarUI<M>::isThumbRollover() const {
 template <class M>
 bool BasicScrollbarUI<M>::isMouseAfterThumb() {
 	const Rectangle &tb = getThumbBounds();
-	return trackListener.currentMouseX > tb.x0().x() + tb.width();
+	return trackListener->currentMouseX > tb.x0().x() + tb.width();
 }
 //-------------------------------------------------------------------------
 template <class M>
 bool BasicScrollbarUI<M>::isMouseBeforeThumb() {
-	return trackListener.currentMouseX < getThumbBounds().x0().x();
+	return trackListener->currentMouseX < getThumbBounds().x0().x();
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -1020,8 +1027,8 @@ TrackListener::mousePressed(const events::MouseEvent &ev) {
 	parent.scrollByBlock(direction);
 
 	parent.scrollTimer->stop();
-	parent.scrollListener.setDirection(direction);
-	parent.scrollListener.setScrollByBlock(true);
+	parent.scrollListener->setDirection(direction);
+	parent.scrollListener->setScrollByBlock(true);
 	startScrollTimerIfNecessary();
 }
 //-----------------------------------------------------------------------------
@@ -1150,11 +1157,11 @@ TrackListener::startScrollTimerIfNecessary() {
 	switch (parent.scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
 		if (direction == ScrollBarType::INCR) {
-			if (tb.x0().y() + tb.height() < parent.trackListener.currentMouseY)
+			if (tb.x0().y() + tb.height() < parent.trackListener->currentMouseY)
 			{
 				parent.scrollTimer->start();
 			}
-		} else if (tb.x0().y() > parent.trackListener.currentMouseY) {
+		} else if (tb.x0().y() > parent.trackListener->currentMouseY) {
 			parent.scrollTimer->start();
 		}
 		break;

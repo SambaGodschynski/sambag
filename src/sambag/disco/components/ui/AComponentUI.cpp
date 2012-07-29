@@ -22,7 +22,9 @@ bool AComponentUI::contains(AComponent::Ptr c, const Point2D &p) {
 	return (p.x() >= 0) && (p.x() < width) && (p.y() >= 0) && (p.y() < height);
 }
 //-----------------------------------------------------------------------------
-int AComponentUI::getBaseline(AComponent::Ptr c, int width, int height) {
+int AComponentUI::getBaseline(AComponentPtr c, 
+		const Coordinate &width, const Coordinate &height)
+{
 	SAMBA_LOG_NOT_YET_IMPL();
 	return -1;
 }

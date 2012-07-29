@@ -50,7 +50,8 @@ public:
 	 * @param height
 	 * @return
 	 */
-	virtual int getBaseline(AComponentPtr c, int width, int height);
+	virtual int getBaseline(AComponentPtr c, 
+		const Coordinate &width, const Coordinate &height);
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the specified component's maximum size appropriate for the

@@ -55,7 +55,7 @@ int FlowLayout::moveComponents(AContainerPtr target, Coordinate x,
 	for (int i = rowStart; i < rowEnd; ++i) {
 		AComponent::Ptr m = target->getComponent(i);
 		if (m->isVisible()) {
-			int cy;
+			Coordinate cy;
 			if (useBaseline && ascent[i] >= 0) {
 				cy = y + baselineOffset + maxAscent - ascent[i];
 			} else {
@@ -69,7 +69,7 @@ int FlowLayout::moveComponents(AContainerPtr target, Coordinate x,
 			x = x + m->getWidth() + hgap;
 		}
 	}
-	return height;
+	return (int)height;
 }
 //-----------------------------------------------------------------------------
 Dimension FlowLayout::preferredLayoutSize(AContainerPtr target) {
@@ -132,7 +132,7 @@ Dimension FlowLayout::minimumLayoutSize(AContainerPtr target) {
 			}
 			dim.width(dim.width() + d.width() );
 			if (useBaseline) {
-				int baseline = m->getBaseLine(d.width(), d.height());
+				Coordinate baseline = m->getBaseLine(d.width(), d.height());
 				if (baseline >= 0) {
 					maxAscent = std::max(maxAscent, (Coordinate)baseline);
 					maxDescent = std::max(maxDescent, (Coordinate)(dim.height() - baseline));

@@ -77,7 +77,7 @@ void SvgBuilder::registerSvgAttributes() {
 	SvgColorStop::registerAttributes(xml2Obj);
 }
 //-----------------------------------------------------------------------------
-SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
+SvgObject::Ptr SvgBuilder::buildSvgFromString(const std::string & str)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get());
@@ -90,7 +90,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromString( const std::string & str)
 	return neu;
 }
 //-----------------------------------------------------------------------------
-SvgObject::Ptr SvgBuilder::buildSvgFromFilename( const std::string & name)
+SvgObject::Ptr SvgBuilder::buildSvgFromFilename(const std::string & name)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);

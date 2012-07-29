@@ -68,17 +68,17 @@ void BoxLayout::layoutContainer(AContainerPtr target) {
 	SAMBAG_BEGIN_SYNCHRONIZED(lock)
 		checkRequests();
 		if (absoluteAxis == X_AXIS) {
-			SizeRequirements::calculateTiledPositions(alloc.width(), xTotal,
+			SizeRequirements::calculateTiledPositions((int)alloc.width(), xTotal,
 					xChildren, xOffsets,
 					xSpans);
-			SizeRequirements::calculateAlignedPositions(alloc.height(), yTotal,
+			SizeRequirements::calculateAlignedPositions((int)alloc.height(), yTotal,
 					yChildren, yOffsets,
 					ySpans);
 		} else {
-			SizeRequirements::calculateAlignedPositions(alloc.width(), xTotal,
+			SizeRequirements::calculateAlignedPositions((int)alloc.width(), xTotal,
 					xChildren, xOffsets,
 					xSpans);
-			SizeRequirements::calculateTiledPositions(alloc.height(), yTotal,
+			SizeRequirements::calculateTiledPositions((int)alloc.height(), yTotal,
 					yChildren, yOffsets,
 					ySpans);
 		}
@@ -174,10 +174,10 @@ void BoxLayout::checkRequests() {
 			Dimension min = c->getMinimumSize();
 			Dimension typ = c->getPreferredSize();
 			Dimension max = c->getMaximumSize();
-			xChildren[i] = SizeRequirements(min.width(), typ.width(),
-					max.width(), c->getAlignmentX());
-			yChildren[i] = SizeRequirements(min.height(), typ.height(),
-					max.height(), c->getAlignmentY());
+			xChildren[i] = SizeRequirements((int)min.width(), (int)typ.width(),
+					(int)max.width(), c->getAlignmentX());
+			yChildren[i] = SizeRequirements((int)min.height(), (int)typ.height(),
+					(int)max.height(), c->getAlignmentY());
 		}
 
 		// Resolve axis to an absolute value (either X_AXIS or Y_AXIS)
