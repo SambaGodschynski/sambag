@@ -29,15 +29,12 @@
 #include <boost/timer/timer.hpp>
 #include <assert.h>
 
-#include <windows.h>
 
 #ifdef WIN32
 #include <crtdbg.h>
-#ifndef SAMBAG_WINONLY
 #define SAMBAG_WINONLY(x) x
 #else
 #define SAMBAG_WINONLY(x)
-#endif
 #endif
 
 namespace sd = sambag::disco;

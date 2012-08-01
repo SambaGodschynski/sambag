@@ -9,11 +9,9 @@
 
 #ifdef WIN32
 #include <crtdbg.h>
-#ifndef SAMBAG_WINONLY
 #define SAMBAG_WINONLY(x) x
 #else
 #define SAMBAG_WINONLY(x)
-#endif
 #endif
 
 
