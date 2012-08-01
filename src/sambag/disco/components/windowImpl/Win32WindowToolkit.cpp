@@ -42,8 +42,7 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
-	while( GetMessage( &msg, NULL, 0, 0 ) > 0  && 
-		Win32WindowImpl::getNumInstances() > 0) 
+	while( GetMessage( &msg, NULL, 0, 0 ) > 0) 
 	{
         DispatchMessage( &msg );
     }

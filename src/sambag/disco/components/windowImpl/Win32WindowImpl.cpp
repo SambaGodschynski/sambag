@@ -182,8 +182,13 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	int x=0; int y=0;
 
 	switch(message) {
+	case WM_DESTROY:
+		win->destroyWindow();
+		if (instances==0)
+			PostQuitMessage(0);
+		break;
 	case WM_CLOSE:
-		PostQuitMessage(0);
+		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
 		if (win)
@@ -199,15 +204,20 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		break;
 	}
 	case WM_LBUTTONDOWN : 
-		mbuttons |= 1;
-	case WM_RBUTTONDOWN :
-		mbuttons |= 4;
-	case WM_MBUTTONDOWN :
-		mbuttons |= 2;
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
-		/*if (win)
-			win->handleMouseButtonPressEvent(x, y, mbuttons);*/
+		if (win)
+			win->handleMouseButtonPressEvent(x, y, 1);
+	case WM_RBUTTONDOWN :
+		x = LOWORD(lParam); 
+		y = HIWORD(lParam);
+		if (win)
+			win->handleMouseButtonPressEvent(x, y, 2);
+	case WM_MBUTTONDOWN :
+		x = LOWORD(lParam); 
+		y = HIWORD(lParam);
+		if (win)
+			win->handleMouseButtonPressEvent(x, y, 4);
 		break;
 	case WM_LBUTTONUP : 
 		mbuttons |= 1;
@@ -217,13 +227,12 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		mbuttons |= 2;
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
-	/*	if (win)
-			win->handleMouseButtonReleaseEvent(x, y, mbuttons);*/
+		if (win)
+			win->handleMouseButtonReleaseEvent(x, y, 1);
 		break;
 	case WM_MOUSEMOVE :
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
-		std::cout<<x<<", "<<y<<std::endl;
 		if (win)
 			win->handleMouseMotionEvent(x, y);
 		break;
