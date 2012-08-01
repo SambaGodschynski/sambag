@@ -29,6 +29,17 @@
 #include <boost/timer/timer.hpp>
 #include <assert.h>
 
+#include <windows.h>
+
+#ifdef WIN32
+#include <crtdbg.h>
+#ifndef SAMBAG_WINONLY
+#define SAMBAG_WINONLY(x) x
+#else
+#define SAMBAG_WINONLY(x)
+#endif
+#endif
+
 namespace sd = sambag::disco;
 namespace sdc = sambag::disco::components;
 
@@ -199,7 +210,7 @@ void createBorderlineWindow() {
 	using namespace sambag::disco::components;
 	win[3] = sdc::FramedWindow::create(win[0]);
 	win[3]->setTitle("Borderline Window");
-	win[3]->setWindowBounds(Rectangle(110,100,430,280));
+	win[3]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 	Scrollbar::Ptr scr = Scrollbar::create(
 			Scrollbar::HORIZONTAL, 0, 0, 0, 100
 	);
@@ -234,7 +245,7 @@ void createSurpriseWindow() {
 	using namespace sambag::disco::components;
 	win[2] = sdc::FramedWindow::create(win[0]);
 	win[2]->setTitle("Surprise Window");
-	win[2]->setWindowBounds(Rectangle(110,100,430,280));
+	win[2]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 	win[2]->getContentPane()->setLayout(FlowLayout::create());
 
 	const int NUM = 1000;
@@ -292,7 +303,7 @@ void createScrollercoasterWindow() {
 	using namespace sambag::disco::components;
 	win[4] = sdc::FramedWindow::create(win[0]);
 	win[4]->setTitle("ScrollerCoaster Window");
-	win[4]->setWindowBounds(Rectangle(110,100,430,280));
+	win[4]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 
 	const int NUM = 500;
 	AContainerPtr con = Panel::create();
@@ -318,7 +329,7 @@ void createACMEWindow() {
 	using namespace sambag::disco::components;
 	win[1] = sdc::FramedWindow::create(win[0]);
 	win[1]->setTitle("ACME Window");
-	win[1]->setWindowBounds(Rectangle(110,100,430,280));
+	win[1]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 
 
 	Panel::Ptr con = Panel::create();
@@ -535,24 +546,32 @@ void initTimer() {
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
 	timer3->start();
 }
-
 int main() {
+	SAMBAG_WINONLY(
+		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
+	)
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	initTimer();
+	//initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
-		win[0]->setWindowBounds(Rectangle(100,100,230,200));
+		win[0]->setWindowBounds(sambag::disco::Rectangle(100,100,230,200));
 		win[0]->setTitle("Messerschmitz 1.0");
 		win[0]->getContentPane()->setLayout(FlowLayout::create());
+		win[0]->getContentPane()->EventSender<sdc::events::MouseEvent>::addEventListener(
+			&trackMouse
+		);
 
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onAhaClicked);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
+		btn->EventSender<sdc::events::MouseEvent>::addEventListener(
+			&trackMouse
+		);
 
 		btn = Button::create();
 		btn->setText("open Surprise Panel");
@@ -581,10 +600,10 @@ int main() {
 		win[0]->validate();
 		win[0]->pack();
 		win[0]->open();
-
+/*
 		MenuSelectionManager::defaultManager().
 		EventSender<MenuSelectionManagerChanged>::addEventListener
-			( &pathChanged );
+			( &pathChanged );*/
 
 		sdc::Window::startMainLoop();
 	}

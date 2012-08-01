@@ -278,7 +278,7 @@ void Viewport::draw(IDrawContext::Ptr cn) {
 		// and result in empty areas.
 		try {
 			backingStoreImage =
-					getDiscoFactory()->createImageSurface(width, height);
+					getDiscoFactory()->createImageSurface((int)width, (int)height);
 		} catch (...) {
 			setScrollMode(Viewport::BLIT_SCROLL_MODE);
 			return;

@@ -21,7 +21,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -83,7 +83,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -106,7 +106,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -160,7 +160,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -1124,6 +1124,22 @@
 						</File>
 						<File
 							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32WindowImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32WindowImpl.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32WindowToolkit.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32WindowToolkit.hpp"
 							>
 						</File>
 						<File

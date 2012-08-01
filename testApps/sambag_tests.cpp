@@ -9,9 +9,11 @@
 
 #ifdef WIN32
 #include <crtdbg.h>
-#define ONLY_WIN(x) x
+#ifndef SAMBAG_WINONLY
+#define SAMBAG_WINONLY(x) x
 #else
-#define ONLY_WIN(x)
+#define SAMBAG_WINONLY(x)
+#endif
 #endif
 
 
@@ -20,7 +22,7 @@
 //                       CPPUnit TestApp fuer cpsqlite
 //=============================================================================
 int main ( const int argc, char **argv ) {
-	ONLY_WIN(
+	SAMBAG_WINONLY(
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)
 	using namespace std;

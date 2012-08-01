@@ -21,6 +21,7 @@ void Window::startMainLoop() {
 Window::Window(Window::Ptr parent) : parent(parent) {
 	rootPane = components::RootPane::create();
 	windowImpl = getWindowToolkit()->createWindowImpl();
+	SAMBAG_ASSERT(windowImpl);
 	windowImpl->setFramed(false);
 	windowImpl->setRootPane(rootPane);
 	//add(rootPane); do not call in constructor! -> getPtr() returns NULL

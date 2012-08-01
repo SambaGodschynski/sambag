@@ -30,10 +30,7 @@ protected:
 	Win32Surface(cairo_surface_t *s, HWND hWnd) : CairoSurface(s), hWnd(hWnd){}
 public:
 	//-------------------------------------------------------------------------
-	Ptr static create (HWND hWnd,
-			int width,
-			int height)
-	{
+	Ptr static create (HWND hWnd, int width, int height) {
 		cairo_surface_t *s = cairo_win32_surface_create(GetDC(hWnd));
 		Ptr neu = Ptr(new Win32Surface(s, hWnd));
 		return neu;
