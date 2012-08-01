@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_lib", "sambag\sambag.vcproj", "{8EE5989A-5379-4923-ABDA-6CA97180A74E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_tests", "..\..\testApps\msVS2008\sambag_tests\sambag_tests.vcproj", "{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testApp", "testApp\testApp.vcproj", "{45500A24-AE77-460D-9C71-AF59D01568AE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_tests", "sambag_tests\sambag_tests.vcproj", "{81C723EB-D571-4FBF-819A-6E89C52FE4EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,14 @@ Global
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Debug|Win32.Build.0 = Debug|Win32
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Release|Win32.ActiveCfg = Release|Win32
 		{8EE5989A-5379-4923-ABDA-6CA97180A74E}.Release|Win32.Build.0 = Release|Win32
-		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Debug|Win32.Build.0 = Debug|Win32
-		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Release|Win32.ActiveCfg = Release|Win32
-		{AE258E18-6144-4D21-B5FB-DBEF1D538DD6}.Release|Win32.Build.0 = Release|Win32
 		{45500A24-AE77-460D-9C71-AF59D01568AE}.Debug|Win32.ActiveCfg = Debug|Win32
 		{45500A24-AE77-460D-9C71-AF59D01568AE}.Debug|Win32.Build.0 = Debug|Win32
 		{45500A24-AE77-460D-9C71-AF59D01568AE}.Release|Win32.ActiveCfg = Release|Win32
 		{45500A24-AE77-460D-9C71-AF59D01568AE}.Release|Win32.Build.0 = Release|Win32
+		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Debug|Win32.Build.0 = Debug|Win32
+		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Release|Win32.ActiveCfg = Release|Win32
+		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
