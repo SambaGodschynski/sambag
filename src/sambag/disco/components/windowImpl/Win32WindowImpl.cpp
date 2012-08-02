@@ -91,6 +91,7 @@ void Win32WindowImpl::destroyWindow() {
 void Win32WindowImpl::close() {
 	if (!visible)
 		return;
+	PostMessage(win, WM_CLOSE, 0, 0);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::open() {

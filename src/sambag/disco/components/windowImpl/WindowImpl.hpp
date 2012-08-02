@@ -115,8 +115,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {
-		rootPane->setSurface(ISurface::Ptr());
-		mec.reset();
 		ConcreteWindowImpl::close();
 	}
 	//--------------------------------------------------------------------------
@@ -144,6 +142,7 @@ template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
 	using namespace sambag::com::events;
 	rootPane->setSurface(ISurface::Ptr());
+	mec.reset();
 	EventSender<OnCloseEvent>::notifyListeners (
 		this,
 		OnCloseEvent()
