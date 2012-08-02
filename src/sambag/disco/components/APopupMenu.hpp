@@ -38,13 +38,13 @@ public:
 	static const std::string PROPERTY_POPUP_LOCATION;
 private:
 	//-------------------------------------------------------------------------
-	AComponentPtr invoker;
+	AComponentWPtr _invoker;
 	//-------------------------------------------------------------------------
 	void initWindow();
 	//-------------------------------------------------------------------------
 	WindowPtr window;
 	//-------------------------------------------------------------------------
-	AComponentPtr parent;
+	AComponentWPtr _parent;
 protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
@@ -82,12 +82,12 @@ public:
 	virtual void processMouseEvent(events::MouseEvent event,
 			const MenuElements & path, MenuSelectionManager &manager) {}
 	//-------------------------------------------------------------------------
-	virtual void setParentWindow(WindowPtr _parent) {
-		parent = _parent;
+	virtual void setParentWindow(WindowPtr parent) {
+		_parent = parent;
 	}
 	//-------------------------------------------------------------------------
 	virtual AComponentPtr getParentComponent() const {
-		return parent;
+		return _parent.lock();
 	}
 	//-------------------------------------------------------------------------
 	virtual void showPopup(const Point2D &_where);
@@ -118,7 +118,7 @@ template <class SM>
 const std::string  APopupMenu<SM>::PROPERTY_POPUP_LOCATION = "popuplocation";
 //-----------------------------------------------------------------------------
 template <class SM>
-APopupMenu<SM>::APopupMenu(AComponentPtr parent) : parent(parent) {
+APopupMenu<SM>::APopupMenu(AComponentPtr parent) : _parent(parent) {
 	setName("PopupMenu");
 }
 //-----------------------------------------------------------------------------
@@ -143,6 +143,7 @@ void APopupMenu<SM>::initWindow() {
 		ui::DefaultMenuLayout::create(getPtr(), ui::DefaultMenuLayout::Y_AXIS)
 	);
 	Window::Ptr parentW;
+	AComponentPtr parent = getParentComponent();
 	if (parent) {
 		AContainerPtr pc = parent->getRootContainer();
 		parentW = boost::shared_dynamic_cast<Window>(pc);
@@ -164,13 +165,13 @@ void APopupMenu<SM>::getSubElements(MenuElements &out) const {
 }
 //-----------------------------------------------------------------------------
 template <class SM>
-void APopupMenu<SM>::setInvoker(AComponentPtr _invoker) {
-	invoker = _invoker;
+void APopupMenu<SM>::setInvoker(AComponentPtr invoker) {
+	_invoker = invoker;
 }
 //-----------------------------------------------------------------------------
 template <class SM>
 AComponentPtr APopupMenu<SM>::getInvoker() const {
-	return invoker;
+	return _invoker.lock();
 }
 //-----------------------------------------------------------------------------
 template <class SM>

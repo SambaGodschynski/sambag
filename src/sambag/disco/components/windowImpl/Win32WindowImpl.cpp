@@ -149,6 +149,16 @@ std::string Win32WindowImpl::getTitle() const {
 void Win32WindowImpl::updateBoundsToWindow() {
 	if (!win)
 		return;
+
+	/*RECT wRect;
+	SetRect ( &wRect, bounds.x0().x(), bounds.x0().y(), bounds.width(), bounds.height() );
+	AdjustWindowRectEx (&wRect, 
+		GetWindowLong (win, GWL_STYLE), 
+		FALSE, GetWindowLong (win, GWL_EXSTYLE)
+	);
+	int width = wRect.right - wRect.left;
+	int height = wRect.bottom - wRect.top;
+	SetWindowPos (win, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);*/
 	SetWindowPos(win, 
 		HWND_TOP,
 		(int)bounds.x0().x(),

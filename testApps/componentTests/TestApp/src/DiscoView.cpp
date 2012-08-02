@@ -69,7 +69,7 @@ float currScrollSpeed = F;
 void createAcmePopup() {
 	using namespace sambag::disco::components;
 	acmePopup = PopupMenu::create(win[1]->getContentPane());
-	const std::string CLEAR = "clear all";
+    const std::string CLEAR = "clear all";
 	const std::string items[] = {"select all", "find sibling",
 			"but I say immer", "helter selter", "add nachwuk banst...", CLEAR};
 	const int NUM = sizeof(items) / sizeof(items[0]);
@@ -113,6 +113,7 @@ void createAcmePopup() {
 		btn->setText(ss.str());
 		menu->add(btn);
 	}
+	
 	Menu::Ptr subsub = Menu::create();
 	subsub->setText("holy anker");
 	for (size_t i=0; i<5; ++i) {
