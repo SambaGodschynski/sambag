@@ -16,6 +16,7 @@ namespace components { namespace ui { namespace basic {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void BasicScrollPaneUI::syncScrollPaneWithViewport() {
+	ScrollPanePtr scrollpane = getScrollPane();
 	ViewportPtr viewport = scrollpane->getViewport();
 	ScrollPane::AScrollbarPtr vsb = scrollpane->getVerticalScrollBar();
 	ScrollPane::AScrollbarPtr hsb = scrollpane->getHorizontalScrollBar();
@@ -65,10 +66,10 @@ void BasicScrollPaneUI::syncScrollPaneWithViewport() {
 //-----------------------------------------------------------------------------
 void BasicScrollPaneUI::installUI(AComponentPtr c) {
 	Super::installUI(c);
-	ScrollPane::Ptr pane  = boost::shared_dynamic_cast<ScrollPane>(c);
-	SAMBAG_ASSERT(pane);
-	scrollpane = pane;
-	ScrollPane::AScrollbarPtr vsb = pane->getVerticalScrollBar();
+	ScrollPane::Ptr scrollpane  = boost::shared_dynamic_cast<ScrollPane>(c);
+	SAMBAG_ASSERT(scrollpane);
+	_scrollpane = scrollpane;
+	ScrollPane::AScrollbarPtr vsb = scrollpane->getVerticalScrollBar();
 	if (vsb) {
 		vsb->EventSender<ScrollPane::ScrollbarModel::StateChangedEvent>::
 			addTrackedEventListener(
@@ -76,7 +77,7 @@ void BasicScrollPaneUI::installUI(AComponentPtr c) {
 			self
 		);
 	}
-	ScrollPane::AScrollbarPtr hsb = pane->getHorizontalScrollBar();
+	ScrollPane::AScrollbarPtr hsb = scrollpane->getHorizontalScrollBar();
 	if (hsb) {
 		hsb->EventSender<ScrollPane::ScrollbarModel::StateChangedEvent>::
 			addTrackedEventListener(
@@ -98,6 +99,7 @@ void BasicScrollPaneUI::vsbStateChanged(void *src,
 		const ScrollPane::ScrollbarModel::StateChangedEvent &ev)
 {
 	const ScrollPane::ScrollbarModel &model = ev.getSrc();
+	ScrollPanePtr scrollpane = getScrollPane();
 	Point2D p = scrollpane->getViewport()->getViewPosition();
 	p.y(model.getValue());
 	scrollpane->getViewport()->setViewPosition(p);
@@ -107,6 +109,7 @@ void BasicScrollPaneUI::hsbStateChanged(void *src,
 		const ScrollPane::ScrollbarModel::StateChangedEvent &ev)
 {
 	const ScrollPane::ScrollbarModel &model = ev.getSrc();
+	ScrollPanePtr scrollpane = getScrollPane();
 	Point2D p = scrollpane->getViewport()->getViewPosition();
 	Coordinate value = model.getValue();
 	p.x(value);

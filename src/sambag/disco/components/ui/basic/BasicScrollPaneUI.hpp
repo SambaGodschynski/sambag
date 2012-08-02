@@ -38,10 +38,14 @@ protected:
 	void syncScrollPaneWithViewport();
 private:
 	//-------------------------------------------------------------------------
-	ScrollPanePtr scrollpane;
+	ScrollPaneWPtr _scrollpane;
 	//-------------------------------------------------------------------------
 	Coordinate oldExtent;
 public:
+	//-------------------------------------------------------------------------
+	ScrollPanePtr getScrollPane() const {
+		return _scrollpane.lock();
+	}
 	//-------------------------------------------------------------------------
 	virtual void installUI(AComponentPtr c);
 	//-------------------------------------------------------------------------

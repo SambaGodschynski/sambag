@@ -46,7 +46,7 @@ protected:
 	//-------------------------------------------------------------------------
 	WPtr self;
 	//-------------------------------------------------------------------------
-	typename ScrollBarType::Ptr scrollbar;
+	typename ScrollBarType::WPtr _scrollbar;
 	//-------------------------------------------------------------------------
 	Coordinate scrollBarWidth;
 	//-------------------------------------------------------------------------
@@ -122,6 +122,7 @@ protected:
 	 * @param active True indicates the thumb is currently active.
 	 */
 	void setThumbRollover(bool active) {
+		typename ScrollBarType::Ptr scrollbar = getScrollbar();
 		if (thumbActive != active) {
 			thumbActive = active;
 			scrollbar->redraw(getThumbBounds());
@@ -195,15 +196,21 @@ private:
 			typename ScrollBarType::Direction direction);
 	//-------------------------------------------------------------------------
 	void scrollByBlock(typename ScrollBarType::Direction direction) {
+		typename ScrollBarType::Ptr scrollbar = getScrollbar();
 		scrollByBlock(scrollbar, direction);
 		trackHighlight = (direction == ScrollBarType::INCR) ?
 				INCREASE_HIGHLIGHT : DECREASE_HIGHLIGHT;
 		scrollbar->redraw(getTrackBounds());
 	}
 	void scrollByUnit(typename ScrollBarType::Direction direction) {
+		typename ScrollBarType::Ptr scrollbar = getScrollbar();
 		scrollByUnits(scrollbar, direction, 1, false);
 	}
 public:
+	//-------------------------------------------------------------------------
+	typename ScrollBarType::Ptr getScrollbar() const {
+		return _scrollbar.lock();
+	}
 	//-------------------------------------------------------------------------
 	virtual bool contains(AComponent::Ptr c, const Point2D &p);
 	//-------------------------------------------------------------------------
@@ -317,7 +324,7 @@ public:
 		trackListener = new TrackListener(TrackListener(*this));
 	}
 	//-------------------------------------------------------------------------
-	~BasicScrollbarUI() {
+	virtual ~BasicScrollbarUI() {
 		delete scrollListener;
 		delete trackListener;
 	}
@@ -337,8 +344,10 @@ bool BasicScrollbarUI<M>::contains(AComponent::Ptr c, const Point2D &p) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installUI(AComponentPtr c) {
-	scrollbar = boost::shared_dynamic_cast<ScrollBarType>(c);
+	typename ScrollBarType::Ptr scrollbar = 
+		boost::shared_dynamic_cast<ScrollBarType>(c);
 	SAMBAG_ASSERT(scrollbar);
+	_scrollbar = scrollbar;
 	thumbRect = Rectangle(0, 0, 0, 0);
 	trackRect = Rectangle(0, 0, 0, 0);
 	installDefaults();
@@ -360,6 +369,7 @@ void BasicScrollbarUI<M>::configureScrollBarColors() {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installDefaults() {
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	UIManager::instance().getProperty("ScrollBar.width",
 			scrollBarWidth);
 	if (scrollBarWidth <= 0) {
@@ -405,6 +415,7 @@ void BasicScrollbarUI<M>::installDefaults() {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installComponents() {
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	switch (scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
 		incrButton = BasicArrowButton::create(BasicArrowButton::SOUTH);
@@ -430,7 +441,7 @@ void trackMouse(void *src, const events::MouseEvent &ev) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installListeners() {
-
+	
 	if (incrButton) {
 		incrButton->EventSender<events::MouseEvent>::addTrackedEventListener(
 			boost::bind(&BasicScrollbarUI<M>::onArrowBtn, this, _1, _2),
@@ -443,7 +454,7 @@ void BasicScrollbarUI<M>::installListeners() {
 			self
 		);
 	}
-
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	if (scrollbar) {
 		scrollbar->EventSender<DefaultBoundedRangeModelChanged>::
 		addTrackedEventListener(
@@ -481,6 +492,7 @@ Dimension BasicScrollbarUI<M>::getMaximumSize(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class M>
 Dimension BasicScrollbarUI<M>::getPreferredSize(AComponentPtr c) {
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	return (
 		scrollbar->getOrientation() == AScrollbar<M>::VERTICAL) ? Dimension(
 		scrollBarWidth, 48.) : Dimension(48., scrollBarWidth
@@ -516,6 +528,7 @@ template <class M>
 void BasicScrollbarUI<M>::drawThumb(IDrawContext::Ptr cn,
 		AComponentPtr c, const Rectangle &thumbBounds)
 {
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	if (!scrollbar->isEnabled()) {
 		return;
 	}
@@ -759,7 +772,7 @@ void BasicScrollbarUI<M>::setThumbBounds(const Rectangle &r) {
 	if (thumbRect == r) {
 		return;
 	}
-
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	/* Update thumbRect, and repaint the union of x,y,w,h and
 	 * the old thumbRect.
 	 */
@@ -777,6 +790,7 @@ template <class M>
 void BasicScrollbarUI<M>::onArrowBtn(void *src,
 		const events::MouseEvent &ev)
 {
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
 	if (ev.getType() == events::MouseEvent::MOUSE_PRESSED) {
 		if (!scrollbar->isEnabled()) {
 			return;
@@ -819,17 +833,19 @@ template <class M>
 void BasicScrollbarUI<M>::onModelChanged(void *src,
 		const DefaultBoundedRangeModelChanged &ev)
 {
-	 layoutContainer(scrollbar);
+	typename ScrollBarType::Ptr scrollbar = getScrollbar();
+	layoutContainer(scrollbar);
 }
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::ScrollListener::onScrollTimer(void *src,
-		const Timer::Event &ev)
+		const Timer::Event &ev) // TODO: add scrollbar::ptr argument
 {
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (useBlockIncrement) {
 		parent.scrollByBlock(direction);
 		// Stop scrolling if the thumb catches up with the mouse
-		if (parent.scrollbar->getOrientation() == ScrollBarType::VERTICAL) {
+		if (scrollbar->getOrientation() == ScrollBarType::VERTICAL) {
 			if (direction == ScrollBarType::INCR) {
 				if (parent.getThumbBounds().x0().y() +
 						parent.getThumbBounds().height()
@@ -852,14 +868,14 @@ void BasicScrollbarUI<M>::ScrollListener::onScrollTimer(void *src,
 		parent.scrollByUnit(direction);
 	}
 
-	if (direction == ScrollBarType::INCR && parent.scrollbar->getValue() +
-			parent.scrollbar->getVisibleAmount()
-			>= parent.scrollbar->getMaximum())
+	if (direction == ScrollBarType::INCR && scrollbar->getValue() +
+			scrollbar->getVisibleAmount()
+			>= scrollbar->getMaximum())
 	{
 		ev.getSource()->stop();
 	}
-	else if (direction == ScrollBarType::DECR && parent.scrollbar->getValue()
-			<= parent.scrollbar->getMinimum())
+	else if (direction == ScrollBarType::DECR && scrollbar->getValue()
+			<= scrollbar->getMinimum())
 	{
 		ev.getSource()->stop();
 	}
@@ -964,7 +980,7 @@ void BasicScrollbarUI<M>::
 TrackListener::mousePressed(const events::MouseEvent &ev) {
 	if (ev.getButtons() != events::MouseEvent::BUTTON1)
 		return;
-	typename ScrollBarType::Ptr scrollbar = parent.scrollbar;
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (!scrollbar->isEnabled())
 		return;
 // TODO: Focus
@@ -1040,18 +1056,19 @@ TrackListener::mouseReleased(const events::MouseEvent &ev) {
 	}
 	if (ev.getButtons() != events::MouseEvent::BUTTON1)
 		return;
-	if (!parent.scrollbar->isEnabled())
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
+	if (!scrollbar->isEnabled())
 		return;
 
 	Rectangle r = parent.getTrackBounds();
-	parent.scrollbar->redraw(r);
+	scrollbar->redraw(r);
 
 	parent.trackHighlight = NO_HIGHLIGHT;
 	parent.isDragging = false;
 	offset = 0;
 	parent.scrollTimer->stop();
 	parent.useCachedValue = true;
-	parent.scrollbar->setValueIsAdjusting(false);
+	scrollbar->setValueIsAdjusting(false);
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -1067,7 +1084,7 @@ void BasicScrollbarUI<M>::
 TrackListener::mouseDragged(const events::MouseEvent &ev) {
 	if (ev.getButtons() != events::MouseEvent::BUTTON1)
 		return;
-	typename ScrollBarType::Ptr scrollbar = parent.scrollbar;
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (!scrollbar->isEnabled() || parent.getThumbBounds().isEmpty()) {
 		return;
 	}
@@ -1091,7 +1108,7 @@ template <class M>
 void BasicScrollbarUI<M>::
 TrackListener::setValueFrom(const events::MouseEvent &ev) {
 	bool active = parent.isThumbRollover();
-	typename ScrollBarType::Ptr scrollbar = parent.scrollbar;
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	Rectangle thumbR = parent.getThumbBounds();
 	Rectangle &trackRect = parent.trackRect;
 	Coordinate trackLength;
@@ -1153,8 +1170,8 @@ TrackListener::startScrollTimerIfNecessary() {
 	}
 
 	const Rectangle &tb = parent.getThumbBounds();
-
-	switch (parent.scrollbar->getOrientation()) {
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
+	switch (scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
 		if (direction == ScrollBarType::INCR) {
 			if (tb.x0().y() + tb.height() < parent.trackListener->currentMouseY)
@@ -1183,7 +1200,7 @@ TrackListener::startScrollTimerIfNecessary() {
 template <class M>
 Coordinate BasicScrollbarUI<M>::
 TrackListener::adjustValueIfNecessary(const Coordinate &scrollBarValue) {
-	typename ScrollBarType::Ptr scrollbar = parent.scrollbar;
+	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	ScrollPane::Ptr scrollBar = boost::shared_dynamic_cast<ScrollPane>(
 			scrollbar->getParent());
 	if (!scrollBar)
