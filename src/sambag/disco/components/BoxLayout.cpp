@@ -16,7 +16,7 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 BoxLayout::BoxLayout(AContainerPtr target, Axis axis) :
-		target(target), axis(axis)
+		_target(target), axis(axis)
 {
 	if (axis != X_AXIS && axis != Y_AXIS && axis != LINE_AXIS && axis
 			!= PAGE_AXIS) {
@@ -151,6 +151,7 @@ Dimension BoxLayout::preferredLayoutSize(AContainerPtr target) {
 }
 //-----------------------------------------------------------------------------
 void BoxLayout::checkContainer(AComponentPtr comp) const {
+	AContainerPtr target = getTarget();
 	if (target != comp) {
 		SAMBAG_THROW( sambag::com::exceptions::IllegalArgumentException,
 			"BoxLayout can't be shared");
@@ -161,6 +162,7 @@ void BoxLayout::checkRequests() {
 	if (xChildren.empty() || yChildren.empty()) {
 		// The requests have been invalidated... recalculate
 		// the request information.
+		AContainerPtr target = getTarget();
 		size_t n = target->getComponentCount();
 		xChildren = SizeRequirements::Container(n);
 		yChildren = SizeRequirements::Container(n);
@@ -217,6 +219,7 @@ BoxLayout::Axis BoxLayout::resolveAxis( Axis axis ) {
 }
 //-----------------------------------------------------------------------------
 std::string BoxLayout::toString() const {
+	AContainerPtr target = getTarget();
 	if (!target)
 		return "BoxLayout for NULL";
 	return "BoxLayout for " + target->toString();

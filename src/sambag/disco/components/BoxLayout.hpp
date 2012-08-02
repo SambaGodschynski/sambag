@@ -13,6 +13,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include "SizeRequirements.hpp"
 #include <sambag/com/Thread.hpp>
+#include <sambag/disco/components/Forward.hpp>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -58,7 +59,7 @@ public:
 protected:
 private:
 	//-------------------------------------------------------------------------
-	AContainerPtr target;
+	AContainerWPtr _target;
 	//-------------------------------------------------------------------------
 	Axis axis;
 	SizeRequirements::Container xChildren;
@@ -101,7 +102,7 @@ public:
 	void removeLayoutComponent(AComponentPtr comp);
 	//-------------------------------------------------------------------------
 	AContainerPtr getTarget() const {
-		return target;
+		return _target.lock();
 	}
 	//-------------------------------------------------------------------------
 	/**

@@ -75,6 +75,7 @@ inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
 	if (needUpdate) {
 		needUpdate=false;
 		root->draw(root->getDrawContext());
+		cn->drawSurface(bff);
 		return;
 	}
 	RedrawManager::currentManager(root)->drawDirtyRegions();
