@@ -58,7 +58,7 @@ void AContainer::checkAddToSelf(AComponent::Ptr comp) const {
 	}
 }
 //-----------------------------------------------------------------------------
-void AContainer::addComponent(AComponent::Ptr comp, int index) {
+void AContainer::addComponent(const AComponentSharedOrWeak &comp, int index) {
 	if (!comp)
 		return;
 	if (index > (int) components.size() || (index < 0 && index != -1)) {
@@ -108,7 +108,7 @@ void AContainer::dispatchAddEvents(AComponent::Ptr comp) {
 			getPtr(), HierarchyEvent::PARENT_CHANGED);
 }
 //-----------------------------------------------------------------------------
-AComponent::Ptr AContainer::add(AComponent::Ptr comp, int index,
+AComponent::Ptr AContainer::add(const AComponentSharedOrWeak &comp, int index,
 		com::ArbitraryType::Ptr constraint)
 {
 	if (!comp)

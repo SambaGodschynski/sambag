@@ -21,7 +21,7 @@ BorderLayout::BorderLayout(const Coordinate &hgap, const Coordinate &vgap)
 
 }
 //-----------------------------------------------------------------------------
-void BorderLayout::addLayoutComponent(AComponentPtr comp,
+void BorderLayout::addLayoutComponent(const AComponentSharedOrWeak &comp,
 		ArbitraryType::Ptr _constraint)
 {
 	SAMBAG_BEGIN_SYNCHRONIZED (comp->getTreeLock())
@@ -179,24 +179,24 @@ Dimension BorderLayout::preferredLayoutSize(AContainerPtr parent) {
 //-----------------------------------------------------------------------------
 void BorderLayout::removeLayoutComponent(AComponentPtr comp) {
 	SAMBAG_BEGIN_SYNCHRONIZED (comp->getTreeLock())
-		if (comp == center) {
+		if (center == comp) {
 			center = AComponent::Ptr();
-		} else if (comp == north) {
+		} else if (north == comp) {
 			north = AComponent::Ptr();
-		} else if (comp == south) {
+		} else if (south == comp) {
 			south = AComponent::Ptr();
-		} else if (comp == east) {
+		} else if (east == comp) {
 			east = AComponent::Ptr();
-		} else if (comp == west) {
+		} else if (west == comp) {
 			west = AComponent::Ptr();
 		}
-		if (comp == firstLine) {
+		if (firstLine == comp) {
 			firstLine = AComponent::Ptr();
-		} else if (comp == lastLine) {
+		} else if (lastLine == comp) {
 			lastLine = AComponent::Ptr();
-		} else if (comp == firstItem) {
+		} else if (firstItem == comp) {
 			firstItem = AComponent::Ptr();
-		} else if (comp == lastItem) {
+		} else if (lastItem == comp) {
 			lastItem = AComponent::Ptr();
 		}
 	SAMBAG_END_SYNCHRONIZED
@@ -238,23 +238,23 @@ BorderLayout::getConstraints(AComponentPtr comp) const
 	if (!comp) {
 		return NONE;
 	}
-	if (comp == center) {
+	if (center == comp) {
 		return CENTER;
-	} else if (comp == north) {
+	} else if (north == comp) {
 		return NORTH;
-	} else if (comp == south) {
+	} else if (south == comp) {
 		return SOUTH;
-	} else if (comp == west) {
+	} else if (west == comp) {
 		return WEST;
-	} else if (comp == east) {
+	} else if (east == comp) {
 		return EAST;
-	} else if (comp == firstLine) {
+	} else if (firstLine == comp) {
 		return PAGE_START;
-	} else if (comp == lastLine) {
+	} else if (lastLine == comp) {
 		return PAGE_END;
-	} else if (comp == firstItem) {
+	} else if (firstItem == comp) {
 		return LINE_START;
-	} else if (comp == lastItem) {
+	} else if (lastItem == comp) {
 		return LINE_END;
 	}
 	return NONE;

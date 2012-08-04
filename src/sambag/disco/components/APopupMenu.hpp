@@ -133,8 +133,9 @@ void APopupMenu<SM>::showPopup(const Point2D &_where) {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::hidePopup() {
-	if (window)
+	if (window) {
 		window->close();
+	}
 }
 //-----------------------------------------------------------------------------
 template <class SM>
@@ -149,7 +150,7 @@ void APopupMenu<SM>::initWindow() {
 		parentW = boost::shared_dynamic_cast<Window>(pc);
 	}
 	window = Window::create(parentW);
-	window->getContentPane()->add(getPtr());
+	window->getContentPane()->add(AsWeakPtr<AComponent>(getPtr()));
 	window->setWindowLocation(location);
 }
 //-----------------------------------------------------------------------------

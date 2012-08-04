@@ -13,6 +13,7 @@
 #include "ALayoutManager.hpp"
 #include <vector>
 #include "events/ContainerEvent.hpp"
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
@@ -33,7 +34,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AContainer> Ptr;
 	//-------------------------------------------------------------------------
-	typedef std::vector<AComponent::Ptr> Components;
+	typedef std::vector< AComponentSharedOrWeak > Components;
 	//-------------------------------------------------------------------------
 	static const bool descendUnconditionallyWhenValidating = false;
 protected:
@@ -79,7 +80,7 @@ private:
 			const events::MouseEvent &ev);
 protected:
 	//--------------------------------------------------------------------------
-	void addComponent(AComponent::Ptr comp, int index = -1);
+	void addComponent(const AComponentSharedOrWeak &comp, int index = -1);
 	//-------------------------------------------------------------------------
 	virtual void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
@@ -161,7 +162,7 @@ public:
 	 * @param index
 	 * @return the component argument
 	 */
-	virtual AComponent::Ptr add(AComponent::Ptr comp, int index = -1,
+	virtual AComponent::Ptr add(const AComponentSharedOrWeak &comp, int index = -1,
 			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
@@ -171,7 +172,7 @@ public:
 	 * @param index
 	 */
 	template <typename T>
-	void add(AComponent::Ptr comp, const T &v, int index /*no default!*/) {
+	void add(const AComponentSharedOrWeak &comp, const T &v, int index /*no default!*/) {
 		add (comp, index, com::ConcreteType<T>::create(v));
 	}
 	//-------------------------------------------------------------------------
@@ -182,7 +183,7 @@ public:
 	 * @param index
 	 */
 	template <typename T>
-	void addBack(AComponent::Ptr comp, const T &v) {
+	void addBack(const AComponentSharedOrWeak &comp, const T &v) {
 		add(comp, -1, com::ConcreteType<T>::create(v));
 	}
 	//-------------------------------------------------------------------------

@@ -61,7 +61,7 @@ void ScrollPaneLayout::adjustForHSB(bool wantsHSB, Rectangle &available,
 	}
 }
 //-----------------------------------------------------------------------------
-void ScrollPaneLayout::addLayoutComponent(AComponentPtr c,
+void ScrollPaneLayout::addLayoutComponent(const AComponentSharedOrWeak &c,
 	ArbitraryType::Ptr constraint)
 {
 	ScrollPane::Area location;

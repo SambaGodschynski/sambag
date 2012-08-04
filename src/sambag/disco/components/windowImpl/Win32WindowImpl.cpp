@@ -219,11 +219,13 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 1);
+		break;
 	case WM_RBUTTONDOWN :
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 2);
+		break;
 	case WM_MBUTTONDOWN :
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
@@ -231,15 +233,22 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 			win->handleMouseButtonPressEvent(x, y, 4);
 		break;
 	case WM_LBUTTONUP : 
-		mbuttons |= 1;
-	case WM_RBUTTONUP :
-		mbuttons |= 4;
-	case WM_MBUTTONUP :
-		mbuttons |= 2;
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 1);
+		break;
+	case WM_RBUTTONUP :
+		x = LOWORD(lParam); 
+		y = HIWORD(lParam);
+		if (win)
+			win->handleMouseButtonReleaseEvent(x, y, 2);
+		break;
+	case WM_MBUTTONUP :
+		x = LOWORD(lParam); 
+		y = HIWORD(lParam);
+		if (win)
+			win->handleMouseButtonReleaseEvent(x, y, 4);
 		break;
 	case WM_MOUSEMOVE :
 		x = LOWORD(lParam); 

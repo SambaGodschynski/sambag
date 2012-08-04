@@ -51,7 +51,7 @@ protected:
 	 * @see #getLayoutAlignmentY
 	 * @see #removeLayoutComponent
 	 */
-	AComponentPtr north;
+	AComponentSharedOrWeak north;
 	//-------------------------------------------------------------------------
 	/**
 	 * Constant to specify components location to be the
@@ -62,7 +62,7 @@ protected:
 	 * @see #getLayoutAlignmentY
 	 * @see #removeLayoutComponent
 	 */
-	AComponentPtr west;
+	AComponentSharedOrWeak west;
 	//-------------------------------------------------------------------------
 	/**
 	 * Constant to specify components location to be the
@@ -73,7 +73,7 @@ protected:
 	 * @see #getLayoutAlignmentY
 	 * @see #removeLayoutComponent
 	 */
-	AComponentPtr east;
+	AComponentSharedOrWeak east;
 	//-------------------------------------------------------------------------
 	/**
 	 * Constant to specify components location to be the
@@ -84,7 +84,7 @@ protected:
 	 * @see #getLayoutAlignmentY
 	 * @see #removeLayoutComponent
 	 */
-	AComponentPtr south;
+	AComponentSharedOrWeak south;
 	//-------------------------------------------------------------------------
 	/**
 	 * Constant to specify components location to be the
@@ -95,7 +95,7 @@ protected:
 	 * @see #getLayoutAlignmentY
 	 * @see #removeLayoutComponent
 	 */
-	AComponentPtr center;
+	AComponentSharedOrWeak center;
 	//-------------------------------------------------------------------------
 	/**
 	 *
@@ -109,22 +109,14 @@ protected:
 	 * <code>BEFORE_FIRST_LINE</code> will be layed out.
 	 * This will be the same for lastLine, firstItem, lastItem.
 	 */
-	AComponentPtr firstLine;
+	AComponentSharedOrWeak firstLine;
 	//-------------------------------------------------------------------------
 	/**
 	 * A relative positioning constant, that can be used instead of
 	 * north, south, east, west or center.
 	 * Please read Description for firstLine.
 	 */
-	AComponentPtr lastLine;
-	//-------------------------------------------------------------------------
-	/**
-	 * A relative positioning constant, that can be used instead of
-	 * north, south, east, west or center.
-	 * Please read Description for firstLine.
-	 * @serial
-	 */
-	AComponentPtr firstItem;
+	AComponentSharedOrWeak lastLine;
 	//-------------------------------------------------------------------------
 	/**
 	 * A relative positioning constant, that can be used instead of
@@ -132,7 +124,15 @@ protected:
 	 * Please read Description for firstLine.
 	 * @serial
 	 */
-	AComponentPtr lastItem;
+	AComponentSharedOrWeak firstItem;
+	//-------------------------------------------------------------------------
+	/**
+	 * A relative positioning constant, that can be used instead of
+	 * north, south, east, west or center.
+	 * Please read Description for firstLine.
+	 * @serial
+	 */
+	AComponentSharedOrWeak lastItem;
 	//-------------------------------------------------------------------------
 	BorderLayout(const Coordinate &hgap, const Coordinate &vgap);
 public:
@@ -282,7 +282,7 @@ public:
 	 * @param comp
 	 * @param constraint
 	 */
-	void addLayoutComponent(AComponentPtr comp,
+	void addLayoutComponent(const AComponentSharedOrWeak &comp,
 			ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**

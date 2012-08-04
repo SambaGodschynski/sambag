@@ -148,7 +148,7 @@ public:
 	 * @param s
 	 * @param c
 	 */
-	virtual void addLayoutComponent(AComponentPtr comp,
+	virtual void addLayoutComponent(const AComponentSharedOrWeak &comp,
 			 ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**

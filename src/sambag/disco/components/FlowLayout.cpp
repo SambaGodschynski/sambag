@@ -178,10 +178,10 @@ void FlowLayout::layoutContainer(AContainerPtr target) {
 			m->setSize(d);
 
 			if (useBaseline) {
-				int baseline = m->getBaseLine(d.width(), d.height());
+				int baseline = (int)(m->getBaseLine(d.width(), d.height()));
 				if (baseline >= 0) {
 					ascent[i] = baseline;
-					descent[i] = d.height() - baseline;
+					descent[i] = (int)(d.height() - baseline);
 				} else {
 					ascent[i] = -1;
 				}

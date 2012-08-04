@@ -195,7 +195,7 @@ void BoxLayout::checkRequests() {
 	}
 }
 //-----------------------------------------------------------------------------
-void BoxLayout::addLayoutComponent(AComponentPtr comp,
+void BoxLayout::addLayoutComponent(const AComponentSharedOrWeak &comp,
 		com::ArbitraryType::Ptr constraint)
 {
 	invalidateLayout(comp->getParent());

@@ -10,6 +10,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <sambag/com/SharedOrWeak.hpp>
+
 //=============================================================================
 // Forward declarations of some important classes
 //=============================================================================
@@ -18,6 +20,7 @@ namespace sambag { namespace disco { namespace components {
 					  typedef boost::weak_ptr<AComponent> AComponentWPtr;
 	class AContainer; typedef boost::shared_ptr<AContainer> AContainerPtr;
 					  typedef boost::weak_ptr<AContainer> AContainerWPtr;
+					  typedef sambag::com::SharedOrWeak<AComponent> AComponentSharedOrWeak;
 	class ALayoutManager; typedef boost::shared_ptr<ALayoutManager> ALayoutManagerPtr;
 	class Panel; typedef boost::shared_ptr<Panel> PanelPtr;
 	class RootPane; typedef boost::shared_ptr<RootPane> RootPanePtr;

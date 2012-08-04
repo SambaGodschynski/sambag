@@ -23,6 +23,7 @@
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
+#include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
@@ -201,19 +202,17 @@ void createSurprisePopup() {
 	);
 }
 
-boost::weak_ptr<sdc::Viewport> viewport;
-
 void createBorderlineWindow() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	win[3] = sdc::FramedWindow::create(win[0]);
 	win[3]->setTitle("Borderline Window");
 	win[3]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+	AContainerPtr c = Panel::create();
 	Scrollbar::Ptr scr = Scrollbar::create(
 			Scrollbar::HORIZONTAL, 0, 0, 0, 100
 	);
 	scr->setPreferredSize(Dimension(250, 25));
-	AContainerPtr c = Panel::create();
 	c->setSize(Dimension(300,300));
 	c->add(scr);
 
@@ -222,10 +221,11 @@ void createBorderlineWindow() {
 	c->add(scr);
 
 	win[3]->getContentPane()->add(c);
-
 }
 
-void onScrollTimer(void *src, const sdc::TimerEvent &ev) {
+void onScrollTimer(void *src, const sdc::TimerEvent &ev, 
+	boost::weak_ptr<sdc::Viewport> viewport) 
+{
 	if (currScrollSpeed == 0.f)
 		return;
 	sdc::Viewport::Ptr vp = viewport.lock();
@@ -258,12 +258,8 @@ void createSurpriseWindow() {
 
 	con->setSize(Dimension(300, 1000));
 	sdc::Viewport::Ptr vp = Viewport::create();
-	viewport = vp;
 	vp->setView(con);
-	//vp->setScrollMode(Viewport::SIMPLE_SCROLL_MODE);
-	//vp->setScrollMode(Viewport::BACKINGSTORE_SCROLL_MODE);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
-	//con->setLayout(ALayoutManagerPtr());
 	win[2]->getContentPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {
 		std::stringstream ss;
@@ -276,8 +272,8 @@ void createSurpriseWindow() {
 	Timer::Ptr timer = Timer::create(10);
 	timer->setNumRepetitions(-1);
 	timer->EventSender<TimerEvent>::addTrackedEventListener(
-		&onScrollTimer,
-		viewport
+		boost::bind( &onScrollTimer, _1, _2, vp ),
+		vp
 	);
 	timer->start();
 }
@@ -305,9 +301,9 @@ void createScrollercoasterWindow() {
 
 	const int NUM = 500;
 	AContainerPtr con = Panel::create();
-	//con->setSize(Dimension(300, 1000));
+	con->setSize(Dimension(300, 1000));
 	sdc::ScrollPane::Ptr vp = ScrollPane::create(con);
-	//vp->setHorizontalScrollBarPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_NEVER);
+	vp->setHorizontalScrollBarPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_NEVER);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
 	win[4]->getContentPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {
