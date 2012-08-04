@@ -82,4 +82,9 @@ struct SharedOrWeak {
 	}
 };
 }}
+template <class A, class B>
+bool operator==(boost::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
+	boost::shared_ptr<B> b = _b;
+	return a==b;
+}
 #endif // SAMBAG_SHAREDORWEAK_H
