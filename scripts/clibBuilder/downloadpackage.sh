@@ -40,7 +40,7 @@ then
     _done
 fi
 check_file $ROOTDIR/$2
-clean_directory $ROOTDIR/$3
+#clean_directory $ROOTDIR/$3
 echo Extract $2:
 tar -xzf $ROOTDIR/$2 -C $ROOTDIR/
 mv $ROOTDIR/$3-* $ROOTDIR/$3

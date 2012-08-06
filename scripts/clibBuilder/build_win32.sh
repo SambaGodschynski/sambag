@@ -14,5 +14,10 @@ esac
 
 
 mkdir -p $ROOTDIR
+#                     $URL      $DST_FILE   $DST_DIRECTORY
 sh downloadpackage.sh $URL_ZLIB zlib.tar.gz zlib
-sh downloadpackage.sh $URL_LIBPNG libpng.tar.gz libpng
+#sh downloadpackage.sh $URL_LIBPNG libpng.tar.gz libpng
+
+#build zlib
+export DST_ZLIB=$ROOTDIR/zlib
+cmd /c makeZlib.bat

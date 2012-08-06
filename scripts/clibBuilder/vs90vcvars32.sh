@@ -27,6 +27,8 @@ _export()
       #append varcontent
       eval y=$(echo '$'$(echo $varname))
       x=$x:$y
+      x=$(echo $x | sed 's/::/:/g')
+      x=$(echo $x | sed 's/:$//g')
   fi
   name=$(echo $x | grep -o '.*=' | sed 's/\=//')
   cnt=$(echo $x | grep -o '=.*' | sed 's/\=//')
@@ -51,6 +53,8 @@ exec_origbat()
 }
 
 SRC=$(conv_path $VS90COMNTOOLS)
+echo export VS90COMNTOOLS=$SRC
+export VS90COMNTOOLS=$SRC
 exec_origbat $SRC/vsvars32.bat
 export WindowsSdkDir="$(get_sdk_location)"
 echo export WindowsSdkDir="$(get_sdk_location)"
