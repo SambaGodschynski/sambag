@@ -15,6 +15,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include "WindowFlags.hpp"
 #include <windows.h>
 
 namespace sambag { namespace disco { namespace components {
@@ -22,7 +23,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class X11Window.
   */
-class Win32WindowImpl {
+class Win32WindowImpl : public WindowFlags {
 //=============================================================================
 friend class Win32WindowToolkit;
 public:
@@ -38,8 +39,6 @@ private:
 	static int instances; 
 	//-------------------------------------------------------------------------
 	HWND win;
-	//-------------------------------------------------------------------------
-	sambag::com::ArithmeticWrapper<bool, true> framed;
 	//-------------------------------------------------------------------------
 	Rectangle bounds;
 	//-------------------------------------------------------------------------
@@ -96,10 +95,6 @@ public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() {
 		return self.lock();
-	}
-	//-------------------------------------------------------------------------
-	void setFramed(bool b) {
-		framed = b;
 	}
 	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {

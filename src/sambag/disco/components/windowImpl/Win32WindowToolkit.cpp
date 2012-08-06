@@ -32,7 +32,8 @@ AWindowPtr Win32WindowToolkit::createWindowImpl() const {
 }
 //-----------------------------------------------------------------------------
 Dimension Win32WindowToolkit::getScreenSize() const {
-	return Dimension(0,0);
+	return Dimension(GetSystemMetrics(SM_CXVIRTUALSCREEN),
+		GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
 //-----------------------------------------------------------------------------
 Win32WindowToolkit * Win32WindowToolkit::getToolkit() {

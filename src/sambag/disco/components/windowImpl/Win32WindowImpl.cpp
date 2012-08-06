@@ -52,8 +52,8 @@ void Win32WindowImpl::createWindow() {
 	if( FAILED(RegisterClass(&wc)) )
 		return;
 
-	DWORD style = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
-
+	DWORD style = WS_VISIBLE;
+	style |= getFlag(WND_FRAMED) ? WS_OVERLAPPEDWINDOW : WS_POPUP | WS_BORDER; 
 	win = CreateWindow(wc.lpszClassName,
 		title.c_str(),
 		style,
@@ -65,15 +65,7 @@ void Win32WindowImpl::createWindow() {
 	);
 	SAMBAG_ASSERT(win);
 
-/*	RECT wRect;
-	SetRect ( &wRect,0, 0, bounds.width(), bounds.height() );
-	AdjustWindowRectEx (&wRect, 
-		GetWindowLong (win, GWL_STYLE), 
-		FALSE, GetWindowLong (win, GWL_EXSTYLE)
-	);
-	int width = wRect.right - wRect.left;
-	int height = wRect.bottom - wRect.top;
-	SetWindowPos (win, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);*/
+	updateBoundsToWindow();
 
 	// register win
 	winmap[win] = this;
@@ -161,21 +153,21 @@ void Win32WindowImpl::updateBoundsToWindow() {
 	if (!win)
 		return;
 
-	/*RECT wRect;
-	SetRect ( &wRect, bounds.x0().x(), bounds.x0().y(), bounds.width(), bounds.height() );
+	RECT wRect;
+	SetRect ( &wRect, 0, 0, bounds.width(), bounds.height() );
 	AdjustWindowRectEx (&wRect, 
 		GetWindowLong (win, GWL_STYLE), 
 		FALSE, GetWindowLong (win, GWL_EXSTYLE)
 	);
 	int width = wRect.right - wRect.left;
 	int height = wRect.bottom - wRect.top;
-	SetWindowPos (win, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);*/
+	//SetWindowPos (win, HWND_TOP, bounds.x0().x(), 0, width, height, SWP_NOMOVE);
 	SetWindowPos(win, 
 		HWND_TOP,
 		(int)bounds.x0().x(),
 		(int)bounds.x0().y(),
-		(int)bounds.width(),
-		(int)bounds.height(),
+		width,
+		height,
 		0
 	);
 }

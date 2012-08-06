@@ -67,8 +67,12 @@ public:
 		return ConcreteWindowImpl::isVisible();
 	}
 	//-------------------------------------------------------------------------
-	virtual void setFramed(bool b) {
-		ConcreteWindowImpl::setFramed(b);
+	virtual void setFlag(WindowFlags::Flag flag, bool val) {
+		return ConcreteWindowImpl::setFlag(flag, val);
+	}
+	//-------------------------------------------------------------------------
+	virtual bool getFlag(WindowFlags::Flag flag) const {
+		return ConcreteWindowImpl::getFlag(flag);
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseButtonPressEvent(int x, int y, int buttons) {

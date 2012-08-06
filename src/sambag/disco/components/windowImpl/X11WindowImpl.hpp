@@ -20,6 +20,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include "WindowFlags.hpp"
 
 namespace sambag { namespace disco { namespace components {
 class X11WindowToolkit;
@@ -52,7 +53,7 @@ struct OpenWindow : public sambag::com::ICommand {
 /** 
   * @class X11Window.
   */
-class X11WindowImpl {
+class X11WindowImpl : public WindowFlags {
 //=============================================================================
 friend struct DestroyWindow;
 friend struct OpenWindow;
@@ -63,8 +64,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<X11WindowImpl> WPtr;
 private:
-	//-------------------------------------------------------------------------
-	sambag::com::ArithmeticWrapper<bool, true> framed;
 	//-------------------------------------------------------------------------
 	Rectangle bounds;
 	//-------------------------------------------------------------------------
@@ -137,10 +136,6 @@ public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() {
 		return self.lock();
-	}
-	//-------------------------------------------------------------------------
-	void setFramed(bool b) {
-		framed = b;
 	}
 	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {

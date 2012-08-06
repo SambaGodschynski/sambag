@@ -81,7 +81,7 @@ void X11WindowImpl::createWindow() {
 	//		| ExposureMask
 	;
 	unsigned long valuemask = CWBackPixel | CWEventMask;
-	if (!framed) {
+	if (!getFlag(WND_FRAMED)) {
 		attributes.override_redirect = 1;
 		valuemask |= CWOverrideRedirect;
 	}

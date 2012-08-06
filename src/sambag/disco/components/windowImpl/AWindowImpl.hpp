@@ -12,6 +12,7 @@
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/com/events/Events.hpp>
+#include "WindowFlags.hpp"
 #include <string>
 
 namespace sambag { namespace disco { namespace components {
@@ -79,7 +80,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr parent) = 0;
 	//-------------------------------------------------------------------------
-	virtual void setFramed(bool b) = 0;
+	virtual void setFlag(WindowFlags::Flag flag, bool val) = 0;
+	//-------------------------------------------------------------------------
+	virtual bool getFlag(WindowFlags::Flag flag) const = 0;
 	//-------------------------------------------------------------------------
 	virtual bool isVisible() const = 0;
 	//-------------------------------------------------------------------------

@@ -39,9 +39,6 @@ void TestWindow::setParentWindow(WindowPtr _parent) {
 	parent = _parent;
 }
 //-----------------------------------------------------------------------------
-void TestWindow::setFramed(bool b) {
-}
-//-----------------------------------------------------------------------------
 bool TestWindow::isVisible() const {
 	return isOpen;
 }

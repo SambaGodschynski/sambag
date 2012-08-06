@@ -462,82 +462,6 @@
 			Name="sambag"
 			>
 			<Filter
-				Name="com"
-				>
-				<File
-					RelativePath="..\..\..\src\sambag\com\Common.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\Common.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\Exception.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\Exception.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\FileHandler.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\FileHandler.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\FileSystem.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\Helper.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
-					>
-				</File>
-				<Filter
-					Name="events"
-					>
-					<File
-						RelativePath="..\..\..\src\sambag\com\events\ChangedEvent.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\sambag\com\events\Events.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\sambag\com\events\PropertyChanged.hpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="exceptions"
-					>
-					<File
-						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalArgumentException.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalStateException.hpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
 				Name="cpsqlite"
 				>
 				<File
@@ -1110,6 +1034,82 @@
 							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEventCreator.hpp"
 							>
 						</File>
+						<Filter
+							Name="com"
+							>
+							<File
+								RelativePath="..\..\..\src\sambag\com\Common.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\Common.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\Exception.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\Exception.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\FileHandler.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\FileHandler.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\FileSystem.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\Helper.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
+								>
+							</File>
+							<Filter
+								Name="events"
+								>
+								<File
+									RelativePath="..\..\..\src\sambag\com\events\ChangedEvent.hpp"
+									>
+								</File>
+								<File
+									RelativePath="..\..\..\src\sambag\com\events\Events.hpp"
+									>
+								</File>
+								<File
+									RelativePath="..\..\..\src\sambag\com\events\PropertyChanged.hpp"
+									>
+								</File>
+							</Filter>
+							<Filter
+								Name="exceptions"
+								>
+								<File
+									RelativePath="..\..\..\src\sambag\com\exceptions\IllegalArgumentException.hpp"
+									>
+								</File>
+								<File
+									RelativePath="..\..\..\src\sambag\com\exceptions\IllegalStateException.hpp"
+									>
+								</File>
+							</Filter>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="windowImpl"
@@ -1144,6 +1144,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32WindowToolkit.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\WindowFlags.hpp"
 							>
 						</File>
 						<File

@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "AWindowImpl.hpp"
+#include "WindowFlags.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
@@ -17,7 +18,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class TestWindow.
   */
-class TestWindow : public AWindowImpl {
+class TestWindow : public AWindowImpl, public WindowFlags {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -54,7 +55,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr parent);
 	//-------------------------------------------------------------------------
-	virtual void setFramed(bool b);
+	virtual void setFlag(WindowFlags::Flag flag, bool val) {
+		WindowFlags::setFlag(flag, val);
+	}
+	//-------------------------------------------------------------------------
+	virtual bool getFlag(WindowFlags::Flag flag) const {
+		return WindowFlags::getFlag(flag);
+	}
 	//-------------------------------------------------------------------------
 	virtual bool isVisible() const;
 	//-------------------------------------------------------------------------

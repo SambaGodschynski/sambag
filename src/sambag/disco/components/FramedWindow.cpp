@@ -6,14 +6,13 @@
  */
 
 #include "FramedWindow.hpp"
-
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class FramedWindow
 //=============================================================================
 //-----------------------------------------------------------------------------
 FramedWindow::FramedWindow(Window::Ptr parent) : Window(parent) {
-	windowImpl->setFramed(true);
+	windowImpl->setFlag(WindowFlags::WND_FRAMED, true);
 }
 //-------------------------------------------------------------------------
 void FramedWindow::setTitle(const std::string &title) {
