@@ -64,7 +64,17 @@ void Win32WindowImpl::createWindow() {
 		0,0,hI,NULL
 	);
 	SAMBAG_ASSERT(win);
-    
+
+/*	RECT wRect;
+	SetRect ( &wRect,0, 0, bounds.width(), bounds.height() );
+	AdjustWindowRectEx (&wRect, 
+		GetWindowLong (win, GWL_STYLE), 
+		FALSE, GetWindowLong (win, GWL_EXSTYLE)
+	);
+	int width = wRect.right - wRect.left;
+	int height = wRect.bottom - wRect.top;
+	SetWindowPos (win, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);*/
+
 	// register win
 	winmap[win] = this;
 
