@@ -530,7 +530,7 @@ void initTimer() {
 	timerInf->setNumRepetitions(-1);
 	timerInf->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
 	timerInf->start();
-
+/*
 	Timer::Ptr timer2 = Timer::create(1000);
 	timer2->setNumRepetitions(4);
 	timer2->EventSender<TimerEvent>::addEventListener(&timedCallback5);
@@ -538,8 +538,10 @@ void initTimer() {
 
 	Timer::Ptr timer3 = Timer::create(500);
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
-	timer3->start();
+	timer3->start();*/
 }
+//#include <windows.h>
+//int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 int main() {
 	SAMBAG_WINONLY(
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
@@ -548,7 +550,7 @@ int main() {
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	//initTimer();
+	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setWindowBounds(sambag::disco::Rectangle(100,100,230,200));
@@ -603,5 +605,6 @@ int main() {
 	}
 	win[0].reset();
 	std::cout<<"bye"<<std::endl;
+	return 0;
 }
 

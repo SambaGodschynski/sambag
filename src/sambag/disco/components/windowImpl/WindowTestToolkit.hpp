@@ -26,7 +26,7 @@ public:
 	typedef boost::shared_ptr<WindowTestToolkit> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindowImpl() const;
+	virtual AWindowImplPtr createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 private:
 	//-------------------------------------------------------------------------
 	WindowTestToolkit() {}

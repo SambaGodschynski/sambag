@@ -20,6 +20,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include "AWindowImpl.hpp"
 #include "WindowFlags.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -150,7 +151,7 @@ public:
 	//-------------------------------------------------------------------------
 	static void invokeLater(sambag::com::ICommand::Ptr cmd);
 	//-------------------------------------------------------------------------
-	void open();
+	void open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------
 	void close();
 	//-------------------------------------------------------------------------

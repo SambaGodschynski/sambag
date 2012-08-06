@@ -24,7 +24,8 @@ class WindowToolkit {
 friend class Window;
 protected:
 	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindowImpl() const = 0;
+	virtual AWindowImplPtr 
+	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const = 0;
 public:
 	//-------------------------------------------------------------------------
 	virtual void startTimer( Timer::Ptr tm ) = 0;

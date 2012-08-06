@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace components {
 //  Class WindowTestToolkit
 //=============================================================================
 //-----------------------------------------------------------------------------
-AWindowPtr WindowTestToolkit::createWindowImpl() const {
+AWindowImplPtr WindowTestToolkit::createWindowImpl(AWindowImplPtr parent) const {
 	return TestWindow::create();
 }
 //-----------------------------------------------------------------------------
@@ -22,12 +22,16 @@ Dimension WindowTestToolkit::getScreenSize() const {
 }
 #ifndef DISCO_USE_WIN32
 #ifndef DISCO_USE_X11
+#ifndef DISCO_USE_CARBON
+#ifndef DISCO_USE_COCOA
 // .. add other
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {
 	typedef Loki::SingletonHolder<WindowTestToolkit> FactoryHolder;
 	return &FactoryHolder::Instance();
 }
+#endif
+#endif
 #endif
 #endif
 }}} // namespace(s)

@@ -62,7 +62,7 @@ public:
 	/**
 	 * to be called by concrete WindowToolkit only.
 	 */
-	virtual void timedExpired();
+	virtual void timerExpired();
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();

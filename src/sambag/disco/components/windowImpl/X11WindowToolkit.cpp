@@ -41,8 +41,8 @@ void X11WindowToolkit::startMainLoop() {
 	mainLoop();
 }
 //-----------------------------------------------------------------------------
-AWindowPtr X11WindowToolkit::createWindowImpl() const {
-	AWindowPtr res = WindowImpl<X11WindowImpl>::create();
+AWindowImplPtr X11WindowToolkit::createWindowImpl(AWindowImplPtr parent) const {
+	AWindowImplPtr res = WindowImpl<X11WindowImpl>::create(parent);
 	return res;
 }
 //-------------------------------------------------------------------------
@@ -115,7 +115,7 @@ void X11WindowToolkit::timerCallback(const boost::system::error_code&,
 		if (it==toInvoke.left.end())
 			return;
 		Timer::Ptr tm = it->second;
-		tm->timedExpired();
+		tm->timerExpired();
 		if (repetitions == 0 ||
 			!threadsAreRunning ||
 			!tm->isRunning()) // stop forced

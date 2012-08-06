@@ -36,6 +36,8 @@ public:
 	typedef boost::shared_ptr<WindowImpl> Ptr;
 protected:
 	//-------------------------------------------------------------------------
+	AWindowImplPtr parent;
+	//-------------------------------------------------------------------------
 	sambag::disco::IImageSurface::Ptr bff;
 	//-------------------------------------------------------------------------
 	components::RootPanePtr rootPane;
@@ -107,15 +109,16 @@ public:
 		return ConcreteWindowImpl::getBounds();
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create() {
+	static Ptr create(AWindowImplPtr parent) {
 		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
 		res->ConcreteWindowImpl::self = res;
+		res->parent = parent;
 		return res;
 	}
 	//-------------------------------------------------------------------------
 	virtual void open() {
 		// init surface
-		ConcreteWindowImpl::open();
+		ConcreteWindowImpl::open(parent);
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {

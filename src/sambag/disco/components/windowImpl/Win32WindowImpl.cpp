@@ -39,7 +39,7 @@ void Win32WindowImpl::update() {
 	this->processDraw();
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::createWindow() {
+void Win32WindowImpl::createWindow(HWND parent) {
 	if (instances++==0) {
 		// init at once
 	}
@@ -61,7 +61,10 @@ void Win32WindowImpl::createWindow() {
 		(int)bounds.x0().y(),
 		(int)bounds.width(),
 		(int)bounds.height(),
-		0,0,hI,NULL
+		parent, // HWND hWndParent
+		0, // HMENU hMenu
+		hI, // HINSTANCE hInstance
+		NULL // LPVOID lpParam
 	);
 	SAMBAG_ASSERT(win);
 
@@ -96,10 +99,15 @@ void Win32WindowImpl::close() {
 	PostMessage(win, WM_CLOSE, 0, 0);
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::open() {
+void Win32WindowImpl::open(AWindowImplPtr parent) {
 	if (visible)
 		return;
-	createWindow();
+	Win32WindowImpl *p = dynamic_cast<Win32WindowImpl*>(parent.get());
+	HWND pHwnd = NULL;
+	if (p) {
+		pHwnd = p->getHwnd();
+	}
+	createWindow(pHwnd);
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl::~Win32WindowImpl() {

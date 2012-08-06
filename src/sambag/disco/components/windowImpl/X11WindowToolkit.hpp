@@ -55,7 +55,7 @@ protected:
 	//-------------------------------------------------------------------------
 	Globals globals;
 	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindowImpl() const;
+	virtual AWindowImplPtr createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------

@@ -14,14 +14,24 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Window
 //=============================================================================
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void Window::startMainLoop() {
 	getWindowToolkit()->startMainLoop();
 }
 //-----------------------------------------------------------------------------
+AWindowImpl::Ptr Window::getWindowImpl() const {
+	return windowImpl;
+}
+//-----------------------------------------------------------------------------
 Window::Window(Window::Ptr parent) : parent(parent) {
 	rootPane = components::RootPane::create();
-	windowImpl = getWindowToolkit()->createWindowImpl();
+	if (parent) {
+		windowImpl =
+			getWindowToolkit()->createWindowImpl(parent->getWindowImpl());
+	} else  {
+		windowImpl =
+			getWindowToolkit()->createWindowImpl();
+	}
 	SAMBAG_ASSERT(windowImpl);
 	windowImpl->setFlag(WindowFlags::WND_FRAMED, false);
 	windowImpl->setRootPane(rootPane);

@@ -72,12 +72,12 @@ inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
 	using namespace sambag::disco::components;
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
-	/*if (needUpdate) { TODO: is this needed anymore? on win it works (better) without
+	if (needUpdate) { // sometimes we need a full redraw
 		needUpdate=false;
 		root->draw(root->getDrawContext());
 		cn->drawSurface(bff);
 		return;
-	}*/
+	}
 	RedrawManager::currentManager(root)->drawDirtyRegions();
 	cn->drawSurface(bff);
 }

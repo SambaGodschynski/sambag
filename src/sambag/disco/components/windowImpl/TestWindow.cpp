@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace components {
 //  Class TestWindow
 //=============================================================================
 //-----------------------------------------------------------------------------
-void TestWindow::open() {
+void TestWindow::open(AWindowImplPtr parent) {
 	isOpen = true;
 	root->setSize(bounds.getDimension());
 	root->validate();

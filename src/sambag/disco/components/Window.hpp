@@ -63,6 +63,8 @@ private:
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
 	//-------------------------------------------------------------------------
+	AWindowImpl::Ptr getWindowImpl() const;
+	//-------------------------------------------------------------------------
 	static void startMainLoop();
 	//-------------------------------------------------------------------------
 	virtual AContainerPtr getRootContainer() const;

@@ -13,6 +13,9 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
 #include <sambag/com/ICommand.hpp>
+#include <boost/unordered_map.hpp>
+
+// including windows.h causes 118 errors because of redef.
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -23,6 +26,7 @@ class Win32WindowToolkit : public WindowToolkit {
 //=============================================================================
 friend struct Loki::CreateUsingNew<Win32WindowToolkit>;
 private:
+	//-------------------------------------------------------------------------
 	Win32WindowToolkit();
 	Win32WindowToolkit(const Win32WindowToolkit&){}
 	//-------------------------------------------------------------------------
@@ -30,7 +34,7 @@ private:
 public:
 protected:
 	//-------------------------------------------------------------------------
-	virtual AWindowPtr createWindowImpl() const;
+	virtual AWindowImplPtr createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------

@@ -134,7 +134,7 @@ void X11WindowImpl::close() {
 	invokeLater(DestroyWindow::create(getPtr()));
 }
 //-----------------------------------------------------------------------------
-void X11WindowImpl::open() {
+void X11WindowImpl::open(AWindowImplPtr parent) {
 	if (visible)
 		return;
 	invokeLater(OpenWindow::create(getPtr()));

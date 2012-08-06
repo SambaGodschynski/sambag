@@ -15,6 +15,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include "AWindowImpl.hpp"
 #include "WindowFlags.hpp"
 #include <windows.h>
 
@@ -48,7 +49,7 @@ private:
 	//-------------------------------------------------------------------------
 	void destroyWindow();
 	//-------------------------------------------------------------------------
-	void createWindow();
+	void createWindow(HWND parent = NULL);
 	//-------------------------------------------------------------------------
 	void updateBoundsToWindow();
 	//-------------------------------------------------------------------------
@@ -89,6 +90,10 @@ protected:
 	virtual void processDraw() = 0;
 public:
 	//-------------------------------------------------------------------------
+	HWND getHwnd() const {
+		return win;
+	}
+	//-------------------------------------------------------------------------
 	static int getNumInstances() {
 		return instances;
 	}
@@ -107,7 +112,7 @@ public:
 	//-------------------------------------------------------------------------
 	std::string getTitle() const;
 	//-------------------------------------------------------------------------
-	void open();
+	void open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------
 	void close();
 	//-------------------------------------------------------------------------
