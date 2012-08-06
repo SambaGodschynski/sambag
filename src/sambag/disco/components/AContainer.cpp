@@ -72,7 +72,7 @@ void AContainer::addComponent(const AComponentSharedOrWeak &comp, int index) {
 	 }*/
 	//Reparent the component and tidy up the tree's state.
 	if (comp->getParent()) {
-		comp->getParent()->remove(comp);
+		comp->getParent()->remove((AComponentPtr)comp);
 		if (index > (int) components.size()) {
 			SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
 					"illegal component position");
