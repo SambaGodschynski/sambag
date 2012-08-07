@@ -14,37 +14,33 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
 #include <X11/Xlib.h>
-#include <boost/system/error_code.hpp>
-#include <boost/bimap.hpp>
-#include <boost/bimap/unordered_set_of.hpp>
 #include <sambag/com/ICommand.hpp>
+#include "BoostTimerImpl.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class X11WindowToolkit.
   */
-class X11WindowToolkit : public WindowToolkit {
+class X11WindowToolkit :public WindowToolkit,
+						 public BoostTimerImpl //it's possible to set
+						                        //the BoostTimer as template
+						                        //policy, but the hassle that
+						                        //comes with templates makes my
+						                        //decision to use simple
+						                        //inheritance.
+{
 //=============================================================================
 friend struct Loki::CreateUsingNew<X11WindowToolkit>;
 private:
+	//-------------------------------------------------------------------------
+	typedef BoostTimerImpl TimerPolicy;
+	//-------------------------------------------------------------------------
 	X11WindowToolkit();
 	X11WindowToolkit(const X11WindowToolkit&){}
 	//-------------------------------------------------------------------------
 	static void mainLoop();
-	//-------------------------------------------------------------------------
-	typedef boost::asio::deadline_timer TimerImpl;
-	typedef sambag::com::ICommand::Ptr CommandPtr;
-	typedef boost::bimap<
-		boost::bimaps::unordered_set_of<TimerImpl*>,
-		boost::bimaps::unordered_set_of<Timer::Ptr> > ToInvoke;
-	//-------------------------------------------------------------------------
-	static void timerCallback(const boost::system::error_code&,
-			TimerImpl* timer, int repetitions);
-	//-------------------------------------------------------------------------
-	static ToInvoke toInvoke;
-	//-------------------------------------------------------------------------
-	static void closeAllTimer();
+	//typedef sambag::com::ICommand::Ptr CommandPtr;
 public:
 	//-------------------------------------------------------------------------
 	struct Globals {
@@ -55,7 +51,8 @@ protected:
 	//-------------------------------------------------------------------------
 	Globals globals;
 	//-------------------------------------------------------------------------
-	virtual AWindowImplPtr createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
+	virtual AWindowImplPtr
+	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------

@@ -188,7 +188,7 @@ void X11WindowImpl::setTitle(const std::string &_title) {
 		return;
 	updateTitle();
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 std::string X11WindowImpl::getTitle() const {
 	return title;
 }

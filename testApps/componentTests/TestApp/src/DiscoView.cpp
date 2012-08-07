@@ -530,7 +530,7 @@ void initTimer() {
 	timerInf->setNumRepetitions(-1);
 	timerInf->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
 	timerInf->start();
-/*
+
 	Timer::Ptr timer2 = Timer::create(1000);
 	timer2->setNumRepetitions(4);
 	timer2->EventSender<TimerEvent>::addEventListener(&timedCallback5);
@@ -538,7 +538,7 @@ void initTimer() {
 
 	Timer::Ptr timer3 = Timer::create(500);
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
-	timer3->start();*/
+	timer3->start();
 }
 //#include <windows.h>
 //int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
