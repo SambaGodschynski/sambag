@@ -33,16 +33,16 @@ _done()
  echo ----
 }
 
-if ! [ -e $ROOTDIR/$2 ]
+if ! [ -e $2 ]
 then
     echo Downloading $1:
-    curl $1 -o $ROOTDIR/$2
+    curl $1 -o $2
     _done
 fi
-check_file $ROOTDIR/$2
-clean_directory $ROOTDIR/$3
+check_file $2
+clean_directory $3
 echo Extract $2:
-tar -xzf $ROOTDIR/$2 -C $ROOTDIR/
-mv $ROOTDIR/$3-* $ROOTDIR/$3
+tar -xzf $2
+mv $3-* $3
 _done
 

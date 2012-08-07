@@ -15,9 +15,24 @@ conv_path() #converts windows path to cygwin path
   echo $1 | sed 's/\\/\//g' | sed 's/\([a-zA-Z]\):/\/cygdrive\/\1/g'
 }
 
+#chekcs whether a path has to be conv. or not.
+check_path_conv()
+{
+  if [ $(echo $1 | grep 'INCLUDE\|LIB\|LIBPATH') ]
+  then
+       echo 0
+       return
+  fi
+  echo 1
+}
+
 _export()
 {
-  x=$(echo $1 | sed 's/@set *//i' | sed 's/;/:/g')
+  if [ $(check_path_conv $1) -eq 1 ]
+  then
+       x=$(conv_path $1)
+  fi
+  x=$(echo $x | sed 's/@set *//i' | sed 's/;/:/g')
   if [ $(echo $x | grep '%.*%') ] #if %PATH%: append content of $PATH
   then
       #get varname
@@ -47,8 +62,7 @@ exec_origbat()
 {
     for x in $(cat $1 | grep -io '@SET.*$')
     do
-      res=$(conv_path $x)
-      _export $res
+      _export $x
     done
 }
 
