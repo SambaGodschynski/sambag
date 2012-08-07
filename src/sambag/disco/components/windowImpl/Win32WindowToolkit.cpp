@@ -9,47 +9,8 @@
 #include "Win32WindowToolkit.hpp"
 #include "WindowImpl.hpp"
 #include "Win32WindowImpl.hpp"
-#include <windows.h>
-
 
 namespace sambag { namespace disco { namespace components {
-namespace {
-///////////////////////////////////////////////////////////////////////////////
-// Timer impl.
-struct TimerInfo {
-	Timer::Ptr tm;
-	int numCalled;
-	TimerInfo(Timer::Ptr tm) : tm(tm), numCalled(0) {}
-};
-typedef boost::unordered_map<UINT_PTR, TimerInfo> Timers;
-Timers timers;
-//-----------------------------------------------------------------------------
-/**
- * Windows timer callback.
- */
-VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
-	std::cout<<"11"<<std::endl;
-	Timers::iterator it = timers.find(idEvent);
-	if (it!=timers.end()) {
-		return;
-	}
-	Timer::Ptr tm = it->second.tm;
-	tm->timerExpired();
-	++(it->second.numCalled);
-	if (tm->getNumRepetitions() != -1 &&
-		it->second.numCalled > tm->getNumRepetitions()) 
-	{
-		tm->__setRunningByToolkit_(false);
-		KillTimer(hwnd, idEvent);
-		timers.erase(it);
-		return;
-	}
-	if (tm->getDelay() != dwTime) { // initial delay
-		// reset timer with new delay
-		SetTimer(NULL, idEvent, tm->getDelay(), &timerProc);
-	}
-}
-} // namespace
 //=============================================================================
 //  Class Win32WindowToolkit
 //=============================================================================
@@ -81,29 +42,21 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
+	TimerPolicy::startThreads();
 	while( GetMessage( &msg, NULL, 0, 0 ) > 0) 
 	{
 		TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+	TimerPolicy::closeThreads();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startTimer(Timer::Ptr tm) {
-	tm->__setRunningByToolkit_(true);
-	/*timers.insert(
-		std::make_pair((UINT_PTR)tm.get(), TimerInfo(tm))
-	);*/
-	UINT_PTR p = SetTimer(NULL, NULL, 1, timerProc);
+	TimerPolicy::startTimer(tm);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::stopTimer(Timer::Ptr tm) {
-	UINT_PTR idEvent = (UINT_PTR)tm.get();
-	tm->__setRunningByToolkit_(false);
-	Timers::iterator it = timers.find(idEvent);
-	if (it!=timers.end()) {
-		return;
-	}
-	KillTimer(NULL, idEvent);
+	TimerPolicy::stopTimer(tm);
 }
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {

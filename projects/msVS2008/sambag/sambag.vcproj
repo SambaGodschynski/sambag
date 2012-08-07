@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -106,7 +106,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\build-cairo-1.10.2\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -1034,88 +1034,20 @@
 							RelativePath="..\..\..\src\sambag\disco\components\events\MouseEventCreator.hpp"
 							>
 						</File>
-						<Filter
-							Name="com"
-							>
-							<File
-								RelativePath="..\..\..\src\sambag\com\Common.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\Common.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\Exception.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\Exception.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\FileHandler.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\FileHandler.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\FileSystem.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\Helper.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
-								>
-							</File>
-							<Filter
-								Name="events"
-								>
-								<File
-									RelativePath="..\..\..\src\sambag\com\events\ChangedEvent.hpp"
-									>
-								</File>
-								<File
-									RelativePath="..\..\..\src\sambag\com\events\Events.hpp"
-									>
-								</File>
-								<File
-									RelativePath="..\..\..\src\sambag\com\events\PropertyChanged.hpp"
-									>
-								</File>
-							</Filter>
-							<Filter
-								Name="exceptions"
-								>
-								<File
-									RelativePath="..\..\..\src\sambag\com\exceptions\IllegalArgumentException.hpp"
-									>
-								</File>
-								<File
-									RelativePath="..\..\..\src\sambag\com\exceptions\IllegalStateException.hpp"
-									>
-								</File>
-							</Filter>
-						</Filter>
 					</Filter>
 					<Filter
 						Name="windowImpl"
 						>
 						<File
 							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\AWindowImpl.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\BoostTimerImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\BoostTimerImpl.hpp"
 							>
 						</File>
 						<File
@@ -1128,6 +1060,14 @@
 						</File>
 						<File
 							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32TimerImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32TimerImpl.hpp"
 							>
 						</File>
 						<File
@@ -1552,6 +1492,98 @@
 					RelativePath="..\..\..\src\sambag\xml\XML2Obj.hpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="com"
+				>
+				<File
+					RelativePath="..\..\..\src\sambag\com\ArbitraryType.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\ArithmeticWrapper.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Common.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Common.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Exception.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Exception.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileHandler.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileHandler.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileSystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\FileSystem.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Helper.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\ICommand.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\IDataHandler.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\Thread.hpp"
+					>
+				</File>
+				<Filter
+					Name="events"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\ChangedEvent.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\Events.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\events\PropertyChanged.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="exceptions"
+					>
+					<File
+						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalArgumentException.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\com\exceptions\IllegalStateException.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

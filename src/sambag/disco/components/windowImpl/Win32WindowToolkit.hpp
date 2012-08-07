@@ -12,20 +12,22 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
-#include <sambag/com/ICommand.hpp>
-#include <boost/unordered_map.hpp>
-
+#include "Win32TimerImpl.hpp"
 // including windows.h causes 118 errors because of redef.
-
+#include "BoostTimerImpl.hpp"
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class Win32WindowToolkit.
   */
-class Win32WindowToolkit : public WindowToolkit {
+class Win32WindowToolkit : public WindowToolkit,
+						   public Win32TimerImpl
+{
 //=============================================================================
 friend struct Loki::CreateUsingNew<Win32WindowToolkit>;
 private:
+	//-------------------------------------------------------------------------
+	typedef Win32TimerImpl TimerPolicy;
 	//-------------------------------------------------------------------------
 	Win32WindowToolkit();
 	Win32WindowToolkit(const Win32WindowToolkit&){}

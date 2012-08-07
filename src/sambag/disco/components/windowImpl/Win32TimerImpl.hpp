@@ -8,9 +8,9 @@
 #ifndef SAMBAG_WIN32TIMERIMPL_H
 #define SAMBAG_WIN32TIMERIMPL_H
 
-#include <boost/shared_ptr.hpp>
+#include <sambag/disco/components/Timer.hpp>
 
-namespace sambag {
+namespace sambag { namespace disco {  namespace components {
 
 //=============================================================================
 /** 
@@ -19,12 +19,28 @@ namespace sambag {
 class Win32TimerImpl {
 //=============================================================================
 public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Win32TimerImpl> Ptr;
 protected:
 private:
 public:
+	//-------------------------------------------------------------------------
+	static void closeAllTimer();
+	//-------------------------------------------------------------------------
+	void startTimer(Timer::Ptr tm);
+	//-------------------------------------------------------------------------
+	void stopTimer(Timer::Ptr tm);
+	///////////////////////////////////////////////////////////////////////////
+	//-------------------------------------------------------------------------
+	/**
+	 * does nothing, only for TimerImpl concept.
+	 */
+	static void startThreads() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * does nothing, only for TimerImpl concept.
+	 */
+	static void closeThreads() {}
+
 }; // Win32TimerImpl
-} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_WIN32TIMERIMPL_H */
