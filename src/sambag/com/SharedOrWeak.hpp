@@ -35,6 +35,12 @@ struct AsWeakPtr {
 template <class T>
 struct SharedOrWeak {
 //=============================================================================
+private:
+	class Tester { // for save if (xy) operations.
+				   // see: "Modern C++ Design, Chapter: Smart Pointer"
+		void operator delete(void*){}
+	};
+public:
 	typedef boost::shared_ptr<T> Ptr;
 	typedef boost::weak_ptr<T> WPtr;
 	Ptr ptr;
@@ -54,27 +60,43 @@ struct SharedOrWeak {
 	Ptr operator->() const {
 		return *this;
 	}
-	bool operator==(const SharedOrWeak<T> &_b) const {
+	template <class B>
+	bool operator==(const SharedOrWeak<B> &_b) const {
 		Ptr a = *this;
 		Ptr b = _b;
 		return a==b;
 	}
-	bool operator==(Ptr b) const {
+	template <class B>
+	bool operator==(boost::shared_ptr<B> b) const {
 		Ptr a = *this;
 		return a==b;
+	}
+	template <class B>
+	bool operator!=(const SharedOrWeak<B> &_b) const {
+		Ptr a = *this;
+		Ptr b = _b;
+		return a!=b;
+	}
+	template <class B>
+	bool operator!=(boost::shared_ptr<B> b) const {
+		Ptr a = *this;
+		return a!=b;
 	}
 	bool operator < (const SharedOrWeak<T> &_b) const {
 		Ptr a = *this;
 		Ptr b = _b;
 		return a<b;
 	}
-	bool operator < (Ptr b) const {
-		Ptr a = *this;
-		return a<b;
-	}
-	operator bool() const {
+	bool operator !() const {
 		Ptr p = *this;
-		return (bool)p;
+		return !(bool)p;
+	}
+	operator Tester*() const {
+		Ptr p = *this;
+		if (!p)
+			return NULL;
+		static Tester test;
+		return &test;
 	}
 	void reset() {
 		if (ptr)
@@ -86,5 +108,10 @@ template <class A, class B>
 bool operator==(boost::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
 	boost::shared_ptr<B> b = _b;
 	return a==b;
+}
+template <class A, class B>
+bool operator!=(boost::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
+	boost::shared_ptr<B> b = _b;
+	return a!=b;
 }
 #endif // SAMBAG_SHAREDORWEAK_H

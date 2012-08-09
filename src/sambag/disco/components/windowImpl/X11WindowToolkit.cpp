@@ -80,7 +80,7 @@ void X11WindowToolkit::mainLoop() {
 		usleep(1000);
 		X11WindowImpl::processInvocations();
 	}
-	TimerPolicy::closeThreads();
+	TimerPolicy::joinThreads();
 	XCloseDisplay(display);
 	display = NULL;
 

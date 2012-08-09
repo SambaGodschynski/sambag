@@ -48,7 +48,7 @@ void Win32WindowToolkit::mainLoop() {
 		TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-	TimerPolicy::closeThreads();
+	TimerPolicy::joinThreads();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startTimer(Timer::Ptr tm) {

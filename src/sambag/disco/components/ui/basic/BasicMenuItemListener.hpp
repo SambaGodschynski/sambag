@@ -49,19 +49,19 @@ void BasicMenuItemListener<ComponentModell>::
 			boost::shared_dynamic_cast<MenuItem>(ev.getSource());
 	SAMBAG_ASSERT(b);
 	switch(ev.getType()) {
-	case MouseEvent::MOUSE_ENTERED:
+	case MouseEvent::DISCO_MOUSE_ENTERED:
 		onMouseEntered(b);
 		break;
-	case MouseEvent::MOUSE_EXITED:
+	case MouseEvent::DISCO_MOUSE_EXITED:
 		onMouseExited(b);
 		break;
-	case MouseEvent::MOUSE_PRESSED:
-		if (ev.getButtons() != MouseEvent::BUTTON1)
+	case MouseEvent::DISCO_MOUSE_PRESSED:
+		if (ev.getButtons() != MouseEvent::DISCO_BTN1)
 			break;
 		b->setButtonPressed(true);
 		break;
-	case MouseEvent::MOUSE_RELEASED: {
-		if (ev.getButtons() != MouseEvent::BUTTON1)
+	case MouseEvent::DISCO_MOUSE_RELEASED: {
+		if (ev.getButtons() != MouseEvent::DISCO_BTN1)
 			break;
 		bool oldState = b->isButtonPressed();
 		b->setButtonPressed(false);

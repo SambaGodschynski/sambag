@@ -18,36 +18,36 @@ struct Listener {
 	int called;
 	Listener() : called(0) {}
 	void mousePressed(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_PRESSED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_PRESSED);
+		called |= dev::MouseEvent::DISCO_MOUSE_PRESSED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_PRESSED);
 	}
 	void mouseReleased(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_RELEASED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_RELEASED);
+		called |= dev::MouseEvent::DISCO_MOUSE_RELEASED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_RELEASED);
 	}
 	void mouseEntered(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_ENTERED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_ENTERED);
+		called |= dev::MouseEvent::DISCO_MOUSE_ENTERED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_ENTERED);
 	}
 	void mouseExited(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_EXITED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_EXITED);
+		called |= dev::MouseEvent::DISCO_MOUSE_EXITED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_EXITED);
 	}
 	void mouseClicked(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_CLICKED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_CLICKED);
+		called |= dev::MouseEvent::DISCO_MOUSE_CLICKED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_CLICKED);
 	}
 	void mouseMoved(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_MOVED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_MOVED);
+		called |= dev::MouseEvent::DISCO_MOUSE_MOVED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_MOVED);
 	}
 	void mouseDragged(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_DRAGGED;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_DRAGGED);
+		called |= dev::MouseEvent::DISCO_MOUSE_DRAGGED;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_DRAGGED);
 	}
 	void mouseWheelMoved(const dev::MouseEvent &ev) {
-		called |= dev::MouseEvent::MOUSE_WHEEL;
-		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::MOUSE_WHEEL);
+		called |= dev::MouseEvent::DISCO_MOUSE_WHEEL;
+		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_WHEEL);
 	}
 };
 //=============================================================================
@@ -59,10 +59,10 @@ void TestMouseEvent::testEventSwitch() {
 	using namespace sambag::disco::components::events;
 	{
 		Listener l;
-		MouseEvent ev(Point2D(), MouseEvent::BUTTON1, MouseEvent::MOUSE_PRESSED);
+		MouseEvent ev(Point2D(), MouseEvent::DISCO_BTN1, MouseEvent::DISCO_MOUSE_PRESSED);
 		MouseEventSwitch<>::delegate(ev, l);
-		MouseEventSwitch<MouseEvent::MOUSE_RELEASED>::delegate(ev, l);
-		CPPUNIT_ASSERT_EQUAL(l.called, (int)MouseEvent::MOUSE_PRESSED);
+		MouseEventSwitch<MouseEvent::DISCO_MOUSE_RELEASED>::delegate(ev, l);
+		CPPUNIT_ASSERT_EQUAL(l.called, (int)MouseEvent::DISCO_MOUSE_PRESSED);
 	}
 }
 } //namespace

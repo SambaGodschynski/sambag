@@ -60,24 +60,24 @@ std::string MouseEvent::paramString() const {
 	ss << (getSource() ? getSource()->getName() : std::string("no source"));
 	ss <<", "<<p<<", ";
 	switch(type) {
-	case MOUSE_CLICKED:
-		ss<<"MOUSE_CLICKED"; break;
-	case MOUSE_DRAGGED:
-	ss<<"MOUSE_DRAGGED"; break;
-	case MOUSE_ENTERED:
-		ss<<"MOUSE_ENTERED"; break;
-	case MOUSE_EXITED:
-		ss<<"MOUSE_EXITED"; break;
-	case MOUSE_MOVED:
-		ss<<"MOUSE_MOVED"; break;
-	case MOUSE_PRESSED:
-		ss<<"MOUSE_PRESSED"; break;
-	case MOUSE_RELEASED:
-		ss<<"MOUSE_RELEASED"; break;
-	case MOUSE_WHEEL:
-		ss<<"MOUSE_WHEEL"; break;
-	case NONE:
-		ss<<"NONE"; break;
+	case DISCO_MOUSE_CLICKED:
+		ss<<"DISCO_MOUSE_CLICKED"; break;
+	case DISCO_MOUSE_DRAGGED:
+	ss<<"DISCO_MOUSE_DRAGGED"; break;
+	case DISCO_MOUSE_ENTERED:
+		ss<<"DISCO_MOUSE_ENTERED"; break;
+	case DISCO_MOUSE_EXITED:
+		ss<<"DISCO_MOUSE_EXITED"; break;
+	case DISCO_MOUSE_MOVED:
+		ss<<"DISCO_MOUSE_MOVED"; break;
+	case DISCO_MOUSE_PRESSED:
+		ss<<"DISCO_MOUSE_PRESSED"; break;
+	case DISCO_MOUSE_RELEASED:
+		ss<<"DISCO_MOUSE_RELEASED"; break;
+	case DISCO_MOUSE_WHEEL:
+		ss<<"DISCO_MOUSE_WHEEL"; break;
+	case UNKNOWN_EVENT:
+		ss<<"UNKNOWN_EVENT"; break;
 	}
 	ss<<", "<<buttons;
 	return ss.str();

@@ -12,6 +12,7 @@
 #include "X11WindowToolkit.hpp"
 #include <sambag/com/Common.hpp>
 
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Win32WindowImpl
@@ -33,6 +34,13 @@ Win32WindowImpl::Win32WindowImpl() :
 	visible(false),
 	win(NULL)
 {
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::drawAll() {
+	BOOST_FOREACH(WinMap::value_type &obj, winmap) {
+		//obj.second->processDraw();
+		UpdateWindow(obj.second->win);
+	}
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::update() {
@@ -214,6 +222,14 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	case WM_PAINT : {
 		if (win)
 			win->update();
+		break;
+	}
+	case WM_MOVE : {
+		RECT r = {0};
+		GetWindowRect(hWnd, &r);
+		Rectangle nr(Point2D(r.left, r.top), Point2D(r.right, r.bottom));
+		if (win)
+			win->updateWindowToBounds(nr);
 		break;
 	}
 	case WM_SIZE : {

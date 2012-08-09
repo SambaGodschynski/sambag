@@ -62,6 +62,8 @@ private:
 	void update();
 	//-------------------------------------------------------------------------
 	static Win32WindowImpl * getWin32WindowImpl(HWND win);
+	//-------------------------------------------------------------------------
+	static void drawAll();
 protected:
 	//-------------------------------------------------------------------------
 	WPtr self; // setted during WindowImpl::create()

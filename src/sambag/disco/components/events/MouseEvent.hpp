@@ -23,23 +23,25 @@ friend class MouseEventCreator;
 public:
 	//-------------------------------------------------------------------------
 	// Indicates mouse button #1; used by getButton().
-	static const int	BUTTON1 = 1;
+	static const int	DISCO_BTN1 = 1;
 	// Indicates mouse button #2; used by getButton().
-	static const int	BUTTON2 = 1<<1;
+	static const int	DISCO_BTN2 = 1<<1;
 	// Indicates mouse button #3; used by getButton().
-	static const int	BUTTON3 = 1<<2;
+	static const int	DISCO_BTN3 = 1<<2;
 	enum Type {
-		NONE,
-		MOUSE_CLICKED = 1,
-		MOUSE_DRAGGED = 1 << 1,
-		MOUSE_ENTERED = 1 << 2,
-		MOUSE_EXITED = 1 << 3,
-		MOUSE_MOVED = 1 << 4,
-		MOUSE_PRESSED = 1 << 5,
-		MOUSE_RELEASED = 1 << 6,
-		MOUSE_WHEEL = 1 << 7,
-		ALL_EVENTS = MOUSE_PRESSED | MOUSE_RELEASED | MOUSE_CLICKED |
-		MOUSE_MOVED | MOUSE_DRAGGED | MOUSE_ENTERED | MOUSE_EXITED | MOUSE_WHEEL
+		UNKNOWN_EVENT,
+		DISCO_MOUSE_CLICKED = 1,
+		DISCO_MOUSE_DRAGGED = 1 << 1,
+		DISCO_MOUSE_ENTERED = 1 << 2,
+		DISCO_MOUSE_EXITED = 1 << 3,
+		DISCO_MOUSE_MOVED = 1 << 4,
+		DISCO_MOUSE_PRESSED = 1 << 5,
+		DISCO_MOUSE_RELEASED = 1 << 6,
+		DISCO_MOUSE_WHEEL = 1 << 7,
+		ALL_EVENTS = DISCO_MOUSE_PRESSED | DISCO_MOUSE_RELEASED | 
+			DISCO_MOUSE_CLICKED | DISCO_MOUSE_MOVED | 
+			DISCO_MOUSE_DRAGGED | DISCO_MOUSE_ENTERED | 
+			DISCO_MOUSE_EXITED | DISCO_MOUSE_WHEEL
 	};
 private:
 	//-------------------------------------------------------------------------
@@ -54,7 +56,7 @@ private:
 	Type type;
 public:
 	//-------------------------------------------------------------------------
-	MouseEvent() : buttons(0), type(NONE) {};
+	MouseEvent() : buttons(0), type(UNKNOWN_EVENT) {};
 	//-------------------------------------------------------------------------
 	MouseEvent(const Point2D &p, int buttons, Type type);
 	//-------------------------------------------------------------------------
@@ -105,49 +107,49 @@ typedef MouseEvent Me;
 template <class L>
 void pressed(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void pressed(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_PRESSED> d) {
+void pressed(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_PRESSED> d) {
 	l.mousePressed(ev);
 }
 template <class L>
 void released(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void released(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_RELEASED> d) {
+void released(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_RELEASED> d) {
 	l.mouseReleased(ev);
 }
 template <class L>
 void entered(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void entered(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_ENTERED> d) {
+void entered(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_ENTERED> d) {
 	l.mouseEntered(ev);
 }
 template <class L>
 void exited(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void exited(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_EXITED> d) {
+void exited(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_EXITED> d) {
 	l.mouseExited(ev);
 }
 template <class L>
 void clicked(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void clicked(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_CLICKED> d) {
+void clicked(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_CLICKED> d) {
 	l.mouseClicked(ev);
 }
 template <class L>
 void moved(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void moved(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_MOVED> d) {
+void moved(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_MOVED> d) {
 	l.mouseMoved(ev);
 }
 template <class L>
 void dragged(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void dragged(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_DRAGGED> d) {
+void dragged(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_DRAGGED> d) {
 	l.mouseDragged(ev);
 }
 template <class L>
 void wheel(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
-void wheel(const MouseEvent &ev, L &l, Int2Type<Me::MOUSE_WHEEL> d) {
+void wheel(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_WHEEL> d) {
 	l.mouseWheelMoved(ev);
 }
 } // namespace
@@ -164,29 +166,29 @@ struct MouseEventSwitch {
  	template <class MouseEventListener>
 	static void delegate(const MouseEvent &ev, MouseEventListener &l) {
 		switch (ev.getType()) {
-		case MouseEvent::MOUSE_PRESSED:
-			pressed(ev, l, Int2Type<Me::MOUSE_PRESSED&Filter>());
+		case MouseEvent::DISCO_MOUSE_PRESSED:
+			pressed(ev, l, Int2Type<Me::DISCO_MOUSE_PRESSED&Filter>());
 			break;
-		case MouseEvent::MOUSE_RELEASED:
-			released(ev, l, Int2Type<Me::MOUSE_RELEASED&Filter>());
+		case MouseEvent::DISCO_MOUSE_RELEASED:
+			released(ev, l, Int2Type<Me::DISCO_MOUSE_RELEASED&Filter>());
 			break;
-		case MouseEvent::MOUSE_CLICKED:
-			clicked(ev, l, Int2Type<Me::MOUSE_CLICKED&Filter>());
+		case MouseEvent::DISCO_MOUSE_CLICKED:
+			clicked(ev, l, Int2Type<Me::DISCO_MOUSE_CLICKED&Filter>());
 			break;
-		case MouseEvent::MOUSE_ENTERED:
-			entered(ev, l, Int2Type<Me::MOUSE_ENTERED&Filter>());
+		case MouseEvent::DISCO_MOUSE_ENTERED:
+			entered(ev, l, Int2Type<Me::DISCO_MOUSE_ENTERED&Filter>());
 			break;
-		case MouseEvent::MOUSE_EXITED:
-			exited(ev, l, Int2Type<Me::MOUSE_EXITED&Filter>());
+		case MouseEvent::DISCO_MOUSE_EXITED:
+			exited(ev, l, Int2Type<Me::DISCO_MOUSE_EXITED&Filter>());
 			break;
-		case MouseEvent::MOUSE_MOVED:
-			moved(ev, l, Int2Type<Me::MOUSE_MOVED&Filter>());
+		case MouseEvent::DISCO_MOUSE_MOVED:
+			moved(ev, l, Int2Type<Me::DISCO_MOUSE_MOVED&Filter>());
 			break;
-		case MouseEvent::MOUSE_DRAGGED:
-			dragged(ev, l, Int2Type<Me::MOUSE_DRAGGED&Filter>());
+		case MouseEvent::DISCO_MOUSE_DRAGGED:
+			dragged(ev, l, Int2Type<Me::DISCO_MOUSE_DRAGGED&Filter>());
 			break;
-		case MouseEvent::MOUSE_WHEEL:
-			wheel(ev, l, Int2Type<Me::MOUSE_WHEEL&Filter>());
+		case MouseEvent::DISCO_MOUSE_WHEEL:
+			wheel(ev, l, Int2Type<Me::DISCO_MOUSE_WHEEL&Filter>());
 			break;
 		default:
 			break;

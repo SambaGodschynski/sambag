@@ -309,8 +309,8 @@ private:
 		Coordinate adjustValueIfNecessary(const Coordinate &scrollBarValue);
 		typedef events::MouseEvent Ev;
 		enum {
-			Filter = Ev::MOUSE_PRESSED | Ev::MOUSE_RELEASED |
-				Ev::MOUSE_EXITED | Ev::MOUSE_DRAGGED | Ev::MOUSE_MOVED
+			Filter = Ev::DISCO_MOUSE_PRESSED | Ev::DISCO_MOUSE_RELEASED |
+				Ev::DISCO_MOUSE_EXITED | Ev::DISCO_MOUSE_DRAGGED | Ev::DISCO_MOUSE_MOVED
 		};
 	};
 	//-------------------------------------------------------------------------
@@ -791,13 +791,13 @@ void BasicScrollbarUI<M>::onArrowBtn(void *src,
 		const events::MouseEvent &ev)
 {
 	typename ScrollBarType::Ptr scrollbar = getScrollbar();
-	if (ev.getType() == events::MouseEvent::MOUSE_PRESSED) {
+	if (ev.getType() == events::MouseEvent::DISCO_MOUSE_PRESSED) {
 		if (!scrollbar->isEnabled()) {
 			return;
 		}
 		// not an unmodified left mouse button
 		//if(e.getModifiers() != InputEvent.BUTTON1_MASK) {return; }
-		if (ev.getButtons() != ev.BUTTON1) {
+		if (ev.getButtons() != ev.DISCO_BTN1) {
 			return;
 		}
 
@@ -816,7 +816,7 @@ void BasicScrollbarUI<M>::onArrowBtn(void *src,
 //		}
 	}
 
-	if (ev.getType() == events::MouseEvent::MOUSE_RELEASED) {
+	if (ev.getType() == events::MouseEvent::DISCO_MOUSE_RELEASED) {
 		scrollTimer->stop();
 		scrollbar->setValueIsAdjusting(false);
 	}
@@ -978,7 +978,7 @@ bool BasicScrollbarUI<M>::isMouseBeforeThumb() {
 template <class M>
 void BasicScrollbarUI<M>::
 TrackListener::mousePressed(const events::MouseEvent &ev) {
-	if (ev.getButtons() != events::MouseEvent::BUTTON1)
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
 		return;
 	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (!scrollbar->isEnabled())
@@ -1054,7 +1054,7 @@ TrackListener::mouseReleased(const events::MouseEvent &ev) {
 	if (parent.isDragging) {
 		parent.updateThumbState(ev.getLocation());
 	}
-	if (ev.getButtons() != events::MouseEvent::BUTTON1)
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
 		return;
 	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (!scrollbar->isEnabled())
@@ -1082,7 +1082,7 @@ TrackListener::mouseExited(const events::MouseEvent &ev) {
 template <class M>
 void BasicScrollbarUI<M>::
 TrackListener::mouseDragged(const events::MouseEvent &ev) {
-	if (ev.getButtons() != events::MouseEvent::BUTTON1)
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
 		return;
 	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
 	if (!scrollbar->isEnabled() || parent.getThumbBounds().isEmpty()) {

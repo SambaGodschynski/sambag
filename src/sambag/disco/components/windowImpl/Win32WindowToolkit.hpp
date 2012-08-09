@@ -12,22 +12,22 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
-#include "Win32TimerImpl.hpp"
-// including windows.h causes 118 errors because of redef.
+//#include "Win32TimerImpl.hpp"
 #include "BoostTimerImpl.hpp"
+#include "NullTimerImpl.hpp"
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class Win32WindowToolkit.
   */
 class Win32WindowToolkit : public WindowToolkit,
-						   public Win32TimerImpl
+						   public BoostTimerImpl
 {
 //=============================================================================
 friend struct Loki::CreateUsingNew<Win32WindowToolkit>;
 private:
 	//-------------------------------------------------------------------------
-	typedef Win32TimerImpl TimerPolicy;
+	typedef BoostTimerImpl TimerPolicy;
 	//-------------------------------------------------------------------------
 	Win32WindowToolkit();
 	Win32WindowToolkit(const Win32WindowToolkit&){}
@@ -35,6 +35,8 @@ private:
 	static void mainLoop();
 public:
 protected:
+	//-------------------------------------------------------------------------
+	void onRefresh();
 	//-------------------------------------------------------------------------
 	virtual AWindowImplPtr createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------

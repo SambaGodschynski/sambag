@@ -121,12 +121,12 @@ void TestRootPane::testMouseEvent() {
 	evc->createPressEvent(50, 50, 1);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(TestComponent0, Point2D(25, 15), MOUSE_PRESSED, 1)"),
+			std::string("MouseEvent(TestComponent0, Point2D(25, 15), DISCO_MOUSE_PRESSED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(TestComponent0, Point2D(25, 15), MOUSE_ENTERED, 1)"),
+			std::string("MouseEvent(TestComponent0, Point2D(25, 15), DISCO_MOUSE_ENTERED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
@@ -134,17 +134,17 @@ void TestRootPane::testMouseEvent() {
 	evc->createMoveEvent(10, 10);
 	CPPUNIT_ASSERT_EQUAL((size_t)3, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_DRAGGED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_DRAGGED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_ENTERED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_ENTERED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(TestComponent0, Point2D(-15, -25), MOUSE_EXITED, 1)"),
+			std::string("MouseEvent(TestComponent0, Point2D(-15, -25), DISCO_MOUSE_EXITED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
@@ -152,7 +152,7 @@ void TestRootPane::testMouseEvent() {
 	evc->createReleaseEvent(10, 10, 1);
 	CPPUNIT_ASSERT_EQUAL((size_t)1, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_RELEASED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_RELEASED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
@@ -161,17 +161,17 @@ void TestRootPane::testMouseEvent() {
 	evc->createReleaseEvent(10, 10, 1);
 	CPPUNIT_ASSERT_EQUAL((size_t)3, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_CLICKED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_CLICKED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_RELEASED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_RELEASED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(10, 10), MOUSE_PRESSED, 1)"),
+			std::string("MouseEvent(RootPane, Point2D(10, 10), DISCO_MOUSE_PRESSED, 1)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
@@ -179,7 +179,7 @@ void TestRootPane::testMouseEvent() {
 	evc->createMoveEvent(0, 0);
 	CPPUNIT_ASSERT_EQUAL((size_t)1, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(RootPane, Point2D(0, 0), MOUSE_MOVED, 0)"),
+			std::string("MouseEvent(RootPane, Point2D(0, 0), DISCO_MOUSE_MOVED, 0)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();

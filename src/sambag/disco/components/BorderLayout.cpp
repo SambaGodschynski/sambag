@@ -267,7 +267,10 @@ AComponentPtr BorderLayout::getChild(BorderLayout::Constraint key) const {
 	AComponentPtr result;
 
 	if (key == NORTH) {
-		result = (firstLine) ? firstLine : north;
+		result = (firstLine) ? firstLine : north; // !! : SharedOrWeak has no bool operator
+													// because it dosent work.
+													// consider: a==b would always be true
+													// when a==true and b==true
 	} else if (key == SOUTH) {
 		result = (lastLine) ? lastLine : south;
 	} else if (key == WEST) {

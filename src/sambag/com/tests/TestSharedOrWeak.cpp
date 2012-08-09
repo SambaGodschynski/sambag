@@ -28,6 +28,10 @@ namespace {
 		typedef boost::shared_ptr<B> Ptr;
 		typedef boost::weak_ptr<B> WPtr;
 	};
+	struct C {
+		typedef boost::shared_ptr<C> Ptr;
+		typedef boost::weak_ptr<C> WPtr;
+	};
 	int func(const sambag::com::SharedOrWeak<A> &a) {
 		return a->val;
 	}
@@ -63,13 +67,21 @@ void TestSharedOrWeak::testSharedOrWeak() {
 	}
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	{
+		A::Ptr a(new A());
 		B::Ptr b(new B());
 		b->val = 1;
-		SharedOrWeak<A> sw01(b);                                
+		SharedOrWeak<A> sw01(b);         
+		SharedOrWeak<A> sw01a(a);         
 		SharedOrWeak<A> sw02 = AsWeakPtr<A>(b);
 		CPPUNIT_ASSERT(sw01);
 		CPPUNIT_ASSERT(sw02);
 		CPPUNIT_ASSERT(sw01 == sw02);
+		CPPUNIT_ASSERT(sw01 != sw01a);
+		CPPUNIT_ASSERT(!(sw01 == sw01a));
+		CPPUNIT_ASSERT(sw01 == b);
+		CPPUNIT_ASSERT(sw01 != a);
+		CPPUNIT_ASSERT(b == sw01);
+		CPPUNIT_ASSERT(a != sw01);
 		CPPUNIT_ASSERT_EQUAL((int)1, func(b));
 		CPPUNIT_ASSERT_EQUAL((int)1, func(AsWeakPtr<B>(b)));
 		CPPUNIT_ASSERT_EQUAL((int)1, func(sw01));
@@ -81,7 +93,13 @@ void TestSharedOrWeak::testSharedOrWeak() {
 		CPPUNIT_ASSERT(!sw01);
 		CPPUNIT_ASSERT(!sw02);
 	}
-
+	A::Ptr a(new A());
+	C::Ptr c(new C());
+	SharedOrWeak<A> swa = AsWeakPtr<A>(a);
+	SharedOrWeak<C> swc = AsWeakPtr<C>(c);
+	///////////////////////////////////////////////////////////////////////////
+	// Should cause compiler errors:
+	//CPPUNIT_ASSERT(swa == swc);
 }
 //-----------------------------------------------------------------------------
 void TestSharedOrWeak::testSTLContainer() {

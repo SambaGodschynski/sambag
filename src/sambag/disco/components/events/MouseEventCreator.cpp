@@ -17,7 +17,7 @@ void
 MouseEventCreator::createPressEvent(const Coordinate &x,
 		const Coordinate &y, MouseEventCreator::Bitmask buttons)
 {
-	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::MOUSE_PRESSED);
+	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_PRESSED);
 	root->processMouseEvent(lastEvent);
 }
 //-----------------------------------------------------------------------------
@@ -26,15 +26,15 @@ MouseEventCreator::createReleaseEvent(const Coordinate &x,
 		const Coordinate &y, MouseEventCreator::Bitmask buttons)
 {
 	Point2D p = Point2D(x, y);
-	if (lastEvent.getType() == MouseEvent::MOUSE_PRESSED && lastEvent.p == p) {
-		lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::MOUSE_CLICKED);
+	if (lastEvent.getType() == MouseEvent::DISCO_MOUSE_PRESSED && lastEvent.p == p) {
+		lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_CLICKED);
 		root->processMouseEvent( // 1. release
-				MouseEvent(root, Point2D(x, y), buttons, MouseEvent::MOUSE_RELEASED)
+				MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_RELEASED)
 		);
 		root->processMouseEvent(lastEvent); // 2. clicked
 		return;
 	}
-	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::MOUSE_RELEASED);
+	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_RELEASED);
 	root->processMouseEvent(lastEvent);
 }
 //-----------------------------------------------------------------------------
@@ -45,14 +45,14 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 
 
 	if (lastEvent.buttons>0
-			&& !(lastEvent.type == MouseEvent::MOUSE_RELEASED)
-			&& !(lastEvent.type == MouseEvent::MOUSE_CLICKED)) {
+			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_RELEASED)
+			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_CLICKED)) {
 		lastEvent =
-			MouseEvent(root, Point2D(x, y), lastEvent.buttons, MouseEvent::MOUSE_DRAGGED);
+			MouseEvent(root, Point2D(x, y), lastEvent.buttons, MouseEvent::DISCO_MOUSE_DRAGGED);
 		root->processMouseEvent(lastEvent);
 		return;
 	}
-	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::MOUSE_MOVED);
+	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::DISCO_MOUSE_MOVED);
 	root->processMouseEvent(lastEvent);
 }
 }}}} // namespace(s)

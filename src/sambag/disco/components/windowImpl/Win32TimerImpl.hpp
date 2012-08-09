@@ -38,7 +38,7 @@ public:
 	/**
 	 * does nothing, only for TimerImpl concept.
 	 */
-	static void closeThreads() {}
+	static void joinThreads() {}
 
 }; // Win32TimerImpl
 }}} // namespace(s)

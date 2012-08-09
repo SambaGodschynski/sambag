@@ -161,7 +161,7 @@ void MenuSelectionManager::processMouseEvent(const events::MouseEvent &ev)
 	}
 
 	int type = ev.getType();
-	if ((type == MouseEvent::MOUSE_ENTERED || type == MouseEvent::MOUSE_EXITED)
+	if ((type == MouseEvent::DISCO_MOUSE_ENTERED || type == MouseEvent::DISCO_MOUSE_EXITED)
 			&& ev.getButtons() > 0)
 	{
 		return;
@@ -221,12 +221,12 @@ void MenuSelectionManager::processMouseEvent(const events::MouseEvent &ev)
 							- 1]->getComponent();
 
 					MouseEvent exitEvent = MouseEvent(oldMC, p,
-							ev.getButtons(), MouseEvent::MOUSE_EXITED);
+							ev.getButtons(), MouseEvent::DISCO_MOUSE_EXITED);
 					currentSelection[currentSelection.size() - 1]->processMouseEvent(
 							exitEvent, path, *this);
 
 					MouseEvent enterEvent = MouseEvent(mc, p,
-							ev.getButtons(), MouseEvent::MOUSE_ENTERED);
+							ev.getButtons(), MouseEvent::DISCO_MOUSE_ENTERED);
 					subElements[j]->processMouseEvent(enterEvent, path, *this);
 				}
 				MouseEvent mouseEvent = MouseEvent(mc,  p,

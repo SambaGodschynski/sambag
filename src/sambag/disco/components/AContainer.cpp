@@ -627,9 +627,9 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		return;
 	if (lastMouseTarget) {
 //		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
-//				ev.getButtons(), MouseEvent::MOUSE_EXITED);
+//				ev.getButtons(), MouseEvent::DISCO_MOUSE_EXITED);
 		MouseEvent nev = ev;
-		nev.updateSoure(getPtr()).updateType(MouseEvent::MOUSE_EXITED);
+		nev.updateSoure(getPtr()).updateType(MouseEvent::DISCO_MOUSE_EXITED);
 		retargetMouseEvent(lastMouseTarget, nev);
 		lastMouseTarget->EventSender<MouseEvent>::notifyListeners(
 				lastMouseTarget.get(),
@@ -638,9 +638,9 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 	}
 	if (target) {
 //		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
-//				ev.getButtons(), MouseEvent::MOUSE_ENTERED);
+//				ev.getButtons(), MouseEvent::DISCO_MOUSE_ENTERED);
 		MouseEvent nev = ev;
-		nev.updateSoure(getPtr()).updateType(MouseEvent::MOUSE_ENTERED);
+		nev.updateSoure(getPtr()).updateType(MouseEvent::DISCO_MOUSE_ENTERED);
 		retargetMouseEvent(target, nev);
 		 target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
 	}
@@ -652,7 +652,7 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
 	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
 
-	if (ev.getType() == MouseEvent::MOUSE_DRAGGED) {
+	if (ev.getType() == MouseEvent::DISCO_MOUSE_DRAGGED) {
 		if(!lastMouseTarget)
 			return;
 		if (lastMouseTarget==getPtr())
@@ -665,7 +665,7 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 		return;
 	}
 
-	if (ev.getType() == MouseEvent::MOUSE_RELEASED) {
+	if (ev.getType() == MouseEvent::DISCO_MOUSE_RELEASED) {
 		if(lastMouseTarget) {
 			events::MouseEvent nev = ev;
 			retargetMouseEvent(lastMouseTarget, nev);

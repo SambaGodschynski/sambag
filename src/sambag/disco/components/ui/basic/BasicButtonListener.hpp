@@ -37,20 +37,20 @@ void BasicButtonListener<ButtonModell>::
 	typename AbstractButton::Ptr b =
 			boost::shared_dynamic_cast<AbstractButton>(ev.getSource());
 	switch(ev.getType()) {
-	case MouseEvent::MOUSE_ENTERED:
+	case MouseEvent::DISCO_MOUSE_ENTERED:
 		b->setButtonRollover(true);
 		break;
-	case MouseEvent::MOUSE_EXITED:
+	case MouseEvent::DISCO_MOUSE_EXITED:
 		b->setButtonRollover(false);
 		b->setButtonPressed(false);
 		break;
-	case MouseEvent::MOUSE_PRESSED:
-		if (ev.getButtons() != MouseEvent::BUTTON1)
+	case MouseEvent::DISCO_MOUSE_PRESSED:
+		if (ev.getButtons() != MouseEvent::DISCO_BTN1)
 			break;
 		b->setButtonPressed(true);
 		break;
-	case MouseEvent::MOUSE_RELEASED: {
-		if (ev.getButtons() != MouseEvent::BUTTON1)
+	case MouseEvent::DISCO_MOUSE_RELEASED: {
+		if (ev.getButtons() != MouseEvent::DISCO_BTN1)
 			break;
 		bool oldState = b->isButtonPressed();
 		b->setButtonPressed(false);

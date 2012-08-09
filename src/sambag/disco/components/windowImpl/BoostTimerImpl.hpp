@@ -19,12 +19,13 @@
 #include <sambag/disco/components/Timer.hpp>
 
 namespace sambag { namespace disco {  namespace components {
-
+struct TimerThread;
 //=============================================================================
 /** 
   * @class BoostTimerImpl.
   */
 class BoostTimerImpl {
+friend struct TimerThread;
 //=============================================================================
 public:
 private:
@@ -49,7 +50,7 @@ public:
 	//-------------------------------------------------------------------------
 	static void startThreads();
 	//-------------------------------------------------------------------------
-	static void closeThreads();
+	static void joinThreads();
 }; // BoostTimerImpl
 }}} // namespace(s)
 
