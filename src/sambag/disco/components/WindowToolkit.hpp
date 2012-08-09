@@ -44,8 +44,8 @@ WindowToolkit * getWindowToolkit();
 //-----------------------------------------------------------------------------
 /**
  * used for testing
- * @param current Windowfactory
+ * @param current WindowToolkit
  */
-void setWindowFactory(WindowToolkit *wf);
+void setWindowToolkit(WindowToolkit *wf);
 }}} // namespace(s)
 #endif /* SAMBAG_WINDOWTOOLKIT_H */

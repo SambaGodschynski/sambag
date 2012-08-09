@@ -43,6 +43,6 @@ check_file $2
 clean_directory $3
 echo Extract $2:
 tar -xzf $2
-mv $3-* $3
+mv -f $3-* $3
 _done
 

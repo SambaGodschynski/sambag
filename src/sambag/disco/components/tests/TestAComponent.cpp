@@ -87,7 +87,7 @@ void TestAComponent::setUp() {
 	using namespace sambag::disco;
 	comp = TestComponent::create();
 	comp->setName("TestComponent");
-	comp->setBounds(Rectangle(0, 0, 50, 55));
+	comp->setBounds(sambag::disco::Rectangle(0, 0, 50, 55));
 }
 //-----------------------------------------------------------------------------
 void TestAComponent::tearDown() {
@@ -108,12 +108,12 @@ void TestAComponent::test_getPtr() {
 void TestAComponent::test_bounds() {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	CPPUNIT_ASSERT_EQUAL( Rectangle(0, 0, 50, 55), comp->getBounds() );
+	CPPUNIT_ASSERT_EQUAL( sambag::disco::Rectangle(0, 0, 50, 55), comp->getBounds() );
 	comp->setSize(Dimension(230,200));
 	comp->setLocation(Point2D(0, 0));
-	CPPUNIT_ASSERT_EQUAL( Rectangle(0, 0, 230, 200), comp->getBounds() );
+	CPPUNIT_ASSERT_EQUAL( sambag::disco::Rectangle(0, 0, 230, 200), comp->getBounds() );
 	comp->setLocation(Point2D(10, 10));
-	CPPUNIT_ASSERT_EQUAL( Rectangle(10, 10, 230, 200), comp->getBounds() );
+	CPPUNIT_ASSERT_EQUAL( sambag::disco::Rectangle(10, 10, 230, 200), comp->getBounds() );
 }
 //-----------------------------------------------------------------------------
 void TestAComponent::test_toString() {

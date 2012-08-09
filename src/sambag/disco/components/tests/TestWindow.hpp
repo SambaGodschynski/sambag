@@ -19,7 +19,7 @@ private:
 	CPPUNIT_TEST_SUITE( TestWindow );
 	CPPUNIT_TEST( testComponentScreenPointConverts );
 	CPPUNIT_TEST_SUITE_END();
-	sambag::disco::components::WindowTestToolkit::Ptr wfac;
+	sambag::disco::components::WindowTestToolkit<>::Ptr wfac;
 public:
 	void setUp();
 	void tearDown();

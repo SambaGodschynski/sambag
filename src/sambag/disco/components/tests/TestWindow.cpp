@@ -23,12 +23,12 @@ namespace tests {
 void TestWindow::setUp() {
 	using namespace sambag::disco::components;
 	if (!wfac)
-		wfac = WindowTestToolkit::create();
-	sambag::disco::components::setWindowFactory(wfac.get());
+		wfac = WindowTestToolkit<>::create();
+	sambag::disco::components::setWindowToolkit(wfac.get());
 }
 //-----------------------------------------------------------------------------
 void TestWindow::tearDown() {
-	sambag::disco::components::setWindowFactory(NULL);
+	sambag::disco::components::setWindowToolkit(NULL);
 }
 //-----------------------------------------------------------------------------
 void TestWindow::testComponentScreenPointConverts() {
@@ -46,7 +46,7 @@ void TestWindow::testComponentScreenPointConverts() {
 	win->getContentPane()->add(btn);
 	win->validate();
 	win->open();
-	Window::startMainLoop(); // affects only when create real window
+	//Window::startMainLoop(); // affects only when create real window
 	CPPUNIT_ASSERT_EQUAL(Point2D(1000, 200),
 		win->getContentPane()->getLocationOnScreen(Point2D(0,0))
 	);

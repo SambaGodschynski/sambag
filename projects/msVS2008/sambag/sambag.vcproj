@@ -1055,11 +1055,15 @@
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.cpp"
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\NullTimerImpl.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindow.hpp"
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindowImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\TestWindowImpl.hpp"
 							>
 						</File>
 						<File

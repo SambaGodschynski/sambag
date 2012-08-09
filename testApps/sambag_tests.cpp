@@ -52,5 +52,4 @@ int main ( const int argc, char **argv ) {
 
 	// Return error code 1 if the one of test failed.
 	return collectedresults.wasSuccessful() ? 0 : 1;
-	return 0;
 }

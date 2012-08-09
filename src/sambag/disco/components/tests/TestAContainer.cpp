@@ -27,7 +27,7 @@ void TestAContainer::setUp() {
 	using namespace sambag::disco;
 	con = TestContainer::create();
 	con->setName("TestContainer");
-	con->setBounds(Rectangle(0, 0, 500, 550));
+	con->setBounds(sambag::disco::Rectangle(0, 0, 500, 550));
 	con->setLayout(components::FlowLayout::create());
 }
 //-----------------------------------------------------------------------------

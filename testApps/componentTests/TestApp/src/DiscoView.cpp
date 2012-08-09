@@ -390,6 +390,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
+	return;
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
 	std::cout<<ev.toString()<<std::endl;
@@ -398,9 +399,9 @@ void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	static PopupMenuPtr currPopup;
-	if (ev.getType() != events::MouseEvent::MOUSE_CLICKED)
+	if (ev.getType() != events::MouseEvent::DISCO_MOUSE_CLICKED)
 		return;
-	if (ev.getButtons() != sdc::events::MouseEvent::BUTTON2) {
+	if (ev.getButtons() != sdc::events::MouseEvent::DISCO_BTN2) {
 		if (currPopup)
 			currPopup->hidePopup();
 		return;
@@ -512,6 +513,7 @@ void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
 void timedCallbackInf(void *src, const sdc::TimerEvent &ev) {
 	static int i=0;
 	std::cout<<"timed callbackInf(" << ++i << ")" << std::flush << std::endl;
+	//while(1);
 }
 
 void timedCallback5(void *src, const sdc::TimerEvent &ev) {
@@ -526,7 +528,7 @@ void timedCallbackOnce(void *src, const sdc::TimerEvent &ev) {
 void initTimer() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	timerInf = Timer::create(10000);
+	timerInf = Timer::create(1000);
 	timerInf->setNumRepetitions(-1);
 	timerInf->EventSender<TimerEvent>::addEventListener(&timedCallbackInf);
 	timerInf->start();

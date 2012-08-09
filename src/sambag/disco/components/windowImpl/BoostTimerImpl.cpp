@@ -52,9 +52,15 @@ struct TimerThread {
 	boost::thread *thread;
 	boost::asio::io_service *io;
 	bool isRunning;
+	bool sleep;
 	Id id;
 	TimerThread( Timer::Ptr tm = Timer::Ptr(), Id id = -1 ) : 
-		tm(tm), thread(NULL), io(NULL), isRunning(false), id(id) {}
+		tm(tm), 
+		thread(NULL),
+		io(NULL), 
+		isRunning(false),
+		sleep(false)
+		id(id) {}
 	~TimerThread() {
 		if (thread)
 			delete thread;
@@ -126,7 +132,7 @@ namespace {
 					msgQueue.pop();
 				}
 			SAMBAG_END_SYNCHRONIZED
-			boost::this_thread::sleep(boost::posix_time::millisec(100));
+			boost::this_thread::sleep(boost::posix_time::millisec(10));
 		}
 	}
 }
@@ -217,6 +223,10 @@ void BoostTimerImpl::joinThreads() {
 	for (Id id = 0; id<timerThreads.size(); ++id) {
 		delete timerThreads[id];
 	}
+}
+//-----------------------------------------------------------------------------
+int BoostTimerImpl::getMaxNumThreads() {
+	return timerThreads.size();
 }
 
 }}} // namespace(s)

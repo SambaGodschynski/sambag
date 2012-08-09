@@ -21,7 +21,7 @@ WindowToolkit * getWindowToolkit() {
 	return _getWindowToolkitImpl();
 }
 //-----------------------------------------------------------------------------
-void setWindowFactory(WindowToolkit *wf) {
+void setWindowToolkit(WindowToolkit *wf) {
 	currFactory = wf;
 }
 }}} // namespace(s)

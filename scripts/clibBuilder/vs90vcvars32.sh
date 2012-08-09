@@ -26,13 +26,20 @@ check_path_conv()
   echo 1
 }
 
+doexport()
+{
+ echo export $1=$2
+ export $1=$2
+}
 _export()
 {
   if [ $(check_path_conv $1) -eq 1 ]
   then
        x=$(conv_path $1)
+       x=$(echo $x | sed 's/;/:/g' )
+       NOCONV=1
   fi
-  x=$(echo $x | sed 's/@set *//i' | sed 's/;/:/g')
+  x=$(echo $x | sed 's/@set *//i')
   if [ $(echo $x | grep '%.*%') ] #if %PATH%: append content of $PATH
   then
       #get varname
@@ -44,17 +51,23 @@ _export()
       x=$x:$y
       x=$(echo $x | sed 's/::/:/g')
       x=$(echo $x | sed 's/:$//g')
+      #if ! [ -z $NOCONV ]
+      #then
+         #x=$(echo $x | sed 's/;://g')
+      #fi
   fi
   name=$(echo $x | grep -o '.*=' | sed 's/\=//')
   cnt=$(echo $x | grep -o '=.*' | sed 's/\=//')
-  echo export $name=$cnt
-  export $name=$cnt
+  doexport $name $cnt
 }
 
 get_sdk_location()
 {
     res=$(reg query "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows" /v "CurrentInstallFolder" | grep -io "[a-zA-Z]:.*$")
-    res= conv_path $res
+    if [ -z $1 ]
+    then
+        res= conv_path $res
+    fi
     echo $res
 }
 
@@ -67,8 +80,12 @@ exec_origbat()
 }
 
 SRC=$(conv_path $VS90COMNTOOLS)
-echo export VS90COMNTOOLS=$SRC
-export VS90COMNTOOLS=$SRC
+doexport VS90COMNTOOLS $SRC
 exec_origbat $SRC/vsvars32.bat
-export WindowsSdkDir="$(get_sdk_location)"
-echo export WindowsSdkDir="$(get_sdk_location)"
+doexport WindowsSdkDir "$(get_sdk_location)"
+
+#by hand
+SDK_LOCATION_UNCONV=$(get_sdk_location NOCONV)
+doexport PATH $WindowsSdkDir\bin:$PATH
+doexport INCLUDE $SDK_LOCATION_UNCONV\include\;$INCLUDE
+doexport LIB $SDK_LOCATION_UNCONV\lib\;$LIB

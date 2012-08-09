@@ -30,6 +30,18 @@ change_makefile_to_static()
  mv $1_ $1
 }
 
+#replaces all zdll.lib to zlib.lib
+change_makefile_zlib()
+{
+ if [ $LINK = 'DYNAMIC' ]
+ then
+     return
+ fi
+ echo change_makefile_to_static
+ sed 's/zdll.lib/zlib/g' $1 > $1_
+ mv $1_ $1
+}
+
 #replaces all RuntimeLibrary=x to RuntimeLibrary=0
 change_vscprj_to_static()
 {
@@ -62,7 +74,7 @@ cd $ROOTDIR
 sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
 sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
 sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
-
+sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
 #build zlib
 cd $ROOTDIR/$ZLIB
@@ -79,4 +91,17 @@ nmake -f scripts/makefile.vcwin32
 cd $ROOTDIR/$PIXMAN
 change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
+make -f Makefile.win32 "CFG=release"
+
+#build cairo
+cd $ROOTDIR/$CAIRO
+export INCLUDE=$INCLUDE:$ROOTDIR\zlib
+export INCLUDE=$INCLUDE:$ROOTDIR\libpng
+export INCLUDE=$INCLUDE:$ROOTDIR\pixman\pixman
+export INCLUDE=$INCLUDE:$ROOTDIR\cairo\boilerplate
+export INCLUDE=$INCLUDE:$ROOTDIR\cairo\src
+export LIB=$LIB:$ROOTDIR\$ZLIN
+export LIB=$LIB:$ROOTDIR\$PNG
+change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
+change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 make -f Makefile.win32 "CFG=release"

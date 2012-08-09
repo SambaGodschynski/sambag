@@ -8,23 +8,22 @@
 #ifndef SAMBAG_TESTBOOSTTIMERIMPL_H
 #define SAMBAG_TESTBOOSTTIMERIMPL_H
 
-#include <boost/shared_ptr.hpp>
+#include <cppunit/extensions/HelperMacros.h>
+#include <sambag/disco/components/Forward.hpp>
 
-namespace sambag {
-
+namespace tests {
 //=============================================================================
-/** 
-  * @class TestBoostTimerImpl.
-  */
-class TestBoostTimerImpl {
+class TestBoostTimerImpl : public CPPUNIT_NS::TestFixture {
 //=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<TestBoostTimerImpl> Ptr;
-protected:
 private:
+	CPPUNIT_TEST_SUITE( TestBoostTimerImpl );
+	CPPUNIT_TEST(testMaxThreads);
+	CPPUNIT_TEST_SUITE_END();
 public:
-}; // TestBoostTimerImpl
+	void setUp();
+	void tearDown();
+	void testMaxThreads();
+};
 } // namespace(s)
 
 #endif /* SAMBAG_TESTBOOSTTIMERIMPL_H */
