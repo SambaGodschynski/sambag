@@ -77,15 +77,17 @@ sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
 sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
 #build zlib
-cd $ROOTDIR/$ZLIB
+export DST_ZLIB=$ROOTDIR/$ZLIB
 change_makefile_to_static $ROOTDIR/$ZLIB/win32/Makefile.msc
-nmake -f win32/Makefile.msc
+#nmake -f win32/Makefile.msc #dosen't work correctly: STATIC.lib not found??
+cmd /c makeZlib.bat
 
 #build libpng
-cd $ROOTDIR/$LIBPNG
+export DST_LIBPNG=$ROOTDIR/$PNG
 change_makefile_to_static $ROOTDIR/$LIBPNG/scripts/makefile.vcwin32
 cp -r $ROOTDIR/$ZLIB $ROOTDIR/$LIBPNG/zlib
-nmake -f scripts/makefile.vcwin32
+#nmake -f scripts/makefile.vcwin32
+cmd /c makeLibpng.bat
 
 #build pixman
 cd $ROOTDIR/$PIXMAN
