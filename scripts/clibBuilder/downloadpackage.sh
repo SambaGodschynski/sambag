@@ -43,6 +43,7 @@ check_file $2
 clean_directory $3
 echo Extract $2:
 tar -xzf $2
+sleep 1   #permission problems when move starts directly
 mv -f $3-* $3
 _done
 

@@ -18,12 +18,12 @@ conv_path() #converts windows path to cygwin path
 #chekcs whether a path has to be conv. or not.
 check_path_conv()
 {
-  if [ $(echo $1 | grep 'INCLUDE\|LIB\|LIBPATH') ]
+  if [ $(echo $1 | grep 'PATH') ] #grep 'INCLUDE\|LIB\|LIBPATH') ]
   then
-       echo 0
+       echo 1
        return
   fi
-  echo 1
+  echo 0
 }
 
 doexport()
@@ -80,7 +80,7 @@ exec_origbat()
 }
 
 SRC=$(conv_path $VS90COMNTOOLS)
-doexport VS90COMNTOOLS $SRC
+#doexport VS90COMNTOOLS $SRC
 exec_origbat $SRC/vsvars32.bat
 doexport WindowsSdkDir "$(get_sdk_location)"
 
