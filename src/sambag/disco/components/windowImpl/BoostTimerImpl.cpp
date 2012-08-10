@@ -128,7 +128,9 @@ void TimerThread::startTimer() {
 	int repetitions = tm->getNumRepetitions();
 	BoostTimerImpl::BoostTimer *t = 
 		new BoostTimerImpl::BoostTimer(*io, boost::posix_time::millisec(ms));
-	BoostTimerImpl::toInvoke.insert( BoostTimerImpl::ToInvoke::value_type(t, tm) );
+	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
+		BoostTimerImpl::toInvoke.insert( BoostTimerImpl::ToInvoke::value_type(t, tm) );
+	SAMBAG_END_SYNCHRONIZED
 	t->async_wait(
 		boost::bind(&BoostTimerImpl::timerCallback,
 		boost::asio::placeholders::error,
@@ -217,11 +219,9 @@ BoostTimerImpl::ToInvoke BoostTimerImpl::toInvoke;
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::closeAllTimer() {
 	try {
-		SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
-			BOOST_FOREACH(ToInvoke::left_map::value_type &v, toInvoke.left) {
-				v.first->cancel();
-			}
-		SAMBAG_END_SYNCHRONIZED
+		BOOST_FOREACH(ToInvoke::left_map::value_type &v, toInvoke.left) {
+			v.first->cancel();
+		}
 	} catch (...) {
 		throw TimerLockedEx();
 	}
@@ -240,20 +240,17 @@ void BoostTimerImpl::startTimer(Timer::Ptr tm) {
 void BoostTimerImpl::stopTimer(Timer::Ptr tm) {
 	if (!tm->isRunning())
 		return;
-	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
-		ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
-		if (it==toInvoke.right.end()) // timerImpl not found
+	ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
+	if (it==toInvoke.right.end()) // timerImpl not found
 			return;
-		BoostTimer *timerImpl = it->second;
-		tm->__setRunningByToolkit_(false);
-		timerImpl->cancel();
-	SAMBAG_END_SYNCHRONIZED
+	BoostTimer *timerImpl = it->second;
+	tm->__setRunningByToolkit_(false);
+	timerImpl->cancel();
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 		BoostTimerImpl::BoostTimer *timerImpl, int repetitions)
 {
-	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
 		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
 		if (it==toInvoke.left.end())
 			return;
@@ -263,9 +260,11 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 			!mainThreadRunning ||
 			!tm->isRunning()) // stop forced
 		{
-			tm->__setRunningByToolkit_(false);
-			toInvoke.left.erase(it);
-			delete timerImpl;
+				tm->__setRunningByToolkit_(false);
+			SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
+				toInvoke.left.erase(it);
+				delete timerImpl;
+			SAMBAG_END_SYNCHRONIZED
 			return;
 		}
 		if (repetitions > 0)
@@ -279,7 +278,6 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 			timerImpl,
 			repetitions)
 		);
-	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::startThreads() {
