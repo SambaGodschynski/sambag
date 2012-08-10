@@ -19,15 +19,17 @@
 #include <sambag/disco/components/Timer.hpp>
 
 namespace sambag { namespace disco {  namespace components {
-struct TimerThread;
+class TimerThread;
 //=============================================================================
 /** 
   * @class BoostTimerImpl.
   */
 class BoostTimerImpl {
-friend struct TimerThread;
+friend class TimerThread;
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	struct TimerLockedEx {};
 private:
 	//-------------------------------------------------------------------------
 	typedef boost::asio::deadline_timer BoostTimer;

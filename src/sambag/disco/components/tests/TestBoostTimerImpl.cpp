@@ -15,9 +15,14 @@
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestBoostTimerImpl );
 
+bool lock = true;
 
 void onTimerInf(int *counter) {
 	++(*counter);
+}
+
+void onTimerLocked() {
+	while (lock);
 }
 
 void onStartTimerThread(sambag::disco::components::Timer::Ptr tm) {
@@ -52,6 +57,7 @@ void TestBoostTimerImpl::tearDown() {
 //-----------------------------------------------------------------------------
 void TestBoostTimerImpl::testMaxThreads() {
 	using namespace sambag::disco::components;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	Timer::Ptr timerInf = Timer::create(10);
 	timerInf->setNumRepetitions(-1);
 	int counter01 = 0;
@@ -59,6 +65,13 @@ void TestBoostTimerImpl::testMaxThreads() {
 		boost::bind(&onTimerInf, &counter01)
 	);
 	timerInf->start();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	/*Timer::Ptr timerLocked = Timer::create(10);
+	timerLocked->EventSender<Timer::Event>::addEventListener(
+		boost::bind(&onTimerLocked)
+	);
+	timerLocked->start();*/
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	Timer::Ptr timer01 = Timer::create(10);
 	int counter02 = 0;
 	timer01->EventSender<Timer::Event>::addEventListener(

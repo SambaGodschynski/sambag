@@ -19,23 +19,25 @@ namespace sambag { namespace disco {  namespace components {
 namespace { // thread stuff
 	//-------------------------------------------------------------------------
 	enum Messages {
-		StartThread,
+		StartTimer,
 		CloseThread
 	};
 	//-------------------------------------------------------------------------
-	typedef int Id;
+	enum {SLEEPING_TIME = 10}; // for timer and main thread
 	//-------------------------------------------------------------------------
-	typedef std::pair<Messages, Id> Message;
+	typedef std::pair<Messages, boost::shared_ptr<TimerThread> > Message;
 	//-------------------------------------------------------------------------
 	typedef std::queue<Message> MessageQueue;
 	//-------------------------------------------------------------------------
 	MessageQueue msgQueue;
 	//-------------------------------------------------------------------------
-	sambag::com::RecursiveMutex queueLock;
+	sambag::com::RecursiveMutex msgQueueLock;
 	//-------------------------------------------------------------------------
 	typedef boost::thread MainThread;
 	//-------------------------------------------------------------------------
-	typedef std::vector<TimerThread*> TimerThreads;
+	typedef std::vector< boost::shared_ptr<TimerThread> > TimerThreads;
+	//-------------------------------------------------------------------------
+	typedef std::queue< boost::shared_ptr<TimerThread> > FreeTimerThreads;
 	//-------------------------------------------------------------------------
 	MainThread mainThread;
 	//-------------------------------------------------------------------------
@@ -46,34 +48,81 @@ namespace { // thread stuff
 	bool mainThreadRunning = true;
 } // namespace
 //=============================================================================
-struct TimerThread {
+class TimerThread {
 //=============================================================================
+public:
+	typedef boost::shared_ptr<TimerThread> Ptr;
+	typedef boost::weak_ptr<TimerThread> WPtr;
+private:
+	static FreeTimerThreads freeThreads;
+	static sambag::com::RecursiveMutex freeTimerLock;
 	Timer::Ptr tm;
 	boost::thread *thread;
 	boost::asio::io_service *io;
-	bool isRunning;
-	bool sleep;
-	Id id;
-	TimerThread( Timer::Ptr tm = Timer::Ptr(), Id id = -1 ) : 
+	bool threadIsRunning;
+	bool timerIsRunning;
+protected:
+	WPtr self;
+	TimerThread( Timer::Ptr tm = Timer::Ptr() ) : 
 		tm(tm), 
 		thread(NULL),
 		io(NULL), 
-		isRunning(false),
-		sleep(false)
-		id(id) {}
+		threadIsRunning(false),
+		timerIsRunning(false)
+	{
+	}
+	void markAsFree();
+public:
+	void startTimer();
+	void startThread();
+	void stopThread();
+	void timerThreadClbk();
 	~TimerThread() {
 		if (thread)
 			delete thread;
 		if (io)
 			delete io;
 	}
-	void start();
-	void stop();
-	void timerThreadClbk();
+	bool isSleeping() const {
+		return !timerIsRunning && threadIsRunning;
+	}
+	static Ptr get(Timer::Ptr tm = Timer::Ptr());
+	Ptr getPtr() const {
+		return self.lock();
+	}
 };
+///////////////////////////////////////////////////////////////////////////////
+// TimerThread impl.
 //-----------------------------------------------------------------------------
-void TimerThread::start() {
-	io = new boost::asio::io_service();
+FreeTimerThreads TimerThread::freeThreads;
+sambag::com::RecursiveMutex TimerThread::freeTimerLock;
+//-----------------------------------------------------------------------------
+TimerThread::Ptr TimerThread::get(Timer::Ptr tm) {
+	Ptr tmth;
+	// look for free thread
+	SAMBAG_BEGIN_SYNCHRONIZED(freeTimerLock)
+		if (!freeThreads.empty()) {
+			tmth = freeThreads.front();
+			freeThreads.pop();
+			tmth->tm = tm;
+			return tmth;
+		}
+	SAMBAG_END_SYNCHRONIZED
+	tmth = Ptr ( new TimerThread(tm) );
+	tmth->self = tmth;
+	timerThreads.push_back(tmth);
+	return tmth;
+}
+//-----------------------------------------------------------------------------
+void TimerThread::markAsFree() {
+	SAMBAG_BEGIN_SYNCHRONIZED(freeTimerLock)
+		freeThreads.push(getPtr());
+	SAMBAG_END_SYNCHRONIZED
+}
+//-----------------------------------------------------------------------------
+void TimerThread::startTimer() {
+	if (!io)
+		io = new boost::asio::io_service();
 	// prepare timer
 	Timer::TimeType ms = tm->getInitialDelay();
 	int repetitions = tm->getNumRepetitions();
@@ -87,52 +136,75 @@ void TimerThread::start() {
 		repetitions)
 	);
 	tm->__setRunningByToolkit_(true);
-	// start timer thread
-	thread = new boost::thread(
-		boost::bind(&TimerThread::timerThreadClbk, this)
-	);
+	timerIsRunning = true;
+	if (!threadIsRunning)
+		startThread();
 }
 //-----------------------------------------------------------------------------
-void TimerThread::stop() {
-	isRunning = false;
+void TimerThread::startThread() {
+	if (threadIsRunning)
+		return;
+	threadIsRunning = true;
+	if (!thread) {
+		thread = new boost::thread (
+			boost::bind(&TimerThread::timerThreadClbk, this)
+		);
+	}
+}
+//-----------------------------------------------------------------------------
+void TimerThread::stopThread() {
+	threadIsRunning = false;
 	thread->join();
 }
 //-----------------------------------------------------------------------------
 void TimerThread::timerThreadClbk() {
-	io->run();
-	SAMBAG_BEGIN_SYNCHRONIZED(queueLock)
-		msgQueue.push(Message(CloseThread, id));
-	SAMBAG_END_SYNCHRONIZED
-	while (isRunning) { // wait for exiting by main thread
-		boost::this_thread::sleep(boost::posix_time::millisec(100));
+	while (threadIsRunning) {
+		while(timerIsRunning && threadIsRunning) {
+			io->run();
+			io->reset();
+			timerIsRunning = false;
+			tm.reset();
+			markAsFree();
+		}
+		while (!timerIsRunning && threadIsRunning) { // wait for exiting by main thread
+			boost::this_thread::sleep(boost::posix_time::millisec(SLEEPING_TIME));
+			// TODO: close thread after X seconds
+			//SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)
+			//	msgQueue.push(Message(CloseThread, id));
+			//SAMBAG_END_SYNCHRONIZED
+		}
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
+// MainThread impl.
 namespace {
 	//-------------------------------------------------------------------------
 	void handleMessage(const Message &msg) {
-		Id id = msg.second;
-		TimerThread &th = *timerThreads[id];
+		TimerThread::Ptr th = msg.second;
 		switch(msg.first) {
-			case StartThread:
-				th.start();
+			case StartTimer:
+				th->startTimer();
 				break;
 			case CloseThread:
-				th.stop();
+				th->stopThread();
 				break;
 		}
 	}
 	//-------------------------------------------------------------------------
 	void mainThreadClbk() {
 		while (mainThreadRunning) {
-			SAMBAG_BEGIN_SYNCHRONIZED(queueLock)
+			SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)
 				while( !msgQueue.empty() ) {
 					Message msg = msgQueue.front();
 					handleMessage(msg);
 					msgQueue.pop();
 				}
 			SAMBAG_END_SYNCHRONIZED
-			boost::this_thread::sleep(boost::posix_time::millisec(10));
+			boost::this_thread::sleep(boost::posix_time::millisec(SLEEPING_TIME));
+		}
+		// close all timer threads:
+		for (int i=0; i<timerThreads.size(); ++i) {
+			timerThreads[i]->stopThread();
 		}
 	}
 }
@@ -151,18 +223,17 @@ void BoostTimerImpl::closeAllTimer() {
 			}
 		SAMBAG_END_SYNCHRONIZED
 	} catch (...) {
-		// one timer is locked	
+		throw TimerLockedEx();
 	}
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::startTimer(Timer::Ptr tm) {
 	if (tm->isRunning())
 		return;
-	Id id = timerThreads.size();
-	timerThreads.push_back(new TimerThread(tm, id));
+	TimerThread::Ptr tmth = TimerThread::get(tm);
 	// invoke: add thread
-	SAMBAG_BEGIN_SYNCHRONIZED(queueLock)
-		msgQueue.push(Message(StartThread, id));
+	SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)
+		msgQueue.push(Message(StartTimer, tmth));
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
@@ -220,9 +291,6 @@ void BoostTimerImpl::joinThreads() {
 	mainThreadRunning = false;
 	closeAllTimer();
 	mainThread.join();
-	for (Id id = 0; id<timerThreads.size(); ++id) {
-		delete timerThreads[id];
-	}
 }
 //-----------------------------------------------------------------------------
 int BoostTimerImpl::getMaxNumThreads() {
