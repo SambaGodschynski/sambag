@@ -132,7 +132,7 @@ void Win32WindowImpl::_open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl::~Win32WindowImpl() {
-	close();
+	_close();
 }
 //-----------------------------------------------------------------------------
 bool Win32WindowImpl::isVisible() const {

@@ -132,7 +132,7 @@ void X11WindowImpl::open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
-	close();
+	destroyWindow(); // TODO: formally close() unchecked behaviour
 }
 //-----------------------------------------------------------------------------
 bool X11WindowImpl::isVisible() const {
