@@ -154,7 +154,7 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::processDraw() {
-	DrawPolicy::processDraw(rootPane, ConcreteWindowImpl::surface);
+	DrawPolicy::processDraw(ConcreteWindowImpl::surface);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

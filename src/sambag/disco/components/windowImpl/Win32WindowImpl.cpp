@@ -13,6 +13,7 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
 
+//extern HINSTANCE __getHInstance_();
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -40,7 +41,7 @@ Win32WindowImpl::Win32WindowImpl() :
 void Win32WindowImpl::drawAll() {
 	BOOST_FOREACH(WinMap::value_type &obj, winmap) {
 		//obj.second->processDraw();
-		UpdateWindow(obj.second->win);
+		InvalidateRect(obj.second->win, NULL, false);
 	}
 }
 //-----------------------------------------------------------------------------
@@ -183,7 +184,7 @@ void Win32WindowImpl::updateBoundsToWindow() {
 		return;
 
 	RECT wRect;
-	SetRect ( &wRect, 0, 0, bounds.width(), bounds.height() );
+	SetRect ( &wRect, 0, 0, (int)bounds.width(), (int)bounds.height() );
 	AdjustWindowRectEx (&wRect, 
 		GetWindowLong (win, GWL_STYLE), 
 		FALSE, GetWindowLong (win, GWL_EXSTYLE)
@@ -235,6 +236,7 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	case WM_PAINT : {
 		if (win)
 			win->update();
+		ValidateRect(hWnd, NULL);
 		break;
 	}
 	case WM_MOVE : {

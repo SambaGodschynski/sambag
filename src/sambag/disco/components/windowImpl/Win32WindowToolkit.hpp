@@ -13,18 +13,22 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
-//#include "Win32TimerImpl.hpp"
+#include "Win32TimerImpl.hpp"
 #include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
 #include <queue>
 
 namespace sambag { namespace disco { namespace components {
+
+//typedef Win32TimerImpl TimerImpl;
+typedef BoostTimerImpl TimerImpl;
+
 //=============================================================================
 /** 
   * @class Win32WindowToolkit.
   */
 class Win32WindowToolkit : public WindowToolkit,
-						   public BoostTimerImpl
+						   public TimerImpl
 {
 //=============================================================================
 friend struct Loki::CreateUsingNew<Win32WindowToolkit>;
@@ -32,7 +36,7 @@ private:
 	//-------------------------------------------------------------------------
 	static void invokeWaiting();
 	//-------------------------------------------------------------------------
-	typedef BoostTimerImpl TimerPolicy;
+	typedef TimerImpl TimerPolicy;
 	//-------------------------------------------------------------------------
 	typedef std::queue<InvokeFunction> InvokeLater;
 	//-------------------------------------------------------------------------

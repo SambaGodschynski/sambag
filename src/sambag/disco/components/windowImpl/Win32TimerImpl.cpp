@@ -65,7 +65,7 @@ void Win32TimerImpl::startTimer(Timer::Ptr tm) {
 	 * A timerId greater zero comes back, but there is
 	 * no WM_TIMER call. ( even in the mainloop )
 	 */
-	UINT_PTR timerId = SetTimer(NULL, NULL, 1, timerProc);
+	UINT_PTR timerId = SetTimer(NULL, 0x100, 1000, timerProc);
 	timers.insert(
 		std::make_pair(timerId, TimerInfo(tm))
 	);

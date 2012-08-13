@@ -18,8 +18,9 @@
 #include <sambag/disco/components/RedrawManager.hpp>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
+#include <sambag/disco/components/Timer.hpp>
 
-namespace sambag { namespace disco {
+namespace sambag { namespace disco { namespace components { 
 //=============================================================================
 /**
   * @class BufferedDrawPolicy.
@@ -29,7 +30,7 @@ class BufferedDrawPolicy {
 //=============================================================================
 protected:
 	//-------------------------------------------------------------------------
-	void processDraw(components::RootPane::Ptr root, ISurface::Ptr surface);
+	void processDraw(ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
 	void clearBuffer();
 	//-------------------------------------------------------------------------
@@ -44,10 +45,18 @@ protected:
 	}
 private:
 	//-------------------------------------------------------------------------
+	Timer::Ptr updateTimer;
+	//-------------------------------------------------------------------------
+	RootPane::Ptr root;
+	//-------------------------------------------------------------------------
+	void redrawRoot();
+	//-------------------------------------------------------------------------
 	sambag::disco::IImageSurface::Ptr bff;
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<bool, true> needUpdate;
 public:
+	//-------------------------------------------------------------------------
+	BufferedDrawPolicy();
 	//-------------------------------------------------------------------------
 	void update() {
 		needUpdate = true;
@@ -55,6 +64,27 @@ public:
 
 }; // X11Window
 ///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+inline BufferedDrawPolicy::BufferedDrawPolicy() {
+	/*updateTimer = Timer::create(10);
+	updateTimer->EventSender<Timer::Event>::addEventListener(
+		boost::bind(&BufferedDrawPolicy::onUpdateTimer, this)
+	);
+	updateTimer->setNumRepetitions(-1);
+	updateTimer->start();*/
+}
+//-----------------------------------------------------------------------------
+inline void BufferedDrawPolicy::redrawRoot() {
+	if (!bff || !root)
+		return;
+	SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
+		if (needUpdate) { // sometimes we need a full redraw
+			needUpdate=false;
+			RedrawManager::currentManager(root)->markCompletelyDirty(root);
+		}
+		RedrawManager::currentManager(root)->drawDirtyRegions();
+	SAMBAG_END_SYNCHRONIZED
+}
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::clearBuffer() {
 	using namespace sambag::disco;
@@ -65,21 +95,13 @@ inline void BufferedDrawPolicy::clearBuffer() {
 	cn->fill();
 }
 //-----------------------------------------------------------------------------
-inline void BufferedDrawPolicy::processDraw(components::RootPane::Ptr root,
-		ISurface::Ptr surface)
+inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
+	redrawRoot();
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
-	if (needUpdate) { // sometimes we need a full redraw
-		needUpdate=false;
-		//root->draw(root->getDrawContext());
-		//cn->drawSurface(bff);
-		//return;
-		RedrawManager::currentManager(root)->markCompletelyDirty(root);
-	}
-	RedrawManager::currentManager(root)->drawDirtyRegions();
 	cn->drawSurface(bff);
 }
 //-----------------------------------------------------------------------------
@@ -91,8 +113,9 @@ inline void BufferedDrawPolicy::init(components::RootPane::Ptr root,
 	bff = sambag::disco::
 			getDiscoFactory()->createImageSurface((int)dim.width(), (int)dim.height());
 	root->setSurface(bff);
+	this->root = root;
 	update();
 }
-}} // namespace(s)
+}}} // namespace(s)
 
 #endif /* DEFAULTDRAWPOLICY_HPP_ */

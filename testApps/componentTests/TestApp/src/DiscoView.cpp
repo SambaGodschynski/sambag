@@ -542,12 +542,17 @@ void initTimer() {
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
 	timer3->start();
 }
-//#include <windows.h>
-//int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+/*#include <windows.h>
+HINSTANCE hI = NULL;
+HINSTANCE __getHInstance_() {
+	return hI;
+}
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {*/
 int main() {
 	SAMBAG_WINONLY(
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)
+	//hI = hInstance;
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
