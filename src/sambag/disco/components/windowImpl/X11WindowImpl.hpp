@@ -16,7 +16,6 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
-#include <sambag/com/ICommand.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
@@ -26,30 +25,6 @@
 namespace sambag { namespace disco { namespace components {
 class X11WindowToolkit;
 class X11WindowImpl; typedef boost::shared_ptr<X11WindowImpl> X11WindowImplPtr;
-//=============================================================================
-struct DestroyWindow : public sambag::com::ICommand {
-//=============================================================================
-	typedef boost::shared_ptr<DestroyWindow> Ptr;
-	X11WindowImplPtr dst;
-	virtual void execute();
-	static Ptr create(X11WindowImplPtr _dst) {
-		Ptr res(new DestroyWindow());
-		res->dst = _dst;
-		return res;
-	}
-};
-//=============================================================================
-struct OpenWindow : public sambag::com::ICommand {
-//=============================================================================
-	typedef boost::shared_ptr<OpenWindow> Ptr;
-	X11WindowImplPtr dst;
-	virtual void execute();
-	static Ptr create(X11WindowImplPtr _dst) {
-		Ptr res(new OpenWindow());
-		res->dst = _dst;
-		return res;
-	}
-};
 //=============================================================================
 /** 
   * @class X11Window.
@@ -70,17 +45,11 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
-	typedef std::list<sambag::com::ICommand::Ptr> Invocations;
-	//-------------------------------------------------------------------------
-	static Invocations invocations;
-	//-------------------------------------------------------------------------
 	void createSurface();
 	//-------------------------------------------------------------------------
 	static void handleEvent(XEvent &event);
 	//-------------------------------------------------------------------------
 	void destroyWindow();
-	//-------------------------------------------------------------------------
-	static void processInvocations();
 	//-------------------------------------------------------------------------
 	static X11WindowImpl * getX11WindowImpl(::Window win);
 	//-------------------------------------------------------------------------
@@ -148,8 +117,6 @@ public:
 	void setTitle(const std::string &title);
 	//-------------------------------------------------------------------------
 	std::string getTitle() const;
-	//-------------------------------------------------------------------------
-	static void invokeLater(sambag::com::ICommand::Ptr cmd);
 	//-------------------------------------------------------------------------
 	void open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------

@@ -10,20 +10,9 @@
 #include <sambag/disco/X11Surface.hpp>
 #include <boost/foreach.hpp>
 #include "X11WindowToolkit.hpp"
+#include <sambag/disco/components/WindowToolkit.hpp>
 
 namespace sambag { namespace disco { namespace components {
-//=============================================================================
-// struct DestroyWindow
-//=============================================================================
-void DestroyWindow::execute() {
-	dst->destroyWindow();
-}
-//=============================================================================
-// struct OpenWindow
-//=============================================================================
-void OpenWindow::execute() {
-	dst->createWindow();
-}
 //=============================================================================
 //  Class X11WindowImpl
 //=============================================================================
@@ -31,8 +20,6 @@ void OpenWindow::execute() {
 X11WindowImpl::WinMap X11WindowImpl::winmap;
 //-----------------------------------------------------------------------------
 int X11WindowImpl::instances = 0;
-//-----------------------------------------------------------------------------
-X11WindowImpl::Invocations X11WindowImpl::invocations;
 //-----------------------------------------------------------------------------
 Atom X11WindowImpl::wm_protocols_atom = 0;
 //-----------------------------------------------------------------------------
@@ -131,13 +118,17 @@ void X11WindowImpl::destroyWindow() {
 void X11WindowImpl::close() {
 	if (!visible)
 		return;
-	invokeLater(DestroyWindow::create(getPtr()));
+	getWindowToolkit()->invokeLater(
+		boost::bind(&X11WindowImpl::destroyWindow, this)
+	);
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::open(AWindowImplPtr parent) {
 	if (visible)
 		return;
-	invokeLater(OpenWindow::create(getPtr()));
+	getWindowToolkit()->invokeLater(
+		boost::bind(&X11WindowImpl::createWindow, this)
+	);
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
@@ -217,22 +208,6 @@ void X11WindowImpl::updateTitle() {
 	window_name.format = 8;
 	window_name.nitems = strlen((char *) window_name.value);
 	XSetWMName(display, win, &window_name);
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::processInvocations() {
-	using namespace sambag::com;
-	Invocations::iterator it = invocations.begin();
-	while (it!=invocations.end()) {
-		(*it)->execute();
-		it = invocations.erase(it);
-	}
-}
-//-----------------------------------------------------------------------------
-void X11WindowImpl::invokeLater(sambag::com::ICommand::Ptr cmd) {
-	invocations.push_back(cmd);
-	if (instances==0) { // loop isn't running, handle now
-		processInvocations();
-	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::handleEvent(XEvent &event) {

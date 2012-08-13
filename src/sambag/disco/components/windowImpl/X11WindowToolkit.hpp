@@ -16,6 +16,7 @@
 #include <X11/Xlib.h>
 #include <sambag/com/ICommand.hpp>
 #include "BoostTimerImpl.hpp"
+#include <queue>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -40,7 +41,14 @@ private:
 	X11WindowToolkit(const X11WindowToolkit&){}
 	//-------------------------------------------------------------------------
 	static void mainLoop();
-	//typedef sambag::com::ICommand::Ptr CommandPtr;
+	//-------------------------------------------------------------------------
+	static void invokeWaiting();
+	//-------------------------------------------------------------------------
+	typedef std::queue<InvokeFunction> InvokeLater;
+	//-------------------------------------------------------------------------
+	static InvokeLater _invokeLater;
+	//-------------------------------------------------------------------------
+	static bool mainLoopRunning;
 public:
 	//-------------------------------------------------------------------------
 	struct Globals {
@@ -55,6 +63,12 @@ protected:
 	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------
 public:
+	//-------------------------------------------------------------------------
+	static bool isMainLoopRunning() {
+		return mainLoopRunning;
+	}
+	//-------------------------------------------------------------------------
+	virtual void invokeLater(const InvokeFunction &f);
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

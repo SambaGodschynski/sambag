@@ -19,6 +19,10 @@ namespace sambag { namespace disco { namespace components {
 //  Class X11WindowToolkit
 //=============================================================================
 //-----------------------------------------------------------------------------
+bool X11WindowToolkit::mainLoopRunning = false;
+//-----------------------------------------------------------------------------
+X11WindowToolkit::InvokeLater X11WindowToolkit::_invokeLater;
+//-----------------------------------------------------------------------------
 X11WindowToolkit::X11WindowToolkit() {
 	globals.display = XOpenDisplay(NULL);
 }
@@ -28,6 +32,14 @@ X11WindowToolkit::~X11WindowToolkit() {
 		// TODO: XCloseDisplay causes segmentation fault
 		//XCloseDisplay(globals.display);
 		globals.display = NULL;
+	}
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::invokeWaiting() {
+	while (!_invokeLater.empty()) {
+		const InvokeFunction &f = _invokeLater.front();
+		f();
+		_invokeLater.pop();
 	}
 }
 //-----------------------------------------------------------------------------
@@ -69,6 +81,7 @@ void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
 void X11WindowToolkit::mainLoop() {
 	::Display *display = getToolkit()->getGlobals().display;
 	TimerPolicy::startThreads();
+	mainLoopRunning = true;
 	while ( X11WindowImpl::getNumInstances() > 0 ) {
 		// read in and process all pending events for the main window
 		XEvent event;
@@ -78,12 +91,22 @@ void X11WindowToolkit::mainLoop() {
 		}
 		X11WindowImpl::drawAll();
 		usleep(1000);
-		X11WindowImpl::processInvocations();
+		invokeWaiting();
 	}
+	mainLoopRunning = false;
 	TimerPolicy::joinThreads();
 	XCloseDisplay(display);
 	display = NULL;
 
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f)
+{
+	if (!isMainLoopRunning()) {
+		f();
+		return;
+	}
+	_invokeLater.push(f);
 }
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {

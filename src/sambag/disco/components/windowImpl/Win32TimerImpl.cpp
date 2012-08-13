@@ -5,6 +5,8 @@
  *      Author: Johannes Unger
  */
 
+#ifdef _WIN32
+
 #include "Win32TimerImpl.hpp"
 #include <boost/unordered_map.hpp>
 #include <windows.h>
@@ -73,3 +75,5 @@ void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 }}} // namespace(s)
+
+#endif // _WIN32
