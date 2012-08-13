@@ -37,7 +37,7 @@ change_makefile_zlib()
  then
      return
  fi
- echo change_makefile_to_static
+ echo change_makefile_zlib
  sed 's/zdll.lib/zlib/g' $1 > $1_
  mv $1_ $1
 }
@@ -63,6 +63,20 @@ case $1 in
      DYNAMIC) export LINK='DYNAMIC' ;;
 esac
 }
+
+to_dos_path()
+{
+ echo $1 | sed 's/\//\\/g' | sed 's/\\*cygdrive\\\([a-z]\)/\1:/i'
+}
+
+#replace: if XY -> ifeq ($(XY), 1)
+missing_seperator_workaround()
+{
+ echo missing_seperator_workaround
+ sed 's/if \([a-Z_]*\)/ifeq ($(\1), 1)/gi' $1 > $1_
+ mv $1_ $1
+}
+
 #//////////////////////////////////////////////////////////////////////////////
 
 arg $@
@@ -76,14 +90,16 @@ sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
 sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
 sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
+cd $WHEREAMI
+
 #build zlib
-export DST_ZLIB=$ROOTDIR/$ZLIB
+export DST_ZLIB=$(to_dos_path $ROOTDIR/$ZLIB)
 change_makefile_to_static $ROOTDIR/$ZLIB/win32/Makefile.msc
-#nmake -f win32/Makefile.msc #dosen't work correctly: STATIC.lib not found??
+#nmake -f win32/Makefile.msc #dosen't work correctly: STATIC.lib not found ?? => bat file even dosen't work!
 cmd /c makeZlib.bat
 
 #build libpng
-export DST_LIBPNG=$ROOTDIR/$PNG
+export DST_LIBPNG=$(to_dos_path $ROOTDIR/$PNG)
 change_makefile_to_static $ROOTDIR/$LIBPNG/scripts/makefile.vcwin32
 cp -r $ROOTDIR/$ZLIB $ROOTDIR/$LIBPNG/zlib
 #nmake -f scripts/makefile.vcwin32
@@ -95,15 +111,19 @@ change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
 make -f Makefile.win32 "CFG=release"
 
+source $WHEREAMI/vs90vcvars32.sh UNIX
+
 #build cairo
 cd $ROOTDIR/$CAIRO
-export INCLUDE=$INCLUDE:$ROOTDIR\zlib
-export INCLUDE=$INCLUDE:$ROOTDIR\libpng
-export INCLUDE=$INCLUDE:$ROOTDIR\pixman\pixman
-export INCLUDE=$INCLUDE:$ROOTDIR\cairo\boilerplate
-export INCLUDE=$INCLUDE:$ROOTDIR\cairo\src
-export LIB=$LIB:$ROOTDIR\$ZLIN
-export LIB=$LIB:$ROOTDIR\$PNG
+#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\zlib)
+#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\libpng)
+#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\pixman\pixman)
+#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\cairo\boilerplate)
+#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\cairo\src)
+#export LIB=$LIB;$(to_dos_path $ROOTDIR\$ZLIB)
+#export LIB=$LIB;$(to_dos_path $ROOTDIR\$PNG)
 change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
+missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
+
 make -f Makefile.win32 "CFG=release"

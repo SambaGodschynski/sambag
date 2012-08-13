@@ -15,6 +15,10 @@ namespace sambag { namespace disco { namespace components {
 //  Class Win32WindowToolkit
 //=============================================================================
 //-----------------------------------------------------------------------------
+bool Win32WindowToolkit::mainLoopRunning = false;
+//-----------------------------------------------------------------------------
+Win32WindowToolkit::InvokeLater Win32WindowToolkit::_invokeLater;
+//-----------------------------------------------------------------------------
 Win32WindowToolkit::Win32WindowToolkit() {
 }
 //-----------------------------------------------------------------------------
@@ -40,15 +44,35 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 	return &FactoryHolder::Instance();
 }
 //-----------------------------------------------------------------------------
+void Win32WindowToolkit::invokeWaiting() {
+	while (!_invokeLater.empty()) {
+		const InvokeFunction &f = _invokeLater.front();
+		f();
+		_invokeLater.pop();
+	}
+}
+//-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
 	TimerPolicy::startThreads();
+	mainLoopRunning = true;
 	while( GetMessage( &msg, NULL, 0, 0 ) > 0) 
 	{
 		TranslateMessage(&msg);
         DispatchMessage(&msg);
+		invokeWaiting();
     }
+	mainLoopRunning = false;
 	TimerPolicy::joinThreads();
+}
+//-----------------------------------------------------------------------------
+void Win32WindowToolkit::invokeLater(const Win32WindowToolkit::InvokeFunction &f) 
+{
+	if (!isMainLoopRunning()) {
+		f();
+		return;
+	}
+	_invokeLater.push(f);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startTimer(Timer::Ptr tm) {

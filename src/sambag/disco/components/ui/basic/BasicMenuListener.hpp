@@ -13,6 +13,7 @@
 #include <sambag/disco/components/Menu.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
+#include <sambag/disco/components/Timer.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {

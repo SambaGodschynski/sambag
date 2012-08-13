@@ -18,6 +18,11 @@ conv_path() #converts windows path to cygwin path
 #chekcs whether a path has to be conv. or not.
 check_path_conv()
 {
+  if ! [ -z $UNIX_STYLE ]
+  then
+      echo 1
+     return
+  fi
   if [ $(echo $1 | grep 'PATH') ] #grep 'INCLUDE\|LIB\|LIBPATH') ]
   then
        echo 1
@@ -78,6 +83,11 @@ exec_origbat()
       _export $x
     done
 }
+
+#passing arguments
+case $@ in
+     UNIX) export UNIX_STYLE=1;;
+esac
 
 SRC=$(conv_path $VS90COMNTOOLS)
 #doexport VS90COMNTOOLS $SRC

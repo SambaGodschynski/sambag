@@ -13,6 +13,7 @@
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/com/ICommand.hpp>
 #include "Timer.hpp"
+#include <boost/function.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -35,6 +36,10 @@ public:
 	virtual void startMainLoop() = 0;
 	//-------------------------------------------------------------------------
 	virtual Dimension getScreenSize() const = 0;
+	//-------------------------------------------------------------------------
+	typedef boost::function<void()> InvokeFunction;
+	//-------------------------------------------------------------------------
+	virtual void invokeLater(const InvokeFunction &f) = 0;
 }; // WindowToolkit
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

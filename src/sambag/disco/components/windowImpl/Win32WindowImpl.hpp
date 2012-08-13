@@ -34,6 +34,10 @@ public:
 	typedef boost::weak_ptr<Win32WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
+	void _open(AWindowImplPtr parent);
+	//-------------------------------------------------------------------------
+	void _close();
+	//-------------------------------------------------------------------------
 	static LRESULT CALLBACK 
 		wndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 	//-------------------------------------------------------------------------
@@ -64,6 +68,8 @@ private:
 	static Win32WindowImpl * getWin32WindowImpl(HWND win);
 	//-------------------------------------------------------------------------
 	static void drawAll();
+	//-------------------------------------------------------------------------
+
 protected:
 	//-------------------------------------------------------------------------
 	WPtr self; // setted during WindowImpl::create()

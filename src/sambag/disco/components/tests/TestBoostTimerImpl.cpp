@@ -15,14 +15,13 @@
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestBoostTimerImpl );
 
-bool lock = true;
 
 void onTimerInf(int *counter) {
 	++(*counter);
 }
 
 void onTimerLocked() {
-	while (lock);
+	boost::this_thread::sleep(boost::posix_time::millisec(5000));
 }
 
 void onStartTimerThread(sambag::disco::components::Timer::Ptr tm) {
@@ -57,32 +56,35 @@ void TestBoostTimerImpl::tearDown() {
 //-----------------------------------------------------------------------------
 void TestBoostTimerImpl::testMaxThreads() {
 	using namespace sambag::disco::components;
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	Timer::Ptr timerInf = Timer::create(10);
-	timerInf->setNumRepetitions(-1);
 	int counter01 = 0;
-	timerInf->EventSender<Timer::Event>::addEventListener(
-		boost::bind(&onTimerInf, &counter01)
-	);
-	timerInf->start();
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	/*Timer::Ptr timerLocked = Timer::create(10);
-	timerLocked->EventSender<Timer::Event>::addEventListener(
-		boost::bind(&onTimerLocked)
-	);
-	timerLocked->start();*/
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	Timer::Ptr timer01 = Timer::create(10);
 	int counter02 = 0;
-	timer01->EventSender<Timer::Event>::addEventListener(
-		boost::bind(&onTimerInf, &counter02)
-	);
-	// start thread which starts timer02 several times
-	boost::thread th(boost::bind(&onStartTimerThread, timer01));
+	boost::thread th;
+	{
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		Timer::Ptr timerInf = Timer::create(10);
+		timerInf->setNumRepetitions(-1);
+		timerInf->EventSender<Timer::Event>::addEventListener(
+			boost::bind(&onTimerInf, &counter01)
+		);
+		timerInf->start();
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		Timer::Ptr timerLocked = Timer::create(10);
+		timerLocked->EventSender<Timer::Event>::addEventListener(
+			boost::bind(&onTimerLocked)
+		);
+		timerLocked->start();
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		Timer::Ptr timer01 = Timer::create(10);
+		timer01->EventSender<Timer::Event>::addEventListener(
+			boost::bind(&onTimerInf, &counter02)
+		);
+		// start thread which starts timer02 several times
+		th = boost::thread(boost::bind(&onStartTimerThread, timer01));
+	}
 	getWindowToolkit()->startMainLoop();
 	th.join();
 	CPPUNIT_ASSERT(counter01>0);
 	CPPUNIT_ASSERT_EQUAL((int)4, counter02);
-	CPPUNIT_ASSERT_EQUAL((int)2, BoostTimerImpl::getMaxNumThreads());
+	CPPUNIT_ASSERT_EQUAL((int)3, BoostTimerImpl::getMaxNumThreads());
 }
 } // namespace(s)

@@ -10,6 +10,7 @@
 #include <sambag/disco/Win32Surface.hpp>
 #include <boost/foreach.hpp>
 #include "X11WindowToolkit.hpp"
+#include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
 
 
@@ -102,12 +103,24 @@ void Win32WindowImpl::destroyWindow() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::close() {
+	getWindowToolkit()->invokeLater(
+		boost::bind(&Win32WindowImpl::_close, this)
+	);
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::open(AWindowImplPtr parent) {
+	getWindowToolkit()->invokeLater(
+		boost::bind(&Win32WindowImpl::_open, this, parent)
+	);
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::_close() {
 	if (!visible)
 		return;
 	PostMessage(win, WM_CLOSE, 0, 0);
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::open(AWindowImplPtr parent) {
+void Win32WindowImpl::_open(AWindowImplPtr parent) {
 	if (visible)
 		return;
 	Win32WindowImpl *p = dynamic_cast<Win32WindowImpl*>(parent.get());

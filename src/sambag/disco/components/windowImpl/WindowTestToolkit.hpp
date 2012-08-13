@@ -38,6 +38,10 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	virtual void invokeLater(const InvokeFunction &f) {
+		f(); // call immediately
+	}
+	//-------------------------------------------------------------------------
 	void setMainLoopWaiting( int ms ) {
 		mainLoopWaiting = ms;
 	}

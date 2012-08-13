@@ -507,7 +507,7 @@ void onMainClose(void*, const sdc::OnCloseEvent &ev) {
 }
 
 void pathChanged(void *src, const sdc::MenuSelectionManagerChanged &ev) {
-	std::cout<<ev.getSrc().getSelectedPath()<<std::endl;
+//	std::cout<<ev.getSrc().getSelectedPath()<<std::endl;
 }
 
 void timedCallbackInf(void *src, const sdc::TimerEvent &ev) {
@@ -598,10 +598,10 @@ int main() {
 		win[0]->validate();
 		win[0]->pack();
 		win[0]->open();
-/*
+
 		MenuSelectionManager::defaultManager().
 		EventSender<MenuSelectionManagerChanged>::addEventListener
-			( &pathChanged );*/
+			( &pathChanged );
 
 		sdc::Window::startMainLoop();
 	}
