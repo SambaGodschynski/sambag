@@ -150,11 +150,11 @@ bool RedrawManager::isDoubleBufferingEnabled() const {
 	return false;
 }
 //-----------------------------------------------------------------------------
-void RedrawManager::markCompletelyClean(AComponentPtr aComponent) {
+void RedrawManager::markCompletelyDirty(AComponentPtr aComponent) {
 	addDirtyRegion(aComponent, Rectangle(0, 0, INT_MAX, INT_MAX));
 }
 //-----------------------------------------------------------------------------
-void RedrawManager::markCompletelyDirty(AComponentPtr aComponent) {
+void RedrawManager::markCompletelyClean(AComponentPtr aComponent) {
 	SAMBAG_BEGIN_SYNCHRONIZED(lock)
 			dirtyComponents.erase(aComponent);
 	SAMBAG_END_SYNCHRONIZED

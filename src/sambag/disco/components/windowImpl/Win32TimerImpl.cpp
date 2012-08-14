@@ -8,40 +8,37 @@
 #ifdef _WIN32
 
 #include "Win32TimerImpl.hpp"
-#include <boost/unordered_map.hpp>
+#include <boost/bimap.hpp>
+#include <boost/bimap/unordered_set_of.hpp>
 #include <windows.h>
 #include <sambag/com/Common.hpp>
 
 namespace sambag { namespace disco {  namespace components {
+
 namespace {
 ///////////////////////////////////////////////////////////////////////////////
-// Timer impl.
-struct TimerInfo {
-	Timer::Ptr tm;
-	int numCalled;
-	TimerInfo(Timer::Ptr tm) : tm(tm), numCalled(0) {}
-};
-typedef boost::unordered_map<UINT_PTR, TimerInfo> Timers;
+typedef boost::bimap< boost::bimaps::unordered_set_of<UINT_PTR>,
+boost::bimaps::unordered_set_of<Timer::Ptr> > Timers;
 Timers timers;
 //-----------------------------------------------------------------------------
 /**
  * Windows timer callback.
  */
 VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
-	std::cout<<"bug: 'never called' is fixed now"<<std::endl;
-	Timers::iterator it = timers.find(idEvent);
-	if (it!=timers.end()) {
+	Timers::left_map::iterator it = timers.left.find(idEvent);
+	if (it==timers.left.end()) {
 		return;
 	}
-	Timer::Ptr tm = it->second.tm;
+	Timer::Ptr tm = it->second;
 	tm->timerExpired();
-	++(it->second.numCalled);
+	int &numCalled = tm->__getNumCalled_();
+	++numCalled;
 	if (tm->getNumRepetitions() != -1 &&
-		it->second.numCalled > tm->getNumRepetitions()) 
+		numCalled > tm->getNumRepetitions()) 
 	{
 		tm->__setRunningByToolkit_(false);
 		KillTimer(hwnd, idEvent);
-		timers.erase(it);
+		timers.left.erase(it);
 		return;
 	}
 	if (tm->getDelay() != dwTime) { // initial delay
@@ -55,24 +52,34 @@ VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::closeAllTimer() {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Timers::right_map::iterator it = timers.right.begin();
+	while(it != timers.right.end()) {
+		Timer::Ptr tm = it->first;
+		tm->__setRunningByToolkit_(false);
+		UINT_PTR idEvent = it->second;
+		KillTimer(NULL, idEvent);
+		// remove timermap entry and incr. it
+		timers.right.erase(it);
+		it = timers.right.begin(); 
+	}
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::startTimer(Timer::Ptr tm) {
 	tm->__setRunningByToolkit_(true);
-	/*
-	 * the invoke below dosent't do anything.
-	 * A timerId greater zero comes back, but there is
-	 * no WM_TIMER call. ( even in the mainloop )
-	 */
-	UINT_PTR timerId = SetTimer(NULL, 0x100, 1000, timerProc);
+	UINT_PTR timerId = SetTimer(NULL, NULL, tm->getInitialDelay(), timerProc);
 	timers.insert(
-		std::make_pair(timerId, TimerInfo(tm))
+		Timers::value_type(timerId, tm)
 	);
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
-	SAMBA_LOG_NOT_YET_IMPL();
+	Timers::right_map::iterator it = timers.right.find(tm);
+	if (it == timers.right.end())
+		return;
+	tm->__setRunningByToolkit_(false);
+	UINT_PTR idEvent = it->second;
+	KillTimer(NULL, idEvent);
+	timers.right.erase(it);
 }
 }}} // namespace(s)
 

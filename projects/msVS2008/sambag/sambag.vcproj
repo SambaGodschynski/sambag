@@ -1053,6 +1053,14 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32MMTimerImpl.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32MMTimerImpl.hpp"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\src\sambag\disco\components\windowImpl\Win32TimerImpl.cpp"
 							>
 						</File>

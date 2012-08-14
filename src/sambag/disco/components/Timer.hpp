@@ -49,14 +49,25 @@ protected:
 	WPtr self;
 	//-------------------------------------------------------------------------
 	bool running;
+	//-------------------------------------------------------------------------
+	int numCalled;
 public:
 	//-------------------------------------------------------------------------
 	/**
-	 * to be called by concrete WindowToolkit only.
+	 * to be called by concrete TimerImpl only.
 	 * @param r
 	 */
-	void __setRunningByToolkit_(bool r) {
-		running = r;
+	void __setRunningByToolkit_(bool r);
+	//-------------------------------------------------------------------------
+	/**
+	 * to be called by concrete TimerImpl only.
+	 */
+	int & __getNumCalled_() {
+		return numCalled;
+	}
+	//-------------------------------------------------------------------------
+	int getNumCalled() const {
+		return numCalled;
 	}
 	//-------------------------------------------------------------------------
 	/**

@@ -54,7 +54,7 @@ void Win32WindowToolkit::invokeWaiting() {
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
-	TimerPolicy::startThreads();
+	TimerPolicy::startUpTimer();
 	mainLoopRunning = true;
 	while( GetMessage( &msg, NULL, 0, 0 ) > 0) 
 	{
@@ -63,7 +63,7 @@ void Win32WindowToolkit::mainLoop() {
 		invokeWaiting();
     }
 	mainLoopRunning = false;
-	TimerPolicy::joinThreads();
+	TimerPolicy::tearDownTimer();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::invokeLater(const Win32WindowToolkit::InvokeFunction &f) 

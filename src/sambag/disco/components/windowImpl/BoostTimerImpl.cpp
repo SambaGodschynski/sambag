@@ -134,8 +134,7 @@ void TimerThread::startTimer() {
 	t->async_wait(
 		boost::bind(&BoostTimerImpl::timerCallback,
 		boost::asio::placeholders::error,
-		t,
-		repetitions)
+		t)
 	);
 	tm->__setRunningByToolkit_(true);
 	timerIsRunning = true;
@@ -249,14 +248,17 @@ void BoostTimerImpl::stopTimer(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::timerCallback(const boost::system::error_code&,
-		BoostTimerImpl::BoostTimer *timerImpl, int repetitions)
+		BoostTimerImpl::BoostTimer *timerImpl)
 {
 		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
 		if (it==toInvoke.left.end())
 			return;
 		Timer::Ptr tm = it->second;
+		int &numCalled = tm->__getNumCalled_();
+		++numCalled;
 		tm->timerExpired();
-		if (repetitions == 0 ||
+		if ( ( tm->getNumRepetitions() != -1 && 
+			  numCalled > tm->getNumRepetitions() ) ||
 			!mainThreadRunning ||
 			!tm->isRunning()) // stop forced
 		{
@@ -267,25 +269,22 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 			SAMBAG_END_SYNCHRONIZED
 			return;
 		}
-		if (repetitions > 0)
-			--repetitions;
 		long ms = tm->getDelay();
 		timerImpl->expires_at(timerImpl->expires_at() +
 				boost::posix_time::millisec(ms));
 		timerImpl->async_wait(
 			boost::bind(&timerCallback,
 			boost::asio::placeholders::error,
-			timerImpl,
-			repetitions)
+			timerImpl)
 		);
 }
 //-----------------------------------------------------------------------------
-void BoostTimerImpl::startThreads() {
+void BoostTimerImpl::startUpTimer() {
 	mainThreadRunning = true;
 	mainThread = boost::thread(&mainThreadClbk);
 }
 //-----------------------------------------------------------------------------
-void BoostTimerImpl::joinThreads() {
+void BoostTimerImpl::tearDownTimer() {
 	mainThreadRunning = false;
 	closeAllTimer();
 	mainThread.join();

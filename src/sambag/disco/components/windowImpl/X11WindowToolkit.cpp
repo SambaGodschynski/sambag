@@ -80,7 +80,7 @@ void X11WindowToolkit::stopTimer(Timer::Ptr tm) {
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::mainLoop() {
 	::Display *display = getToolkit()->getGlobals().display;
-	TimerPolicy::startThreads();
+	TimerPolicy::startUpTimer();
 	mainLoopRunning = true;
 	while ( X11WindowImpl::getNumInstances() > 0 ) {
 		// read in and process all pending events for the main window
@@ -94,7 +94,7 @@ void X11WindowToolkit::mainLoop() {
 		invokeWaiting();
 	}
 	mainLoopRunning = false;
-	TimerPolicy::joinThreads();
+	TimerPolicy::tearDownTimer();
 	XCloseDisplay(display);
 	display = NULL;
 

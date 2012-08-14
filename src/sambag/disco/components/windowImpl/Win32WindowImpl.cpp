@@ -15,6 +15,14 @@
 
 //extern HINSTANCE __getHInstance_();
 
+namespace {
+	template <typename T>
+	void debugMsg(HWND hwnd, const T &msg) {
+		std::cout<<"["<<std::hex<<hwnd<<"]:"
+		<<msg<<";"<<std::endl<<std::flush;
+	}
+}
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Win32WindowImpl
@@ -251,8 +259,9 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
-		if (win)
+		if (win) {
 			win->update();
+		}
 		ValidateRect(hWnd, NULL);
 		break;
 	}

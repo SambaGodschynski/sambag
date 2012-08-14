@@ -17,9 +17,17 @@ Timer::Timer() :
 	repetitions(0),
 	delay(1),
 	initialDelay(-1),
-	running(false)
+	running(false),
+	numCalled(0)
 {
 
+}
+//-------------------------------------------------------------------------
+void Timer::__setRunningByToolkit_(bool r) {
+	running = r;
+	if (!running) {
+		numCalled = 0;
+	}
 }
 //-----------------------------------------------------------------------------
 Timer::Ptr Timer::create(const TimeType &ms) {
@@ -30,12 +38,16 @@ Timer::Ptr Timer::create(const TimeType &ms) {
 }
 //-----------------------------------------------------------------------------
 void Timer::start() {
+	if (isRunning())
+		return;
 	if (initialDelay==-1)
 		initialDelay = delay;
 	getWindowToolkit()->startTimer(getPtr());
 }
 //-----------------------------------------------------------------------------
 void Timer::stop() {
+	if (!isRunning())
+		return;
 	getWindowToolkit()->stopTimer(getPtr());
 }
 //-----------------------------------------------------------------------------

@@ -74,7 +74,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 	enum {Res=100};
 	int waited = 0;
 	int sec = 1;
-	T::startThreads();
+	T::startUpTimer();
 	while (true) {
 		boost::this_thread::sleep(boost::posix_time::millisec(Res));
 		waited+=Res;
@@ -85,7 +85,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 		if ( waited > mainLoopWaiting )
 			break;
 	}
-	T::joinThreads();
+	T::tearDownTimer();
 }
 //-----------------------------------------------------------------------------
 template <class T, class W>

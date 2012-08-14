@@ -33,12 +33,12 @@ public:
 	/**
 	 * does nothing, only for TimerImpl concept.
 	 */
-	static void startThreads() {}
+	static void startUpTimer() {}
 	//-------------------------------------------------------------------------
 	/**
 	 * does nothing, only for TimerImpl concept.
 	 */
-	static void joinThreads() {}
+	static void tearDownTimer() {}
 
 }; // Win32TimerImpl
 }}} // namespace(s)

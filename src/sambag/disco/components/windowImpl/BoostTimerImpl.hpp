@@ -39,7 +39,7 @@ private:
 			boost::bimaps::unordered_set_of<Timer::Ptr> > ToInvoke;
 	//-------------------------------------------------------------------------
 	static void timerCallback(const boost::system::error_code&,
-				BoostTimer* timer, int repetitions);
+				BoostTimer* timer);
 	//-------------------------------------------------------------------------
 	static ToInvoke toInvoke;
 public:
@@ -52,9 +52,9 @@ public:
 	//-------------------------------------------------------------------------
 	void stopTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------
-	static void startThreads();
+	static void startUpTimer();
 	//-------------------------------------------------------------------------
-	static void joinThreads();
+	static void tearDownTimer();
 }; // BoostTimerImpl
 }}} // namespace(s)
 

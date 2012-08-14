@@ -14,14 +14,16 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
 #include "Win32TimerImpl.hpp"
+#include "Win32MMTimerImpl.hpp"
 #include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
 #include <queue>
 
 namespace sambag { namespace disco { namespace components {
 
-//typedef Win32TimerImpl TimerImpl;
-typedef BoostTimerImpl TimerImpl;
+typedef Win32TimerImpl TimerImpl;
+//typedef Win32MMTimerImpl TimerImpl;
+//typedef BoostTimerImpl TimerImpl;
 
 //=============================================================================
 /** 
