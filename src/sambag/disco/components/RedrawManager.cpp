@@ -10,6 +10,7 @@
 #include "Graphics.hpp"
 #include <algorithm>
 #include <boost/foreach.hpp>
+#include "Window.hpp"
 namespace sambag { namespace disco { namespace components {
 namespace {
 	RedrawManager::Ptr holder;
@@ -52,6 +53,10 @@ void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 		}
 		dirtyComponents.insert(std::make_pair(c, r));
 	SAMBAG_END_SYNCHRONIZED
+	// invalidate containing window:
+	Window::Ptr win = c->getTopLevelAncestor();
+	SAMBAG_ASSERT(win); // if c is visible win has to be valid.
+	win->invalidateWindow(r);
 }
 //-------------------------------------------------------------------------
 void RedrawManager::updateDirtyComponent(AComponentPtr c,

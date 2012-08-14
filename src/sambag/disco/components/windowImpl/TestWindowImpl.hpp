@@ -54,6 +54,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void close();
 	//-------------------------------------------------------------------------
+	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
+	//-------------------------------------------------------------------------
 	virtual void setBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBounds() const;

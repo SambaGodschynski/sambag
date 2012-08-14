@@ -167,6 +167,9 @@ void X11WindowImpl::setBounds(const Rectangle &r) {
 	updateBoundsToWindow();
 }
 //-----------------------------------------------------------------------------
+void X11WindowImpl::invalidateWindow(const Rectangle &area) {
+}
+//-----------------------------------------------------------------------------
 void X11WindowImpl::drawAll() {
 	BOOST_FOREACH(WinMap::value_type &v, winmap) {
 		v.second->processDraw();

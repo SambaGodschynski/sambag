@@ -202,6 +202,23 @@ void Win32WindowImpl::updateBoundsToWindow() {
 	);
 }
 //-----------------------------------------------------------------------------
+void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
+	enum { ERASE_BG = false };
+	if (!win)
+		return;
+	if (area == NULL_RECTANGLE) {
+		InvalidateRect(win, NULL, ERASE_BG);
+		return;
+	}
+	RECT wRect;
+	SetRect ( &wRect, (int)area.x0().x(), 
+		(int)area.x0().y(), 
+		(int)area.width(), 
+		(int)area.height() 
+	);
+	InvalidateRect(win, &wRect, ERASE_BG);
+}
+//-----------------------------------------------------------------------------
 void Win32WindowImpl::updateWindowToBounds(const Rectangle &r) {
 	if (r.getDimension() != bounds.getDimension()) {
 		createSurface();

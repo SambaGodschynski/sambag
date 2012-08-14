@@ -663,6 +663,8 @@ public:
 	 */
 	virtual RootPanePtr getTopLevelRootPane() const;
 	//-------------------------------------------------------------------------
+	WindowPtr getTopLevelAncestor() const;
+	//-------------------------------------------------------------------------
 	/**
 	 * @return the autoscrolls property.
 	 */

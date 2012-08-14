@@ -53,6 +53,8 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
+	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root) {
 		rootPane = root;
 	}
@@ -130,6 +132,13 @@ public:
 	}
 };
 ///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::invalidateWindow(
+	const Rectangle &area) 
+{
+	ConcreteWindowImpl::invalidateWindow(area);
+}
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {

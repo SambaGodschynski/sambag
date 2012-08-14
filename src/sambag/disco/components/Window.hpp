@@ -65,6 +65,13 @@ private:
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * notifys the (system) window to invalidate the given area.
+	 * @param the area to invalidate, can be NULL_RECTANGLE to
+	 * invalidate the whole area.
+	 */
+	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
+	//-------------------------------------------------------------------------
 	AWindowImpl::Ptr getWindowImpl() const;
 	//-------------------------------------------------------------------------
 	static void startMainLoop();

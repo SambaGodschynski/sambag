@@ -76,6 +76,8 @@ public:
 		return curr.x0();
 	}
 	//-------------------------------------------------------------------------
+	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE) = 0;
+	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root) = 0;
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr parent) = 0;

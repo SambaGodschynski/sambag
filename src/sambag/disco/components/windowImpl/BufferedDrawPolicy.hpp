@@ -109,6 +109,7 @@ inline void BufferedDrawPolicy::init(components::RootPane::Ptr root,
 		ISurface::Ptr surface)
 {
 	using namespace components;
+	SAMBAG_ASSERT(root);
 	Dimension dim = root->getBounds().getDimension();
 	bff = sambag::disco::
 			getDiscoFactory()->createImageSurface((int)dim.width(), (int)dim.height());

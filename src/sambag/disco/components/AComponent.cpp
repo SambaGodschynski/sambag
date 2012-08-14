@@ -10,6 +10,7 @@
 #include <sambag/com/Common.hpp>
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
+#include "Window.hpp"
 #include "ui/AComponentUI.hpp"
 #include "Graphics.hpp"
 #include <boost/tuple/tuple.hpp>
@@ -872,6 +873,18 @@ RootPanePtr AComponent::getTopLevelRootPane() const {
 			return rt;
 	}
 	return RootPanePtr();
+}
+//-----------------------------------------------------------------------------
+WindowPtr AComponent::getTopLevelAncestor() const {
+	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	if (!p)
+		p = getParent();
+	for (; p; p = p->getParent()) {
+		WindowPtr w = boost::shared_dynamic_cast<Window>(p);
+		if (w)
+			return w;
+	}
+	return WindowPtr();
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getValidateRoot() const {

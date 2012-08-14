@@ -19,6 +19,9 @@ void TestWindowImpl::open(AWindowImplPtr parent) {
 	root->validate();
 }
 //-----------------------------------------------------------------------------
+void TestWindowImpl::invalidateWindow(const Rectangle &area) {
+}
+//-----------------------------------------------------------------------------
 void TestWindowImpl::close() {
 	isOpen = false;
 }

@@ -118,6 +118,10 @@ void Window::close() {
 	windowImpl->close();
 }
 //-----------------------------------------------------------------------------
+void Window::invalidateWindow(const Rectangle &area) {
+	windowImpl->invalidateWindow(area);
+}
+//-----------------------------------------------------------------------------
 void Window::pack() {
 	// invalidate because:
 	// AContainer::(dim == NULL_DIMENSION || !(isPreferredSizeSet() || isValid()))

@@ -98,6 +98,8 @@ protected:
 	virtual void processDraw() = 0;
 public:
 	//-------------------------------------------------------------------------
+	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
+	//-------------------------------------------------------------------------
 	HWND getHwnd() const {
 		return win;
 	}
