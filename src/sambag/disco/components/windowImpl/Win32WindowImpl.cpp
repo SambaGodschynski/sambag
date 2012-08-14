@@ -67,6 +67,7 @@ void Win32WindowImpl::createWindow(HWND parent) {
 	wc.hInstance     = hI;
 	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
 	wc.lpszClassName = "discowindowimpl";
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&wc)) )
 		return;
 
@@ -250,6 +251,8 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	int x=0; int y=0;
 
 	switch(message) {
+	case WM_SETFOCUS:
+		break;
 	case WM_DESTROY:
 		win->destroyWindow();
 		if (instances==0)
@@ -267,7 +270,7 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	}
 	case WM_MOVE : {
 		RECT r = {0};
-		GetWindowRect(hWnd, &r);
+		GetClientRect(hWnd, &r);
 		Rectangle nr(Point2D(r.left, r.top), Point2D(r.right, r.bottom));
 		if (win)
 			win->updateWindowToBounds(nr);
@@ -275,43 +278,49 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	}
 	case WM_SIZE : {
 		RECT r = {0};
-		GetWindowRect(hWnd, &r);
+		GetClientRect(hWnd, &r);
 		Rectangle nr(Point2D(r.left, r.top), Point2D(r.right, r.bottom));
 		if (win)
 			win->updateWindowToBounds(nr);
 		break;
 	}
 	case WM_LBUTTONDOWN : 
+		SetCapture(hWnd);
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 1);
 		break;
 	case WM_RBUTTONDOWN :
+		SetCapture(hWnd);
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 2);
 		break;
 	case WM_MBUTTONDOWN :
+		SetCapture(hWnd);
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 4);
 		break;
 	case WM_LBUTTONUP : 
+		ReleaseCapture();
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 1);
 		break;
 	case WM_RBUTTONUP :
+		ReleaseCapture();
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 2);
 		break;
 	case WM_MBUTTONUP :
+		ReleaseCapture();
 		x = LOWORD(lParam); 
 		y = HIWORD(lParam);
 		if (win)
