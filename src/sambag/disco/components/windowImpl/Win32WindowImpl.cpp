@@ -13,7 +13,6 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
 #include <sambag/com/ArbitraryType.hpp>
-//extern HINSTANCE __getHInstance_();
 
 namespace {
 	template <typename T>
@@ -43,7 +42,7 @@ void Win32WindowImpl::initWindowClass(HINSTANCE hI) {
 	}
 	wndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	wndClass.hInstance     = hI;
-	wndClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255)); //0; //(HBRUSH)(COLOR_BACKGROUND);
+	wndClass.hbrBackground = 0; //(HBRUSH)(COLOR_BACKGROUND);
 	wndClass.lpszClassName = "discowindowimpl";
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&wndClass)) )
@@ -58,7 +57,7 @@ void Win32WindowImpl::initNestedWindowClass(HINSTANCE hI) {
 	nestedWndClass.style = CS_GLOBALCLASS | CS_DBLCLKS;
 	nestedWndClass.cbClsExtra  = 0; 
 	nestedWndClass.cbWndExtra  = 0; 
-	nestedWndClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255));
+	nestedWndClass.hbrBackground = 0;
 	nestedWndClass.lpszMenuName  = 0; 
 	nestedWndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	nestedWndClass.hInstance     = hI;
@@ -102,6 +101,7 @@ void Win32WindowImpl::drawAll() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::update() {
+	createSurface();
 	this->processDraw();
 }
 //-----------------------------------------------------------------------------
@@ -117,7 +117,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	HINSTANCE hI = (HINSTANCE)parentData.second;
 	initNestedWindowClass(hI);
 
-	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	bounds = area;
 	win = CreateWindowEx ( styleEx, 
@@ -142,11 +142,6 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 
 	// register win
 	winmap[win] = this;
-
-	// disco stuff
-	createSurface();
-	SAMBAG_ASSERT(surface);
-
 	visible = true;
 }
 //-----------------------------------------------------------------------------
@@ -184,10 +179,6 @@ void Win32WindowImpl::createWindow(HWND parent) {
 
 	// register win
 	winmap[win] = this;
-
-	// disco stuff
-	createSurface();
-	SAMBAG_ASSERT(surface);
 
 	visible = true;
 	onCreated();
@@ -361,18 +352,10 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
-		HDC hDC;
-		PAINTSTRUCT Ps;
-		hDC = BeginPaint(hWnd, &Ps);
-		MoveToEx(hDC, 60, 20, NULL);
-		LineTo(hDC, 264, 122);
-		EndPaint(hWnd, &Ps);
-		break;
-		/*
 		if (win) {
 			win->update();
 		}
-		ValidateRect(hWnd, NULL);*/
+		ValidateRect(hWnd, NULL);
 		break;
 	}
 	case WM_MOVE : {

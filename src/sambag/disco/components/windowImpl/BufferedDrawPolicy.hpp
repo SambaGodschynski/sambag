@@ -34,14 +34,14 @@ protected:
 	//-------------------------------------------------------------------------
 	void clearBuffer();
 	//-------------------------------------------------------------------------
-	void init(components::RootPane::Ptr root, ISurface::Ptr surface);
+	void init(components::RootPane::Ptr root);
 	//-------------------------------------------------------------------------
-	void reinit(components::RootPane::Ptr root, ISurface::Ptr surface) {
+	void reinit(components::RootPane::Ptr root) {
 		if (bff)
 			if (bff->getSize().getDimension() ==
 					root->getBounds().getDimension())
 				return;
-		init(root, surface);
+		init(root);
 	}
 private:
 	//-------------------------------------------------------------------------
@@ -80,8 +80,10 @@ inline void BufferedDrawPolicy::redrawRoot() {
 	SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
 		if (needUpdate) { // sometimes we need a full redraw
 			needUpdate=false;
-			//RedrawManager::currentManager(root)->markCompletelyDirty(root);
 			root->draw(root->getDrawContext());
+			RedrawManager::currentManager(root)->markCompletelyClean(root);
+			// return; Cubase/Live8 as nested window(win32) -> need to drawDirtyRegions()
+			// otherwise redrawing is locked until system sends WM_PAINT
 		}
 		RedrawManager::currentManager(root)->drawDirtyRegions();
 	SAMBAG_END_SYNCHRONIZED
@@ -106,8 +108,7 @@ inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 	cn->drawSurface(bff);
 }
 //-----------------------------------------------------------------------------
-inline void BufferedDrawPolicy::init(components::RootPane::Ptr root,
-		ISurface::Ptr surface)
+inline void BufferedDrawPolicy::init(components::RootPane::Ptr root)
 {
 	using namespace components;
 	SAMBAG_ASSERT(root);

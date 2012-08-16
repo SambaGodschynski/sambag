@@ -167,7 +167,7 @@ template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::initRootPane() {
 	using namespace components;
 	rootPane->setSize(ConcreteWindowImpl::getBounds().getDimension());
-	DrawPolicy::init(rootPane, ConcreteWindowImpl::surface);
+	DrawPolicy::init(rootPane);
 	rootPane->validate();
 	// create mousevent creator
 	mec = events::MouseEventCreator::create(rootPane);
@@ -202,7 +202,7 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	Dimension dim = ConcreteWindowImpl::getBounds().getDimension();
 	if (dim != rootPane->getSize()) {
 		rootPane->setSize(dim);
-		DrawPolicy::reinit(rootPane, ConcreteWindowImpl::surface);
+		DrawPolicy::reinit(rootPane);
 		rootPane->invalidate();
 	}
 	EventSender<OnBoundsChanged>::notifyListeners(this, OnBoundsChanged(dim));

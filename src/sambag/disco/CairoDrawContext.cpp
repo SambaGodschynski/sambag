@@ -87,18 +87,21 @@ void CairoDrawContext::drawSurface(ISurface::Ptr _surface, Number opacity) {
 	// color settings has to be reseted.
 	setFillColor(getFillColor());
 	setStrokeColor(getStrokeColor());
+	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setFillPattern() {
 	if (!fillPattern)
 		return;
 	cairo_set_source(context, fillPattern->getCairoPatternRef().get());
+	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setStrokePattern() {
 	if (!strokePattern)
 		return;
 	cairo_set_source(context, strokePattern->getCairoPatternRef().get());
+	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setClip(const Rectangle &r) {
@@ -115,6 +118,7 @@ void CairoDrawContext::copyTo(IDrawContext::Ptr cn) const
 			surfaceRef->getCairoSurface(),
 			0, 0);
 	cairo_paint (dst->getCairoContext());
+	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
@@ -129,5 +133,6 @@ void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
 			dest.x() - src.x0().x(), dest.y() - src.x0().y());
 	cairo_rectangle (cr, dest.x(), dest.y(), src.width(), src.height());
 	cairo_fill (cr);
+	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 }} // namespaces

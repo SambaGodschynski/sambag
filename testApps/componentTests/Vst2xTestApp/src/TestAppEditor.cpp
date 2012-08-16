@@ -23,6 +23,7 @@ TestAppEditor::~TestAppEditor () {
 }
 //-----------------------------------------------------------------------------
 bool TestAppEditor::open( void *ptr ) {
+	AEffEditor::open(ptr);
 	using namespace sambag::com;
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
@@ -42,11 +43,17 @@ bool TestAppEditor::open( void *ptr ) {
 }
 //-----------------------------------------------------------------------------
 void TestAppEditor::close() {
+	AEffEditor::close();
 }
 //-----------------------------------------------------------------------------
 bool TestAppEditor::getRect (ERect** rect) {
 	*rect = &size;
 	return true;
+}
+//-----------------------------------------------------------------------------
+void TestAppEditor::idle() {
+	/*if (window)
+		window->invalidateWindow();*/
 }
 
 

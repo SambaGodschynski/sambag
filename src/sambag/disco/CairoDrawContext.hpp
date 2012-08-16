@@ -18,6 +18,20 @@
 #include <list>
 #include <boost/scoped_array.hpp>
 
+
+#define DISCO_CONTEXT_CHECK_ERROR 1
+
+#ifdef DISCO_CONTEXT_CHECK_ERROR
+#define SAMBAG_CHECK_CONTEXT_STATE(cn)		  \
+	cairo_status_t status = cairo_status(cn); \
+	if (status!=CAIRO_STATUS_SUCCESS)	      \
+		throw std::runtime_error(cairo_status_to_string(status));
+#else
+#define SAMBAG_CHECK_CONTEXT_STATE(cn)
+#endif
+
+
+
 namespace sambag { namespace disco {
 //=============================================================================
 // Class CairoPath
@@ -229,6 +243,7 @@ public:
 			patternInUse = STROKE;
 		}
 		cairo_stroke(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fill() {
@@ -239,6 +254,7 @@ public:
 			patternInUse = FILL;
 		}
 		cairo_fill(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void fillPreserve() {
@@ -251,6 +267,7 @@ public:
 			patternInUse = FILL;
 		}
 		cairo_fill_preserve(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -269,6 +286,7 @@ public:
 		);
 		cairo_set_font_size (context, font.size);
 		currentFont = font;
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFontFace(const Font::FontFace &fontFace) {
@@ -279,6 +297,7 @@ public:
 			(cairo_font_slant_t)currentFont.slant,
 			(cairo_font_weight_t)currentFont.weight
 		);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFontWeight(const Font::Weight &weight) {
@@ -289,6 +308,7 @@ public:
 			(cairo_font_slant_t)currentFont.slant,
 			(cairo_font_weight_t)currentFont.weight
 		);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFontSlant(const Font::Slant &slant) {
@@ -299,11 +319,13 @@ public:
 			(cairo_font_slant_t)currentFont.slant,
 			(cairo_font_weight_t)currentFont.weight
 		);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setFontSize(const Font::Size &size) {
 		currentFont.size = size;
 		cairo_set_font_size (context, currentFont.size);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual Font getCurrentFont() const {
@@ -408,6 +430,7 @@ public:
 			dash->size(),
 			dash->offset()
 		);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void setClip(const Rectangle &r);
@@ -456,11 +479,13 @@ public:
 	virtual void save() {
 		_save();
 		cairo_save(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void restore() {
 		_restore();
 		cairo_restore(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual Point2D getCurrentPoint() const {
@@ -480,6 +505,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void clip() {
 		cairo_clip(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle clipExtends() const {
@@ -491,11 +517,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPath() const {
 		cairo_path_t * path = cairo_copy_path(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 		return CairoPath::create(path);
 	}
 	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPathFlat() const {
 		cairo_path_t * path = cairo_copy_path_flat(context);
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 		return CairoPath::create(path);
 	}
 	//-------------------------------------------------------------------------
@@ -503,6 +531,7 @@ public:
 		CairoPath::Ptr cp = boost::shared_dynamic_cast<CairoPath, Path>(path);
 		if (!cp) return;
 		cairo_append_path(context, cp->getPath());
+		SAMBAG_CHECK_CONTEXT_STATE(context);
 	}
 	//-------------------------------------------------------------------------
 	virtual void newSubPath() {
