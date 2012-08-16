@@ -52,6 +52,8 @@ protected:
 	//-------------------------------------------------------------------------
 	Window(Window::Ptr parent);
 	//-------------------------------------------------------------------------
+	Window(AWindowImpl::Ptr windowImpl);
+	//-------------------------------------------------------------------------
 	AWindowImpl::Ptr windowImpl;
 	//-------------------------------------------------------------------------
 	/**
@@ -117,6 +119,13 @@ public:
 	//-------------------------------------------------------------------------
 	static Ptr create(Window::Ptr parent=WindowPtr()) {
 		Ptr res(new Window(parent));
+		res->self = res;
+		res->initWindow();
+		return res;
+	}
+	//-------------------------------------------------------------------------
+	static Ptr create(AWindowImpl::Ptr winImpl) {
+		Ptr res(new Window(winImpl));
 		res->self = res;
 		res->initWindow();
 		return res;

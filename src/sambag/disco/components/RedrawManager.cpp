@@ -55,8 +55,9 @@ void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 	SAMBAG_END_SYNCHRONIZED
 	// invalidate containing window:
 	Window::Ptr win = c->getTopLevelAncestor();
-	SAMBAG_ASSERT(win); // if c is visible win has to be valid.
-	win->invalidateWindow(r);
+	//SAMBAG_ASSERT(win); // if c is visible win has to be valid.
+	if (win)
+		win->invalidateWindow(r);
 }
 //-------------------------------------------------------------------------
 void RedrawManager::updateDirtyComponent(AComponentPtr c,

@@ -14,6 +14,9 @@
 #include <sambag/com/ICommand.hpp>
 #include "Timer.hpp"
 #include <boost/function.hpp>
+#include <sambag/com/ArbitraryType.hpp>
+#include <sambag/com/Common.hpp>
+#include <stdexcept>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -28,6 +31,22 @@ protected:
 	virtual AWindowImplPtr 
 	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const = 0;
 public:
+	//-------------------------------------------------------------------------
+	/**
+	 * Creates a Window that uses an existing Window as host. 
+	 * @param osParent depends on OS:
+	 *		Win32: pair<HWND, HINSTANCE>
+	 * @param area the area of the host window which has to be used by 
+	 *             the new window (not every OS need this)
+	 */ 
+	virtual WindowPtr createNestedWindow( ArbitraryType::Ptr osParent, 
+		const Rectangle &area ) 
+	{
+		throw std::logic_error(
+			"createNestedWindow is not impl. with this WindowToolkit."
+		);
+		return WindowPtr();
+	}
 	//-------------------------------------------------------------------------
 	virtual void startTimer( Timer::Ptr tm ) = 0;
 	//-------------------------------------------------------------------------

@@ -52,8 +52,15 @@ public:
 	//-------------------------------------------------------------------------
 	void stopTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------
+	/**
+	 * Starts the timer main thread, which is needed to bring the boost
+	 * timer to run.
+	 */
 	static void startUpTimer();
 	//-------------------------------------------------------------------------
+	/**
+	 * Joins the main thread.
+	 */
 	static void tearDownTimer();
 }; // BoostTimerImpl
 }}} // namespace(s)

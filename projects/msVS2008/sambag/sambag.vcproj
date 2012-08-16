@@ -1583,6 +1583,18 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="dsp"
+				>
+				<File
+					RelativePath="..\..\..\src\sambag\dsp\DspPlugin.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\dsp\VST2xPluginWrapper.hpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

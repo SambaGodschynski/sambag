@@ -303,7 +303,7 @@ void createScrollercoasterWindow() {
 	AContainerPtr con = Panel::create();
 	con->setSize(Dimension(300, 1000));
 	sdc::ScrollPane::Ptr vp = ScrollPane::create(con);
-	vp->setHorizontalScrollBarPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_NEVER);
+	//vp->setHorizontalScrollBarPolicy(ScrollPane::HORIZONTAL_SCROLLBAR_NEVER);
 	con->setLayout(BoxLayout::create(con, BoxLayout::Y_AXIS));
 	win[4]->getContentPane()->add(vp);
 	for (int i=0; i<NUM; ++i) {

@@ -18,6 +18,7 @@
 #include "AWindowImpl.hpp"
 #include "WindowFlags.hpp"
 #include <windows.h>
+#include <sambag/com/ArbitraryType.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -33,6 +34,14 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<Win32WindowImpl> WPtr;
 private:
+	//-------------------------------------------------------------------------
+	static void initWindowClass(HINSTANCE hI);
+	//-------------------------------------------------------------------------
+	static void initNestedWindowClass(HINSTANCE hI);
+	//-------------------------------------------------------------------------
+	static void destroyWindowClass();
+	//-------------------------------------------------------------------------
+	static void destroyNestedWindowClass();
 	//-------------------------------------------------------------------------
 	void _open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------
@@ -71,6 +80,8 @@ private:
 	//-------------------------------------------------------------------------
 
 protected:
+	//-------------------------------------------------------------------------
+	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
 	//-------------------------------------------------------------------------
 	WPtr self; // setted during WindowImpl::create()
 	//-------------------------------------------------------------------------

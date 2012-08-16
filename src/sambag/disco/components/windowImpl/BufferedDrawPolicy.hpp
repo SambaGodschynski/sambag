@@ -80,7 +80,8 @@ inline void BufferedDrawPolicy::redrawRoot() {
 	SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
 		if (needUpdate) { // sometimes we need a full redraw
 			needUpdate=false;
-			RedrawManager::currentManager(root)->markCompletelyDirty(root);
+			//RedrawManager::currentManager(root)->markCompletelyDirty(root);
+			root->draw(root->getDrawContext());
 		}
 		RedrawManager::currentManager(root)->drawDirtyRegions();
 	SAMBAG_END_SYNCHRONIZED

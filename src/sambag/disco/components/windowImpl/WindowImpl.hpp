@@ -51,12 +51,16 @@ private:
 	//-------------------------------------------------------------------------
 	components::events::MouseEventCreator::Ptr mec;
 	//-------------------------------------------------------------------------
+	void initRootPane();
+	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
 	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root) {
 		rootPane = root;
+		if (isVisible())
+			initRootPane();
 	}
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr parent) {
@@ -114,12 +118,31 @@ public:
 		return res;
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * ceates nested window.
+	 */
+	static Ptr create(ArbitraryType::Ptr osParent, 
+		const Rectangle &area) 
+	{
+		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
+		res->ConcreteWindowImpl::initAsNestedWindow(osParent, area);
+		res->ConcreteWindowImpl::self = res;
+		res->setFlag(WindowFlags::WND_NESTED, true);
+		return res;
+	}
+	//-------------------------------------------------------------------------
 	virtual void open() {
+		// is window nested open/close is deactivated.
+		if (getFlag(WindowFlags::WND_NESTED))
+			return; 
 		// init surface
 		ConcreteWindowImpl::open(parent);
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {
+		// is window nested open/close is deactivated.
+		if (getFlag(WindowFlags::WND_NESTED))
+			return; 
 		ConcreteWindowImpl::close();
 	}
 	//--------------------------------------------------------------------------
@@ -141,13 +164,19 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::invalidateWindow(
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
-void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::initRootPane() {
 	using namespace components;
 	rootPane->setSize(ConcreteWindowImpl::getBounds().getDimension());
 	DrawPolicy::init(rootPane, ConcreteWindowImpl::surface);
 	rootPane->validate();
 	// create mousevent creator
 	mec = events::MouseEventCreator::create(rootPane);
+}
+//-----------------------------------------------------------------------------
+template <class ConcreteWindowImpl, class DrawPolicy>
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
+	if (rootPane)
+		initRootPane();
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testApp", "testApp\testApp.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sambag_tests", "sambag_tests\sambag_tests.vcproj", "{81C723EB-D571-4FBF-819A-6E89C52FE4EF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vst2xTestApp", "Vst2xTestApp\Vst2xTestApp.vcproj", "{C80E88A8-3157-43C4-AC85-9D6246595A25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Debug|Win32.Build.0 = Debug|Win32
 		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Release|Win32.ActiveCfg = Release|Win32
 		{81C723EB-D571-4FBF-819A-6E89C52FE4EF}.Release|Win32.Build.0 = Release|Win32
+		{C80E88A8-3157-43C4-AC85-9D6246595A25}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C80E88A8-3157-43C4-AC85-9D6246595A25}.Debug|Win32.Build.0 = Debug|Win32
+		{C80E88A8-3157-43C4-AC85-9D6246595A25}.Release|Win32.ActiveCfg = Release|Win32
+		{C80E88A8-3157-43C4-AC85-9D6246595A25}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

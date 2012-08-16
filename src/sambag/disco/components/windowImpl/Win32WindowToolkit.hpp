@@ -59,6 +59,9 @@ protected:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	virtual WindowPtr createNestedWindow( ArbitraryType::Ptr osParent, 
+		const Rectangle &area );
+	//-------------------------------------------------------------------------
 	static bool isMainLoopRunning() {
 		return mainLoopRunning;
 	}

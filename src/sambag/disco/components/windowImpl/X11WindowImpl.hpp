@@ -66,6 +66,8 @@ private:
 	static void drawAll();
 protected:
 	//-------------------------------------------------------------------------
+	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
+	//-------------------------------------------------------------------------
 	WPtr self; // setted during WindowImpl::create()
 	//-------------------------------------------------------------------------
 	X11WindowImpl();

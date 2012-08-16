@@ -9,6 +9,7 @@
 #include "Win32WindowToolkit.hpp"
 #include "WindowImpl.hpp"
 #include "Win32WindowImpl.hpp"
+#include <sambag/disco/components/Window.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -32,6 +33,14 @@ void Win32WindowToolkit::startMainLoop() {
 AWindowImplPtr Win32WindowToolkit::createWindowImpl(AWindowImplPtr parent) const {
 	AWindowImplPtr res = WindowImpl<Win32WindowImpl>::create(parent);
 	return res;
+}
+//-------------------------------------------------------------------------
+WindowPtr Win32WindowToolkit::createNestedWindow( ArbitraryType::Ptr osParent, 
+	const Rectangle &area )
+{
+	AWindowImpl::Ptr windowImpl = 
+		WindowImpl<Win32WindowImpl>::create(osParent, area);
+	return Window::create(windowImpl);
 }
 //-----------------------------------------------------------------------------
 Dimension Win32WindowToolkit::getScreenSize() const {

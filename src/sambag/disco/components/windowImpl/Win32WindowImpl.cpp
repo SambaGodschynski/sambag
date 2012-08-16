@@ -12,7 +12,7 @@
 #include "X11WindowToolkit.hpp"
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
-
+#include <sambag/com/ArbitraryType.hpp>
 //extern HINSTANCE __getHInstance_();
 
 namespace {
@@ -21,6 +21,10 @@ namespace {
 		std::cout<<"["<<std::hex<<hwnd<<"]:"
 		<<msg<<";"<<std::endl<<std::flush;
 	}
+	int nbWndClassRegs = 0;
+	int nbWndNestedClassRegs = 0;
+	WNDCLASS wndClass = {0};
+	WNDCLASS nestedWndClass = {0};
 }
 
 namespace sambag { namespace disco { namespace components {
@@ -28,9 +32,53 @@ namespace sambag { namespace disco { namespace components {
 //  Class Win32WindowImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
+int Win32WindowImpl::instances = 0;
+//-----------------------------------------------------------------------------
 Win32WindowImpl::WinMap Win32WindowImpl::winmap;
 //-----------------------------------------------------------------------------
-int Win32WindowImpl::instances = 0;
+void Win32WindowImpl::initWindowClass(HINSTANCE hI) {
+	if ( nbWndClassRegs++ > 0 ) {
+		SAMBAG_ASSERT(wndClass.hInstance == hI);
+		return;
+	}
+	wndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
+	wndClass.hInstance     = hI;
+	wndClass.hbrBackground = 0; //(HBRUSH)(COLOR_BACKGROUND);
+	wndClass.lpszClassName = "discowindowimpl";
+	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	if( FAILED(RegisterClass(&wndClass)) )
+		throw std::runtime_error ("Win32 RegisterClass failed.");
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::initNestedWindowClass(HINSTANCE hI) {
+	if ( nbWndNestedClassRegs++ > 0 ) {
+		SAMBAG_ASSERT(nestedWndClass.hInstance == hI);
+		return;
+	}
+	nestedWndClass.style = CS_GLOBALCLASS | CS_DBLCLKS;
+	nestedWndClass.cbClsExtra  = 0; 
+	nestedWndClass.cbWndExtra  = 0; 
+	nestedWndClass.hbrBackground = 0;
+	nestedWndClass.lpszMenuName  = 0; 
+	nestedWndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
+	nestedWndClass.hInstance     = hI;
+	nestedWndClass.lpszClassName = "disconestedwindowimpl";
+	nestedWndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	if( FAILED(RegisterClass(&nestedWndClass)) )
+		throw std::runtime_error ("Win32 RegisterClass failed.");
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::destroyWindowClass() {
+	if ( --nbWndClassRegs != 0 )
+		return;
+	UnregisterClass("discowindowimpl", wndClass.hInstance);
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::destroyNestedWindowClass() {
+	if ( --nbWndNestedClassRegs != 0 )
+		return;
+	UnregisterClass("disconestedwindowimpl", nestedWndClass.hInstance);
+}
 //-----------------------------------------------------------------------------
 Win32WindowImpl * Win32WindowImpl::getWin32WindowImpl(HWND win) {
 	WinMap::iterator it = winmap.find(win);
@@ -57,35 +105,80 @@ void Win32WindowImpl::update() {
 	this->processDraw();
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::createWindow(HWND parent) {
-	if (instances++==0) {
-		// init at once
-	}
-	HINSTANCE hI = GetModuleHandle(NULL);
-	WNDCLASS wc      = {0}; 
-	wc.lpfnWndProc   = &Win32WindowImpl::wndProc;
-	wc.hInstance     = hI;
-	wc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
-	wc.lpszClassName = "discowindowimpl";
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	if( FAILED(RegisterClass(&wc)) )
+void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent, 
+	const Rectangle &area) 
+{
+	++instances;
+	std::pair<void*, void*> parentData(NULL, NULL);
+	sambag::com::get(osParent, parentData);
+	if (!parentData.first)
 		return;
+	HWND parent = (HWND)parentData.first;
+	HINSTANCE hI = (HINSTANCE)parentData.second;
+	initNestedWindowClass(hI);
 
+	DWORD styleEx = 0;//WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+	bounds = area;
+	win = CreateWindowEx ( styleEx, 
+		nestedWndClass.lpszClassName, 
+		"Window",
+		style,
+		0,
+		0,
+		(int)bounds.width(),
+		(int)bounds.height(),
+		parent, // HWND hWndParent
+		NULL,   // HMENU hMenu
+		hI,     // HINSTANCE hInstance
+		NULL    // LPVOID lpParam
+	);
+	if (!win) {
+		std::stringstream ss;
+		DWORD err = GetLastError();
+		ss<<"window creation failed: "<<err;
+		throw std::runtime_error(ss.str());
+	}
+
+	// register win
+	winmap[win] = this;
+
+	// disco stuff
+	createSurface();
+	SAMBAG_ASSERT(surface);
+
+	visible = true;
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::createWindow(HWND parent) {
+	++instances;
+	HINSTANCE hI = GetModuleHandle(NULL);
+	initWindowClass(hI);
+	
+	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_VISIBLE;
 	style |= getFlag(WND_FRAMED) ? WS_OVERLAPPEDWINDOW : WS_POPUP | WS_BORDER; 
-	win = CreateWindow(wc.lpszClassName,
+
+	win = CreateWindowEx ( styleEx, 
+		wndClass.lpszClassName, 
 		title.c_str(),
 		style,
-        (int)bounds.x0().x(),
+		(int)bounds.x0().x(),
 		(int)bounds.x0().y(),
 		(int)bounds.width(),
 		(int)bounds.height(),
 		parent, // HWND hWndParent
-		0, // HMENU hMenu
-		hI, // HINSTANCE hInstance
-		NULL // LPVOID lpParam
+		NULL,   // HMENU hMenu
+		hI,     // HINSTANCE hInstance
+		NULL    // LPVOID lpParam
 	);
-	SAMBAG_ASSERT(win);
+
+	if (!win) {
+		std::stringstream ss;
+		DWORD err = GetLastError();
+		ss<<"window creation failed: "<<err;
+		throw std::runtime_error(ss.str());
+	}
 
 	updateBoundsToWindow();
 
@@ -108,8 +201,13 @@ void Win32WindowImpl::destroyWindow() {
 	surface.reset();
 	onDestroy();
 	win = 0;
-	--instances;
 	visible = false;
+	if (getFlag(WND_NESTED)) {
+		destroyNestedWindowClass();
+	} else {
+		destroyWindowClass();
+	}
+	--instances;
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::close() {

@@ -18,7 +18,8 @@ private:
 public:
 	enum Flag {
 		WND_FRAMED,
-		WND_RESIZEABLE
+		WND_RESIZEABLE,
+		WND_NESTED		// is true when windowImpl. is nested in a host window. 
 	};
 	WindowFlags() : flags(0) {}
 	void setFlag(Flag aFlag, bool b) {

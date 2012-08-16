@@ -32,6 +32,11 @@ X11WindowImpl * X11WindowImpl::getX11WindowImpl(::Window win) {
 	return it->second;
 }
 //-----------------------------------------------------------------------------
+void X11WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
+	const Rectangle &area) 
+{
+}
+//-----------------------------------------------------------------------------
 X11WindowImpl::X11WindowImpl() :
 	bounds(Rectangle(0,0,1,1)),
 	visible(false),
