@@ -43,7 +43,7 @@ void Win32WindowImpl::initWindowClass(HINSTANCE hI) {
 	}
 	wndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	wndClass.hInstance     = hI;
-	wndClass.hbrBackground = 0; //(HBRUSH)(COLOR_BACKGROUND);
+	wndClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255)); //0; //(HBRUSH)(COLOR_BACKGROUND);
 	wndClass.lpszClassName = "discowindowimpl";
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&wndClass)) )
@@ -58,7 +58,7 @@ void Win32WindowImpl::initNestedWindowClass(HINSTANCE hI) {
 	nestedWndClass.style = CS_GLOBALCLASS | CS_DBLCLKS;
 	nestedWndClass.cbClsExtra  = 0; 
 	nestedWndClass.cbWndExtra  = 0; 
-	nestedWndClass.hbrBackground = 0;
+	nestedWndClass.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255));
 	nestedWndClass.lpszMenuName  = 0; 
 	nestedWndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	nestedWndClass.hInstance     = hI;
@@ -117,7 +117,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	HINSTANCE hI = (HINSTANCE)parentData.second;
 	initNestedWindowClass(hI);
 
-	DWORD styleEx = 0;//WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	bounds = area;
 	win = CreateWindowEx ( styleEx, 
@@ -354,16 +354,25 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	case WM_DESTROY:
 		win->destroyWindow();
 		if (instances==0)
-			PostQuitMessage(0);
+			if (!win->getFlag(WND_NESTED))
+				PostQuitMessage(0);
 		break;
 	case WM_CLOSE:
 		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
+		HDC hDC;
+		PAINTSTRUCT Ps;
+		hDC = BeginPaint(hWnd, &Ps);
+		MoveToEx(hDC, 60, 20, NULL);
+		LineTo(hDC, 264, 122);
+		EndPaint(hWnd, &Ps);
+		break;
+		/*
 		if (win) {
 			win->update();
 		}
-		ValidateRect(hWnd, NULL);
+		ValidateRect(hWnd, NULL);*/
 		break;
 	}
 	case WM_MOVE : {
