@@ -435,10 +435,6 @@ void BasicScrollbarUI<M>::installComponents() {
 	scrollbar->setEnabled(scrollbar->isEnabled());
 }
 //-----------------------------------------------------------------------------
-void trackMouse(void *src, const events::MouseEvent &ev) {
-	std::cout<<ev.toString()<<std::endl;
-}
-//-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installListeners() {
 	
@@ -466,8 +462,6 @@ void BasicScrollbarUI<M>::installListeners() {
 			boost::bind(&BasicScrollbarUI<M>::onTrack, this, _1, _2),
 			self
 		);
-		scrollbar->EventSender<events::MouseEvent>::
-		addEventListener(&trackMouse);
 	}
 	//scrollListener = createScrollListener();
 	scrollTimer = Timer::create(scrollSpeedThrottle);

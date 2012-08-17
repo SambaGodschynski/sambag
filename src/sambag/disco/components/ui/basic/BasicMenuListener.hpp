@@ -104,7 +104,7 @@ onMouseEntered(Menu::Ptr item)
 	}
 }
 namespace {
-	void executePopup(Menu::Ptr item) {
+	inline void executePopup(Menu::Ptr item) {
 		MenuSelectionManager &defaultManager = MenuSelectionManager::defaultManager();
 		IMenuElement::MenuElements path = defaultManager.getSelectedPath();
 		if (path.size() > 0 && path[path.size() - 1] == item) {
@@ -115,7 +115,7 @@ namespace {
 	}
 }
 //-----------------------------------------------------------------------------
-void popupTimerExpired(void *src, const TimerEvent &ev, Menu::Ptr item) {
+inline void popupTimerExpired(void *src, const TimerEvent &ev, Menu::Ptr item) {
 	executePopup(item);
 }
 //-----------------------------------------------------------------------------
