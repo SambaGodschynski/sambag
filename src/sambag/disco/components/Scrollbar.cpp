@@ -40,7 +40,7 @@ Scrollbar::Ptr Scrollbar::create(Scrollbar::Orientation orientation,
 {
 	Ptr res(new Scrollbar(orientation, value, extent, min, max));
 	res->self = res;
-	res->constructorAlt();
+	res->postConstructor();
 	return res;
 }
 //-----------------------------------------------------------------------------

@@ -390,7 +390,6 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 }
 
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
-	return;
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
 	std::cout<<ev.toString()<<std::endl;

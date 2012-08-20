@@ -89,7 +89,7 @@ public:
 	static Ptr create(ScrollPane &parent, Scrollbar::Orientation o) {
 		Ptr res(new MyScrollbar(parent, o));
 		res->self = res;
-		res->constructorAlt();
+		res->postConstructor();
 		return res;
 	}
 };
@@ -127,7 +127,8 @@ ScrollPane::ScrollPane() :
 {
 }
 //-----------------------------------------------------------------------------
-void ScrollPane::constructorAlt() {
+void ScrollPane::postConstructor() {
+	Super::postConstructor();
 	setLayout(ScrollPaneLayout::create());
 	setVerticalScrollBarPolicy(verticalScrollBarPolicy);
 	setHorizontalScrollBarPolicy(horizontalScrollBarPolicy);
@@ -214,7 +215,7 @@ ScrollPane::Ptr ScrollPane::create(AComponentPtr view,
 {
 	Ptr res(new ScrollPane());
 	res->self = res;
-	res->constructorAlt();
+	res->postConstructor();
 	if (view) {
 		res->setViewportView(view);
 	}

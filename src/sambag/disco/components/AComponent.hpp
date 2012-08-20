@@ -56,7 +56,7 @@
 	static Ptr create() {													\
 		Ptr res(new sambag_macro_class_name());								\
 		res->self = res;													\
-		res->constructorAlt();												\
+		res->postConstructor();												\
 		return res;															\
 	}
 
@@ -424,7 +424,7 @@ protected:
 
 protected: // TODO: remove mangeling
 	//-------------------------------------------------------------------------
-	virtual void constructorAlt() {}
+	virtual void postConstructor() {}
 	//-------------------------------------------------------------------------
 	virtual void processMouseEvent(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------

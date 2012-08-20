@@ -28,12 +28,14 @@ friend class ui::UIManager;
 friend class sambag::disco::components::Window;
 public:
 	//-------------------------------------------------------------------------
+	typedef AContainer Super;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<RootPane> Ptr;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_SURFACE;
 protected:
 	//-------------------------------------------------------------------------
-	virtual void constructorAlt();
+	virtual void postConstructor();
 	//-------------------------------------------------------------------------
 	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();

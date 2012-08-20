@@ -14,6 +14,8 @@
 #include <sambag/com/Common.hpp>
 #include <sambag/com/ArbitraryType.hpp>
 
+#include <Windowsx.h> // GET_X_LPARAM
+
 namespace {
 	template <typename T>
 	void debugMsg(HWND hwnd, const T &msg) {
@@ -376,49 +378,49 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	}
 	case WM_LBUTTONDOWN : 
 		SetCapture(hWnd);
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 1);
 		break;
 	case WM_RBUTTONDOWN :
 		SetCapture(hWnd);
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 2);
 		break;
 	case WM_MBUTTONDOWN :
 		SetCapture(hWnd);
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 4);
 		break;
 	case WM_LBUTTONUP : 
 		ReleaseCapture();
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 1);
 		break;
 	case WM_RBUTTONUP :
 		ReleaseCapture();
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 2);
 		break;
 	case WM_MBUTTONUP :
 		ReleaseCapture();
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonReleaseEvent(x, y, 4);
 		break;
 	case WM_MOUSEMOVE :
-		x = LOWORD(lParam); 
-		y = HIWORD(lParam);
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseMotionEvent(x, y);
 		break;

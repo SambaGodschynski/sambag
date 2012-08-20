@@ -39,7 +39,7 @@ public:
 	static Ptr create(Direction direction) {
 		Ptr res(new BasicArrowButton(direction));
 		res->self = res;
-		res->constructorAlt();
+		res->postConstructor();
 		return res;
 	}
 }; // BasicArrowButton

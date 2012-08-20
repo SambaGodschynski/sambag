@@ -193,7 +193,8 @@ void RootPane::setContentPane(Panel::Ptr content) {
 	add(contentPane);
 }
 //-----------------------------------------------------------------------------
-void RootPane::constructorAlt() {
+void RootPane::postConstructor() {
+	Super::postConstructor();
 	setBackground(svg::HtmlColors::getColor("AliceBlue"));
 	setForeground(ColorRGBA(0,0,0,1));
 	setLayout(RootLayout::create(*this));
@@ -224,7 +225,7 @@ RootPane::Ptr RootPane::create(ISurface::Ptr surface)
 	ui::UIManager::instance().installLookAndFeel(res,
 		ui::basic::BasicLookAndFeel::create()
 	);
-	res->constructorAlt();
+	res->postConstructor();
 	return res;
 }
 //-----------------------------------------------------------------------------

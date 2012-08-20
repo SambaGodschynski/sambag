@@ -22,6 +22,8 @@ class ScrollPane : public AContainer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef AContainer Super;
+	//-------------------------------------------------------------------------
 	/**
 	 * TODO: it would be more consequence to impl. the ScrollPane class using
 	 * ScrollBarModel template param.
@@ -143,7 +145,7 @@ public:
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
-	virtual void constructorAlt();
+	virtual void postConstructor();
 	//-------------------------------------------------------------------------
 	ScrollPane();
 private:

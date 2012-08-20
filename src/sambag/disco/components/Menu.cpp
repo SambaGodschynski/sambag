@@ -20,7 +20,7 @@ Menu::Menu() {
 	setDelay(500);
 }
 //-----------------------------------------------------------------------------
-void Menu::constructorAlt() {
+void Menu::postConstructor() {
 	popupMenu = PopupMenu::create(getPtr());
 	popupMenu->setInvoker(getPtr());
 }
