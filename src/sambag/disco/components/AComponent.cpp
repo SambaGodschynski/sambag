@@ -264,13 +264,14 @@ AComponent::Lock & AComponent::getTreeLock() const {
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getRootContainer() const {
-	AContainer::Ptr p = getParent();
+	/*AContainer::Ptr p = getParent();
 	if (!p)
 		return AContainerPtr();
 	while (p->getParent()) {
 		p = p->getParent();
 	}
-	return p;
+	return p;*/
+	return getLastContainer<AContainer>();
 }
 //-----------------------------------------------------------------------------
 Point2D AComponent::getLocationOnScreen(const Point2D &p) const {
@@ -864,7 +865,7 @@ void AComponent::processMouseEvent(const events::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 RootPanePtr AComponent::getTopLevelRootPane() const {
-	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	/*AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	for (; p; p = p->getParent()) {
@@ -872,11 +873,12 @@ RootPanePtr AComponent::getTopLevelRootPane() const {
 		if (rt)
 			return rt;
 	}
-	return RootPanePtr();
+	return RootPanePtr();*/
+	return getLastContainer<RootPane>();
 }
 //-----------------------------------------------------------------------------
 WindowPtr AComponent::getTopLevelAncestor() const {
-	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	/*AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	for (; p; p = p->getParent()) {
@@ -884,7 +886,8 @@ WindowPtr AComponent::getTopLevelAncestor() const {
 		if (w)
 			return w;
 	}
-	return WindowPtr();
+	return WindowPtr();*/
+	return getLastContainer<Window>();
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getValidateRoot() const {

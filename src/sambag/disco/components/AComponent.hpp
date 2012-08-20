@@ -1203,13 +1203,13 @@ public:
 	 * @return the first parent container which is a instance of ContainerType.
 	 */
 	template <class ContainerType>
-	typename ContainerType::Ptr getFirstParent() const;
+	typename ContainerType::Ptr getFirstContainer() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the last parent container which is a instance of ContainerType.
 	 */
 	template <class ContainerType>
-	typename ContainerType::Ptr getLastParent() const;
+	typename ContainerType::Ptr getLastContainer() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -1236,8 +1236,10 @@ void AComponent::getClientProperty(const std::string &name, T &out) const {
 }
 //-----------------------------------------------------------------------------
 template <class ContainerType>
-typename ContainerType::Ptr AComponent::getFirstParent() const {
-	AContainerPtr p = getParent();
+typename ContainerType::Ptr AComponent::getFirstContainer() const {
+	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	if (!p)
+		p = getParent();
 	if (!p)
 		return typename ContainerType::Ptr();
 	for (; p; p = p->getParent()) {
@@ -1250,11 +1252,12 @@ typename ContainerType::Ptr AComponent::getFirstParent() const {
 }
 //-----------------------------------------------------------------------------
 template <class ContainerType>
-typename ContainerType::Ptr AComponent::getLastParent() const {
-	AContainerPtr p = getParent();
+typename ContainerType::Ptr AComponent::getLastContainer() const {
+	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	if (!p)
+		p = getParent();
 	if (!p)
 		return typename ContainerType::Ptr();
-
 	typename ContainerType::Ptr ctp;
 	for (; p; p = p->getParent()) {
 		 typename ContainerType::Ptr tmp = 

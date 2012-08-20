@@ -325,8 +325,9 @@ void TestAComponent::testPutClientProperty() {
 void TestAComponent::testGetFirstAndLastParent() {
 	using namespace sambag::com;
 	using namespace sambag::disco;
+	using namespace sambag::disco::components;
 	enum { NUM = 10 };
-	components::AContainer::Ptr cont[NUM];
+	AContainer::Ptr cont[NUM];
 	for (int i=0; i<NUM; ++i) {
 		if (i == NUM/2) {
 			cont[i] = TestContainerVariant<0>::create();
@@ -338,18 +339,24 @@ void TestAComponent::testGetFirstAndLastParent() {
 		cont[i-1]->add(cont[i]);
 	}
 	cont[NUM-1]->add(comp);
-	TestContainer::Ptr obj = comp->getFirstParent<TestContainer>();
+	
+	comp->getFirstContainer<TestComponent>();
+	CPPUNIT_ASSERT( comp->getFirstContainer<AContainer>() == cont[NUM-1] );
+	CPPUNIT_ASSERT( comp->getLastContainer<AContainer>() == cont[0] );
+
+
+	TestContainer::Ptr obj = comp->getFirstContainer<TestContainer>();
 	CPPUNIT_ASSERT_EQUAL((void*)cont[NUM-1].get(), (void*)obj.get());
 	
-	obj = comp->getLastParent<TestContainer>();
+	obj = comp->getLastContainer<TestContainer>();
 	CPPUNIT_ASSERT_EQUAL((void*)cont[0].get(), (void*)obj.get());
 
 	TestContainerVariant<0>::Ptr obj2 = 
-		comp->getLastParent< TestContainerVariant<0> >();
+		comp->getLastContainer< TestContainerVariant<0> >();
 	CPPUNIT_ASSERT_EQUAL((void*)cont[NUM/2].get(), (void*)obj2.get());
 
 	CPPUNIT_ASSERT(
-		!comp->getLastParent< TestContainerVariant<1> >()
+		!comp->getLastContainer< TestContainerVariant<1> >()
 	);
 }
 } // namespace
