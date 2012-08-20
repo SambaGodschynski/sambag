@@ -1198,6 +1198,18 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Rectangle getVisibleRect() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the first parent container which is a instance of ContainerType.
+	 */
+	template <class ContainerType>
+	typename ContainerType::Ptr getFirstParent() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the last parent container which is a instance of ContainerType.
+	 */
+	template <class ContainerType>
+	typename ContainerType::Ptr getLastParent() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -1222,6 +1234,37 @@ void AComponent::getClientProperty(const std::string &name, T &out) const {
 	if (val)
 		out = *val;
 }
+//-----------------------------------------------------------------------------
+template <class ContainerType>
+typename ContainerType::Ptr AComponent::getFirstParent() const {
+	AContainerPtr p = getParent();
+	if (!p)
+		return typename ContainerType::Ptr();
+	for (; p; p = p->getParent()) {
+		typename ContainerType::Ptr ctp = 
+			boost::shared_dynamic_cast<ContainerType>(p);
+		if (ctp)
+			return ctp;
+	}
+	return typename ContainerType::Ptr();
+}
+//-----------------------------------------------------------------------------
+template <class ContainerType>
+typename ContainerType::Ptr AComponent::getLastParent() const {
+	AContainerPtr p = getParent();
+	if (!p)
+		return typename ContainerType::Ptr();
+
+	typename ContainerType::Ptr ctp;
+	for (; p; p = p->getParent()) {
+		 typename ContainerType::Ptr tmp = 
+			boost::shared_dynamic_cast<ContainerType>(p);
+		if (tmp)
+			ctp = tmp;
+	}
+	return ctp;
+}
+
 }}}
 
 #endif /* COMPONENT_HPP_ */

@@ -117,6 +117,19 @@ namespace tests {
 		}
 	};
 	//=============================================================================
+	template <int Dummy>
+	class TestContainerVariant : public TestContainer {
+	protected:
+		TestContainerVariant() {}
+	public:
+		typedef boost::shared_ptr<TestContainerVariant> Ptr;
+		static Ptr create() {
+			Ptr res(new TestContainerVariant());
+			res->self = res;
+			return res;
+		}
+	};
+	//=============================================================================
 	class TestLayoutManager : public  sdc::ALayoutManager {
 	public:
 		typedef boost::shared_ptr<TestLayoutManager> Ptr;

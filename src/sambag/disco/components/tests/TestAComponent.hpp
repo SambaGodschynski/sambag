@@ -53,6 +53,7 @@ private:
 	CPPUNIT_TEST(test_validate);
 	CPPUNIT_TEST(testPropertyChanged);
 	CPPUNIT_TEST(testPutClientProperty);
+	CPPUNIT_TEST(testGetFirstAndLastParent);
 	CPPUNIT_TEST_SUITE_END();
 private:
 	sambag::disco::components::AComponentPtr comp;
@@ -94,6 +95,7 @@ public:
 	void test_validate();
 	void testPropertyChanged();
 	void testPutClientProperty();
+	void testGetFirstAndLastParent();
 
 };
 

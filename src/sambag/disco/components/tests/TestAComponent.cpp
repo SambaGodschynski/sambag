@@ -8,6 +8,7 @@
 #include "TestAComponent.hpp"
 #include "TestComponents.hpp"
 #include <sambag/disco/components/AComponent.hpp>
+#include <sambag/disco/components/AContainer.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include "TestHelper.hpp"
 #include <sstream>
@@ -319,5 +320,36 @@ void TestAComponent::testPutClientProperty() {
 	Point2D p;
 	comp->getClientProperty("pos", p);
 	CPPUNIT_ASSERT_EQUAL(p, Point2D(100, 101));
+}
+//-----------------------------------------------------------------------------
+void TestAComponent::testGetFirstAndLastParent() {
+	using namespace sambag::com;
+	using namespace sambag::disco;
+	enum { NUM = 10 };
+	components::AContainer::Ptr cont[NUM];
+	for (int i=0; i<NUM; ++i) {
+		if (i == NUM/2) {
+			cont[i] = TestContainerVariant<0>::create();
+		} else {
+			cont[i] = TestContainer::create();
+		}
+		if (i==0)
+			continue;
+		cont[i-1]->add(cont[i]);
+	}
+	cont[NUM-1]->add(comp);
+	TestContainer::Ptr obj = comp->getFirstParent<TestContainer>();
+	CPPUNIT_ASSERT_EQUAL((void*)cont[NUM-1].get(), (void*)obj.get());
+	
+	obj = comp->getLastParent<TestContainer>();
+	CPPUNIT_ASSERT_EQUAL((void*)cont[0].get(), (void*)obj.get());
+
+	TestContainerVariant<0>::Ptr obj2 = 
+		comp->getLastParent< TestContainerVariant<0> >();
+	CPPUNIT_ASSERT_EQUAL((void*)cont[NUM/2].get(), (void*)obj2.get());
+
+	CPPUNIT_ASSERT(
+		!comp->getLastParent< TestContainerVariant<1> >()
+	);
 }
 } // namespace
