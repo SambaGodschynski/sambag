@@ -41,7 +41,7 @@ private:
 	Type type;
 public:
 	//-------------------------------------------------------------------------
-	Unit(const Coordinate &v = 0) : value(v), type(NONE) {}
+	explicit Unit(const Coordinate &v = 0) : value(v), type(NONE) {}
 	//-------------------------------------------------------------------------
 	/**
 	 * delivers coordinates pixelvalue. To solve relative unit types

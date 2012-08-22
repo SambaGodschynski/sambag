@@ -502,6 +502,10 @@ void AContainer::remove(AComponent::Ptr comp) {
 	}
 }
 //-----------------------------------------------------------------------------
+bool AContainer::containsComponent(AComponentPtr comp) const {
+	return sambag::com::indexOf(components, comp) >= 0;
+}
+//-----------------------------------------------------------------------------
 void AContainer::remove(size_t index) {
 	using namespace events;
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())

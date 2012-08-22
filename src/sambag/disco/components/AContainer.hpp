@@ -203,6 +203,11 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
+	 * @return true if component in container
+	 */
+	virtual bool containsComponent(AComponentPtr comp) const;
+	//-------------------------------------------------------------------------
+	/**
 	 * @param p
 	 * @return visible child component that contains the specified position.
 	 */

@@ -125,6 +125,7 @@ public: /*Interface impl.*/
 	virtual Point2D getCurrentPoint() const { return cn->getCurrentPoint(); }
 	virtual bool hasCurrentPoint() const { return cn->hasCurrentPoint(); }
 	virtual void clip() { cn->clip(); }
+	virtual void resetClip() { cn->resetClip(); }
 	virtual Rectangle clipExtends() const { return cn->clipExtends(); }
 	virtual void setClip(const Rectangle &r) { cn->setClip(r); }
 	virtual void newSubPath() { cn->newSubPath(); }

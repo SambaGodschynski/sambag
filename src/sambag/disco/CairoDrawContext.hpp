@@ -435,6 +435,10 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setClip(const Rectangle &r);
 	//-------------------------------------------------------------------------
+	virtual void resetClip() {
+		cairo_reset_clip( context );
+	}
+	//-------------------------------------------------------------------------
 	virtual void disableDash() {
 		cairo_set_dash( context, NULL, 0, 0 );
 	}
