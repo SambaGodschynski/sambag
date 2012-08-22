@@ -60,6 +60,7 @@ template <class Drawable>
 void ComponentWrapper<Drawable>::updateBounds() 
 {
 	sd::IDrawContext::Ptr cn = sd::getDiscoFactory()->createContext();
+	cn->setStrokeColor(ColorRGBA(0));
 	setBounds(drawable->getBoundingBox(cn));
 }
 //-----------------------------------------------------------------------------

@@ -22,10 +22,12 @@ GraphicElement::~GraphicElement() {
 Rectangle GraphicElement::getBoundingBox(IDrawContext::Ptr context) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	cn->setStrokeWidth( context->getStrokeWidth() );
+	cn->setStrokeColor( context->getStrokeColor() );
+	cn->setFillColor( context->getFillColor() );
 	Matrix m;
 	context->getMatrix(m);
 	cn->transform(m);
 	draw(cn);
-	return cn->pathExtends();
+	return cn->getSurface()->getSize();
 }
 }}}} // namespaces
