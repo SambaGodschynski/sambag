@@ -60,10 +60,6 @@ public:
 	virtual ~Rect();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox( IDrawContext::Ptr context ) const {
-		return rect.solve(context);
-	}
 };
 
 }}}} // namespace

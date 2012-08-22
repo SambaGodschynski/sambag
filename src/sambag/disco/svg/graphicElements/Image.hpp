@@ -82,10 +82,6 @@ public:
 	virtual ~Image(){}
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
-		return outline.solve(cn);
-	}
 };
 
 }}}} // namespace

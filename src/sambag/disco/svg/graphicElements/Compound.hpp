@@ -38,8 +38,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const;
-	//-------------------------------------------------------------------------
 	static Ptr create() {
 		Ptr neu(new Compound());
 		neu->__setSelf(neu);

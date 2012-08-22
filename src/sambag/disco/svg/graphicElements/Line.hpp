@@ -58,12 +58,6 @@ public:
 	virtual ~Line();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
-		Point2D _p0 = p0.solve(cn);
-		Point2D _p1 = p1.solve(cn);
-		return Rectangle(minimize(_p0, _p1), maximize(_p0, _p1));
-	}
 };
 
 }}}} // namespace

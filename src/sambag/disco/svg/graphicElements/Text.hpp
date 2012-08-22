@@ -72,10 +72,6 @@ public:
 	virtual ~Text();
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
-		return Rectangle();
-	}
 };
 
 }}}} // namespace

@@ -14,11 +14,6 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 // class Compound
 //=============================================================================
 //-----------------------------------------------------------------------------
-Rectangle Compound::getBoundingBox(IDrawContext::Ptr context) const {
-	Rectangle res;
-	return NULL_RECTANGLE;
-}
-//-----------------------------------------------------------------------------
 GraphicElement::Ptr Compound::clone() const {
 	Ptr neu = create();
 	*neu = *this;

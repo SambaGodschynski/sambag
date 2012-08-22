@@ -599,13 +599,4 @@ void Path::drawInstructions( IDrawContext::Ptr cn ) const {
 		}
 	}
 }
-//-----------------------------------------------------------------------------
-Rectangle Path::getBoundingBox(IDrawContext::Ptr cn) const {
-	IDiscoFactory *fac = getDiscoFactory();
-	IDrawContext::Ptr context = fac->createContext();
-	SAMBAG_ASSERT(context);
-	drawInstructions(context);
-	return context->pathExtends();
-}
-
 }}}}

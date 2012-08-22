@@ -31,9 +31,6 @@ protected:
 	void __setSelf( Ptr self ) { __self = self; }
 public:
 	//-------------------------------------------------------------------------
-	// TODO: draw path method. which saves the path data on first call
-	// and restores saved data on the others.
-	//-------------------------------------------------------------------------
 	std::string toString() const = 0;
 	//-------------------------------------------------------------------------
 	virtual Ptr clone() const = 0;
@@ -46,7 +43,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context ) = 0;
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const = 0;
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context);
 };
 
 }}}} // namespace

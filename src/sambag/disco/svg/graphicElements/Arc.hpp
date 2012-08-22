@@ -60,8 +60,6 @@ public:
 	virtual ~Arc(){}
 	//-------------------------------------------------------------------------
 	virtual void draw( IDrawContext::Ptr context );
-	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const ;
 };
 
 }}}} // namespace

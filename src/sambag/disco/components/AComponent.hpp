@@ -550,7 +550,7 @@ public:
 	 * implements IDrawable::getBoundingBox()
 	 * @return
 	 */
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr cn) const {
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) {
 		return getBounds();
 	}
 	//-------------------------------------------------------------------------

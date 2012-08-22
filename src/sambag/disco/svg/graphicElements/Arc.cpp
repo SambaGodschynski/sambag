@@ -49,19 +49,4 @@ void Arc::draw( IDrawContext::Ptr cn ) {
 		return;
 	}
 }
-//-----------------------------------------------------------------------------
-Rectangle Arc::getBoundingBox(IDrawContext::Ptr cn) const {
-	Point2D _r;
-	if (this->r.y().getType() == units::Unit::NONE) { // in case of circle
-		// solve a single coord. has a different result to solve a point.
-		_r.x(this->r.x().solve(cn));
-		_r.y(_r.x());
-	} else {
-		_r = this->r.solve(cn);
-	}
-	Point2D p0 = c.solve(cn);
-	boost::geometry::subtract_point(p0, _r);
-	boost::geometry::multiply_value(_r, 2.);
-	return Rectangle(p0, _r.x(), _r.y());
-}
 }}}}

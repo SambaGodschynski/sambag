@@ -21,6 +21,8 @@ class RefElement : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef GraphicElement Super;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<RefElement> Ptr;
 private:
 	//-------------------------------------------------------------------------
@@ -60,9 +62,10 @@ public:
 			ref->draw(context);
 	}
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const {
-		if (!ref) return NULL_RECTANGLE;
-		return ref->getBoundingBox(context);
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) {
+		if (!ref) 
+			return NULL_RECTANGLE;
+		return Super::getBoundingBox(context);
 	}
 };
 

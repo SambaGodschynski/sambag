@@ -23,10 +23,15 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IDrawable> Ptr;
 	//-------------------------------------------------------------------------
-	// TODO: make const
 	virtual void draw(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------
-	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) const = 0;
+	/**
+	 * @note: can't be const because the default impl. of 
+	 * GraphicElement::getBoundingBox uses the unconst draw method().
+	 * And making draw() is partially harder to realize than
+	 * having getBoundingBox() unconst.
+	 */
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * for testing and debugging

@@ -6,7 +6,7 @@
  */
 
 #include "GraphicElement.hpp"
-
+#include <sambag/disco/IDiscoFactory.hpp>
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 //=============================================================================
@@ -14,9 +14,18 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 GraphicElement::GraphicElement() {
-	using namespace boost::numeric::ublas;
 }
 //-----------------------------------------------------------------------------
 GraphicElement::~GraphicElement() {
+}
+//-----------------------------------------------------------------------------
+Rectangle GraphicElement::getBoundingBox(IDrawContext::Ptr context) {
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	cn->setStrokeWidth( context->getStrokeWidth() );
+	Matrix m;
+	context->getMatrix(m);
+	cn->transform(m);
+	draw(cn);
+	return cn->pathExtends();
 }
 }}}} // namespaces
