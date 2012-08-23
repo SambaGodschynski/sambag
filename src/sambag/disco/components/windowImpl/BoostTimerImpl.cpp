@@ -125,7 +125,6 @@ void TimerThread::startTimer() {
 		io = new boost::asio::io_service();
 	// prepare timer
 	Timer::TimeType ms = tm->getInitialDelay();
-	int repetitions = tm->getNumRepetitions();
 	BoostTimerImpl::BoostTimer *t = 
 		new BoostTimerImpl::BoostTimer(*io, boost::posix_time::millisec(ms));
 	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
@@ -204,7 +203,7 @@ namespace {
 			boost::this_thread::sleep(boost::posix_time::millisec(SLEEPING_TIME));
 		}
 		// close all timer threads:
-		for (int i=0; i<timerThreads.size(); ++i) {
+		for (size_t i=0; i<timerThreads.size(); ++i) {
 			timerThreads[i]->stopThread();
 		}
 	}

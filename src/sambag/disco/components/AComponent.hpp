@@ -1237,12 +1237,14 @@ void AComponent::getClientProperty(const std::string &name, T &out) const {
 //-----------------------------------------------------------------------------
 template <class ContainerType>
 typename ContainerType::Ptr AComponent::getFirstContainer() const {
-	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	AContainerPtr p = boost::shared_dynamic_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	if (!p)
 		return typename ContainerType::Ptr();
-	for (; p; p = p->getParent()) {
+	for (; p; p = ((AComponent*)p.get())->getParent()/*!*/) {
+		// !: we can't use AContainer: it's header can't
+		//    be included because of cross including issues.
 		typename ContainerType::Ptr ctp = 
 			boost::shared_dynamic_cast<ContainerType>(p);
 		if (ctp)
@@ -1253,13 +1255,15 @@ typename ContainerType::Ptr AComponent::getFirstContainer() const {
 //-----------------------------------------------------------------------------
 template <class ContainerType>
 typename ContainerType::Ptr AComponent::getLastContainer() const {
-	AContainer::Ptr p = boost::shared_dynamic_cast<AContainer>(getPtr());
+	AContainerPtr p = boost::shared_dynamic_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	if (!p)
 		return typename ContainerType::Ptr();
 	typename ContainerType::Ptr ctp;
-	for (; p; p = p->getParent()) {
+	for (; p; p = ((AComponent*)p.get())->getParent()/*!*/) {
+		// !: we can't use AContainer: it's header can't
+		//    be included because of cross including issues.
 		 typename ContainerType::Ptr tmp = 
 			boost::shared_dynamic_cast<ContainerType>(p);
 		if (tmp)
