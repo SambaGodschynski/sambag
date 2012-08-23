@@ -138,8 +138,6 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_WHEELSCROLLING_ENABLED;
 	//-------------------------------------------------------------------------
-	typedef AContainer Super;
-	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ScrollPane> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
