@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ICOMMAND_H
 #define SAMBAG_ICOMMAND_H
 
-#include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 namespace sambag { namespace com {
 
@@ -17,19 +17,11 @@ namespace sambag { namespace com {
   * @class ICommand.
   * Interface for a Command Object.
   */
-class ICommand {
+struct ICommand {
 //=============================================================================
-protected:
 	//-------------------------------------------------------------------------
-	/**
-	 * Constructor is protected. Always use a static create method.
-	 */
-	ICommand() {}
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ICommand> Ptr;
-	//-------------------------------------------------------------------------
-	virtual void execute() = 0;
+	typedef boost::function<void()> Function;
+
 }; // ICommand
 }} // namespace(s)
 

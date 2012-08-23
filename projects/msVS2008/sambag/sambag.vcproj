@@ -1138,6 +1138,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\svg\HtmlColors.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\svg\PathInstructions.cpp"
 						>
 					</File>

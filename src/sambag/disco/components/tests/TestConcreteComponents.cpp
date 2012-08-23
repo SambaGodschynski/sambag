@@ -45,11 +45,13 @@ void TestConcreteComponents::testButton() {
 	using namespace sambag::disco::components::events;
 	using namespace boost;
 	MouseEventCreator::Ptr evc = MouseEventCreator::create(root);
-	tests::CommandForTest::Ptr cmd = tests::CommandForTest::create();
+	tests::TestButtonAction action;
 	Button::Ptr btn = Button::create();
 	btn->setText("do it!");
 	btn->setName("Button01");
-	btn->setButtonCommand(cmd);
+	btn->setButtonFunction(
+		boost::bind(&tests::TestButtonAction::execute, &action)
+	);
 	root->add(btn);
 	root->validate();
 	root->draw( root->getDrawContext() );
@@ -67,6 +69,6 @@ void TestConcreteComponents::testButton() {
 	evc->createMoveEvent(0,0);
 	root->draw( root->getDrawContext() );
 	surf->writeToFile(OUTPUT_FOLDER + "/testConcreteButton(RELEASED).png");
-	CPPUNIT_ASSERT(cmd->wasCalled());
+	CPPUNIT_ASSERT(action.wasCalled());
 }
 } //namespace

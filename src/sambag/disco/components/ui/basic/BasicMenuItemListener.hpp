@@ -71,10 +71,10 @@ void BasicMenuItemListener<ComponentModell>::
 			b->setButtonRollover(false);
 			break;
 		}
-		sambag::com::ICommand::Ptr c =
-				b->getButtonCommand();
+		const sambag::com::ICommand::Function &c =
+				b->getButtonFunction();
 		if (c)
-			c->execute();
+			c();
 		b->EventSender<events::ActionEvent>::notifyListeners(
 				b.get(),
 				events::ActionEvent(b)

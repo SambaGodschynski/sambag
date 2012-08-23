@@ -19,14 +19,17 @@ namespace sambag { namespace disco { namespace svg {
  */
 class HtmlColors {
 //=============================================================================
-private:
+public:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<std::string, ColorRGBA> ColorMap;
+private:
 	//-------------------------------------------------------------------------
 	static ColorMap colorMap;
 	//-------------------------------------------------------------------------
 	static void initHtmlColors();
 public:
+	//-------------------------------------------------------------------------
+	static const ColorMap & getColorMap() { return colorMap; }
 	//-------------------------------------------------------------------------
 	static const ColorRGBA & getColor( const std::string &name );
 };

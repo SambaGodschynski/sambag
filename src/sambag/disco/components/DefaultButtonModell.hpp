@@ -35,7 +35,7 @@ protected:
 	int stateMask;
 	//-------------------------------------------------------------------------
 	/** The action command string fired by the button. */
-	sambag::com::ICommand::Ptr actionCommand;
+	sambag::com::ICommand::Function action;
 	//-------------------------------------------------------------------------
 	/** The button group that the button belongs to. */
 	ButtonGroup::Ptr group;
@@ -168,9 +168,9 @@ public:
 	//-------------------------------------------------------------------------
 	ButtonGroup::Ptr getButtonGroup() const;
 	//-------------------------------------------------------------------------
-	void setButtonCommand(sambag::com::ICommand::Ptr actionCommand);
+	void setButtonFunction(const sambag::com::ICommand::Function &action);
 	//-------------------------------------------------------------------------
-	sambag::com::ICommand::Ptr getButtonCommand() const;
+	const sambag::com::ICommand::Function & getButtonFunction() const;
 }; // IButtonModell
 }}} // namespace(s)
 

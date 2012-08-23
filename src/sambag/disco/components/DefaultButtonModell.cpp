@@ -111,13 +111,16 @@ ButtonGroup::Ptr DefaultButtonModell::getButtonGroup() const {
 	return group;
 }
 //-----------------------------------------------------------------------------
-void DefaultButtonModell::setButtonCommand(sambag::com::ICommand::Ptr cmd )
+void DefaultButtonModell::setButtonFunction(
+	const sambag::com::ICommand::Function &cmd )
 {
-	actionCommand = cmd;
+	action = cmd;
 }
 //-----------------------------------------------------------------------------
-sambag::com::ICommand::Ptr DefaultButtonModell::getButtonCommand() const {
-	return actionCommand;
+const sambag::com::ICommand::Function &
+DefaultButtonModell::getButtonFunction() const 
+{
+	return action;
 }
 //-----------------------------------------------------------------------------
 void DefaultButtonModell::fireStateChanged() {

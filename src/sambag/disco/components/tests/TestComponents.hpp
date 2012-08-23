@@ -176,13 +176,10 @@ namespace tests {
 		}
 	}; // ALayoutManager
 	//=========================================================================
-	struct CommandForTest : public sambag::com::ICommand {
+	struct TestButtonAction : public sambag::com::ICommand {
 		sambag::com::ArithmeticWrapper<bool> called;
-		typedef boost::shared_ptr<CommandForTest> Ptr;
-		static Ptr create() {
-			return Ptr(new CommandForTest());
-		}
-		virtual void execute() {
+		typedef boost::shared_ptr<TestButtonAction> Ptr;
+		void execute() {
 			called = true;
 		}
 		bool wasCalled() const { return called; }
