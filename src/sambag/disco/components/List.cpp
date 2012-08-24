@@ -17,7 +17,7 @@ List::List() {
 	setName("List");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr List::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr List::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<List>();
 }
 }}} // namespace(s)

@@ -21,7 +21,7 @@ MenuItem::MenuItem() {
 	setName("MenuItem");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr MenuItem::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr MenuItem::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<MenuItem>();
 }
 //-----------------------------------------------------------------------------

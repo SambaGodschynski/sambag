@@ -341,13 +341,13 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	/**
-	 * Gets ComponentUI by look and feel. Every concrete Component needs
+	 * Creates a fitting ComponentUI. Every concrete Component needs
 	 * to impl. this method because the look and feel component relation
 	 * is type dependent.
 	 *
 	 * @param c
 	 */
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();
 	}
 	//-------------------------------------------------------------------------
@@ -447,7 +447,7 @@ protected: // TODO: remove mangeling
 	 * Invalidates the component unless it is already invalid.
 	 */
 	virtual void __invalidateIfValid_();
-public: /* END should be protected  */
+public:
 	//-------------------------------------------------------------------------
 	/**
 	 * writes all components into stream
@@ -910,6 +910,8 @@ protected:
 	 */
 	virtual IDrawContext::Ptr getComponentDrawContext(IDrawContext::Ptr cn) const;
 public:
+	//-------------------------------------------------------------------------
+	ui::AComponentUIPtr getUI() const;
 	//-------------------------------------------------------------------------
 	virtual void setOpaque(bool b);
 	//-------------------------------------------------------------------------

@@ -19,7 +19,7 @@ PopupMenu::PopupMenu(AComponentPtr parent) :
 	setName("PopupMenu");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr PopupMenu::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr PopupMenu::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<PopupMenu>();
 }
 }}} // namespace(s)

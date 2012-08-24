@@ -140,7 +140,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ScrollPane> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
 	virtual void postConstructor();

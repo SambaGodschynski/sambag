@@ -23,7 +23,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Menu> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
 	PopupMenuPtr popupMenu;

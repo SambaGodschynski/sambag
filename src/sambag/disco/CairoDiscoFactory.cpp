@@ -40,6 +40,13 @@ IRecordingSurface::Ptr CairoDiscoFactory::createRecordingSurface() const {
 	return CairoRecordingSurface::create();
 }
 //-----------------------------------------------------------------------------
+IRecordingSurface::Ptr 
+CairoDiscoFactory::createRecordingSurface(const Integer &width, 
+	const Integer &height) const
+{
+	return CairoRecordingSurface::create(width, height);
+}
+//-----------------------------------------------------------------------------
 ISolidPattern::Ptr
 CairoDiscoFactory::createSolidPattern(const ColorRGBA &col) const {
 	return CairoSolidPattern::create(col);

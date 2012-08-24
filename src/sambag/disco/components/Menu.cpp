@@ -29,7 +29,7 @@ void Menu::add(AComponent::Ptr comp, size_t index) {
 	popupMenu->add(comp, index);
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Menu::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr Menu::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Menu>();
 }
 //-----------------------------------------------------------------------------

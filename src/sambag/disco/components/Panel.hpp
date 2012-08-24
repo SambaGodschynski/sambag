@@ -23,7 +23,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Panel> Ptr;
 	//-------------------------------------------------------------------------
-	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
 	Panel();

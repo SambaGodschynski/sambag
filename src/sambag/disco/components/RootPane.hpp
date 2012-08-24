@@ -37,7 +37,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void postConstructor();
 	//-------------------------------------------------------------------------
-	ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const {
+	ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const {
 		return ui::AComponentUIPtr();
 	}
 	//-------------------------------------------------------------------------

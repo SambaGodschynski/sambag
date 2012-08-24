@@ -21,7 +21,7 @@ Panel::Panel(){
 	setName("Panel");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Panel::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr Panel::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Panel>();
 }
 }}} // namespace(s)

@@ -31,7 +31,7 @@ Viewport::~Viewport() {
 	}
 }
 //----------------------------------------------------------------------------
-ui::AComponentUIPtr Viewport::getComponentUI(ui::ALookAndFeelPtr laf) const
+ui::AComponentUIPtr Viewport::createComponentUI(ui::ALookAndFeelPtr laf) const
 {
 	return laf->getUI<Viewport>();
 }

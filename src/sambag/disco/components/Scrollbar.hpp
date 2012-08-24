@@ -26,7 +26,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Scrollbar> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
 	Scrollbar(Orientation orientation, const Coordinate &value = 0.,

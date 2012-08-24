@@ -19,7 +19,7 @@ Button::Button() {
 	setName("Button");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Button::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr Button::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Button>();
 }
 //-----------------------------------------------------------------------------

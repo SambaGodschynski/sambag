@@ -51,7 +51,7 @@ private:
 	//-------------------------------------------------------------------------
 	void redrawRoot();
 	//-------------------------------------------------------------------------
-	sambag::disco::IImageSurface::Ptr bff;
+	sambag::disco::ISurface::Ptr bff;
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<bool, true> needUpdate;
 public:
@@ -77,16 +77,21 @@ inline BufferedDrawPolicy::BufferedDrawPolicy() {
 inline void BufferedDrawPolicy::redrawRoot() {
 	if (!bff || !root)
 		return;
-	SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
-		if (needUpdate) { // sometimes we need a full redraw
-			needUpdate=false;
-			root->draw(root->getDrawContext());
-			RedrawManager::currentManager(root)->markCompletelyClean(root);
-			// return; Cubase/Live8 as nested window(win32) -> need to drawDirtyRegions()
-			// otherwise redrawing is locked until system sends WM_PAINT
-		}
-		RedrawManager::currentManager(root)->drawDirtyRegions();
-	SAMBAG_END_SYNCHRONIZED
+	try {
+		SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
+			if (needUpdate) { // sometimes we need a full redraw
+				needUpdate=false;
+				root->draw(root->getDrawContext());
+				RedrawManager::currentManager(root)->markCompletelyClean(root);
+				// return; Cubase/Live8 as nested window(win32) -> need to drawDirtyRegions()
+				// otherwise redrawing is locked until system sends WM_PAINT
+			}
+			RedrawManager::currentManager(root)->drawDirtyRegions();
+		SAMBAG_END_SYNCHRONIZED
+	} catch (const std::exception &ex) {
+		std::cout<<ex.what()<<std::endl;
+		exit(0);
+	}
 }
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::clearBuffer() {
@@ -114,7 +119,8 @@ inline void BufferedDrawPolicy::init(components::RootPane::Ptr root)
 	SAMBAG_ASSERT(root);
 	Dimension dim = root->getBounds().getDimension();
 	bff = sambag::disco::
-			getDiscoFactory()->createImageSurface((int)dim.width(), (int)dim.height());
+			getDiscoFactory()->
+				createImageSurface((int)dim.width(), (int)dim.height());
 	root->setSurface(bff);
 	this->root = root;
 	update();

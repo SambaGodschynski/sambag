@@ -137,6 +137,15 @@ public:
 		return Ptr (new CairoRecordingSurface(s));
 	}
 	//-------------------------------------------------------------------------
+	static Ptr create(const Integer &width, const Integer &height) {
+		cairo_rectangle_t r = {0};
+		r.width = width;
+		r.height = height;
+		cairo_surface_t *s =
+				cairo_recording_surface_create(CAIRO_CONTENT_COLOR_ALPHA, &r);
+		return Ptr (new CairoRecordingSurface(s));
+	}
+	//-------------------------------------------------------------------------
 	virtual ~CairoRecordingSurface() {}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const {

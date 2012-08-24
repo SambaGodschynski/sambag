@@ -41,6 +41,9 @@ public:
 	virtual IRecordingSurface::Ptr
 	createRecordingSurface() const = 0;
 	//-------------------------------------------------------------------------
+	virtual IRecordingSurface::Ptr
+	createRecordingSurface(const Integer &width, const Integer &height) const = 0;
+	//-------------------------------------------------------------------------
 	virtual ISolidPattern::Ptr createSolidPattern(const ColorRGBA &col) const = 0;
 	//-------------------------------------------------------------------------
 	virtual ILinearPattern::Ptr

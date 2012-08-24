@@ -20,7 +20,7 @@ Label::Label() {
 	setName("Label");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Label::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr Label::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Label>();
 }
 //-----------------------------------------------------------------------------

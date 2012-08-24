@@ -37,7 +37,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Viewport> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------
 	enum ScrollMode {
 		SIMPLE_SCROLL_MODE,

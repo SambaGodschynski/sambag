@@ -21,7 +21,6 @@ CairoDrawContext::CairoDrawContext(CairoSurface::Ptr _surface)
 	surface = surfaceRef->getCairoSurface();
 	context = cairo_create(surface);
 	setFont(currentFont);
-
 }
 //-----------------------------------------------------------------------------
 CairoDrawContext::~CairoDrawContext() {

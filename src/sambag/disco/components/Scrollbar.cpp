@@ -29,7 +29,7 @@ Scrollbar::Scrollbar(Scrollbar::Orientation orientation, const Coordinate &value
 	//setRequestFocusEnabled(false);
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr Scrollbar::getComponentUI(ui::ALookAndFeelPtr laf) const
+ui::AComponentUIPtr Scrollbar::createComponentUI(ui::ALookAndFeelPtr laf) const
 {
 	return laf->getUI<Scrollbar>();
 }

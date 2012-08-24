@@ -24,7 +24,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Button> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 private:
 protected:
 	//-------------------------------------------------------------------------

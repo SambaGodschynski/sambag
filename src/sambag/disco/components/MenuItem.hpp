@@ -27,7 +27,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<MenuItem> Ptr;
 	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr getComponentUI(ui::ALookAndFeelPtr laf) const;
+	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_DELAY;
 private:

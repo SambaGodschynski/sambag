@@ -937,7 +937,7 @@ void AComponent::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 		return;
 	if (!laf)
 		return;
-	ui::AComponentUI::Ptr cui = getComponentUI(laf);
+	ui::AComponentUI::Ptr cui = createComponentUI(laf);
 	if (!cui)
 		return;
 	installUI(cui);
@@ -1053,6 +1053,10 @@ void AComponent::setFlag(Flag aFlag, bool b) {
 bool AComponent::getFlag(unsigned int aFlag) const {
 	unsigned int mask = (1 << aFlag);
 	return ((flags & mask) == mask);
+}
+//-----------------------------------------------------------------------------
+ui::AComponentUIPtr AComponent::getUI() const {
+	return ui;
 }
 
 }}} // namespace(s)

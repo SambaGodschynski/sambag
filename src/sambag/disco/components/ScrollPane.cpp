@@ -223,7 +223,7 @@ ScrollPane::Ptr ScrollPane::create(AComponentPtr view,
 }
 //-----------------------------------------------------------------------------
 ui::AComponentUIPtr
-ScrollPane::getComponentUI(ui::ALookAndFeelPtr laf) const
+ScrollPane::createComponentUI(ui::ALookAndFeelPtr laf) const
 {
 	return laf->getUI<ScrollPane>();
 }
