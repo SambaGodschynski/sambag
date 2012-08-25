@@ -9,7 +9,7 @@ export ROOTDIR=$WHEREAMI/build
 export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
 export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
 export URL_PIXMAN='http://cairographics.org/releases/pixman-0.26.2.tar.gz'
-export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.0.tar.gz'
+export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.2.tar.xz'
 export _LIBLINK='MT'
 LIBPNG=libpng
 ZLIB=zlib
@@ -109,7 +109,7 @@ change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
 make -f Makefile.win32 "CFG=release"
 
-source $WHEREAMI/vs90vcvars32.sh UNIX
+#source $WHEREAMI/vs90vcvars32.sh UNIX
 
 #build cairo
 cd $ROOTDIR/$CAIRO
