@@ -58,7 +58,7 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
-	void createSurface();
+	sambag::disco::ISurface::Ptr createSurface();
 	//-------------------------------------------------------------------------
 	void destroyWindow();
 	//-------------------------------------------------------------------------
@@ -78,7 +78,6 @@ private:
 	//-------------------------------------------------------------------------
 	static void drawAll();
 	//-------------------------------------------------------------------------
-
 protected:
 	//-------------------------------------------------------------------------
 	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
@@ -90,8 +89,6 @@ protected:
 	typedef boost::unordered_map<HWND, Win32WindowImpl*> WinMap;
 	//-------------------------------------------------------------------------
 	static WinMap winmap;
-	//-------------------------------------------------------------------------
-	ISurface::Ptr surface;
 	//-------------------------------------------------------------------------
 	// Impl. by WindowImpl
 	virtual void handleMouseButtonPressEvent(int x, int y, int buttons) = 0;
@@ -106,7 +103,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void boundsUpdated() = 0;
 	//-------------------------------------------------------------------------
-	virtual void processDraw() = 0;
+	virtual void processDraw(sambag::disco::ISurface::Ptr surface) = 0;
 public:
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
@@ -121,10 +118,6 @@ public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() {
 		return self.lock();
-	}
-	//-------------------------------------------------------------------------
-	ISurface::Ptr getSurface() const {
-		return surface;
 	}
 	//-------------------------------------------------------------------------
 	bool isVisible() const;

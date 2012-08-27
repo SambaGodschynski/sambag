@@ -42,7 +42,7 @@ protected:
 	//-------------------------------------------------------------------------
 	WindowImpl() {}
 	//-------------------------------------------------------------------------
-	virtual void processDraw();
+	virtual void processDraw( sambag::disco::ISurface::Ptr surface );
 	//-------------------------------------------------------------------------
 	virtual void onCreated();
 	//-------------------------------------------------------------------------
@@ -191,8 +191,10 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
-void WindowImpl<ConcreteWindowImpl, DrawPolicy>::processDraw() {
-	DrawPolicy::processDraw(ConcreteWindowImpl::surface);
+void WindowImpl<ConcreteWindowImpl, DrawPolicy>::processDraw(
+	sambag::disco::ISurface::Ptr surface) 
+{
+	DrawPolicy::processDraw(surface);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

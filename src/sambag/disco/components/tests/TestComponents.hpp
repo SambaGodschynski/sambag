@@ -90,8 +90,7 @@ namespace tests {
 		TestComponent() {}
 		virtual void drawComponent(sambag::disco::IDrawContext::Ptr cn);
 	public:
-		sdc::ui::AComponentUIPtr getComponentUI() const { return ui; }
-		sdc::ui::AComponentUIPtr getComponentUI(sdc::ui::ALookAndFeelPtr laf) const;
+		sdc::ui::AComponentUIPtr createComponentUI(sdc::ui::ALookAndFeelPtr laf) const;
 		static int numDrawCalled;
 		typedef boost::shared_ptr<TestComponent> Ptr;
 		static Ptr create() {

@@ -43,7 +43,7 @@ LookAndFeelForTest::LookAndFeelForTest() {
 }
 //-----------------------------------------------------------------------------
 sdc::ui::AComponentUIPtr
-TestComponent::getComponentUI(sdc::ui::ALookAndFeelPtr laf) const
+TestComponent::createComponentUI(sdc::ui::ALookAndFeelPtr laf) const
 {
 	return laf->getUI<TestComponent>();
 }

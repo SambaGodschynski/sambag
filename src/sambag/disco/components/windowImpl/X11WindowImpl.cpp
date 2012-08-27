@@ -92,9 +92,6 @@ void X11WindowImpl::createWindow() {
 	if (XSetWMProtocols(display, win, &wm_delete_window_atom, 1)==0) {
 		SAMBAG_ASSERT(false);
 	}
-	// disco stuff
-	createSurface();
-	SAMBAG_ASSERT(surface);
 	// pop up the window
 	XMapWindow(display, win);
 	// force position
@@ -112,7 +109,6 @@ void X11WindowImpl::destroyWindow() {
 	// unregister window
 	winmap.erase(win);
 	// X11's destroy
-	surface.reset();
 	onDestroy();
 	XDestroyWindow(display, win);
 	win = 0;
@@ -148,10 +144,10 @@ Rectangle X11WindowImpl::getBounds() const {
 	return bounds;
 }
 //-----------------------------------------------------------------------------
-void X11WindowImpl::createSurface() {
+sambag::disco::ISurface::Ptr X11WindowImpl::createSurface() {
 	using namespace sambag;
 	Rectangle r = getBounds();
-	surface = disco::X11Surface::create(display, win, visual,
+	return disco::X11Surface::create(display, win, visual,
 			r.getWidth(), r.getHeight());
 }
 //-----------------------------------------------------------------------------
@@ -177,7 +173,8 @@ void X11WindowImpl::invalidateWindow(const Rectangle &area) {
 //-----------------------------------------------------------------------------
 void X11WindowImpl::drawAll() {
 	BOOST_FOREACH(WinMap::value_type &v, winmap) {
-		v.second->processDraw();
+		sambag::disco::ISurface::Ptr s = v.createSurface();
+		v.second->processDraw(s);
 	}
 }
 //-----------------------------------------------------------------------------

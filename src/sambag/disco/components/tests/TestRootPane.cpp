@@ -193,16 +193,16 @@ void TestRootPane::testLaf() {
 	ui::UIManager::instance().installLookAndFeel(root, laf);
 	CPPUNIT_ASSERT(root->getCurrentLookAndFeel() == laf);
 	for (int i = 0; i < NUM_COMPOS; ++i) {
-		CPPUNIT_ASSERT(comps[i]->getComponentUI());
+		CPPUNIT_ASSERT(comps[i]->getUI());
 	}
 	TestComponent::Ptr neu = TestComponent::create();
-	CPPUNIT_ASSERT(!neu->getComponentUI());
+	CPPUNIT_ASSERT(!neu->getUI());
 	root->add(neu);
-	CPPUNIT_ASSERT(neu->getComponentUI());
+	CPPUNIT_ASSERT(neu->getUI());
 	neu = TestComponent::create();
 	TestComponentUI::Ptr cui = TestComponentUI::create();
 	neu->setUserUI(cui);
 	root->add(neu);
-	CPPUNIT_ASSERT(neu->getComponentUI()!=comps[0]->getComponentUI());
+	CPPUNIT_ASSERT(neu->getUI()!=comps[0]->getUI());
 }
 } //namespace

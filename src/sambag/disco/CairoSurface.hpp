@@ -63,6 +63,8 @@ public:
 	virtual ~CairoSurface() {
 		if (!surface)
 			return;
+		cairo_surface_flush(surface); 
+		cairo_surface_finish(surface);
 		cairo_surface_destroy(surface);
 	}
 	//-------------------------------------------------------------------------

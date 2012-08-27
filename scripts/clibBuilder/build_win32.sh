@@ -1,6 +1,9 @@
 #!/bin/sh
 IFS=$'\n'
 
+
+
+
 source ./vs90vcvars32.sh
 
 WHEREAMI=$(pwd)
@@ -15,7 +18,6 @@ LIBPNG=libpng
 ZLIB=zlib
 PIXMAN=pixman
 CAIRO=cairo
-
 #//////////////////////////////////////////////////////////////////////////////
 
 #replaces all -MD to -MT
@@ -109,19 +111,21 @@ change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
 make -f Makefile.win32 "CFG=release"
 
-#source $WHEREAMI/vs90vcvars32.sh UNIX
+source $WHEREAMI/vs90vcvars32.sh UNIX
 
 #build cairo
 cd $ROOTDIR/$CAIRO
-#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\zlib)
-#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\libpng)
-#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\pixman\pixman)
-#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\cairo\boilerplate)
-#export INCLUDE=$INCLUDE;$(to_dos_path $ROOTDIR\cairo\src)
-#export LIB=$LIB;$(to_dos_path $ROOTDIR\$ZLIB)
-#export LIB=$LIB;$(to_dos_path $ROOTDIR\$PNG)
 change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
 
 make -f Makefile.win32 "CFG=release"
+
+#deploy
+cd $ROOTDIR
+cp $CAIRO/cairo-version.h $CAIRO/src/cairo-version.h
+cp $ZLIB/zlib.lib $CAIRO/src/release/
+cp $LIBPNG/libpng.lib $CAIRO/src/release
+cp $PIXMAN/pixman/release/pixman-1.lib $CAIRO/src/release
+
+

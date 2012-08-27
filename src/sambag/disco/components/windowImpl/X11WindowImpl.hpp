@@ -45,7 +45,7 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
-	void createSurface();
+	sambag::disco::ISurface::Ptr createSurface();
 	//-------------------------------------------------------------------------
 	static void handleEvent(XEvent &event);
 	//-------------------------------------------------------------------------
@@ -85,8 +85,6 @@ protected:
 	Visual *visual;
 	::Window win;
 	//-------------------------------------------------------------------------
-	ISurface::Ptr surface;
-	//-------------------------------------------------------------------------
 	virtual void handleMouseButtonPressEvent(int x, int y, int buttons) = 0;
 	//-------------------------------------------------------------------------
 	virtual void handleMouseButtonReleaseEvent(int x, int y, int buttons) = 0;
@@ -99,7 +97,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void boundsUpdated() = 0;
 	//-------------------------------------------------------------------------
-	virtual void processDraw() = 0;
+	virtual void processDraw(sambag::disco::ISurface::Ptr surface) = 0;
 public:
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);

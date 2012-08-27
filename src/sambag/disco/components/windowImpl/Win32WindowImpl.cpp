@@ -103,8 +103,7 @@ void Win32WindowImpl::drawAll() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::update() {
-	createSurface();
-	this->processDraw();
+	this->processDraw( createSurface() );
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent, 
@@ -191,7 +190,6 @@ void Win32WindowImpl::destroyWindow() {
 		return;
 	// unregister window
 	winmap.erase(win);
-	surface.reset();
 	onDestroy();
 	win = 0;
 	visible = false;
@@ -244,10 +242,10 @@ Rectangle Win32WindowImpl::getBounds() const {
 	return bounds;
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::createSurface() {
+sambag::disco::ISurface::Ptr Win32WindowImpl::createSurface() {
 	using namespace sambag;
 	Rectangle r = getBounds();
-	surface = disco::Win32Surface::create(win,
+	return disco::Win32Surface::create(win,
 			(int)r.getWidth(), (int)r.getHeight());
 }
 //-----------------------------------------------------------------------------

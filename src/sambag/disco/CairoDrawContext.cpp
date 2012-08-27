@@ -21,6 +21,7 @@ CairoDrawContext::CairoDrawContext(CairoSurface::Ptr _surface)
 	surface = surfaceRef->getCairoSurface();
 	context = cairo_create(surface);
 	setFont(currentFont);
+	cairo_set_antialias(context, CAIRO_ANTIALIAS_FAST);
 }
 //-----------------------------------------------------------------------------
 CairoDrawContext::~CairoDrawContext() {
