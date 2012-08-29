@@ -10,13 +10,16 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/svg/graphicElements/GraphicElement.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 #include <sambag/disco/components/AComponent.hpp>
 #include <sambag/disco/IDrawContext.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 
-namespace sambag { namespace disco { namespace svg { namespace graphicElements {
+namespace sambag { namespace disco { namespace components {
 namespace sc = sambag::com;
 namespace sd = sambag::disco;
+namespace sds = sd::svg;
+namespace sdsg = sds::graphicElements;
 namespace sdc = sd::components;
 namespace sdcu = sdc::ui;
 //=============================================================================
@@ -41,7 +44,21 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	typename Drawable::Ptr drawable;
+	//-------------------------------------------------------------------------
+	sdsg::Style style;
 public:
+	//-------------------------------------------------------------------------
+	virtual void setStyle( const sdsg::Style &style ) { 
+		this->style = style;
+	}
+	//-------------------------------------------------------------------------
+	virtual const sdsg::Style & getStyle() const { 
+		return style;
+	}
+	//-------------------------------------------------------------------------
+	virtual sdsg::Style & getStyle() { 
+		return style;
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * sycronizes Drawable bounds with Component bounds.
@@ -60,7 +77,7 @@ template <class Drawable>
 void ComponentWrapper<Drawable>::updateBounds() 
 {
 	sd::IDrawContext::Ptr cn = sd::getDiscoFactory()->createContext();
-	cn->setStrokeColor(ColorRGBA(0));
+	cn->setStrokeColor(ColorRGBA(0)); // without stroke there is no bounding
 	setBounds(drawable->getBoundingBox(cn));
 }
 //-----------------------------------------------------------------------------
@@ -70,6 +87,7 @@ void ComponentWrapper<Drawable>::drawComponent(IDrawContext::Ptr context)
 	sd::Point2D p(0, 0);
 	boost::geometry::subtract_point(p, getLocation());
 	context->translate(p);
+	style.intoContext(context);
 	drawable->draw(context);
 }
 //-----------------------------------------------------------------------------
@@ -86,6 +104,6 @@ template <class Drawable>
 ComponentWrapper<Drawable>::ComponentWrapper() {
 	drawable = typename Drawable::create();
 }
-}}}} // namespace(s)
+}}} // namespace(s)
 
 #endif /* SAMBAG_COMPONENTWRAPPER_H */

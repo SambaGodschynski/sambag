@@ -17,8 +17,11 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 #include <float.h>
 #include <limits.h>
+#include <limits>
 #include <string>
 #include <sstream>
 
@@ -52,12 +55,13 @@ typedef tribool TriBool;
 //=============================================================================
 extern void log(const std::string &str);
 //-----------------------------------------------------------------------------
-inline Integer getNullNumber() {
+inline Integer getNullInteger() {
 	return INT_MAX;
 }
 //-----------------------------------------------------------------------------
-inline Number getNullInteger() {
-	return DBL_MAX;
+inline Number getNullNumber() {
+	BOOST_STATIC_ASSERT( boost::is_floating_point<Number>::value );
+	return std::numeric_limits<Number>::infinity(); //NaN occurs problems
 }
 //-----------------------------------------------------------------------------
 template<typename T>

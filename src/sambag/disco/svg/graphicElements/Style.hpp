@@ -5,8 +5,8 @@
  *      Author: samba
  */
 
-#ifndef STYLE_H_
-#define STYLE_H_
+#ifndef _DISCO_STYLE_H_
+#define _DISCO_STYLE_H_
 
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/Geometry.hpp"
