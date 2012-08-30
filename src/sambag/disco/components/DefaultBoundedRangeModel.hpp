@@ -107,7 +107,7 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets all of the BoundedRangeModel properties after forcing the
-	 * rguments to obey the usual constraints:
+	 * arguments to obey the usual constraints:
 	 * @param newValue
 	 * @param newExtent
 	 * @param newMin

@@ -602,6 +602,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\AKnob.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\ALayoutManager.cpp"
 						>
 					</File>
@@ -719,6 +723,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\components\IScrollable.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Knob.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\Knob.hpp"
 						>
 					</File>
 					<File
@@ -929,6 +941,14 @@
 							</File>
 							<File
 								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicButtonUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicKnobUI.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicKnobUI.hpp"
 								>
 							</File>
 							<File

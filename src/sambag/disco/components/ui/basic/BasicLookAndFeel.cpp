@@ -15,6 +15,7 @@
 #include "BasicScrollbarUI.hpp"
 #include "BasicPanelUI.hpp"
 #include "BasicScrollPaneUI.hpp"
+#include "BasicKnobUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -27,6 +28,7 @@
 #include <sambag/disco/svg/HtmlColors.hpp>
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
+#include <sambag/disco/components/Knob.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -49,6 +51,7 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Panel, BasicPanelUI >();
 	registerComponentUI<Viewport, BasicPanelUI >();
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
+	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
@@ -70,6 +73,10 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ScrollBar.thumb", HtmlColors::getColor("grey"));
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
 	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<knobs
+	m.putProperty("Knob.range", (Coordinate)200.);
+	m.putProperty("Knob.mode", std::string("circular"));
+	//m.putProperty("Knob.knobMode",  std::string("circular"));
 }
 
 }}}}} // namespace(s)
