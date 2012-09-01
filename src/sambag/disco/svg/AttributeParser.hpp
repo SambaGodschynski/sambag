@@ -66,7 +66,7 @@ public:
 	static void parseCoordinate(const std::string &str, Coordinate&);
 	//-------------------------------------------------------------------------
 	static void parseUnit(const std::string &str, units::Unit&);
-	//-------------------------------------------------------------------------
+	//---------------------------------------------------s----------------------
 	static void parsePathInstructions(const std::string &str, PathInstructions&);
 	//-------------------------------------------------------------------------
 	static void parseOpacity(const std::string &str, Number &v);
@@ -131,7 +131,6 @@ public:
 // stream operators
 //=============================================================================
 extern std::istream & operator>>(std::istream&, sambag::disco::svg::units::Unit&);
-extern std::istream & operator>>(std::istream&, sambag::disco::Coordinate&);
 extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
@@ -181,10 +180,10 @@ void AttributeParser::getValuesFromString( const std::string &_values, Container
 	while(!ss.eof()) {
 		typename Container::value_type value;
 		ss>>value;
-		if (ss.fail()) { // no number character
+		if (ss.fail()) {
 			char dump;
-			ss.clear(); // clear flags
-			ss>>dump; // remove no number character
+			ss.clear();
+			ss>>dump; 
 			continue;
 		}
 		out.push_back(value);

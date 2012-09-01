@@ -33,9 +33,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::function<void(SvgObject::Ptr)> ObjectRequestFunction;
 	//-------------------------------------------------------------------------
-	struct Width_tag { typedef Coordinate Type; };
+	struct Width_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
-	struct Height_tag { typedef Coordinate Type; };
+	struct Height_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct Viewbox_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------

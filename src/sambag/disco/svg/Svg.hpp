@@ -48,7 +48,7 @@ public:
 	typedef std::string ClassType;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct StrokeWidth_tag { typedef Coordinate Type; };
+	struct StrokeWidth_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct Stroke_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
 	//-------------------------------------------------------------------------
 	struct FontFamily_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
-	struct FontSize_tag { typedef Coordinate Type; };
+	struct FontSize_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct FontWeight_tag { typedef Font::Weight Type; };
 	//-------------------------------------------------------------------------
@@ -76,7 +76,7 @@ public:
 	//-------------------------------------------------------------------------
 	struct DashArrayStyle_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
-	struct DashOffsetStyle_tag { typedef Coordinate Type; };
+	struct DashOffsetStyle_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct Style_tag { typedef disco::svg::graphicElements::Style Type; };
 	//-------------------------------------------------------------------------

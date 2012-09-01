@@ -20,7 +20,7 @@ public:
 	typedef boost::shared_ptr<SvgColorStop> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct Offset_tag { typedef Coordinate Type; };
+	struct Offset_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
 	struct Color_tag { typedef ColorRGBA Type; };
 	//-------------------------------------------------------------------------

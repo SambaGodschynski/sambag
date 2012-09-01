@@ -16,12 +16,15 @@ namespace sambag { namespace disco {
 //=============================================================================
 /**
  * @class Coordinate
+ * TODO: change to fundamental type.
  */
 struct Coordinate {
 //=============================================================================
 	//-------------------------------------------------------------------------
+private:
 	sambag::com::Number value;
 	//-------------------------------------------------------------------------
+public:
 	Coordinate(const sambag::com::Number value=0) : value(value) {}
 	//-------------------------------------------------------------------------
 	operator sambag::com::Number() const {

@@ -28,9 +28,9 @@ public:
 	//-------------------------------------------------------------------------
 	struct HEIGHT_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct RX_tag { typedef Coordinate Type; };
+	struct RX_tag { typedef Number Type; };
 	//-------------------------------------------------------------------------
-	struct RY_tag { typedef Coordinate Type; };
+	struct RY_tag { typedef Number Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------

@@ -240,7 +240,7 @@ void AttributeParser::parseCoordinate(const std::string &str, Coordinate&c) {
 	boost::match_results<std::string::const_iterator> what;
 	boost::regex re("([0-9e.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
-	c.value = string2Number(what[1], 0.f);
+	c = string2Number(what[1], 0.f);
 }
 //-----------------------------------------------------------------------------
 void AttributeParser::parseUnit(const std::string &str, units::Unit &c) {
@@ -407,14 +407,6 @@ std::istream & operator>>(std::istream& istr, sambag::disco::svg::units::Unit &c
 	AttributeParser::getWholeString(istr, in);
 	AttributeParser::prepareString(in);
 	AttributeParser::parseUnit(in, c);
-	return istr;
-}
-//-----------------------------------------------------------------------------
-std::istream & operator>>(std::istream& istr, sambag::disco::Coordinate &c) {
-	std::string in;
-	AttributeParser::getWholeString(istr, in);
-	AttributeParser::prepareString(in);
-	AttributeParser::parseCoordinate(in, c);
 	return istr;
 }
 //-----------------------------------------------------------------------------
