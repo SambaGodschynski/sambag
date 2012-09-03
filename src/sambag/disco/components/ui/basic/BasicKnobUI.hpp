@@ -65,17 +65,26 @@ private:
 	Coordinate aCoef;
 	Coordinate bCoef;
 	//-------------------------------------------------------------------------
-	Point2D getPivot(AComponentPtr c) {
+	inline Point2D getPivot(AComponentPtr c) {
 		Coordinate w = c->getWidth(), h = c->getHeight();
 		return Point2D(w/2., h/2.);
 	}
 	//-------------------------------------------------------------------------
 	Coordinate valueFromPoint(const Point2D &p) const;
 	//-------------------------------------------------------------------------
+	Point2D valueToPoint(Number value) const {
+		Number alpha = (value - bCoef) / aCoef;
+		Number inset = 4.;
+		Point2D p;
+		p.x(radius + cosf (alpha) * (radius - inset) + 0.5f);
+		p.y(radius - sinf (alpha) * (radius - inset) + 0.5f);
+		return p;
+	}
+	//-------------------------------------------------------------------------
 	void compute();
 public:
 	//-------------------------------------------------------------------------
-	KnobTypePtr getKnob() const {
+	inline KnobTypePtr getKnob() const {
 		return knob.lock();
 	}
 	//-------------------------------------------------------------------------
@@ -128,16 +137,20 @@ void BasicKnobUI<M>::installUI(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+
+	cn->setFillColor(getKnob()->getForeground());
+	cn->arc(valueToPoint(getKnob()->getValue()), 5.);
+	cn->fill();
+
 	cn->translate(getPivot(getKnob()));
 	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 2.5);
-	cn->setFillColor(getKnob()->getForeground());
 	cn->stroke();
 	
-	cn->setFillColor(ColorRGBA(0));
+	/*cn->setFillColor(ColorRGBA(0));
 	cn->translate(Point2D(-5., 2.5));
 	cn->setFontSize(11.);
 	cn->textPath(sambag::com::toString(getKnob()->getValue()));
-	cn->fill();
+	cn->fill();*/
 }
 //-----------------------------------------------------------------------------
 template <class M>

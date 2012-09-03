@@ -27,7 +27,7 @@ private:
 public:
 	Coordinate(const sambag::com::Number value=0) : value(value) {}
 	//-------------------------------------------------------------------------
-	operator sambag::com::Number() const {
+	inline operator sambag::com::Number() const {
 		return value;
 	}
 	//-------------------------------------------------------------------------
