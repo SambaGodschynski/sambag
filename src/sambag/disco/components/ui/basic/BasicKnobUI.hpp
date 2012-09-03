@@ -138,20 +138,22 @@ void BasicKnobUI<M>::installUI(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+
+	Point2D loc = getPivot(getKnob());
+	cn->setFillColor(fill);
+	cn->arc(loc, getKnob()->getWidth() / 3.);
+	cn->fill();
+
+	cn->setFillColor(stroke);
+	cn->arc(loc, getKnob()->getWidth() / 3.);
+	cn->stroke();
+
+
 	// handler
 	cn->setFillColor(handler);
 	cn->arc(valueToPoint(getKnob()->getValue()), 5.);
 	cn->fill();
 
-	cn->translate(getPivot(getKnob()));
-	cn->setFillColor(fill);
-	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 3);
-	cn->fill();
-
-	cn->setFillColor(stroke);
-	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 3);
-	cn->stroke();
-	
 	/*cn->setFillColor(ColorRGBA(0));
 	cn->translate(Point2D(-5., 2.5));
 	cn->setFontSize(11.);
@@ -180,14 +182,15 @@ void BasicKnobUI<M>::mousePressed(const sdce::MouseEvent &ev) {
 
 	modeLinear = false;
 	entryState = getKnob()->getValue();
-	range = 200.;
-	m.getProperty("Knob.range", range);
+	SAMBAG_PROPERTY_TAG(RangePropertyTag, "Knob.range");
+	range = getUIPropertyCached<RangePropertyTag>(200.);
 
 	Coordinate vmax = getKnob()->getMaximum(), vmin = getKnob()->getMinimum();
 	coef = (vmax - vmin) / range;
 
-	std::string mode = "linear";
-	m.getProperty("Knob.mode", mode);
+	SAMBAG_PROPERTY_TAG(ModePropertyTag, "Knob.range");
+	const std::string &mode = 
+		getUIPropertyCached<ModePropertyTag>(std::string("linear"));
 	modeLinear = mode == "linear";
 
 	

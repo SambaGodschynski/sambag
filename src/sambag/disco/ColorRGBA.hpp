@@ -34,19 +34,23 @@ struct ColorRGBA: public sambag::math::VectorN<sambag::com::Number, 4> {
 	sambag::com::Number getA() const {
 		return get<A> ();
 	}
-	void setR(const sambag::com::Number & val) {
+	ColorRGBA & setR(const sambag::com::Number & val) {
 		set<R> (val);
+		return *this;
 	}
-	void setG(const sambag::com::Number & val) {
+	ColorRGBA & setG(const sambag::com::Number & val) {
 		set<G> (val);
+		return *this;
 	}
-	void setB(const sambag::com::Number & val) {
+	ColorRGBA & setB(const sambag::com::Number & val) {
 		set<B> (val);
+		return *this;
 	}
-	void setA(const sambag::com::Number & val) {
+	ColorRGBA & setA(const sambag::com::Number & val) {
 		set<A> (val);
+		return *this;
 	}
-	void setValues(const sambag::com::Number &r,
+	ColorRGBA & setValues(const sambag::com::Number &r,
 			const sambag::com::Number &g, const sambag::com::Number &b,
 			const sambag::com::Number &a)
 	{
@@ -54,6 +58,7 @@ struct ColorRGBA: public sambag::math::VectorN<sambag::com::Number, 4> {
 		setG(g);
 		setB(b);
 		setA(a);
+		return *this;
 	}
 	ColorRGBA(sambag::com::Number r = 0.0, sambag::com::Number g = 0.0,
 			sambag::com::Number b = 0.0, sambag::com::Number a = 1.0)

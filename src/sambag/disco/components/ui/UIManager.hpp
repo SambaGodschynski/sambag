@@ -81,16 +81,9 @@ inline UIManager & getUIManager() {
 }
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
-	int resetCounter = 0;
-	template <class PropertyTag, class T>
-	T __getUIProperty(const T &defaultValue) {
-		T val = defaultValue;
-		getUIManager().getProperty(
-			std::string(typename PropertyTag::propertyName()), val
-		);
-		return val;
-	}
+	int resetStamp = 0;
 } //namespace
+//-----------------------------------------------------------------------------
 /**
  * Returns a UIManager property value cached.
  * The UIManager property map will be invoked once at first call.
@@ -102,11 +95,13 @@ namespace {
  */
 template <class PropertyTag, class T>
 const T & getUIPropertyCached(const T& defaultValue) {
-	static int resetStamp = resetCounter;
-	static T val = __getUIProperty<PropertyTag>(defaultValue);
-	if (resetCounter!=resetStamp) {
-		val = __getUIProperty<PropertyTag>(defaultValue);
-		resetStamp = resetCounter;
+	static int localStamp = -1;
+	static T val = defaultValue;
+	if (localStamp!=resetStamp) {
+		getUIManager().getProperty (
+			std::string(typename PropertyTag::propertyName()), val
+		);
+		localStamp = resetStamp;
 	}
 	return val;
 }
@@ -115,7 +110,7 @@ const T & getUIPropertyCached(const T& defaultValue) {
  * Resets all cached values.
  */
 inline void resetUIPorpertyCache() {
-	resetCounter++;
+	resetStamp++;
 }
 
 
