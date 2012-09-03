@@ -74,7 +74,7 @@ private:
 	//-------------------------------------------------------------------------
 	Point2D valueToPoint(Number value) const {
 		Number alpha = (value - bCoef) / aCoef;
-		Number inset = 4.;
+		Number inset = 6.;
 		Point2D p;
 		p.x(radius + cosf (alpha) * (radius - inset) + 0.5f);
 		p.y(radius - sinf (alpha) * (radius - inset) + 0.5f);
@@ -143,7 +143,7 @@ void BasicKnobUI<M>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->fill();
 
 	cn->translate(getPivot(getKnob()));
-	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 2.5);
+	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 3);
 	cn->stroke();
 	
 	/*cn->setFillColor(ColorRGBA(0));
