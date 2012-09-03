@@ -76,7 +76,10 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<knobs
 	m.putProperty("Knob.range", (Coordinate)200.);
 	m.putProperty("Knob.mode", std::string("circular"));
-	//m.putProperty("Knob.knobMode",  std::string("circular"));
+	m.putProperty("Knob.size", Dimension(45., 45.));
+	m.putProperty("Knob.strokeColor", HtmlColors::getColor("black"));
+	m.putProperty("Knob.fillColor", HtmlColors::getColor("white"));
+	m.putProperty("Knob.colorHandler", HtmlColors::getColor("grey"));
 }
 
 }}}}} // namespace(s)

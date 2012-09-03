@@ -64,6 +64,7 @@ private:
 	Coordinate halfAngle;
 	Coordinate aCoef;
 	Coordinate bCoef;
+	ColorRGBA stroke, fill, handler;
 	//-------------------------------------------------------------------------
 	inline Point2D getPivot(AComponentPtr c) {
 		Coordinate w = c->getWidth(), h = c->getHeight();
@@ -137,12 +138,17 @@ void BasicKnobUI<M>::installUI(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-
-	cn->setFillColor(getKnob()->getForeground());
+	// handler
+	cn->setFillColor(handler);
 	cn->arc(valueToPoint(getKnob()->getValue()), 5.);
 	cn->fill();
 
 	cn->translate(getPivot(getKnob()));
+	cn->setFillColor(fill);
+	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 3);
+	cn->fill();
+
+	cn->setFillColor(stroke);
 	cn->arc(Point2D(0, 0), getKnob()->getWidth() / 3);
 	cn->stroke();
 	
@@ -226,11 +232,19 @@ void BasicKnobUI<M>::mouseDragged(const sdce::MouseEvent &ev) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::installDefaults(AComponentPtr c) {
+	UIManager &m = getUIManager();
+	Dimension size(25., 25.);
+	m.getProperty("Knob.size", size);
+	c->setSize(size);
 	radius = c->getWidth() / 2.f;
 	rangeAngle = 1.f;
 	startAngle = 5. * M_PI / 4.;
 	rangeAngle = -3. * M_PI / 2.;
 	compute();
+	// colors
+	m.getProperty("Knob.strokeColor", stroke);
+	m.getProperty("Knob.fillColor", fill);
+	m.getProperty("Knob.colorHandler", handler);
 }
 //-----------------------------------------------------------------------------
 template <class M>

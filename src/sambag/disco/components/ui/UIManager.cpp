@@ -18,6 +18,7 @@ void UIManager::installLookAndFeel(RootPane::Ptr root, ALookAndFeel::Ptr laf)
 {
 	lafMap[root] = laf;
 	root->installLookAndFeel(laf);
+	resetUIPorpertyCache();
 }
 //-----------------------------------------------------------------------------
 ALookAndFeel::Ptr UIManager::getLookAndFeel(RootPane::Ptr root) const {

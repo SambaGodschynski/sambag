@@ -79,6 +79,50 @@ void UIManager::getProperty(const std::string &name, T &out) const {
 inline UIManager & getUIManager() {
 	return UIManager::instance();
 }
+///////////////////////////////////////////////////////////////////////////////
+namespace {
+	int resetCounter = 0;
+	template <class PropertyTag, class T>
+	T __getUIProperty(const T &defaultValue) {
+		T val = defaultValue;
+		getUIManager().getProperty(
+			std::string(typename PropertyTag::propertyName()), val
+		);
+		return val;
+	}
+} //namespace
+/**
+ * Returns a UIManager property value cached.
+ * The UIManager property map will be invoked once at first call.
+ * The PropertyTag has to comply following concept:
+ *
+ * struct BasicPropertyTag {
+ *    static const char * propertyName();
+ * };
+ */
+template <class PropertyTag, class T>
+const T & getUIPropertyCached(const T& defaultValue) {
+	static int resetStamp = resetCounter;
+	static T val = __getUIProperty<PropertyTag>(defaultValue);
+	if (resetCounter!=resetStamp) {
+		val = __getUIProperty<PropertyTag>(defaultValue);
+		resetStamp = resetCounter;
+	}
+	return val;
+}
+
+/**
+ * Resets all cached values.
+ */
+inline void resetUIPorpertyCache() {
+	resetCounter++;
+}
+
+
+#define SAMBAG_PROPERTY_TAG(classname, name) struct classname { \
+	static const char * propertyName() { return (name); }   \
+}
+
 }}}} // namespace(s)
 
 #endif /* SAMBAG_UIMANAGER_H */

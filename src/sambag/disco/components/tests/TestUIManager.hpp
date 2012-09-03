@@ -18,10 +18,12 @@ private:
 	CPPUNIT_TEST_SUITE( TestUIManager );
 	CPPUNIT_TEST( testSingleton );
 	CPPUNIT_TEST( testSetGetProperty );
+	CPPUNIT_TEST( testUIPropertyCache );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSingleton();
 	void testSetGetProperty();
+	void testUIPropertyCache();
 };
 
 } // namespace
