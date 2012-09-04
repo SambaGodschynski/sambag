@@ -85,6 +85,17 @@ private:
 	void compute();
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * Returns true if the specified x,y location
+	 * is contained within the look and feel's defined
+	 * shape of the specified component.
+	 * @param c
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	virtual bool contains(AComponentPtr c, const Point2D &p);
+	//-------------------------------------------------------------------------
 	inline KnobTypePtr getKnob() const {
 		return knob.lock();
 	}
@@ -128,6 +139,14 @@ public:
 	virtual void draw(IDrawContext::Ptr cn, AComponentPtr c);
 }; // BasicKnobUI
 ///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+template <class M>
+bool BasicKnobUI<M>::contains(AComponentPtr c, const Point2D &p) {
+	Coordinate x = p.x() - radius;
+	Coordinate y = p.y() - radius;
+	Coordinate _radius = radius - 2.;
+	return x*x + y*y <= _radius*_radius;
+}
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::installUI(AComponentPtr c) {
