@@ -43,12 +43,15 @@ void TestUIManager::testSetGetProperty() {
 	laf->getProperty("point", p);
 	CPPUNIT_ASSERT_EQUAL(p, Point2D(1,2));
 }
+namespace {
+	SAMBAG_PROPERTY_TAG(PropertyTag, "x");
+
+} // namespace
 void TestUIManager::testUIPropertyCache() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components::ui;
 	UIManager &laf = UIManager::instance();
 	laf.putProperty("x", (int)100);
-	SAMBAG_PROPERTY_TAG(PropertyTag, "x");
 	int x = getUIPropertyCached<PropertyTag>(0);
 	CPPUNIT_ASSERT_EQUAL(x, (int)100);
 	// change property

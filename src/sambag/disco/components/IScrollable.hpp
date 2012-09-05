@@ -33,11 +33,11 @@ public:
 	 * scroll increment that will completely expose one block of rows or
 	 * columns, depending on the value of orientation.
 	 * @param visibleRect
-	 * @param orientation
-	 * @param direction
+	 * @param orientation Either SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
+	 * @param direction Less than zero to scroll up/left, greater than zero for down/right.
 	 * @return
 	 */
-	virtual int getScrollableBlockIncrement(const Rectangle &visibleRect,
+	virtual Coordinate getScrollableBlockIncrement(const Rectangle &visibleRect,
 			int orientation, int direction) const = 0;
 	//-------------------------------------------------------------------------
 	/**
@@ -59,11 +59,11 @@ public:
 	 * scroll increment that will completely expose one new row or column,
 	 * depending on the value of orientation.
 	 * @param visibleRect
-	 * @param orientation
-	 * @param direction
+	 * @param orientation Either SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
+	 * @param direction Less than zero to scroll up/left, greater than zero for down/right.
 	 * @return
 	 */
-	virtual int getScrollableUnitIncrement(const Rectangle &visibleRect,
+	virtual Coordinate getScrollableUnitIncrement(const Rectangle &visibleRect,
 		int orientation, int direction) const = 0;
 
 }; // IScrollable
