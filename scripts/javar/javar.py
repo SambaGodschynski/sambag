@@ -169,7 +169,12 @@ class mywidgets:
         mb = Button(menubar,text = 'do it!', command = self.doIt)
         mb.pack(padx = 25,side = RIGHT)
 
-parser = argparse.ArgumentParser(description='creates class')
+parser = argparse.ArgumentParser(description=
+"""
+Pareses Java files for class methods and extract these to an appropriated
+c++ format (which I prefer). Note:
+The parser far away from being perfect.
+""")
 parser.add_argument('--classname','-n',  
 		dest='classname', 
 		help='the classname', 
