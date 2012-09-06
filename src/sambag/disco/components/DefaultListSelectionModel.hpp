@@ -11,13 +11,19 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <limits.h>
+#include <boost/dynamic_bitset.hpp>
+#include <sambag/com/events/Events.hpp>
+#include "events/ListSelectionEvent.hpp"
 
 namespace sambag { namespace disco { namespace components {
+namespace ev = sambag::com::events;
 //=============================================================================
 /** 
   * @class DefaultListSelectionModel.
   */
-class DefaultListSelectionModel {
+class DefaultListSelectionModel :
+	public ev::EventSender<events::ListSelectionEvent>
+{
 //=============================================================================
 public:
 	enum SelectionMode {
@@ -48,7 +54,7 @@ private:
 	bool isAdjusting;
 	int firstChangedIndex;
 	int lastChangedIndex;
-	typedef unsigned int BitSet;
+	typedef boost::dynamic_bitset<> BitSet;
 
 protected:
 	//-------------------------------------------------------------------------
@@ -70,15 +76,17 @@ protected:
 		return isAdjusting;
 	}
 	//-------------------------------------------------------------------------
-	int getSelectionMode() const {
+	SelectionMode getSelectionMode() const {
 		return selectionMode;
 	}
 	//-------------------------------------------------------------------------
-	void setSelectionMode(int selectionMode);
+	void setSelectionMode(SelectionMode mode);
 	//-------------------------------------------------------------------------
 	bool isSelectedIndex(int index);
 	//-------------------------------------------------------------------------
 	bool isSelectionEmpty() const;
+	//-------------------------------------------------------------------------
+	void fireValueChanged(bool isAdjusting);
 	//-------------------------------------------------------------------------
 	/**
 	 * @param firstIndex the first index in the interval
@@ -89,6 +97,8 @@ protected:
 	 */
 	//-------------------------------------------------------------------------
 	void fireValueChanged(int firstIndex, int lastIndex);
+	//-------------------------------------------------------------------------
+	void fireValueChanged(int firstIndex, int lastIndex, bool isAdjusting);
 private:
 	//-------------------------------------------------------------------------
 	void fireValueChanged();
@@ -143,7 +153,7 @@ public:
 		firstChangedIndex(MAX),
 		lastChangedIndex(MIN),
 		leadAnchorNotificationEnabled(true),
-		value(0)
+		value(32) // 32 bits
 	{
 	}
 	//-------------------------------------------------------------------------
@@ -174,7 +184,7 @@ public:
 	 * @return  the value of the <code>leadAnchorNotificationEnabled</code> flag
 	 * @see             #setLeadAnchorNotificationEnabled(bool)
 	 */
-	bool isLeadAnchorNotificationEnabled();
+	bool isLeadAnchorNotificationEnabled() const;
 	//-------------------------------------------------------------------------
 	void clearSelection();
 	//-------------------------------------------------------------------------
