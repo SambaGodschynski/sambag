@@ -391,7 +391,7 @@ std::string RedrawManager::toString() const {
 //-----------------------------------------------------------------------------
 void RedrawManager::validateInvalidComponents() {
 	SAMBA_LOG_NOT_YET_IMPL();
-//    java.util.List < Component > ic;
+//    java.util.AList < Component > ic;
 //	synchronized(this) {
 //		if(invalidComponents == null) {
 //			return;

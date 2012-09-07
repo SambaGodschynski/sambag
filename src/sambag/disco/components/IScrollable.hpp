@@ -47,16 +47,18 @@ public:
 	/**
 	 * Return true if a viewport should always force the height of this
 	 * Scrollable to match the height of the viewport.
+	 * @note: no const here !!
 	 * @return
 	 */
-	virtual bool getScrollableTracksViewportHeight() const = 0;
+	virtual bool getScrollableTracksViewportHeight() = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Return true if a viewport should always force the width of this
 	 * Scrollable to match the width of the viewport.
+	 * @note: no const here !!
 	 * @return
 	 */
-	virtual bool getScrollableTracksViewportWidth() const = 0;
+	virtual bool getScrollableTracksViewportWidth() = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Components that display logical rows or columns should compute the

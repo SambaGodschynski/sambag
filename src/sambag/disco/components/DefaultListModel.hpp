@@ -21,7 +21,7 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class DefaultListModel.
   * The abstract definition for the data model that provides
-  * a <code>List</code> with its contents.
+  * a <code>AList</code> with its contents.
   */
 template <class T>
 class DefaultListModel :
@@ -102,7 +102,7 @@ public:
 	 * Returns the number of components in this list.
 	 * <p>
 	 * This method is identical to <code>size</code>, which implements the
-	 * <code>List</code> interface defined in the 1.2 Collections framework.
+	 * <code>AList</code> interface defined in the 1.2 Collections framework.
 	 * This method exists in conjunction with <code>setSize</code> so that
 	 * <code>size</code> is identifiable as a JavaBean property.
 	 *

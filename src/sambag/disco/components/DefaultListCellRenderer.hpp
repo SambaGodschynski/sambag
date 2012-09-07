@@ -12,12 +12,13 @@
 #include "Label.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "Forward.hpp"
+#include <sambag/com/Common.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class DefaultListCellRenderer.
-  * Default renderer for List. Using Label as rendering component. T has to
+  * Default renderer for AList. Using Label as rendering component. T has to
   * be convertible to using the ostream<<T operator.
   */
 template <class T>
@@ -39,22 +40,98 @@ protected:
 	//-------------------------------------------------------------------------
 	DefaultListCellRenderer() {
 		setName("DefaultListCellRenderer");
+		setOpaque(true);
 	}
 private:
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(DefaultListCellRenderer)
 	//-------------------------------------------------------------------------
-	virtual AComponentPtr getListCellRendererComponent(
-			AContainerPtr list,           // the list
+	template <class ListType>
+	AComponentPtr getListCellRendererComponent(
+			boost::shared_ptr<ListType> list, // the list
 			const T &value, // value to display
 			int index, // cell index
 			bool isSelected, // is the cell selected
-			bool cellHasFocus) // does the cell have focus
-	{
-		return AComponentPtr();
-	}
+			bool cellHasFocus
+	); // does the cell have focus
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 */
+	void validate() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 *
+	 * @since 1.5
+	 */
+	void invalidate() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 *
+	 * @since 1.5
+	 */
+	void redraw() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 */
+	void revalidate() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 */
+	void redraw(const Rectangle &r) {}
+	//-------------------------------------------------------------------------
+protected:
+	/*void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+	 // Strings get interned...
+	 if (propertyName == "text"
+	 || ((propertyName == "font" || propertyName == "foreground")
+	 && oldValue != newValue
+	 && getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey) != null)) {
+
+	 super.firePropertyChange(propertyName, oldValue, newValue);
+	 }
+	 }*/
 }; // DefaultListCellRenderer
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+template <class T>
+template <class ListType>
+AComponentPtr DefaultListCellRenderer<T>::getListCellRendererComponent(
+		boost::shared_ptr<ListType> list, const T &value, int index,
+		bool isSelected, bool cellHasFocus)
+{
+	//setComponentOrientation(list.getComponentOrientation());
+
+	if (isSelected) {
+		setBackground(list->getSelectionBackground());
+		setForeground(list->getSelectionForeground());
+	} else {
+		setBackground(list->getBackground());
+		setForeground(list->getForeground());
+	}
+	setText(sambag::com::toString(value));
+
+	setEnabled(list->isEnabled());
+	setFont(list->getFont());
+
+	return getPtr();
+
+}
 }}} // namespace(s)
 
 #endif /* SAMBAG_DEFAULTLISTCELLRENDERER_H */
