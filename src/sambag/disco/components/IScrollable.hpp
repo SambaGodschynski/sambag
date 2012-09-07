@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/Geometry.hpp>
+#include "AScrollbar.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -24,9 +25,10 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the preferred size of the viewport for a view component.
+	 * @note: no const here !!
 	 * @return
 	 */
-	virtual Dimension getPreferredScrollableViewportSize() const = 0;
+	virtual Dimension getPreferredScrollableViewportSize() = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Components that display logical rows or columns should compute the
@@ -37,8 +39,10 @@ public:
 	 * @param direction Less than zero to scroll up/left, greater than zero for down/right.
 	 * @return
 	 */
-	virtual Coordinate getScrollableBlockIncrement(const Rectangle &visibleRect,
-			int orientation, int direction) const = 0;
+	virtual Coordinate getScrollableBlockIncrement(
+			const Rectangle &visibleRect,
+			ScrollbarConstants::Orientation orientation,
+			ScrollbarConstants::Direction direction) const = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * Return true if a viewport should always force the height of this
@@ -63,8 +67,10 @@ public:
 	 * @param direction Less than zero to scroll up/left, greater than zero for down/right.
 	 * @return
 	 */
-	virtual Coordinate getScrollableUnitIncrement(const Rectangle &visibleRect,
-		int orientation, int direction) const = 0;
+	virtual Coordinate getScrollableUnitIncrement(
+			const Rectangle &visibleRect,
+			ScrollbarConstants::Orientation orientation,
+			ScrollbarConstants::Direction direction) const = 0;
 
 }; // IScrollable
 }}} // namespace(s)

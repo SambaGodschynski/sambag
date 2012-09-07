@@ -12,11 +12,13 @@
 #include "AContainer.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "IScrollable.hpp"
+#include "AScrollbar.hpp"
 #include "DefaultListModel.hpp"
 #include "DefaultListSelectionModel.hpp"
 #include <sambag/com/Common.hpp>
 #include "DefaultListCellRenderer.hpp"
 #include <boost/foreach.hpp>
+#include <sambag/com/exceptions/IllegalArgumentException.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -116,7 +118,7 @@ private:
 	virtual void updateFixedCellSize();
 	//-------------------------------------------------------------------------
 	virtual void checkScrollableParameters(const Rectangle &visibleRect,
-		int orientation);
+		int orientation) const;
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(List)
@@ -198,7 +200,7 @@ public:
 	 * Computes the size of viewport needed to display visibleRowCount rows.
 	 * @return
 	 */
-	virtual Dimension getPreferredScrollableViewportSize() const;
+	virtual Dimension getPreferredScrollableViewportSize();
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the "prototypical" cell value -- a value used to calculate a
@@ -216,7 +218,8 @@ public:
 	 */
 	virtual Coordinate
 	getScrollableBlockIncrement(const Rectangle &visibleRect,
-		int orientation, int direction) const;
+		ScrollbarConstants::Orientation orientation,
+		ScrollbarConstants::Direction direction) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns true if this JList is displayed in a JViewport and the viewport
@@ -244,7 +247,8 @@ public:
 	 */
 	virtual Coordinate
 	getScrollableUnitIncrement(const Rectangle &visibleRect,
-		int orientation, int direction) const;
+		ScrollbarConstants::Orientation orientation,
+		ScrollbarConstants::Direction direction) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the smallest selected cell index; the selection when only a
@@ -495,10 +499,13 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-void List<T, CR, DM, SM>::checkScrollableParameters(
-	const Rectangle &visibleRect, int orientation)
+void List<T, CR, DM, SM>::checkScrollableParameters (
+	const Rectangle &visibleRect, int orientation) const
 {
-
+	if (visibleRect == NULL_RECTANGLE) {
+		using namespace sambag::com::exceptions;
+		SAMBAG_THROW(IllegalArgumentException,"visibleRect must be non-null");
+	}
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -685,10 +692,40 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-Dimension List<T, CR, DM, SM>::getPreferredScrollableViewportSize() const
-{
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_DIMENSION;
+Dimension List<T, CR, DM, SM>::getPreferredScrollableViewportSize() {
+	if (getLayoutOrientation() != VERTICAL) {
+		return getPreferredSize();
+	}
+	Insets insets = getInsets();
+	Coordinate dx = insets.left() + insets.right();
+	Coordinate dy = insets.top() + insets.bottom();
+
+	int visibleRowCount = getVisibleRowCount();
+	Coordinate fixedCellWidth = getFixedCellWidth();
+	Coordinate fixedCellHeight = getFixedCellHeight();
+
+	if ((fixedCellWidth > 0.) && (fixedCellHeight > 0.)) {
+		Coordinate width = fixedCellWidth + dx;
+		Coordinate height = (visibleRowCount * fixedCellHeight) + dy;
+		return Dimension(width, height);
+	} else if (ListModel::getSize() > 0) {
+		Coordinate width = getPreferredSize().width();
+		Coordinate height;
+		Rectangle r = getCellBounds(0, 0);
+		if (r != NULL_RECTANGLE) {
+			height = (visibleRowCount * r.height()) + dy;
+		} else {
+			// Will only happen if UI null, shouldn't matter what we return
+			height = 1;
+		}
+		return Dimension(width, height);
+	} else {
+		fixedCellWidth = (fixedCellWidth > 0.) ?
+				fixedCellWidth : Coordinate(256.);
+		fixedCellHeight = (fixedCellHeight > 0.) ?
+				fixedCellHeight : Coordinate(16.);
+		return Dimension(fixedCellWidth, fixedCellHeight * visibleRowCount);
+	}
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -707,11 +744,126 @@ template < class T,
 	class SM
 >
 Coordinate List<T, CR, DM, SM>::
-getScrollableBlockIncrement(const Rectangle &visibleRect, int orientation,
-		int direction) const
+getScrollableBlockIncrement(const Rectangle &visibleRect,
+		ScrollbarConstants::Orientation orientation,
+		ScrollbarConstants::Direction direction) const
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_NUMBER;
+//	checkScrollableParameters(visibleRect, orientation);
+//	if (orientation == ScrollbarConstants::VERTICAL) {
+//		Coordinate inc = visibleRect.height();
+//		/* Scroll Down */
+//		if (direction == ScrollbarConstants::INCR) {
+//			// last cell is the lowest left cell
+//			int last = locationToIndex(
+//					new Point(visibleRect.x,
+//							visibleRect.y + visibleRect.height - 1));
+//			if (last != -1) {
+//				Rectangle lastRect = getCellBounds(last, last);
+//				if (lastRect != null) {
+//					inc = lastRect.y - visibleRect.y;
+//					if ((inc == 0) && (last < getModel().getSize() - 1)) {
+//						inc = lastRect.height;
+//					}
+//				}
+//			}
+//		}
+//		/* Scroll Up */
+//		else {
+//			int newFirst =
+//					locationToIndex(
+//							new Point(visibleRect.x,
+//									visibleRect.y - visibleRect.height));
+//			int first = getFirstVisibleIndex();
+//			if (newFirst != -1) {
+//				if (first == -1) {
+//					first = locationToIndex(visibleRect.getLocation());
+//				}
+//				Rectangle newFirstRect = getCellBounds(newFirst, newFirst);
+//				Rectangle firstRect = getCellBounds(first, first);
+//				if ((newFirstRect != null) && (firstRect != null)) {
+//					while ((newFirstRect.y + visibleRect.height < firstRect.y
+//							+ firstRect.height) && (newFirstRect.y
+//							< firstRect.y)) {
+//						newFirst++;
+//						newFirstRect = getCellBounds(newFirst, newFirst);
+//					}
+//					inc = visibleRect.y - newFirstRect.y;
+//					if ((inc <= 0) && (newFirstRect.y > 0)) {
+//						newFirst--;
+//						newFirstRect = getCellBounds(newFirst, newFirst);
+//						if (newFirstRect != null) {
+//							inc = visibleRect.y - newFirstRect.y;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return inc;
+//	} else if (orientation == SwingConstants.HORIZONTAL
+//			&& getLayoutOrientation() != JList.VERTICAL) {
+//		boolean leftToRight = getComponentOrientation().isLeftToRight();
+//		int inc = visibleRect.width;
+//		/* Scroll Right (in ltr mode) or Scroll Left (in rtl mode) */
+//		if (direction > 0) {
+//			// position is upper right if ltr, or upper left otherwise
+//			int x = visibleRect.x + (leftToRight ? (visibleRect.width - 1) : 0);
+//			int last = locationToIndex(new Point(x, visibleRect.y));
+//
+//			if (last != -1) {
+//				Rectangle lastRect = getCellBounds(last, last);
+//				if (lastRect != null) {
+//					if (leftToRight) {
+//						inc = lastRect.x - visibleRect.x;
+//					} else {
+//						inc = visibleRect.x + visibleRect.width - (lastRect.x
+//								+ lastRect.width);
+//					}
+//					if (inc < 0) {
+//						inc += lastRect.width;
+//					} else if ((inc == 0) && (last < getModel().getSize() - 1)) {
+//						inc = lastRect.width;
+//					}
+//				}
+//			}
+//		}
+//		/* Scroll Left (in ltr mode) or Scroll Right (in rtl mode) */
+//		else {
+//			// position is upper left corner of the visibleRect shifted
+//			// left by the visibleRect.width if ltr, or upper right shifted
+//			// right by the visibleRect.width otherwise
+//			int x = visibleRect.x + (leftToRight ? -visibleRect.width
+//					: visibleRect.width - 1 + visibleRect.width);
+//			int first = locationToIndex(new Point(x, visibleRect.y));
+//
+//			if (first != -1) {
+//				Rectangle firstRect = getCellBounds(first, first);
+//				if (firstRect != null) {
+//					// the right of the first cell
+//					int firstRight = firstRect.x + firstRect.width;
+//
+//					if (leftToRight) {
+//						if ((firstRect.x < visibleRect.x - visibleRect.width)
+//								&& (firstRight < visibleRect.x)) {
+//							inc = visibleRect.x - firstRight;
+//						} else {
+//							inc = visibleRect.x - firstRect.x;
+//						}
+//					} else {
+//						int visibleRight = visibleRect.x + visibleRect.width;
+//
+//						if ((firstRight > visibleRight + visibleRect.width)
+//								&& (firstRect.x > visibleRight)) {
+//							inc = firstRect.x - visibleRight;
+//						} else {
+//							inc = firstRight - visibleRight;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return inc;
+//	}
+//	return visibleRect.width;
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -740,11 +892,89 @@ template < class T,
 	class SM
 >
 Coordinate List<T, CR, DM, SM>::
-getScrollableUnitIncrement(const Rectangle &visibleRect, int orientation,
-		int direction) const
+getScrollableUnitIncrement(const Rectangle &visibleRect,
+		ScrollbarConstants::Orientation orientation,
+		ScrollbarConstants::Direction direction) const
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_NUMBER;
+	checkScrollableParameters(visibleRect, orientation);
+
+	if (orientation == ScrollbarConstants::VERTICAL) {
+		int row = locationToIndex(visibleRect.x0());
+
+		if (row == -1) {
+			return 0;
+		} else {
+			/* Scroll Down */
+			if (direction > 0) {
+				Rectangle r = getCellBounds(row, row);
+				return (r == NULL_RECTANGLE) ?
+						0. : r.height() - (visibleRect.x0().y() - r.x0().y());
+			}
+			/* Scroll Up */
+			else {
+				Rectangle r = getCellBounds(row, row);
+
+				/* The first row is completely visible and it's row 0.
+				 * We're done.
+				 */
+				if ((r.x0().y() == visibleRect.x0().y()) && (row == 0)) {
+					return 0.;
+				}
+				/* The first row is completely visible, return the
+				 * height of the previous row or 0 if the first row
+				 * is the top row of the list.
+				 */
+				else if (r.x0().y() == visibleRect.x0().y()) {
+					Point2D loc = r.x0();
+					loc.y( loc.y() - 1 );
+					int prevIndex = locationToIndex(loc);
+					Rectangle prevR = getCellBounds(prevIndex, prevIndex);
+					if (prevR == NULL_RECTANGLE || prevR.x0().y() >= r.x0().y())
+					{
+						return 0;
+					}
+					return prevR.height();
+				}
+				/* The first row is partially visible, return the
+				 * height of hidden part.
+				 */
+				else {
+					return visibleRect.x0().y() - r.x0().y();
+				}
+			}
+		}
+	} else if (orientation == ScrollbarConstants::HORIZONTAL
+			&& getLayoutOrientation() != VERTICAL) {
+		int index;
+		Point2D leadingPoint = visibleRect.x0();
+
+		index = locationToIndex(leadingPoint);
+
+		if (index != -1) {
+			Rectangle cellBounds = getCellBounds(index, index);
+			if (cellBounds != NULL_RECTANGLE && cellBounds.contains(leadingPoint))
+			{
+				Coordinate leadingVisibleEdge;
+				Coordinate leadingCellEdge;
+				leadingVisibleEdge = visibleRect.x0().x();
+				leadingCellEdge = cellBounds.x0().x();
+
+				if (leadingCellEdge != leadingVisibleEdge) {
+					if (direction == ScrollbarConstants::DECR) {
+						// Show remainder of leading cell
+						return std::abs(leadingVisibleEdge - leadingCellEdge);
+					}
+					// Hide rest of leading cell
+					return leadingCellEdge + cellBounds.width()
+							- leadingVisibleEdge;
+				}
+				// ASSUME: All cells are the same width
+				return cellBounds.width();
+			}
+		}
+	}
+	Font f = getFont();
+	return f.size;
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -981,7 +1211,6 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-//TODO: was here
 void List<T, CR, DM, SM>::
 setSelectedValue(const T &anObject, bool shouldScroll)
 {

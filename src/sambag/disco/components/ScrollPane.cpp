@@ -44,14 +44,15 @@ private:
 	sambag::com::ArithmeticWrapper<bool> blockIncrementSet;
 public:
 	//-------------------------------------------------------------------------
-	Coordinate getUnitIncrement(Direction direction) const {
+	Coordinate getUnitIncrement(Direction direction) const
+	{
 		Viewport::Ptr vp = parent.getViewport();
 		IScrollable::Ptr sc =
 				boost::shared_dynamic_cast<IScrollable>(vp->getView());
 		if (!unitIncrementSet && vp && sc) {
 			Rectangle vr = vp->getViewRect();
-			return sc->getScrollableUnitIncrement(vr, (int)getOrientation(),
-					(int)direction);
+			return sc->getScrollableUnitIncrement(vr, getOrientation(),
+					direction);
 		} else {
 			return Super::getUnitIncrement(direction);
 		}
@@ -62,7 +63,7 @@ public:
 		Super::setUnitIncrement(unitIncrement);
 	}
 	//-------------------------------------------------------------------------
-	Coordinate getBlockIncrement(const Coordinate &direction) const{
+	Coordinate getBlockIncrement(Direction direction) const{
 		Viewport::Ptr vp = parent.getViewport();
 		if (blockIncrementSet || !vp) {
 			return Super::getBlockIncrement(direction);
@@ -71,8 +72,8 @@ public:
 				boost::shared_dynamic_cast<IScrollable>(vp->getView());
 		if (sc) {
 			Rectangle vr = vp->getViewRect();
-			return sc->getScrollableBlockIncrement(vr, (int)getOrientation(),
-					(int)direction);
+			return sc->getScrollableBlockIncrement(vr, getOrientation(),
+					direction);
 		}
 		if (getOrientation() == VERTICAL) {
 			return vp->getExtentSize().height();
