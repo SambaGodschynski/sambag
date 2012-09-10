@@ -51,8 +51,8 @@ void CellRendererPane::drawComponent(IDrawContext::Ptr cn, AComponentPtr c,
 	if (shouldValidate) {
 		c->validate();
 	}
-
 	cn->save();
+	cn->translate(bounds.x0()); // form. Graphics.create(x,y,w,h)
 	c->draw(cn);
 	cn->restore();
 	c->setBounds(Rectangle(-bounds.getWidth(), -bounds.getHeight(), 0, 0));

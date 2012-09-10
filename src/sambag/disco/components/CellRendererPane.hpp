@@ -57,8 +57,8 @@ public:
 	 * bother doing anything - stacking order doesn't matter for cell
 	 * renderer components (CellRendererPane doesn't paint anyway).<
 	 */
-	virtual AComponent::Ptr add(const AComponentSharedOrWeak &x, int index,
-			com::ArbitraryType::Ptr constraint);
+	virtual AComponent::Ptr add(const AComponentSharedOrWeak &x, int index = -1,
+			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**
 	 * Paint a cell renderer component c on graphics object g.  Before the component

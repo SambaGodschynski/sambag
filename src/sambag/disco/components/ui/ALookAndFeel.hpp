@@ -49,11 +49,11 @@ private:
 	UIMap uiMap;
 protected:
 	//-------------------------------------------------------------------------
-	template <typename Component, typename ComponentUI>
-	void registerComponentUI();
-	//-------------------------------------------------------------------------
 	ALookAndFeel() {}
 public:
+	//-------------------------------------------------------------------------
+	template <typename Component, typename ComponentUI>
+	void registerComponentUI();
 	//-------------------------------------------------------------------------
 	template <class ConcreteComponent>
 	AComponentUI::Ptr getUI() const;

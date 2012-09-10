@@ -62,7 +62,7 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	BitSet value;
-protected:
+public:
 	//-------------------------------------------------------------------------
 	int getMinSelectionIndex() const {
 		return isSelectionEmpty() ? -1 : minIndex;
@@ -88,6 +88,7 @@ protected:
 	//-------------------------------------------------------------------------
 	void fireValueChanged(bool isAdjusting);
 	//-------------------------------------------------------------------------
+private:
 	/**
 	 * @param firstIndex the first index in the interval
 	 * @param lastIndex the last index in the interval
@@ -99,7 +100,6 @@ protected:
 	void fireValueChanged(int firstIndex, int lastIndex);
 	//-------------------------------------------------------------------------
 	void fireValueChanged(int firstIndex, int lastIndex, bool isAdjusting);
-private:
 	//-------------------------------------------------------------------------
 	void fireValueChanged();
 	//-------------------------------------------------------------------------

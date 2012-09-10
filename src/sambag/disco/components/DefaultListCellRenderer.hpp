@@ -45,6 +45,14 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * @override makes installLookAndFeel() accessible for AList<>.
+	 * @param laf
+	 */
+	virtual void installLookAndFeel(ui::ALookAndFeelPtr laf) {
+		Super::installLookAndFeel(laf);
+	}
+	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(DefaultListCellRenderer)
 	//-------------------------------------------------------------------------
 	template <class ListType>
@@ -118,16 +126,17 @@ AComponentPtr DefaultListCellRenderer<T>::getListCellRendererComponent(
 	//setComponentOrientation(list.getComponentOrientation());
 
 	if (isSelected) {
-		setBackground(list->getSelectionBackground());
-		setForeground(list->getSelectionForeground());
+		Super::setBackground(list->getSelectionBackground());
+		Super::setForeground(list->getSelectionForeground());
 	} else {
-		setBackground(list->getBackground());
-		setForeground(list->getForeground());
+		Super::setBackground(list->getBackground());
+		Super::setForeground(list->getForeground());
 	}
+
 	setText(sambag::com::toString(value));
 
-	setEnabled(list->isEnabled());
-	setFont(list->getFont());
+	Super::setEnabled(list->isEnabled());
+	Super::setFont(list->getFont());
 
 	return getPtr();
 

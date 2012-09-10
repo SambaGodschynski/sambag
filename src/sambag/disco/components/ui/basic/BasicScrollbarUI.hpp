@@ -17,7 +17,6 @@
 #include <sambag/disco/components/Graphics.hpp>
 #include <sambag/disco/components/Timer.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
-#include <sambag/disco/components/List.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {

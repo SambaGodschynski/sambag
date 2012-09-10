@@ -17,39 +17,10 @@
 #include <boost/foreach.hpp>
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include "Viewport.hpp"
+#include "ui/IListUI.hpp"
 
 namespace sambag { namespace disco { namespace components {
-//=============================================================================
-/** 
- * @class AList.
- */
-template <
-	class T,
-	template <class> class _ListCellRenderer,
-	template <class> class _ListModel,
-	class _ListSelectionModel
->
-class AList : public AContainer,
-		public _ListModel<T>,
-		public _ListSelectionModel,
-		public IScrollable
-{
-//=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef _ListCellRenderer<T> ListCellRenderer;
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ListCellRenderer> ListCellRendererPtr;
-	//-------------------------------------------------------------------------
-	typedef _ListModel<T> ListModel;
-	//-------------------------------------------------------------------------
-	typedef _ListSelectionModel ListSelectionModel;
-	//-------------------------------------------------------------------------
-	typedef AList<T, _ListCellRenderer, _ListModel, _ListSelectionModel> Class;
-	//-------------------------------------------------------------------------
-	typedef AContainer Super;
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AList> Ptr;
+struct ListConstants {
 	//-------------------------------------------------------------------------
 	enum Orientation {
 		/**
@@ -79,6 +50,41 @@ public:
 	static const std::string PROPERTY_FIXEDCELLWIDTH;
 	static const std::string PROPERTY_FIXEDCELLHEIGHT;
 	static const std::string PROPERTY_CELLRENDERER;
+};
+//=============================================================================
+/** 
+ * @class AList.
+ */
+template <
+	class T,
+	template <class> class _ListCellRenderer,
+	template <class> class _ListModel,
+	class _ListSelectionModel
+>
+class AList : public AContainer,
+		public _ListModel<T>,
+		public _ListSelectionModel,
+		public IScrollable,
+		public ListConstants
+{
+//=============================================================================
+public:
+	//-------------------------------------------------------------------------
+	typedef T ValueType;
+	//-------------------------------------------------------------------------
+	typedef _ListCellRenderer<T> ListCellRenderer;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<ListCellRenderer> ListCellRendererPtr;
+	//-------------------------------------------------------------------------
+	typedef _ListModel<T> ListModel;
+	//-------------------------------------------------------------------------
+	typedef _ListSelectionModel ListSelectionModel;
+	//-------------------------------------------------------------------------
+	typedef AList<T, _ListCellRenderer, _ListModel, _ListSelectionModel> Class;
+	//-------------------------------------------------------------------------
+	typedef AContainer Super;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<AList> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	Coordinate fixedCellWidth;
@@ -92,13 +98,9 @@ private:
 	Orientation layoutOrientation;
 	ListCellRendererPtr cellRenderer;
 public:
-	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr
-	createComponentUI(ui::ALookAndFeelPtr laf) const
-	{
-		return laf->getUI<AList> ();
-	}
 protected:
+	//-------------------------------------------------------------------------
+	virtual void postConstructor();
 	//-------------------------------------------------------------------------
 	AList() :
 		fixedCellWidth(-1),
@@ -119,15 +121,23 @@ private:
 		int orientation) const;
 public:
 	//-------------------------------------------------------------------------
-	SAMBAG_STD_STATIC_COMPONENT_CREATOR(AList)
-	//-------------------------------------------------------------------------
 	/**
 	 * Clears the selection; after calling this method, isSelectionEmpty
 	 *  will return true.
 	 */
 	void clearSelection();
 protected:
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 * @param laf
+	 */
+	virtual void installLookAndFeel(ui::ALookAndFeelPtr laf);
 public:
+	//-------------------------------------------------------------------------
+	Ptr getPtr() const {
+		return boost::shared_dynamic_cast<Class>(Super::getPtr());
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 * Scrolls the list within an enclosing viewport to make the
@@ -298,19 +308,6 @@ public:
 	virtual Point2D indexToLocation(int index) const;
 	//-------------------------------------------------------------------------
 	/**
-	 * Returns true if the specified index is selected, else false.
-	 * @param index
-	 * @return
-	 */
-	virtual bool isSelectedIndex(int index) const;
-	//-------------------------------------------------------------------------
-	/**
-	 * Returns true if nothing is selected, else false.
-	 * @return
-	 */
-	virtual bool isSelectionEmpty() const;
-	//-------------------------------------------------------------------------
-	/**
 	 * Returns the cell index closest to the given location in the list's
 	 * coordinate system.
 	 * @param location
@@ -415,50 +412,23 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-const std::string AList<T, CR, DM, SM>::PROPERTY_VISIBLEROWCOUNT =
-		"visible_rowcount";
+void AList<T, CR, DM, SM>::installLookAndFeel(ui::ALookAndFeelPtr laf) {
+	Super::installLookAndFeel(laf);
+	if (cellRenderer) {
+		cellRenderer->installLookAndFeel(laf);
+		updateFixedCellSize();
+	}
+}
+//-----------------------------------------------------------------------------
 template < class T,
 	template <class> class CR,
 	template <class> class DM,
 	class SM
 >
-const std::string AList<T, CR, DM, SM>::PROPERTY_SELECTIONFOREGROUND =
-		"selection_foreground";
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-const std::string AList<T, CR, DM, SM>::PROPERTY_SELECTIONBACKGROUND =
-		"selection_background";
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-const std::string AList<T, CR, DM, SM>::PROPERTY_LAYOUTORIENTATION =
-		"property_layoutorientation";
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-const std::string AList<T, CR, DM, SM>::PROPERTY_FIXEDCELLWIDTH =
-		"fixed_cellwitdh";
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-const std::string AList<T, CR, DM, SM>::PROPERTY_FIXEDCELLHEIGHT =
-		"fixed_cellheight";
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-const std::string AList<T, CR, DM, SM>::PROPERTY_CELLRENDERER =
-		"cellrender";
+void AList<T, CR, DM, SM>::postConstructor() {
+	Super::postConstructor();
+	setCellRenderer(ListCellRenderer::create());
+}
 //-----------------------------------------------------------------------------
 template < class T,
 	template <class> class CR,
@@ -523,12 +493,9 @@ template < class T,
 >
 Rectangle AList<T, CR, DM, SM>::getCellBounds(int index0, int index1) const
 {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_RECTANGLE;
-	/*
-	 * ListUI ui = getUI();
-	 * return (ui != null) ? ui.getCellBounds(this, index0, index1) : null;
-	 */
+	using namespace ui;
+	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	return (ui) ? ui->getCellBounds(getPtr(), index0, index1) : NULL_RECTANGLE;
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -1007,7 +974,7 @@ void AList<T, CR, DM, SM>::getSelectedIndices(IndexContainer &out) const
 	}
 	int n = 0;
 	for (int i = iMin; i <= iMax; ++i) {
-		if (isSelectedIndex(i)) {
+		if (ListSelectionModel::isSelectedIndex(i)) {
 			out.push_back(i);
 		}
 	}
@@ -1056,12 +1023,9 @@ template < class T,
 	class SM
 >
 Point2D AList<T, CR, DM, SM>::indexToLocation(int index) const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_POINT2D;
-	/*
-	 * ListUI ui = getUI();
-	 * return (ui != null) ? ui.indexToLocation(this, index) : null;
-	 */
+	using namespace ui;
+	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	return (ui) ? ui->indexToLocation(getPtr(), index) : NULL_POINT2D;
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -1069,31 +1033,11 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-bool AList<T, CR, DM, SM>::isSelectedIndex(int index) const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-bool AList<T, CR, DM, SM>::isSelectionEmpty() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return false;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
-int AList<T, CR, DM, SM>::locationToIndex(const Point2D & location) const {
-	/*ListUI ui = getUI();
-	return (ui != null) ? ui.locationToIndex(this, location) : -1;*/
-	SAMBA_LOG_NOT_YET_IMPL();
-	return -1;
+int AList<T, CR, DM, SM>::locationToIndex(const Point2D & location) const
+{
+	using namespace ui;
+	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	return (ui) ? ui->locationToIndex(getPtr(), location) : -1;
 }
 //-----------------------------------------------------------------------------
 //void setCellRenderer(ListCellRenderer<? super E> cellRenderer);

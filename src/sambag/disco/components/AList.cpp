@@ -9,7 +9,14 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-//  Class AList
+//  ListConstants
 //=============================================================================
 //-----------------------------------------------------------------------------
+const std::string ListConstants::PROPERTY_VISIBLEROWCOUNT = "visible_rowcount";
+const std::string ListConstants::PROPERTY_SELECTIONFOREGROUND = "selection_foreground";
+const std::string ListConstants::PROPERTY_SELECTIONBACKGROUND = "selection_background";
+const std::string ListConstants::PROPERTY_LAYOUTORIENTATION = "property_layoutorientation";
+const std::string ListConstants::PROPERTY_FIXEDCELLWIDTH = "fixed_cellwitdh";
+const std::string ListConstants::PROPERTY_FIXEDCELLHEIGHT = "fixed_cellheight";
+const std::string ListConstants::PROPERTY_CELLRENDERER = "cellrender";
 }}} // namespace(s)
