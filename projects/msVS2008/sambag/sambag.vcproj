@@ -615,6 +615,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\AList.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\AList.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\APopupMenu.hpp"
 						>
 					</File>
@@ -655,6 +663,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\CellRendererPane.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\CellRendererPane.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\ComponentWrapper.hpp"
 						>
 					</File>
@@ -672,6 +688,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\components\DefaultButtonModell.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultListCellRenderer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultListCellRenderer.hpp"
 						>
 					</File>
 					<File
@@ -930,6 +954,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\src\sambag\disco\components\ui\IListUI.hpp"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\src\sambag\disco\components\ui\UIManager.cpp"
 							>
 						</File>
@@ -970,6 +998,10 @@
 							</File>
 							<File
 								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicLabelUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicListUI.hpp"
 								>
 							</File>
 							<File
