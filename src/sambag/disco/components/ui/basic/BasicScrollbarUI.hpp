@@ -17,7 +17,6 @@
 #include <sambag/disco/components/Graphics.hpp>
 #include <sambag/disco/components/Timer.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
-#include <sambag/disco/components/List.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -1202,12 +1201,12 @@ TrackListener::adjustValueIfNecessary(const Coordinate &scrollBarValue) {
 	Coordinate value = scrollBarValue;
 //	Viewport::Ptr viewport = scrollpane->getViewport();
 //	AComponentPtr view = viewport->getView();
-//	List::Ptr list = boost::shared_ptr<List>(view);
+//	AList::Ptr list = boost::shared_ptr<AList>(view);
 //	if (!view)
 //		return value;
 //	JList list = (JList) view;
 //	if (DefaultLookup.getBoolean(list, list.getUI(),
-//			"List.lockToPositionOnScroll", false)) {
+//			"AList.lockToPositionOnScroll", false)) {
 //		int adjustedValue = value;
 //		int mode = list.getLayoutOrientation();
 //		int orientation = scrollbar.getOrientation();

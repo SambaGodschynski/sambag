@@ -19,6 +19,7 @@
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/PopupMenu.hpp>
 #include <sambag/disco/components/Label.hpp>
+#include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/MenuSelectionManager.hpp>
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
@@ -52,7 +53,7 @@ void onSurpriseMouse(void *src, const sdc::events::MouseEvent &ev);
 
 
 std::vector<sdc::FramedWindow::Ptr> win =
-		std::vector<sdc::FramedWindow::Ptr>(5);
+		std::vector<sdc::FramedWindow::Ptr>(6);
 
 sdc::PopupMenu::Ptr acmePopup;
 sdc::PopupMenu::Ptr surprisePopup;
@@ -221,6 +222,23 @@ void createBorderlineWindow() {
 	c->add(scr);
 
 	win[3]->getContentPane()->add(c);
+}
+
+void createListWindow() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[5] = sdc::FramedWindow::create(win[0]);
+	win[5]->setTitle("L.I.S.T.");
+	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+	StringList::Ptr list = StringList::create();
+	list->setFont(list->getFont().setSize(14));
+
+	for (int i=0; i<100; ++i) {
+		std::stringstream ss;
+		ss<<"nomber "<<i;
+		list->addElement(ss.str());
+	}
+	win[5]->getContentPane()->add(list);
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 
@@ -485,6 +503,16 @@ void onScrollerClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	win[4]->open();
 }
 
+void onListClicked ( void *src, const sdc::events::ActionEvent &ac) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	if (!win[5]) {
+		createListWindow();
+	}
+	win[5]->getContentPane()->validate();
+	win[5]->open();
+}
+
 void onBorderlineClicked ( void *src, const sdc::events::ActionEvent &ac) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
@@ -585,6 +613,11 @@ int main() {
 		btn->setText("open Scrollercoaster");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onScrollerClicked);
 		btn->getFont().setFontFace("monospace");
+		win[0]->getContentPane()->add(btn);
+
+		btn = Button::create();
+		btn->setText("the L.I.S.T.");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onListClicked);
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();

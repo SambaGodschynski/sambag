@@ -16,6 +16,7 @@
 #include "BasicPanelUI.hpp"
 #include "BasicScrollPaneUI.hpp"
 #include "BasicKnobUI.hpp"
+#include "BasicListUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -29,6 +30,7 @@
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Knob.hpp>
+#include <sambag/disco/components/List.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -52,6 +54,13 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Viewport, BasicPanelUI >();
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
+
+	/*
+	 * Unfortunately it is not possible to use a generic List because it isn't
+	 * possible to register a generic class with a LookAndFeel's registerClass.
+	 * So every specific list type has to be registered manually.
+	 */
+	registerComponentUI<StringList, BasicListUI<StringList> >();
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
@@ -73,6 +82,11 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ScrollBar.thumb", HtmlColors::getColor("grey"));
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
 	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<StringList
+	m.putProperty("StringList.background", HtmlColors::getColor("lightgrey"));
+	m.putProperty("StringList.foreground", HtmlColors::getColor("black"));
+	m.putProperty("StringList.selectionBackground", HtmlColors::getColor("blue"));
+	m.putProperty("StringList.selectionForeground", HtmlColors::getColor("white"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<knobs
 	m.putProperty("Knob.range", (Coordinate)200.);
 	m.putProperty("Knob.mode", std::string("circular"));

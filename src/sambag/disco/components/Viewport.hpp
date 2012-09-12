@@ -103,8 +103,8 @@ private:
 	//-------------------------------------------------------------------------
 	/**
 	 * The <code>scrollUnderway</code> flag is used for components like
-	 * <code>List</code>.  When the downarrow key is pressed on a
-	 * <code>List</code> and the selected
+	 * <code>AList</code>.  When the downarrow key is pressed on a
+	 * <code>AList</code> and the selected
 	 * cell is the last in the list, the <code>scrollpane</code> autoscrolls.
 	 * Here, the old selected cell needs repainting and so we need
 	 * a flag to make the viewport do the optimized painting

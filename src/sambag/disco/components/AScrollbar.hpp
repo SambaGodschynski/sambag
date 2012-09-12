@@ -15,11 +15,27 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
+struct ScrollbarConstants {
+	enum Orientation {
+		HORIZONTAL,
+		VERTICAL,
+		NO_ORIENTATION
+	};
+	enum Direction {
+		DECR = -1,
+		INCR = 1
+	};
+};
+//=============================================================================
 /** 
   * @class AScrollbar.
   */
 template<class ComponentModel>
-class AScrollbar : public AContainer, public ComponentModel {
+class AScrollbar :
+	public AContainer,
+	public ComponentModel,
+	public ScrollbarConstants
+{
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -30,17 +46,6 @@ public:
 	typedef boost::shared_ptr<AScrollbar> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<AScrollbar> WPtr;
-	//-------------------------------------------------------------------------
-	enum Orientation {
-		HORIZONTAL,
-		VERTICAL,
-		NO_ORIENTATION
-	};
-	//-------------------------------------------------------------------------
-	enum Direction {
-		INCR = -1,
-		DECR = 1
-	};
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_UNITINCREMENT;
 	static const std::string PROPERTY_ORIENTATION;

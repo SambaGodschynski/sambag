@@ -37,3 +37,8 @@ public static final String NORTH  = "North";
 dim.height = a + b;
 (left|right|bottom|top|x|y|width|height)\s*=(.*?);
 removes = and encloses a+b with braces using : $1( $2 );
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+void getXY();
+(?s)(get[a-zA-Z]*.*?);          => void getXY() const; 
+using:
+$1 const;

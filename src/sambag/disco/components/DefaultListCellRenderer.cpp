@@ -1,15 +1,13 @@
 /*
- * List.cpp
+ * DefaultListCellRenderer.cpp
  *
- *  Created on: Fri Sep  7 12:36:51 2012
+ *  Created on: Thu Sep  6 14:27:02 2012
  *      Author: Johannes Unger
  */
 
-#include "List.hpp"
-#include "ui/ALookAndFeel.hpp"
-
+#include "DefaultListCellRenderer.hpp"
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
-//  Class List
+//  Class DefaultListCellRenderer
 //=============================================================================
 }}} // namespace(s)
