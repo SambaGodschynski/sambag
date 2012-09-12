@@ -675,6 +675,18 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultListModel.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultListSelectionModel.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultListSelectionModel.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\DefaultSingleSelectionModell.cpp"
 						>
 					</File>

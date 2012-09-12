@@ -173,7 +173,7 @@ void X11WindowImpl::invalidateWindow(const Rectangle &area) {
 //-----------------------------------------------------------------------------
 void X11WindowImpl::drawAll() {
 	BOOST_FOREACH(WinMap::value_type &v, winmap) {
-		sambag::disco::ISurface::Ptr s = v.createSurface();
+		sambag::disco::ISurface::Ptr s = v.second->createSurface();
 		v.second->processDraw(s);
 	}
 }
@@ -200,7 +200,6 @@ void X11WindowImpl::updateBoundsToWindow() {
 //-----------------------------------------------------------------------------
 void X11WindowImpl::updateWindowToBounds(const Rectangle &r) {
 	if (r.getDimension() != bounds.getDimension()) {
-		surface->setSize(r);
 	}
 	bounds = r;
 	boundsUpdated();

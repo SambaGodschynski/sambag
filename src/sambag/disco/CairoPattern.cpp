@@ -23,7 +23,7 @@ void getStops( CairoPatternRef ref,
 		cairo_pattern_get_color_stop_count(ref.get(),
 				&endIndex);
 	}
-	if (startIndex>_endIndex) // important for vector.reserve()
+	if (startIndex>_endIndex) // important for delegate.reserve()
 		return;
 	out.reserve(endIndex-startIndex);
 	for(int i=startIndex; i<endIndex; ++i) {

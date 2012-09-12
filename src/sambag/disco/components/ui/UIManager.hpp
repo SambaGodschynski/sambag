@@ -99,7 +99,7 @@ const T & getUIPropertyCached(const T& defaultValue) {
 	static T val = defaultValue;
 	if (localStamp!=resetStamp) {
 		getUIManager().getProperty (
-			std::string(typename PropertyTag::propertyName()), val
+			std::string(PropertyTag::propertyName()), val
 		);
 		localStamp = resetStamp;
 	}

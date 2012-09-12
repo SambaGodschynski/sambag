@@ -17,7 +17,7 @@
 namespace sambag { namespace lua {
 //=============================================================================
 /**
- * Implements ILuaTable using std::vector
+ * Implements ILuaTable using std::delegate
  * Transforms between a Lua-sequence(index:1..n) and a C-array(index:0..n).
  */
 template <typename T>

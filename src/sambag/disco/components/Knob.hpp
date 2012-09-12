@@ -29,7 +29,7 @@ public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Knob)
 	//-------------------------------------------------------------------------
-	ui::AComponentUIPtr Knob::createComponentUI(ui::ALookAndFeelPtr laf) const;
+	ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 }; // Knob
 }}} // namespace(s)
 

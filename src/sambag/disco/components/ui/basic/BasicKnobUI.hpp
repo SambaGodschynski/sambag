@@ -11,9 +11,11 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/disco/components/AKnob.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <math.h>
+
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -188,6 +190,10 @@ void BasicKnobUI<M>::onMouse(void *src, const sdce::MouseEvent &ev) {
 	};
 	sdce::MouseEventSwitch<Filter>::delegate(ev, *this);
 }
+namespace {
+	SAMBAG_PROPERTY_TAG(RangePropertyTag, "Knob.range");
+	SAMBAG_PROPERTY_TAG(ModePropertyTag, "Knob.mode");
+} // namespace
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::mousePressed(const sdce::MouseEvent &ev) {
@@ -207,7 +213,6 @@ void BasicKnobUI<M>::mousePressed(const sdce::MouseEvent &ev) {
 	Coordinate vmax = getKnob()->getMaximum(), vmin = getKnob()->getMinimum();
 	coef = (vmax - vmin) / range;
 
-	SAMBAG_PROPERTY_TAG(ModePropertyTag, "Knob.range");
 	const std::string &mode = 
 		getUIPropertyCached<ModePropertyTag>(std::string("linear"));
 	modeLinear = mode == "linear";
@@ -275,7 +280,7 @@ void BasicKnobUI<M>::installListener(AComponentPtr c) {
 		boost::bind(&Class::onMouse, this, _1, _2),
 		getPtr()
 	);
-	typename getKnob()->EventSender<StateChanged>::addTrackedEventListener(
+	getKnob()->EventSender<StateChanged>::addTrackedEventListener(
 		boost::bind(&Class::onKnobStateChanged, this, _1, _2),
 		getPtr()
 	);

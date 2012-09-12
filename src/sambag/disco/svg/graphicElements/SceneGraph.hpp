@@ -802,7 +802,7 @@ public:
 /**
 	@brief Copies grap src to graph dst. Assumes that dst is empty.
 	Using this because the boost::copy_graph function dosen't works
-	if G2 type is a "vector as graph" type. ( for all I know )
+	if G2 type is a "delegate as graph" type. ( for all I know )
 	Only works if G1 vertex_descr. type is vecS.
 	Otherwise there is missing a mapping from G1 to G2 vertex.
 
@@ -850,7 +850,7 @@ void SceneGraph::createProcessList (Container &out) const
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 {
 	/**
-	 * @brief copies org. graph into a "vector as graph" graph.
+	 * @brief copies org. graph into a "delegate as graph" graph.
 	 * where the edge container is a set<vertex> to affect in which order
 	 * the depth_first_search alg. selects the out_edges.
 	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph#building_process_list
