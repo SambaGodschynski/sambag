@@ -102,7 +102,7 @@ public:
 		return knob.lock();
 	}
 	//-------------------------------------------------------------------------
-	virtual void onKnobStateChanged(void *src, const typename StateChanged &ev) 
+	virtual void onKnobStateChanged(void *src, const StateChanged &ev)
 	{
 		getKnob()->redraw();
 	}
@@ -200,14 +200,12 @@ void BasicKnobUI<M>::mousePressed(const sdce::MouseEvent &ev) {
 	if (ev.getButtons() != sdce::MouseEvent::DISCO_BTN1) {
 		return;
 	}
-	UIManager &m = getUIManager();
 	firstPoint = ev.getLocation();
 	lastPoint = Point2D(-1., -1.);
 	startValue = oldValue;
 
 	modeLinear = false;
 	entryState = getKnob()->getValue();
-	SAMBAG_PROPERTY_TAG(RangePropertyTag, "Knob.range");
 	range = getUIPropertyCached<RangePropertyTag>(200.);
 
 	Coordinate vmax = getKnob()->getMaximum(), vmin = getKnob()->getMinimum();

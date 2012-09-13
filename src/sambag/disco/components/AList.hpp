@@ -646,8 +646,7 @@ template < class T,
 	class SM
 >
 int AList<T, CR, DM, SM>::getLeadSelectionIndex() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return -1;
+	return ListSelectionModel::getLeadSelectionIndex();
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -697,7 +696,6 @@ template < class T,
 	class SM
 >
 const T & AList<T, CR, DM, SM>::getPrototypeCellValue() const {
-	SAMBA_LOG_NOT_YET_IMPL();
 	return prototypeCellValue;
 }
 //-----------------------------------------------------------------------------

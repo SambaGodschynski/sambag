@@ -234,16 +234,25 @@ void createListWindow() {
 	Panel::Ptr panel = Panel::create();
 
 	StringList::Ptr list = StringList::create();
-	list->setFont(list->getFont().setSize(14));
-	sdc::ScrollPane::Ptr scrollpane = ScrollPane::create(list);
+	ScrollPane::Ptr scroll = ScrollPane::create(list);
+	//list->setFont(list->getFont().setSize(14));
 
-	for (int i=0; i<10000; ++i) {
+	std::string max = "";
+
+	for (int i=0; i<100; ++i) {
 		std::stringstream ss;
 		ss<<"nomber "<<i;
-		list->addElement(ss.str());
+		std::string str = ss.str();
+		if (max.length() < str.length())
+				max = str;
+		list->addElement(str);
 	}
-	panel->add(scrollpane);
+	//list->setPrototypeCellValue(max);
+	panel->add(scroll);
 	win[5]->getContentPane()->add(panel);
+	Dimension size = scroll->getPreferredSize();
+	std::cout<<size<<std::endl;
+
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

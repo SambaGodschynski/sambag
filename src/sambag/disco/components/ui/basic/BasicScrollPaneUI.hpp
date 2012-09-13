@@ -43,6 +43,16 @@ private:
 	Coordinate oldExtent;
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * Returns the specified component's maximum size appropriate for the
+	 * look and feel.
+	 * @param c
+	 * @return
+	 */
+	virtual Dimension getMaximumSize(AComponentPtr c) {
+		return Dimension(32767, 32767);
+	}
+	//-------------------------------------------------------------------------
 	ScrollPanePtr getScrollPane() const {
 		return _scrollpane.lock();
 	}
