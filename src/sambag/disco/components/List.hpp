@@ -54,10 +54,14 @@ public:
 protected:
 	//-------------------------------------------------------------------------
 	List() {
-		Super::setName("List");
+		AComponent::setName("List");
 	}
 private:
 public:
+	//-------------------------------------------------------------------------
+	void setBounds(const Rectangle &r) {
+		AContainer::setBounds(r);
+	}
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(List)
 }; // List

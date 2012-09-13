@@ -230,15 +230,29 @@ void createListWindow() {
 	win[5] = sdc::FramedWindow::create(win[0]);
 	win[5]->setTitle("L.I.S.T.");
 	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+
+	Panel::Ptr panel = Panel::create();
+
 	StringList::Ptr list = StringList::create();
-	list->setFont(list->getFont().setSize(14));
+	ScrollPane::Ptr scroll = ScrollPane::create(list);
+	//list->setFont(list->getFont().setSize(14));
+
+	std::string max = "";
 
 	for (int i=0; i<100; ++i) {
 		std::stringstream ss;
 		ss<<"nomber "<<i;
-		list->addElement(ss.str());
+		std::string str = ss.str();
+		if (max.length() < str.length())
+				max = str;
+		list->addElement(str);
 	}
-	win[5]->getContentPane()->add(list);
+	//list->setPrototypeCellValue(max);
+	panel->add(scroll);
+	win[5]->getContentPane()->add(panel);
+	Dimension size = scroll->getPreferredSize();
+	std::cout<<size<<std::endl;
+
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

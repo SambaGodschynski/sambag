@@ -869,7 +869,11 @@ void BasicListUI<LT>::onSelectionStateChanged(void *src,
 	Rectangle bounds = getCellBounds(list, firstIndex, lastIndex);
 
 	if (bounds != NULL_RECTANGLE) {
-		list->redraw(bounds);
+		Coordinate x = bounds.x0().x(),
+		y = bounds.x0().y(),
+		w = bounds.width(),
+		h = bounds.height();
+		list->redraw(Rectangle(x,y-5., w, h+5));
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
