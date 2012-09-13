@@ -83,7 +83,7 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
 	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<StringList
-	m.putProperty("StringList.background", HtmlColors::getColor("lightgrey"));
+	m.putProperty("StringList.background", HtmlColors::getColor("azure"));
 	m.putProperty("StringList.foreground", HtmlColors::getColor("black"));
 	m.putProperty("StringList.selectionBackground", HtmlColors::getColor("blue"));
 	m.putProperty("StringList.selectionForeground", HtmlColors::getColor("white"));

@@ -230,15 +230,20 @@ void createListWindow() {
 	win[5] = sdc::FramedWindow::create(win[0]);
 	win[5]->setTitle("L.I.S.T.");
 	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+
+	Panel::Ptr panel = Panel::create();
+
 	StringList::Ptr list = StringList::create();
 	list->setFont(list->getFont().setSize(14));
+	sdc::ScrollPane::Ptr scrollpane = ScrollPane::create(list);
 
-	for (int i=0; i<100; ++i) {
+	for (int i=0; i<10000; ++i) {
 		std::stringstream ss;
 		ss<<"nomber "<<i;
 		list->addElement(ss.str());
 	}
-	win[5]->getContentPane()->add(list);
+	panel->add(scrollpane);
+	win[5]->getContentPane()->add(panel);
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

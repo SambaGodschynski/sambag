@@ -869,7 +869,11 @@ void BasicListUI<LT>::onSelectionStateChanged(void *src,
 	Rectangle bounds = getCellBounds(list, firstIndex, lastIndex);
 
 	if (bounds != NULL_RECTANGLE) {
-		list->redraw(bounds);
+		Coordinate x = bounds.x0().x(),
+		y = bounds.x0().y(),
+		w = bounds.width(),
+		h = bounds.height();
+		list->redraw(Rectangle(x,y-5., w, h+5));
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -885,6 +889,8 @@ void BasicListUI<LT>::onMouse(void *src, const events::MouseEvent &ev)
 template <class LT>
 void BasicListUI<LT>::mousePressed(const events::MouseEvent &ev)
 {
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
+		return;
 	adjustSelection(ev);
 }
 //-----------------------------------------------------------------------------
