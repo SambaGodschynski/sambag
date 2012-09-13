@@ -37,10 +37,12 @@ public:
 	//-------------------------------------------------------------------------
 	typedef List<T> Class;
 	//-------------------------------------------------------------------------
-	typedef AList< T,
+	// Compiler Error C3200 on MSVC. ? WTF
+	// see: http://msdn.microsoft.com/de-de/library/3xwxftta.aspx
+	/*typedef AList< T,
 			DefaultListCellRenderer,
 			DefaultListModel,
-			DefaultListSelectionModel> Super;
+			DefaultListSelectionModel> Super;*/
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------

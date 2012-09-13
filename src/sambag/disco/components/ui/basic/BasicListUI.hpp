@@ -551,7 +551,7 @@ Rectangle BasicListUI<LT>::getCellBounds(AComponentPtr c,
 }
 //-----------------------------------------------------------------------------
 template <class LT>
-Rectangle BasicListUI<LT>::getCellBounds(BasicListUI<LT>::ListType &list,
+Rectangle BasicListUI<LT>::getCellBounds(typename BasicListUI<LT>::ListType &list,
 		int index1, int index2)
 {
 	maybeUpdateLayoutState();
@@ -594,7 +594,7 @@ Rectangle BasicListUI<LT>::getCellBounds(BasicListUI<LT>::ListType &list,
 }
 //-----------------------------------------------------------------------------
 template <class LT>
-Rectangle BasicListUI<LT>::getCellBounds(BasicListUI<LT>::ListType &list,
+Rectangle BasicListUI<LT>::getCellBounds(typename BasicListUI<LT>::ListType &list,
 		int index)
 {
 	maybeUpdateLayoutState();

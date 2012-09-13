@@ -504,7 +504,7 @@ template < class T,
 	class SM
 >
 void AList<T, CR, DM, SM>::setCellRenderer(
-	AList<T, CR, DM, SM>::ListCellRendererPtr cellRenderer)
+	typename AList<T, CR, DM, SM>::ListCellRendererPtr cellRenderer)
 {
 	ListCellRendererPtr oldValue = this->cellRenderer;
 	this->cellRenderer = cellRenderer;
@@ -1070,7 +1070,7 @@ template < class T,
 	class SM
 >
 void AList<T, CR, DM, SM>::setLayoutOrientation(
-		AList<T, CR, DM, SM>::Orientation layoutOrientation)
+	typename AList<T, CR, DM, SM>::Orientation layoutOrientation)
 {
 	Orientation oldValue = this->layoutOrientation;
 	this->layoutOrientation = layoutOrientation;
