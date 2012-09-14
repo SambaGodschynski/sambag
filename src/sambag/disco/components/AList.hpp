@@ -50,6 +50,7 @@ struct ListConstants {
 	static const std::string PROPERTY_FIXEDCELLWIDTH;
 	static const std::string PROPERTY_FIXEDCELLHEIGHT;
 	static const std::string PROPERTY_CELLRENDERER;
+	static const std::string PROPERTY_PROTOTYPECELLVALUE;
 };
 //=============================================================================
 /** 
@@ -1118,7 +1119,8 @@ setPrototypeCellValue(const T &prototypeCellValue)
 		updateFixedCellSize();
 	}
 
-	firePropertyChanged("prototypeCellValue", oldValue, prototypeCellValue);
+	firePropertyChanged(PROPERTY_PROTOTYPECELLVALUE,
+		oldValue, prototypeCellValue);
 }
 //-----------------------------------------------------------------------------
 template < class T,

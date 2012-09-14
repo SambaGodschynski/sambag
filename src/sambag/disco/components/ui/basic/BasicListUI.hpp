@@ -15,10 +15,12 @@
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/CellRendererPane.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
+#include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/Graphics.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/ui/IListUI.hpp>
+#include <sambag/com/events/PropertyChanged.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -202,13 +204,16 @@ public:
 	virtual void installUI(AComponentPtr c);
 public:
 	///////////////////////////////////////////////////////////////////////////
-	// Mouse Listener functions
+	// Listener functions
 	//-------------------------------------------------------------------------
 	void onMouse(void *, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	void mousePressed(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	void adjustSelection(const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	void onPropertyChanged(void *src,
+			const sambag::com::events::PropertyChanged &ev);
 }; // BasicListUI
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -239,10 +244,20 @@ void BasicListUI<LT>::installListeners(AComponentPtr c) {
 		boost::bind(&Class::onSelectionStateChanged, this, _1, _2),
 		getPtr()
 	);
+	using sambag::com::events::PropertyChanged;
+	list->EventSender<PropertyChanged>::addTrackedEventListener(
+		boost::bind(&Class::onPropertyChanged, this, _1, _2),
+		getPtr()
+	);
 }
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::installDefaults(AComponentPtr c) {
+	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
+	SAMBAG_ASSERT(list);
+
+	list->setLayout(ALayoutManagerPtr());
+
 	UIManager &m = getUIManager();
 	ColorRGBA col(0.7, 0.7, 0.7);
 	m.getProperty("StringList.background", col);
@@ -251,8 +266,6 @@ void BasicListUI<LT>::installDefaults(AComponentPtr c) {
 	col = ColorRGBA();
 	m.getProperty("StringList.foreground", col);
 	c->setForeground(col);
-	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
-	SAMBAG_ASSERT(list);
 
 	col = ColorRGBA(0.7, 0., 1.);
 	m.getProperty("StringList.selectionBackground", col);
@@ -877,7 +890,7 @@ void BasicListUI<LT>::onSelectionStateChanged(void *src,
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////
-// MouseEvent listeners
+// listeners
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::onMouse(void *src, const events::MouseEvent &ev)
@@ -901,6 +914,59 @@ void BasicListUI<LT>::adjustSelection(const events::MouseEvent &ev)
 	ListTypePtr list = getListPtr();
 	int row = list->locationToIndex(point);
 	list->setSelectionInterval(row, row);
+}
+//-----------------------------------------------------------------------------
+template <class LT>
+void BasicListUI<LT>::onPropertyChanged(void *src,
+		const sambag::com::events::PropertyChanged &ev)
+{
+	ListTypePtr list = getListPtr();
+	std::string name = ev.getPropertyName();
+	if (name == ListConstants::PROPERTY_VISIBLEROWCOUNT) {
+		if (layoutOrientation != ListConstants::VERTICAL) {
+			updateLayoutStateNeeded |= layoutOrientationChanged;
+			redrawList();
+		}
+		return;
+	}
+	if (name==ListConstants::PROPERTY_SELECTIONFOREGROUND) {
+		list->redraw();
+		return;
+	}
+	if (name==ListConstants::PROPERTY_SELECTIONBACKGROUND) {
+		list->redraw();
+		return;
+	}
+	if (name==ListConstants::PROPERTY_LAYOUTORIENTATION) {
+		updateLayoutStateNeeded |= layoutOrientationChanged;
+		layoutOrientation = list->getLayoutOrientation();
+		redrawList();
+		return;
+	}
+	if (name == ListConstants::PROPERTY_FIXEDCELLWIDTH) {
+		updateLayoutStateNeeded |= fixedCellWidthChanged;
+		redrawList();
+		return;
+	}
+	if (name==ListConstants::PROPERTY_FIXEDCELLHEIGHT) {
+		updateLayoutStateNeeded |= fixedCellHeightChanged;
+		redrawList();
+		return;
+	}
+	if (name==ListConstants::PROPERTY_CELLRENDERER) {
+		updateLayoutStateNeeded |= cellRendererChanged;
+		redrawList();
+		return;
+	}
+	if (name == AComponent::PROPERTY_FONT) {
+		updateLayoutStateNeeded |= fontChanged;
+		redrawList();
+		return;
+	}
+	if (name == ListConstants::PROPERTY_PROTOTYPECELLVALUE) {
+		updateLayoutStateNeeded |= prototypeCellValueChanged;
+		redrawList();
+	}
 }
 }}}}} // namespace(s)
 

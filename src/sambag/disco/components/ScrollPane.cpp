@@ -443,6 +443,11 @@ std::string ScrollPane::paramString() const {
 	return "";
 }
 //-----------------------------------------------------------------------------
+void ScrollPane::setBounds(const Rectangle &r) {
+	Super::setBounds(r);
+	//validate();
+}
+//-----------------------------------------------------------------------------
 void ScrollPane::resetViewPort() {
 //	if (viewPort) {
 //		viewPort.removeChangeListener(this);

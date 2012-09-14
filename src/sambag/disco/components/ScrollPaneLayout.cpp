@@ -165,8 +165,11 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	vsbPolicy = scrollPane->getVerticalScrollBarPolicy();
 	hsbPolicy = scrollPane->getHorizontalScrollBarPolicy();
 
-	Rectangle availR = scrollPane->getBounds();
-	availR.x0().x(0); availR.x0().y(0);
+	Rectangle availR = Rectangle(
+			0, 0,
+			scrollPane->getWidth(),
+			scrollPane->getHeight()
+	);
 
 	Insets insets = parent->getInsets();
 	availR.x0().x( insets.left() );
