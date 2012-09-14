@@ -254,11 +254,11 @@ void createListWindow() {
 	win[5] = sdc::FramedWindow::create(win[0]);
 	win[5]->setTitle("L.I.S.T.");
 	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
-	/*Panel::Ptr pane = Panel::create();
+	Panel::Ptr pane = Panel::create();
 	pane->add(createList());
 	pane->add(createList());
-	win[5]->getContentPane()->add(pane);*/
-	win[5]->getContentPane()->add(createList());
+	win[5]->getContentPane()->add(pane);
+	//win[5]->getContentPane()->add(createList());
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 
