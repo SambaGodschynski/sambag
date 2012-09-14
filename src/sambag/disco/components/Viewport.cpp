@@ -52,14 +52,14 @@ bool Viewport::computeBlit(const Coordinate &dx, const Coordinate &dy,
 		if (dy < 0) {
 			blitFrom.y(-dy);
 			blitTo.y(0);
-			blitPaint.x0().y(extentSize.height() + dy);
+			blitPaint.y(extentSize.height() + dy);
 		} else {
 			blitFrom.y(0);
 			blitTo.y(dy);
-			blitPaint.x0().y(0);
+			blitPaint.y(0);
 		}
 
-		blitPaint.x0().x(0); blitFrom.x(0); blitTo.x(0);
+		blitPaint.x(0); blitFrom.x(0); blitTo.x(0);
 
 		blitSize.width(extentSize.width());
 		blitSize.height(extentSize.height() - dyAbs);
@@ -73,14 +73,14 @@ bool Viewport::computeBlit(const Coordinate &dx, const Coordinate &dy,
 		if (dx < 0) {
 			blitFrom.x(-dx);
 			blitTo.x(0);
-			blitPaint.x0().x(extentSize.width() + dx);
+			blitPaint.x(extentSize.width() + dx);
 		} else {
 			blitFrom.x(0);
 			blitTo.x(dx);
-			blitPaint.x0().x(0);
+			blitPaint.x(0);
 		}
 
-		blitPaint.x0().y(0); blitFrom.y(0); blitTo.y(0);
+		blitPaint.y(0); blitFrom.y(0); blitTo.y(0);
 
 		blitSize.width(extentSize.width() - dxAbs);
 		blitSize.height(extentSize.height());
@@ -332,8 +332,8 @@ void Viewport::draw(IDrawContext::Ptr cn) {
 				bsg.copyArea(Rectangle(blitFrom.x(), blitFrom.y(), blitSize.width(),
 						blitSize.height()), Point2D(bdx, bdy));
 
-				cn->setClip(Rectangle(clip.x0().x(),
-						clip.x0().y(), clip.width(), clip.height()));
+				cn->setClip(Rectangle(clip.x(),
+						clip.y(), clip.width(), clip.height()));
 				// Draw the rest of the view; the part that has just been exposed.
 				Rectangle r; // = viewBounds.intersection(blitPaint);
 				boost::geometry::intersection<Rectangle::Base,
@@ -364,7 +364,7 @@ void Viewport::redraw(const Rectangle &r) {
 //	AContainerPtr parent = getParent();
 //	if(parent) {
 //		Rectangle d(
-//			r.x0().x() + getX(), r.x0().y() + getY(),
+//			r.x() + getX(), r.y() + getY(),
 //			r.width(), r.height()
 //		);
 //		parent->redraw(d);
@@ -399,9 +399,9 @@ void Viewport::scrollRectToVisible(const Rectangle & contentRect) {
 		Coordinate dx, dy;
 
 		dx = positionAdjustment(getWidth(),
-				contentRect.width(), contentRect.x0().x());
+				contentRect.width(), contentRect.x());
 		dy = positionAdjustment(getHeight(),
-				contentRect.height(), contentRect.x0().y());
+				contentRect.height(), contentRect.y());
 
 		if (dx != 0 || dy != 0) {
 			Point2D viewPosition = getViewPosition();
@@ -658,11 +658,11 @@ void Viewport::flushViewDirtyRegion(IDrawContext::Ptr cn,
 	Graphics g(cn);
 	AComponentPtr view = getView();
 	if (dirty.width() > 0 && dirty.height() > 0) {
-		dirty.x0().x((view->getX()));
-		dirty.x0().y((view->getY()));
+		dirty.x((view->getX()));
+		dirty.y((view->getY()));
 		Rectangle clip = g.clipExtends();
-		g.clipRect(Rectangle(dirty.x0().x(),
-				dirty.x0().y(), dirty.width(), dirty.height()));
+		g.clipRect(Rectangle(dirty.x(),
+				dirty.y(), dirty.width(), dirty.height()));
 		clip = cn->clipExtends();
 		// Only paint the dirty region if it is visible.
 		if (clip.width() > 0 && clip.height() > 0) {
@@ -709,10 +709,10 @@ bool Viewport::windowBlitDraw(IDrawContext::Ptr cn) {
 			Rectangle r; // = view.getBounds().intersection(blitPaint);
 			boost::geometry::intersection<Rectangle::Base, Rectangle::Base,
 			Rectangle::Base>(view->getBounds(), blitPaint, r);
-			r.x0().x( r.x0().x() - view->getX() );
-			r.x0().y( r.x0().y() - view->getY() );
+			r.x( r.x() - view->getX() );
+			r.y( r.y() - view->getY() );
 
-			blitDoubleBuffered(view, cn, r.x0().x(), r.x0().y(), r.width(), r.height(),
+			blitDoubleBuffered(view, cn, r.x(), r.y(), r.width(), r.height(),
 					blitFrom.x(), blitFrom.y(), blitTo.x(), blitTo.y(), blitSize.width(),
 					blitSize.height());
 			retValue = true;
@@ -761,12 +761,12 @@ void Viewport::drawView(IDrawContext::Ptr cn) {
 		Coordinate x = view->getX();
 		Coordinate y = view->getY();
 		cn->translate(Point2D(x, y));
-		cn->setClip(Rectangle(clip.x0().x() - x, clip.x0().y() - y,
+		cn->setClip(Rectangle(clip.x() - x, clip.y() - y,
 				clip.width(), clip.height()));
 		view->drawForceDoubleBuffered(cn);
 		cn->translate(Point2D(-x, -y));
-		cn->setClip(Rectangle(clip.x0().x(),
-				clip.x0().y(), clip.width(), clip.height()));
+		cn->setClip(Rectangle(clip.x(),
+				clip.y(), clip.width(), clip.height()));
 	} else {
 		// To avoid any problems that may result from the viewport being
 		// bigger than the view we start painting from the viewport.

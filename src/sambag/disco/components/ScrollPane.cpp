@@ -279,8 +279,8 @@ Rectangle ScrollPane::getViewportBorderBounds() const {
 	Rectangle borderR(getSize());
 
 	Insets insets = getInsets();
-	borderR.x0().x(insets.left());
-	borderR.x0().y(insets.top());
+	borderR.x(insets.left());
+	borderR.y(insets.top());
 	borderR.width( borderR.width() - insets.left() + insets.right());
 	borderR.height( borderR.height() - insets.top() + insets.bottom());
 
@@ -290,7 +290,7 @@ Rectangle ScrollPane::getViewportBorderBounds() const {
 	Viewport::Ptr colHead = getColumnHeader();
 	if (colHead && colHead->isVisible()) {
 		Coordinate colHeadHeight = colHead->getHeight();
-		borderR.x0().y( borderR.x0().y() + colHeadHeight);
+		borderR.y( borderR.y() + colHeadHeight);
 		borderR.height( borderR.height() - colHeadHeight);
 	}
 
@@ -300,7 +300,7 @@ Rectangle ScrollPane::getViewportBorderBounds() const {
 	Viewport::Ptr rowHead = getRowHeader();
 	if (rowHead && rowHead->isVisible()) {
 		Coordinate rowHeadWidth = rowHead->getWidth();
-		borderR.x0().x( borderR.x0().x() + rowHeadWidth);
+		borderR.x( borderR.x() + rowHeadWidth);
 		borderR.width( borderR.width() - rowHeadWidth);
 	}
 

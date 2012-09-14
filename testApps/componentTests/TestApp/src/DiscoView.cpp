@@ -232,7 +232,7 @@ sdc::AContainerPtr createList() {
 	Panel::Ptr panel = Panel::create();
 	StringList::Ptr list = StringList::create();
 	ScrollPane::Ptr scroll = ScrollPane::create(list);
-	//list->setFont(list->getFont().setSize(14));
+	list->setFont(list->getFont().setSize(14));
 
 	std::string max = "";
 	for (int i=0; i<100; ++i) {
@@ -243,7 +243,7 @@ sdc::AContainerPtr createList() {
 				max = str;
 		list->addElement(str);
 	}
-	//list->setPrototypeCellValue(max);
+	list->setPrototypeCellValue(max);
 	panel->add(scroll);
 	return panel;
 }

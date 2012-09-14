@@ -14,8 +14,8 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgLinearGradient::createPattern(const Rectangle &rect) const {
-	Point2D p0 = rect.min_corner();
-	Point2D p1 = rect.max_corner();
+	Point2D p0 = rect.x0();
+	Point2D p1 = rect.x1();
 	ILinearPattern::Ptr pattern = getDiscoFactory()->createLinearPattern(p0, p1);
 	pattern->addColorStops(getColorStops());
 	return pattern;

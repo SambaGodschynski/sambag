@@ -972,9 +972,10 @@ void AComponent::computeVisibleRect(AComponent::Ptr c, Rectangle &out) {
 		out = Rectangle(0, 0, bounds.getWidth(), bounds.getHeight());
 	} else {
 		computeVisibleRect(p, out);
-		geometry::subtract_point(out.x0(), bounds.x0());
-		geometry::intersection<Rectangle::Base, Rectangle::Base, Rectangle::Base>
-		(
+		Point2D tmp = out.x0();
+		geometry::subtract_point(tmp, bounds.x0());
+		out.x0(tmp);
+		geometry::intersection (
 				Rectangle(0,0,bounds.getWidth(), bounds.getHeight()),
 				out,
 				out

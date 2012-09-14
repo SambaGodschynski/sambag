@@ -38,7 +38,7 @@ void ScrollPaneLayout::adjustForVSB(bool wantsVSB,
 				std::min(vsb->getPreferredSize().width(), available.width()));
 
 		available.width( available.width() -  vsbWidth);
-		vsbR.x0().x(available.x0().x() + available.width() + vpbInsets.right());
+		vsbR.x(available.x() + available.width() + vpbInsets.right());
 		vsbR.width(vsbWidth);
 	} else {
 		available.width( available.width() + oldWidth);
@@ -54,7 +54,7 @@ void ScrollPaneLayout::adjustForHSB(bool wantsHSB, Rectangle &available,
 				std::min(available.height(), hsb->getPreferredSize().height()));
 
 		available.height( available.height() -  hsbHeight);
-		hsbR.x0().y(available.x0().y() + available.height() + vpbInsets.bottom());
+		hsbR.y(available.y() + available.height() + vpbInsets.bottom());
 		hsbR.height(hsbHeight);
 	} else {
 		available.height( available.height() +  oldHeight);
@@ -172,8 +172,8 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	);
 
 	Insets insets = parent->getInsets();
-	availR.x0().x( insets.left() );
-	availR.x0().y( insets.top() );
+	availR.x( insets.left() );
+	availR.y( insets.top() );
 	availR.width( availR.width() - (insets.left() + insets.right() ));
 	availR.height( availR.height() - (insets.top() + insets.bottom() ));
 
@@ -182,13 +182,13 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	 * as if it were fixed height, arbitrary width.
 	 */
 
-	Rectangle colHeadR(0, availR.x0().y(), 0, 0);
+	Rectangle colHeadR(0, availR.y(), 0, 0);
 
 	if ((colHead) && (colHead->isVisible())) {
 		Coordinate colHeadHeight = std::min(availR.height(),
 				colHead->getPreferredSize().height());
 		colHeadR.height(colHeadHeight);
-		availR.x0().y( availR.x0().y() + colHeadHeight);
+		availR.y( availR.y() + colHeadHeight);
 		availR.height( availR.height() - colHeadHeight);
 	}
 
@@ -204,8 +204,8 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 				rowHead->getPreferredSize().width());
 		rowHeadR.width(rowHeadWidth);
 		availR.width( availR.width() - rowHeadWidth);
-		rowHeadR.x0().x(availR.x0().x());
-		availR.x0().x(availR.x0().x() + rowHeadWidth);
+		rowHeadR.x(availR.x());
+		availR.x(availR.x() + rowHeadWidth);
 	}
 
 	/* If there's a ScrollPane.viewportBorder, remove the
@@ -216,8 +216,8 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	Insets vpbInsets;
 	if (viewportBorder) {
 		vpbInsets = viewportBorder->getBorderInsets(parent);
-		availR.x0().x(availR.x0().x() + vpbInsets.left());
-		availR.x0().y(availR.x0().y() + vpbInsets.top());
+		availR.x(availR.x() + vpbInsets.left());
+		availR.y(availR.y() + vpbInsets.top());
 		availR.width(availR.width() - vpbInsets.left() + vpbInsets.right());
 		availR.height(availR.height() - vpbInsets.top() + vpbInsets.bottom());
 	} else {
@@ -250,7 +250,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 			: Dimension(0, 0);
 
 	Dimension extentSize = (viewport) ? viewport->toViewCoordinates(
-			availR.getSize()) : Dimension(0, 0);
+			availR.size()) : Dimension(0, 0);
 
 	bool viewTracksViewportWidth = false;
 	bool viewTracksViewportHeight = false;
@@ -271,7 +271,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	 * scrollbar is considered to be fixed width, arbitrary height.
 	 */
 
-	Rectangle vsbR(0, availR.x0().y() - vpbInsets.top(), 0, 0);
+	Rectangle vsbR(0, availR.y() - vpbInsets.top(), 0, 0);
 
 	bool vsbNeeded;
 	if (isEmpty) {
@@ -287,7 +287,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 
 	if (vsb && vsbNeeded) {
 		adjustForVSB(true, availR, vsbR, vpbInsets);
-		extentSize = viewport->toViewCoordinates(availR.getSize());
+		extentSize = viewport->toViewCoordinates(availR.size());
 	}
 
 	/* If there's a horizontal scrollbar and we need one, allocate
@@ -295,7 +295,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	 * scrollbar is considered to be fixed height, arbitrary width.
 	 */
 
-	Rectangle hsbR(availR.x0().x() - vpbInsets.left(), 0, 0, 0);
+	Rectangle hsbR(availR.x() - vpbInsets.left(), 0, 0, 0);
 	bool hsbNeeded;
 	if (isEmpty) {
 		hsbNeeded = false;
@@ -320,7 +320,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 		if (vsb && !vsbNeeded && (vsbPolicy
 				!= ScrollPane::VERTICAL_SCROLLBAR_NEVER)) {
 
-			extentSize = viewport->toViewCoordinates(availR.getSize());
+			extentSize = viewport->toViewCoordinates(availR.size());
 			vsbNeeded = viewPrefSize.height() > extentSize.height();
 
 			if (vsbNeeded) {
@@ -340,7 +340,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 		viewport->setBounds(availR);
 
 		if (sv) {
-			extentSize = viewport->toViewCoordinates(availR.getSize());
+			extentSize = viewport->toViewCoordinates(availR.size());
 
 			bool oldHSBNeeded = hsbNeeded;
 			bool oldVSBNeeded = vsbNeeded;
@@ -352,7 +352,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 				if (newVSBNeeded != vsbNeeded) {
 					vsbNeeded = newVSBNeeded;
 					adjustForVSB(vsbNeeded, availR, vsbR, vpbInsets);
-					extentSize = viewport->toViewCoordinates(availR.getSize());
+					extentSize = viewport->toViewCoordinates(availR.size());
 				}
 			}
 			if (hsb && hsbPolicy == ScrollPane::HORIZONTAL_SCROLLBAR_AS_NEEDED)
@@ -366,7 +366,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 							!= ScrollPane::VERTICAL_SCROLLBAR_NEVER)) {
 
 						extentSize = viewport->toViewCoordinates(
-								availR.getSize());
+								availR.size());
 						vsbNeeded = viewPrefSize.height() > extentSize.height();
 
 						if (vsbNeeded) {
@@ -391,9 +391,9 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	vsbR.height(availR.height() + vpbInsets.top() + vpbInsets.bottom());
 	hsbR.width(availR.width() + vpbInsets.left() + vpbInsets.right());
 	rowHeadR.height(availR.height() + vpbInsets.top() + vpbInsets.bottom());
-	rowHeadR.x0().y(availR.x0().y() - vpbInsets.top());
+	rowHeadR.y(availR.y() - vpbInsets.top());
 	colHeadR.width(availR.width() + vpbInsets.left() + vpbInsets.right());
-	colHeadR.x0().x(availR.x0().x() - vpbInsets.left());
+	colHeadR.x(availR.x() - vpbInsets.left());
 
 	/* Set the bounds of the remaining components.  The scrollbars
 	 * are made invisible if they're not needed.
@@ -418,7 +418,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 					// corner near the column header.  Note that we skip
 					// this step (and use the default behavior) if the
 					// user has set a custom corner component.
-					vsbR.x0().y(colHeadR.x0().y());
+					vsbR.y(colHeadR.y());
 					vsbR.height(vsbR.height() + colHeadR.height());
 				}
 			}
@@ -440,7 +440,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 					// corner near the row header.  Note that we skip
 					// this step (and use the default behavior) if the
 					// user has set a custom corner component.
-					hsbR.x0().x(rowHeadR.x0().x());
+					hsbR.x(rowHeadR.x());
 					hsbR.width( hsbR.width() + rowHeadR.width());
 				}
 			}
@@ -452,22 +452,22 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	}
 
 	if (lowerLeft) {
-		lowerLeft->setBounds(rowHeadR.x0().x(), hsbR.x0().y(),
+		lowerLeft->setBounds(rowHeadR.x(), hsbR.y(),
 			rowHeadR.width(), hsbR.height());
 	}
 
 	if (lowerRight) {
-		lowerRight->setBounds(vsbR.x0().x(), hsbR.x0().y(),
+		lowerRight->setBounds(vsbR.x(), hsbR.y(),
 				vsbR.width(), hsbR.height());
 	}
 
 	if (upperLeft) {
-		upperLeft->setBounds(rowHeadR.x0().x(), colHeadR.x0().y(),
+		upperLeft->setBounds(rowHeadR.x(), colHeadR.y(),
 				rowHeadR.width(), colHeadR.height());
 	}
 
 	if (upperRight) {
-		upperRight->setBounds(vsbR.x0().x(), colHeadR.x0().y(),
+		upperRight->setBounds(vsbR.x(), colHeadR.y(),
 				vsbR.width(), colHeadR.height());
 	}
 }

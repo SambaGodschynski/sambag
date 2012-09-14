@@ -592,12 +592,12 @@ Rectangle BasicListUI<LT>::getCellBounds(typename BasicListUI<LT>::ListType &lis
 			int maxRow = convertModelToRow(maxIndex);
 
 			if (minRow != maxRow) {
-				minBounds.x0().x(0.);
+				minBounds.x(0.);
 				minBounds.width(list.getWidth());
 			}
 		} else if (minBounds.x0().x() != maxBounds.x0().x()) {
 			// Different columns
-			minBounds.x0().y(0.);
+			minBounds.y(0.);
 			minBounds.height( list.getHeight() );
 		}
 		//minBounds.add(maxBounds);

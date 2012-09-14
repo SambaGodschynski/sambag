@@ -16,9 +16,9 @@ namespace sambag { namespace disco { namespace svg {
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
 	// cal. rect mid point
-	Point2D c0 = rect.min_corner();
-	Point2D tmp = rect.max_corner();
-	boost::geometry::subtract_point(tmp, rect.min_corner());
+	Point2D c0 = rect.x0();
+	Point2D tmp = rect.x1();
+	boost::geometry::subtract_point(tmp, rect.x0());
 	boost::geometry::divide_value(tmp, 2.0);
 	boost::geometry::add_point(c0, tmp);
 
