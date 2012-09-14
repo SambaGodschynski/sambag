@@ -77,26 +77,39 @@ inline std::ostream & operator << (std::ostream &os, const Point2D &p)
 /**
  * @class Dimension
  */
-struct Dimension : public Point2D {
+class Dimension {
 //=============================================================================
+private:
+	//-------------------------------------------------------------------------
+	Point2D size;
+	//-------------------------------------------------------------------------
+public:
 	//-------------------------------------------------------------------------
 	Dimension(const Coordinate &width=0, const Coordinate &height=0) :
-		Point2D(width, height) {}
+		size(width, height) {}
 	//-------------------------------------------------------------------------
 	const Coordinate & width() const {
-		return Point2D::x();
+		return size.x();
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & height() const {
-		return Point2D::y();
+		return size.y();
 	}
 	//-------------------------------------------------------------------------
 	void width(const Coordinate &v) {
-		Point2D::x(v);
+		size.x(v);
 	}
 	//-------------------------------------------------------------------------
 	void height(const Coordinate &v) {
-		Point2D::y(v);
+		size.y(v);
+	}
+	//-------------------------------------------------------------------------
+	bool operator==(const Dimension &b) const {
+		return size == b.size;
+	}
+	//-------------------------------------------------------------------------
+	bool operator!=(const Dimension &b) const {
+		return size != b.size;
 	}
 };
 inline Dimension getNullDimension() {
@@ -105,156 +118,150 @@ inline Dimension getNullDimension() {
 //=============================================================================
 /**
  * @class Rectangle.
- * extends boost::geometry::box
  */
-class Rectangle: public boost::geometry::model::box<Point2D> {
+class Rectangle {
 //=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::geometry::model::box<Point2D> Base;
 private:
+	Point2D _x0;
+	Point2D _size;
 public:
-	//-------------------------------------------------------------------------
-	const Point2D & x0() const {
-		return min_corner();
-	}
-	//-------------------------------------------------------------------------
-	Point2D & x0() {
-		return min_corner();
-	}
-	//-------------------------------------------------------------------------
-	const Point2D & x1() const {
-		return max_corner();
-	}
-	//-------------------------------------------------------------------------
-	Point2D & x1() {
-		return max_corner();
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * translates whole rectangle to x0
-	 * @param val
-	 */
-	void translate(const Point2D & val) {
-		Point2D diff = val;
-		geometry::subtract_point(diff, min_corner());
-		geometry::add_point(min_corner(), diff);
-		geometry::add_point(max_corner(), diff);
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @deprecated use width()
-	 * @return
-	 */
-	Coordinate getWidth() const {
-		Point2D result = max_corner();
-		geometry::subtract_point(result, min_corner());
-		return result.x();
-
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @deprecated use getSize()
-	 * @return
-	 */
-	Dimension getDimension() const {
-		return Dimension(getWidth(), getHeight());
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @deprecated use height()
-	 * @return
-	 */
-	Coordinate getHeight() const {
-		Point2D result = max_corner();
-		geometry::subtract_point(result, min_corner());
-		return result.y();
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @deprecated use width()
-	 * @param w
-	 */
-	void setWidth(const Coordinate &w) {
-		max_corner().x(min_corner().x() + w);
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * @deprecated use height()
-	 * @param h
-	 */
-	void setHeight(const Coordinate &h) {
-		max_corner().y(min_corner().y() + h);
-	}
-	//-------------------------------------------------------------------------
-	Rectangle(const Base &box) :
-		Base(box) {
-	}
-	//-------------------------------------------------------------------------
-	Rectangle(Point2D x0 = Point2D(0, 0), Point2D x1 = Point2D(0, 0)) :
-		Base(minimize(x0, x1), maximize(x0, x1))
+	typedef boost::geometry::coordinate_type<Point2D>::type CoordinateType;
+	// constructors ///////////////////////////////////////////////////////////
+	Rectangle() {}
+	Rectangle(const Dimension &dim) :
+		_x0(0,0), _size(dim.width(), dim.height()) {}
+	Rectangle(Point2D _x0, const Coordinate &width, const Coordinate &height) :
+		_x0(_x0), _size(width, height)
 	{
 	}
-	//-------------------------------------------------------------------------
-	Rectangle(Point2D _x0, const Coordinate &width, const Coordinate &height)
-
-	{
-		Point2D x0(_x0), x1(width, height);
-		geometry::add_point(x1, x0);
-		*this = Rectangle(x0, x1);
+	Rectangle(const Coordinate &x, const Coordinate &y,
+		  const Coordinate &w, const Coordinate &h) : _x0(x, y), _size(w, h) {}
+	Rectangle(const Point2D &x0, const Dimension &size)
+		: _x0(x0), _size(size.width(), size.height()) {}
+	Rectangle(const Point2D &x0_, const Point2D &x1_) {
+		x0(minimize(x0_, x1_));
+		x1(maximize(x0_, x1_));
 	}
-	//-------------------------------------------------------------------------
-	Rectangle(const Coordinate &x, const Coordinate &y, const Coordinate &width,
-			const Coordinate &height) {
-		Point2D x0(x, y), x1(width, height);
-		geometry::add_point(x1, x0);
-		*this = Rectangle(x0, x1);
+	// getter /////////////////////////////////////////////////////////////////
+	const Coordinate & x() const { return _x0.x(); }
+	const Coordinate & y() const { return _x0.y(); }
+	const Coordinate & width() const { return _size.x(); }
+	const Coordinate & height() const { return _size.y(); }
+	const Point2D & x0() const { return _x0; }
+	Dimension size() const { return Dimension(_size.x(), _size.y()); }
+	Point2D x1() const {
+		Point2D res = _x0;
+		boost::geometry::add_point(res, _size);
+		return res;
 	}
-	//-------------------------------------------------------------------------
-	bool operator==(const Rectangle &b) const {
-		return boost::geometry::equals<Base, Base>(*this, b);
+	// setter /////////////////////////////////////////////////////////////////
+	void x0(const Point2D &val) { _x0 = val; }
+	void x1(const Point2D &val) {
+		_size = val;
+		boost::geometry::subtract_point(_size, _x0);
 	}
-	//-------------------------------------------------------------------------
-	bool operator!=(const Rectangle &b) const {
-		return !(*this==b);
+	void x(const Coordinate &val) { _x0.x(val); }
+	void y(const Coordinate &val) { _x0.y(val); }
+	void width(const Coordinate &val) { _size.x(val); }
+	void height(const Coordinate &val) { _size.y(val); }
+	void size(const Dimension &val) {
+		width(val.width());
+		height(val.height());
 	}
-	///////////////////////////////////////////////////////////////////////////
-	// new getter setter versions
-	//-------------------------------------------------------------------------
-	Coordinate width() const {
-		Point2D result = max_corner();
-		geometry::subtract_point(result, min_corner());
-		return result.x();
-
-	}
-	//-------------------------------------------------------------------------
-	Dimension getSize() const {
-		return Dimension(getWidth(), getHeight());
-	}
-	//-------------------------------------------------------------------------
-	Coordinate height() const {
-		Point2D result = max_corner();
-		geometry::subtract_point(result, min_corner());
-		return result.y();
-	}
-	//-------------------------------------------------------------------------
-	void width(const Coordinate &w) {
-		max_corner().x(min_corner().x() + w);
-	}
-	//-------------------------------------------------------------------------
-	void height(const Coordinate &h) {
-		max_corner().y(min_corner().y() + h);
-	}
-	//-------------------------------------------------------------------------
 	bool isEmpty() const {
 		return boost::geometry::equals(x0(), x1());
 	}
-	//-------------------------------------------------------------------------
+	// handy stuff ////////////////////////////////////////////////////////////
 	bool contains(const Point2D &p) const {
-		return p.x() > x0().x() && p.y() > x0().y() &&
-				p.x() < x1().x() && p.y() < x1().y();
+		Point2D _x0 = x0();
+		Point2D _x1 = x1();
+		return p.x() > _x0.x() && p.y() > _x0.y() &&
+				p.x() < _x1.x() && p.y() < _x1.y();
+	}
+	bool operator==(const Rectangle &b) const {
+		return boost::geometry::equals(*this, b);
+	}
+	bool operator!=(const Rectangle &b) const {
+		return !(*this==b);
+	}
+	// deprecated stuff ///////////////////////////////////////////////////////
+	/**
+	 * @deprecated Rectangle extends boost::geometry::box<> formally
+	 */
+	typedef Rectangle Base;
+	/**
+	 * @deprecated use witdh()
+	 */
+	const Coordinate & getWidth() const { return _size.x(); }
+	/**
+	 * @deprecated use height()
+	 */
+	const Coordinate & getHeight() const { return _size.y(); }
+	/**
+	 * @deprecated use setWitdh()
+	 */
+	void setWidth(const Coordinate &val) { _size.x(val); }
+	/**
+	 * @deprecated use height()
+	 */
+	void setHeight(const Coordinate &val) { _size.y(val); }
+	/**
+	 * @deprecated use x0()
+	 * translates whole rectangle to x0
+	 * @param val
+	 */
+	void translate(const Point2D & val) { _x0 = val; }
+	/**
+	 * @deprecated use size()
+	 * translates whole rectangle to x0
+	 * @param val
+	 */
+	Dimension getDimension() const { return size(); }
+};
+}} // namespace sambag::disco
+///////////////////////////////////////////////////////////////////////////////
+namespace boost { namespace geometry { namespace traits {
+template <>
+struct tag<sambag::disco::Rectangle> {
+	typedef box_tag type;
+};
+template<>
+struct point_type<sambag::disco::Rectangle> {
+	typedef sambag::disco::Point2D type;
+};
+template<std::size_t Dimension>
+struct indexed_access<sambag::disco::Rectangle, min_corner, Dimension> {
+	typedef sambag::disco::Rectangle::CoordinateType coordinate_type;
+
+	static inline coordinate_type get(sambag::disco::Rectangle const& b) {
+		return geometry::get<Dimension>(b.x0());
+	}
+
+	static inline void set(sambag::disco::Rectangle& b,
+			coordinate_type const& value) {
+		sambag::disco::Point2D p = b.x0();
+		geometry::set<Dimension>(p, value);
+		b.x0(p);
 	}
 };
+template<std::size_t Dimension>
+struct indexed_access<sambag::disco::Rectangle, max_corner, Dimension> {
+	typedef sambag::disco::Rectangle::CoordinateType coordinate_type;
+
+	static inline coordinate_type get(sambag::disco::Rectangle const& b) {
+		return geometry::get<Dimension>(b.x1());
+	}
+
+	static inline void set(sambag::disco::Rectangle& b,
+			coordinate_type const& value) {
+		sambag::disco::Point2D p = b.x1();
+		geometry::set<Dimension>(p, value);
+		b.x1(p);
+	}
+};
+}}} // namespace boost::geometry::traits
+///////////////////////////////////////////////////////////////////////////////
+namespace sambag { namespace disco {
 //-----------------------------------------------------------------------------
 inline Rectangle union_(const Rectangle &a, const Rectangle &b) {
 	/*
@@ -298,35 +305,39 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	void left(Coordinate &v) {
-		min_corner().x(v);
+		Rectangle::x(v);
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & left() const {
-		return min_corner().x();
+		return Rectangle::x();
 	}
 	//-------------------------------------------------------------------------
 	void top(Coordinate &v) {
-		min_corner().y(v);
+		Rectangle::y(v);
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & top() const {
-		return min_corner().y();
+		return Rectangle::y();
 	}
 	//-------------------------------------------------------------------------
 	void right(Coordinate &v) {
-		max_corner().x(v);
+		Point2D p = Rectangle::x1();
+		p.x(v);
+		Rectangle::x1(p);
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & right() const {
-		return max_corner().x();
+		return Rectangle::x1().x();
 	}
 	//-------------------------------------------------------------------------
 	void bottom(Coordinate &v) {
-		max_corner().y(v);
+		Point2D p = Rectangle::x1();
+		p.y(v);
+		Rectangle::x1(p);
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & bottom() const {
-		return max_corner().y();
+		return Rectangle::x1().y();
 	}
 	//-------------------------------------------------------------------------
 	Insets(const Coordinate &left = 0,

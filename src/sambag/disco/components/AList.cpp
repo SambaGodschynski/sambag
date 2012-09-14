@@ -19,4 +19,5 @@ const std::string ListConstants::PROPERTY_LAYOUTORIENTATION = "property_layoutor
 const std::string ListConstants::PROPERTY_FIXEDCELLWIDTH = "fixed_cellwitdh";
 const std::string ListConstants::PROPERTY_FIXEDCELLHEIGHT = "fixed_cellheight";
 const std::string ListConstants::PROPERTY_CELLRENDERER = "cellrender";
+const std::string ListConstants::PROPERTY_PROTOTYPECELLVALUE = "prototype_cellrenderer";
 }}} // namespace(s)

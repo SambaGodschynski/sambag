@@ -261,9 +261,7 @@ protected:
 	AComponentPtr upperRight;
 public:
 	//-------------------------------------------------------------------------
-	void setBounds(const Rectangle &r) {
-		Super::setBounds(r);
-	}
+	void setBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	virtual ScrollbarPtr createHorizontalScrollBar();
 	//-------------------------------------------------------------------------

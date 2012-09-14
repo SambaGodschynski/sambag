@@ -283,8 +283,8 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
 		if (r==NULL_RECTANGLE)
 			continue;
 		res = Rectangle::Base(
-			minimize(res.min_corner(), r.min_corner()),
-			maximize(res.max_corner(), r.max_corner())
+			minimize(res.x0(), r.x0()),
+			maximize(res.x1(), r.x1())
 		);
 	}
 	return res;

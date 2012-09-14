@@ -224,21 +224,17 @@ void createBorderlineWindow() {
 	win[3]->getContentPane()->add(c);
 }
 
-void createListWindow() {
+
+sdc::AContainerPtr createList() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	win[5] = sdc::FramedWindow::create(win[0]);
-	win[5]->setTitle("L.I.S.T.");
-	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 
 	Panel::Ptr panel = Panel::create();
-
 	StringList::Ptr list = StringList::create();
 	ScrollPane::Ptr scroll = ScrollPane::create(list);
-	//list->setFont(list->getFont().setSize(14));
+	list->setFont(list->getFont().setSize(14));
 
 	std::string max = "";
-
 	for (int i=0; i<100; ++i) {
 		std::stringstream ss;
 		ss<<"nomber "<<i;
@@ -247,12 +243,22 @@ void createListWindow() {
 				max = str;
 		list->addElement(str);
 	}
-	//list->setPrototypeCellValue(max);
+	list->setPrototypeCellValue(max);
 	panel->add(scroll);
-	win[5]->getContentPane()->add(panel);
-	Dimension size = scroll->getPreferredSize();
-	std::cout<<size<<std::endl;
+	return panel;
+}
 
+void createListWindow() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[5] = sdc::FramedWindow::create(win[0]);
+	win[5]->setTitle("L.I.S.T.");
+	win[5]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+	Panel::Ptr pane = Panel::create();
+	pane->add(createList());
+	pane->add(createList());
+	win[5]->getContentPane()->add(pane);
+	//win[5]->getContentPane()->add(createList());
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 
