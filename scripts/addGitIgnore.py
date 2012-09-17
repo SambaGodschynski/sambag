@@ -8,14 +8,18 @@ root = "../src/"
 SAMBAG_LIB = "sambag"
 SAMBAG_TESTLIB = "sambag_tests"
 
-ignore = ["CMakeFiles", "Makefile"]
+ignore = ["CMakeFiles", "Makefile", "cmake_install.cmake"]
 
 def process(currDir):
     _dir = os.path.abspath(currDir)
     print "write %s/.gitignore" %(_dir, )
-    f = open(_dir+"/.gitignore", "r")
-    l = f.readlines()
-    f.close()
+    l = []
+    try:
+        f = open(_dir+"/.gitignore", "r")
+        l = f.readlines()
+        f.close()
+    except:
+        pass
     tmp = []
     for x in l:
         if re.match("\s*$", x):
@@ -32,6 +36,8 @@ def process(currDir):
 
 for currDir, subDirs, files in os.walk(root):
     if re.match(".*?CMakeFiles", currDir):
+        continue
+    if re.match(".*?TestFolders", currDir):
         continue
     process(currDir)
 

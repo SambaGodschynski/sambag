@@ -3,7 +3,7 @@ import os
 import os.path
 import re
 
-inDir = "../../src/"
+inDir = "../src/"
 
 SAMBAG_LIB = "sambag"
 SAMBAG_TESTLIB = "sambag_tests"

@@ -1,0 +1,7 @@
+add_subdirectory(xml)
+add_subdirectory(disco)
+add_subdirectory(dsp)
+add_subdirectory(lua)
+add_subdirectory(cpsqlite)
+add_subdirectory(math)
+add_subdirectory(com)

@@ -1,0 +1,48 @@
+add_subdirectory(events)
+add_subdirectory(tests)
+add_subdirectory(ui)
+add_subdirectory(windowImpl)
+SET (sambag_disco_components
+	CellRendererPane.cpp
+	DefaultButtonModell.cpp
+	WindowToolkit.cpp
+	RedrawManager.cpp
+	AComponent.cpp
+	DefaultSingleSelectionModell.cpp
+	RootPane.cpp
+	Menu.cpp
+	AList.cpp
+	AButton.cpp
+	Window.cpp
+	AKnob.cpp
+	Panel.cpp
+	DefaultListCellRenderer.cpp
+	BorderLayout.cpp
+	Button.cpp
+	MessageBox.cpp
+	Knob.cpp
+	ALayoutManager.cpp
+	Scrollbar.cpp
+	DefaultBoundedRangeModel.cpp
+	IBorder.cpp
+	ScrollPane.cpp
+	ViewportLayout.cpp
+	BoxLayout.cpp
+	Label.cpp
+	AContainer.cpp
+	SizeRequirements.cpp
+	DefaultListSelectionModel.cpp
+	ActionMap.cpp
+	MenuSelectionManager.cpp
+	Graphics.cpp
+	Viewport.cpp
+	PopupMenu.cpp
+	ButtonGroup.cpp
+	List.cpp
+	FramedWindow.cpp
+	MenuItem.cpp
+	Timer.cpp
+	ScrollPaneLayout.cpp
+	FlowLayout.cpp
+)
+add_library(sambag_disco_components ${sambag_disco_components})
