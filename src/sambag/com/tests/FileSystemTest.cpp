@@ -9,7 +9,7 @@
 #include <string>
 
 // Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::ComTests );
+//CPPUNIT_TEST_SUITE_REGISTRATION( tests::ComTests );
 
 using namespace sambag;
 

@@ -7,6 +7,8 @@
 #include <cppunit/BriefTestProgressListener.h>
 #include <stdlib.h>
 
+#include "TestList.h"
+
 #ifdef WIN32
 #include <crtdbg.h>
 #define SAMBAG_WINONLY(x) x

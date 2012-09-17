@@ -8,7 +8,7 @@ root = "../src/"
 SAMBAG_LIB = "sambag"
 SAMBAG_TESTLIB = "sambag_tests"
 
-ignore = ["CMakeFiles"]
+ignore = ["CMakeFiles", "Makefile"]
 
 def process(currDir):
     _dir = os.path.abspath(currDir)

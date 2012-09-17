@@ -43,4 +43,12 @@ include_directories(${LUA52_INCLUDE_DIRS})
 include_directories(${SQLITE3_INCLUDE_DIRS})
 #target_link_libraries (CmTut ${CAIRO_LIBRARIES})
 
+set (UNITTEST_LIBS ${EXTRA_LIBS} 
+	sambag_com
+	sambag_com_tests
+	sambag_com_events
+	sambag_com_exceptions
+)
+
 add_subdirectory(src)
+add_subdirectory(testApps)
