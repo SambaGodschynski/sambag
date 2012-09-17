@@ -7,5 +7,6 @@ then
 fi
 
 export CLIBS=$1
-export Boost_DIR=$CLIBS/boost
+export Boost_ROOT=$CLIBS/boost
 cmake .
+make

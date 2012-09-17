@@ -33,7 +33,7 @@ find_package(Sqlite3X REQUIRED)
 #x11
 #win32
 #SET(Boost_DIR $ENV{CLIBS}/boost)
-find_package(Boost 1.49.0 REQUIRED)
+find_package(Boost 1.49.0 REQUIRED COMPONENTS filesystem system thread)
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
 include_directories(${TINYXML_INCLUDE_DIRS})
@@ -43,11 +43,17 @@ include_directories(${LUA52_INCLUDE_DIRS})
 include_directories(${SQLITE3_INCLUDE_DIRS})
 #target_link_libraries (CmTut ${CAIRO_LIBRARIES})
 
-set (UNITTEST_LIBS ${EXTRA_LIBS} 
+set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
+	${Boost_LIBRARIES}
+	${CPPUNIT_LIBRARY_DIRS}/${LIBCPPUNIT}
+)
+
+set (SAMBAG_LIBS ${SAMBAG_LIBS}
 	sambag_com
+)
+
+set (SAMBAG_UNITTEST_LIBS ${SAMBAG_UNITTEST_LIBS}
 	sambag_com_tests
-	sambag_com_events
-	sambag_com_exceptions
 )
 
 add_subdirectory(src)
