@@ -17,6 +17,7 @@
 #include "BasicScrollPaneUI.hpp"
 #include "BasicKnobUI.hpp"
 #include "BasicListUI.hpp"
+#include "BasicColumnViewUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -31,6 +32,7 @@
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Knob.hpp>
 #include <sambag/disco/components/List.hpp>
+#include <sambag/disco/components/ColumnView.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -54,6 +56,7 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Viewport, BasicPanelUI >();
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
+	registerComponentUI<ColumnView, BasicColumnViewUI >();
 
 	/*
 	 * Unfortunately it is not possible to use a generic List because it isn't
@@ -67,7 +70,6 @@ void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
 	UIManager &m = getUIManager();
-	// TODO: impl. lazy init e.g. -> lookAndFeel->install("Colors")
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
 	m.putProperty("global.background", HtmlColors::getColor("red"));
 	m.putProperty("global.foreground", HtmlColors::getColor("white"));
@@ -94,6 +96,12 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("Knob.strokeColor", HtmlColors::getColor("black"));
 	m.putProperty("Knob.fillColor", HtmlColors::getColor("white"));
 	m.putProperty("Knob.colorHandler", HtmlColors::getColor("grey"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnView
+	m.putProperty("ColumnView.background", HtmlColors::getColor("lightblue"));
+	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
+	m.putProperty("ColumnView.numInitLists", (int)3);
+	m.putProperty("ColumnView.fixedColumnWidth", (Coordinate)120.);
+
 }
 
 }}}}} // namespace(s)
