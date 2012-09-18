@@ -7,7 +7,7 @@
 #include <cppunit/BriefTestProgressListener.h>
 #include <stdlib.h>
 
-#include "TestList.h"
+#include "sambag_com_tests.hpp"
 
 #ifdef WIN32
 #include <crtdbg.h>

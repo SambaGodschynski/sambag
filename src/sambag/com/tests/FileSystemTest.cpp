@@ -8,9 +8,6 @@
 #include <boost/algorithm/string.hpp>
 #include <string>
 
-// Registers the fixture into the 'registry'
-//CPPUNIT_TEST_SUITE_REGISTRATION( tests::ComTests );
-
 using namespace sambag;
 
 const std::string FILENAME = boost::algorithm::erase_all_copy( std::string(__FILE__), std::string("../") );

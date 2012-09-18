@@ -13,8 +13,6 @@
 #include <vector>
 #include <sstream>
 #include <string>
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestHelper );
 
 using namespace sambag;
 
