@@ -7,6 +7,5 @@ then
 fi
 
 export CLIBS=$1
-export Boost_ROOT=$CLIBS/boost
 cmake .
-make install
+make

@@ -28,12 +28,9 @@ find_package(TinyXMLX REQUIRED)
 find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
-#sqlite
-#lua
-#x11
-#win32
-#SET(Boost_DIR $ENV{CLIBS}/boost)
-find_package(Boost 1.49.0 REQUIRED COMPONENTS filesystem system thread)
+SET(BOOST_ROOT $ENV{CLIBS}/boost)
+find_package(Boost 1.49.0 REQUIRED filesystem system thread)
+
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
 include_directories(${TINYXML_INCLUDE_DIRS})
