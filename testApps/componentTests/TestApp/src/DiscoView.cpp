@@ -24,12 +24,13 @@
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
-#include <sambag/disco/components/ColumnView.hpp>
+#include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
+#include <boost/filesystem.hpp>
 #include <assert.h>
 
 enum { /*Views*/
@@ -276,6 +277,36 @@ void createWindow<LIST>() {
 	//win[LIST]->getContentPane()->add(createList());
 }
 
+void createContent(sdc::ColumnBrowser::Ptr miller) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	typedef ColumnBrowser::ContentType Content;
+	std::list<Content> l;
+	for (int i=0; i<4; ++i) {
+		l.push_back(Content("folder " + sambag::com::toString(i), Content::Folder));
+	}
+	for (int i=0; i<3; ++i) {
+		l.push_back(Content("file " + sambag::com::toString(i), Content::File));
+	}
+	miller->setCurrentPathContent(l);
+}
+
+void onMillerPathChanged(void *src,
+	const sdc::ColumnBrowserSelectionPathChanged &ev)
+{
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	ColumnBrowser::Ptr miller = ev.src;
+	typedef ColumnBrowser::ContentType Content;
+	std::list<Content> l;
+	miller->getSelectionPath(l);
+
+	BOOST_FOREACH(const Content &val, l) {
+		std::cout<<val.name<<"/";
+	}
+	std::cout<<std::endl;
+}
+
 template <>
 void createWindow<MILLER>() {
 	using namespace sambag::disco;
@@ -283,9 +314,12 @@ void createWindow<MILLER>() {
 	win[MILLER] = sdc::FramedWindow::create(win[0]);
 	win[MILLER]->setTitle("Miller Columns");
 	win[MILLER]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
-	ColumnView::Ptr miller = ColumnView::create();
+	ColumnBrowser::Ptr miller = ColumnBrowser::create();
 	win[MILLER]->getContentPane()->add(miller);
-
+	createContent(miller);
+	miller->EventSender<sdc::ColumnBrowserSelectionPathChanged>::addEventListener(
+		&onMillerPathChanged
+	);
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

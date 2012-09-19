@@ -33,6 +33,7 @@
 #include <sambag/disco/components/Knob.hpp>
 #include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/ColumnView.hpp>
+#include <sambag/disco/components/ColumnBrowser.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -56,7 +57,6 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Viewport, BasicPanelUI >();
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
-	registerComponentUI<ColumnView, BasicColumnViewUI >();
 
 	/*
 	 * Unfortunately it is not possible to use a generic List because it isn't
@@ -64,6 +64,11 @@ void BasicLookAndFeel::installComponents() {
 	 * So every specific list type has to be registered manually.
 	 */
 	registerComponentUI<StringList, BasicListUI<StringList> >();
+	typedef ColumnView<StringList> StringListColumn;
+	registerComponentUI<StringListColumn, BasicColumnViewUI<StringListColumn> >();
+	registerComponentUI<ColumnBrowser::ListType, BasicListUI<ColumnBrowser::ListType> >();
+	registerComponentUI<ColumnBrowser::ColumnViewClass, BasicColumnViewUI<ColumnBrowser::ColumnViewClass> >();
+
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
@@ -99,8 +104,9 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnView
 	m.putProperty("ColumnView.background", HtmlColors::getColor("lightblue"));
 	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
-	m.putProperty("ColumnView.numInitLists", (int)3);
 	m.putProperty("ColumnView.fixedColumnWidth", (Coordinate)120.);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
+	m.putProperty("ColumnBrowser.numInitLists", (int)4);
 
 }
 

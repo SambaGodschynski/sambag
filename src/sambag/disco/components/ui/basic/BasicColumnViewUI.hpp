@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace ui { namespace basic {
@@ -18,6 +19,7 @@ namespace ui { namespace basic {
 /** 
   * @class BasicColumnViewUI.
   */
+template <class ViewType>
 class BasicColumnViewUI : public AComponentUI {
 //=============================================================================
 public:
@@ -47,6 +49,34 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void draw(IDrawContext::Ptr cn, AComponentPtr c);
 }; // BasicColumnViewUI
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+template <class VT>
+BasicColumnViewUI<VT>::BasicColumnViewUI() {
+}
+//-----------------------------------------------------------------------------
+template <class VT>
+void BasicColumnViewUI<VT>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+	/*cn->setFillColor(c->getBackground());
+	cn->rect(cn->clipExtends());
+	cn->fill();*/
+}
+//-----------------------------------------------------------------------------
+template <class VT>
+void BasicColumnViewUI<VT>::installDefaults(AComponentPtr c) {
+	UIManager &m = getUIManager();
+	ColorRGBA bg(0,0,0);
+	ColorRGBA fg(0,0,0);
+	m.getProperty("ColumnView.background", bg);
+	m.getProperty("ColumnView.foreground", fg);
+	c->setBackground(bg);
+	c->setForeground(fg);
+}
+//-----------------------------------------------------------------------------
+template <class VT>
+void BasicColumnViewUI<VT>::installUI(AComponentPtr c) {
+	installDefaults(c);
+}
 }}}}} // namespace(s)
 
 #endif /* SAMBAG_BASICCOLUMNVIEWUI_H */
