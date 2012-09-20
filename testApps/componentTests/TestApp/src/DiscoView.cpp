@@ -294,7 +294,7 @@ void createContent(sdc::ColumnBrowser::Ptr miller) {
 	} //for
 	miller->setCurrentPathContent(l);
 }
-
+/*
 void onMillerPathChanged(void *src,
 	const sdc::ColumnBrowserSelectionPathChanged &ev)
 {
@@ -310,7 +310,7 @@ void onMillerPathChanged(void *src,
 	}
 	std::cout<<std::endl;
 }
-
+*/
 template <>
 void createWindow<MILLER>() {
 	using namespace sambag::disco;
@@ -321,9 +321,9 @@ void createWindow<MILLER>() {
 	ColumnBrowser::Ptr miller = ColumnBrowser::create();
 	win[MILLER]->getContentPane()->add(miller);
 	createContent(miller);
-	miller->EventSender<sdc::ColumnBrowserSelectionPathChanged>::addEventListener(
+	/*miller->EventSender<sdc::ColumnBrowserSelectionPathChanged>::addEventListener(
 		&onMillerPathChanged
-	);
+	);*/
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

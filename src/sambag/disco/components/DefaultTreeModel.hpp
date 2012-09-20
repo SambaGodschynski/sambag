@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
+#include <boost/foreach.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -72,6 +73,12 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	typedef Vertex Node;
+private:
+	//-------------------------------------------------------------------------
+	template <class VertexContainer, class EdgeContainer>
+	void removeNodeImpl(Node node, VertexContainer &vertices,
+			EdgeContainer &edges);
+public:
 	//-------------------------------------------------------------------------
 	static const NodeDataType NULL_NODE_DATA;
 	//-------------------------------------------------------------------------
@@ -109,6 +116,10 @@ public:
 	 */
 	Node addNode(Node parent, const NodeDataType &data);
 	//-------------------------------------------------------------------------
+	/**
+	 * removes node and it's children
+	 * @param node
+	 */
 	void removeNode(Node node);
 	//-------------------------------------------------------------------------
 	/**
@@ -117,6 +128,10 @@ public:
 	 * @return
 	 */
 	Node getParent(Node node) const;
+	//-------------------------------------------------------------------------
+	size_t getNumChildren(Node node) const {
+		return boost::out_degree(node, tree);
+	}
 	//-------------------------------------------------------------------------
 	/**
 	 *
@@ -166,28 +181,42 @@ typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
 	return u;
 }
 //-----------------------------------------------------------------------------
-namespace {
-struct BFSVisitor : public boost::bfs_visitor<> {
-	template <class Edge, class Graph>
-	void back_edge(Edge, Graph&) const {}
-	template <class Vertex, class Graph>
-	void discover_vertex(const Vertex &v, Graph &g) {}
-	template <class Vertex, class Graph>
-	void finish_vertex(const Vertex &v, Graph &g) {}
-	template <class Vertex, class Graph>
-	void initialize_vertex(const Vertex &v, Graph&) {}
-};
-} // namespace
+template <class NT>
+template <class VertexContainer, class EdgeContainer>
+void DefaultTreeModel<NT>::removeNodeImpl(DefaultTreeModel<NT>::Node node,
+		VertexContainer &vertices, EdgeContainer &edges)
+{
+	// remove children
+	AdjacencyIterator it, end;
+	boost::tie(it, end) = boost::adjacent_vertices(node, tree);
+	for (; it!=end; ++it) {
+		removeNodeImpl(*it, vertices, edges);
+	}
+	// remove in-edge(s)
+	InEdgeIterator iit, ie;
+	boost::tie(iit,ie) = boost::in_edges(node, tree);
+	for ( ; iit!=ie; ++iit) {
+		edges.push_back(*iit);
+	}
+	vertices.push_back(node);
+}
+//-----------------------------------------------------------------------------
 template <class NT>
 void DefaultTreeModel<NT>::removeNode(
 		DefaultTreeModel<NT>::Node node)
 {
-	boost::breadth_first_search(
-			tree,
-			node,
-			boost::visitor(BFSVisitor())
-	);
-
+	if (node==root)
+		return;
+	// first collect elements to remove, then remove.
+	std::list<Node> nodeList;
+	std::list<Edge> edgeList;
+	removeNodeImpl(node, nodeList, edgeList);
+	BOOST_FOREACH(Edge edge, edgeList) {
+		boost::remove_edge(edge, tree);
+	}
+	BOOST_FOREACH(Node node, nodeList) {
+		boost::remove_vertex(node, tree);
+	}
 }
 //-----------------------------------------------------------------------------
 template <class NT>

@@ -9,7 +9,7 @@
 #include <loki/Singleton.h>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
-
+int __SAMBAG_RESET_STAMP__ = 0;
 //=============================================================================
 //  Class UIManager
 //=============================================================================

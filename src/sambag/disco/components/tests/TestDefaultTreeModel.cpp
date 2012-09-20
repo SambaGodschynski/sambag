@@ -33,6 +33,15 @@ void TestDefaultTreeModel::testConstructor() {
 }
 //-----------------------------------------------------------------------------
 void TestDefaultTreeModel::testAddRemove() {
+	// Root
+	//  +
+	//  +--------folder1
+	//  +          +
+	//  +          +------folder2
+	//  +          +        +
+	//  +-file1    +        +-file1
+	//             +-file1
+	//
 	using namespace sambag::disco::components;
 	typedef DefaultTreeModel<std::string> Tree;
 	Tree tree;
@@ -42,6 +51,7 @@ void TestDefaultTreeModel::testAddRemove() {
 	Tree::Node folder2 = tree.addNode(folder1, "folder2");
 	tree.addNode(folder2, "file1");
 	CPPUNIT_ASSERT_EQUAL((size_t)6, tree.size());
+	CPPUNIT_ASSERT_EQUAL((size_t)2, tree.getNumChildren(tree.getRootNode()));
 	std::vector<Tree::Node> nl;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<root
 	tree.getChildren(tree.getRootNode(), nl);
@@ -61,5 +71,10 @@ void TestDefaultTreeModel::testAddRemove() {
 	CPPUNIT_ASSERT_EQUAL(tree.getNodeData(nl[0]), std::string("file1"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<remove folder1
 	tree.removeNode(folder1);
+	CPPUNIT_ASSERT_EQUAL((size_t)2, tree.size());
+	nl.clear();
+	tree.getChildren(tree.getRootNode(), nl);
+	CPPUNIT_ASSERT_EQUAL((size_t)1, nl.size());
+	CPPUNIT_ASSERT_EQUAL(tree.getNodeData(nl[0]), std::string("file1"));
 }
 } //namespace
