@@ -280,14 +280,18 @@ void createWindow<LIST>() {
 void createContent(sdc::ColumnBrowser::Ptr miller) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
+	using namespace boost::filesystem;
 	typedef ColumnBrowser::ContentType Content;
 	std::list<Content> l;
-	for (int i=0; i<4; ++i) {
-		l.push_back(Content("folder " + sambag::com::toString(i), Content::Folder));
-	}
-	for (int i=0; i<3; ++i) {
-		l.push_back(Content("file " + sambag::com::toString(i), Content::File));
-	}
+	directory_iterator end_it;
+	directory_iterator it(".");
+	for ( ; it!=end_it; ++it ) {
+		if ( is_directory ( *it ) ) {
+			l.push_back(Content(it->path().filename().string(), Content::Folder));
+		} else {
+			l.push_back(Content(it->path().filename().string(), Content::File));
+		}
+	} //for
 	miller->setCurrentPathContent(l);
 }
 
