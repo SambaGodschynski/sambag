@@ -12,19 +12,24 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/foreach.hpp>
+#include <sambag/com/events/Events.hpp>
 
 namespace sambag { namespace disco { namespace components {
+namespace sce = sambag::com::events;
+struct TreeModelStateChanged {};
 //=============================================================================
 /** 
   * @class DefaultTreeModel.
   * A tree model impl. using boost::bgl
   */
 template <class _NodeDataType>
-class DefaultTreeModel {
+class DefaultTreeModel : sce::EventSender<TreeModelStateChanged> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef _NodeDataType NodeDataType;
+	//-------------------------------------------------------------------------
+	typedef TreeModelStateChanged Event;
 protected:
 	//-------------------------------------------------------------------------
 	struct node_data_t { typedef boost::vertex_property_tag kind; };
@@ -70,6 +75,8 @@ protected:
 	VertexDataMap vertexDataMap;
 	//-------------------------------------------------------------------------
 	Vertex root;
+	//-------------------------------------------------------------------------
+	static const Vertex NULL_NODE;
 public:
 	//-------------------------------------------------------------------------
 	typedef Vertex Node;
@@ -151,6 +158,10 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 template <class NT>
+const typename DefaultTreeModel<NT>::Vertex
+DefaultTreeModel<NT>::NULL_NODE = INT_MAX;
+//-----------------------------------------------------------------------------
+template <class NT>
 const typename DefaultTreeModel<NT>::NodeDataType
 DefaultTreeModel<NT>::NULL_NODE_DATA;
 //-----------------------------------------------------------------------------
@@ -178,6 +189,7 @@ typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
 	const Vertex &u = add_vertex(tree);
 	vertexDataMap[u] = data;
 	boost::add_edge(parent, u, tree);
+	EventSender<Event>::notifyListeners(this, Event());
 	return u;
 }
 //-----------------------------------------------------------------------------
@@ -217,6 +229,7 @@ void DefaultTreeModel<NT>::removeNode(
 	BOOST_FOREACH(Node node, nodeList) {
 		boost::remove_vertex(node, tree);
 	}
+	EventSender<Event>::notifyListeners(this, Event());
 }
 //-----------------------------------------------------------------------------
 template <class NT>
@@ -250,6 +263,7 @@ void DefaultTreeModel<NT>::setNodeData(DefaultTreeModel<NT>::Node node,
 		const DefaultTreeModel<NT>::NodeDataType &v)
 {
 	vertexDataMap[node] = v;
+	EventSender<Event>::notifyListeners(this, Event());
 }
 }}} // namespace(s)
 

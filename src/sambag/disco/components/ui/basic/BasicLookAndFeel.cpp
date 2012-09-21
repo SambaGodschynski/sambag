@@ -31,9 +31,10 @@
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Knob.hpp>
+#include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/ColumnView.hpp>
-#include <sambag/disco/components/ColumnBrowser.hpp>
+
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -59,15 +60,19 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
 
 	/*
-	 * Unfortunately it is not possible to use a generic List because it isn't
-	 * possible to register a generic class with a LookAndFeel's registerClass.
-	 * So every specific list type has to be registered manually.
+	 * Unfortunately it is not
+	 * possible to register a generic class with a LookAndFeel.
+	 * So every specific template class type has to be registered manually.
 	 */
 	registerComponentUI<StringList, BasicListUI<StringList> >();
 	typedef ColumnView<StringList> StringListColumn;
 	registerComponentUI<StringListColumn, BasicColumnViewUI<StringListColumn> >();
-	registerComponentUI<ColumnBrowser::ListType, BasicListUI<ColumnBrowser::ListType> >();
-	registerComponentUI<ColumnBrowser::ColumnViewClass, BasicColumnViewUI<ColumnBrowser::ColumnViewClass> >();
+
+	typedef ColumnBrowser<std::string> CBrowser;
+	registerComponentUI<CBrowser::ColumnViewClass,
+		BasicColumnViewUI<CBrowser::ColumnViewClass> >();
+	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
+
 
 }
 //-----------------------------------------------------------------------------
@@ -107,6 +112,7 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ColumnView.fixedColumnWidth", (Coordinate)120.);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
 	m.putProperty("ColumnBrowser.numInitLists", (int)4);
+	m.putProperty("ColumnBrowser.fontSize", Coordinate(13.));
 
 }
 

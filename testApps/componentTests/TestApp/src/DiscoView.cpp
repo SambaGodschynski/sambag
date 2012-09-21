@@ -277,40 +277,34 @@ void createWindow<LIST>() {
 	//win[LIST]->getContentPane()->add(createList());
 }
 
-void createContent(sdc::ColumnBrowser::Ptr miller) {
+typedef sdc::ColumnBrowser<std::string> Browser;
+
+void createContent( Browser::Ptr miller) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	using namespace boost::filesystem;
-	typedef ColumnBrowser::ContentType Content;
-	std::list<Content> l;
+	typedef Browser::ModelDataType Content;
 	directory_iterator end_it;
 	directory_iterator it(".");
 	for ( ; it!=end_it; ++it ) {
+		std::string name = it->path().filename().string();
 		if ( is_directory ( *it ) ) {
-			l.push_back(Content(it->path().filename().string(), Content::Folder));
+			Browser::Node n = miller->addNode(miller->getRootNode(), name);
+			miller->addNode(n, "dummy");
+
 		} else {
-			l.push_back(Content(it->path().filename().string(), Content::File));
+			miller->addNode(miller->getRootNode(), name);
 		}
 	} //for
-	miller->setCurrentPathContent(l);
+	miller->updateLists();
 }
-/*
-void onMillerPathChanged(void *src,
-	const sdc::ColumnBrowserSelectionPathChanged &ev)
-{
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	ColumnBrowser::Ptr miller = ev.src;
-	typedef ColumnBrowser::ContentType Content;
-	std::list<Content> l;
-	miller->getSelectionPath(l);
 
-	BOOST_FOREACH(const Content &val, l) {
-		std::cout<<val.name<<"/";
-	}
-	std::cout<<std::endl;
+void onMillerPathChanged(void *src,
+	const Browser::Event &ev)
+{
+	std::cout<<ev.src->selectionPathToString()<<std::endl;
 }
-*/
+
 template <>
 void createWindow<MILLER>() {
 	using namespace sambag::disco;
@@ -318,12 +312,13 @@ void createWindow<MILLER>() {
 	win[MILLER] = sdc::FramedWindow::create(win[0]);
 	win[MILLER]->setTitle("Miller Columns");
 	win[MILLER]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
-	ColumnBrowser::Ptr miller = ColumnBrowser::create();
+
+	Browser::Ptr miller = Browser::create();
 	win[MILLER]->getContentPane()->add(miller);
 	createContent(miller);
-	/*miller->EventSender<sdc::ColumnBrowserSelectionPathChanged>::addEventListener(
+	miller->EventSender<sdc::SelectionPathChanged<Browser::Model> >::addEventListener(
 		&onMillerPathChanged
-	);*/
+	);
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 

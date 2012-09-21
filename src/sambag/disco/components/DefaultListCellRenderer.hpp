@@ -61,8 +61,8 @@ public:
 			const T &value, // value to display
 			int index, // cell index
 			bool isSelected, // is the cell selected
-			bool cellHasFocus
-	); // does the cell have focus
+			bool cellHasFocus // does the cell have focus
+	);
 	//-------------------------------------------------------------------------
 	/**
 	 * Overridden for performance reasons.

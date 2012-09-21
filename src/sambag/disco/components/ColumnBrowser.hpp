@@ -17,22 +17,28 @@ namespace sambag { namespace disco { namespace components {
 /** 
   * @class ColumnBrowser.
   */
-class ColumnBrowser : public AColumnBrowser<DefaultTreeModel<std::string> > {
+template <typename T>
+class ColumnBrowser : public AColumnBrowser<DefaultTreeModel<T> > {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef AContainer Super;
+	typedef AColumnBrowser<DefaultTreeModel<T> >  Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ColumnBrowser> Ptr;
-	//-------------------------------------------------------------------------
-	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
 	//-------------------------------------------------------------------------
-	ColumnBrowser();
+	ColumnBrowser() {
+		Super::setName("ColumnBrowser");
+	}
 private:
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(ColumnBrowser)
+	//-------------------------------------------------------------------------
+	ui::AComponentUIPtr
+	createComponentUI(ui::ALookAndFeelPtr laf) const {
+		return laf->getUI<ColumnBrowser<T> >();
+	}
 }; // ColumnBrowser
 }}} // namespace(s)
 #endif /* SAMBAG_COLUMNBROWSER_H */

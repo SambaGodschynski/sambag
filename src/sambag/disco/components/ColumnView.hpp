@@ -126,6 +126,7 @@ AContainer::Ptr ColumnView<LT>::createList() {
 	Coordinate width =
 			ui::getUIPropertyCached<FixedColumWitdh>((Coordinate)120.);
 	list->setFixedCellWidth(width);
+	list->setFont(getFont());
 
 	lists.push_back(list);
 

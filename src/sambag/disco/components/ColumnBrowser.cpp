@@ -13,13 +13,4 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class ColumnBrowser
 //=============================================================================
-//-----------------------------------------------------------------------------
-ColumnBrowser::ColumnBrowser() {
-	setName("ColumnBrowser");
-}
-//-----------------------------------------------------------------------------
-ui::AComponentUIPtr
-ColumnBrowser::createComponentUI(ui::ALookAndFeelPtr laf) const {
-	return laf->getUI<ColumnBrowser>();
-}
 }}} // namespace(s)
