@@ -5,63 +5,65 @@ import re
 
 inDir = "../src/"
 
-SAMBAG_LIB = "sambag"
-SAMBAG_TESTLIB = "sambag_tests"
+add = """
+#unit tests
+SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
+add_executable(unit_tests ${UNIT_TESTSOURCE})
+target_link_libraries (unit_tests ${SAMBAG_CLIBS})
+"""
 
 ignoreDirs = ("TestFolders", "CMakeFiles")
 
 class Walker():
     fHandler = None
-    libraryName = SAMBAG_LIB
     currDir = ""
     root = ""
+    testSource = []
+    source = []
     def __init__(self, root):
         self.root = root
+        
         for currDir, subDirs, files in os.walk(root):
                self.process(currDir, subDirs, files)
+               
+        self.fHandler = self.createCmakeFile()
+        self.writeList("SAMBAG_SOURCES", self.source)
+        self.writeList("SAMBAG_TESTSOURCES",self.testSource)
+        self.writeLine("add_library(sambag ${SAMBAG_SOURCES})")
+        self.writeLine(add)
+        self.fHandler.close()
 
+    def writeList(self, name, data):
+        self.writeLine("SET ( %s" % (name))
+        for x in data:
+            self.writeLine("\t%s" % (x))
+        self.writeLine(")")
+        
     def writeLine(self, string):
         self.fHandler.write("%s\n" % (string))
         
     def createCmakeFile(self):
-        return open(self.currDir+"/"+"CMakeLists.txt", "w")
+        return open(self.root+"/"+"CMakeLists.txt", "w")
 
-    def addLibrary(self, name, files):
-        sources = name#+"_"+"sources"
-        self.writeLine("SET (%s" % (sources))
-        for x in files:
-            self.writeLine("\t%s"%(x))
-        self.writeLine(")")
-        scmd = "${%s}" % (sources)
-        self.writeLine("add_library(%s %s)" % (name, scmd))
-
-    def addSubdir(self, name):
-        self.writeLine("add_subdirectory(%s)" % (name))
-
-    def passDir(self, x):
-        if x in ignoreDirs:
-            return False
+    def passDir(self, _dir):
+        for x in ignoreDirs:
+            if re.match(".*?%s.*" % (x), _dir):
+                return False
         return True
     
     def processSubDirs(self, subDirs):
-        for x in subDirs:
-            if self.passDir(x):
-                self.addSubdir(x)
+        pass
 
-    def getLibraryName(self):
-        res = os.path.relpath(self.currDir, self.root)
-        res = res.replace("/", "_")
-        return res
 
     def processFiles(self, files):
-        _files = []
         for x in files:
-            if not re.match(".*?\.cpp$", x):
+            full = os.path.relpath(self.currDir, self.root) +'/'+x
+            if not re.match(".*?\.cp{0,2}$", x):
                 continue
-            _files.append(x)
-        if len(_files) == 0:
-            return
-        self.addLibrary(self.getLibraryName(), _files)
+            if self.isTest(self.currDir):
+                self.testSource.append(full)
+            else:
+                self.source.append(full)
 
     def isTest(self, _dir):
         if re.match(".*?test.*", _dir):
@@ -69,19 +71,16 @@ class Walker():
         return False
     
     def process(self, currDir, subDirs, files):
+        if not self.passDir(currDir):
+            return
         self.currDir = currDir
-        self.fHandler = self.createCmakeFile()
-        #figure out whether test_lib or not
-        if self.isTest(currDir):
-            self.libraryName = SAMBAG_TESTLIB
-        else:
-            self.libraryName = SAMBAG_LIB
         #process
         self.processSubDirs(subDirs)
         self.processFiles(files)
-        self.fHandler.close()
 
 
 
-Walker(inDir)
+
+w = Walker(inDir)
+
 

@@ -1,6 +1,0 @@
-add_executable(unit_test sambag_tests.cpp)
-target_link_libraries (unit_test  ${SAMBAG_UNITTEST_LIBS})
-target_link_libraries (unit_test  ${SAMBAG_CLIBS})
-target_link_libraries (unit_test  ${SAMBAG_LIBS})
-#target_link_libraries (unit_test  sambag_com_tests)
-#install (TARGETS unit_test DESTINATION bin)

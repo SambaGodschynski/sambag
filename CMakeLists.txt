@@ -29,7 +29,7 @@ find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
 SET(BOOST_ROOT $ENV{CLIBS}/boost)
-find_package(Boost 1.49.0 REQUIRED filesystem system thread)
+find_package(Boost 1.49.0 REQUIRED filesystem system thread regex signals)
 
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
@@ -40,20 +40,16 @@ include_directories(${LUA52_INCLUDE_DIRS})
 include_directories(${SQLITE3_INCLUDE_DIRS})
 #target_link_libraries (CmTut ${CAIRO_LIBRARIES})
 
+
 set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${Boost_LIBRARIES}
 	${CPPUNIT_LIBRARY_DIRS}/${LIBCPPUNIT}
-)
-
-set (SAMBAG_LIBS ${SAMBAG_LIBS}
-	sambag_com
-)
-
-set (SAMBAG_UNITTEST_LIBS ${SAMBAG_UNITTEST_LIBS}
-	sambag_com_tests
+	${CAIRO_LIBRARY_DIRS}/${LIBCAIRO}
+	${TINYXML_LIBRARY_DIRS}/${LIBTINYXML}
+	${LUA52_LIBRARY_DIRS}/${LIBLUA52}
+	${SQLITE3_LIBRARY_DIRS}/${LIBSQLITE3}
 )
 
 add_subdirectory(src)
-add_subdirectory(testApps)
 
 
