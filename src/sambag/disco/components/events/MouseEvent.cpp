@@ -59,26 +59,24 @@ std::string MouseEvent::paramString() const {
 	std::stringstream ss;
 	ss << (getSource() ? getSource()->getName() : std::string("no source"));
 	ss <<", "<<p<<", ";
-	switch(type) {
-	case DISCO_MOUSE_CLICKED:
-		ss<<"DISCO_MOUSE_CLICKED"; break;
-	case DISCO_MOUSE_DRAGGED:
-	ss<<"DISCO_MOUSE_DRAGGED"; break;
-	case DISCO_MOUSE_ENTERED:
-		ss<<"DISCO_MOUSE_ENTERED"; break;
-	case DISCO_MOUSE_EXITED:
-		ss<<"DISCO_MOUSE_EXITED"; break;
-	case DISCO_MOUSE_MOVED:
-		ss<<"DISCO_MOUSE_MOVED"; break;
-	case DISCO_MOUSE_PRESSED:
-		ss<<"DISCO_MOUSE_PRESSED"; break;
-	case DISCO_MOUSE_RELEASED:
-		ss<<"DISCO_MOUSE_RELEASED"; break;
-	case DISCO_MOUSE_WHEEL:
-		ss<<"DISCO_MOUSE_WHEEL"; break;
-	case UNKNOWN_EVENT:
-		ss<<"UNKNOWN_EVENT"; break;
-	}
+	if ((type & DISCO_MOUSE_CLICKED) == DISCO_MOUSE_CLICKED)
+		ss<<"DISCO_MOUSE_CLICKED ";
+	if ((type & DISCO_MOUSE_DRAGGED) == DISCO_MOUSE_DRAGGED)
+		ss<<"DISCO_MOUSE_DRAGGED ";
+	if ((type & DISCO_MOUSE_ENTERED) == DISCO_MOUSE_ENTERED)
+		ss<<"DISCO_MOUSE_ENTERED ";
+	if ((type & DISCO_MOUSE_EXITED) == DISCO_MOUSE_EXITED)
+		ss<<"DISCO_MOUSE_EXITED ";
+	if ((type & DISCO_MOUSE_MOVED) == DISCO_MOUSE_MOVED)
+		ss<<"DISCO_MOUSE_MOVED ";
+	if ((type & DISCO_MOUSE_PRESSED) == DISCO_MOUSE_PRESSED)
+		ss<<"DISCO_MOUSE_PRESSED ";
+	if ((type & DISCO_MOUSE_RELEASED) == DISCO_MOUSE_RELEASED)
+		ss<<"DISCO_MOUSE_RELEASED ";
+	if ((type & DISCO_MOUSE_WHEEL) == DISCO_MOUSE_WHEEL)
+		ss<<"DISCO_MOUSE_WHEEL ";
+	if ((type & UNKNOWN_EVENT) == UNKNOWN_EVENT)
+		ss<<"UNKNOWN_EVENT ";
 	ss<<", "<<buttons;
 	return ss.str();
 }

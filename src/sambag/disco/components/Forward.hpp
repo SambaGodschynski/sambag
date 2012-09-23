@@ -34,6 +34,7 @@ namespace sambag { namespace disco { namespace components {
 	class FramedWindow; typedef boost::shared_ptr<FramedWindow> FramedWindowPtr;
 	class PopupMenu; typedef boost::shared_ptr<PopupMenu> PopupMenuPtr;
 	class MenuSelectionManager;
+	class Knob; typedef boost::shared_ptr<Knob> KnobPtr;
 namespace ui {
 	class UIManager;
 	class AComponentUI; typedef boost::shared_ptr<AComponentUI> AComponentUIPtr;
