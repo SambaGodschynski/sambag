@@ -302,7 +302,8 @@ void AColumnBrowser<TM>::onSelectionChanged(void *src,
 	ListTypePtr list = columnView->getList(listIndex);
 	Entry e = list->ListType::ListModel::get(ev.getFirstIndex());
 	int currSelPathIndex = listIndex+1; // root is on index 0
-	if ( currSelPathIndex > (int)selectionPath.size()) {
+	size_t s = selectionPath.size();
+	if ( currSelPathIndex >= (int)selectionPath.size()) {
 		// can always be one greater
 		selectionPath.push_back(e.node);
 	} else {
