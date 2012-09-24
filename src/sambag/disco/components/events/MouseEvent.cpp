@@ -59,6 +59,8 @@ std::string MouseEvent::paramString() const {
 	std::stringstream ss;
 	ss << (getSource() ? getSource()->getName() : std::string("no source"));
 	ss <<", "<<p<<", ";
+	if (type  == UNKNOWN_EVENT)
+		ss<<"UNKNOWN_EVENT ";
 	if ((type & DISCO_MOUSE_CLICKED) == DISCO_MOUSE_CLICKED)
 		ss<<"DISCO_MOUSE_CLICKED ";
 	if ((type & DISCO_MOUSE_DRAGGED) == DISCO_MOUSE_DRAGGED)
@@ -75,8 +77,6 @@ std::string MouseEvent::paramString() const {
 		ss<<"DISCO_MOUSE_RELEASED ";
 	if ((type & DISCO_MOUSE_WHEEL) == DISCO_MOUSE_WHEEL)
 		ss<<"DISCO_MOUSE_WHEEL ";
-	if ((type & UNKNOWN_EVENT) == UNKNOWN_EVENT)
-		ss<<"UNKNOWN_EVENT ";
 	ss<<", "<<buttons;
 	return ss.str();
 }

@@ -111,7 +111,7 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
 	m.putProperty("ColumnView.fixedColumnWidth", (Coordinate)120.);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
-	m.putProperty("ColumnBrowser.numInitLists", (int)4);
+	m.putProperty("ColumnBrowser.numFixedLists", (int)4);
 	m.putProperty("ColumnBrowser.fontSize", Coordinate(13.));
 
 }

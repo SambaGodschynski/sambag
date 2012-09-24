@@ -35,6 +35,9 @@ void TestDefaultTreeModel::testConstructor() {
 void TestDefaultTreeModel::testAddRemove() {
 	// Root
 	//  +
+	//  +--------folder0
+	//  +          +
+	//  +          +-file1
 	//  +--------folder1
 	//  +          +
 	//  +          +------folder2
@@ -45,11 +48,12 @@ void TestDefaultTreeModel::testAddRemove() {
 	using namespace sambag::disco::components;
 	typedef DefaultTreeModel<std::string> Tree;
 	Tree tree;
+	Tree::Node tmp;
 	Tree::Node folder1 = tree.addNode(tree.getRootNode(), "folder1");
-	tree.addNode(tree.getRootNode(), "file1");
-	tree.addNode(folder1, "file1");
+	tmp = tree.addNode(tree.getRootNode(), "file1");
+	tmp = tree.addNode(folder1, "file1");
 	Tree::Node folder2 = tree.addNode(folder1, "folder2");
-	tree.addNode(folder2, "file1");
+	tmp = tree.addNode(folder2, "file1");
 	CPPUNIT_ASSERT_EQUAL((size_t)6, tree.size());
 	CPPUNIT_ASSERT_EQUAL((size_t)2, tree.getNumChildren(tree.getRootNode()));
 	std::vector<Tree::Node> nl;

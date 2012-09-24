@@ -579,6 +579,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\AColumnBrowser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\AColumnBrowser.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\AComponent.cpp"
 						>
 					</File>
@@ -671,6 +679,22 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ColumnBrowser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ColumnBrowser.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ColumnView.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\ColumnView.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\ComponentWrapper.hpp"
 						>
 					</File>
@@ -719,6 +743,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\src\sambag\disco\components\DefaultTreeModel.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\src\sambag\disco\components\FlowLayout.cpp"
 						>
 					</File>
@@ -744,6 +772,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\src\sambag\disco\components\Graphics.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\GridLayout.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\sambag\disco\components\GridLayout.hpp"
 						>
 					</File>
 					<File
@@ -982,6 +1018,14 @@
 							</File>
 							<File
 								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicButtonUI.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicColumnViewUI.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\src\sambag\disco\components\ui\basic\BasicColumnViewUI.hpp"
 								>
 							</File>
 							<File

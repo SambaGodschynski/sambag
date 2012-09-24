@@ -24,13 +24,14 @@
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
-template <class TreeModel>
-class AColumnBrowser;
-template <class TreeModel>
-struct SelectionPathChanged {
-	typedef boost::shared_ptr<AColumnBrowser<TreeModel> > ColumnBrowserPtr;
-	ColumnBrowserPtr src;
-	SelectionPathChanged(ColumnBrowserPtr src) : src(src) {}
+class SelectionPathChanged {
+private:
+	AContainerPtr src;
+public:
+	SelectionPathChanged(AContainerPtr src) : src(src) {}
+	AContainerPtr getSource() const {
+		return src;
+	}
 };
 //=============================================================================
 // @class ColumnBrowserListCellRenderer
@@ -112,7 +113,7 @@ public:
 template <class TreeModel>
 class AColumnBrowser : public AContainer,
 	public TreeModel,
-	public sce::EventSender<SelectionPathChanged<TreeModel> >
+	public sce::EventSender<SelectionPathChanged>
 {
 //=============================================================================
 public:
@@ -121,7 +122,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AColumnBrowser<Model> Class;
 	//-------------------------------------------------------------------------
-	typedef SelectionPathChanged<TreeModel> Event;
+	typedef SelectionPathChanged Event;
 	//-------------------------------------------------------------------------
 	typedef typename Model::NodeDataType ModelDataType;
 	//-------------------------------------------------------------------------
@@ -173,11 +174,13 @@ protected:
 	//-------------------------------------------------------------------------
 	enum {ListNotFound = -2, NotEnoughLists = -1};
 	int getListIndex(const Node &node) const;
+	//-------------------------------------------------------------------------
+	Path oldPath;
 private:
 	//-------------------------------------------------------------------------
-	void updateList(Node parent, int listIndex);
+	void adjustListCount();
 	//-------------------------------------------------------------------------
-	void updateLists(const Path &path);
+	void updateList(Node parent, int listIndex);
 	//-------------------------------------------------------------------------
 	Path selectionPath;
 	//-------------------------------------------------------------------------
@@ -186,13 +189,18 @@ private:
 	typename ColumnViewClass::Ptr columnView;
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<int> currListIndex;
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<int> numFixedLists;
 public:
 	//-------------------------------------------------------------------------
-	void updateLists() {
-		updateLists(selectionPath);
+	void updateLists();
+	//-------------------------------------------------------------------------
+	std::string selectionPathToString(const std::string & seperator = "/") const{
+		return pathToString(getSelectionPath(), seperator);
 	}
 	//-------------------------------------------------------------------------
-	std::string selectionPathToString() const;
+	std::string pathToString( const Path &path, 
+		const std::string & seperator = "/" ) const;
 	//-------------------------------------------------------------------------
 	const Path & getSelectionPath() const {
 		return selectionPath;
@@ -258,24 +266,46 @@ void AColumnBrowser<TM>::init() {
 	columnView = ColumnViewClass::create();
 	selectionPath.reserve(10);
 	selectionPath.push_back(Model::getRootNode());
+	oldPath = selectionPath; 
 	Model::setNodeData(Model::getRootNode(), "root");
-	int numInitLists = 3;
-	ui::getUIManager().getProperty("AColumnBrowser.numInitLists", numInitLists);
-	for (int i=0; i<numInitLists; ++i) {
+	numFixedLists = 3;
+	ui::getUIManager().getProperty("AColumnBrowser.numFixedLists", numFixedLists);
+	for (int i=0; i<numFixedLists; ++i) {
 		addList(i);
 	}
 	add(columnView);
 }
 //-----------------------------------------------------------------------------
 template <class TM>
-void AColumnBrowser<TM>::updateList(AColumnBrowser<TM>::Node parent,
+void AColumnBrowser<TM>::adjustListCount() {
+	int numLists = (int)columnView->getNumLists();
+	int numNeededLists = (int)selectionPath.size();
+	if (!isFolder(selectionPath.back())) {
+		//last entry is no folder
+		--numNeededLists;
+	}
+	if ( numNeededLists > numLists ) { // add
+		for (int i=numLists; i<numNeededLists; ++i) {
+			addList(i);
+			columnView->invalidate();
+			columnView->validate();
+		}
+	}
+}
+//-----------------------------------------------------------------------------
+template <class TM>
+void AColumnBrowser<TM>::updateList(typename AColumnBrowser<TM>::Node parent,
 		int listIndex)
 {
 	ListTypePtr list = columnView->getList(listIndex);
+	if (!list)
+		return;
 	list->clear();
 	int num = Model::getNumChildren(parent);
-	if (num==0)
+	if (num==0) {
+		list->redraw();
 		return;
+	}
 	std::vector<Node> nodes;
 	nodes.reserve(num);
 	Model::getChildren(parent, nodes);
@@ -287,12 +317,23 @@ void AColumnBrowser<TM>::updateList(AColumnBrowser<TM>::Node parent,
 }
 //-----------------------------------------------------------------------------
 template <class TM>
-void AColumnBrowser<TM>::updateLists(const AColumnBrowser<TM>::Path &path)
+void AColumnBrowser<TM>::updateLists()
 {
-	// root
-	for (int i=0; i<(int)path.size(); ++i) {
-		updateList(path[i], i);
+	adjustListCount();
+	if (oldPath.size() > selectionPath.size()) {
+		for (int i = oldPath.size(); i>(int)selectionPath.size(); --i) {
+			ListTypePtr list = columnView->getList(i-1);
+			if (!list)
+				continue;
+			list->clear();
+			list->redraw();
+		}
 	}
+	// root
+	for (int i=0; i<(int)selectionPath.size(); ++i) {
+		updateList(selectionPath[i], i);
+	}
+	oldPath = selectionPath;
 }
 //-----------------------------------------------------------------------------
 template <class TM>
@@ -300,40 +341,45 @@ void AColumnBrowser<TM>::onSelectionChanged(void *src,
 	const ListSelectionEvent &ev, int listIndex)
 {
 	ListTypePtr list = columnView->getList(listIndex);
-	Entry e = list->ListType::ListModel::get(ev.getFirstIndex());
+	const Entry *e = list->getSelectedValue();
+	if  (!e)
+		return;
 	int currSelPathIndex = listIndex+1; // root is on index 0
 	size_t s = selectionPath.size();
 	if ( currSelPathIndex >= (int)selectionPath.size()) {
-		// can always be one greater
-		selectionPath.push_back(e.node);
+		// currSelPathIndex can always be one greater
+		selectionPath.push_back(e->node);
 	} else {
-		while (currSelPathIndex < (int)selectionPath.size()) {
+		while (currSelPathIndex < (int)selectionPath.size()-1) {
 			typename Path::iterator it = selectionPath.end() - 1;
 			selectionPath.erase(it);
 		}
-		selectionPath[currSelPathIndex] = e.node;
+		selectionPath[currSelPathIndex] = e->node;
 	}
 
 	// if listIndex<numLists-1 remove all lists > listIndex
 
 	// update
-	updateLists(selectionPath);
+	updateLists();
 
 	EventSender<Event>::notifyListeners (
-		this, SelectionPathChanged<TM>(getPtr())
+		this, Event(getPtr())
 	);
 }
 //-----------------------------------------------------------------------------
 template <class TM>
-std::string AColumnBrowser<TM>::selectionPathToString() const {
-	if (selectionPath.empty())
-		return "{}";
+std::string 
+AColumnBrowser<TM>::pathToString(const typename AColumnBrowser<TM>::Path &path,
+	const std::string & seperator) const
+{
+	if (path.size()<=1) // only root inside
+		return "";
 	std::stringstream ss;
-	ss<<Model::getNodeData(selectionPath[0]);
-	for (int i=1; i<(int)selectionPath.size(); ++i) {
-		ss<<"->"<<Model::getNodeData(selectionPath[i]);
+	ss<<Model::getNodeData(path[1]);
+	for (int i=2; i<(int)path.size(); ++i) {
+		ss<<seperator<<Model::getNodeData(path[i]);
 	}
-	return "{" + ss.str() + "}";
+	return ss.str();
 }
 }}} // namespace(s)
 #endif /* SAMBAG_ACOLUMNBROWSER_H */

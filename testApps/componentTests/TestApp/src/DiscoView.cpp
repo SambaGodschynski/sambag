@@ -23,6 +23,7 @@
 #include <sambag/disco/components/MenuSelectionManager.hpp>
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
+#include <sambag/disco/components/GridLayout.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
@@ -245,12 +246,13 @@ sdc::AContainerPtr createList() {
 	using namespace sambag::disco::components;
 
 	Panel::Ptr panel = Panel::create();
+	panel->setLayout(GridLayout::create(2,0));
 	StringList::Ptr list = StringList::create();
 	ScrollPane::Ptr scroll = ScrollPane::create(list);
 	list->setFont(list->getFont().setSize(14));
 
 	std::string max = "";
-	for (int i=0; i<100; ++i) {
+	for (int i=0; i<10000; ++i) {
 		std::stringstream ss;
 		ss<<"nomber "<<i;
 		std::string str = ss.str();
@@ -279,13 +281,13 @@ void createWindow<LIST>() {
 
 typedef sdc::ColumnBrowser<std::string> Browser;
 
-void createContent( Browser::Ptr miller) {
+void createContent(Browser::Ptr miller) {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	using namespace boost::filesystem;
 	typedef Browser::ModelDataType Content;
 	directory_iterator end_it;
-	directory_iterator it(".");
+	directory_iterator it("/");
 	for ( ; it!=end_it; ++it ) {
 		std::string name = it->path().filename().string();
 		if ( is_directory ( *it ) ) {
@@ -299,10 +301,39 @@ void createContent( Browser::Ptr miller) {
 	miller->updateLists();
 }
 
+void updateContent(Browser::Ptr miller, const Browser::Path &path) {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	using namespace boost::filesystem;
+	if ( !miller->isFolder(path.back()) ) {
+		return;
+	}
+	std::string loc = "/" + miller->pathToString(path); 
+	if (!exists(loc))
+		return;
+	directory_iterator end_it;
+	directory_iterator it(loc);
+	Browser::Node start = path.back();
+	for ( ; it!=end_it; ++it ) {
+		std::string name = it->path().filename().string();
+		if ( is_directory ( *it ) ) {
+			Browser::Node n = miller->addNode(start, name);
+			miller->addNode(n, "dummy");
+
+		} else {
+			miller->addNode(start, name);
+		}
+	} //for
+	miller->updateLists();	
+}
+
 void onMillerPathChanged(void *src,
 	const Browser::Event &ev)
 {
-	std::cout<<ev.src->selectionPathToString()<<std::endl;
+	Browser::Ptr browser = boost::shared_dynamic_cast<Browser>(ev.getSource());
+	SAMBAG_ASSERT(browser);
+	std::cout<<browser->selectionPathToString()<<std::endl;
+	updateContent(browser, browser->getSelectionPath());
 }
 
 template <>
@@ -315,8 +346,14 @@ void createWindow<MILLER>() {
 
 	Browser::Ptr miller = Browser::create();
 	win[MILLER]->getContentPane()->add(miller);
+	Browser::Node dummy = miller->addNode(miller->getRootNode(), "Dummy Folder");
+	Browser::Node dummyContent = miller->addNode(dummy, "Dummy Content");
+	miller->addNode(dummy, "Dummy File");
+	miller->addNode(dummyContent, "Dummy File2");
+	Browser::Node dummyFolder = miller->addNode(dummyContent, "Dummy Folder");
+	miller->addNode(dummyFolder, "Dummy File3");
 	createContent(miller);
-	miller->EventSender<sdc::SelectionPathChanged<Browser::Model> >::addEventListener(
+	miller->EventSender<Browser::Event>::addEventListener(
 		&onMillerPathChanged
 	);
 }
@@ -679,7 +716,11 @@ int main() {
 		EventSender<MenuSelectionManagerChanged>::addEventListener
 			( &pathChanged );
 
-		sdc::Window::startMainLoop();
+		try {
+			sdc::Window::startMainLoop();
+		} catch(const std::runtime_error &ex) {
+			std::cout<<ex.what()<<std::endl;
+		}
 	}
 	win[0].reset();
 	std::cout<<"bye"<<std::endl;

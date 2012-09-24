@@ -13,6 +13,7 @@
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/foreach.hpp>
 #include <sambag/com/events/Events.hpp>
+#include <sambag/com/ArithmeticWrapper.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -82,9 +83,14 @@ public:
 	typedef Vertex Node;
 private:
 	//-------------------------------------------------------------------------
-	template <class VertexContainer, class EdgeContainer>
-	void removeNodeImpl(Node node, VertexContainer &vertices,
-			EdgeContainer &edges);
+	void removeNodeImpl(Node node);
+	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated
+	 */
+	size_t sizeImpl(Node node) const;
+	//-------------------------------------------------------------------------
+	sambag::com::ArithmeticWrapper<int, 1> numNodes;
 public:
 	//-------------------------------------------------------------------------
 	static const NodeDataType NULL_NODE_DATA;
@@ -125,6 +131,11 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * removes node and it's children
+	 * @note: this method removes all nodes connections only. So all concerning
+	 * nodes still exists (dead) in tree. This is because bgl::remove_vertex 
+	 * function makes DefaultTreeModel::Node objects invalid.
+	 * If this getting a problem the Node type has to getting a unique id with
+	 * extra mapping.
 	 * @param node
 	 */
 	void removeNode(Node node);
@@ -151,9 +162,7 @@ public:
 	/**
 	 * @return number of nodes inclusive rootnode.
 	 */
-	size_t size() const {
-		return boost::num_vertices(tree);
-	}
+	size_t size() const;
 }; // DefaultTreeModel
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -174,7 +183,7 @@ DefaultTreeModel<NT>::DefaultTreeModel() {
 //-----------------------------------------------------------------------------
 template <class NT>
 DefaultTreeModel<NT>::DefaultTreeModel(
-		const DefaultTreeModel<NT>::NodeDataType &rootData)
+		const typename DefaultTreeModel<NT>::NodeDataType &rootData)
 {
 	vertexDataMap = get( node_data_t(), tree );
 	root = add_vertex(tree);
@@ -182,66 +191,73 @@ DefaultTreeModel<NT>::DefaultTreeModel(
 }
 //-----------------------------------------------------------------------------
 template <class NT>
+size_t DefaultTreeModel<NT>::sizeImpl(typename DefaultTreeModel<NT>::Node node)
+const
+{
+	// remove children
+	AdjacencyIterator it, end;
+	boost::tie(it, end) = boost::adjacent_vertices(node, tree);
+	size_t res = 1;
+	for (; it!=end; ++it) {
+		res += sizeImpl(*it);
+	} 
+	return res;
+}
+//-----------------------------------------------------------------------------
+template <class NT>
+size_t DefaultTreeModel<NT>::size() const
+{
+	return numNodes;
+}
+//-----------------------------------------------------------------------------
+template <class NT>
 typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
-		DefaultTreeModel<NT>::Node parent,
-		const DefaultTreeModel<NT>::NodeDataType &data)
+		typename DefaultTreeModel<NT>::Node parent,
+		const typename DefaultTreeModel<NT>::NodeDataType &data)
 {
 	const Vertex &u = add_vertex(tree);
 	vertexDataMap[u] = data;
 	boost::add_edge(parent, u, tree);
 	EventSender<Event>::notifyListeners(this, Event());
-	return u;
+	numNodes = numNodes + 1;
+	return u; 
 }
 //-----------------------------------------------------------------------------
 template <class NT>
-template <class VertexContainer, class EdgeContainer>
-void DefaultTreeModel<NT>::removeNodeImpl(DefaultTreeModel<NT>::Node node,
-		VertexContainer &vertices, EdgeContainer &edges)
+void DefaultTreeModel<NT>::removeNodeImpl(typename DefaultTreeModel<NT>::Node node)
 {
 	// remove children
 	AdjacencyIterator it, end;
 	boost::tie(it, end) = boost::adjacent_vertices(node, tree);
-	for (; it!=end; ++it) {
-		removeNodeImpl(*it, vertices, edges);
+	
+	while (it!=end) {
+		removeNodeImpl(*it);
+		boost::tie(it, end) = boost::adjacent_vertices(node, tree);
 	}
-	// remove in-edge(s)
-	InEdgeIterator iit, ie;
-	boost::tie(iit,ie) = boost::in_edges(node, tree);
-	for ( ; iit!=ie; ++iit) {
-		edges.push_back(*iit);
-	}
-	vertices.push_back(node);
+	boost::clear_vertex(node, tree);
+	numNodes = numNodes - 1;
 }
 //-----------------------------------------------------------------------------
 template <class NT>
 void DefaultTreeModel<NT>::removeNode(
-		DefaultTreeModel<NT>::Node node)
+		typename DefaultTreeModel<NT>::Node node)
 {
 	if (node==root)
 		return;
-	// first collect elements to remove, then remove.
-	std::list<Node> nodeList;
-	std::list<Edge> edgeList;
-	removeNodeImpl(node, nodeList, edgeList);
-	BOOST_FOREACH(Edge edge, edgeList) {
-		boost::remove_edge(edge, tree);
-	}
-	BOOST_FOREACH(Node node, nodeList) {
-		boost::remove_vertex(node, tree);
-	}
+	removeNodeImpl(node);
 	EventSender<Event>::notifyListeners(this, Event());
 }
 //-----------------------------------------------------------------------------
 template <class NT>
 typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::
-getParent(DefaultTreeModel<NT>::Node node) const
+getParent(typename DefaultTreeModel<NT>::Node node) const
 {
 }
 //-----------------------------------------------------------------------------
 template <class NT>
 template <class NodeContainer>
 void DefaultTreeModel<NT>::getChildren(
-		DefaultTreeModel<NT>::Node node,
+		typename DefaultTreeModel<NT>::Node node,
 		NodeContainer &c) const
 {
 	AdjacencyIterator it, end;
@@ -253,14 +269,14 @@ void DefaultTreeModel<NT>::getChildren(
 //-----------------------------------------------------------------------------
 template <class NT>
 const typename DefaultTreeModel<NT>::NodeDataType & DefaultTreeModel<NT>::
-getNodeData(DefaultTreeModel<NT>::Node node) const
+getNodeData(typename DefaultTreeModel<NT>::Node node) const
 {
 	return vertexDataMap[node];
 }
 //-----------------------------------------------------------------------------
 template <class NT>
-void DefaultTreeModel<NT>::setNodeData(DefaultTreeModel<NT>::Node node,
-		const DefaultTreeModel<NT>::NodeDataType &v)
+void DefaultTreeModel<NT>::setNodeData(typename DefaultTreeModel<NT>::Node node,
+		const typename DefaultTreeModel<NT>::NodeDataType &v)
 {
 	vertexDataMap[node] = v;
 	EventSender<Event>::notifyListeners(this, Event());

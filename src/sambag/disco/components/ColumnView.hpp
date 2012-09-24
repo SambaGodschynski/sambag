@@ -78,7 +78,10 @@ public:
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
 	//-------------------------------------------------------------------------
 	ListTypePtr getList(size_t index) const {
-		return lists.at(index);
+		if (index >= lists.size()) {
+			return ListTypePtr();
+		}
+		return lists[index];
 	}
 	//-------------------------------------------------------------------------
 	size_t getNumLists() const {
