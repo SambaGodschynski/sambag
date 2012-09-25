@@ -289,8 +289,7 @@ void copyMap(const Map &src, Map &dst) {
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions() {
-	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
-
+/*	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
 		ComponentMap tmp;
 		// tmp = tmpDirtyComponents;
 		copyMap(tmpDirtyComponents, tmp);
@@ -300,7 +299,8 @@ void RedrawManager::drawDirtyRegions() {
 		copyMap(tmp, dirtyComponents) ;
 		dirtyComponents.clear();
 	SAMBAG_END_SYNCHRONIZED
-	drawDirtyRegions(tmpDirtyComponents);
+	drawDirtyRegions(tmpDirtyComponents);*/
+	drawDirtyRegions(dirtyComponents);
 }
 //-------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
@@ -345,6 +345,7 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 			if (cn) {
 				cn->save();
 				g.setClip(rect);
+				//std::cout<<dirtyComponent->toString()<<std::endl;
 				dirtyComponent->draw(g.getPtr());
 				cn->restore();
 			}
