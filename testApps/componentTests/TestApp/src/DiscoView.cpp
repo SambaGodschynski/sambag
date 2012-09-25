@@ -245,8 +245,6 @@ sdc::AContainerPtr createList() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 
-	Panel::Ptr panel = Panel::create();
-	panel->setLayout(GridLayout::create(2,0));
 	StringList::Ptr list = StringList::create();
 	ScrollPane::Ptr scroll = ScrollPane::create(list);
 	list->setFont(list->getFont().setSize(14));
@@ -260,9 +258,9 @@ sdc::AContainerPtr createList() {
 				max = str;
 		list->addElement(str);
 	}
-	list->setPrototypeCellValue(max);
-	panel->add(scroll);
-	return panel;
+	//list->setFixedCellWidth(400.);
+	//list->setPrototypeCellValue("0123456789012345");
+	return scroll;
 }
 
 template <>
@@ -273,10 +271,9 @@ void createWindow<LIST>() {
 	win[LIST]->setTitle("L.I.S.T.");
 	win[LIST]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
 	Panel::Ptr pane = Panel::create();
-	pane->add(createList());
+	pane->setLayout(GridLayout::create(0,1));
 	pane->add(createList());
 	win[LIST]->getContentPane()->add(pane);
-	//win[LIST]->getContentPane()->add(createList());
 }
 
 typedef sdc::ColumnBrowser<std::string> Browser;
@@ -530,7 +527,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	std::cout<<ev.toString()<<std::endl;
+	//std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {
@@ -630,7 +627,7 @@ void timedCallbackOnce(void *src, const sdc::TimerEvent &ev) {
 }
 
 void initTimer() {
-	using namespace sambag::disco;
+/*	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	timerInf = Timer::create(1000);
 	timerInf->setNumRepetitions(-1);
@@ -644,7 +641,7 @@ void initTimer() {
 
 	Timer::Ptr timer3 = Timer::create(500);
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
-	timer3->start();
+	timer3->start();*/
 }
 
 int main() {

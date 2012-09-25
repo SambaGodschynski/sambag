@@ -21,6 +21,7 @@
 #include "DefaultListCellRenderer.hpp"
 #include "DefaultListModel.hpp"
 #include "DefaultListSelectionModel.hpp"
+#include "Forward.hpp"
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -287,9 +288,9 @@ void AColumnBrowser<TM>::adjustListCount() {
 	if ( numNeededLists > numLists ) { // add
 		for (int i=numLists; i<numNeededLists; ++i) {
 			addList(i);
-			columnView->invalidate();
-			columnView->validate();
 		}
+		columnView->invalidate();
+		columnView->validate();
 	}
 }
 //-----------------------------------------------------------------------------
@@ -303,7 +304,9 @@ void AColumnBrowser<TM>::updateList(typename AColumnBrowser<TM>::Node parent,
 	list->clear();
 	int num = Model::getNumChildren(parent);
 	if (num==0) {
-		list->redraw();
+		list->getParent()->invalidate();
+		list->getParent()->validate();
+		list->getParent()->redraw();
 		return;
 	}
 	std::vector<Node> nodes;
@@ -313,7 +316,9 @@ void AColumnBrowser<TM>::updateList(typename AColumnBrowser<TM>::Node parent,
 		const ModelDataType &data = Model::getNodeData(nodes[i]);
 		list->addElement(Entry(this, data, nodes[i]));
 	}
-	list->redraw();
+	list->getParent()->invalidate();
+	list->getParent()->validate();
+	list->getParent()->redraw();
 }
 //-----------------------------------------------------------------------------
 template <class TM>
@@ -332,7 +337,7 @@ void AColumnBrowser<TM>::updateLists()
 	// root
 	for (int i=0; i<(int)selectionPath.size(); ++i) {
 		updateList(selectionPath[i], i);
-	}
+	}	
 	oldPath = selectionPath;
 }
 //-----------------------------------------------------------------------------
@@ -361,6 +366,15 @@ void AColumnBrowser<TM>::onSelectionChanged(void *src,
 
 	// update
 	updateLists();
+	
+	/*
+	// scroll to next list
+	ScrollPane::Ptr scp = columnView->getScrollPane();
+	ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
+	Point2D vp = scp->getViewport()->getViewPosition();
+	Coordinate fxW = ui::getUIPropertyCached<FixedCellWidth>(Coordinate(120.));
+	scp->getViewport()->setViewPosition(Point2D(fxW, vp.y()));
+	*/
 
 	EventSender<Event>::notifyListeners (
 		this, Event(getPtr())

@@ -417,7 +417,14 @@ void AList<T, CR, DM, SM>::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 	Super::installLookAndFeel(laf);
 	if (cellRenderer) {
 		cellRenderer->installLookAndFeel(laf);
+		Coordinate oldW = fixedCellWidth;
+		Coordinate oldH = fixedCellHeight;
 		updateFixedCellSize();
+		// restore previous values if set
+		if (oldW > 0.)
+			fixedCellWidth = oldW;
+		if (oldH > 0.)
+			fixedCellHeight = oldH;
 	}
 }
 //-----------------------------------------------------------------------------

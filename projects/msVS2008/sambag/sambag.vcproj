@@ -536,6 +536,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\GlyphCache.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\GlyphCache.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\IDiscoFactory.cpp"
 					>
 				</File>

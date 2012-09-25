@@ -54,7 +54,7 @@ private:
 	//-------------------------------------------------------------------------
 	void adjustLayout();
 	//-------------------------------------------------------------------------
-	ScrollPane::Ptr listScrollPane;
+	ScrollPane::Ptr listsScrollPane;
 	//-------------------------------------------------------------------------
 	GridLayout::Ptr listPaneLayout;
 	//-------------------------------------------------------------------------
@@ -70,10 +70,12 @@ private:
 	//-------------------------------------------------------------------------
 	void initView();
 	//-------------------------------------------------------------------------
-	ScrollPane::Ptr listView;
-	//-------------------------------------------------------------------------
 	Lists lists;
 public:
+	//-------------------------------------------------------------------------
+	ScrollPane::Ptr getScrollPane() const {
+		return listsScrollPane;
+	}
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
 	//-------------------------------------------------------------------------
@@ -188,8 +190,8 @@ template <class LT>
 void ColumnView<LT>::initView() {
 	initMainPane();
 	listPane = createListPane();
-	listScrollPane = createListScrollPane(listPane);
-	getPtr()->add(listScrollPane);
+	listsScrollPane = createListScrollPane(listPane);
+	getPtr()->add(listsScrollPane);
 }
 }}} // namespace(s)
 

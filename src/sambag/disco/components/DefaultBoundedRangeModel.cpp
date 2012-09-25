@@ -113,7 +113,7 @@ void DefaultBoundedRangeModel::setValue(const Coordinate & n) {
 
 	Coordinate newValue = std::max(nv, min);
 	if (newValue + extent > max) {
-		newValue = max - extent;
+		//newValue = max - extent;
 	}
 	setRangeProperties(newValue, extent, min, max, isAdjusting);
 }

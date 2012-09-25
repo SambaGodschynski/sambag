@@ -289,6 +289,10 @@ void copyMap(const Map &src, Map &dst) {
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions() {
+	// Thread saftey deactivated because:
+	//  - perfomance reasons
+	//  - bug: after resize window, rootcontainer remains as dirty ->
+	//         every component redraw winds up in a rootcontainer redraw.
 /*	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
 		ComponentMap tmp;
 		// tmp = tmpDirtyComponents;
