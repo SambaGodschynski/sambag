@@ -525,6 +525,13 @@ void BasicScrollbarUI<M>::drawThumb(IDrawContext::Ptr cn,
 	if (!scrollbar->isEnabled()) {
 		return;
 	}
+	Coordinate min = scrollbar->getMinimum();
+	Coordinate extent = scrollbar->getVisibleAmount();
+	Coordinate range = scrollbar->getMaximum() - min;
+
+	if (extent>=range)
+		return;
+
 	Graphics g(cn);
 
 	Coordinate w = thumbBounds.width();

@@ -1076,6 +1076,7 @@
 									<listOptionValue builtIn="false" value="boost_thread"/>
 									<listOptionValue builtIn="false" value="ticppd"/>
 									<listOptionValue builtIn="false" value="cppunit"/>
+									<listOptionValue builtIn="false" value="boost_locale"/>
 									<listOptionValue builtIn="false" value="boost_filesystem"/>
 									<listOptionValue builtIn="false" value="boost_signals"/>
 								</option>

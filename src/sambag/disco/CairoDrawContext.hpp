@@ -19,13 +19,16 @@
 #include <boost/scoped_array.hpp>
 
 
-#define DISCO_CONTEXT_CHECK_ERROR 1
+extern bool isFatalCairoStatus(cairo_status_t);
 
+#define DISCO_CONTEXT_CHECK_ERROR 1
 #ifdef DISCO_CONTEXT_CHECK_ERROR
 #define SAMBAG_CHECK_CONTEXT_STATE(cn)		  \
 	cairo_status_t status = cairo_status(cn); \
-	if (status!=CAIRO_STATUS_SUCCESS)	      \
-		throw std::runtime_error(cairo_status_to_string(status));
+	if (status!=CAIRO_STATUS_SUCCESS)	{     \
+		if (isFatalCairoStatus(status))		  \
+			throw std::runtime_error(cairo_status_to_string(status)); \
+	}
 #else
 #define SAMBAG_CHECK_CONTEXT_STATE(cn)
 #endif

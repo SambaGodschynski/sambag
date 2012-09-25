@@ -23,14 +23,11 @@ void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	Label::Ptr l = boost::shared_dynamic_cast<Label>(c);
 	cn->setFont(l->getFont());
 	cn->setFillColor(c->getForeground());
-	Rectangle txtEx = cn->textExtends(l->getText());
+	std::string txt = sambag::com::normString(l->getText());
+	Rectangle txtEx = cn->textExtends(txt);
 	cn->moveTo(Point2D(0,  c->getHeight() / 2.0 + txtEx.getHeight() / 2.0 ));
-	cn->textPath(l->getText());
+	cn->textPath(txt);
 	cn->fill();
-/*
-	cn->setStrokeColor(ColorRGBA());
-	cn->rect(c->getSize());
-	cn->stroke();*/
 }
 //-----------------------------------------------------------------------------
 Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
@@ -38,7 +35,7 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(l->getFont());
-	Rectangle txtEx = cn->textExtends(l->getText());
+	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
 	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
 }
 

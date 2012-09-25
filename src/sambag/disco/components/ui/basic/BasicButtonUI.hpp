@@ -131,7 +131,7 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->setStrokeWidth(1);
 	cn->stroke();
 	cn->setFont(b->getFont());
-	std::string str = b->getText();
+	std::string str = sambag::com::normString(b->getText());
 	Rectangle txt = cn->textExtends(str);
 	cn->setFillColor(c->getForeground());
 	cn->translate( Point2D( 10,
@@ -187,7 +187,7 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());
-	Rectangle txtEx = cn->textExtends(b->getText());
+	Rectangle txtEx = cn->textExtends(sambag::com::normString(b->getText()));
 	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
 }
 //-----------------------------------------------------------------------------

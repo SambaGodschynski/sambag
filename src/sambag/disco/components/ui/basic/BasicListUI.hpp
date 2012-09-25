@@ -902,8 +902,6 @@ void BasicListUI<LT>::onMouse(void *src, const events::MouseEvent &ev)
 template <class LT>
 void BasicListUI<LT>::mousePressed(const events::MouseEvent &ev)
 {
-	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
-		return;
 	adjustSelection(ev);
 }
 //-----------------------------------------------------------------------------

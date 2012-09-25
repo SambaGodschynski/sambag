@@ -17,6 +17,7 @@
 #include "BasicScrollPaneUI.hpp"
 #include "BasicKnobUI.hpp"
 #include "BasicListUI.hpp"
+#include "BasicColumnViewUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -30,7 +31,10 @@
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Knob.hpp>
+#include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/List.hpp>
+#include <sambag/disco/components/ColumnView.hpp>
+
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -56,18 +60,26 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
 
 	/*
-	 * Unfortunately it is not possible to use a generic List because it isn't
-	 * possible to register a generic class with a LookAndFeel's registerClass.
-	 * So every specific list type has to be registered manually.
+	 * Unfortunately it is not
+	 * possible to register a generic class with a LookAndFeel.
+	 * So every specific template class type has to be registered manually.
 	 */
 	registerComponentUI<StringList, BasicListUI<StringList> >();
+	typedef ColumnView<StringList> StringListColumn;
+	registerComponentUI<StringListColumn, BasicColumnViewUI<StringListColumn> >();
+
+	typedef ColumnBrowser<std::string> CBrowser;
+	registerComponentUI<CBrowser::ColumnViewClass,
+		BasicColumnViewUI<CBrowser::ColumnViewClass> >();
+	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
+
+
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
 	UIManager &m = getUIManager();
-	// TODO: impl. lazy init e.g. -> lookAndFeel->install("Colors")
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
 	m.putProperty("global.background", HtmlColors::getColor("red"));
 	m.putProperty("global.foreground", HtmlColors::getColor("white"));
@@ -94,6 +106,13 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("Knob.strokeColor", HtmlColors::getColor("black"));
 	m.putProperty("Knob.fillColor", HtmlColors::getColor("white"));
 	m.putProperty("Knob.colorHandler", HtmlColors::getColor("grey"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnView
+	m.putProperty("ColumnView.background", HtmlColors::getColor("lightblue"));
+	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
+	m.putProperty("ColumnBrowser.numFixedLists", (int)4);
+	m.putProperty("ColumnBrowser.fontSize", Coordinate(13.));
+	m.putProperty("ColumnBrowser.fixedColumnWidth", (Coordinate)230.);
 }
 
 }}}}} // namespace(s)
