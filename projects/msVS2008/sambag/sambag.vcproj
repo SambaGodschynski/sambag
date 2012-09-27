@@ -500,6 +500,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoSurface.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\CairoSurface.hpp"
 					>
 				</File>

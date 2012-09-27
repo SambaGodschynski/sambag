@@ -7,7 +7,6 @@
 #ifdef DISCO_USE_WIN32
 
 #include "Win32WindowImpl.hpp"
-#include <sambag/disco/Win32Surface.hpp>
 #include <boost/foreach.hpp>
 #include "X11WindowToolkit.hpp"
 #include <sambag/disco/components/WindowToolkit.hpp>
@@ -103,7 +102,9 @@ void Win32WindowImpl::drawAll() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::update() {
-	this->processDraw( createSurface() );
+	disco::Win32Surface::Ptr sf = getSurface();
+	this->processDraw( sf );
+	cairo_surface_flush(sf->getCairoSurface());
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent, 
@@ -216,6 +217,7 @@ void Win32WindowImpl::open(AWindowImplPtr parent) {
 void Win32WindowImpl::_close() {
 	if (!visible)
 		return;
+	invalidateSurface();
 	PostMessage(win, WM_CLOSE, 0, 0);
 }
 //-----------------------------------------------------------------------------
@@ -241,12 +243,19 @@ bool Win32WindowImpl::isVisible() const {
 Rectangle Win32WindowImpl::getBounds() const {
 	return bounds;
 }
+//-------------------------------------------------------------------------
+void Win32WindowImpl::invalidateSurface() {
+	surface.reset();
+}
 //-----------------------------------------------------------------------------
-sambag::disco::ISurface::Ptr Win32WindowImpl::createSurface() {
+disco::Win32Surface::Ptr Win32WindowImpl::getSurface() {
 	using namespace sambag;
-	Rectangle r = getBounds();
-	return disco::Win32Surface::create(win,
+	if (!surface) {
+		Rectangle r = getBounds();
+		surface = disco::Win32Surface::create(win,
 			(int)r.getWidth(), (int)r.getHeight());
+	}
+	return surface;
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::setBounds(const Rectangle &r) {
@@ -319,7 +328,7 @@ void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::updateWindowToBounds(const Rectangle &r) {
 	if (r.getDimension() != bounds.getDimension()) {
-		createSurface();
+		invalidateSurface();
 		UpdateWindow(win);
 	}
 	bounds = r;

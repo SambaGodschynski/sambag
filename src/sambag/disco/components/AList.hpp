@@ -121,12 +121,6 @@ private:
 	virtual void checkScrollableParameters(const Rectangle &visibleRect,
 		int orientation) const;
 public:
-	//-------------------------------------------------------------------------
-	/**
-	 * Clears the selection; after calling this method, isSelectionEmpty
-	 *  will return true.
-	 */
-	void clearSelection();
 protected:
 	//-------------------------------------------------------------------------
 	/**

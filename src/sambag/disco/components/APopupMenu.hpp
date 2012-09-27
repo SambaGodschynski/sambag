@@ -43,13 +43,11 @@ private:
 	void initWindow();
 	//-------------------------------------------------------------------------
 	WindowPtr window;
-	//-------------------------------------------------------------------------
-	AComponentWPtr _parent;
 protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
-	APopupMenu(AComponentPtr parent = AComponentPtr());
+	APopupMenu(AComponentPtr invoker = AComponentPtr());
 public:
 	//-------------------------------------------------------------------------
 	void setInvoker(AComponentPtr _invoker);
@@ -82,14 +80,6 @@ public:
 	virtual void processMouseEvent(events::MouseEvent event,
 			const MenuElements & path, MenuSelectionManager &manager) {}
 	//-------------------------------------------------------------------------
-	virtual void setParentWindow(WindowPtr parent) {
-		_parent = parent;
-	}
-	//-------------------------------------------------------------------------
-	virtual AComponentPtr getParentComponent() const {
-		return _parent.lock();
-	}
-	//-------------------------------------------------------------------------
 	virtual void showPopup(const Point2D &_where);
 	//-------------------------------------------------------------------------
 	virtual void hidePopup();
@@ -118,7 +108,7 @@ template <class SM>
 const std::string  APopupMenu<SM>::PROPERTY_POPUP_LOCATION = "popuplocation";
 //-----------------------------------------------------------------------------
 template <class SM>
-APopupMenu<SM>::APopupMenu(AComponentPtr parent) : _parent(parent) {
+APopupMenu<SM>::APopupMenu(AComponentPtr invoker) : _invoker(invoker) {
 	setName("PopupMenu");
 }
 //-----------------------------------------------------------------------------
@@ -144,10 +134,9 @@ void APopupMenu<SM>::initWindow() {
 		ui::DefaultMenuLayout::create(getPtr(), ui::DefaultMenuLayout::Y_AXIS)
 	);
 	Window::Ptr parentW;
-	AComponentPtr parent = getParentComponent();
-	if (parent) {
-		AContainerPtr pc = parent->getRootContainer();
-		parentW = boost::shared_dynamic_cast<Window>(pc);
+	AComponentPtr invoker = getInvoker();
+	if (invoker) {
+		parentW = invoker->getTopLevelAncestor();
 	}
 	window = Window::create(parentW);
 	window->getContentPane()->add(AsWeakPtr<AComponent>(getPtr()));

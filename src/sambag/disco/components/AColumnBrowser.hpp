@@ -337,7 +337,29 @@ void AColumnBrowser<TM>::updateLists()
 	// root
 	for (int i=0; i<(int)selectionPath.size(); ++i) {
 		updateList(selectionPath[i], i);
-	}	
+		/*if (i>=oldPath.size())
+			continue;
+		if (selectionPath[i]!=oldPath[i]) {
+			ListTypePtr list = columnView->getList(i-1);
+			if (!list)
+				continue;
+			list->clearSelection();
+		}*/
+	}
+	if (selectionPath.size() > oldPath.size()) {
+		// scroll to last list
+		/*ScrollPane::Ptr scp = columnView->getScrollPane();
+		ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
+		Point2D vp = scp->getViewport()->getViewPosition();
+		std::cout<<scr->getMaximum()<<std::endl;
+		std::cout<<scr->getExtent()<<std::endl;
+		scp->getViewport()->setViewPosition(
+			Point2D(
+				scr->getMaximum(), 
+				vp.y()
+			)
+		);*/
+	}
 	oldPath = selectionPath;
 }
 //-----------------------------------------------------------------------------
@@ -366,15 +388,6 @@ void AColumnBrowser<TM>::onSelectionChanged(void *src,
 
 	// update
 	updateLists();
-	
-	/*
-	// scroll to next list
-	ScrollPane::Ptr scp = columnView->getScrollPane();
-	ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
-	Point2D vp = scp->getViewport()->getViewPosition();
-	Coordinate fxW = ui::getUIPropertyCached<FixedCellWidth>(Coordinate(120.));
-	scp->getViewport()->setViewPosition(Point2D(fxW, vp.y()));
-	*/
 
 	EventSender<Event>::notifyListeners (
 		this, Event(getPtr())

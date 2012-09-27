@@ -36,7 +36,7 @@ public:
 	typedef boost::shared_ptr<WindowImpl> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	AWindowImplPtr parent;
+	AWindowImpl::WPtr _parent;
 	//-------------------------------------------------------------------------
 	components::RootPanePtr rootPane;
 	//-------------------------------------------------------------------------
@@ -114,7 +114,7 @@ public:
 	static Ptr create(AWindowImplPtr parent) {
 		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
 		res->ConcreteWindowImpl::self = res;
-		res->parent = parent;
+		res->_parent = parent;
 		return res;
 	}
 	//-------------------------------------------------------------------------
@@ -136,7 +136,7 @@ public:
 		if (getFlag(WindowFlags::WND_NESTED))
 			return; 
 		// init surface
-		ConcreteWindowImpl::open(parent);
+		ConcreteWindowImpl::open(_parent.lock());
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {

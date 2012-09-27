@@ -47,7 +47,8 @@ protected:
 			Components &roots);
 private:
 	//-------------------------------------------------------------------------
-	void updateDirtyComponent(AComponentPtr c, const Rectangle &r);
+	void updateDirtyComponent(ComponentMap &dirtyComponents, 
+		AComponentPtr c, const Rectangle &r);
 	//-------------------------------------------------------------------------
 	mutable sambag::com::RecursiveMutex lock;
 	//-------------------------------------------------------------------------

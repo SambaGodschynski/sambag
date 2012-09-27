@@ -31,6 +31,7 @@ namespace sambag { namespace disco { namespace components {
 	class RedrawManager; typedef boost::shared_ptr<RedrawManager> RedrawManagerPtr;
 	class AWindowImpl; typedef boost::shared_ptr<AWindowImpl> AWindowImplPtr;
 	class Window; typedef boost::shared_ptr<Window> WindowPtr;
+	class Window; typedef boost::weak_ptr<Window> WindowWPtr;
 	class FramedWindow; typedef boost::shared_ptr<FramedWindow> FramedWindowPtr;
 	class PopupMenu; typedef boost::shared_ptr<PopupMenu> PopupMenuPtr;
 	class MenuSelectionManager;

@@ -41,6 +41,8 @@ class AWindowImpl :
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AWindowImpl> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<AWindowImpl> WPtr;
 protected:
 private:
 public:

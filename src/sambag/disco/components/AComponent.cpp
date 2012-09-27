@@ -50,6 +50,8 @@ const std::string AComponent::PROPERTY_FONT = "font";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_OPAQUE = "opaque";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_COMPONENTPOPUPMENU="componentPopupMenu";
+//-----------------------------------------------------------------------------
 const float AComponent::TOP_ALIGNMENT = 0.0f;
 //-----------------------------------------------------------------------------
 const float AComponent::CENTER_ALIGNMENT = 0.5f;
@@ -61,7 +63,7 @@ const float AComponent::LEFT_ALIGNMENT = 0.0f;
 const float AComponent::RIGHT_ALIGNMENT = 1.0f;
 //-----------------------------------------------------------------------------
 AComponent::AComponent() : flags(0) {
-
+	setInheritsPopupMenu(true);
 }
 //-----------------------------------------------------------------------------
 AComponent::~AComponent() {
@@ -1059,5 +1061,30 @@ bool AComponent::getFlag(unsigned int aFlag) const {
 ui::AComponentUIPtr AComponent::getUI() const {
 	return ui;
 }
-
+//-----------------------------------------------------------------------------
+void AComponent::setInheritsPopupMenu(bool value) {
+	setFlag(INHERITS_POPUP_MENU, value);
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isInheritsPopupMenu() const {
+	return getFlag(INHERITS_POPUP_MENU);
+}
+//-----------------------------------------------------------------------------
+void AComponent::setComponentPopupMenu(PopupMenuPtr menu) {
+	PopupMenuPtr old = popupMenu;
+	popupMenu = menu;
+	firePropertyChanged(PROPERTY_COMPONENTPOPUPMENU, old, popupMenu);
+}
+//-----------------------------------------------------------------------------
+PopupMenuPtr AComponent::getComponentPopupMenu() const {
+	if (!isInheritsPopupMenu()) {
+		return popupMenu;
+	}	
+	if (popupMenu)
+		return popupMenu;
+	AContainerPtr parent = getParent();
+	if (parent)
+		return parent->getComponentPopupMenu();
+	return PopupMenuPtr();
+}
 }}} // namespace(s)

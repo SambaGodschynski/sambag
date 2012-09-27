@@ -23,8 +23,9 @@ AWindowImpl::Ptr Window::getWindowImpl() const {
 	return windowImpl;
 }
 //-----------------------------------------------------------------------------
-Window::Window(Window::Ptr parent) : parent(parent) {
+Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 	rootPane = components::RootPane::create();
+	WindowPtr parent = getParentWindow();
 	if (parent) {
 		windowImpl =
 			getWindowToolkit()->createWindowImpl(parent->getWindowImpl());
@@ -46,6 +47,7 @@ Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
 //-----------------------------------------------------------------------------
 void Window::initWindow() {
 	add(rootPane);
+	WindowPtr parent = getParentWindow();
 	if (parent) {
 		parent->addTrackedOnCloseEventListener(
 			boost::bind(&Window::onParentRemove, this, _1, _2),

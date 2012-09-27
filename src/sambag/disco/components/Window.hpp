@@ -46,11 +46,11 @@ public:
 	typedef boost::weak_ptr<Window> WPtr;
 protected:
 	//-------------------------------------------------------------------------
-	Window::Ptr parent;
+	WindowWPtr parentWindow;
 	//-------------------------------------------------------------------------
 	components::RootPane::Ptr rootPane;
 	//-------------------------------------------------------------------------
-	Window(Window::Ptr parent);
+	Window(Window::Ptr parentWindow);
 	//-------------------------------------------------------------------------
 	Window(AWindowImpl::Ptr windowImpl);
 	//-------------------------------------------------------------------------
@@ -88,6 +88,10 @@ public:
 		return AContainer::Ptr();
 	}
 	//-------------------------------------------------------------------------
+	virtual WindowPtr getParentWindow() const {
+		return parentWindow.lock();
+	}
+	//-------------------------------------------------------------------------
 	Rectangle getWindowBounds() const;
 	//-------------------------------------------------------------------------
 	Point2D getWindowLocation() const {
@@ -117,8 +121,8 @@ public:
 	 */
 	virtual void pack();
 	//-------------------------------------------------------------------------
-	static Ptr create(Window::Ptr parent=WindowPtr()) {
-		Ptr res(new Window(parent));
+	static Ptr create(Window::Ptr parentWindow=WindowPtr()) {
+		Ptr res(new Window(parentWindow));
 		res->self = res;
 		res->initWindow();
 		return res;

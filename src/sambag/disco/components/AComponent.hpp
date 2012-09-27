@@ -33,9 +33,6 @@
  *  Border
  *  KeyStroke
  *  KeyEvent
- *  MouseEvent
- *  AComponentUI
- *  LayoutManager
  *  FocusListener
  *  ---
  *  FocusTraversalPolicy
@@ -43,7 +40,6 @@
  *  ToolTip
  *  HierarchyBoundsListener
  *  HierarchyListener
- *  PropertyChangeEvent
  *  ComponentEvent
  *  Image
  *  DropTarget
@@ -116,6 +112,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_OPAQUE;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_COMPONENTPOPUPMENU;
+	//-------------------------------------------------------------------------
 	enum Flag {
 		IS_DOUBLE_BUFFERED = 0,
 		ANCESTOR_USING_BUFFER,
@@ -124,7 +122,7 @@ public:
 		KEY_EVENTS_ENABLED,
 		FOCUS_INPUTMAP_CREATED,
 		ANCESTOR_INPUTMAP_CREATED,
-		WIF_INPUTMAP_CREATED,
+		IF_INPUTMAP_CREATED,
 		ACTIONMAP_CREATED,
 		CREATED_DOUBLE_BUFFER,
 		// bit 10 is free
@@ -203,6 +201,7 @@ protected:
 	 * @see setBackground
 	 */
 	ColorRGBA background;
+	//-------------------------------------------------------------------------
 	/**
 	 * True when the object should ignore all repaint events.
 	 * @see setIgnoreRepaint
@@ -254,6 +253,8 @@ protected:
 	 * @param cn
 	 */
 	void drawForceDoubleBuffered(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	PopupMenuPtr popupMenu;
 private:
 	//-------------------------------------------------------------------------
 	unsigned int flags;
@@ -1212,6 +1213,22 @@ public:
 	 */
 	template <class ContainerType>
 	typename ContainerType::Ptr getLastContainer() const;
+	//-------------------------------------------------------------------------
+	/**
+	 *  Sets whether or not getComponentPopupMenu should delegate to the parent
+	 *  if this component does not have a PopupMenu assigned to it.
+	 */
+	virtual void setInheritsPopupMenu(bool value); 
+	//-------------------------------------------------------------------------
+	/**
+	 *  @retun whether or not getComponentPopupMenu should delegate to the parent
+	 *  if this component does not have a PopupMenu assigned to it.
+	 */
+	virtual bool isInheritsPopupMenu() const; 
+	//-------------------------------------------------------------------------
+	virtual void setComponentPopupMenu(PopupMenuPtr menu);
+	//-------------------------------------------------------------------------
+	virtual PopupMenuPtr getComponentPopupMenu() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
