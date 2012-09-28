@@ -21,10 +21,17 @@
 		throw type( (what), std::string(__FILE__), \
 			sambag::com::toString(__LINE__) ); \
 	}
-#define SAMBAG_WARN(what) sambag::com::warn((what))
 
 #define SAMBAG_EXCEPTION_CLASS(name) \
 	struct name : public sambag::com::Exception { \
+		name(const std::string &what = "unknown reason", \
+			 const std::string &where = "unknown location", \
+			 const std::string &line = "unknown line number") \
+		 : sambag::com::Exception(what, where, line) {}\
+	} \
+
+#define SAMBAG_DERIVATED_EXCEPTION_CLASS(base, name) \
+	struct name : public base { \
 		name(const std::string &what = "unknown reason", \
 			 const std::string &where = "unknown location", \
 			 const std::string &line = "unknown line number") \

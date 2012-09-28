@@ -5,8 +5,8 @@
  *      Author: samba
  */
 
-#ifndef FORWARD_HPP_
-#define FORWARD_HPP_
+#ifndef SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_
+#define SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -43,4 +43,4 @@ namespace ui {
 }
 }}}
 
-#endif /* FORWARD_HPP_ */
+#endif /* SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_ */
