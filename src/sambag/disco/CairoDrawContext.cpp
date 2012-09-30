@@ -9,6 +9,14 @@
 #include "CairoSurface.hpp"
 #include <sambag/com/Common.hpp>
 #include "IDiscoFactory.hpp"
+
+
+bool isFatalCairoStatus(cairo_status_t status) {
+	if (status==CAIRO_STATUS_INVALID_STRING)
+		return false;
+	return true;
+}
+
 namespace sambag { namespace disco {
 //=============================================================================
 //  Class CairoDrawContext:

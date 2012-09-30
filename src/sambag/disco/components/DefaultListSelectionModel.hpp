@@ -40,6 +40,8 @@ public:
 protected:
 private:
 public:
+	//-------------------------------------------------------------------------
+	typedef events::ListSelectionEvent Event;
 private:
 	//-------------------------------------------------------------------------
 	static const int MIN = -1;

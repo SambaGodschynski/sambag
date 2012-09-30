@@ -70,6 +70,8 @@ std::string toString(const T &v) {
 	ss << v;
 	return ss.str();
 }
+//-----------------------------------------------------------------------------
+extern std::string normString(const std::string &v);
 }} // namespaces
 
 #endif /* COMMON_HPP_ */

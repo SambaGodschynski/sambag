@@ -7,6 +7,8 @@
 
 #include "Common.hpp"
 #include <iostream>
+#include <boost/locale.hpp>
+
 namespace sambag { namespace com {
 
 //=============================================================================
@@ -16,5 +18,9 @@ void log(const std::string &str) {
 	using namespace std;
 	clog<<str<<endl;
 #endif
+}
+//-----------------------------------------------------------------------------
+std::string normString(const std::string &v) {
+	return boost::locale::conv::to_utf<char>(v,"utf-8");
 }
 }}

@@ -80,9 +80,7 @@ inline UIManager & getUIManager() {
 	return UIManager::instance();
 }
 ///////////////////////////////////////////////////////////////////////////////
-namespace {
-	int resetStamp = 0;
-} //namespace
+extern int __SAMBAG_RESET_STAMP__;
 //-----------------------------------------------------------------------------
 /**
  * Returns a UIManager property value cached.
@@ -97,11 +95,11 @@ template <class PropertyTag, class T>
 const T & getUIPropertyCached(const T& defaultValue) {
 	static int localStamp = -1;
 	static T val = defaultValue;
-	if (localStamp!=resetStamp) {
+	if (localStamp!=__SAMBAG_RESET_STAMP__) {
 		getUIManager().getProperty (
 			std::string(PropertyTag::propertyName()), val
 		);
-		localStamp = resetStamp;
+		localStamp = __SAMBAG_RESET_STAMP__;
 	}
 	return val;
 }
@@ -110,7 +108,7 @@ const T & getUIPropertyCached(const T& defaultValue) {
  * Resets all cached values.
  */
 inline void resetUIPorpertyCache() {
-	resetStamp++;
+	__SAMBAG_RESET_STAMP__++;
 }
 
 

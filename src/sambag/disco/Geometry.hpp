@@ -77,26 +77,39 @@ inline std::ostream & operator << (std::ostream &os, const Point2D &p)
 /**
  * @class Dimension
  */
-struct Dimension : public Point2D {
+class Dimension {
 //=============================================================================
+private:
+	//-------------------------------------------------------------------------
+	Point2D size;
+	//-------------------------------------------------------------------------
+public:
 	//-------------------------------------------------------------------------
 	Dimension(const Coordinate &width=0, const Coordinate &height=0) :
-		Point2D(width, height) {}
+		size(width, height) {}
 	//-------------------------------------------------------------------------
 	const Coordinate & width() const {
-		return Point2D::x();
+		return size.x();
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & height() const {
-		return Point2D::y();
+		return size.y();
 	}
 	//-------------------------------------------------------------------------
 	void width(const Coordinate &v) {
-		Point2D::x(v);
+		size.x(v);
 	}
 	//-------------------------------------------------------------------------
 	void height(const Coordinate &v) {
-		Point2D::y(v);
+		size.y(v);
+	}
+	//-------------------------------------------------------------------------
+	bool operator==(const Dimension &b) const {
+		return size == b.size;
+	}
+	//-------------------------------------------------------------------------
+	bool operator!=(const Dimension &b) const {
+		return size != b.size;
 	}
 };
 inline Dimension getNullDimension() {
@@ -123,8 +136,13 @@ public:
 	}
 	Rectangle(const Coordinate &x, const Coordinate &y,
 		  const Coordinate &w, const Coordinate &h) : _x0(x, y), _size(w, h) {}
-	Rectangle(const Point2D &x0, const Point2D &size) : _x0(x0), _size(size) {}
-	// getter
+	Rectangle(const Point2D &x0, const Dimension &size)
+		: _x0(x0), _size(size.width(), size.height()) {}
+	Rectangle(const Point2D &x0_, const Point2D &x1_) {
+		x0(minimize(x0_, x1_));
+		x1(maximize(x0_, x1_));
+	}
+	// getter /////////////////////////////////////////////////////////////////
 	const Coordinate & x() const { return _x0.x(); }
 	const Coordinate & y() const { return _x0.y(); }
 	const Coordinate & width() const { return _size.x(); }
@@ -146,6 +164,10 @@ public:
 	void y(const Coordinate &val) { _x0.y(val); }
 	void width(const Coordinate &val) { _size.x(val); }
 	void height(const Coordinate &val) { _size.y(val); }
+	void size(const Dimension &val) {
+		width(val.width());
+		height(val.height());
+	}
 	bool isEmpty() const {
 		return boost::geometry::equals(x0(), x1());
 	}

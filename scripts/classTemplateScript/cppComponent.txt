@@ -17,7 +17,7 @@ $$$NAME$$$::$$$NAME$$$() {
 	setName("$$$NAME$$$");
 }
 //-----------------------------------------------------------------------------
-ui::AComponentUIPtr $$$NAME$$$::getComponentUI(ui::ALookAndFeelPtr laf) const {
+ui::AComponentUIPtr $$$NAME$$$::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<$$$NAME$$$>();
 }
 }}} // namespace(s)
