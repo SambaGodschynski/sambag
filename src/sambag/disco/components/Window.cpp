@@ -154,4 +154,29 @@ Window::addTrackedOnCloseEventListener(
 	return
 		windowImpl->EventSender<OnCloseEvent>::addTrackedEventListener(f, wPtr);
 }
+//-----------------------------------------------------------------------------
+Window::WindwowMouseEvent::Connection
+Window::addWindowMouseEventListener(const Window::WindwowMouseEvent::EventFunction &f) 
+{
+	EventSender<events::MouseEvent> *sender =
+		windowImpl->getMouseEventSender();
+	if (!sender) {
+		SAMBAG_WARN("WindowImpl EventSender==NULL");
+		return WindwowMouseEvent::Connection();
+	}
+	return sender->addEventListener(f);
+}
+//-----------------------------------------------------------------------------
+Window::WindwowMouseEvent::Connection
+Window::addTrackedWindowMouseEventListener
+(const Window::WindwowMouseEvent::EventFunction &f, Window::AnyWPtr ptr )
+{
+	EventSender<events::MouseEvent> *sender =
+		windowImpl->getMouseEventSender();
+	if (!sender) {
+		SAMBAG_WARN("WindowImpl EventSender==NULL");
+		return WindwowMouseEvent::Connection();
+	}
+	return sender->addTrackedEventListener(f, ptr);
+}
 }}} // namespace(s)

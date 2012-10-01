@@ -101,6 +101,8 @@ public:
 	Dimension getWindowSize() const {
 		return getWindowBounds().getDimension();
 	}
+	/////////////
+	// OnCloseEventSender
 	//-------------------------------------------------------------------------
 	typedef sambag::com::events::EventSender<OnCloseEvent> OnCloseEventSender;
 	//-------------------------------------------------------------------------
@@ -112,6 +114,17 @@ public:
 	OnCloseEventSender::Connection
 	addTrackedOnCloseEventListener
 	(const OnCloseEventSender::EventFunction &f, AnyWPtr ptr );
+	/////////////
+	// WindwowMouseEvent
+	//-------------------------------------------------------------------------
+	typedef sambag::com::events::EventSender<events::MouseEvent> WindwowMouseEvent;
+	//-------------------------------------------------------------------------
+	WindwowMouseEvent::Connection
+	addWindowMouseEventListener(const WindwowMouseEvent::EventFunction &f);
+	//-------------------------------------------------------------------------
+	WindwowMouseEvent::Connection
+	addTrackedWindowMouseEventListener
+	(const WindwowMouseEvent::EventFunction &f, AnyWPtr ptr );
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the minimum size of this window to a constant value.

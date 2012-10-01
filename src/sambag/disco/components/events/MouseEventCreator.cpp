@@ -13,12 +13,17 @@ namespace sambag { namespace disco { namespace components { namespace events {
 //  Class MouseEventCreator
 //=============================================================================
 //-----------------------------------------------------------------------------
+void MouseEventCreator::fireEvent(const MouseEvent &ev) {
+	EventSender<MouseEvent>::notifyListeners(this, ev);
+	root->processMouseEvent(ev);
+}
+//-----------------------------------------------------------------------------
 void
 MouseEventCreator::createPressEvent(const Coordinate &x,
 		const Coordinate &y, MouseEventCreator::Bitmask buttons)
 {
 	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_PRESSED);
-	root->processMouseEvent(lastEvent);
+	fireEvent(lastEvent);
 }
 //-----------------------------------------------------------------------------
 void
@@ -28,14 +33,14 @@ MouseEventCreator::createReleaseEvent(const Coordinate &x,
 	Point2D p = Point2D(x, y);
 	if (lastEvent.getType() == MouseEvent::DISCO_MOUSE_PRESSED && lastEvent.p == p) {
 		lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_CLICKED);
-		root->processMouseEvent( // 1. release
+		fireEvent( // 1. release
 				MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_RELEASED)
 		);
-		root->processMouseEvent(lastEvent); // 2. clicked
+		fireEvent(lastEvent); // 2. clicked
 		return;
 	}
 	lastEvent = MouseEvent(root, Point2D(x, y), buttons, MouseEvent::DISCO_MOUSE_RELEASED);
-	root->processMouseEvent(lastEvent);
+	fireEvent(lastEvent);
 }
 //-----------------------------------------------------------------------------
 void
@@ -49,10 +54,10 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_CLICKED)) {
 		lastEvent =
 			MouseEvent(root, Point2D(x, y), lastEvent.buttons, MouseEvent::DISCO_MOUSE_DRAGGED);
-		root->processMouseEvent(lastEvent);
+		fireEvent(lastEvent);
 		return;
 	}
 	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::DISCO_MOUSE_MOVED);
-	root->processMouseEvent(lastEvent);
+	fireEvent(lastEvent);
 }
 }}}} // namespace(s)

@@ -174,7 +174,7 @@ void HtmlColors::initHtmlColors() {
 	( "none", graphicElements::Style::NONE_COLOR );
 }
 //-----------------------------------------------------------------------------
-const ColorRGBA & HtmlColors::getColor( const std::string &name )
+ColorRGBA HtmlColors::getColor( const std::string &name )
 {
 	using boost::algorithm::to_lower_copy;
 	if (colorMap.empty())

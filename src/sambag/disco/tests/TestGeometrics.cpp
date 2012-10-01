@@ -46,5 +46,11 @@ void TestGeometrics::testRectangle() {
 	CPPUNIT_ASSERT(Dimension(-10., -10.) == r.size());
 	CPPUNIT_ASSERT(Point2D(10., 10.)==r.x0());
 	CPPUNIT_ASSERT(Point2D(0., 0.)==r.x1());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<check insets
+	r = Rectangle(0.,0.,10.,10.);
+	r.inset(5., 5.);
+	CPPUNIT_ASSERT_EQUAL(Dimension(15., 15.), r.size());
+	CPPUNIT_ASSERT_EQUAL(Point2D(-2.5, -2.5), r.x0());
+	CPPUNIT_ASSERT_EQUAL(Point2D(12.5, 12.5), r.x1());
 }
 } // namespace

@@ -31,7 +31,7 @@ public:
 	//-------------------------------------------------------------------------
 	static const ColorMap & getColorMap() { return colorMap; }
 	//-------------------------------------------------------------------------
-	static const ColorRGBA & getColor( const std::string &name );
+	static ColorRGBA getColor( const std::string &name );
 };
 
 }}}

@@ -85,6 +85,9 @@ void AContainer::addComponent(const AComponentSharedOrWeak &comp, int index) {
 		it += index;
 		components.insert(it, comp);
 	}
+
+	comp->__updateParent_(getPtr());
+	
 	// update ui
 	if (!comp->isUiSettedByUser()) {
 		RootPane::Ptr root = getTopLevelRootPane();
@@ -94,7 +97,6 @@ void AContainer::addComponent(const AComponentSharedOrWeak &comp, int index) {
 				comp->installLookAndFeel(laf);
 		}
 	}
-	comp->__updateParent_(getPtr());
 	adjustDescendants(comp->__countHierarchyMembers_());
 	__invalidateIfValid_();
 }

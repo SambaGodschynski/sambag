@@ -184,6 +184,13 @@ public:
 	bool operator!=(const Rectangle &b) const {
 		return !(*this==b);
 	}
+	void inset(const Coordinate &_x, const Coordinate &_y) {
+		Coordinate w = _x / 2.;
+		x( x() - w );
+		y( y() - w );
+		width( width() + _y );
+		height( height() + _y );
+	}
 	// deprecated stuff ///////////////////////////////////////////////////////
 	/**
 	 * @deprecated Rectangle extends boost::geometry::box<> formally

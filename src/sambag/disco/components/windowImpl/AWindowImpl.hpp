@@ -14,6 +14,7 @@
 #include <sambag/com/events/Events.hpp>
 #include "WindowFlags.hpp"
 #include <string>
+#include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -46,6 +47,8 @@ public:
 protected:
 private:
 public:
+	//-------------------------------------------------------------------------
+	virtual EventSender<events::MouseEvent> * getMouseEventSender() = 0;
 	//-------------------------------------------------------------------------
 	virtual void open() = 0;
 	//-------------------------------------------------------------------------

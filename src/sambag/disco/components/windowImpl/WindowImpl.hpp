@@ -55,6 +55,10 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
+		return mec.get();
+	}
+	//-------------------------------------------------------------------------
 	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root) {
