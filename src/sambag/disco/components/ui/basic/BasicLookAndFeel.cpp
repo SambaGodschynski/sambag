@@ -72,8 +72,6 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<CBrowser::ColumnViewClass,
 		BasicColumnViewUI<CBrowser::ColumnViewClass> >();
 	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
-
-
 }
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {

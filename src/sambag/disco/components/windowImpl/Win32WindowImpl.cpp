@@ -348,6 +348,9 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	int mbuttons = 0;
 	int x=0; int y=0;
 
+	PAINTSTRUCT ps;
+	HDC hdc;
+
 	switch(message) {
 	case WM_SETFOCUS:
 		break;
@@ -361,9 +364,11 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
+		hdc = BeginPaint(hWnd, &ps);
 		if (win) {
 			win->update();
 		}
+		EndPaint(hWnd, &ps);
 		ValidateRect(hWnd, NULL);
 		break;
 	}
