@@ -6,13 +6,20 @@ import re
 inDir = "../src/"
 
 add = """
+SET ( SAMBAG_TESTAPPSOURCES
+	testApps/componentTests/TestApp/src/DiscoView.cpp
+)
 #unit tests
 SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
 add_executable(unit_tests ${UNIT_TESTSOURCE})
-target_link_libraries (unit_tests ${SAMBAG_CLIBS})
+target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
+#testapp
+add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
+target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
+
 """
 
-ignoreDirs = ("TestFolders", "CMakeFiles")
+ignoreDirs = ("TestFolders", "CMakeFiles", ".*testApps.*")
 
 class Walker():
     fHandler = None
@@ -47,7 +54,7 @@ class Walker():
 
     def passDir(self, _dir):
         for x in ignoreDirs:
-            if re.match(".*?%s.*" % (x), _dir):
+            if re.match("%s" % (x), _dir):
                 return False
         return True
     
@@ -77,9 +84,6 @@ class Walker():
         #process
         self.processSubDirs(subDirs)
         self.processFiles(files)
-
-
-
 
 w = Walker(inDir)
 
