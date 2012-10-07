@@ -7,6 +7,7 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 	$ENV{CAIRODIR}/include/cairo
 	$ENV{CAIRODIR}/include
 	$ENV{CAIRODIR}
+	$ENV{CLIBS}/cairo/include/cairo
 	~/Library/Frameworks
 	/Library/Frameworks
 	/usr/include/cairo
@@ -17,15 +18,19 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 	/opt/include
 )
 
-IF(WIN32)
-	SET(LIBCAIRO "cairo.lib")
-ELSE(WIN32)
+IF(APPLE)
+	SET(LIBCAIRO "libcairo.dylib")
+ELSEIF(UNIX)
 	SET(LIBCAIRO "libcairo.so")
-ENDIF(WIN32)
+ELSEIF(WIN32)
+	SET(LIBCAIRO "libcairo.a")
+ENDIF(APPLE)
+
 
 FIND_PATH(CAIRO_LIBRARY_DIRS ${LIBCAIRO}
 	$ENV{CAIRODIR}/lib
 	$ENV{CAIRODIR}
+	$ENV{CLIBS}/cairo/lib
 	~/Library/Frameworks
 	/Library/Frameworks
 	/usr/local/lib
