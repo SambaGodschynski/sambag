@@ -59,11 +59,14 @@ change_vscprj_to_static()
 #passing arguments
 arg()
 {
-case $1 in
-     CLEAN_ALL) export CLEAN_ALL=1
-                rm -rf $ROOTDIR ;;
-     MD) export _LIBLINK='MD' ;;
-esac
+for x in $@
+do
+  case $1 in
+       CLEAN_ALL) export CLEAN_ALL=1
+                  rm -rf $ROOTDIR ;;
+       MD) export _LIBLINK='MD' ;;
+  esac
+done
 }
 
 to_dos_path()
@@ -123,9 +126,16 @@ make -f Makefile.win32 "CFG=release"
 
 #deploy
 cd $ROOTDIR
+mkdir $CAIRO/lib
 cp $CAIRO/cairo-version.h $CAIRO/src/cairo-version.h
-cp $ZLIB/zlib.lib $CAIRO/src/release/
-cp $LIBPNG/libpng.lib $CAIRO/src/release
-cp $PIXMAN/pixman/release/pixman-1.lib $CAIRO/src/release
+cp $CAIRO/src/release/cairo.dll $CAIRO/lib
+cp $CAIRO/src/release/cairo-static.lib $CAIRO/lib
+cp $CAIRO/src/release/cairo.lib $CAIRO/lib
+mkdir $ZLIB/lib
+mv $ZLIB/zlib.lib $ZLIB/lib
+mkdir $LIBPNG/lib
+cp $LIBPNG/libpng.lib $LIBPNG/lib
+mkdir $PIXMAN/lib
+cp $PIXMAN/pixman/release/pixman-1.lib $PIXMAN/lib
 
 
