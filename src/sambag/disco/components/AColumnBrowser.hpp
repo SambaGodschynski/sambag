@@ -415,7 +415,6 @@ void AColumnBrowser<TM, CR, LM, LSM>::onSelectionChanged(void *src,
 	if  (!e)
 		return;
 	int currSelPathIndex = listIndex+1; // root is on index 0
-	size_t s = selectionPath.size();
 	if ( currSelPathIndex >= (int)selectionPath.size()) {
 		// currSelPathIndex can always be one greater
 		selectionPath.push_back(e->node);
