@@ -6,7 +6,7 @@ project (sambag)
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
-add_definitions(-DDISCO_USE_X11)
+
 
 #to avoid name conflicts with existing FindSomeLib.cmake scripts
 #every finding script has a "X" postfix: FindSomeLibX.cmake
@@ -21,10 +21,13 @@ IF(APPLE)
 	find_package(X11 REQUIRED)
         include_directories(${X11_INCLUDE_DIRS})
 	find_package(IConvX REQUIRED)
+	add_definitions(-DDISCO_USE_X11)
 ELSEIF(UNIX)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIRS})
+	add_definitions(-DDISCO_USE_X11)
 ELSEIF(WIN32)
+        add_definitions(-DDISCO_USE_WIN32)
 ENDIF(APPLE)
 
 find_package(Cairo REQUIRED)
@@ -69,5 +72,3 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 )
 
 add_subdirectory(src)
-
-

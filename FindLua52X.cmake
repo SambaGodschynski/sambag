@@ -8,7 +8,7 @@ FIND_PATH(LUA52_INCLUDE_DIRS lua.hpp
 )
 
 IF(WIN32)
-	SET(LIBLUA52 "lua.lib")
+	SET(LIBLUA52 "liblua.a")
 ELSE(WIN32)
 	SET(LIBLUA52 "liblua.a")
 ENDIF(WIN32)
