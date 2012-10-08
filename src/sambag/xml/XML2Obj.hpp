@@ -29,6 +29,11 @@ namespace sambag { namespace xml {
   the stringstream::>> operator.
   When object created and all attributes setted a "object created"
   boost::signal will be sent.
+  
+  TODO: make configurable using policy classes:
+	- CreatorPolicy
+	- SetterPolicy
+	- FromStringConvertionPolicy
 */
 //=============================================================================
 struct NoClosureType{};

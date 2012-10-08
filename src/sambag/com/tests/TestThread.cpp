@@ -8,9 +8,6 @@
 #include "TestThread.hpp"
 #include <cppunit/config/SourcePrefix.h>
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestThread );
-
 void callLockRecursive(sambag::com::RecursiveMutex &mutex, int i=0) {
 	if (i==10)
 		return;
