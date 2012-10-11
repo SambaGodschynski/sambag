@@ -22,7 +22,7 @@ namespace {
 #define SAMBAG_FRIEND_OF_T(_class) friend class FriendBuilder<_class>::Type
 #endif
 
-#include <AudioEffectX.h>
+#include <audioeffectx.h>
 #include <string>
 #include <sstream>
 #include "DspPlugin.hpp"

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <assert.h>
 #include "Common.hpp"
+#include <exception>
 
 // TODO: remove string conv.
 #define SAMBAG_THROW(type, what) {		\
@@ -42,12 +43,12 @@
 
 namespace sambag { namespace com {
 //=============================================================================
-struct Exception {
+struct Exception : public std::exception {
 //=============================================================================
 	//-------------------------------------------------------------------------
 	std::string line;
 	std::string where;
-	std::string what;
+	std::string _what;
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -59,7 +60,9 @@ public:
 	Exception(const std::string &what = "unknown reason",
 			  const std::string &where = "unknown location",
 			  const std::string &line = "unknown line number")
-	: line(line), where(where), what(what) {}
+	: line(line), where(where), _what(what) {}
+	//-------------------------------------------------------------------------
+	virtual const char* what() const throw();
 };
 //-----------------------------------------------------------------------------
 inline void warn(const std::string &msg) {
