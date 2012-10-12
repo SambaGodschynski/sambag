@@ -540,6 +540,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\GeometrySerialization.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\GeometrySerialization.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\GlyphCache.cpp"
 					>
 				</File>

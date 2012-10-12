@@ -26,7 +26,6 @@
 #include <sambag/com/ArbitraryType.hpp>
 #include <sstream>
 
-
 /**
  *  +++
  *  ActionMap
@@ -144,7 +143,7 @@ public:
 		FOCUS_TRAVERSAL_KEYS_FORWARD_SET,
 		FOCUS_TRAVERSAL_KEYS_BACKWARD_SET,
 		REVALIDATE_RUNNABLE_SCHEDULED
-};// Flags
+	};// Flags
 protected:
 	//-------------------------------------------------------------------------
 	/**

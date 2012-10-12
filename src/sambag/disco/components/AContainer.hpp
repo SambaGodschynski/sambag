@@ -9,6 +9,7 @@
 #define SAMBAG_ACONTAINER_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/serialization/access.hpp>
 #include "AComponent.hpp"
 #include "ALayoutManager.hpp"
 #include <vector>
@@ -31,6 +32,8 @@ class AContainer: public AComponent,
 		public EventSender<events::ContainerEvent> {
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	typedef AComponent Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AContainer> Ptr;
 	//-------------------------------------------------------------------------
