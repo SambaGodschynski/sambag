@@ -12,8 +12,8 @@ export ROOTDIR=$WHEREAMI/build
 export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
 export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
 export URL_PIXMAN='http://cairographics.org/releases/pixman-0.26.2.tar.gz'
-export URL_CAIRO='http://cairographics.org/releases/cairo-1.10.2.tar.gz'
-export _LIBLINK='MT'
+export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.2.tar.xz'
+export _LIBLINK='MD'
 LIBPNG=libpng
 ZLIB=zlib
 PIXMAN=pixman
@@ -59,11 +59,14 @@ change_vscprj_to_static()
 #passing arguments
 arg()
 {
-case $1 in
-     CLEAN_ALL) export CLEAN_ALL=1
-                rm -rf $ROOTDIR ;;
-     MD) export _LIBLINK='MD' ;;
-esac
+for x in $@
+do
+  case $x in
+       CLEAN_ALL) export CLEAN_ALL=1
+                  rm -rf $ROOTDIR ;;
+       MT) export _LIBLINK='MT' ;;
+  esac
+done
 }
 
 to_dos_path()
@@ -123,9 +126,19 @@ make -f Makefile.win32 "CFG=release"
 
 #deploy
 cd $ROOTDIR
+mkdir $CAIRO/lib
 cp $CAIRO/cairo-version.h $CAIRO/src/cairo-version.h
-cp $ZLIB/zlib.lib $CAIRO/src/release/
-cp $LIBPNG/libpng.lib $CAIRO/src/release
-cp $PIXMAN/pixman/release/pixman-1.lib $CAIRO/src/release
+cp $CAIRO/src/release/cairo.lib $CAIRO/lib
+cp $CAIRO/src/release/cairo-static.lib $CAIRO/lib
+cp $CAIRO/src/release/cairo.dll $CAIRO/lib
+
+mkdir $ZLIB/lib
+cp $ZLIB/zlib.lib $ZLIB/lib
+
+mkdir $LIBPNG/lib
+cp $LIBPNG/libpng.lib $LIBPNG/lib
+
+mkdir $PIXMAN/lib
+cp $PIXMAN/pixman/release/pixman-1.lib $PIXMAN/lib
 
 
