@@ -69,5 +69,7 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 )
 
 add_subdirectory(src)
-
+SOURCE_GROUP(com REGULAR_EXPRESSION ".*/com/.*")
+SOURCE_GROUP(com REGULAR_EXPRESSION ".*/disco/.*")
+SOURCE_GROUP(com REGULAR_EXPRESSION ".*/math/.*")
 
