@@ -17,7 +17,6 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 #APPLE is TRUE on Apple systems.
 
 IF(APPLE)
-	message(STATUS "XXX Apple")
 	find_package(X11 REQUIRED)
         include_directories(${X11_INCLUDE_DIRS})
 	find_package(IConvX REQUIRED)
@@ -27,6 +26,9 @@ ELSEIF(UNIX)
 	include_directories(${X11_INCLUDE_DIRS})
 	add_definitions(-DDISCO_USE_X11)
 ELSEIF(WIN32)
+        find_package(LibPngX REQUIRED)
+        find_package(ZlibX REQUIRED)
+        find_package(PixmanX REQUIRED)
         add_definitions(-DDISCO_USE_WIN32)
 ENDIF(APPLE)
 
