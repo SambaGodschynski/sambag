@@ -16,6 +16,19 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class ColumnBrowser.
+  * 
+  * concept for custom data type:
+  *
+  * struct BrowserNode {
+  *		BrowserNode(const char *name = "");
+  *		bool operator==(const BrowserNode &n) const;
+  *	};
+  *	std::ostream & operator <<(std::ostream &os, const BrowserNode &n);
+  *
+  * typedef ColumnBrowser<BrowserNode> Browser;
+  *
+  * !Don't forget to register 
+  * new type's ColumnView<T> and List<T> in look and feel.
   */
 template <typename T>
 class ColumnBrowser : public AColumnBrowser<DefaultTreeModel<T> > {

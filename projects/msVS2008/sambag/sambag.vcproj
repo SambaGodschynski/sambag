@@ -1584,6 +1584,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\com\One2One.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\One2One.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
 					>
 				</File>
@@ -1625,10 +1633,6 @@
 				>
 				<File
 					RelativePath="..\..\..\src\sambag\dsp\DspPlugin.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\sambag\dsp\HostTimeInfo.cpp"
 					>
 				</File>
 				<File
