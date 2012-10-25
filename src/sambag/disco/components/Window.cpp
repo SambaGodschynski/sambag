@@ -39,6 +39,10 @@ Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 	//add(rootPane); do not call in constructor! -> getPtr() returns NULL
 }
 //-----------------------------------------------------------------------------
+Window::~Window() {
+	//close();
+}
+//-----------------------------------------------------------------------------
 Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
 	SAMBAG_ASSERT(windowImpl);
 	rootPane = components::RootPane::create();

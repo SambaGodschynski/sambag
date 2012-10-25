@@ -85,6 +85,10 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_NAME;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ALIGNMENTX;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ALIGNMENTY;
+	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_FOREGROUND;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_BACKGROUND;
@@ -521,6 +525,9 @@ public:
 	 * @see     getAlignmentX
 	 */
 	static const float RIGHT_ALIGNMENT;
+private:
+	//-------------------------------------------------------------------------
+	float xalignment, yalignment;
 public:
 	//-----------------------------------------------------------------------------
 	virtual bool isDrawing() const;
@@ -573,6 +580,24 @@ public:
 	 *
 	 */
 	virtual Coordinate getAlignmentY() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the alignment along the x axis. This specifies how the component
+	 * would like to be aligned relative to other components. The value should
+	 * be a number between 0 and 1 where 0 represents alignment along the origin,
+	 *  1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	 *
+	 */
+	virtual void setAlignmentX(const Coordinate &c);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the alignment along the y axis. This specifies how the component
+	 * would like to be aligned relative to other components. The value should
+	 * be a number between 0 and 1 where 0 represents alignment along the origin,
+	 *  1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	 *
+	 */
+	virtual void setAlignmentY(const Coordinate &c);
 	//-------------------------------------------------------------------------
 	/**
 	 * Determines if this component or one of its immediate subcomponents
