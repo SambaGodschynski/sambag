@@ -187,6 +187,8 @@ void Win32WindowImpl::createWindow(HWND parent) {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::destroyWindow() {
+	Ptr hold = self.lock();
+	SAMBAG_ASSERT(hold);
 	if (win==NULL)
 		return;
 	// unregister window
