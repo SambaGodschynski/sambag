@@ -5,8 +5,8 @@
  *      Author: samba
  */
 
-#ifndef FORWARD_HPP_
-#define FORWARD_HPP_
+#ifndef SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_
+#define SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -27,10 +27,13 @@ namespace sambag { namespace disco { namespace components {
 	class Scrollbar; typedef boost::shared_ptr<Scrollbar> ScrollbarPtr;
 	class ScrollPane; typedef boost::shared_ptr<ScrollPane> ScrollPanePtr;
 					  typedef boost::weak_ptr<ScrollPane> ScrollPaneWPtr;
+	class Button; typedef boost::shared_ptr<Button> ButtonPtr;
+					  typedef boost::weak_ptr<Button> ButtonWPtr;
 	class Viewport; typedef boost::shared_ptr<Viewport> ViewportPtr;
 	class RedrawManager; typedef boost::shared_ptr<RedrawManager> RedrawManagerPtr;
 	class AWindowImpl; typedef boost::shared_ptr<AWindowImpl> AWindowImplPtr;
 	class Window; typedef boost::shared_ptr<Window> WindowPtr;
+	class Window; typedef boost::weak_ptr<Window> WindowWPtr;
 	class FramedWindow; typedef boost::shared_ptr<FramedWindow> FramedWindowPtr;
 	class PopupMenu; typedef boost::shared_ptr<PopupMenu> PopupMenuPtr;
 	class MenuSelectionManager;
@@ -42,4 +45,4 @@ namespace ui {
 }
 }}}
 
-#endif /* FORWARD_HPP_ */
+#endif /* SAMBAG_DISCO_COMPONENTS_FORWARD_HPP_ */

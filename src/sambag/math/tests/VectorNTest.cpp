@@ -3,7 +3,8 @@
 #include "sambag/math/VectorN.hpp"
 #include "sambag/math/VectorNCreator.hpp"
 #include <string>
-
+#include <ostream>
+#include <sstream>
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::VectorNTest );
 
@@ -28,6 +29,10 @@ void VectorNTest::testToString() {
 	Vector3D v = createVector<float>( 0.0f , 1.1f, 2.2f  );
 	std::string str = v.toString();
 	CPPUNIT_ASSERT_EQUAL ( std::string("{0, 1.1, 2.2}"), str );
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	std::stringstream ss;
+	ss<<v;
+	CPPUNIT_ASSERT_EQUAL ( std::string("{0, 1.1, 2.2}"), ss.str() );
 }
 //=============================================================================
 void VectorNTest::testOperations() {
@@ -35,12 +40,68 @@ void VectorNTest::testOperations() {
 	using namespace sambag;
 	typedef float T;
 	typedef math::VectorN<T, 3> Vector3D;
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType operator+(const VectorType &v) 
 	Vector3D v1 = math::createVector<T>(  1.1f, 2.2f, 3.3f);
 	Vector3D v2 = math::createVector<T>(  1.5f, 2.5f, 3.5f);
 	Vector3D ist = v1 + v2;
 	Vector3D soll = math::createVector<T>( 2.6f, 4.7f, 6.8f);
-    CPPUNIT_ASSERT ( ist == soll );
+    CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType operator-(const VectorType &v)
+	v1 = math::createVector<T>(  5.f, 6.f, 7.f);
+	v2 = math::createVector<T>(  3.f, 4.f, 5.f);
+	ist = v1 - v2;
+	soll = math::createVector<T>( 2.f, 2.f, 2.f);
+    CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType & operator+=(const VectorType &v)
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	ist+=ist;
+	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType & operator-=(const VectorType &v)
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	v1=math::createVector<T>(  .1f, .2f, .3f);
+	ist-=v1;
+	soll = math::createVector<T>( 1.f, 2.f, 3.f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType & operator*=(const ContentType &v)
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	ist*=2.f;
+	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType operator*(const ContentType &v)
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	ist = ist * 2.f;
+	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//
+	//ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	//ist = 2.f * ist; // not possible
+	//soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	//CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType & operator/=(const ContentType &v)
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	ist /= 0.5f;
+	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType operator/(const ContentType &v)  
+	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	ist = ist / 0.5f;
+	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//
+	//ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	//ist = 0.5f / ist; // not possible
+	//soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	//CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ContentType abs() 
+	v1= math::createVector<T>(1.f, 2.f, 2.f);
+	CPPUNIT_ASSERT_EQUAL (3.f, v1.abs());
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<dot product
+	v1= math::createVector<T>( 1.f, 3.f, 5.f);
+	v2= math::createVector<T>( 2.f, 0.f, 4.f);
+	CPPUNIT_ASSERT_EQUAL (22.f, v1 * v2);
+	CPPUNIT_ASSERT_EQUAL (22.f, v2 * v1);
+
 }
 //=============================================================================
 void VectorNTest::testCompare() {

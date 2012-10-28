@@ -29,6 +29,11 @@
 		std::stringstream ss;									\
 		ss<<__FUNCTION__<< " not yet implemented."<<std::endl;	\
 		sambag::com::log(ss.str());								\
+	}	
+#define SAMBAG_WARN(msg) {										\
+		std::stringstream ss;									\
+		ss<<(msg)<<" in: "<<__FUNCTION__<<std::endl;			\
+		sambag::com::log(ss.str());								\
 	}
 
 namespace sambag { namespace com {

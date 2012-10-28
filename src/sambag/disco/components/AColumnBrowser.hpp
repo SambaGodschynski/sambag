@@ -70,7 +70,7 @@ public:
 		if (!value.parent)
 			return getPtr();
 		if (value.parent->isFolder(value.node)) {
-			setText(sambag::com::toString(value.data) + " >");
+			setText("[" + sambag::com::toString(value.data) + "]");
 		} else {
 			setText(sambag::com::toString(value.data));
 		}
@@ -84,17 +84,23 @@ public:
 //=============================================================================
 // @class ColumnBrowserList
 //=============================================================================
-template <class T>
+template <
+	class T, 
+	template <class> class _ListCellRenderer,
+	template <class> class _ListModel,
+	class _ListSelectionModel
+>
 class ColumnBrowserList :
 	public AList<  T,
-					ColumnBrowserListCellRenderer,
-					DefaultListModel,
-					DefaultListSelectionModel
-				>
+		_ListCellRenderer,
+		_ListModel,
+		_ListSelectionModel
+	>
 {
 public:
 	//-------------------------------------------------------------------------
-	typedef ColumnBrowserList<T> Class;
+	typedef ColumnBrowserList<T, _ListCellRenderer, 
+		_ListModel, _ListSelectionModel> Class;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
@@ -109,9 +115,13 @@ public:
 //=============================================================================
 /** 
   * @class AColumnBrowser.
-  * TODO: CellRenderer as template policy
   */
-template <class TreeModel>
+template <
+	class TreeModel, 
+	template <class> class _ListCellRenderer = ColumnBrowserListCellRenderer,
+	template <class> class _ListModel = DefaultListModel,
+	class _ListSelectionModel = DefaultListSelectionModel
+>
 class AColumnBrowser : public AContainer,
 	public TreeModel,
 	public sce::EventSender<SelectionPathChanged>
@@ -149,7 +159,8 @@ public:
 		}
 	};
 	//-------------------------------------------------------------------------
-	typedef ColumnBrowserList<Entry> ListType;
+	typedef ColumnBrowserList<Entry,
+		_ListCellRenderer, _ListModel, _ListSelectionModel> ListType;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ListType> ListTypePtr;
 	//-------------------------------------------------------------------------
@@ -217,8 +228,12 @@ public:
 }; // AColumnBrowser
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-template <class TM>
-int AColumnBrowser<TM>::getListIndex(const Node &node) const {
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+int AColumnBrowser<TM, CR, LM, LSM>::getListIndex(const Node &node) const {
 	if (selectionPath.size() == 1) // root
 		return 0;
 	int c=0;
@@ -237,14 +252,22 @@ int AColumnBrowser<TM>::getListIndex(const Node &node) const {
 	return index;
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::postConstructor() {
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::postConstructor() {
 	Super::postConstructor();
 	init();
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::addList(int listIndex)
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::addList(int listIndex)
 {
 	Coordinate fontSize = 20.;
 	ui::getUIManager().getProperty("ColumnBrowser.fontSize", fontSize);
@@ -261,8 +284,12 @@ void AColumnBrowser<TM>::addList(int listIndex)
 	);
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::init() {
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::init() {
 	setLayout(BorderLayout::create());
 	columnView = ColumnViewClass::create();
 	selectionPath.reserve(10);
@@ -277,8 +304,12 @@ void AColumnBrowser<TM>::init() {
 	add(columnView);
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::adjustListCount() {
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::adjustListCount() {
 	int numLists = (int)columnView->getNumLists();
 	int numNeededLists = (int)selectionPath.size();
 	if (!isFolder(selectionPath.back())) {
@@ -294,9 +325,13 @@ void AColumnBrowser<TM>::adjustListCount() {
 	}
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::updateList(typename AColumnBrowser<TM>::Node parent,
-		int listIndex)
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::updateList(
+	typename AColumnBrowser<TM, CR, LM, LSM>::Node parent, int listIndex)
 {
 	ListTypePtr list = columnView->getList(listIndex);
 	if (!list)
@@ -321,8 +356,12 @@ void AColumnBrowser<TM>::updateList(typename AColumnBrowser<TM>::Node parent,
 	list->getParent()->redraw();
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::updateLists()
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::updateLists()
 {
 	adjustListCount();
 	if (oldPath.size() > selectionPath.size()) {
@@ -337,12 +376,38 @@ void AColumnBrowser<TM>::updateLists()
 	// root
 	for (int i=0; i<(int)selectionPath.size(); ++i) {
 		updateList(selectionPath[i], i);
-	}	
+		/*if (i>=oldPath.size())
+			continue;
+		if (selectionPath[i]!=oldPath[i]) {
+			ListTypePtr list = columnView->getList(i-1);
+			if (!list)
+				continue;
+			list->clearSelection();
+		}*/
+	}
+	if (selectionPath.size() > oldPath.size()) {
+		// scroll to last list
+		/*ScrollPane::Ptr scp = columnView->getScrollPane();
+		ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
+		Point2D vp = scp->getViewport()->getViewPosition();
+		std::cout<<scr->getMaximum()<<std::endl;
+		std::cout<<scr->getExtent()<<std::endl;
+		scp->getViewport()->setViewPosition(
+			Point2D(
+				scr->getMaximum(), 
+				vp.y()
+			)
+		);*/
+	}
 	oldPath = selectionPath;
 }
 //-----------------------------------------------------------------------------
-template <class TM>
-void AColumnBrowser<TM>::onSelectionChanged(void *src,
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::onSelectionChanged(void *src,
 	const ListSelectionEvent &ev, int listIndex)
 {
 	ListTypePtr list = columnView->getList(listIndex);
@@ -365,24 +430,20 @@ void AColumnBrowser<TM>::onSelectionChanged(void *src,
 
 	// update
 	updateLists();
-	
-	/*
-	// scroll to next list
-	ScrollPane::Ptr scp = columnView->getScrollPane();
-	ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
-	Point2D vp = scp->getViewport()->getViewPosition();
-	Coordinate fxW = ui::getUIPropertyCached<FixedCellWidth>(Coordinate(120.));
-	scp->getViewport()->setViewPosition(Point2D(fxW, vp.y()));
-	*/
 
 	EventSender<Event>::notifyListeners (
 		this, Event(getPtr())
 	);
 }
 //-----------------------------------------------------------------------------
-template <class TM>
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
 std::string 
-AColumnBrowser<TM>::pathToString(const typename AColumnBrowser<TM>::Path &path,
+AColumnBrowser<TM, CR, LM, LSM>::pathToString(
+	const typename AColumnBrowser<TM, CR, LM, LSM>::Path &path,
 	const std::string & seperator) const
 {
 	if (path.size()<=1) // only root inside

@@ -60,8 +60,9 @@ void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 		win->invalidateWindow(r);
 }
 //-------------------------------------------------------------------------
-void RedrawManager::updateDirtyComponent(AComponentPtr c,
-		const Rectangle &r)
+void RedrawManager::updateDirtyComponent(
+	RedrawManager::ComponentMap &dirtyComponents, AComponentPtr c,
+	const Rectangle &r)
 {
 	dirtyComponents[c] = r;
 }
@@ -78,7 +79,7 @@ bool RedrawManager::extendDirtyRegion(AComponentPtr c, const Rectangle &rect) {
 		// compute union
 		r = Rectangle(minimize(rect.x0(), r.x0()),
 			Point2D(maximize(rect.x1(), r.x1())));
-		updateDirtyComponent(c, r);
+		updateDirtyComponent(dirtyComponents, c, r);
 		return true;
 	SAMBAG_END_SYNCHRONIZED
 }
@@ -257,7 +258,7 @@ void RedrawManager::collectDirtyComponents(ComponentMap &dirtyComponents,
 		//computeUnion(tmp.x, tmp.y, tmp.width, tmp.height, r);
 		r = Rectangle(minimize(tmp.x0(), r.x0()),
 			Point2D(maximize(tmp.x1(), r.x1())));
-		updateDirtyComponent(rootDirtyComponent, r);
+		updateDirtyComponent(dirtyComponents, rootDirtyComponent, r);
 	}
 
 	// If we haven't seen this root before, then we need to add it to the
@@ -269,42 +270,12 @@ void RedrawManager::collectDirtyComponents(ComponentMap &dirtyComponents,
 	}
 }
 //-----------------------------------------------------------------------------
-/**
- * Simply mapA = mapB ocurrs:
- * boost/unordered/detail/buckets.hpp:454:
- * void boost::unordered::detail::buckets<A, Bucket, Node>::delete_buckets()
- * [with A = std::allocator<std::pair<const boost::shared_ptr<sambag::disco::
- * components::AComponent>, sambag::disco::Rectangle> >, Bucket = boost::unordered::detail::ptr_bucket,
- * Node = boost::unordered::detail::ptr_node<std::pair<const boost::
- * shared_ptr<sambag::disco::components::AComponent>, sambag::disco::Rectangle> >]:
- * Assertion `!this->size_' failed.
- * @param src
- * @param dst
- */
-template <class Map>
-void copyMap(const Map &src, Map &dst) {
-	BOOST_FOREACH(const typename Map::value_type v, src) {
-		dst.insert(v);
-	}
-}
-//-----------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions() {
-	// Thread saftey deactivated because:
-	//  - perfomance reasons
-	//  - bug: after resize window, rootcontainer remains as dirty ->
-	//         every component redraw winds up in a rootcontainer redraw.
-/*	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
-		ComponentMap tmp;
-		// tmp = tmpDirtyComponents;
-		copyMap(tmpDirtyComponents, tmp);
-		// tmpDirtyComponents = dirtyComponents;
-		copyMap(dirtyComponents, tmpDirtyComponents);
-		// dirtyComponents = tmp;
-		copyMap(tmp, dirtyComponents) ;
-		dirtyComponents.clear();
+	ComponentMap tmp;
+	SAMBAG_BEGIN_SYNCHRONIZED(lock) // swap for thread safety
+		tmp.swap(dirtyComponents);
 	SAMBAG_END_SYNCHRONIZED
-	drawDirtyRegions(tmpDirtyComponents);*/
-	drawDirtyRegions(dirtyComponents);
+	drawDirtyRegions(tmp);
 }
 //-------------------------------------------------------------------------
 void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
@@ -368,7 +339,6 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 		//}
 	}
 	painting = false;
-	tmpDirtyComponents.clear();
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::removeInvalidComponent(AComponentPtr component) {

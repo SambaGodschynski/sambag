@@ -23,8 +23,9 @@ AWindowImpl::Ptr Window::getWindowImpl() const {
 	return windowImpl;
 }
 //-----------------------------------------------------------------------------
-Window::Window(Window::Ptr parent) : parent(parent) {
+Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 	rootPane = components::RootPane::create();
+	WindowPtr parent = getParentWindow();
 	if (parent) {
 		windowImpl =
 			getWindowToolkit()->createWindowImpl(parent->getWindowImpl());
@@ -38,6 +39,10 @@ Window::Window(Window::Ptr parent) : parent(parent) {
 	//add(rootPane); do not call in constructor! -> getPtr() returns NULL
 }
 //-----------------------------------------------------------------------------
+Window::~Window() {
+	//close();
+}
+//-----------------------------------------------------------------------------
 Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
 	SAMBAG_ASSERT(windowImpl);
 	rootPane = components::RootPane::create();
@@ -46,6 +51,7 @@ Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
 //-----------------------------------------------------------------------------
 void Window::initWindow() {
 	add(rootPane);
+	WindowPtr parent = getParentWindow();
 	if (parent) {
 		parent->addTrackedOnCloseEventListener(
 			boost::bind(&Window::onParentRemove, this, _1, _2),
@@ -151,5 +157,30 @@ Window::addTrackedOnCloseEventListener(
 {
 	return
 		windowImpl->EventSender<OnCloseEvent>::addTrackedEventListener(f, wPtr);
+}
+//-----------------------------------------------------------------------------
+Window::WindwowMouseEvent::Connection
+Window::addWindowMouseEventListener(const Window::WindwowMouseEvent::EventFunction &f) 
+{
+	EventSender<events::MouseEvent> *sender =
+		windowImpl->getMouseEventSender();
+	if (!sender) {
+		SAMBAG_WARN("WindowImpl EventSender==NULL");
+		return WindwowMouseEvent::Connection();
+	}
+	return sender->addEventListener(f);
+}
+//-----------------------------------------------------------------------------
+Window::WindwowMouseEvent::Connection
+Window::addTrackedWindowMouseEventListener
+(const Window::WindwowMouseEvent::EventFunction &f, Window::AnyWPtr ptr )
+{
+	EventSender<events::MouseEvent> *sender =
+		windowImpl->getMouseEventSender();
+	if (!sender) {
+		SAMBAG_WARN("WindowImpl EventSender==NULL");
+		return WindwowMouseEvent::Connection();
+	}
+	return sender->addTrackedEventListener(f, ptr);
 }
 }}} // namespace(s)

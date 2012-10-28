@@ -9,19 +9,23 @@
 
 #include <string>
 #include <sstream>
+#include "HostTimeInfo.hpp"
 
 namespace sambag { namespace dsp { 
 //=============================================================================
 /** 
  * @classe IHost
+ * PluginProcessor -> Wrapper calls.
  */
 struct IHost {
 //=============================================================================
 	virtual void configurationChanged() = 0;
 	virtual void parameterChanged(int index) = 0;
+	virtual HostTimeInfo * getHostTimeInfo (int filter) = 0;
 };	
 //=============================================================================
-struct PluginProcessorBase {
+class PluginProcessorBase {
+public:
 	template <typename ParameterType>
 	void setParameterValue(int index, const ParameterType &value){}
 	template <typename ParameterType> 
@@ -42,8 +46,10 @@ struct PluginProcessorBase {
 	void suspend(){}
 	void resume(){}
 	// will be setted by client wrapper.
-	IHost *host;
 	void setHost(IHost *_host) { host = _host; }
+	IHost * getHost() const { return host; }
+protected:
+	IHost *host;
 };
 //=============================================================================
 template <int _NumInputs,

@@ -39,6 +39,10 @@ private:
 	WindowPtr parent;
 public:
 	//-------------------------------------------------------------------------
+	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
+		return NULL;
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new TestWindowImpl());
 	}

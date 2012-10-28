@@ -19,6 +19,7 @@
 #include "WindowFlags.hpp"
 #include <windows.h>
 #include <sambag/com/ArbitraryType.hpp>
+#include <sambag/disco/Win32Surface.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -58,7 +59,11 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
-	sambag::disco::ISurface::Ptr createSurface();
+	disco::Win32Surface::Ptr surface;
+	//-------------------------------------------------------------------------
+	disco::Win32Surface::Ptr getSurface();
+	//-------------------------------------------------------------------------
+	void invalidateSurface();
 	//-------------------------------------------------------------------------
 	void destroyWindow();
 	//-------------------------------------------------------------------------

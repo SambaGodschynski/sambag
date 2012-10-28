@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32;CAIRO_WIN32_STATIC_BUILD"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_USE_WIN32;CAIRO_WIN32_STATIC_BUILD"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -169,7 +169,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost_1_49_0&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit-1.12.1\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua-5.2.0\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki-0.1.7\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\..\tinyxml&quot;;&quot;$(ProjectDir)..\..\..\..\..\clibs\cairo\src&quot;;&quot;$(ProjectDir)..\..\..\..\boost&quot;;&quot;$(ProjectDir)..\..\..\..\cppunit\include&quot;;&quot;$(ProjectDir)..\..\..\..\sqlite&quot;;&quot;$(ProjectDir)..\..\..\..\sambag\src&quot;;&quot;$(ProjectDir)..\..\..\..\lua\src&quot;;&quot;$(ProjectDir)..\..\..\..\loki\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;TIXML_USE_TICPP;BOOST_FILESYSTEM_VERSION=3;BOOST_UBLAS_TYPE_CHECK=0;DISCO_MAKE_LIBRARY=1"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -216,231 +216,131 @@
 				Name="lua"
 				>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lapi.c"
+					RelativePath="..\..\..\..\lua\src\lapi.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lapi.h"
+					RelativePath="..\..\..\..\lua\src\lauxlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lauxlib.c"
+					RelativePath="..\..\..\..\lua\src\lbaselib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lauxlib.h"
+					RelativePath="..\..\..\..\lua\src\lbitlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lbaselib.c"
+					RelativePath="..\..\..\..\lua\src\lcode.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lbitlib.c"
+					RelativePath="..\..\..\..\lua\src\lcorolib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lcode.c"
+					RelativePath="..\..\..\..\lua\src\lctype.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lcode.h"
+					RelativePath="..\..\..\..\lua\src\ldblib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lcorolib.c"
+					RelativePath="..\..\..\..\lua\src\ldebug.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lctype.c"
+					RelativePath="..\..\..\..\lua\src\ldo.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lctype.h"
+					RelativePath="..\..\..\..\lua\src\ldump.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldblib.c"
+					RelativePath="..\..\..\..\lua\src\lfunc.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldebug.c"
+					RelativePath="..\..\..\..\lua\src\lgc.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldebug.h"
+					RelativePath="..\..\..\..\lua\src\linit.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldo.c"
+					RelativePath="..\..\..\..\lua\src\liolib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldo.h"
+					RelativePath="..\..\..\..\lua\src\llex.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ldump.c"
+					RelativePath="..\..\..\..\lua\src\lmathlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lfunc.c"
+					RelativePath="..\..\..\..\lua\src\lmem.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lfunc.h"
+					RelativePath="..\..\..\..\lua\src\loadlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lgc.c"
+					RelativePath="..\..\..\..\lua\src\lobject.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lgc.h"
+					RelativePath="..\..\..\..\lua\src\lopcodes.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\linit.c"
+					RelativePath="..\..\..\..\lua\src\loslib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\liolib.c"
+					RelativePath="..\..\..\..\lua\src\lparser.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\llex.c"
+					RelativePath="..\..\..\..\lua\src\lstate.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\llex.h"
+					RelativePath="..\..\..\..\lua\src\lstring.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\llimits.h"
+					RelativePath="..\..\..\..\lua\src\lstrlib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lmathlib.c"
+					RelativePath="..\..\..\..\lua\src\ltable.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lmem.c"
+					RelativePath="..\..\..\..\lua\src\ltablib.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lmem.h"
+					RelativePath="..\..\..\..\lua\src\ltm.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\loadlib.c"
+					RelativePath="..\..\..\..\lua\src\lundump.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lobject.c"
+					RelativePath="..\..\..\..\lua\src\lvm.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lobject.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lopcodes.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lopcodes.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\loslib.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lparser.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lparser.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lstate.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lstate.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lstring.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lstring.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lstrlib.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ltable.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ltable.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ltablib.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ltm.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\ltm.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lua.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lua.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\luaconf.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lualib.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lundump.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lundump.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lvm.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lvm.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lzio.c"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\lua-5.2.0\src\lzio.h"
+					RelativePath="..\..\..\..\lua\src\lzio.c"
 					>
 				</File>
 			</Filter>
@@ -500,6 +400,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\disco\CairoSurface.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\disco\CairoSurface.hpp"
 					>
 				</File>
@@ -533,6 +437,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\src\sambag\disco\Geometry.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\GeometrySerialization.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\disco\GeometrySerialization.hpp"
 					>
 				</File>
 				<File
@@ -1672,6 +1584,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\sambag\com\One2One.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\com\One2One.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\sambag\com\SharedOrWeak.hpp"
 					>
 				</File>
@@ -1713,6 +1633,10 @@
 				>
 				<File
 					RelativePath="..\..\..\src\sambag\dsp\DspPlugin.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\sambag\dsp\HostTimeInfo.hpp"
 					>
 				</File>
 				<File

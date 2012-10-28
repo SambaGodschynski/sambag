@@ -130,6 +130,13 @@ public:
 	Node addNode(Node parent, const NodeDataType &data);
 	//-------------------------------------------------------------------------
 	/**
+	 * appends node to parent
+	 * @param parent
+	 * @param node
+	 */
+	Node addNode(Node parent);
+	//-------------------------------------------------------------------------
+	/**
 	 * removes node and it's children
 	 * @note: this method removes all nodes connections only. So all concerning
 	 * nodes still exists (dead) in tree. This is because bgl::remove_vertex 
@@ -218,8 +225,19 @@ typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
 	const Vertex &u = add_vertex(tree);
 	vertexDataMap[u] = data;
 	boost::add_edge(parent, u, tree);
-	EventSender<Event>::notifyListeners(this, Event());
 	numNodes = numNodes + 1;
+	EventSender<Event>::notifyListeners(this, Event());
+	return u; 
+}
+//-----------------------------------------------------------------------------
+template <class NT>
+typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
+		typename DefaultTreeModel<NT>::Node parent)
+{
+	const Vertex &u = add_vertex(tree);
+	boost::add_edge(parent, u, tree);
+	numNodes = numNodes + 1;
+	EventSender<Event>::notifyListeners(this, Event());
 	return u; 
 }
 //-----------------------------------------------------------------------------

@@ -11,6 +11,7 @@
 #include "sambag/com/Common.hpp"
 #include <string>
 #include <ostream>
+#include <boost/serialization/access.hpp>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -23,6 +24,13 @@ struct Coordinate {
 	//-------------------------------------------------------------------------
 private:
 	sambag::com::Number value;
+	//-------------------------------------------------------------------------
+	friend class boost::serialization::access;
+	//-------------------------------------------------------------------------
+	template <typename Archive> 
+	void serialize(Archive &ar, const unsigned int version) {
+		ar & value;
+	}
 	//-------------------------------------------------------------------------
 public:
 	Coordinate(const sambag::com::Number value=0) : value(value) {}

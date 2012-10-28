@@ -79,7 +79,6 @@ public:
 	virtual void startMainLoop();
 	//-------------------------------------------------------------------------
 	virtual Dimension getScreenSize() const;
-
 }; // Win32WindowToolkit
 }}} // namespace(s)
 #endif // DISCO_USE_WIN32

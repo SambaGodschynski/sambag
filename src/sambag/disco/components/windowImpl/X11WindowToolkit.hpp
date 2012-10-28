@@ -86,7 +86,6 @@ public:
 	virtual void startMainLoop();
 	//-------------------------------------------------------------------------
 	virtual Dimension getScreenSize() const;
-
 }; // X11WindowToolkit
 }}} // namespace(s)
 #endif // DISCO_USE_X11

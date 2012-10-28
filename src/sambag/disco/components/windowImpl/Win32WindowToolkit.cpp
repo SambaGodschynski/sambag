@@ -10,6 +10,7 @@
 #include "WindowImpl.hpp"
 #include "Win32WindowImpl.hpp"
 #include <sambag/disco/components/Window.hpp>
+#include <windows.h>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================

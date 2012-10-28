@@ -15,13 +15,13 @@
 #include <sambag/disco/components/Forward.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace events {
-
+namespace sce = sambag::com::events;
 //=============================================================================
 /** 
   * @class MouseEventCreator.
   * Helperclass for creating MouseEvents.
   */
-class MouseEventCreator {
+class MouseEventCreator : public sce::EventSender <MouseEvent> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -35,6 +35,8 @@ protected:
 	RootPanePtr root;
 	//-------------------------------------------------------------------------
 	MouseEventCreator(RootPanePtr root) : root(root) {}
+	//-------------------------------------------------------------------------
+	void fireEvent(const MouseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create(RootPanePtr root) {

@@ -14,6 +14,7 @@
 #include <sambag/com/events/Events.hpp>
 #include "WindowFlags.hpp"
 #include <string>
+#include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -41,9 +42,13 @@ class AWindowImpl :
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AWindowImpl> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<AWindowImpl> WPtr;
 protected:
 private:
 public:
+	//-------------------------------------------------------------------------
+	virtual EventSender<events::MouseEvent> * getMouseEventSender() = 0;
 	//-------------------------------------------------------------------------
 	virtual void open() = 0;
 	//-------------------------------------------------------------------------

@@ -19,11 +19,15 @@
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
 		return 																\
-		boost::shared_dynamic_cast<window_class_name>(Window::getPtr()); 	\
+		  boost::shared_dynamic_cast<window_class_name>                     \
+            ( ::sambag::disco::components::Window::getPtr() ); 	            \
 	}																		\
-	static Ptr create(Window::Ptr parent = Window::Ptr()) { 				\
+	static Ptr create(::sambag::disco::components::Window::Ptr parent =     \
+	  ::sambag::disco::components::Window::Ptr())                           \
+	{ 																		\
 		Ptr neu(new window_class_name(parent));								\
-		neu->self = neu;													\
+		neu->self = neu;                                                    \
+		neu->postConstructor();                                             \
 		neu->initWindow();													\
 		return neu;															\
 	}
@@ -46,11 +50,11 @@ public:
 	typedef boost::weak_ptr<Window> WPtr;
 protected:
 	//-------------------------------------------------------------------------
-	Window::Ptr parent;
+	WindowWPtr parentWindow;
 	//-------------------------------------------------------------------------
 	components::RootPane::Ptr rootPane;
 	//-------------------------------------------------------------------------
-	Window(Window::Ptr parent);
+	Window(Window::Ptr parentWindow);
 	//-------------------------------------------------------------------------
 	Window(AWindowImpl::Ptr windowImpl);
 	//-------------------------------------------------------------------------
@@ -66,6 +70,8 @@ private:
 	//-------------------------------------------------------------------------
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
+	//-------------------------------------------------------------------------
+	 virtual ~Window();
 	//-------------------------------------------------------------------------
 	/**
 	 * notifys the (system) window to invalidate the given area.
@@ -88,6 +94,10 @@ public:
 		return AContainer::Ptr();
 	}
 	//-------------------------------------------------------------------------
+	virtual WindowPtr getParentWindow() const {
+		return parentWindow.lock();
+	}
+	//-------------------------------------------------------------------------
 	Rectangle getWindowBounds() const;
 	//-------------------------------------------------------------------------
 	Point2D getWindowLocation() const {
@@ -97,6 +107,8 @@ public:
 	Dimension getWindowSize() const {
 		return getWindowBounds().getDimension();
 	}
+	/////////////
+	// OnCloseEventSender
 	//-------------------------------------------------------------------------
 	typedef sambag::com::events::EventSender<OnCloseEvent> OnCloseEventSender;
 	//-------------------------------------------------------------------------
@@ -108,6 +120,17 @@ public:
 	OnCloseEventSender::Connection
 	addTrackedOnCloseEventListener
 	(const OnCloseEventSender::EventFunction &f, AnyWPtr ptr );
+	/////////////
+	// WindwowMouseEvent
+	//-------------------------------------------------------------------------
+	typedef sambag::com::events::EventSender<events::MouseEvent> WindwowMouseEvent;
+	//-------------------------------------------------------------------------
+	WindwowMouseEvent::Connection
+	addWindowMouseEventListener(const WindwowMouseEvent::EventFunction &f);
+	//-------------------------------------------------------------------------
+	WindwowMouseEvent::Connection
+	addTrackedWindowMouseEventListener
+	(const WindwowMouseEvent::EventFunction &f, AnyWPtr ptr );
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the minimum size of this window to a constant value.
@@ -117,8 +140,8 @@ public:
 	 */
 	virtual void pack();
 	//-------------------------------------------------------------------------
-	static Ptr create(Window::Ptr parent=WindowPtr()) {
-		Ptr res(new Window(parent));
+	static Ptr create(Window::Ptr parentWindow=WindowPtr()) {
+		Ptr res(new Window(parentWindow));
 		res->self = res;
 		res->initWindow();
 		return res;

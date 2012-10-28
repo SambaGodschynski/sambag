@@ -16,6 +16,8 @@
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/ISurface.hpp>
 #include <sambag/disco/IPattern.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -37,9 +39,24 @@ public:
 protected:
 	//-------------------------------------------------------------------------
 	BasicButtonUI();
+	//-------------------------------------------------------------------------
+	virtual void installListener(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	virtual void installDefaults(AComponentPtr c);
 private:
 	//-------------------------------------------------------------------------
-	IPattern::Ptr bk, roll, press;
+	IPattern::Ptr bk, roll, press, disabled;
+	//-------------------------------------------------------------------------
+	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
+	//-------------------------------------------------------------------------
+	typedef BasicButtonListener<ButtonModell> ButtonListener;
+	//-------------------------------------------------------------------------
+	ButtonListener listener;
+	//-------------------------------------------------------------------------
+	IPattern::Ptr 
+		createPattern(const ColorRGBA &start, const ColorRGBA &end) const;
+	//-------------------------------------------------------------------------
+	svg::graphicElements::Style createDefaultStyle() const;
 public:
 	//-------------------------------------------------------------------------
 	virtual bool contains(AComponent::Ptr c, const Point2D &p);
@@ -86,23 +103,17 @@ public:
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 BasicButtonUI<ButtonModell>::BasicButtonUI() {
-	ILinearPattern::Ptr lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0.5);
-	lp->addColorStop(svg::HtmlColors::getColor("lavender"), .51);
-	lp->addColorStop(svg::HtmlColors::getColor("lavender"), 1.0);
-	bk = lp;
-	lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("slategrey"), 1.0);
-	press = lp;
-	lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
-	lp->addColorStop(svg::HtmlColors::getColor("white"), 0);
-	lp->addColorStop(svg::HtmlColors::getColor("lightblue"), 1.0);
-	roll = lp;
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+svg::graphicElements::Style 
+BasicButtonUI<ButtonModell>::createDefaultStyle() const
+{
+	svg::graphicElements::Style style;
+	style.fillColor(ColorRGBA(0,0,0,0));
+	style.strokeColor(ColorRGBA(0,0,0,1.));
+	style.strokeWidth(1.5);
+	return style;
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -113,27 +124,24 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	// consider clipping
 	cn->translate(Point2D(2,2));
 	cn->scale(Point2D(0.8, 0.8));
-
-	if (b->isButtonRollover()) {
+	
+	if (!b->isEnabled()) {
+		sDisabled.intoContext(cn);
+	} else if (b->isButtonRollover()) {
 		if (b->isButtonPressed())
-			//cn->setFillColor(svg::HtmlColors::getColor("slategrey"));
-			cn->setFillPattern(press);
+			sPress.intoContext(cn);
 		else
-			cn->setFillPattern(roll);
-			//cn->setFillColor(svg::HtmlColors::getColor("lightblue"));
+			sRoll.intoContext(cn);
 	} else
-		//cn->setFillColor(svg::HtmlColors::getColor("aliceblue"));
-		cn->setFillPattern(bk);
-	cn->setStrokeColor(c->getForeground());
+		sNormal.intoContext(cn);
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
 	cn->fill();
 	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
-	cn->setStrokeWidth(1);
 	cn->stroke();
 	cn->setFont(b->getFont());
 	std::string str = sambag::com::normString(b->getText());
 	Rectangle txt = cn->textExtends(str);
-	cn->setFillColor(c->getForeground());
+	cn->setFillColor(cn->getStrokeColor());
 	cn->translate( Point2D( 10,
 			c->getHeight() / 2.0 + txt.getHeight() / 2.0
 	));
@@ -143,12 +151,17 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
+	installDefaults(c);
+	installListener(c);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::installListener(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
 			boost::shared_dynamic_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
-	typedef BasicButtonListener<ButtonModell> ButtonListener;
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
-			boost::bind(&ButtonListener::onMouseEvent, _1, _2),
+			boost::bind(&ButtonListener::onMouseEvent, &listener, _1, _2),
 			b
 	);
 	b->EventSender<typename ButtonModell::StateChangedEvent>::
@@ -157,6 +170,34 @@ void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
 					this, _1, _2),
 			b
 	);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+IPattern::Ptr 
+BasicButtonUI<ButtonModell>::
+createPattern(const ColorRGBA &start, const ColorRGBA &end) const
+{
+	ILinearPattern::Ptr lp =
+		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
+	lp->addColorStop(start, 0);
+	lp->addColorStop(start, 0.5);
+	lp->addColorStop(end, .51);
+	lp->addColorStop(end, 1.0);
+	return lp;
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::installDefaults(AComponentPtr c) {
+	ui::UIManager &m = ui::getUIManager();
+	sNormal = sPress = sRoll = sDisabled = createDefaultStyle();
+	m.getProperty("Button.normal", sNormal);
+	/*bk = createPattern(
+		ColorRGBA(1.,1.,1.,1.),
+	    end
+	);*/
+	m.getProperty("Button.pressed", sPress);
+	m.getProperty("Button.rollover", sRoll);
+	m.getProperty("Button.disabled", sDisabled);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>

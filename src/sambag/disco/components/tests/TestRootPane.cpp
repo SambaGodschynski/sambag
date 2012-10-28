@@ -72,14 +72,14 @@ void TestRootPane::testRepaint() {
 	RedrawManager::currentManager(root)->drawDirtyRegions();
 	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)14, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
 	comps[0]->redraw();
-	CPPUNIT_ASSERT_EQUAL((int)14, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)15, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)8, TestComponent::numDrawCalled);
 	comps[2]->redraw();
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)16, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)9, TestComponent::numDrawCalled);
 	root->validate();
 }
 //-----------------------------------------------------------------------------

@@ -16,6 +16,9 @@
 namespace sambag {
 namespace math {
 //==============================================================================
+/**
+ * TODO: impl missing (contentType * VectorType) operator (notice the twist).
+ */
 template < typename T, int N >
 class VectorN : public VectorN<T, N-1>{
 //==============================================================================
@@ -51,7 +54,7 @@ public:
 		v._set ( &values[0] );
 		return v;
 	}
-        //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 	VectorN() : val(0) {}
 	//--------------------------------------------------------------------------
 	virtual ~VectorN() {}
@@ -163,6 +166,13 @@ protected:
 	//--------------------------------------------------------------------------
 	bool operator==(const VectorType &v) const { return true; }
 };
+///////////////////////////////////////////////////////////////////////////////
+template <class T, int D>
+std::ostream & operator<<(std::ostream &os, const sambag::math::VectorN<T, D> &v) 
+{
+	os<<v.toString();
+	return os;
+}
 } // math
 } // sambag
 

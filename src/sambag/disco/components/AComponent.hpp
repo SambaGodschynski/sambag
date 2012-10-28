@@ -26,16 +26,12 @@
 #include <sambag/com/ArbitraryType.hpp>
 #include <sstream>
 
-
 /**
  *  +++
  *  ActionMap
  *  Border
  *  KeyStroke
  *  KeyEvent
- *  MouseEvent
- *  AComponentUI
- *  LayoutManager
  *  FocusListener
  *  ---
  *  FocusTraversalPolicy
@@ -43,7 +39,6 @@
  *  ToolTip
  *  HierarchyBoundsListener
  *  HierarchyListener
- *  PropertyChangeEvent
  *  ComponentEvent
  *  Image
  *  DropTarget
@@ -90,6 +85,10 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_NAME;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ALIGNMENTX;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ALIGNMENTY;
+	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_FOREGROUND;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_BACKGROUND;
@@ -116,6 +115,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_OPAQUE;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_COMPONENTPOPUPMENU;
+	//-------------------------------------------------------------------------
 	enum Flag {
 		IS_DOUBLE_BUFFERED = 0,
 		ANCESTOR_USING_BUFFER,
@@ -124,7 +125,7 @@ public:
 		KEY_EVENTS_ENABLED,
 		FOCUS_INPUTMAP_CREATED,
 		ANCESTOR_INPUTMAP_CREATED,
-		WIF_INPUTMAP_CREATED,
+		IF_INPUTMAP_CREATED,
 		ACTIONMAP_CREATED,
 		CREATED_DOUBLE_BUFFER,
 		// bit 10 is free
@@ -146,7 +147,7 @@ public:
 		FOCUS_TRAVERSAL_KEYS_FORWARD_SET,
 		FOCUS_TRAVERSAL_KEYS_BACKWARD_SET,
 		REVALIDATE_RUNNABLE_SCHEDULED
-};// Flags
+	};// Flags
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -203,6 +204,7 @@ protected:
 	 * @see setBackground
 	 */
 	ColorRGBA background;
+	//-------------------------------------------------------------------------
 	/**
 	 * True when the object should ignore all repaint events.
 	 * @see setIgnoreRepaint
@@ -254,6 +256,8 @@ protected:
 	 * @param cn
 	 */
 	void drawForceDoubleBuffered(IDrawContext::Ptr cn);
+	//-------------------------------------------------------------------------
+	PopupMenuPtr popupMenu;
 private:
 	//-------------------------------------------------------------------------
 	unsigned int flags;
@@ -521,6 +525,9 @@ public:
 	 * @see     getAlignmentX
 	 */
 	static const float RIGHT_ALIGNMENT;
+private:
+	//-------------------------------------------------------------------------
+	float xalignment, yalignment;
 public:
 	//-----------------------------------------------------------------------------
 	virtual bool isDrawing() const;
@@ -573,6 +580,24 @@ public:
 	 *
 	 */
 	virtual Coordinate getAlignmentY() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the alignment along the x axis. This specifies how the component
+	 * would like to be aligned relative to other components. The value should
+	 * be a number between 0 and 1 where 0 represents alignment along the origin,
+	 *  1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	 *
+	 */
+	virtual void setAlignmentX(const Coordinate &c);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the alignment along the y axis. This specifies how the component
+	 * would like to be aligned relative to other components. The value should
+	 * be a number between 0 and 1 where 0 represents alignment along the origin,
+	 *  1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	 *
+	 */
+	virtual void setAlignmentY(const Coordinate &c);
 	//-------------------------------------------------------------------------
 	/**
 	 * Determines if this component or one of its immediate subcomponents
@@ -1212,6 +1237,22 @@ public:
 	 */
 	template <class ContainerType>
 	typename ContainerType::Ptr getLastContainer() const;
+	//-------------------------------------------------------------------------
+	/**
+	 *  Sets whether or not getComponentPopupMenu should delegate to the parent
+	 *  if this component does not have a PopupMenu assigned to it.
+	 */
+	virtual void setInheritsPopupMenu(bool value); 
+	//-------------------------------------------------------------------------
+	/**
+	 *  @retun whether or not getComponentPopupMenu should delegate to the parent
+	 *  if this component does not have a PopupMenu assigned to it.
+	 */
+	virtual bool isInheritsPopupMenu() const; 
+	//-------------------------------------------------------------------------
+	virtual void setComponentPopupMenu(PopupMenuPtr menu);
+	//-------------------------------------------------------------------------
+	virtual PopupMenuPtr getComponentPopupMenu() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
