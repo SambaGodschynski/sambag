@@ -236,7 +236,7 @@ VST2xPluginWrapper<P,U,T,E,C>::getHostTimeInfo (int filter)
 	timeInfo.tempo = vstTime->tempo;
 	timeInfo.sampleRate = vstTime->sampleRate;
 	timeInfo.ppqPos = vstTime->ppqPos;
-	timeInfo.transportIsPlaying = (vstTime->flags & kVstTransportPlaying) > 0;
+	timeInfo.transportIsPlaying((vstTime->flags & kVstTransportPlaying) > 0);
 	timeInfo.samplePos = vstTime->samplePos;
 	timeInfo.nanoSeconds = vstTime->nanoSeconds;
 	timeInfo.barStartPos = vstTime->barStartPos;
@@ -247,11 +247,11 @@ VST2xPluginWrapper<P,U,T,E,C>::getHostTimeInfo (int filter)
 	timeInfo.smpteOffset = vstTime->smpteOffset;
 	timeInfo.smpteFrameRate = vstTime->smpteFrameRate;
 	timeInfo.samplesToNextClock = vstTime->samplesToNextClock;
-	timeInfo.transportIsChanged = (vstTime->flags & kVstTransportChanged) > 0;
-	timeInfo.transportCycleIsActive = (vstTime->flags & kVstTransportCycleActive) > 0;
-	timeInfo.transportIsRecording = (vstTime->flags & kVstTransportRecording) > 0;
-	timeInfo.automationIsWriting = (vstTime->flags & kVstAutomationWriting) > 0;
-	timeInfo.automationIsReading = (vstTime->flags & kVstAutomationReading) > 0;
+	timeInfo.transportIsChanged((vstTime->flags & kVstTransportChanged) > 0);
+	timeInfo.transportCycleIsActive((vstTime->flags & kVstTransportCycleActive) > 0);
+	timeInfo.transportIsRecording((vstTime->flags & kVstTransportRecording) > 0);
+	timeInfo.automationIsWriting((vstTime->flags & kVstAutomationWriting) > 0);
+	timeInfo.automationIsReading((vstTime->flags & kVstAutomationReading) > 0);
 	return &timeInfo;
 }
 }}} // namespace

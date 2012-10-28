@@ -27,10 +27,17 @@ struct HostTimeInfo {
 		FrxSmpteValid = 1<<6,
 		FrxClockValid = 1<<7
 	};
+	enum Flag {
+		kTransportIsChanged = 1, 
+		kTransportCycleIsActive = 1 << 1, 
+		kTransportIsRecording = 1 << 2, 
+		kAutomationIsWriting = 1 << 3, 
+		kAutomationIsReading = 1 << 4,
+		kTransportIsPlaying = 1 << 5
+	};
 	double tempo;
 	double sampleRate; // always valid
 	double ppqPos; // Musical Position, in Quarter Note (1.0 equals 1 Quarter Note).
-	bool transportIsPlaying;
 	double 	samplePos; // current Position in audio samples (always valid)
 	double 	nanoSeconds; //System Time in nanoseconds (10^-9 second).
 	double barStartPos; // last Bar Start Position, in Quarter Note
@@ -41,16 +48,11 @@ struct HostTimeInfo {
 	int smpteOffset; // SMPTE offset (in SMPTE subframes (bits; 1/80 of a frame)).
 	int smpteFrameRate;
 	int samplesToNextClock; // MIDI Clock Resolution (24 Per Quarter Note), can be negative (nearest clock). 
-	bool transportIsChanged; // 	indicates that play, cycle or record state has changed 
-	bool transportCycleIsActive; // set if Host sequencer is in cycle mode
-	bool transportIsRecording; // set if Host sequencer is in record mode
-	bool automationIsWriting; // set if automation write mode active (record parameter changes)
-	bool automationIsReading; // set if automation read mode active (play parameter changes) 
+	int flags;
 	HostTimeInfo() :
 		tempo(0.),
 		sampleRate(0.),
 		ppqPos(0.),
-		transportIsPlaying(false),
 		samplePos(0.),
 		nanoSeconds(0.),
 		barStartPos(0.),
@@ -61,12 +63,69 @@ struct HostTimeInfo {
 		smpteOffset(0),
 		smpteFrameRate(0),
 		samplesToNextClock(0),
-		transportIsChanged(false),
-		transportCycleIsActive(false),
-		transportIsRecording(false),
-		automationIsWriting(false),
-		automationIsReading(false)
+		flags(0)
 	{
+	}
+	void setFlag(Flag f, bool val) {
+		int fVal = f;
+		if (val) {
+			flags |= (1 << fVal);
+		} else {
+			flags &= ~(1 << fVal);
+		}
+	}
+	bool getFlag(Flag f) const {
+		int fVal = f;
+		return flags & fVal == fVal;
+	}
+	bool transportIsChanged() const // 	indicates that play, cycle or record state has changed 
+	{
+		return getFlag(kTransportIsChanged);
+	}
+	bool transportCycleIsActive() const // set if Host sequencer is in cycle mode
+	{
+		return getFlag(kTransportCycleIsActive);
+	}
+	bool transportIsRecording() const // set if Host sequencer is in record mode
+		{
+		return getFlag(kTransportIsRecording);
+	}
+	bool automationIsWriting() const // set if automation write mode active (record parameter changes)
+	{
+		return getFlag(kAutomationIsWriting);
+	}
+	bool automationIsReading() const // set if automation read mode active (play parameter changes) 
+	{
+		return getFlag(kAutomationIsReading);
+	}
+	bool transportIsPlaying() const // set if automation read mode active (play parameter changes) 
+	{
+		return getFlag(kTransportIsPlaying);
+	}
+
+	void transportIsChanged(bool b) 
+	{
+		setFlag(kTransportIsChanged, b);
+	}
+	void transportCycleIsActive(bool b)
+	{
+		setFlag(kTransportCycleIsActive, b);
+	}
+	void transportIsRecording(bool b)
+		{
+		setFlag(kTransportIsRecording, b);
+	}
+	void automationIsWriting(bool b)
+	{
+		setFlag(kAutomationIsWriting, b);
+	}
+	void automationIsReading(bool b)
+	{
+		setFlag(kAutomationIsReading, b);
+	}
+	void transportIsPlaying(bool b)
+	{
+		setFlag(kTransportIsPlaying, b);
 	}
 };
 }} // namespace(s)
