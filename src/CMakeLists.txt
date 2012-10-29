@@ -3,6 +3,7 @@ SET ( SAMBAG_SOURCES
 	sambag/com/Exception.cpp
 	sambag/com/FileHandler.cpp
 	sambag/com/FileSystem.cpp
+	sambag/com/One2One.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
 	sambag/disco/CairoDiscoFactory.cpp
@@ -128,6 +129,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/FileSystemTest.cpp
 	sambag/com/tests/TestArithmeticWrapper.cpp
 	sambag/com/tests/TestHelper.cpp
+	sambag/com/tests/TestOne2One.cpp
 	sambag/com/tests/TestPropertyChanged.cpp
 	sambag/com/tests/TestSharedOrWeak.cpp
 	sambag/com/tests/TestThread.cpp
