@@ -414,7 +414,7 @@ void AList<T, CR, DM, SM>::onIntervalRemoved(void *src,
 	const events::ListDataEvent &ev)
 {
 	if (ev.getType() == events::ListDataEvent::INTERVAL_REMOVED) {
-		removeSelectionInterval(ev.getIndex0(), ev.getIndex1());
+		ListSelectionModel::removeSelectionInterval(ev.getIndex0(), ev.getIndex1());
 	}
 }
 //-----------------------------------------------------------------------------
