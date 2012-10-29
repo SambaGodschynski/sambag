@@ -18,6 +18,7 @@ ENDIF(WIN32)
 FIND_PATH(CPPUNIT_LIBRARY_DIRS ${LIBCPPUNIT}
 	$ENV{CLIBS}/cppunit/lib/lib
 	$ENV{CLIBS}/cppunit/bin/lib
+	$ENV{CLIBS}/cppunit/lib
 )
 
 SET(CPPUNIT_FOUND "NO")
