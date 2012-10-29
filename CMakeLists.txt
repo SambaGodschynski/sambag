@@ -6,6 +6,7 @@ project (sambag)
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
+add_definitions(-DCAIRO_WIN32_STATIC_BUILD)
 
 
 #to avoid name conflicts with existing FindSomeLib.cmake scripts
@@ -61,6 +62,11 @@ ELSEIF(UNIX)
 		${X11_LIBRARIES}
 	)
 ELSEIF(WIN32)
+        set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
+		${LIBPNG_LIBRARY_DIRS}/${LIBPNG}
+		${LIBZLIB_LIBRARY_DIRS}/${LIBZLIB}
+		${LIBPIXMAN_LIBRARY_DIRS}/${LIBPIXMAN}
+	)
 ENDIF(APPLE)
 
 
