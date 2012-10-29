@@ -34,6 +34,7 @@
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/ColumnView.hpp>
+#include <sambag/disco/svg/StyleParser.hpp>
 
 
 namespace sambag { namespace disco {
@@ -74,6 +75,17 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
 }
 //-----------------------------------------------------------------------------
+namespace {
+	svg::graphicElements::Style createStyle(const std::string &str) {
+		using namespace sambag::disco::svg;
+		svg::graphicElements::Style res;
+		std::stringstream ss;
+		ss<<str;
+		ss>>res;
+		return res;
+	}
+} // namespace(s)
+//-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
@@ -81,6 +93,16 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
 	m.putProperty("global.background", HtmlColors::getColor("red"));
 	m.putProperty("global.foreground", HtmlColors::getColor("white"));
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Button
+	using namespace svg;
+	m.putProperty("Button.normal", 
+		createStyle("stroke: black; fill: lavender;"));
+	m.putProperty("Button.pressed",  
+		createStyle("stroke: black; fill: slategrey;"));
+	m.putProperty("Button.rollover",  
+		createStyle("stroke: black; fill: lightblue;"));
+	m.putProperty("Button.disabled",  
+		createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
 	m.putProperty("ScrollBar.minimumThumbSize", Dimension(15., 15.));
 	m.putProperty("ScrollBar.maximumThumbSize", Dimension(20., 20.));

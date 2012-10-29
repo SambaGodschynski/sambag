@@ -117,7 +117,7 @@ public:
 	//-------------------------------------------------------------------------
 	void installDefaults(AComponentPtr c);
 	//-------------------------------------------------------------------------
-	void installListener(AComponentPtr c);
+	void installListeners(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();
@@ -154,7 +154,7 @@ template <class M>
 void BasicKnobUI<M>::installUI(AComponentPtr c) {
 	knob = boost::shared_dynamic_cast<KnobType>(c);
 	installDefaults(c);
-	installListener(c);
+	installListeners(c);
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -273,7 +273,7 @@ void BasicKnobUI<M>::installDefaults(AComponentPtr c) {
 }
 //-----------------------------------------------------------------------------
 template <class M>
-void BasicKnobUI<M>::installListener(AComponentPtr c) {
+void BasicKnobUI<M>::installListeners(AComponentPtr c) {
 	c->EventSender<sdce::MouseEvent>::addTrackedEventListener(
 		boost::bind(&Class::onMouse, this, _1, _2),
 		getPtr()

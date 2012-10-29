@@ -18,6 +18,7 @@
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include "Viewport.hpp"
 #include "ui/IListUI.hpp"
+#include "events/ListDataEvent.hpp"
 
 namespace sambag { namespace disco { namespace components {
 struct ListConstants {
@@ -129,6 +130,8 @@ protected:
 	 */
 	virtual void installLookAndFeel(ui::ALookAndFeelPtr laf);
 public:
+	//-------------------------------------------------------------------------
+	void onIntervalRemoved(void *src, const events::ListDataEvent &ev);
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return boost::shared_dynamic_cast<Class>(Super::getPtr());
@@ -407,6 +410,19 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
+void AList<T, CR, DM, SM>::onIntervalRemoved(void *src, 
+	const events::ListDataEvent &ev)
+{
+	if (ev.getType() == events::ListDataEvent::INTERVAL_REMOVED) {
+		removeSelectionInterval(ev.getIndex0(), ev.getIndex1());
+	}
+}
+//-----------------------------------------------------------------------------
+template < class T,
+	template <class> class CR,
+	template <class> class DM,
+	class SM
+>
 void AList<T, CR, DM, SM>::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 	Super::installLookAndFeel(laf);
 	if (cellRenderer) {
@@ -430,6 +446,10 @@ template < class T,
 void AList<T, CR, DM, SM>::postConstructor() {
 	Super::postConstructor();
 	setCellRenderer(ListCellRenderer::create());
+	EventSender<events::ListDataEvent>::addEventListener(
+		boost::bind(&Class::onIntervalRemoved, this, _1, _2)
+	);
+
 }
 //-----------------------------------------------------------------------------
 template < class T,

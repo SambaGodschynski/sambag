@@ -23,7 +23,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<FramedWindow> Ptr;
 protected:
-	FramedWindow(Window::Ptr parent);
+	FramedWindow(Window::Ptr parent=Window::Ptr());
 private:
 public:
 	//-------------------------------------------------------------------------

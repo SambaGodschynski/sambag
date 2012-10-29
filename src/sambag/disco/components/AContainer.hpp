@@ -9,6 +9,7 @@
 #define SAMBAG_ACONTAINER_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/serialization/access.hpp>
 #include "AComponent.hpp"
 #include "ALayoutManager.hpp"
 #include <vector>
@@ -31,6 +32,8 @@ class AContainer: public AComponent,
 		public EventSender<events::ContainerEvent> {
 //=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	typedef AComponent Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<AContainer> Ptr;
 	//-------------------------------------------------------------------------
@@ -152,6 +155,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~AContainer();
 	//-------------------------------------------------------------------------
+	enum { APPEND = -1 };
+	//-------------------------------------------------------------------------
 	/**
 	 * Adds the specified component to this container. Note: If a component has
 	 * been added to a container that has been displayed, validate must be
@@ -162,7 +167,7 @@ public:
 	 * @param index
 	 * @return the component argument
 	 */
-	virtual AComponent::Ptr add(const AComponentSharedOrWeak &comp, int index = -1,
+	virtual AComponent::Ptr add(const AComponentSharedOrWeak &comp, int index = APPEND,
 			com::ArbitraryType::Ptr constraint = ArbitraryType::Ptr());
 	//-------------------------------------------------------------------------
 	/**

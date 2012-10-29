@@ -74,10 +74,10 @@ void VectorNTest::testOperations() {
 	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
 	CPPUNIT_ASSERT_EQUAL (soll, ist);
 	//
-	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	//ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
 	//ist = 2.f * ist; // not possible
-	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
-	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	//CPPUNIT_ASSERT_EQUAL (soll, ist);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<VectorType & operator/=(const ContentType &v)
 	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
 	ist /= 0.5f;
@@ -89,10 +89,10 @@ void VectorNTest::testOperations() {
 	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
 	CPPUNIT_ASSERT_EQUAL (soll, ist);
 	//
-	ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
+	//ist=math::createVector<T>(  1.1f, 2.2f, 3.3f);
 	//ist = 0.5f / ist; // not possible
-	soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
-	CPPUNIT_ASSERT_EQUAL (soll, ist);
+	//soll = math::createVector<T>( 2.2f, 4.4f, 6.6f);
+	//CPPUNIT_ASSERT_EQUAL (soll, ist);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ContentType abs() 
 	v1= math::createVector<T>(1.f, 2.f, 2.f);
 	CPPUNIT_ASSERT_EQUAL (3.f, v1.abs());

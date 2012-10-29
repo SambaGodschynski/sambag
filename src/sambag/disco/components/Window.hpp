@@ -19,11 +19,15 @@
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
 		return 																\
-		boost::shared_dynamic_cast<window_class_name>(Window::getPtr()); 	\
+		  boost::shared_dynamic_cast<window_class_name>                     \
+            ( ::sambag::disco::components::Window::getPtr() ); 	            \
 	}																		\
-	static Ptr create(Window::Ptr parent = Window::Ptr()) { 				\
+	static Ptr create(::sambag::disco::components::Window::Ptr parent =     \
+	  ::sambag::disco::components::Window::Ptr())                           \
+	{ 																		\
 		Ptr neu(new window_class_name(parent));								\
-		neu->self = neu;													\
+		neu->self = neu;                                                    \
+		neu->postConstructor();                                             \
 		neu->initWindow();													\
 		return neu;															\
 	}
@@ -66,6 +70,8 @@ private:
 	//-------------------------------------------------------------------------
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
+	//-------------------------------------------------------------------------
+	 virtual ~Window();
 	//-------------------------------------------------------------------------
 	/**
 	 * notifys the (system) window to invalidate the given area.

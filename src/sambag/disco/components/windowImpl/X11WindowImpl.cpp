@@ -104,6 +104,8 @@ void X11WindowImpl::createWindow() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::destroyWindow() {
+	Ptr hold = self.lock();
+	SAMBAG_ASSERT(hold);
 	if (win==0)
 		return;
 	// unregister window
