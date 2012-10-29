@@ -15,7 +15,7 @@ namespace sambag { namespace disco { namespace components {
 // .. add other
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {
-	typedef Loki::SingletonHolder<WindowTestToolkit> FactoryHolder;
+	typedef Loki::SingletonHolder< WindowTestToolkit<> > FactoryHolder;
 	return &FactoryHolder::Instance();
 }
 #endif

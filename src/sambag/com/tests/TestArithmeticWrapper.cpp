@@ -9,9 +9,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include <sambag/com/ArithmeticWrapper.hpp>
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestArithmeticWrapper );
-
 namespace tests {
 //=============================================================================
 //  Class TestArithmeticWrapper

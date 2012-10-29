@@ -13,9 +13,6 @@
 #include <map>
 #include <string>
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSharedOrWeak );
-
 namespace tests {
 namespace {
 	struct A {
