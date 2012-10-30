@@ -485,7 +485,7 @@ template < class T,
 void AList<T, CR, DM, SM>::ensureIndexIsVisible(int index) {
 	Rectangle cellBounds = getCellBounds(index, index);
 	if (cellBounds != NULL_RECTANGLE) {
-		// TODO: scrollRectToVisible(cellBounds);
+		scrollRectToVisible(cellBounds);
 	}
 }
 //-----------------------------------------------------------------------------
