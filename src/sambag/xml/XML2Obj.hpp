@@ -36,22 +36,24 @@ namespace sambag { namespace xml {
 	- FromStringConvertionPolicy
 */
 //=============================================================================
-struct NoClosureType{};
-template <typename ObjectType, typename ClosureType>
-typename ObjectType::Ptr _create(ObjectType* alwaysNULL, ClosureType*closure) {
-	return typename ObjectType::Ptr( ObjectType::create(closure) );
-}
-//-----------------------------------------------------------------------------
-template <typename ObjectType>
-typename ObjectType::Ptr _create(ObjectType* alwaysNULL, NoClosureType*) {
-	return typename ObjectType::Ptr( ObjectType::create() );
-}
+template <class T>
+struct SharedCreateCreator {
+	typedef boost::shared_ptr<T> PointeeType;
+	static PointeeType create() {
+		return T::create();
+	}
+};
 //=============================================================================
-template<typename BaseType, typename ClosureType=NoClosureType>
-class XML2Object {
+template<
+	class BaseType, 
+	template <class> class CreatorPolicy = SharedCreateCreator
+>
+class XML2Object : public CreatorPolicy<BaseType>
+	
+{
 public:
 	//-------------------------------------------------------------------------
-	typedef typename BaseType::Ptr BaseTypePtr;
+	typedef typename CreatorPolicy<BaseType>::PointeeType BaseTypePtr;
 	//-------------------------------------------------------------------------
 	typedef std::string TagName;
 	//-------------------------------------------------------------------------
@@ -62,23 +64,18 @@ public:
 	//-------------------------------------------------------------------------
 	CreatedSignal sObjCreated;
 private:
-	//-------------------------------------------------------------------------
-	ClosureType *closure[1];
 	//#########################################################################
 	// Object Creation:
 	//-------------------------------------------------------------------------
 	struct IObjectFactory {
-		virtual typename BaseType::Ptr create() = 0;
+		virtual BaseTypePtr create() = 0;
 	};
 	//-------------------------------------------------------------------------
 	template<typename ObjectType>
 	struct ObjectFactory: public IObjectFactory {
 		//---------------------------------------------------------------------
-		ClosureType **closure;
-		//---------------------------------------------------------------------
-		virtual typename BaseType::Ptr create() {
-			ObjectType* t=NULL; // dummy for function matching
-			return _create(t, *closure);
+		virtual BaseTypePtr create() {
+			return CreatorPolicy<ObjectType>::create();
 		}
 	};
 	//-------------------------------------------------------------------------
@@ -86,12 +83,12 @@ private:
 	typedef boost::unordered_map<TagName, IObjectFactory*> TagMap;
 	TagMap tagMap;
 	//-------------------------------------------------------------------------
-	typename BaseType::Ptr buildObject(const ticpp::Element &el) {
+	BaseTypePtr buildObject(const ticpp::Element &el) {
 		using namespace boost::algorithm;
 		typename TagMap::iterator it = tagMap.find(to_lower_copy(el.Value()));
 		if (it == tagMap.end())
-			return typename BaseType::Ptr();
-		typename BaseType::Ptr obj = it->second->create();
+			return BaseTypePtr();
+		BaseTypePtr obj = it->second->create();
 		return obj;
 	}
 	//#########################################################################
@@ -99,13 +96,13 @@ private:
 	//
 	//-------------------------------------------------------------------------
 	struct IAttributeSetter {
-		virtual void set(typename BaseType::Ptr obj,
+		virtual void set(BaseTypePtr obj,
 				const std::string &attrValue) = 0;
 	};
 	//-------------------------------------------------------------------------
 	template<typename AttrType, typename TagClassType, typename ObjectType>
 	struct AttributeSetter: public IAttributeSetter {
-		virtual void set(typename BaseType::Ptr obj,
+		virtual void set(BaseTypePtr obj,
 				const std::string &strValue) {
 			ObjectType *tObj = dynamic_cast<ObjectType*> (obj.get());
 			if (!tObj)
@@ -120,7 +117,7 @@ private:
 	//-------------------------------------------------------------------------
 	template<typename TagClassType, typename ObjectType>
 	struct AttributeSetter<std::string, TagClassType, ObjectType> : public IAttributeSetter {
-		virtual void set(typename BaseType::Ptr obj,
+		virtual void set(BaseTypePtr obj,
 				const std::string &strValue) {
 			ObjectType *tObj = dynamic_cast<ObjectType*> (obj.get());
 			if (!tObj)
@@ -133,7 +130,7 @@ private:
 	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
 	AttributeMap attrMap;
 	//-------------------------------------------------------------------------
-	void setAttribute(typename BaseType::Ptr obj, const ticpp::Attribute &attr) {
+	void setAttribute(BaseTypePtr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
 		typedef typename AttributeMap::iterator It;
 		std::pair<It, It> range = attrMap.equal_range(to_lower_copy( attr.Name() ));
@@ -143,7 +140,7 @@ private:
 		}
 	}
 	//-------------------------------------------------------------------------
-	void setAttributes(typename BaseType::Ptr obj, const ticpp::Element &el) {
+	void setAttributes(BaseTypePtr obj, const ticpp::Element &el) {
 		ticpp::Iterator < ticpp::Attribute > attribute;
 		attribute = attribute.begin(&el);
 		for (; attribute != attribute.end(); attribute++) {
@@ -160,18 +157,18 @@ private:
 	 * @param givenRoot: setted if the root object is already created (opt.)
 	 * @return created object ptr
 	 */
-	typename BaseType::Ptr walk(
+	BaseTypePtr walk(
 			const ticpp::Element &element,
-			typename BaseType::Ptr givenRoot = typename BaseType::Ptr() )
+			BaseTypePtr givenRoot = BaseTypePtr() )
 	{
 		// create new object
-		typename BaseType::Ptr node = (givenRoot) ? givenRoot : buildObject(element);
+		BaseTypePtr node = (givenRoot) ? givenRoot : buildObject(element);
 		if (!node)
-			return typename BaseType::Ptr();
+			return BaseTypePtr();
 		// iterate through child elements
 		ticpp::Iterator < ticpp::Element > child;
 		for (child = child.begin(&element); child != child.end(); child++) {
-			typename BaseType::Ptr app = walk(*child); // rekusive call
+			BaseTypePtr app = walk(*child); // rekusive call
 			if (!app)
 				continue;
 			node->add(app);
@@ -189,18 +186,14 @@ private:
 	 * @param givenRoot setted if the root object is already created (opt.)
 	 * @return root object ptr
 	 */
-	typename BaseType::Ptr build(
+	BaseTypePtr build(
 			ticpp::Document &doc,
-			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+			BaseTypePtr givenRoot = BaseTypePtr())
 	{
 		ticpp::Element* pElem = doc.FirstChildElement();
 		return walk(*pElem, givenRoot);
 	}
 public:
-	//--------------------------------------------------------------------------
-	void setClosure(ClosureType *_closure) {
-		closure[0] = _closure;
-	}
 	//--------------------------------------------------------------------------
 	/**
 	 * XML2Object<BaseObject, ClosureType=NO_TYPE>
@@ -209,12 +202,7 @@ public:
 	 * will be called without this closure parameter.
 	 * @param closure
 	 */
-	XML2Object(ClosureType *closure=NULL) {
-		setClosure(closure);
-	}
-	//--------------------------------------------------------------------------
-	const ClosureType * const getClosure() const {
-		return *closure;
+	XML2Object() {
 	}
 	//--------------------------------------------------------------------------
 	// frees IOBjectFactory objects
@@ -248,7 +236,6 @@ public:
 	void registerObject(const std::string &tagName) {
 		using namespace boost::algorithm;
 		ObjectFactory<ObjectType> *fact = new ObjectFactory<ObjectType> ();
-		fact->closure = closure;
 		tagMap.insert(std::make_pair(to_lower_copy(tagName), fact));
 	}
 	//-------------------------------------------------------------------------
@@ -258,13 +245,13 @@ public:
 	 * @param xml:  a valid xml document as string
 	 * @return the root object containing a object representation of the xml structure.
 	 */
-	typename BaseType::Ptr buildWithXmlString(
+	BaseTypePtr buildWithXmlString(
 			const std::string &xml /*default value dosent work with MVSC
 									 (complaining about typename) so we use overload*/)
 	{
 		ticpp::Document doc;
 		doc.Parse(xml);
-		return build(doc, typename BaseType::Ptr());
+		return build(doc, BaseTypePtr());
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -274,9 +261,9 @@ public:
 	 * @param givenRoot: you are able to use a already created root element.
 	 * @return the root object containing a object representation of the xml structure.
 	 */
-	typename BaseType::Ptr buildWithXmlString(
+	BaseTypePtr buildWithXmlString(
 			const std::string &xml,
-			typename BaseType::Ptr givenRoot)
+			BaseTypePtr givenRoot)
 	{
 		ticpp::Document doc;
 		doc.Parse(xml);
@@ -290,9 +277,9 @@ public:
 	 * @param givenRoot: you are able to use a already created root element.
 	 * @return the root object containing a object representation of the xml structure.
 	 */
-	typename BaseType::Ptr buildWithXmlFile(
+	BaseTypePtr buildWithXmlFile(
 			const std::string &filename,
-			typename BaseType::Ptr givenRoot = typename BaseType::Ptr())
+			BaseTypePtr givenRoot = BaseTypePtr())
 	{
 		ticpp::Document doc(filename);
 		doc.LoadFile();

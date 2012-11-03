@@ -104,10 +104,10 @@ void X11WindowImpl::createWindow() {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::destroyWindow() {
-	Ptr hold = self.lock();
-	SAMBAG_ASSERT(hold);
 	if (win==0)
 		return;
+	Ptr hold = self.lock();
+	SAMBAG_ASSERT(hold);
 	// unregister window
 	winmap.erase(win);
 	// X11's destroy
@@ -135,7 +135,7 @@ void X11WindowImpl::open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::~X11WindowImpl() {
-	destroyWindow(); // TODO: formally close() unchecked behaviour
+	//destroyWindow(); // TODO: formally close() unchecked behaviour
 }
 //-----------------------------------------------------------------------------
 bool X11WindowImpl::isVisible() const {
