@@ -39,9 +39,42 @@ namespace sambag { namespace xml {
 template <class T>
 struct SharedCreateCreator {
 	typedef boost::shared_ptr<T> PointeeType;
-	static PointeeType create() {
+	PointeeType create() {
 		return T::create();
 	}
+	SharedCreateCreator(){}
+	template <class U>
+	SharedCreateCreator(const SharedCreateCreator<U> &b) {
+	}
+};
+//=============================================================================
+template <class T>
+struct NewCreator {
+	typedef T* PointeeType;
+	PointeeType create() {
+		return new T();
+	}
+	NewCreator(){}
+	template <class U>
+	NewCreator(const NewCreator<U> &b) {
+	}
+};
+//=============================================================================
+template <class Closure>
+struct SharedWithClosure {
+	template <class T>
+	struct Creator {
+		Closure closure;
+		typedef boost::shared_ptr<T> PointeeType;
+		PointeeType create() {
+			return T::create(&closure);
+		}
+		Creator(){}
+		template <class U>
+		Creator(const Creator<U> &b) {
+			closure = b.closure;
+		}
+	};
 };
 //=============================================================================
 template<
@@ -49,7 +82,6 @@ template<
 	template <class> class CreatorPolicy = SharedCreateCreator
 >
 class XML2Object : public CreatorPolicy<BaseType>
-	
 {
 public:
 	//-------------------------------------------------------------------------
@@ -73,9 +105,9 @@ private:
 	//-------------------------------------------------------------------------
 	template<typename ObjectType>
 	struct ObjectFactory: public IObjectFactory {
-		//---------------------------------------------------------------------
+		CreatorPolicy<ObjectType> creator;
 		virtual BaseTypePtr create() {
-			return CreatorPolicy<ObjectType>::create();
+			return creator.create();
 		}
 	};
 	//-------------------------------------------------------------------------
@@ -236,6 +268,7 @@ public:
 	void registerObject(const std::string &tagName) {
 		using namespace boost::algorithm;
 		ObjectFactory<ObjectType> *fact = new ObjectFactory<ObjectType> ();
+		fact->creator = *this;
 		tagMap.insert(std::make_pair(to_lower_copy(tagName), fact));
 	}
 	//-------------------------------------------------------------------------

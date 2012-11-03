@@ -17,6 +17,7 @@ private:
 public:
   void testConstructor();
   void testClosure();
+  void testNewCreator();
   void testBuildStructure();
 };
 } // namespace tests

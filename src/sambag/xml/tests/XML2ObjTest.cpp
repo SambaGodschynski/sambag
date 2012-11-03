@@ -59,6 +59,8 @@ struct BaseObject {
   virtual void add ( BaseObject::Ptr obj ) {
     oL.push_back(obj);
   }
+  virtual void add ( BaseObject  *obj ) { // for test newcreator
+  }
 };
 //------------------------------------------------------------------------------
 int BaseObject::numObjects = 0;
@@ -185,16 +187,27 @@ void XML2ObjectTest::testConstructor() {
 }
 //=============================================================================
 void XML2ObjectTest::testClosure() {
-	/*using namespace sambag::xml;
-	std::pair<double, int> pv(1.0, 10);
-	XML2Object<BaseObject, std::pair<double, int> > xml2Obj(&pv);
+	using namespace sambag::xml;
+	typedef std::pair<double, int> Closure;
+	Closure pv(1.0, 10);
+	XML2Object<BaseObject, SharedWithClosure<Closure>::Creator > xml2Obj;
+	xml2Obj.closure = pv;
 	xml2Obj.registerObject<Root>("root");
 	BaseObject::Ptr base = xml2Obj.buildWithXmlString("<root/>");
 	Root::Ptr root = boost::shared_dynamic_cast<Root>(base);
 	CPPUNIT_ASSERT( root );
-	CPPUNIT_ASSERT( root->closure == pv );*/
+	CPPUNIT_ASSERT( root->closure == pv );
 }
 //=============================================================================
+void XML2ObjectTest::testNewCreator() {
+	using namespace sambag::xml;
+	XML2Object<BaseObject, NewCreator> xml2Obj;
+	xml2Obj.registerObject<Root>("root");
+	BaseObject *base = xml2Obj.buildWithXmlString("<root/>");
+	Root *root = dynamic_cast<Root*>(base);
+	CPPUNIT_ASSERT( root );
+	delete root;
+}
 //=============================================================================
 void XML2ObjectTest::testBuildStructure() {
 //=============================================================================
