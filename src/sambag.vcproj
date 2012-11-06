@@ -458,6 +458,10 @@
 				>
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\math\CantorOrder.cpp"
+				>
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\CellRendererPane.cpp"
 				>
 			</File>
@@ -539,6 +543,10 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\Geometry.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\GeometrySerialization.cpp"
 				>
 			</File>
 			<File
@@ -631,6 +639,10 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\events\MouseEventCreator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\One2One.cpp"
 				>
 			</File>
 			<File

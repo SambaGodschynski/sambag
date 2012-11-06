@@ -18,6 +18,13 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
+struct OnOpenEvent {
+//=============================================================================
+	// implement Window source ptr. is quite tricky
+	// because the Window Object is possible gone on windowimpl.
+	// closing event.
+};
+//=============================================================================
 struct OnCloseEvent {
 //=============================================================================
 	// implement Window source ptr. is quite tricky
@@ -36,6 +43,7 @@ struct OnBoundsChanged {
   * @class AWindowImpl.
   */
 class AWindowImpl :
+	public sambag::com::events::EventSender<OnOpenEvent>,
 	public sambag::com::events::EventSender<OnCloseEvent>,
 	public sambag::com::events::EventSender<OnBoundsChanged> {
 //=============================================================================
@@ -55,6 +63,13 @@ public:
 	virtual void close() = 0;
 	//-------------------------------------------------------------------------
 	virtual void setBounds(const Rectangle &r) = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return a system dependent pointer:
+	 *     win32: HWND,
+	 *     ...
+	 */
+	virtual void * getSystemHandle() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void setSize(const Dimension &d) {
 		Rectangle neu = getBounds();

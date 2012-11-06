@@ -117,6 +117,10 @@ public:
 		return win;
 	}
 	//-------------------------------------------------------------------------
+	void * getSystemHandle() const {
+		return getHwnd();
+	}
+	//-------------------------------------------------------------------------
 	static int getNumInstances() {
 		return instances;
 	}

@@ -187,10 +187,10 @@ void Win32WindowImpl::createWindow(HWND parent) {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::destroyWindow() {
-	Ptr hold = self.lock();
-	SAMBAG_ASSERT(hold);
 	if (win==NULL)
 		return;
+	Ptr hold = self.lock();
+	SAMBAG_ASSERT(hold);
 	// unregister window
 	winmap.erase(win);
 	onDestroy();
@@ -366,6 +366,8 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		DestroyWindow(hWnd);
 		break;
 	case WM_PAINT : {
+		if (win->getFlag(WindowFlags::WND_RAW))
+			break;
 		hdc = BeginPaint(hWnd, &ps);
 		if (win) {
 			win->update();
