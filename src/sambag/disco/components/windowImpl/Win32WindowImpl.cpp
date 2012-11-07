@@ -191,17 +191,9 @@ void Win32WindowImpl::destroyWindow() {
 		return;
 	Ptr hold = self.lock();
 	SAMBAG_ASSERT(hold);
-	// unregister window
-	winmap.erase(win);
-	onDestroy();
-	win = 0;
 	visible = false;
-	if (getFlag(WND_NESTED)) {
-		destroyNestedWindowClass();
-	} else {
-		destroyWindowClass();
-	}
-	--instances;
+	onDestroy();
+	destroyImmediately();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::close() {
@@ -214,6 +206,20 @@ void Win32WindowImpl::open(AWindowImplPtr parent) {
 	getWindowToolkit()->invokeLater(
 		boost::bind(&Win32WindowImpl::_open, this, parent)
 	);
+}
+//-----------------------------------------------------------------------------
+void Win32WindowImpl::destroyImmediately() {
+	if (win==NULL)
+		return;
+	// unregister window
+	winmap.erase(win);
+	if (getFlag(WND_NESTED)) {
+		destroyNestedWindowClass();
+	} else {
+		destroyWindowClass();
+	}
+	win = 0;
+	--instances;
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_close() {
@@ -235,7 +241,9 @@ void Win32WindowImpl::_open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl::~Win32WindowImpl() {
-	_close();
+	HWND tmpWin = win; 
+	destroyImmediately();
+	PostMessage(tmpWin, WM_CLOSE, 0, 0);
 }
 //-----------------------------------------------------------------------------
 bool Win32WindowImpl::isVisible() const {
@@ -346,7 +354,7 @@ void Win32WindowImpl::updateTitle() {
 LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message, 
 	WPARAM wParam, LPARAM lParam) 
 {
-	Win32WindowImpl *win = getWin32WindowImpl(hWnd);
+	Win32WindowImpl *win = getWin32WindowImpl(hWnd); //can be NULL
 	int mbuttons = 0;
 	int x=0; int y=0;
 
@@ -357,6 +365,8 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	case WM_SETFOCUS:
 		break;
 	case WM_DESTROY:
+		if (!win)
+			break;
 		win->destroyWindow();
 		if (instances==0)
 			if (!win->getFlag(WND_NESTED))
