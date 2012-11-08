@@ -69,7 +69,7 @@ public:
 	 *     win32: HWND,
 	 *     ...
 	 */
-	virtual void * getSystemHandle() const = 0;
+	virtual void * getSystemHandle() = 0;
 	//-------------------------------------------------------------------------
 	virtual void setSize(const Dimension &d) {
 		Rectangle neu = getBounds();
