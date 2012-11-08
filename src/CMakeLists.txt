@@ -1,17 +1,25 @@
 SET ( SAMBAG_SOURCES
 	sambag/com/FileSystem.cpp
+<<<<<<< HEAD
 	sambag/com/FileHandler.cpp
 	sambag/com/Exception.cpp
 	sambag/com/Common.cpp
 	sambag/math/Matrix.cpp
+=======
+	sambag/com/One2One.cpp
+>>>>>>> 5d5d099e9787c5d9989039c4fa4a945c236312d4
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
 	sambag/xml/cpAtl/SimpleTagCreator.cpp
 	sambag/xml/cpAtl/MarkupBuilder.cpp
 	sambag/disco/Geometry.cpp
+<<<<<<< HEAD
 	sambag/disco/ColorRGBA.cpp
 	sambag/disco/CairoPattern.cpp
 	sambag/disco/CairoDiscoFactory.cpp
+=======
+	sambag/disco/GeometrySerialization.cpp
+>>>>>>> 5d5d099e9787c5d9989039c4fa4a945c236312d4
 	sambag/disco/IDiscoFactory.cpp
 	sambag/disco/IPattern.cpp
 	sambag/disco/CairoSurface.cpp
@@ -127,6 +135,11 @@ SET ( SAMBAG_SOURCES
 SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/TestArithmeticWrapper.cpp
 	sambag/com/tests/TestHelper.cpp
+<<<<<<< HEAD
+=======
+	sambag/com/tests/TestOne2One.cpp
+	sambag/com/tests/TestPropertyChanged.cpp
+>>>>>>> 5d5d099e9787c5d9989039c4fa4a945c236312d4
 	sambag/com/tests/TestSharedOrWeak.cpp
 	sambag/com/tests/TestThread.cpp
 	sambag/com/tests/TestPropertyChanged.cpp
@@ -157,6 +170,13 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/TestGeometrics.cpp
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
+<<<<<<< HEAD
+=======
+	sambag/disco/tests/TestGeometrics.cpp
+	sambag/disco/tests/TestGeometrySerialization.cpp
+	sambag/disco/tests/TestPattern.cpp
+	sambag/disco/tests/TestSceneGraph.cpp
+>>>>>>> 5d5d099e9787c5d9989039c4fa4a945c236312d4
 	sambag/disco/tests/TestSvg.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 )

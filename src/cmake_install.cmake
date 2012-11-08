@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Install script for directory: /home/samba/workspace/sambag/src
+=======
+# Install script for directory: /Users/johannesunger/workspace/sambag/src
+>>>>>>> 5d5d099e9787c5d9989039c4fa4a945c236312d4
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
