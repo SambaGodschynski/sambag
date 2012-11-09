@@ -40,7 +40,6 @@ Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 }
 //-----------------------------------------------------------------------------
 Window::~Window() {
-	//close();
 }
 //-----------------------------------------------------------------------------
 Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
@@ -54,19 +53,26 @@ void Window::initWindow() {
 	WindowPtr parent = getParentWindow();
 	if (parent) {
 		parent->addTrackedOnCloseEventListener(
-			boost::bind(&Window::onParentRemove, this, _1, _2),
+			boost::bind(&Window::onParentClose, this, _1, _2),
 			getPtr()
 		);
-	}
+	}	
+	addTrackedOnCloseEventListener(
+		boost::bind(&Window::onWindowImplClose, this, _1, _2),
+		getPtr()
+	);
 	windowImpl->EventSender<OnBoundsChanged>::addTrackedEventListener(
 			boost::bind(&Window::onBoundsChanged, this, _1, _2),
 			getPtr()
 	);
 }
 //-----------------------------------------------------------------------------
-void Window::onParentRemove(void *src, const OnCloseEvent &ev) {
+void Window::onParentClose(void *src, const OnCloseEvent &ev) {
 	if (windowImpl)
 		close();
+}
+//-----------------------------------------------------------------------------
+void Window::onWindowImplClose(void *src, const OnCloseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {

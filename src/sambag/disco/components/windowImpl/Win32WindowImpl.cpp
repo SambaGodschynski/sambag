@@ -8,7 +8,6 @@
 
 #include "Win32WindowImpl.hpp"
 #include <boost/foreach.hpp>
-#include "X11WindowToolkit.hpp"
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
 #include <sambag/com/ArbitraryType.hpp>
@@ -23,8 +22,10 @@ namespace {
 	}
 	int nbWndClassRegs = 0;
 	int nbWndNestedClassRegs = 0;
-	WNDCLASS wndClass = {0};
+	WNDCLASS  wndClass = {0};
 	WNDCLASS nestedWndClass = {0};
+	const char STR_WNDCLASS[] = "discowindowimpl";
+	const char STR_NESTEDWNDCLASS[] = "disconestedwindowimpl";
 }
 
 namespace sambag { namespace disco { namespace components {
@@ -36,7 +37,7 @@ int Win32WindowImpl::instances = 0;
 //-----------------------------------------------------------------------------
 Win32WindowImpl::WinMap Win32WindowImpl::winmap;
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::initWindowClass(HINSTANCE hI) {
+void Win32WindowImpl::registerWindowClass(HINSTANCE hI) {
 	if ( nbWndClassRegs++ > 0 ) {
 		SAMBAG_ASSERT(wndClass.hInstance == hI);
 		return;
@@ -44,40 +45,36 @@ void Win32WindowImpl::initWindowClass(HINSTANCE hI) {
 	wndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	wndClass.hInstance     = hI;
 	wndClass.hbrBackground = 0; //(HBRUSH)(COLOR_BACKGROUND);
-	wndClass.lpszClassName = "discowindowimpl";
+	wndClass.lpszClassName = STR_WNDCLASS;
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&wndClass)) )
 		throw std::runtime_error ("Win32 RegisterClass failed.");
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::initNestedWindowClass(HINSTANCE hI) {
+void Win32WindowImpl::registerNestedWindowClass(HINSTANCE hI) {
 	if ( nbWndNestedClassRegs++ > 0 ) {
 		SAMBAG_ASSERT(nestedWndClass.hInstance == hI);
 		return;
 	}
-	nestedWndClass.style = CS_GLOBALCLASS | CS_DBLCLKS;
-	nestedWndClass.cbClsExtra  = 0; 
-	nestedWndClass.cbWndExtra  = 0; 
-	nestedWndClass.hbrBackground = 0;
-	nestedWndClass.lpszMenuName  = 0; 
+	nestedWndClass.style = CS_DBLCLKS | CS_GLOBALCLASS;
 	nestedWndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	nestedWndClass.hInstance     = hI;
-	nestedWndClass.lpszClassName = "disconestedwindowimpl";
+	nestedWndClass.lpszClassName = STR_NESTEDWNDCLASS;
 	nestedWndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&nestedWndClass)) )
 		throw std::runtime_error ("Win32 RegisterClass failed.");
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::destroyWindowClass() {
+void Win32WindowImpl::unregisterWindowClass() {
 	if ( --nbWndClassRegs != 0 )
 		return;
-	UnregisterClass("discowindowimpl", wndClass.hInstance);
+	UnregisterClass(STR_WNDCLASS, wndClass.hInstance);
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::destroyNestedWindowClass() {
+void Win32WindowImpl::unregisterNestedWindowClass() {
 	if ( --nbWndNestedClassRegs != 0 )
 		return;
-	UnregisterClass("disconestedwindowimpl", nestedWndClass.hInstance);
+	UnregisterClass(STR_NESTEDWNDCLASS, nestedWndClass.hInstance);
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl * Win32WindowImpl::getWin32WindowImpl(HWND win) {
@@ -117,7 +114,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	HWND parent = (HWND)parentData.first;
 	HINSTANCE hI = (HINSTANCE)parentData.second;
-	initNestedWindowClass(hI);
+	registerNestedWindowClass(hI);
 
 	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
@@ -138,7 +135,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	if (!win) {
 		std::stringstream ss;
 		DWORD err = GetLastError();
-		ss<<"window creation failed: "<<err;
+		ss<<"GetLastError = "<<err;
 		throw std::runtime_error(ss.str());
 	}
 
@@ -150,9 +147,9 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = GetModuleHandle(NULL);
-	initWindowClass(hI);
+	registerWindowClass(hI);
 	
-	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_VISIBLE;
 	style |= getFlag(WND_FRAMED) ? WS_OVERLAPPEDWINDOW : WS_POPUP | WS_BORDER; 
 
@@ -189,11 +186,11 @@ void Win32WindowImpl::createWindow(HWND parent) {
 void Win32WindowImpl::destroyWindow() {
 	if (win==NULL)
 		return;
-	Ptr hold = self.lock();
-	SAMBAG_ASSERT(hold);
 	visible = false;
-	onDestroy();
-	destroyImmediately();
+	Ptr hold = self.lock();
+	if (hold) { // if not we came from destrucor
+		onDestroy();
+	}
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::close() {
@@ -208,25 +205,25 @@ void Win32WindowImpl::open(AWindowImplPtr parent) {
 	);
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::destroyImmediately() {
+void Win32WindowImpl::unregisterWindow() {
 	if (win==NULL)
 		return;
-	// unregister window
 	winmap.erase(win);
-	if (getFlag(WND_NESTED)) {
-		destroyNestedWindowClass();
-	} else {
-		destroyWindowClass();
-	}
 	win = 0;
 	--instances;
+	if (getFlag(WND_NESTED)) {
+		unregisterNestedWindowClass();
+	} else {
+		unregisterWindowClass();
+	}
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_close() {
 	if (!visible)
 		return;
 	invalidateSurface();
-	PostMessage(win, WM_CLOSE, 0, 0);
+	DestroyWindow(win);
+	unregisterWindow();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_open(AWindowImplPtr parent) {
@@ -241,9 +238,10 @@ void Win32WindowImpl::_open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl::~Win32WindowImpl() {
-	HWND tmpWin = win; 
-	destroyImmediately();
-	PostMessage(tmpWin, WM_CLOSE, 0, 0);
+	if (win) {
+		DestroyWindow(win);
+		unregisterWindow();
+	}
 }
 //-----------------------------------------------------------------------------
 bool Win32WindowImpl::isVisible() const {
@@ -355,6 +353,7 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	WPARAM wParam, LPARAM lParam) 
 {
 	Win32WindowImpl *win = getWin32WindowImpl(hWnd); //can be NULL
+	
 	int mbuttons = 0;
 	int x=0; int y=0;
 

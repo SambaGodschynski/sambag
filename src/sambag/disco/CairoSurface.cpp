@@ -38,6 +38,7 @@ CairoImageSurface::Ptr CairoImageSurface::create(const Integer &width,
 			cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 	return Ptr (new CairoImageSurface(s));
 }
+IDataHandler::Ptr tmp;
 //-----------------------------------------------------------------------------
 CairoImageSurface::Ptr CairoImageSurface::create(IDataHandler::Ptr handler) 
 {
@@ -48,6 +49,7 @@ CairoImageSurface::Ptr CairoImageSurface::create(IDataHandler::Ptr handler)
 				(&read_handler, handler.get());
 	if (!surface)
 		return Ptr();
+	tmp = handler;
 	return Ptr (new CairoImageSurface(surface));
 }
 //-----------------------------------------------------------------------------

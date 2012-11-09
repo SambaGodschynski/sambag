@@ -76,7 +76,7 @@ struct HostTimeInfo {
 	}
 	bool getFlag(Flag f) const {
 		int fVal = f;
-		return flags & fVal == fVal;
+		return (flags & fVal) == fVal;
 	}
 	bool transportIsChanged() const // 	indicates that play, cycle or record state has changed 
 	{

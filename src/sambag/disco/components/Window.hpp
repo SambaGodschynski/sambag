@@ -66,7 +66,9 @@ protected:
 	virtual void initWindow();
 private:
 	//-------------------------------------------------------------------------
-	void onParentRemove(void *src, const OnCloseEvent &ev);
+	void onWindowImplClose(void *src, const OnCloseEvent &ev);
+	//-------------------------------------------------------------------------
+	void onParentClose(void *src, const OnCloseEvent &ev);
 	//-------------------------------------------------------------------------
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:

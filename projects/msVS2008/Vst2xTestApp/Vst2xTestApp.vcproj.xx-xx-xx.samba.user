@@ -65,7 +65,7 @@
 			Name="Debug VstHost|Win32"
 			>
 			<DebugSettings
-				Command=""
+				Command="C:\Eigene Dateien\Eigene Progs\VST\VstHost\vsthost.exe"
 				WorkingDirectory=""
 				CommandArguments=""
 				Attach="false"
