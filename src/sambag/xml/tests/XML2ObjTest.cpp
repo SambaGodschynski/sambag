@@ -190,9 +190,9 @@ void XML2ObjectTest::testClosure() {
 	using namespace sambag::xml;
 	typedef std::pair<double, int> Closure;
 	Closure pv(1.0, 10);
-	XML2Object<BaseObject, SharedWithClosure<Closure>::Creator > xml2Obj;
-	xml2Obj.closure = pv;
+	XML2Object<BaseObject, SharedWithClosure<Closure*>::Creator > xml2Obj;
 	xml2Obj.registerObject<Root>("root");
+	xml2Obj.setClosure(&pv);
 	BaseObject::Ptr base = xml2Obj.buildWithXmlString("<root/>");
 	Root::Ptr root = boost::shared_dynamic_cast<Root>(base);
 	CPPUNIT_ASSERT( root );

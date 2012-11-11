@@ -29,15 +29,35 @@ template <class Closure>
 struct SharedWithClosure {
 	template <class T>
 	struct Creator {
-		Closure closure;
+		Closure val;
+		Closure *pClosure;
 		typedef boost::shared_ptr<T> PointeeType;
 		PointeeType create() {
-			return T::create(&closure);
+			if (!pClosure)
+				return T::create(val);
+			return T::create(*pClosure);
 		}
-		Creator(){}
+		Creator() : pClosure(NULL) {
+		}
 		template <class U>
-		Creator(const Creator<U> &b) {
-			closure = b.closure;
+		Creator(Creator<U> &b) {
+			if (!(b.pClosure)) {
+				pClosure = &(b.val);
+				return;
+			}
+			pClosure = b.pClosure;
+		}
+		void setClosure(const Closure &val) {
+			if (!pClosure) {
+				this->val = val;
+				return;			
+			}
+			*pClosure = val;		
+		}
+		const Closure & getClosure() const {
+			if (!pClosure)
+				return val;
+			return *pClosure;		
 		}
 	};
 };
@@ -153,22 +173,23 @@ struct DefaultXmlTextSetter {
 };
 //=============================================================================
 /** @class XML2Object Parser:
-	- CreatorPolicy:
-		typedef boost::shared_ptr<T> PointeeType;
-		PointeeType create();
-		template <class U>
-		SharedCreateCreator(const SharedCreateCreator<U> &b);
-	- AddObjectPolicy:
-		template <class U, class V>
-		void performAdd(U &u, const V &v);
-	- AtrributeSetterPolicy:
-		template <class T>	
-		void performSetAttribute(T &obj, const std::string &attrName, 
-			const std::string &val) ;
-	- XmlTextPolicy:
-		template <class T>
-		void performSetXmlText(T &u, const std::string &txt);
-*/
+ *	Policy concepts:
+ *	- CreatorPolicy:
+ *		typedef boost::shared_ptr<T> PointeeType;
+ *		PointeeType create();
+ *		template <class U>
+ *		SharedCreateCreator(const SharedCreateCreator<U> &b);
+ *	- AddObjectPolicy:
+ *		template <class U, class V>
+ *		void performAdd(U &u, const V &v);
+ *	- AtrributeSetterPolicy:
+ *		template <class T>	
+ *		void performSetAttribute(T &obj, const std::string &attrName, 
+ *			const std::string &val);
+ *	- XmlTextPolicy:
+ *		template <class T>
+ *		void performSetXmlText(T &u, const std::string &txt);
+ */
 template<
 	class BaseType, 
 	template <class> class CreatorPolicy = SharedCreateCreator,
