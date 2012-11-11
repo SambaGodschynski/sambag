@@ -55,6 +55,10 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	virtual void * getSystemHandle() {
+		return ConcreteWindowImpl::getSystemHandle();
+	}
+	//-------------------------------------------------------------------------
 	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
 		return mec.get();
 	}
@@ -181,6 +185,10 @@ template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
 	if (rootPane)
 		initRootPane();
+	EventSender<OnOpenEvent>::notifyListeners (
+		this,
+		OnOpenEvent()
+	);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

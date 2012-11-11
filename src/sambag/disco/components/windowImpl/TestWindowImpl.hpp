@@ -39,6 +39,10 @@ private:
 	WindowPtr parent;
 public:
 	//-------------------------------------------------------------------------
+	virtual void * getSystemHandle() {
+		return NULL;
+	}
+	//-------------------------------------------------------------------------
 	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
 		return NULL;
 	}

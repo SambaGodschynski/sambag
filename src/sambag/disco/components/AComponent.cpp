@@ -16,6 +16,7 @@
 #include <boost/tuple/tuple.hpp>
 #include "RedrawManager.hpp"
 #include "RootPane.hpp"
+#include "CellRendererPane.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -515,6 +516,7 @@ void AComponent::revalidate() {
 	}
 	invalidate();
 	RedrawManager::currentManager(getPtr())->addInvalidComponent(getPtr());
+	validate();
 }
 //-----------------------------------------------------------------------------
 void AComponent::setBounds(const Rectangle &r) {
@@ -1105,5 +1107,18 @@ PopupMenuPtr AComponent::getComponentPopupMenu() const {
 	if (parent)
 		return parent->getComponentPopupMenu();
 	return PopupMenuPtr();
+}
+//-------------------------------------------------------------------------
+void AComponent::scrollRectToVisible(const Rectangle &aRect) {
+	Rectangle rect = aRect;
+	AContainerPtr parent = getParent();
+	CellRendererPane::Ptr cellR = 
+		boost::shared_dynamic_cast<CellRendererPane>(parent);
+	Coordinate dx = getX(), dy = getY();
+	if (parent && !cellR) {
+		rect.x ( rect.x() + dx );
+		rect.y ( rect.y() + dy );
+		parent->scrollRectToVisible(rect);
+	}
 }
 }}} // namespace(s)

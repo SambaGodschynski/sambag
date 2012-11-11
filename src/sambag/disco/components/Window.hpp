@@ -121,6 +121,17 @@ public:
 	addTrackedOnCloseEventListener
 	(const OnCloseEventSender::EventFunction &f, AnyWPtr ptr );
 	/////////////
+	// OnCloseEventSender
+	//-------------------------------------------------------------------------
+	typedef sambag::com::events::EventSender<OnOpenEvent> OnOpenEventSender;
+	//-------------------------------------------------------------------------
+	OnOpenEventSender::Connection
+	addOnOpenEventListener(const OnOpenEventSender::EventFunction &f);
+	//-------------------------------------------------------------------------
+	OnOpenEventSender::Connection
+	addTrackedOnOpenEventListener
+	(const OnOpenEventSender::EventFunction &f, AnyWPtr ptr );
+	/////////////
 	// WindwowMouseEvent
 	//-------------------------------------------------------------------------
 	typedef sambag::com::events::EventSender<events::MouseEvent> WindwowMouseEvent;

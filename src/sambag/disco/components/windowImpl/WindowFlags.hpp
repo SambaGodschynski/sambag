@@ -19,7 +19,9 @@ public:
 	enum Flag {
 		WND_FRAMED,
 		WND_RESIZEABLE,
-		WND_NESTED		// is true when windowImpl. is nested in a host window. 
+		WND_NESTED,		    // is true when windowImpl. is nested in a host window. 
+		WND_RAW,			// create raw window without disco rendering
+		WND_NO_SYSTEM_MENU
 	};
 	WindowFlags() : flags(0) {}
 	void setFlag(Flag aFlag, bool b) {

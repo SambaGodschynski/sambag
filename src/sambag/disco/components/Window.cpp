@@ -123,10 +123,14 @@ Rectangle Window::getWindowBounds() const {
 }
 //-----------------------------------------------------------------------------
 void Window::open() {
+	if (isVisible())
+		return;
 	windowImpl->open();
 }
 //-----------------------------------------------------------------------------
 void Window::close() {
+	if (!isVisible())
+		return;
 	windowImpl->close();
 }
 //-----------------------------------------------------------------------------
@@ -157,6 +161,25 @@ Window::addTrackedOnCloseEventListener(
 {
 	return
 		windowImpl->EventSender<OnCloseEvent>::addTrackedEventListener(f, wPtr);
+}
+
+//-----------------------------------------------------------------------------
+Window::OnOpenEventSender::Connection
+Window::addOnOpenEventListener(
+		const Window::OnOpenEventSender::EventFunction &f
+)
+{
+	return windowImpl->EventSender<OnOpenEvent>::addEventListener(f);
+}
+//-----------------------------------------------------------------------------
+Window::OnOpenEventSender::Connection
+Window::addTrackedOnOpenEventListener(
+		const Window::OnOpenEventSender::EventFunction &f,
+		Window::AnyWPtr wPtr
+)
+{
+	return
+		windowImpl->EventSender<OnOpenEvent>::addTrackedEventListener(f, wPtr);
 }
 //-----------------------------------------------------------------------------
 Window::WindwowMouseEvent::Connection

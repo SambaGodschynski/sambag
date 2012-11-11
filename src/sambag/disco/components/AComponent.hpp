@@ -1208,6 +1208,8 @@ protected:
 	static void computeVisibleRect(AComponent::Ptr, Rectangle &out);
 public:
 	//-------------------------------------------------------------------------
+	virtual void scrollRectToVisible(const Rectangle &aRect);
+	//-------------------------------------------------------------------------
 	/**
 	 * Returns the <code>Component</code>'s "visible rect rectangle" -  the
 	 * intersection of the visible rectangles for this component
