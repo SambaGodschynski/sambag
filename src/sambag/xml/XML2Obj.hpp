@@ -143,27 +143,47 @@ public:
 	}
 };
 //=============================================================================
+// Default XmlTextSetter policy:
+template <class BaseType>
+struct DefaultXmlTextSetter {
+	template <class T>
+	void performSetXmlText(T &u, const std::string &txt) {
+		u.setXmlText(txt);
+	}
+};
+//=============================================================================
 /** @class XML2Object Parser:
-  
-  TODO: make configurable using policy classes:
-
-	- CreatorPolicy
-	- AddObjectPolicy
-	- AtrributeSetterPolicy
-	- XmlTextPolicy
+	- CreatorPolicy:
+		typedef boost::shared_ptr<T> PointeeType;
+		PointeeType create();
+		template <class U>
+		SharedCreateCreator(const SharedCreateCreator<U> &b);
+	- AddObjectPolicy:
+		template <class U, class V>
+		void performAdd(U &u, const V &v);
+	- AtrributeSetterPolicy:
+		template <class T>	
+		void performSetAttribute(T &obj, const std::string &attrName, 
+			const std::string &val) ;
+	- XmlTextPolicy:
+		template <class T>
+		void performSetXmlText(T &u, const std::string &txt);
 */
 template<
 	class BaseType, 
 	template <class> class CreatorPolicy = SharedCreateCreator,
 	template <class> class _AddObjectPolicy = DefaultAddObject,
+	template <class> class _XmlTextSetterPolicy = DefaultXmlTextSetter,
 	template <class> class _AttributeSetterPolicy = TaggedAttributeSetterPolicy
 >
 class XML2Object : public CreatorPolicy<BaseType>,
 	public _AddObjectPolicy<BaseType>,
+	public _XmlTextSetterPolicy<BaseType>,
 	public _AttributeSetterPolicy<BaseType>
 {
 //=============================================================================
 public:
+	typedef _XmlTextSetterPolicy<BaseType> XmlTextSetterPolicy;
 	//-------------------------------------------------------------------------
 	typedef _AttributeSetterPolicy<BaseType> AttributeSetterPolicy;
 	//-------------------------------------------------------------------------
@@ -249,7 +269,9 @@ private:
 			AddObjectPolicy::performAdd(*object, app);
 		}
 		setAttributes(object, element);
-		object->setXmlText(element.GetTextOrDefault(""));
+		XmlTextSetterPolicy::performSetXmlText(*object, 
+			element.GetTextOrDefault("")
+		);
 		sObjCreated(object, element.Value()); // fire objCreated signal
 		return object;
 	}
