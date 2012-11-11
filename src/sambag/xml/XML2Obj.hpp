@@ -108,7 +108,7 @@ class TaggedAttributeSetterPolicy {
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
-	~TaggedAttributeSetterPolicy() {
+	virtual ~TaggedAttributeSetterPolicy() {
 		typename AttributeMap::iterator atIt = attrMap.begin();
 		for (; atIt != attrMap.end(); ++atIt) {
 			delete atIt->second;
@@ -127,6 +127,19 @@ public:
 		IAttributeSetter *setter = new AttributeSetter<AttrType, TagClassType,
 				ObjectType> ();
 		attrMap.insert(std::make_pair(attrName, setter));
+	}
+	//-------------------------------------------------------------------------
+	template <class T>	
+	void performSetAttribute(T &obj, const std::string &attrName, 
+		const std::string &val) 
+	{
+		typedef typename AttributeMap::iterator It;
+		std::pair<It, It> range = 
+			attrMap.equal_range(boost::to_lower_copy(attrName));
+		// try every possible entries (stupid)
+		for ( It it=range.first; it!=range.second; ++it) {
+			it->second->set(obj, val);
+		}
 	}
 };
 //=============================================================================
@@ -194,17 +207,12 @@ private:
 		BaseTypePtr obj = it->second->create();
 		return obj;
 	}
-private:
 	//-------------------------------------------------------------------------
 	void setAttribute(BaseTypePtr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
-		/*typedef typename AttributeMap::iterator It;
-		std::pair<It, It> range = 
-			attrMap.equal_range(to_lower_copy( attr.Name() ));
-		// try every possible entries (stupid)
-		for ( It it=range.first; it!=range.second; ++it) {
-			it->second->set(obj, attr.Value());
-		}*/
+		AttributeSetterPolicy::performSetAttribute(
+			*obj, attr.Name(), attr.Value()
+		);
 	}
 	//-------------------------------------------------------------------------
 	void setAttributes(BaseTypePtr obj, const ticpp::Element &el) {
@@ -240,7 +248,7 @@ private:
 				continue;
 			AddObjectPolicy::performAdd(*object, app);
 		}
-		//setAttributes(object, element);
+		setAttributes(object, element);
 		object->setXmlText(element.GetTextOrDefault(""));
 		sObjCreated(object, element.Value()); // fire objCreated signal
 		return object;
