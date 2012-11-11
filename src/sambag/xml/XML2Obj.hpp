@@ -13,29 +13,7 @@
 
 namespace sambag { namespace xml {
 //=============================================================================
-/** @class XML2Object Parser:
-  Builds an object structure using a given XML string.
-  You can regsiter a class related to a tag name.
-  You have to set a object base class as template argument.
-  Every registered object has to be an virtual subobject of this base class.
-  Every base class object has to implement an add( BaseClass::Ptr obj ) method.
-  Every base class has to define a Ptr typedef which is a shared_ptr type.
-  Every object class has to implement a static create()
-  respective a create(ClosureType*) method dependent whether a ClosureType is setted.
-  which returns a Ptr object.
-  You can register an attributes with an attributeType a tag class and the
-  Object Type which have a set( attributeType value, TagClass ) method.
-  The convertion from string to the attr. type value will be done by
-  the stringstream::>> operator.
-  When object created and all attributes setted a "object created"
-  boost::signal will be sent.
-  
-  TODO: make configurable using policy classes:
-	- CreatorPolicy
-	- SetterPolicy
-	- FromStringConvertionPolicy
-*/
-//=============================================================================
+// Default Creator policies:
 template <class T>
 struct SharedCreateCreator {
 	typedef boost::shared_ptr<T> PointeeType;
@@ -47,19 +25,6 @@ struct SharedCreateCreator {
 	SharedCreateCreator(const SharedCreateCreator<U> &b) {
 	}
 };
-//=============================================================================
-template <class T>
-struct NewCreator {
-	typedef T* PointeeType;
-	PointeeType create() {
-		return new T();
-	}
-	NewCreator(){}
-	template <class U>
-	NewCreator(const NewCreator<U> &b) {
-	}
-};
-//=============================================================================
 template <class Closure>
 struct SharedWithClosure {
 	template <class T>
@@ -76,14 +41,120 @@ struct SharedWithClosure {
 		}
 	};
 };
+template <class T>
+struct NewCreator {
+	typedef T* PointeeType;
+	PointeeType create() {
+		return new T();
+	}
+	NewCreator(){}
+	template <class U>
+	NewCreator(const NewCreator<U> &b) {
+	}
+};
 //=============================================================================
+// Default AddObject policy:
+template <class BaseType>
+struct DefaultAddObject {
+	template <class U, class V>
+	void performAdd(U &u, const V &v) {
+		u.add(v);
+	}
+};
+//=============================================================================
+// Default AttributeSetter policy:
+template <class BaseType>
+class TaggedAttributeSetterPolicy {
+	//-------------------------------------------------------------------------
+	struct IAttributeSetter {
+		virtual void set(BaseType &obj,
+				const std::string &attrValue) = 0;
+	};
+	//-------------------------------------------------------------------------
+	template<typename AttrType, typename TagClassType, typename ObjectType>
+	struct AttributeSetter: public IAttributeSetter 
+	{
+		virtual void set(BaseType &obj,
+				const std::string &strValue) 
+		{
+			ObjectType *tObj = dynamic_cast<ObjectType*> (&obj);
+			if (!tObj)
+				return;
+			std::stringstream ss;
+			ss << strValue;
+			AttrType value;
+			ss >> value;
+			tObj->set(value, TagClassType());
+		}
+	};
+	//-------------------------------------------------------------------------
+	template<typename TagClassType, typename ObjectType>
+	struct AttributeSetter<std::string, TagClassType, ObjectType> : 
+		public IAttributeSetter 
+	{
+		virtual void set(BaseType &obj,
+				const std::string &strValue) 
+		{
+			ObjectType *tObj = dynamic_cast<ObjectType*> (&obj);
+			if (!tObj)
+				return;
+			tObj->set(strValue, TagClassType());
+		}
+	};
+	//-------------------------------------------------------------------------
+	typedef std::string AttributeName;
+	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
+	AttributeMap attrMap;
+	//-------------------------------------------------------------------------
+public:
+	//-------------------------------------------------------------------------
+	~TaggedAttributeSetterPolicy() {
+		typename AttributeMap::iterator atIt = attrMap.begin();
+		for (; atIt != attrMap.end(); ++atIt) {
+			delete atIt->second;
+			atIt->second = NULL;
+		}	
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * template: AttrType,
+	 *           TagClassType,
+	 *           ObjectType
+	 * @param attrName
+	 */
+	template<typename AttrType, typename TagClassType, typename ObjectType>
+	void registerAttribute(const std::string &attrName) {
+		IAttributeSetter *setter = new AttributeSetter<AttrType, TagClassType,
+				ObjectType> ();
+		attrMap.insert(std::make_pair(attrName, setter));
+	}
+};
+//=============================================================================
+/** @class XML2Object Parser:
+  
+  TODO: make configurable using policy classes:
+
+	- CreatorPolicy
+	- AddObjectPolicy
+	- AtrributeSetterPolicy
+	- XmlTextPolicy
+*/
 template<
 	class BaseType, 
-	template <class> class CreatorPolicy = SharedCreateCreator
+	template <class> class CreatorPolicy = SharedCreateCreator,
+	template <class> class _AddObjectPolicy = DefaultAddObject,
+	template <class> class _AttributeSetterPolicy = TaggedAttributeSetterPolicy
 >
-class XML2Object : public CreatorPolicy<BaseType>
+class XML2Object : public CreatorPolicy<BaseType>,
+	public _AddObjectPolicy<BaseType>,
+	public _AttributeSetterPolicy<BaseType>
 {
+//=============================================================================
 public:
+	//-------------------------------------------------------------------------
+	typedef _AttributeSetterPolicy<BaseType> AttributeSetterPolicy;
+	//-------------------------------------------------------------------------
+	typedef _AddObjectPolicy<BaseType> AddObjectPolicy;
 	//-------------------------------------------------------------------------
 	typedef typename CreatorPolicy<BaseType>::PointeeType BaseTypePtr;
 	//-------------------------------------------------------------------------
@@ -123,53 +194,17 @@ private:
 		BaseTypePtr obj = it->second->create();
 		return obj;
 	}
-	//#########################################################################
-	// Attribute Setter
-	//
-	//-------------------------------------------------------------------------
-	struct IAttributeSetter {
-		virtual void set(BaseTypePtr obj,
-				const std::string &attrValue) = 0;
-	};
-	//-------------------------------------------------------------------------
-	template<typename AttrType, typename TagClassType, typename ObjectType>
-	struct AttributeSetter: public IAttributeSetter {
-		virtual void set(BaseTypePtr obj,
-				const std::string &strValue) {
-			ObjectType *tObj = dynamic_cast<ObjectType*> (obj.get());
-			if (!tObj)
-				return;
-			std::stringstream ss;
-			ss << strValue;
-			AttrType value;
-			ss >> value;
-			tObj->set(value, TagClassType());
-		}
-	};
-	//-------------------------------------------------------------------------
-	template<typename TagClassType, typename ObjectType>
-	struct AttributeSetter<std::string, TagClassType, ObjectType> : public IAttributeSetter {
-		virtual void set(BaseTypePtr obj,
-				const std::string &strValue) {
-			ObjectType *tObj = dynamic_cast<ObjectType*> (obj.get());
-			if (!tObj)
-				return;
-			tObj->set(strValue, TagClassType());
-		}
-	};
-	//-------------------------------------------------------------------------
-	typedef std::string AttributeName;
-	typedef std::multimap<AttributeName, IAttributeSetter*> AttributeMap;
-	AttributeMap attrMap;
+private:
 	//-------------------------------------------------------------------------
 	void setAttribute(BaseTypePtr obj, const ticpp::Attribute &attr) {
 		using namespace boost::algorithm;
-		typedef typename AttributeMap::iterator It;
-		std::pair<It, It> range = attrMap.equal_range(to_lower_copy( attr.Name() ));
+		/*typedef typename AttributeMap::iterator It;
+		std::pair<It, It> range = 
+			attrMap.equal_range(to_lower_copy( attr.Name() ));
 		// try every possible entries (stupid)
 		for ( It it=range.first; it!=range.second; ++it) {
 			it->second->set(obj, attr.Value());
-		}
+		}*/
 	}
 	//-------------------------------------------------------------------------
 	void setAttributes(BaseTypePtr obj, const ticpp::Element &el) {
@@ -194,8 +229,8 @@ private:
 			BaseTypePtr givenRoot = BaseTypePtr() )
 	{
 		// create new object
-		BaseTypePtr node = (givenRoot) ? givenRoot : buildObject(element);
-		if (!node)
+		BaseTypePtr object = (givenRoot) ? givenRoot : buildObject(element);
+		if (!object)
 			return BaseTypePtr();
 		// iterate through child elements
 		ticpp::Iterator < ticpp::Element > child;
@@ -203,12 +238,12 @@ private:
 			BaseTypePtr app = walk(*child); // rekusive call
 			if (!app)
 				continue;
-			node->add(app);
+			AddObjectPolicy::performAdd(*object, app);
 		}
-		setAttributes(node, element);
-		node->setXmlText(element.GetTextOrDefault(""));
-		sObjCreated(node, element.Value()); // fire objCreated signal
-		return node;
+		//setAttributes(object, element);
+		object->setXmlText(element.GetTextOrDefault(""));
+		sObjCreated(object, element.Value()); // fire objCreated signal
+		return object;
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -244,12 +279,6 @@ public:
 		for (; tagIt != tagMap.end(); ++tagIt) {
 			delete tagIt->second;
 			tagIt->second = NULL;
-		}
-		// release IAttributeSetter Objects
-		typename AttributeMap::iterator atIt = attrMap.begin();
-		for (; atIt != attrMap.end(); ++atIt) {
-			delete atIt->second;
-			atIt->second = NULL;
 		}
 	}
 	//-------------------------------------------------------------------------
@@ -317,19 +346,6 @@ public:
 		ticpp::Document doc(filename);
 		doc.LoadFile();
 		return build(doc, givenRoot);
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * template: AttrType,
-	 *           TagClassType,
-	 *           ObjectType
-	 * @param attrName
-	 */
-	template<typename AttrType, typename TagClassType, typename ObjectType>
-	void registerAttribute(const std::string &attrName) {
-		IAttributeSetter *setter = new AttributeSetter<AttrType, TagClassType,
-				ObjectType> ();
-		attrMap.insert(std::make_pair(attrName, setter));
 	}
 };
 }
