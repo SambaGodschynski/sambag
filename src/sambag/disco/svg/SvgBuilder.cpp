@@ -25,6 +25,7 @@
 #include "sambag/disco/svg/SvgRadialGradient.hpp"
 #include "sambag/disco/svg/SvgColorStop.hpp"
 #include <boost/bind.hpp>
+#include <boost/filesystem.hpp>
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -94,6 +95,8 @@ SvgObject::Ptr SvgBuilder::buildSvgFromFilename(const std::string & name)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);
+	boost::filesystem::path loc = name;
+	root->setSvgPath(loc.remove_filename().string() + "/");
 	xml2Obj.setClosure(root.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =
 			boost::bind( &SvgRoot::subObjectCreated, root.get(), _1, _2 );
