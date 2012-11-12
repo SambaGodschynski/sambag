@@ -100,6 +100,14 @@ protected:
 	virtual void processDraw(sambag::disco::ISurface::Ptr surface) = 0;
 public:
 	//-------------------------------------------------------------------------
+	::Window * getX11WindowHandle() {
+		return &win;	
+	}
+	//-------------------------------------------------------------------------
+	void * getSystemHandle() {
+		return getX11WindowHandle();
+	}	
+	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
 	static int getNumInstances() {

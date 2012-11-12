@@ -32,7 +32,10 @@ FileHandler::Ptr FileHandler::create(const std::string &location) {
 	if (!boost::filesystem::exists(location)) {
 		return FileHandler::Ptr();
 	}
-	FStreamPtr fs(new std::fstream(location.c_str(), std::ios::in), &destroyFStream);
+	FStreamPtr fs(
+		new std::fstream(location.c_str(), std::ios::in | std::ios::binary), 
+		&destroyFStream
+	);
 	return FileHandler::create(fs);
 }
 

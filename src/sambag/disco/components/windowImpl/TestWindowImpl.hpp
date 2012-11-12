@@ -39,7 +39,7 @@ private:
 	WindowPtr parent;
 public:
 	//-------------------------------------------------------------------------
-	virtual void * getSystemHandle() const {
+	virtual void * getSystemHandle() {
 		return NULL;
 	}
 	//-------------------------------------------------------------------------

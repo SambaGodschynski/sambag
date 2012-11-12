@@ -14,6 +14,7 @@
 #include <boost/function.hpp>
 #include "AttributeParser.hpp"
 #include <map>
+#include <string>
 
 namespace sambag { namespace disco { namespace svg {
 
@@ -57,6 +58,8 @@ public:
 	void handleRequests();
 protected:
 	//-------------------------------------------------------------------------
+	std::string svgPath; // location of svg file
+	//-------------------------------------------------------------------------
 	SvgRoot() : creationCompleted(false) {}
 	//-------------------------------------------------------------------------
 	virtual void init();
@@ -64,6 +67,14 @@ private:
 	//-------------------------------------------------------------------------
 	Rectangle size, viewBox;
 public:
+	//-------------------------------------------------------------------------
+	void setSvgPath(const std::string &loc) {
+		svgPath = loc;	
+	}
+	//-------------------------------------------------------------------------
+	const std::string & getSvgPath() const {
+		return svgPath;	
+	}
 	//-------------------------------------------------------------------------
 	const Rectangle & getSize() const {
 		return size;

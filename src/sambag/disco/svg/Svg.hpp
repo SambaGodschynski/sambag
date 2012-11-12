@@ -31,11 +31,13 @@ class SvgObject {
 //=============================================================================
 friend class SvgRoot;
 public:
-	//-------------------------------------------------------------------------
 	/**
 	 * needed for registerAttributes()
 	 */
-	typedef sambag::xml::XML2Object<SvgObject, SvgRoot> BuilderType;
+	typedef sambag::xml::XML2Object<
+		SvgObject, 
+		sambag::xml::SharedWithClosure<SvgRoot*>::Creator
+	> BuilderType;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<SvgObject> Ptr;
 	//-------------------------------------------------------------------------

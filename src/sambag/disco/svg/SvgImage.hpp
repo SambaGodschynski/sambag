@@ -32,6 +32,8 @@ public:
 	//-------------------------------------------------------------------------
 	struct HRef_tag { typedef std::string Type; };
 private:
+	//-------------------------------------------------------------------------
+	std::string svgPath;
 protected:
 	//-------------------------------------------------------------------------
 	sambag::disco::svg::graphicElements::Image::Ptr image;
@@ -49,6 +51,9 @@ public:
 		Ptr neu(new SvgImage());
 		neu->__setSelf(neu);
 		neu->createBase(root);
+		if (root) {
+			neu->svgPath = root->getSvgPath();		
+		}
 		return neu;
 	}
 	//-------------------------------------------------------------------------
@@ -73,7 +78,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void set( const HRef_tag::Type &v, const HRef_tag& ) {
-		image->setUri(v);
+		image->setUri(svgPath+v);
 	}
 	//-------------------------------------------------------------------------
 	/**
