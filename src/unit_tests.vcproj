@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="unit_tests"
-	ProjectGUID="{995CE1A9-A904-4054-9906-49DB1F8AD438}"
+	ProjectGUID="{D31490B4-875B-483E-A86F-DC01F78727B8}"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
 	>
@@ -461,6 +461,10 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestDefaultTreeModel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestFileResourceManager.cpp"
 				>
 			</File>
 			<File

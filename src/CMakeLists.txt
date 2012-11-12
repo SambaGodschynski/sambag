@@ -11,6 +11,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/CairoSurface.cpp
 	sambag/disco/ColorRGBA.cpp
 	sambag/disco/Coordinate.cpp
+	sambag/disco/FileResourceManager.cpp
 	sambag/disco/Geometry.cpp
 	sambag/disco/GeometrySerialization.cpp
 	sambag/disco/IDiscoFactory.cpp
@@ -150,6 +151,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
+	sambag/disco/tests/TestFileResourceManager.cpp
 	sambag/disco/tests/TestGeometrics.cpp
 	sambag/disco/tests/TestGeometrySerialization.cpp
 	sambag/disco/tests/TestPattern.cpp
