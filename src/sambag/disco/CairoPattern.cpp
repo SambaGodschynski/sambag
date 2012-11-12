@@ -77,6 +77,40 @@ IGradient::ColorStop getColorStop ( CairoPatternRef ref,
 }
 } // namespace gradient
 //=============================================================================
+// class CairoPatternBase
+//=============================================================================
+//-----------------------------------------------------------------------------
+void CairoPatternBase::setExtendType(Extend type) {
+	cairo_extend_t t = CAIRO_EXTEND_NONE;
+	switch (type) {
+		case DISCO_EXTEND_NONE:
+			t = CAIRO_EXTEND_NONE; break;
+		case DISCO_EXTEND_REPEAT:
+			t = CAIRO_EXTEND_REPEAT; break;
+		case DISCO_EXTEND_REFLECT:
+			t = CAIRO_EXTEND_REFLECT; break;
+		case DISCO_EXTEND_PAD:
+			t = CAIRO_EXTEND_PAD; break;
+	}
+	cairo_pattern_set_extend(cairoPatternRef.get(), t);
+}
+//-----------------------------------------------------------------------------
+CairoPatternBase::Extend CairoPatternBase::getExtendType() const {
+	Extend res = DISCO_EXTEND_NONE;
+	cairo_extend_t t = cairo_pattern_get_extend(cairoPatternRef.get());
+	switch (t) {
+		case CAIRO_EXTEND_NONE:
+			return DISCO_EXTEND_NONE;
+		case CAIRO_EXTEND_REPEAT:
+			return DISCO_EXTEND_REPEAT;
+		case CAIRO_EXTEND_REFLECT:
+			return DISCO_EXTEND_REFLECT;
+		case CAIRO_EXTEND_PAD:
+			return DISCO_EXTEND_PAD;
+	}
+	cairo_pattern_set_extend(cairoPatternRef.get(), t);
+}
+//=============================================================================
 // class CairoSurfacePattern
 //=============================================================================
 //-----------------------------------------------------------------------------

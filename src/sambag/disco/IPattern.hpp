@@ -32,6 +32,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IPattern> Ptr;
 	//-------------------------------------------------------------------------
+	enum Extend {
+		DISCO_EXTEND_NONE,
+		DISCO_EXTEND_REPEAT,
+		DISCO_EXTEND_REFLECT,
+		DISCO_EXTEND_PAD
+	};
+	//-------------------------------------------------------------------------
 	// TODO: pattern comparison
 	//-------------------------------------------------------------------------
 	/**
@@ -52,6 +59,10 @@ public:
 	virtual void setMatrix (const sambag::math::Matrix &m) = 0;
 	//-------------------------------------------------------------------------
 	virtual sambag::math::Matrix getMatrix() const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type) = 0;
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const = 0;
 };
 //=============================================================================
 class ISolidPattern : public virtual IPattern {

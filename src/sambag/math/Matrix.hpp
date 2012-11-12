@@ -19,8 +19,8 @@ using namespace boost;
 //#############################################################################
 //=============================================================================
 typedef boost::numeric::ublas::matrix<sambag::com::Number> Matrix;
-#define IDENTITY_MATRIX identity_matrix<sambag::com::Number> (3,3)
-#define NULL_MATRIX createNullMatrix()
+#define IDENTITY_MATRIX sambag::math::identity_matrix<sambag::com::Number> (3,3)
+#define NULL_MATRIX sambag::math::createNullMatrix()
 //=============================================================================
 using namespace boost::numeric::ublas;
 //=============================================================================

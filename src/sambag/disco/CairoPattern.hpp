@@ -95,6 +95,10 @@ public:
 		discoMatrixToCairoMatrix(res, cm);
 		return res;
 	}
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type);
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const;
 };
 //=============================================================================
 class CairoSolidPattern : public CairoPatternBase, public ISolidPattern {
@@ -154,6 +158,14 @@ public:
 		);
 		Ptr neu(new CairoSolidPattern(ref));
 		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type) {
+		CairoPatternBase::setExtendType(type);	
+	}
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const {
+		return CairoPatternBase::getExtendType();
 	}
 };
 //=============================================================================
@@ -255,6 +267,14 @@ public:
 		);
 		Ptr neu(new CairoLinearPattern(ref));
 		return neu;
+	}
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type) {
+		CairoPatternBase::setExtendType(type);	
+	}
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const {
+		return CairoPatternBase::getExtendType();
 	}
 };
 //=============================================================================
@@ -359,6 +379,14 @@ public:
 		Ptr neu(new CairoRadialPattern(ref));
 		return neu;
 	}
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type) {
+		CairoPatternBase::setExtendType(type);	
+	}
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const {
+		return CairoPatternBase::getExtendType();
+	}
 
 };
 //=============================================================================
@@ -399,6 +427,14 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(ISurface::Ptr _surf);
+	//-------------------------------------------------------------------------
+	virtual void setExtendType(Extend type) {
+		CairoPatternBase::setExtendType(type);	
+	}
+	//-------------------------------------------------------------------------
+	virtual Extend getExtendType() const {
+		return CairoPatternBase::getExtendType();
+	}
 };
 }}
 #endif /* CAIROPATTERN_HPP_ */
