@@ -27,7 +27,7 @@ void TestFileResourceManager::tearDown() {
 //-----------------------------------------------------------------------------
 void TestFileResourceManager::testImageLoader() {
 	using namespace sambag::disco;
-	CPPUNIT_ASSERT( &(getGraphicsRepository()) );
+	CPPUNIT_ASSERT( &(getResourceManager()) );
 	FileResourceManager &rep = FileResourceManager::instance();
 	CPPUNIT_ASSERT(!rep.getImage("frxTest.imageA"));
 	CPPUNIT_ASSERT(!rep.getImage("frxTest.imageB"));

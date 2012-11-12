@@ -42,7 +42,7 @@ public:
 }; // IResourceManager
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-extern IResourceManager & getGraphicsRepository();
+extern IResourceManager & getResourceManager();
 }} // namespace(s)
 
 #endif /* SAMBAG_IGRAPHICSREPOSITORY_H */
