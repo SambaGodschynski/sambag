@@ -1,5 +1,5 @@
 /*
- * TestGraphicsRepositiory.cpp
+ * TestFileResourceManager.cpp
  *
  *  Created on: Thu Nov  8 13:34:42 2012
  *      Author: Johannes Unger
@@ -10,22 +10,22 @@
 #include <sambag/disco/FileResourceManager.hpp>
 #include <string>
 // Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestGraphicsRepositiory );
+CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestFileResourceManager );
 
 
 namespace tests {
 //=============================================================================
-//  Class TestGraphicsRepositiory
+//  Class TestFileResourceManager
 //=============================================================================
 //-----------------------------------------------------------------------------
-void TestGraphicsRepositiory::setUp() {
+void TestFileResourceManager::setUp() {
 	sambag::disco::FileResourceManager::init("./testimages");
 }
 //-----------------------------------------------------------------------------
-void TestGraphicsRepositiory::tearDown() {
+void TestFileResourceManager::tearDown() {
 }
 //-----------------------------------------------------------------------------
-void TestGraphicsRepositiory::testImageLoader() {
+void TestFileResourceManager::testImageLoader() {
 	using namespace sambag::disco;
 	CPPUNIT_ASSERT( &(getGraphicsRepository()) );
 	FileResourceManager &rep = FileResourceManager::instance();
