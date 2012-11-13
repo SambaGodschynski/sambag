@@ -24,8 +24,8 @@ namespace {
 	int nbWndNestedClassRegs = 0;
 	WNDCLASS  wndClass = {0};
 	WNDCLASS nestedWndClass = {0};
-	const char STR_WNDCLASS[] = "discowindowimpl";
-	const char STR_NESTEDWNDCLASS[] = "disconestedwindowimpl";
+	const char STR_WNDCLASS[] = "_discowindowimpl";
+	const char STR_NESTEDWNDCLASS[] = "_disconestedwindowimpl";
 }
 
 namespace sambag { namespace disco { namespace components {
@@ -216,6 +216,9 @@ void Win32WindowImpl::unregisterWindow() {
 	} else {
 		unregisterWindowClass();
 	}
+	if (instances==0)
+		if (!getFlag(WND_NESTED))
+				PostQuitMessage(0);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_close() {
@@ -367,12 +370,10 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 		if (!win)
 			break;
 		win->destroyWindow();
-		if (instances==0)
-			if (!win->getFlag(WND_NESTED))
-				PostQuitMessage(0);
 		break;
 	case WM_CLOSE:
-		DestroyWindow(hWnd);
+		if (win)
+			win->close();
 		break;
 	case WM_PAINT : {
 		if (win->getFlag(WindowFlags::WND_RAW))

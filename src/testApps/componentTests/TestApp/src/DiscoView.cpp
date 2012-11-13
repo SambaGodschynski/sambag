@@ -28,6 +28,7 @@
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
 #include <sambag/com/ICommand.hpp>
+#include <sambag/disco/FileResourceManager.hpp>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/timer/timer.hpp>
@@ -460,6 +461,7 @@ void createWindow<SCROLLERCOASTER>() {
 		Label::Ptr el = Label::create();
 		el->setText(ss.str());
 		el->setFont(el->getFont().setSize((NUM-i)*0.9));
+		el->setIcon(getResourceManager().getImage("IconA"));
 		con->add(el);
 	}
 	win[SCROLLERCOASTER]->getContentPane()->validate();
@@ -654,10 +656,18 @@ void initTimer() {
 	timer3->start();*/
 }
 
+void initResources() {
+	sambag::disco::FileResourceManager::init("./testimages");
+	sambag::disco::FileResourceManager &m = 
+		sambag::disco::FileResourceManager::instance();
+	m.registerImage("IconA","disco-floor.png");
+}
+
 int main() {
 	SAMBAG_WINONLY(
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)
+	initResources();
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;

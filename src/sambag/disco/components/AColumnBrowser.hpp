@@ -131,7 +131,10 @@ public:
 	//-------------------------------------------------------------------------
 	typedef TreeModel Model;
 	//-------------------------------------------------------------------------
-	typedef AColumnBrowser<Model> Class;
+	typedef AColumnBrowser<Model, 
+		_ListCellRenderer,
+		_ListModel, 
+		_ListSelectionModel> Class;
 	//-------------------------------------------------------------------------
 	typedef SelectionPathChanged Event;
 	//-------------------------------------------------------------------------
@@ -205,6 +208,8 @@ private:
 	sambag::com::ArithmeticWrapper<int> numFixedLists;
 public:
 	//-------------------------------------------------------------------------
+	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
+	//-------------------------------------------------------------------------
 	void updateLists();
 	//-------------------------------------------------------------------------
 	std::string selectionPathToString(const std::string & seperator = "/") const{
@@ -216,10 +221,6 @@ public:
 	//-------------------------------------------------------------------------
 	const Path & getSelectionPath() const {
 		return selectionPath;
-	}
-	//-------------------------------------------------------------------------
-	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<AColumnBrowser>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	bool isFolder(Node node) const {
