@@ -415,7 +415,7 @@ void TestCairoDrawContext::testSetStrokeWidth() {
 }
 //-----------------------------------------------------------------------------
 void drawGradients(sambag::disco::IDrawContext::Ptr context,
-	const sambag::math::Matrix trans = sambag::math::IDENTITY_MATRIX)
+	const sambag::math::Matrix trans = IDENTITY_MATRIX)
 {
 	using namespace sambag::disco;
 	context->save();
