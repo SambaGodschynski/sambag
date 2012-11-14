@@ -17,7 +17,7 @@ Rectangle calcIconBounds(ISurface::Ptr icon, const Coordinate &textHeight) {
 	Rectangle res(0,0,textHeight,textHeight);
 	return res;
 }
-void drawIcon(IDrawContext::Ptr cn, 
+void drawIcon(IDrawContext::Ptr cn, // TODO: impl. and use glyph renderer for purpose
 	ISurface::Ptr icon, 
 	const Rectangle &bounds,
 	AComponent::Ptr c) 

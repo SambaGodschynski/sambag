@@ -36,6 +36,10 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
+	virtual Dimension getPreferredSize() {
+		return Dimension(20., 20.);
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create(Direction direction) {
 		Ptr res(new BasicArrowButton(direction));
 		res->self = res;

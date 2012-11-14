@@ -103,8 +103,8 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("Button.disabled",  
 		createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
-	m.putProperty("ScrollBar.minimumThumbSize", Dimension(15., 15.));
-	m.putProperty("ScrollBar.maximumThumbSize", Dimension(20., 20.));
+	m.putProperty("ScrollBar.minimumThumbSize", Dimension(10., 10.));
+	m.putProperty("ScrollBar.maximumThumbSize", Dimension(9999., 9999.));
 	m.putProperty("ScrollBar.incrementButtonGap", Coordinate(5.));
 	m.putProperty("ScrollBar.decrementButtonGap", Coordinate(5.));
 	m.putProperty("ScrollBar.thumbHighlight", HtmlColors::getColor("lightblue"));
