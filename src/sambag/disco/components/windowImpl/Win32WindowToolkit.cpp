@@ -10,6 +10,7 @@
 #include "WindowImpl.hpp"
 #include "Win32WindowImpl.hpp"
 #include <sambag/disco/components/Window.hpp>
+#include <sambag/disco/components/Timer.hpp>
 #include <windows.h>
 
 namespace sambag { namespace disco { namespace components {
@@ -18,8 +19,6 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 bool Win32WindowToolkit::mainLoopRunning = false;
-//-----------------------------------------------------------------------------
-Win32WindowToolkit::InvokeLater Win32WindowToolkit::_invokeLater;
 //-----------------------------------------------------------------------------
 Win32WindowToolkit::Win32WindowToolkit() {
 }
@@ -54,14 +53,6 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 	return &FactoryHolder::Instance();
 }
 //-----------------------------------------------------------------------------
-void Win32WindowToolkit::invokeWaiting() {
-	while (!_invokeLater.empty()) {
-		const InvokeFunction &f = _invokeLater.front();
-		f();
-		_invokeLater.pop();
-	}
-}
-//-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
 	TimerPolicy::startUpTimer();
@@ -70,19 +61,28 @@ void Win32WindowToolkit::mainLoop() {
 	{
 		TranslateMessage(&msg);
         DispatchMessage(&msg);
-		invokeWaiting();
     }
 	mainLoopRunning = false;
 	TimerPolicy::tearDownTimer();
 }
 //-----------------------------------------------------------------------------
+namespace {
+	/* 
+	 * timer callback
+	 */
+	void _invokeLater(Win32WindowToolkit::InvokeFunction f) 
+	{
+		f();
+	}
+} // namespace(s)
 void Win32WindowToolkit::invokeLater(const Win32WindowToolkit::InvokeFunction &f) 
 {
-	if (!isMainLoopRunning()) {
-		f();
-		return;
-	}
-	_invokeLater.push(f);
+	Timer::Ptr tm = Timer::create(50);
+	tm->setNumRepetitions(0);
+	tm->EventSender<TimerEvent>::addEventListener(
+		boost::bind(&_invokeLater, f)
+	);
+	tm->start();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startTimer(Timer::Ptr tm) {

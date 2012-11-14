@@ -17,7 +17,6 @@
 #include "Win32MMTimerImpl.hpp"
 #include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
-#include <queue>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -36,13 +35,7 @@ class Win32WindowToolkit : public WindowToolkit,
 friend struct Loki::CreateUsingNew<Win32WindowToolkit>;
 private:
 	//-------------------------------------------------------------------------
-	static void invokeWaiting();
-	//-------------------------------------------------------------------------
 	typedef TimerImpl TimerPolicy;
-	//-------------------------------------------------------------------------
-	typedef std::queue<InvokeFunction> InvokeLater;
-	//-------------------------------------------------------------------------
-	static InvokeLater _invokeLater;
 	//-------------------------------------------------------------------------
 	Win32WindowToolkit();
 	Win32WindowToolkit(const Win32WindowToolkit&){}

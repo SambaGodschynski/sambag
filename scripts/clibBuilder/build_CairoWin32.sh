@@ -112,7 +112,7 @@ nmake -f scripts/makefile.vcwin32
 cd $ROOTDIR/$PIXMAN
 change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
-make -f Makefile.win32 "CFG=release"
+make -f Makefile.win32 "CFG=debug"
 
 #source $WHEREAMI/vs90vcvars32.sh UNIX
 
@@ -122,7 +122,7 @@ change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
 
-make -f Makefile.win32 "CFG=release"
+make -f Makefile.win32 "CFG=debug"
 
 #deploy
 cd $ROOTDIR

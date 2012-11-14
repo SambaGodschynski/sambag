@@ -20,12 +20,26 @@ namespace {
 		std::cout<<"["<<std::hex<<hwnd<<"]:"
 		<<msg<<";"<<std::endl<<std::flush;
 	}
-	int nbWndClassRegs = 0;
-	int nbWndNestedClassRegs = 0;
-	WNDCLASS  wndClass = {0};
-	WNDCLASS nestedWndClass = {0};
+	WNDCLASS  nullWndClass = {0};
 	const char STR_WNDCLASS[] = "_discowindowimpl";
 	const char STR_NESTEDWNDCLASS[] = "_disconestedwindowimpl";
+	typedef std::pair<std::string, HINSTANCE> WndClassId;
+	struct WndClassHolder {
+		typedef boost::shared_ptr<WndClassHolder> Ptr;
+		WndClassId wndClassId;
+		WNDCLASS wndClass;
+		WndClassHolder(const WndClassId &wndClassId) :
+		wndClassId(wndClassId), wndClass(nullWndClass) 
+		{
+		}
+		~WndClassHolder() 
+		{
+			UnregisterClass(wndClassId.first.c_str(), 
+				wndClassId.second);
+		}
+	};
+	typedef std::map<WndClassId, WndClassHolder::Ptr> WndClassMap;
+	WndClassMap wndClassMap;
 }
 
 namespace sambag { namespace disco { namespace components {
@@ -37,11 +51,15 @@ int Win32WindowImpl::instances = 0;
 //-----------------------------------------------------------------------------
 Win32WindowImpl::WinMap Win32WindowImpl::winmap;
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::registerWindowClass(HINSTANCE hI) {
-	if ( nbWndClassRegs++ > 0 ) {
-		SAMBAG_ASSERT(wndClass.hInstance == hI);
-		return;
-	}
+WNDCLASS & Win32WindowImpl::registerWindowClass(HINSTANCE hI) {
+	WndClassId id(std::string(STR_WNDCLASS), hI);
+	WndClassMap::iterator it = wndClassMap.find(id);
+	if ( it != wndClassMap.end())
+		return it->second->wndClass;
+	WndClassHolder::Ptr holder(new WndClassHolder(id));
+	wndClassMap.insert(std::make_pair(id, holder));
+
+	WNDCLASS &wndClass = holder->wndClass;
 	wndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	wndClass.hInstance     = hI;
 	wndClass.hbrBackground = 0; //(HBRUSH)(COLOR_BACKGROUND);
@@ -49,13 +67,18 @@ void Win32WindowImpl::registerWindowClass(HINSTANCE hI) {
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&wndClass)) )
 		throw std::runtime_error ("Win32 RegisterClass failed.");
+	return wndClass;
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::registerNestedWindowClass(HINSTANCE hI) {
-	if ( nbWndNestedClassRegs++ > 0 ) {
-		SAMBAG_ASSERT(nestedWndClass.hInstance == hI);
-		return;
-	}
+WNDCLASS & Win32WindowImpl::registerNestedWindowClass(HINSTANCE hI) {
+	WndClassId id(std::string(STR_NESTEDWNDCLASS), hI);
+	WndClassMap::iterator it = wndClassMap.find(id);
+	if ( it != wndClassMap.end())
+		return it->second->wndClass;
+	WndClassHolder::Ptr holder(new WndClassHolder(id));
+	wndClassMap.insert(std::make_pair(id, holder));
+
+	WNDCLASS &nestedWndClass = holder->wndClass;
 	nestedWndClass.style = CS_DBLCLKS | CS_GLOBALCLASS;
 	nestedWndClass.lpfnWndProc   = &Win32WindowImpl::wndProc;
 	nestedWndClass.hInstance     = hI;
@@ -63,18 +86,7 @@ void Win32WindowImpl::registerNestedWindowClass(HINSTANCE hI) {
 	nestedWndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	if( FAILED(RegisterClass(&nestedWndClass)) )
 		throw std::runtime_error ("Win32 RegisterClass failed.");
-}
-//-----------------------------------------------------------------------------
-void Win32WindowImpl::unregisterWindowClass() {
-	if ( --nbWndClassRegs != 0 )
-		return;
-	UnregisterClass(STR_WNDCLASS, wndClass.hInstance);
-}
-//-----------------------------------------------------------------------------
-void Win32WindowImpl::unregisterNestedWindowClass() {
-	if ( --nbWndNestedClassRegs != 0 )
-		return;
-	UnregisterClass(STR_NESTEDWNDCLASS, nestedWndClass.hInstance);
+	return nestedWndClass;
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl * Win32WindowImpl::getWin32WindowImpl(HWND win) {
@@ -114,7 +126,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	HWND parent = (HWND)parentData.first;
 	HINSTANCE hI = (HINSTANCE)parentData.second;
-	registerNestedWindowClass(hI);
+	WNDCLASS & nestedWndClass = registerNestedWindowClass(hI);
 
 	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
@@ -147,7 +159,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = GetModuleHandle(NULL);
-	registerWindowClass(hI);
+	WNDCLASS & wndClass = registerWindowClass(hI);
 	
 	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_VISIBLE;
@@ -191,6 +203,7 @@ void Win32WindowImpl::destroyWindow() {
 	if (hold) { // if not we came from destrucor
 		onDestroy();
 	}
+	unregisterWindow();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::close() {
@@ -211,14 +224,6 @@ void Win32WindowImpl::unregisterWindow() {
 	winmap.erase(win);
 	win = 0;
 	--instances;
-	if (getFlag(WND_NESTED)) {
-		unregisterNestedWindowClass();
-	} else {
-		unregisterWindowClass();
-	}
-	if (instances==0)
-		if (!getFlag(WND_NESTED))
-				PostQuitMessage(0);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_close() {
@@ -241,9 +246,8 @@ void Win32WindowImpl::_open(AWindowImplPtr parent) {
 }
 //-----------------------------------------------------------------------------
 Win32WindowImpl::~Win32WindowImpl() {
-	if (win) {
+	if (win && visible) {
 		DestroyWindow(win);
-		unregisterWindow();
 	}
 }
 //-----------------------------------------------------------------------------
@@ -356,6 +360,9 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 	WPARAM wParam, LPARAM lParam) 
 {
 	Win32WindowImpl *win = getWin32WindowImpl(hWnd); //can be NULL
+	Win32WindowImpl::Ptr hold;
+	if (win)
+		hold = win->getPtr();
 	
 	int mbuttons = 0;
 	int x=0; int y=0;
@@ -376,12 +383,12 @@ LRESULT CALLBACK Win32WindowImpl::wndProc(HWND hWnd, UINT message,
 			win->close();
 		break;
 	case WM_PAINT : {
+		if (!win)
+			break;
 		if (win->getFlag(WindowFlags::WND_RAW))
 			break;
 		hdc = BeginPaint(hWnd, &ps);
-		if (win) {
-			win->update();
-		}
+		win->update();
 		EndPaint(hWnd, &ps);
 		ValidateRect(hWnd, NULL);
 		break;

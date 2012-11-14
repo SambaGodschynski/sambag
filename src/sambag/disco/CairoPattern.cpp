@@ -109,6 +109,7 @@ CairoPatternBase::Extend CairoPatternBase::getExtendType() const {
 			return DISCO_EXTEND_PAD;
 	}
 	cairo_pattern_set_extend(cairoPatternRef.get(), t);
+	return res;
 }
 //=============================================================================
 // class CairoSurfacePattern

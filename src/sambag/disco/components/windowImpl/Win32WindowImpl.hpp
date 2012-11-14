@@ -36,13 +36,9 @@ public:
 	typedef boost::weak_ptr<Win32WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
-	static void registerWindowClass(HINSTANCE hI);
+	static WNDCLASS & registerWindowClass(HINSTANCE hI);
 	//-------------------------------------------------------------------------
-	static void registerNestedWindowClass(HINSTANCE hI);
-	//-------------------------------------------------------------------------
-	static void unregisterWindowClass();
-	//-------------------------------------------------------------------------
-	static void unregisterNestedWindowClass();
+	static WNDCLASS & registerNestedWindowClass(HINSTANCE hI);
 	//-------------------------------------------------------------------------
 	void _open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------
