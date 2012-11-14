@@ -12,6 +12,7 @@
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
 namespace {
+sambag::com::Number iconPadding = 5.;
 Rectangle calcIconBounds(ISurface::Ptr icon, const Coordinate &textHeight) {
 	Rectangle res(0,0,textHeight,textHeight);
 	return res;
@@ -27,7 +28,10 @@ void drawIcon(IDrawContext::Ptr cn,
 		return;
 	sambag::com::Number scaleX = bounds.width() / realBounds.width();
 	sambag::com::Number scaleY = bounds.height() / realBounds.height();
-	cn->translate(Point2D(0, (c->getHeight() - bounds.height()) / 2.));
+	cn->translate(Point2D(
+		iconPadding, 
+		(c->getHeight() - bounds.height()) / 2.
+	));
 	cn->scale(Point2D(scaleX, scaleY));
 	cn->drawSurface(icon);	
 	cn->restore();
@@ -36,8 +40,6 @@ void drawIcon(IDrawContext::Ptr cn,
 //=============================================================================
 //  Class BasicLabelUI
 //=============================================================================
-//-----------------------------------------------------------------------------
-sambag::com::Number iconTextGap = 10.;
 //-----------------------------------------------------------------------------
 void BasicLabelUI::installUI(AComponentPtr c) {
 	Super::installUI(c);
@@ -56,9 +58,9 @@ void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 		cn->fill();
 		return;
 	}
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
+	Rectangle iconBounds = calcIconBounds(icon, l->getFont().size);
 	drawIcon(cn, icon, iconBounds, c);
-	cn->moveTo(Point2D(iconBounds.width() + iconTextGap, 
+	cn->moveTo(Point2D(iconBounds.width() + iconPadding*2., 
 		c->getHeight() / 2.0 + txtEx.getHeight() / 2.0));
 	cn->textPath(txt);
 	cn->fill();
@@ -74,8 +76,8 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	Dimension res = Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 20);
 	if (!icon)
 		return res;
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
-	res.width( res.width() + iconBounds.width() + iconTextGap);
+	Rectangle iconBounds = calcIconBounds(icon, l->getFont().size);
+	res.width( res.width() + iconBounds.width() + iconPadding*2.);
 	return res;
 }
 

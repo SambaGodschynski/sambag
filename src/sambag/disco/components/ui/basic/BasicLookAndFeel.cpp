@@ -34,7 +34,6 @@
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/ColumnView.hpp>
-#include <sambag/disco/svg/StyleParser.hpp>
 
 
 namespace sambag { namespace disco {
@@ -75,16 +74,16 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
 }
 //-----------------------------------------------------------------------------
-namespace {
-	svg::graphicElements::Style createStyle(const std::string &str) {
+svg::graphicElements::Style BasicLookAndFeel::createStyle(const std::string &str) 
+{
 		using namespace sambag::disco::svg;
 		svg::graphicElements::Style res;
+		res.font(Font()); // TODO: why has sytle no std font?
 		std::stringstream ss;
 		ss<<str;
 		ss>>res;
 		return res;
-	}
-} // namespace(s)
+} 
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
@@ -131,7 +130,7 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
 	m.putProperty("ColumnBrowser.numFixedLists", (int)4);
-	m.putProperty("ColumnBrowser.fontSize", Coordinate(13.));
+	m.putProperty("ColumnBrowser.fontStyle", createStyle("font-size: 16; font-family: arial; font-style:normal"));
 	m.putProperty("ColumnBrowser.fixedColumnWidth", (Coordinate)230.);
 }
 

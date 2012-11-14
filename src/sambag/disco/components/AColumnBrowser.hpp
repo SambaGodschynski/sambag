@@ -22,6 +22,7 @@
 #include "DefaultListModel.hpp"
 #include "DefaultListSelectionModel.hpp"
 #include "Forward.hpp"
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -270,13 +271,14 @@ template <class TM,
 >
 void AColumnBrowser<TM, CR, LM, LSM>::addList(int listIndex)
 {
-	Coordinate fontSize = 20.;
-	ui::getUIManager().getProperty("ColumnBrowser.fontSize", fontSize);
-	columnView->setFont(columnView->getFont().setSize(fontSize));
+	svg::graphicElements::Style fontStyle;
+	ui::getUIManager().getProperty("ColumnBrowser.fontStyle", fontStyle);
+	Font font = fontStyle.font();
+	if (font != svg::graphicElements::Style::NO_FONT) {
+		columnView->setFont(fontStyle.font());
+	}
 	Coordinate fixedColumnWitdh = 120.;
 	ui::getUIManager().getProperty("ColumnBrowser.fixedColumnWidth", fixedColumnWitdh);
-	columnView->setFont(columnView->getFont().setSize(fontSize));
-
 	ListTypePtr list = columnView->addList();
 	list->setFixedCellWidth(fixedColumnWitdh);
 	list->sce::EventSender<ListSelectionEvent>::addTrackedEventListener(
