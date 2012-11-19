@@ -6,7 +6,7 @@
  */
 
 #include "FileResourceManager.hpp"
-#include <boost/Filesystem.hpp>
+#include <boost/filesystem.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/svg/SvgBuilder.hpp>

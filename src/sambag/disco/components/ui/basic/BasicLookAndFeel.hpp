@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
-#include <sambag/disco/svg/StyleParser.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -31,8 +31,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void installDefaults();
 	//-------------------------------------------------------------------------
-	svg::graphicElements::Style 
-	BasicLookAndFeel::createStyle(const std::string &str);
+	svg::graphicElements::Style createStyle(const std::string &str);
 private:
 public:
 	//-------------------------------------------------------------------------
