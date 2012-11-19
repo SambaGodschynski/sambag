@@ -29,6 +29,8 @@ namespace sambag { namespace disco { namespace components {
 					  typedef boost::weak_ptr<ScrollPane> ScrollPaneWPtr;
 	class Button; typedef boost::shared_ptr<Button> ButtonPtr;
 					  typedef boost::weak_ptr<Button> ButtonWPtr;
+	class Label; typedef boost::shared_ptr<Label> LabelPtr;
+					  typedef boost::weak_ptr<Label> LabelWPtr;
 	class Viewport; typedef boost::shared_ptr<Viewport> ViewportPtr;
 	class RedrawManager; typedef boost::shared_ptr<RedrawManager> RedrawManagerPtr;
 	class AWindowImpl; typedef boost::shared_ptr<AWindowImpl> AWindowImplPtr;

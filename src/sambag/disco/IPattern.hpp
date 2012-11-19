@@ -129,5 +129,12 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr getSurface() const = 0;
 };
+///////////////////////////////////////////////////////////////////////////////
+inline ColorRGBA getPatternColorHelper(IPattern::Ptr pat) {
+	ISolidPattern::Ptr sol = boost::shared_dynamic_cast<ISolidPattern>(pat);
+	if (!sol)
+		return ColorRGBA::NULL_COLOR;
+	return sol->getSolidColor();
+}
 }} // namespace
 #endif /* PATTERN_HPP_ */

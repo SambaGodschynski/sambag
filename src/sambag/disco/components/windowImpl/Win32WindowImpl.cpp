@@ -110,6 +110,16 @@ void Win32WindowImpl::drawAll() {
 	}
 }
 //-----------------------------------------------------------------------------
+disco::Win32Surface::Ptr Win32WindowImpl::getSurface() {
+	using namespace sambag;
+	//if (!surface) {
+		Rectangle r = getBounds();
+		surface = disco::Win32Surface::create(win,
+			(int)r.getWidth(), (int)r.getHeight());
+	//}
+	return surface;
+}
+//-----------------------------------------------------------------------------
 void Win32WindowImpl::update() {
 	disco::Win32Surface::Ptr sf = getSurface();
 	this->processDraw( sf );
@@ -261,16 +271,6 @@ Rectangle Win32WindowImpl::getBounds() const {
 //-------------------------------------------------------------------------
 void Win32WindowImpl::invalidateSurface() {
 	surface.reset();
-}
-//-----------------------------------------------------------------------------
-disco::Win32Surface::Ptr Win32WindowImpl::getSurface() {
-	using namespace sambag;
-	if (!surface) {
-		Rectangle r = getBounds();
-		surface = disco::Win32Surface::create(win,
-			(int)r.getWidth(), (int)r.getHeight());
-	}
-	return surface;
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::setBounds(const Rectangle &r) {
