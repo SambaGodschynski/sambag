@@ -112,11 +112,11 @@ void Win32WindowImpl::drawAll() {
 //-----------------------------------------------------------------------------
 disco::Win32Surface::Ptr Win32WindowImpl::getSurface() {
 	using namespace sambag;
-	//if (!surface) {
+	if (!surface) {
 		Rectangle r = getBounds();
 		surface = disco::Win32Surface::create(win,
 			(int)r.getWidth(), (int)r.getHeight());
-	//}
+	}
 	return surface;
 }
 //-----------------------------------------------------------------------------

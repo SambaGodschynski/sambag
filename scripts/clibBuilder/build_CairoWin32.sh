@@ -11,8 +11,8 @@ WHEREAMI=$(pwd)
 export ROOTDIR=$WHEREAMI/build
 export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
 export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
-export URL_PIXMAN='http://cairographics.org/releases/pixman-0.26.2.tar.gz'
-export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.2.tar.xz'
+export URL_PIXMAN='http://cairographics.org/releases/pixman-0.28.0.tar.gz'
+export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.8.tar.xz'
 export _LIBLINK='MD'
 LIBPNG=libpng
 ZLIB=zlib
@@ -112,7 +112,7 @@ nmake -f scripts/makefile.vcwin32
 cd $ROOTDIR/$PIXMAN
 change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
-make -f Makefile.win32 "CFG=debug"
+make -f Makefile.win32 "CFG=release"
 
 #source $WHEREAMI/vs90vcvars32.sh UNIX
 
@@ -122,7 +122,7 @@ change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
 
-make -f Makefile.win32 "CFG=debug"
+make -f Makefile.win32 "CFG=release"
 
 #deploy
 cd $ROOTDIR

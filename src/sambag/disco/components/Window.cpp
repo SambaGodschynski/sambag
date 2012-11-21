@@ -46,6 +46,7 @@ Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
 	SAMBAG_ASSERT(windowImpl);
 	rootPane = components::RootPane::create();
 	windowImpl->setRootPane(rootPane);
+	setBounds(windowImpl->getBounds());
 }
 //-----------------------------------------------------------------------------
 void Window::initWindow() {
