@@ -325,7 +325,7 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 			if (cn) {
 				cn->save();
 				g.setClip(rect);
-				std::cout<<dirtyComponent->toString()<<std::endl;
+				//std::cout<<dirtyComponent->toString()<<std::endl;
 				dirtyComponent->draw(g.getPtr());
 				cn->restore();
 			}
