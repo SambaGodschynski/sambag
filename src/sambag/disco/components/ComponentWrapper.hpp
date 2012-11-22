@@ -103,6 +103,7 @@ typename ComponentWrapper<Drawable>::Ptr ComponentWrapper<Drawable>::create()
 template <class Drawable>
 ComponentWrapper<Drawable>::ComponentWrapper() {
 	drawable = typename Drawable::create();
+	setName("ComponentWrapper<" + drawable->toString() + ">");
 }
 }}} // namespace(s)
 
