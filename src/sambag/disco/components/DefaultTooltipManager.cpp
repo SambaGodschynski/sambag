@@ -11,7 +11,7 @@
 #include "Window.hpp"
 #include "ui/UIManager.hpp"
 #include "Label.hpp"
-#include "BoxLayout.hpp"
+
 namespace sambag { namespace disco { namespace components {
 struct TooltipWindow : public Window {
 	typedef boost::shared_ptr<TooltipWindow> Ptr;
@@ -28,7 +28,11 @@ TooltipWindow::Ptr TooltipWindow::sharedInstance;
 //-----------------------------------------------------------------------------
 void TooltipWindow::setText(const std::string &txt) {
 	label->setText(txt);
-	std::cout<<label->getBounds()<<std::endl;
+	Dimension size = label->getMinimumSize();
+	size.width( size.width() );
+	size.height( size.height() + 10.);
+	label->setBounds(Rectangle(0, 0, size.width(), size.height()));
+	setWindowSize(size);
 }
 //-----------------------------------------------------------------------------
 TooltipWindow::Ptr TooltipWindow::create(AComponentPtr invoker) {
@@ -49,12 +53,8 @@ TooltipWindow::Ptr TooltipWindow::create(AComponentPtr invoker) {
 //-----------------------------------------------------------------------------
 void TooltipWindow::postConstructor() {	
 	AContainer::Ptr cnt = getContentPane();
-	cnt->setLayout(
-		BoxLayout::create(cnt, BoxLayout::Y_AXIS)
-	);
+	cnt->setLayout( ALayoutManager::Ptr() );
 	label = Label::create();
-	label->setLocation(Point2D(0,0));
-	label->setAlignmentX(0.5);
 	label->setForeground(ColorRGBA(0.0, 0.0, 0.0));
 	cnt->add(label);
 	cnt->setBackground(ColorRGBA(0.8, 0.8, 0.8));
@@ -85,19 +85,19 @@ DefaultTooltipManager & DefaultTooltipManager::instance() {
 }
 //-----------------------------------------------------------------------------
 int DefaultTooltipManager::getDismissDelay() const {
-	return 0;
+	return 0; //dismissDelay;
 }
 //-----------------------------------------------------------------------------
 int DefaultTooltipManager::getInitialDelay() const {
-	return 0;
+	return initialDelay;
 }
 //-----------------------------------------------------------------------------
 int DefaultTooltipManager::getReshowDelay() const {
-	return 0;
+	return 0; //reshowDelay;
 }
 //-----------------------------------------------------------------------------
 bool DefaultTooltipManager::isEnabled() const {
-	return false;
+	return enabled;
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::registerComponent(AComponentPtr component)
@@ -111,19 +111,19 @@ void DefaultTooltipManager::registerComponent(AComponentPtr component)
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::setDismissDelay(int milliseconds) {
-
+	
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::setEnabled(bool flag) {
-
+	enabled = flag;
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::setInitialDelay(int milliseconds) {
-
+	initialDelay = milliseconds;
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::setReshowDelay(int milliseconds) {
-
+	reshowDelay = milliseconds;
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::unregisterComponent(AComponentPtr component)
@@ -181,10 +181,9 @@ void DefaultTooltipManager::onTimer(void *src, const TimerEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::showTooltip(AComponentPtr c) {
-	std::cout<<c->getTooltipText()<<std::endl;
+	if (!enabled)
+		return;
 	TooltipWindow::sharedInstance = TooltipWindow::create(c);
-	TooltipWindow::sharedInstance->pack();
-	TooltipWindow::sharedInstance->invalidate();
 	TooltipWindow::sharedInstance->setWindowLocation(location);
 	TooltipWindow::sharedInstance->open();
 }
