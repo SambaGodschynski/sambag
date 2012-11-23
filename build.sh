@@ -12,8 +12,10 @@ fi
 #usage
 usage() 
 {
-	echo $0 "-i clib_location [-t target(make=default, eclipse, xcode, visual studio)]"
+	echo $0 "-i clib_location [-g generator(cmmake generator default=Unix Makefiles)]"
 }
+
+mode="Unix Makefiles"
 
 #passing arguments
 while [ "$1" != "" ]; do
@@ -21,8 +23,8 @@ while [ "$1" != "" ]; do
         -i | --in )             shift
                                 in=$1
                                 ;;
-        -t | --target )    		shift
-								mode=$1							
+        -m | --mode )         shift
+				mode=$1							
                                 ;;
         -h | --help )           usage
                                 exit
@@ -34,5 +36,5 @@ while [ "$1" != "" ]; do
 done
 
 export CLIBS=$in
-cmake .
+cmake . -G "$mode"
 make

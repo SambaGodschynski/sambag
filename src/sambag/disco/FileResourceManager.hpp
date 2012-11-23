@@ -9,7 +9,7 @@
 #define SAMBAG_FRXGRAPHICFILEREPOSITORY_H
 
 #include <boost/shared_ptr.hpp>
-#include <Loki/Singleton.h>
+#include <loki/Singleton.h>
 #include "IResourceManager.hpp"
 #include <boost/unordered_map.hpp>
 
