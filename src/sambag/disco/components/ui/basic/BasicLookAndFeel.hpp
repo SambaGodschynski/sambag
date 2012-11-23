@@ -32,7 +32,7 @@ protected:
 	virtual void installDefaults();
 	//-------------------------------------------------------------------------
 	svg::graphicElements::Style 
-	BasicLookAndFeel::createStyle(const std::string &str);
+	createStyle(const std::string &str);
 private:
 public:
 	//-------------------------------------------------------------------------
