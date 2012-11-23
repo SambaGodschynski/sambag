@@ -66,6 +66,9 @@ extern WindowToolkit * _getWindowToolkitImpl();
 //-----------------------------------------------------------------------------
 WindowToolkit * getWindowToolkit();
 //-----------------------------------------------------------------------------
+void setGlobalUserData(const std::string &key, sambag::com::ArbitraryType::Ptr);
+//-----------------------------------------------------------------------------
+sambag::com::ArbitraryType::Ptr getGlobalUserData(const std::string &key);
 /**
  * used for testing
  * @param current WindowToolkit

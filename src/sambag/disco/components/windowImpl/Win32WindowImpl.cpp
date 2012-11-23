@@ -44,6 +44,16 @@ namespace {
 		if( FAILED(RegisterClass(&wc)) )
 			throw std::runtime_error ("Win32 RegisterClass failed.");
 	}
+	HINSTANCE getHInstance() {
+		HINSTANCE res;
+		sambag::com::ArbitraryType::Ptr obj =
+			getGlobalUserData("win32.hinstance");
+		if (!obj) {
+			return GetModuleHandle(NULL);
+		}
+		sambag::com::get(obj, res);
+		return res;
+	}
 } // namespace(s)
 //=============================================================================
 // class WndClassManager	
@@ -126,12 +136,15 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	const Rectangle &area) 
 {
 	++instances;
-	std::pair<void*, void*> parentData(NULL, NULL);
-	sambag::com::get(osParent, parentData);
-	if (!parentData.first)
+	if (!osParent)
 		return;
-	HWND parent = (HWND)parentData.first;
-	HINSTANCE hI = (HINSTANCE)parentData.second;
+	HWND parent = NULL;
+	void *_parent = NULL;
+	sambag::com::get(osParent, _parent);
+	parent = (HWND)_parent;
+	if (!parent)
+		return;
+	HINSTANCE hI = getHInstance();
 	// wndclass
 	wndClassHolder = WndClassManager::getWndClassHolder(STR_NESTEDWNDCLASS, hI);
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
@@ -166,7 +179,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
-	HINSTANCE hI = GetModuleHandle(NULL);
+	HINSTANCE hI = getHInstance();
 	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_VISIBLE;
 	style |= getFlag(WND_FRAMED) ? WS_OVERLAPPEDWINDOW : WS_POPUP | WS_BORDER; 
