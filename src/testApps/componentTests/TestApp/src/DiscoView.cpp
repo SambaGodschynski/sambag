@@ -35,6 +35,8 @@
 #include <boost/filesystem.hpp>
 #include <assert.h>
 
+#pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
+
 enum { /*Views*/
 	ACME = 1,
 	SURPRISE,
@@ -684,6 +686,7 @@ int main() {
 
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");
+		btn->setTooltipText("open new ACME panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<ACME>);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
@@ -693,34 +696,41 @@ int main() {
 
 		btn = Button::create();
 		btn->setText("open Surprise Panel");
+		btn->setTooltipText("open new Surprise panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<SURPRISE>);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("open Borderline Panel");
+		btn->setTooltipText("open new Borderline panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<BORDERLINE>);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("open Scrollercoaster");
+		btn->setTooltipText("open new Scrollercoaster panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<SCROLLERCOASTER>);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("the L.I.S.T.");
+		btn->setTooltipText("open new List panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<LIST>);
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("Miller Milch");
+		btn->setTooltipText("open new Miller panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<MILLER>);
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();
 		btn->setText("tschüß");
+		btn->setTooltipText("I should not be shown.");
+		btn->setTooltipText("");
 		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
 		win[0]->getContentPane()->add(btn);

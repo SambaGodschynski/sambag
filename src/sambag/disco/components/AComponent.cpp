@@ -17,6 +17,7 @@
 #include "RedrawManager.hpp"
 #include "RootPane.hpp"
 #include "CellRendererPane.hpp"
+#include "ITooltipManager.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -56,6 +57,8 @@ const std::string AComponent::PROPERTY_COMPONENTPOPUPMENU="componentPopupMenu";
 const std::string AComponent::PROPERTY_ALIGNMENTX = "alignmentX";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_ALIGNMENTY = "alignmentY";
+//-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_TOOLTIP = "tooltip";
 //-----------------------------------------------------------------------------
 const float AComponent::TOP_ALIGNMENT = 0.0f;
 //-----------------------------------------------------------------------------
@@ -1108,7 +1111,7 @@ PopupMenuPtr AComponent::getComponentPopupMenu() const {
 		return parent->getComponentPopupMenu();
 	return PopupMenuPtr();
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void AComponent::scrollRectToVisible(const Rectangle &aRect) {
 	Rectangle rect = aRect;
 	AContainerPtr parent = getParent();
@@ -1120,5 +1123,21 @@ void AComponent::scrollRectToVisible(const Rectangle &aRect) {
 		rect.y ( rect.y() + dy );
 		parent->scrollRectToVisible(rect);
 	}
+}
+//-----------------------------------------------------------------------------
+void AComponent::setTooltipText(const std::string &txt) {
+	std::string old = getTooltipText();
+	tooltipText = txt;
+	firePropertyChanged(PROPERTY_TOOLTIP, old, tooltipText);
+	ITooltipManager &tm = getTooltipManager();
+	if (txt == "") {
+		tm.unregisterComponent(getPtr());
+	} else {
+		tm.registerComponent(getPtr());
+	}
+}
+//-----------------------------------------------------------------------------
+const std::string & AComponent::getTooltipText() const {
+	return tooltipText;
 }
 }}} // namespace(s)

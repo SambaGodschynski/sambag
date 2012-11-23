@@ -18,6 +18,7 @@ namespace sambag { namespace disco { namespace components {
   */
 class ITooltipManager {
 //=============================================================================
+public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the dismissal delay value.

@@ -139,7 +139,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;;CAIRO_WIN32_STATIC_BUILD"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CAIRO_WIN32_STATIC_BUILD;CMAKE_INTDIR=\&quot;Release\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -523,6 +523,10 @@
 				>
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\DefaultTooltipManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\Exception.cpp"
 				>
 			</File>
@@ -588,6 +592,10 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\IPattern.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\ITooltipManager.cpp"
 				>
 			</File>
 			<File

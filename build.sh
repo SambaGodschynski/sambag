@@ -36,5 +36,5 @@ while [ "$1" != "" ]; do
 done
 
 export CLIBS=$in
-cmake . -G "$mode"
+cmake .
 make

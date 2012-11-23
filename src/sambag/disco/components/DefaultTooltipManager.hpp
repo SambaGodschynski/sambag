@@ -10,6 +10,10 @@
 
 #include <loki/Singleton.h>
 #include "ITooltipManager.hpp"
+#include "Timer.hpp"
+#include "events/MouseEvent.hpp"
+#include <sambag/com/events/Events.hpp>
+#include <boost/unordered_map.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -22,9 +26,33 @@ friend struct Loki::CreateUsingNew<DefaultTooltipManager>;
 public:
 protected:
 	//-------------------------------------------------------------------------
-	DefaultTooltipManager(){}
+	DefaultTooltipManager();
+	//-------------------------------------------------------------------------
+	void onTimer(void *src, const TimerEvent &ev);
+	//-------------------------------------------------------------------------
+	void showTooltip(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	void hideTooltip();
 private:
+	//-------------------------------------------------------------------------
+	Point2D location;
+	//-------------------------------------------------------------------------
+	AComponentWPtr currentObject;
+	//-------------------------------------------------------------------------
+	Timer::Ptr timer;
+	//-------------------------------------------------------------------------
+	com::events::EventSender<TimerEvent>::Connection timerConnection;
+	//-------------------------------------------------------------------------
+	int dismissDelay, initialDelay, reshowDelay;
+	//-------------------------------------------------------------------------
+	bool enabled;
+	//-------------------------------------------------------------------------
+	Timer::Ptr getTimer();
+	//-------------------------------------------------------------------------
+	Point2D determineLocation(const events::MouseEvent &ev);
 public:
+	//-------------------------------------------------------------------------
+	virtual ~DefaultTooltipManager();
 	//-------------------------------------------------------------------------
 	virtual int getDismissDelay() const;
 	//-------------------------------------------------------------------------
@@ -47,6 +75,19 @@ public:
 	virtual void unregisterComponent(AComponentPtr component);
 	//-------------------------------------------------------------------------
 	static DefaultTooltipManager & instance();
+	//-------------------------------------------------------------------------
+	///////////////////////////////////////////////////////////////////////////
+	// mouse events
+	//-------------------------------------------------------------------------
+	typedef com::events::EventSender<events::MouseEvent>::Connection Connection;
+	typedef boost::unordered_map<AComponentPtr, Connection> ConnectionMap;
+	ConnectionMap connectionMap;
+	//-------------------------------------------------------------------------
+	void onMouse(void *src, const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	void mouseEntered(const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	void mouseExited(const events::MouseEvent &ev);
 }; // DefaultTooltipManager
 }}} // namespace(s)
 
