@@ -6,6 +6,7 @@
  */
 
 #include "BasicLookAndFeel.hpp"
+#include <sambag/disco/svg/StyleParser.hpp>
 // button
 #include "BasicButtonUI.hpp"
 #include "BasicMenuItemUI.hpp"
