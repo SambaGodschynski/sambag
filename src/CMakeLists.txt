@@ -36,10 +36,25 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ALayoutManager.cpp
 	sambag/disco/components/Scrollbar.cpp
 	sambag/disco/components/DefaultBoundedRangeModel.cpp
+<<<<<<< HEAD
+	sambag/disco/components/DefaultButtonModell.cpp
+	sambag/disco/components/DefaultListCellRenderer.cpp
+	sambag/disco/components/DefaultListSelectionModel.cpp
+	sambag/disco/components/DefaultSingleSelectionModell.cpp
+	sambag/disco/components/DefaultTooltipManager.cpp
+	sambag/disco/components/FlowLayout.cpp
+	sambag/disco/components/FramedWindow.cpp
+	sambag/disco/components/Graphics.cpp
+	sambag/disco/components/GridLayout.cpp
+	sambag/disco/components/IBorder.cpp
+	sambag/disco/components/ITooltipManager.cpp
+	sambag/disco/components/Knob.cpp
+=======
 	sambag/disco/components/IBorder.cpp
 	sambag/disco/components/ScrollPane.cpp
 	sambag/disco/components/ViewportLayout.cpp
 	sambag/disco/components/BoxLayout.cpp
+>>>>>>> c5284f754f594f4ab8639f3eb3d458ed12c27850
 	sambag/disco/components/Label.cpp
 	sambag/disco/components/AContainer.cpp
 	sambag/disco/components/SizeRequirements.cpp

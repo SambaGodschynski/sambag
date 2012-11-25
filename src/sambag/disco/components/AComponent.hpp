@@ -115,6 +115,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_OPAQUE;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_TOOLTIP;
+	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_COMPONENTPOPUPMENU;
 	//-------------------------------------------------------------------------
 	enum Flag {
@@ -258,6 +260,8 @@ protected:
 	void drawForceDoubleBuffered(IDrawContext::Ptr cn);
 	//-------------------------------------------------------------------------
 	PopupMenuPtr popupMenu;
+	//-------------------------------------------------------------------------
+	std::string tooltipText;
 private:
 	//-------------------------------------------------------------------------
 	unsigned int flags;
@@ -452,6 +456,10 @@ protected: // TODO: remove mangeling
 	 */
 	virtual void __invalidateIfValid_();
 public:
+	//-------------------------------------------------------------------------
+	virtual void setTooltipText(const std::string &txt);
+	//-------------------------------------------------------------------------
+	virtual const std::string & getTooltipText() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * writes all components into stream

@@ -44,9 +44,7 @@ public:
 		return getPreferredSize(c);
 	}
 	//-------------------------------------------------------------------------
-	virtual Dimension getMinimumSize(AComponentPtr c) {
-		return getPreferredSize(c);
-	}
+	virtual Dimension getMinimumSize(AComponentPtr c);
 }; // BasicLabelUI
 }}}}} // namespace(s)
 

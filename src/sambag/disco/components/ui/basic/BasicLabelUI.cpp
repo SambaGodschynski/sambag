@@ -80,5 +80,14 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	res.width( res.width() + iconBounds.width() + iconPadding*2.);
 	return res;
 }
+//-----------------------------------------------------------------------------
+Dimension BasicLabelUI::getMinimumSize(AComponentPtr c) {
+	Label::Ptr l = boost::shared_dynamic_cast<Label>(c);
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	// TODO: handle font style/size
+	cn->setFont(l->getFont());
+	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
+	return Dimension(txtEx.width(), txtEx.height());
+}
 
 }}}}} // namespace(s)

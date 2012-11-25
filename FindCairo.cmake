@@ -24,7 +24,7 @@ IF(APPLE)
 ELSEIF(UNIX)
 	SET(LIBCAIRO "libcairo.so")
 ELSEIF(WIN32)
-	SET(LIBCAIRO "cairo-static.lib")
+	SET(LIBCAIRO "cairo.lib")
 ENDIF(APPLE)
 
 

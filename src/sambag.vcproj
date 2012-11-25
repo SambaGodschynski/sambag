@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="sambag"
-	ProjectGUID="{39CD99C6-EB8B-4C73-B2E8-34326F05B070}"
+	ProjectGUID="{D8E6ECCC-452F-4806-A44B-46A9CBFDF17B}"
+	RootNamespace="sambag"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
 	>
@@ -55,7 +56,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="0"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -72,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
 			/>
 			<Tool
@@ -138,7 +139,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CAIRO_WIN32_STATIC_BUILD;CMAKE_INTDIR=\&quot;Release\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -153,7 +154,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
 			/>
 			<Tool
@@ -219,7 +220,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -234,7 +235,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
 			/>
 			<Tool
@@ -300,7 +301,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -316,7 +317,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;CAIRO_WIN32_STATIC_BUILD;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;"
 			/>
 			<Tool
@@ -522,6 +523,10 @@
 				>
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\DefaultTooltipManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\Exception.cpp"
 				>
 			</File>
@@ -587,6 +592,10 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\IPattern.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\ITooltipManager.cpp"
 				>
 			</File>
 			<File

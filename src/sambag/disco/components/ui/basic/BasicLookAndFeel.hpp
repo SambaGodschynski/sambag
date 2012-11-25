@@ -31,7 +31,8 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void installDefaults();
 	//-------------------------------------------------------------------------
-	svg::graphicElements::Style createStyle(const std::string &str);
+	svg::graphicElements::Style 
+	createStyle(const std::string &str);
 private:
 public:
 	//-------------------------------------------------------------------------

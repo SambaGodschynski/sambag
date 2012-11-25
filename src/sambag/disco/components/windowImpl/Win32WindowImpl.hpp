@@ -9,6 +9,7 @@
 #define SAMBAG_WIN32WINDOW_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 #ifdef DISCO_USE_WIN32
@@ -23,6 +24,25 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
+struct WndClassManager {
+//=============================================================================
+	typedef std::pair<std::string, HINSTANCE> WndClassId;
+	struct WndClassHolder {
+		typedef boost::shared_ptr<WndClassHolder> Ptr;
+		typedef boost::weak_ptr<WndClassHolder> WPtr;
+		WndClassId wndClassId;
+		WNDCLASS wndClass;
+		static Ptr create(const WndClassId &id);
+		~WndClassHolder();
+		const WNDCLASS & getWndClass() const {
+			return wndClass;
+		}
+	};
+	typedef std::map<WndClassId, WndClassHolder::WPtr> WndClassMap;
+	static WndClassMap wndClassMap;
+	static WndClassHolder::Ptr getWndClassHolder(const std::string &name, HINSTANCE hi);
+};
+//=============================================================================
 /** 
   * @class X11Window.
   */
@@ -36,9 +56,7 @@ public:
 	typedef boost::weak_ptr<Win32WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
-	static WNDCLASS & registerWindowClass(HINSTANCE hI);
-	//-------------------------------------------------------------------------
-	static WNDCLASS & registerNestedWindowClass(HINSTANCE hI);
+	WndClassManager::WndClassHolder::Ptr wndClassHolder;
 	//-------------------------------------------------------------------------
 	void _open(AWindowImplPtr parent);
 	//-------------------------------------------------------------------------
@@ -46,8 +64,10 @@ private:
 	//-------------------------------------------------------------------------
 	void unregisterWindow();
 	//-------------------------------------------------------------------------
+public:
 	static LRESULT CALLBACK 
-		wndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
+		__wndProc_(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
+private:
 	//-------------------------------------------------------------------------
 	static int instances; 
 	//-------------------------------------------------------------------------

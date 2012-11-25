@@ -309,8 +309,13 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 		localBoundsH = dirtyComponent->getHeight();
 		localBoundsW = dirtyComponent->getWidth();
 
-		boost::geometry::intersection<Rectangle::Base, Rectangle::Base, Rectangle::Base>
-				(Rectangle(localBoundsX,localBoundsY,localBoundsW,localBoundsH), rect, rect);
+		boost::geometry::intersection(
+			Rectangle(localBoundsX,
+				localBoundsY,
+				localBoundsW,
+				localBoundsH
+			), rect, rect
+		);
 
 		if (dirtyComponent->isShowing()) {
 			IDrawContext::Ptr cn = dirtyComponent->getDrawContext();
