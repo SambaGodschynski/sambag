@@ -16,23 +16,23 @@
 #include <sambag/disco/IDiscoFactory.hpp>
 
 namespace sambag { namespace disco { namespace components {
-namespace sc = sambag::com;
-namespace sd = sambag::disco;
-namespace sds = sd::svg;
+namespace sds = svg;
 namespace sdsg = sds::graphicElements;
-namespace sdc = sd::components;
-namespace sdcu = sdc::ui;
 //=============================================================================
 /** 
   * @class ComponentWrapper.
   * Wraps a disco::components::AComponent around a IDrawable object.
   */
 template <class Drawable>
-class ComponentWrapper : public sdc::AComponent {
+class ComponentWrapper : public AComponent {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ComponentWrapper> Ptr;
+	//-------------------------------------------------------------------------
+	typedef ComponentWrapper<Drawable> Class;
+	//-------------------------------------------------------------------------
+	typedef AComponent Super;
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -76,15 +76,15 @@ public:
 template <class Drawable>
 void ComponentWrapper<Drawable>::updateBounds() 
 {
-	sd::IDrawContext::Ptr cn = sd::getDiscoFactory()->createContext();
-	cn->setStrokeColor(ColorRGBA(0)); // without stroke there is no bounding
+	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	cn->setStrokeColor(ColorRGBA(0)); // without stroke, no bounding
 	setBounds(drawable->getBoundingBox(cn));
 }
 //-----------------------------------------------------------------------------
 template <class Drawable>
 void ComponentWrapper<Drawable>::drawComponent(IDrawContext::Ptr context) 
 {
-	sd::Point2D p(0, 0);
+	Point2D p(0, 0);
 	boost::geometry::subtract_point(p, getLocation());
 	context->translate(p);
 	style.intoContext(context);
@@ -94,7 +94,7 @@ void ComponentWrapper<Drawable>::drawComponent(IDrawContext::Ptr context)
 template <class Drawable>
 typename ComponentWrapper<Drawable>::Ptr ComponentWrapper<Drawable>::create() 
 {
-	Ptr res( new ComponentWrapper() );
+	Ptr res( new Class() );
 	res->self = res;
 	res->postConstructor();
 	return res;
@@ -102,7 +102,7 @@ typename ComponentWrapper<Drawable>::Ptr ComponentWrapper<Drawable>::create()
 //-----------------------------------------------------------------------------
 template <class Drawable>
 ComponentWrapper<Drawable>::ComponentWrapper() {
-	drawable = typename Drawable::create();
+	drawable = Drawable::create();
 }
 }}} // namespace(s)
 
