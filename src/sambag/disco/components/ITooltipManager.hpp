@@ -80,6 +80,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 typedef boost::function<ITooltipManager&()> TooltipManagerCreator;
 void registerTooltipManager(const TooltipManagerCreator &creator);
+const TooltipManagerCreator & getTooltipManagerCreator();
 ITooltipManager & getTooltipManager();
 }}} // namespace(s)
 

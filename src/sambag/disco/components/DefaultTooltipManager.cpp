@@ -170,7 +170,7 @@ void DefaultTooltipManager::mouseEntered(const events::MouseEvent &ev) {
 void DefaultTooltipManager::mouseExited(const events::MouseEvent &ev) {
 	currentObject.reset();
 	getTimer()->stop();
-	hideTooltip();
+	hideTooltip(ev.getSource());
 }
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::onTimer(void *src, const TimerEvent &ev) {
@@ -188,7 +188,7 @@ void DefaultTooltipManager::showTooltip(AComponentPtr c) {
 	TooltipWindow::sharedInstance->open();
 }
 //-----------------------------------------------------------------------------
-void DefaultTooltipManager::hideTooltip() {
+void DefaultTooltipManager::hideTooltip(AComponentPtr c) {
 	if (TooltipWindow::sharedInstance)
 		TooltipWindow::sharedInstance->close();
 }

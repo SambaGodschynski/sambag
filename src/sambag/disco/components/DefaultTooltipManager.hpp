@@ -30,9 +30,9 @@ protected:
 	//-------------------------------------------------------------------------
 	void onTimer(void *src, const TimerEvent &ev);
 	//-------------------------------------------------------------------------
-	void showTooltip(AComponentPtr c);
+	virtual void showTooltip(AComponentPtr c);
 	//-------------------------------------------------------------------------
-	void hideTooltip();
+	virtual void hideTooltip(AComponentPtr c);
 private:
 	//-------------------------------------------------------------------------
 	Point2D location;
@@ -83,11 +83,11 @@ public:
 	typedef boost::unordered_map<AComponentPtr, Connection> ConnectionMap;
 	ConnectionMap connectionMap;
 	//-------------------------------------------------------------------------
-	void onMouse(void *src, const events::MouseEvent &ev);
+	virtual void onMouse(void *src, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
-	void mouseEntered(const events::MouseEvent &ev);
+	virtual void mouseEntered(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
-	void mouseExited(const events::MouseEvent &ev);
+	virtual void mouseExited(const events::MouseEvent &ev);
 }; // DefaultTooltipManager
 }}} // namespace(s)
 

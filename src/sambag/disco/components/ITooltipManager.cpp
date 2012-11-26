@@ -22,5 +22,8 @@ ITooltipManager & getTooltipManager() {
 		return __creator();
 	return DefaultTooltipManager::instance();
 }
-
+//-----------------------------------------------------------------------------
+const TooltipManagerCreator & getTooltipManagerCreator() {
+	return __creator;
+}
 }}} // namespace(s)

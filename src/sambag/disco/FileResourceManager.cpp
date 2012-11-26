@@ -77,7 +77,9 @@ sd::ISurface::Ptr FileResourceManager::loadImage(const std::string &_path)
 	return res;
 }
 //-----------------------------------------------------------------------------
-sd::ISurface::Ptr FileResourceManager::getImage(const Url &url) {
+sd::ISurface::Ptr FileResourceManager::getImage(const Url &url
+	const Dimension &prefferedSize) 
+{
 	ImageMap::const_iterator it = imageMap.find(url);
 	if (it==imageMap.end())
 		return sd::ISurface::Ptr();
