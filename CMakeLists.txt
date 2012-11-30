@@ -39,6 +39,7 @@ find_package(TinyXMLX REQUIRED)
 find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
+find_package(VST23X REQUIRED)
 
 SET(BOOST_ROOT $ENV{CLIBS}/boost)
 SET(Boost_USE_STATIC_LIBS        ON)
@@ -52,6 +53,10 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${LOKI_INCLUDE_DIRS})
 include_directories(${LUA52_INCLUDE_DIRS})
 include_directories(${SQLITE3_INCLUDE_DIRS})
+
+include_directories(${VSTSDK_INCLUDE_DIRS})
+include_directories(${VSTSDK_INCLUDE_DIRS}/public.sdk/source/vst2.x)
+include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}

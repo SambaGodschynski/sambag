@@ -1,16 +1,16 @@
 /*
- * MidiEventConverter.cpp
+ * DefautMidiEvents.cpp
  *
- *  Created on: Fri Nov 30 11:12:47 2012
+ *  Created on: Fri Nov 30 13:03:16 2012
  *      Author: Johannes Unger
  */
 
-#include "MidiEventConverter.hpp"
+#include "DefaultMidiEvents.hpp"
 
-namespace sambag { namespace dsp {
+namespace sambag { 
 //=============================================================================
-//  Class MidiEventConverter
+//  Class DefautMidiEvents
 //=============================================================================
 //-----------------------------------------------------------------------------
 
-}} // namespace(s)
+} // namespace(s)

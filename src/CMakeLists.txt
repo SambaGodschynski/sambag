@@ -123,7 +123,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/svg/graphicElements/Style.cpp
 	sambag/disco/svg/graphicElements/Text.cpp
 	sambag/disco/svg/units/Units.cpp
-	sambag/dsp/MidiEventConverter.cpp
+	sambag/dsp/DefaultMidiEvents.cpp
 	sambag/math/CantorOrder.cpp
 	sambag/math/Matrix.cpp
 	sambag/xml/cpAtl/MarkupBuilder.cpp
@@ -160,6 +160,8 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/TestPattern.cpp
 	sambag/disco/tests/TestSceneGraph.cpp
 	sambag/disco/tests/TestSvg.cpp
+	sambag/dsp/tests/TestDefaultMidiEvents.cpp
+	sambag/dsp/tests/TestVstMidiEventAdapter.cpp
 	sambag/lua/tests/TestLuaHelper.cpp
 	sambag/lua/tests/TestLuaRegisterFunction.cpp
 	sambag/math/tests/VectorNTest.cpp

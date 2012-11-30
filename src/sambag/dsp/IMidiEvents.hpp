@@ -27,8 +27,8 @@ namespace sambag { namespace dsp {
   *       | IMidiEvents::MidiEvent event = independent->getMidiEvent(0);
   *       | ...
   *  specific unpacking:
-  *	      | MidiEventConverter::getVstEvents(independet); // no convertion
-  *		  | MidiEventConverter::getXXXEvents(independet); // convertion
+  *	      | VstMidiEventAdapter flatcopy(independet); // no convertion
+  *		  | XXXMidiEventAdapter deepcopy(independet); // convertion
   */
 struct IMidiEvents {
 //=============================================================================
@@ -49,6 +49,32 @@ struct IMidiEvents {
 	//-------------------------------------------------------------------------
 	virtual MidiEvent getMidiEvent(Int index) const = 0;
 }; // IMidiEvents
+///////////////////////////////////////////////////////////////////////////////
+inline bool operator==(const IMidiEvents &a, const IMidiEvents &b) {
+	if (a.getNumEvents() != b.getNumEvents() ) {
+		return false;
+	}
+	int num = a.getNumEvents();
+	for (int i=0; i<num; ++i) {
+		IMidiEvents::MidiEvent eva = a.getMidiEvent(i);
+		IMidiEvents::MidiEvent evb = b.getMidiEvent(i);
+		if   ( boost::get<0>(eva) != boost::get<0>(evb) ||
+			   boost::get<1>(eva) != boost::get<1>(evb)
+			 )
+		{
+			return false;
+		}
+		IMidiEvents::ByteSize bytes = boost::get<0>(eva);
+		for (int j=0; j<bytes; ++j) {
+			if (boost::get<2>(eva)[j] != boost::get<2>(evb)[j]) 
+				return false;
+		}
+	}
+	return true;
+}
+inline bool operator!=(const IMidiEvents &a, const IMidiEvents &b) {
+	return !(a==b);
+}
 }} // namespace(s)
 
 #endif /* SAMBAG_IMIDIEVENTS_H */
