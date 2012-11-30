@@ -10,7 +10,7 @@
 #include <string>
 #include <sstream>
 #include "HostTimeInfo.hpp"
-
+#include "IMidiEvents.hpp"
 namespace sambag { namespace dsp { 
 //=============================================================================
 /** 
@@ -36,8 +36,7 @@ public:
 	void getParameterLabel(int index, String &outStr) const {}
 	template <class String> 
 	void getParameterDisplay(int index, String &outStr) const {}
-	template <class Event>
-	void processEvents(Event *ev) {}
+	void processEvents(IMidiEvents *ev) {}
 	void setBlockSize(int blockSize){}
 	void setSampleRate(float blockSize){}
 	int getLatency() const {return 0;}

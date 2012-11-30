@@ -666,6 +666,9 @@
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\svg\units\Units.cpp">
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\dsp\MidiEventConverter.cpp">
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\math\CantorOrder.cpp">
 			</File>
 			<File

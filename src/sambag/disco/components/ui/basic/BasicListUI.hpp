@@ -509,7 +509,7 @@ int BasicListUI<LT>::convertLocationToColumn(const Coordinate &x,
 		}
 		Insets insets = list->getInsets();
 		int col;
-		col = (x - insets.left()) / cellWidth;
+		col = (int)((x - insets.left()) / cellWidth);
 		if (col < 0.) {
 			return 0;
 		} else if (col >= columnCount) {
@@ -807,7 +807,7 @@ int BasicListUI<LT>::convertLocationToRow(const Coordinate &x,
 			if ((y0 >= y) && (y0 < y + cellHeights[i])) {
 				return row;
 			}
-			y += cellHeights[i];
+			y += (int)cellHeights[i];
 			row += 1;
 		}
 		return i - 1;
