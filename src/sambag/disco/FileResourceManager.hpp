@@ -63,7 +63,8 @@ public:
 	//-------------------------------------------------------------------------
 	sd::ISurface::Ptr loadImage(const std::string &path);
 	//-------------------------------------------------------------------------
-	virtual sd::ISurface::Ptr getImage(const Url &url);
+	virtual sd::ISurface::Ptr getImage(const Url &url,
+		const Dimension &prefferedSize = Dimension(0,0));
 	//-------------------------------------------------------------------------
 	/**
 	 * reloads file.

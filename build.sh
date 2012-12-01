@@ -15,7 +15,7 @@ usage()
 	echo $0 "-i clib_location [-g generator(cmmake generator default=Unix Makefiles)]"
 }
 
-mode="Unix Makefiles"
+mode=""
 
 #passing arguments
 while [ "$1" != "" ]; do
@@ -36,5 +36,11 @@ while [ "$1" != "" ]; do
 done
 
 export CLIBS=$in
-cmake .
+if [ -z $mode ]
+then
+  cmake .
+else
+  cmake . -G $mode
+fi
+
 make

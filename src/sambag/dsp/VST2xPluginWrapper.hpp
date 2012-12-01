@@ -25,6 +25,7 @@ namespace {
 #include <audioeffectx.h>
 #include <string>
 #include <sstream>
+#include "VstMidiEventAdapter.hpp"
 #include "DspPlugin.hpp"
 namespace sambag { namespace dsp { namespace vst {
 //=============================================================================
@@ -165,7 +166,10 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	VstInt32 processEvents(VstEvents * events) {
-		PluginProcessor::processEvents(events);
+		if (!events)
+			return 0;
+		VstMidiEventAdapter midiev(events);
+		PluginProcessor::processEvents(&midiev);
 		return 1;
 	}
 	//-------------------------------------------------------------------------

@@ -87,7 +87,14 @@ Dimension BasicLabelUI::getMinimumSize(AComponentPtr c) {
 	// TODO: handle font style/size
 	cn->setFont(l->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
-	return Dimension(txtEx.width(), txtEx.height());
+	Dimension res(txtEx.width(), txtEx.height());
+	ISurface::Ptr icon = l->getIcon();
+	if (!icon)
+		return res;
+	Rectangle iconBounds = calcIconBounds(icon, l->getFont().size);
+	res.width( res.width() + iconBounds.width() + iconPadding*2.);
+	return res;
+
 }
 
 }}}}} // namespace(s)

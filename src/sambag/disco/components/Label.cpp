@@ -20,6 +20,7 @@ const std::string Label::PROPERTY_ICON = "icon";
 Label::Label() {
 	setForeground(ColorRGBA(0,0,0));
 	setName("Label");
+	setOpaque(true);
 }
 //-----------------------------------------------------------------------------
 ui::AComponentUIPtr Label::createComponentUI(ui::ALookAndFeelPtr laf) const {

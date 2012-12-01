@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/ISurface.hpp>
+#include <sambag/disco/Geometry.hpp>
 #include <string>
 
 namespace sambag { namespace disco {
@@ -31,8 +32,11 @@ public:
 	//-------------------------------------------------------------------------	
 	/**
 	 * @return an image related to url or NULL.
+	 * @param url
+	 * @param preferred size of image (for optimization purpose)
 	 */ 
-	virtual sd::ISurface::Ptr getImage(const Url &url) = 0;
+	virtual sd::ISurface::Ptr getImage(const Url &url,
+		const Dimension &prefferedSize = Dimension(0,0)) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * updates related image e.g. 
