@@ -21,10 +21,12 @@ namespace sambag { namespace dsp {
 struct VstMidiEventAdapter : public IMidiEvents {
 //=============================================================================
 	VstEvents *events;
+	Int maxEvents;
 	bool ownerOfData;
 	//-------------------------------------------------------------------------
 	VstMidiEventAdapter(VstEvents *events) : 
-		events(events), ownerOfData(false) {
+		events(events), ownerOfData(false) 
+	{
 	}
 	//-------------------------------------------------------------------------
 	VstMidiEventAdapter(const VstMidiEventAdapter &b) {
@@ -32,9 +34,11 @@ struct VstMidiEventAdapter : public IMidiEvents {
 		ownerOfData = false;
 	}
 	//-------------------------------------------------------------------------
-	VstEvents * allocVstEventsFor(IMidiEvents *ev);
+	void allocDataIfNecessary(IMidiEvents *ev);
 	//-------------------------------------------------------------------------
-	VstEvent * allocVstEventFor(size_t bytes);
+	void freeDataIfNecessary();
+	//-------------------------------------------------------------------------
+	VstEvent * allocVstEventNecessary(size_t bytes, VstEvent *old);
 	//-------------------------------------------------------------------------
 	virtual Int getNumEvents() const {
 		return events->numEvents;
@@ -55,6 +59,8 @@ struct VstMidiEventAdapter : public IMidiEvents {
 	}
 	//-------------------------------------------------------------------------
 	VstMidiEventAdapter(IMidiEvents *ev);
+	//-------------------------------------------------------------------------
+	void set(IMidiEvents *ev);
 	//-------------------------------------------------------------------------
 	virtual ~VstMidiEventAdapter();
 
