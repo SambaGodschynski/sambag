@@ -669,6 +669,9 @@
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\dsp\DefaultMidiEvents.cpp">
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\dsp\VstMidiEventAdapter.cpp">
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\math\CantorOrder.cpp">
 			</File>
 			<File

@@ -124,6 +124,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/svg/graphicElements/Text.cpp
 	sambag/disco/svg/units/Units.cpp
 	sambag/dsp/DefaultMidiEvents.cpp
+	sambag/dsp/VstMidiEventAdapter.cpp
 	sambag/math/CantorOrder.cpp
 	sambag/math/Matrix.cpp
 	sambag/xml/cpAtl/MarkupBuilder.cpp

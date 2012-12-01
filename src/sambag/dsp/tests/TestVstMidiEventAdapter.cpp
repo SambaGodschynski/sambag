@@ -24,7 +24,7 @@ void TestVstMidiEventAdapter::testCreateNCopy() {
 	DataArray data[1024];
 	DefaultMidiEvents a;
 	for (int i=0; i<1024; ++i) {
-		int bytes = (i%15) + 1;
+		int bytes = i + 1;
 		data[i] = DataArray(new IMidiEvents::Data[bytes]);
 		for (int j=0; j<bytes; ++j) {
 			data[i][j] = j % 26 + 'a';

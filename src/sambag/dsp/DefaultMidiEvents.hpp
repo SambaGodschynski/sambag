@@ -23,26 +23,26 @@ struct DefaultMidiEvents : public IMidiEvents {
 	std::vector<MidiEvent> events;
 	typedef boost::shared_array<Data> DataArray;
 	std::vector<DataArray> dataContainer; // needed for deep copy
-	DefaultMidiEvents(IMidiEvents *_events = NULL) 
-	{
+	//-------------------------------------------------------------------------
+	DefaultMidiEvents(IMidiEvents *_events = NULL) {
 		if (_events) {
 			copyFlat(_events);
 		}
 	}
-	virtual Int getNumEvents() const 
-	{
+	//-------------------------------------------------------------------------
+	virtual Int getNumEvents() const {
 		return events.size();
 	}
-	virtual MidiEvent getMidiEvent(Int index) const
-	{
+	//-------------------------------------------------------------------------
+	virtual MidiEvent getMidiEvent(Int index) const {
 		return events[index];
 	}
+	//-------------------------------------------------------------------------
 	/**
 	 * flat copy of midi data. (remember: MidiEvent contains midi data as ptr)
 	 * @note: clears all previous setted data
 	 */
-	void copyFlat(IMidiEvents *_events) 
-	{
+	void copyFlat(IMidiEvents *_events) {
 		events.clear();
 		events.reserve(_events->getNumEvents());
 		int num = _events->getNumEvents();
@@ -52,12 +52,12 @@ struct DefaultMidiEvents : public IMidiEvents {
 			);
 		}
 	}
+	//-------------------------------------------------------------------------
 	/**
 	 * deep copy of midi data.
 	 * @note: clears all previous setted data
 	 */
-	void copyDeep(IMidiEvents *_events) 
-	{
+	void copyDeep(IMidiEvents *_events) {
 		events.clear();
 		events.reserve(_events->getNumEvents());
 		dataContainer.reserve(_events->getNumEvents());
@@ -76,6 +76,14 @@ struct DefaultMidiEvents : public IMidiEvents {
 				MidiEvent(bytes, d, dstdata)
 			);
 		}
+	}
+	//-------------------------------------------------------------------------
+	void reserve(Int size) {
+		events.reserve(size);
+	}
+	//-------------------------------------------------------------------------
+	void insertFlat(const MidiEvent &ev) {
+		events.push_back(ev);
 	}
 }; // DefaultMidiEvents
 }} // namespace(s)
