@@ -27,7 +27,6 @@ public:
 protected:
 	//-------------------------------------------------------------------------
 	SolidBorder();
-private:
 	//-------------------------------------------------------------------------
 	typedef svg::graphicElements::Style Style;
 	Style style;
