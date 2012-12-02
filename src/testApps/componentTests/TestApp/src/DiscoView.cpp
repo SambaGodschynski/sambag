@@ -26,6 +26,7 @@
 #include <sambag/disco/components/GridLayout.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/ColumnBrowser.hpp>
+#include <sambag/disco/components/SolidBorder.hpp>
 #include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <sambag/disco/FileResourceManager.hpp>
@@ -513,9 +514,14 @@ void createWindow<ACME>() {
 				addEventListener(&trackMouse);
 		con->add(btn);
 	}
+	Panel::Ptr labelcon = Panel::create();
+	SolidBorder::Ptr border = SolidBorder::create();
+	border->setCornerRadius(12.);
 	Label::Ptr label = Label::create();
 	label->getFont().setFontFace("monospace").setSize(INPUT_LABEL_SIZE);
-	con->add(label);
+	labelcon->add(label);
+	labelcon->setBorder(border);
+	con->add(labelcon);
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
