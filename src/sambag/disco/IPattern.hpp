@@ -63,6 +63,11 @@ public:
 	virtual void setExtendType(Extend type) = 0;
 	//-------------------------------------------------------------------------
 	virtual Extend getExtendType() const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return representing color if exists. Otherwise NULL_COLOR.
+	 */
+	virtual ColorRGBA getColor() const = 0;
 };
 //=============================================================================
 class ISolidPattern : public virtual IPattern {
@@ -129,12 +134,5 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr getSurface() const = 0;
 };
-///////////////////////////////////////////////////////////////////////////////
-inline ColorRGBA getPatternColorHelper(IPattern::Ptr pat) {
-	ISolidPattern::Ptr sol = boost::shared_dynamic_cast<ISolidPattern>(pat);
-	if (!sol)
-		return ColorRGBA::NULL_COLOR;
-	return sol->getSolidColor();
-}
 }} // namespace
 #endif /* PATTERN_HPP_ */

@@ -517,11 +517,10 @@ void createWindow<ACME>() {
 	Panel::Ptr labelcon = Panel::create();
     labelcon->setName("Output:");
 	TitledBorder::Ptr border = TitledBorder::create();
-	border->setCornerRadius(12.);
 	Label::Ptr label = Label::create();
 	label->getFont().setFontFace("monospace").setSize(INPUT_LABEL_SIZE);
 	labelcon->add(label);
-	labelcon->setBorder(border);
+	label->setBorder(border);
 	con->add(labelcon);
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }

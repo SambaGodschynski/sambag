@@ -58,7 +58,7 @@ void AComponentUI::uninstallUI(AComponent::Ptr c) {
 //-----------------------------------------------------------------------------
 void AComponentUI::update(IDrawContext::Ptr cn, AComponent::Ptr c){
 	if (c->isOpaque()) {
-		cn->setFillColor(c->getBackground());
+		cn->setFillPattern(c->getBackgroundPattern());
 		cn->rect(Rectangle(0, 0, c->getWidth(), c->getHeight()));
 		cn->fill();
 	}

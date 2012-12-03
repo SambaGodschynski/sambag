@@ -6,8 +6,8 @@
  */
 
 #include "TitledBorder.hpp"
+#include "SolidBorder.hpp"
 #include "ui/ALookAndFeel.hpp"
-#include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/AComponent.hpp>
 
 namespace sambag { namespace disco { namespace components {
@@ -16,38 +16,74 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 TitledBorder::TitledBorder() {
+	style.fillColor(Style::NONE_COLOR);
+	style.strokeColor(ColorRGBA(0));
+	style.strokeWidth(2.);
+    Font f;
+	f.size = 12.;
+    style.font(f);
+}
+//-----------------------------------------------------------------------------
+Point2D TitledBorder::getTextPos(AComponentPtr c, const Rectangle &size) const 
+{
+	return Point2D(10., 8.);
+}
+//-----------------------------------------------------------------------------
+std::string TitledBorder::getText(AComponentPtr c, const Rectangle &size) const 
+{
+	return c ? c->getName() : "";
 }
 //-----------------------------------------------------------------------------
 Rectangle TitledBorder::getTextBounds(AComponentPtr c,
     IDrawContext::Ptr cn, const Rectangle &r)
 {
-    Rectangle res = cn->textExtends(c->getName());
-    res.x(15);
-    res.y(5);
+	cn->moveTo( getTextPos(c, r) );
+    Rectangle res = cn->textExtends(getText(c, r));
     return res;
+}
+//-----------------------------------------------------------------------------
+Insets TitledBorder::getBorderInsets(AComponentPtr c) {
+	return getBorder()->getBorderInsets(c);
+}
+//-----------------------------------------------------------------------------
+bool TitledBorder::isBorderOpaque() {
+	return getBorder()->isBorderOpaque();
 }
 //-----------------------------------------------------------------------------
 void TitledBorder::paintBorder(AComponentPtr c,IDrawContext::Ptr cn,
     const Rectangle &r)
 {
-    style.intoContext(cn);
+	style.intoContext(cn);
     Rectangle textBounds = getTextBounds(c, cn, r);
-    Coordinate tx = textBounds.x();
-    Coordinate ty = textBounds.y();
-    Coordinate tw = textBounds.width();
-    Coordinate th = textBounds.height();
-    Coordinate cx = c->getX();
-    Coordinate cy = c->getY();
-    
-    IImageSurface::Ptr bff = getDiscoFactory()->createImageSurface(tw, th);
-    IDrawContext::Ptr bffCn = getDiscoFactory()->createContext(bff);
-    cn->copyAreaTo(bffCn, textBounds, Point2D(0,0));
-    Super::paintBorder(c, cn, r);
-    bffCn->copyAreaTo(cn, Rectangle(0,0,tw, th), Point2D(tx, ty));
-    //bffCn->copyTo(cn);
-    cn->moveTo(textBounds.x0());
-    cn->textPath(c->getName());
+    cn->save();
+	cn->rect(r);
+	cn->rect(textBounds);
+	cn->setFillRule(IDrawContext::FILL_RULE_EVEN_ODD);
+	cn->clip();
+	
+	Rectangle borderb = r;
+	borderb.inset(-5., -5.);
+	getBorder()->paintBorder(c, cn, borderb);
+  
+	cn->restore();
+    cn->moveTo(getTextPos(c, r));
+    cn->textPath(getText(c, r));
     cn->setFillColor(ColorRGBA(0));
     cn->fill();
+}
+//-----------------------------------------------------------------------------
+void TitledBorder::setBorder(IBorder::Ptr border) {
+	this->border = border;
+}
+//-----------------------------------------------------------------------------
+IBorder::Ptr TitledBorder::getBorder() {
+	if (!border) {
+		border = SolidBorder::create();
+	}
+	return border;
+}
+//-----------------------------------------------------------------------------
+void TitledBorder::setStyle(const Style &style) {
+	this->style = style;
 }
 }}} // namespace(s)

@@ -18,6 +18,7 @@
 #include "RootPane.hpp"
 #include "CellRendererPane.hpp"
 #include "ITooltipManager.hpp"
+#include <sambag/disco/IDiscoFactory.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -267,21 +268,37 @@ IDrawContext::Ptr AComponent::getDrawContext() const {
 }
 //-----------------------------------------------------------------------------
 ColorRGBA AComponent::getBackground() const {
-	ColorRGBA background = this->background;
-	if (background != ColorRGBA::NULL_COLOR) {
-		return background;
+	IPattern::Ptr res = getBackgroundPattern();
+	if (!res) {
+		return ColorRGBA::NULL_COLOR;
 	}
-	AContainerPtr parent = getParent();
-	return (parent) ? parent->getBackground() : ColorRGBA::NULL_COLOR;
+	return res->getColor();
 }
 //-----------------------------------------------------------------------------
 ColorRGBA AComponent::getForeground() const {
-	ColorRGBA foreground = this->foreground;
-	if (foreground != ColorRGBA::NULL_COLOR) {
+	IPattern::Ptr res = getForegroundPattern();
+	if (!res) {
+		return ColorRGBA::NULL_COLOR;
+	}
+	return res->getColor();
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr AComponent::getBackgroundPattern() const {
+	IPattern::Ptr background = this->background;
+	if (background) {
+		return background;
+	}
+	AContainerPtr parent = getParent();
+	return (parent) ? parent->getBackgroundPattern() : IPattern::Ptr();
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr AComponent::getForegroundPattern() const {
+	IPattern::Ptr foreground = this->foreground;
+	if (foreground) {
 		return foreground;
 	}
 	AContainerPtr parent = getParent();
-	return (parent) ? parent->getForeground() : ColorRGBA::NULL_COLOR;
+	return (parent) ? parent->getForegroundPattern() : IPattern::Ptr();
 }
 //-----------------------------------------------------------------------------
 AComponent::Lock & AComponent::getTreeLock() const {
@@ -426,11 +443,11 @@ bool AComponent::isMinimumSizeSet() const {
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isBackgroundSet() const {
-	return background != ColorRGBA::NULL_COLOR;
+	return background.get() != NULL;
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isForegroundSet() const {
-	return foreground != ColorRGBA::NULL_COLOR;
+	return foreground.get() != NULL;
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawChildren(IDrawContext::Ptr context) {
@@ -735,27 +752,37 @@ void AComponent::setVisible(bool b) {
 	revalidate();
 }
 //-----------------------------------------------------------------------------
+void AComponent::setForeground(const ColorRGBA &c) {
+	setForeground(
+		getDiscoFactory()->createSolidPattern(c)
+	);
+}
+//-----------------------------------------------------------------------------
 void AComponent::setBackground(const ColorRGBA &c) {
-	ColorRGBA oldColor = background;
-	background = c;
+	setBackground(
+		getDiscoFactory()->createSolidPattern(c)
+	);
+}
+//-----------------------------------------------------------------------------
+void AComponent::setForeground(IPattern::Ptr pat) {
+	IPattern::Ptr old = foreground;
+	foreground = pat;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	firePropertyChanged(PROPERTY_BACKGROUND, oldColor, c);
-	if ((oldColor != ColorRGBA::NULL_COLOR) ? oldColor != c :
-		((c != ColorRGBA::NULL_COLOR) && c!=oldColor))
+	firePropertyChanged(PROPERTY_FOREGROUND, old, pat);
+	if (old ? old != pat : pat)
 	{
 		redraw();
 	}
 }
 //-----------------------------------------------------------------------------
-void AComponent::setForeground(const ColorRGBA &c) {
-	ColorRGBA oldColor = foreground;
-	foreground = c;
+void AComponent::setBackground(IPattern::Ptr pat) {
+	IPattern::Ptr old = background;
+	background = pat;
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
-	firePropertyChanged(PROPERTY_FOREGROUND, oldColor, c);
-	if ((oldColor != ColorRGBA::NULL_COLOR) ? oldColor != c :
-		((c != ColorRGBA::NULL_COLOR) && c!=oldColor))
+	firePropertyChanged(PROPERTY_BACKGROUND, old, pat);
+	if (old ? old != pat : pat)
 	{
 		redraw();
 	}

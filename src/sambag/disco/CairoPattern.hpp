@@ -167,6 +167,13 @@ public:
 	virtual Extend getExtendType() const {
 		return CairoPatternBase::getExtendType();
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @return representing color if exists. Otherwise NULL_COLOR.
+	 */
+	virtual ColorRGBA getColor() const {
+		return getSolidColor();
+	}
 };
 //=============================================================================
 class CairoLinearPattern :
@@ -275,6 +282,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Extend getExtendType() const {
 		return CairoPatternBase::getExtendType();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @return representing color if exists. Otherwise NULL_COLOR.
+	 */
+	virtual ColorRGBA getColor() const {
+		// TODO: return colorstops average
+		return ColorRGBA::NULL_COLOR;
 	}
 };
 //=============================================================================
@@ -387,7 +402,14 @@ public:
 	virtual Extend getExtendType() const {
 		return CairoPatternBase::getExtendType();
 	}
-
+	//-------------------------------------------------------------------------
+	/**
+	 * @return representing color if exists. Otherwise NULL_COLOR.
+	 */
+	virtual ColorRGBA getColor() const {
+		// TODO: return colorstops average
+		return ColorRGBA::NULL_COLOR;
+	}
 };
 //=============================================================================
 class CairoSurfacePattern :
@@ -434,6 +456,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Extend getExtendType() const {
 		return CairoPatternBase::getExtendType();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @return representing color if exists. Otherwise NULL_COLOR.
+	 */
+	virtual ColorRGBA getColor() const {
+		return ColorRGBA::NULL_COLOR;
 	}
 };
 }}

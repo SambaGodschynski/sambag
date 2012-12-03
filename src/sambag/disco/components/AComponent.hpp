@@ -197,7 +197,7 @@ protected:
 	 * @see getForeground
 	 * @see setForeground
 	 */
-	ColorRGBA foreground;
+	IPattern::Ptr foreground;
 	//-------------------------------------------------------------------------
 	/**
 	 * The background color for this component.
@@ -205,7 +205,7 @@ protected:
 	 * @see getBackground
 	 * @see setBackground
 	 */
-	ColorRGBA background;
+	IPattern::Ptr background;
 	//-------------------------------------------------------------------------
 	/**
 	 * True when the object should ignore all repaint events.
@@ -752,6 +752,16 @@ public:
 	virtual ColorRGBA getForeground() const;
 	//-------------------------------------------------------------------------
 	/**
+	 * @return the Background color
+	 */
+	virtual IPattern::Ptr getBackgroundPattern() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return the Foreground color
+	 */
+	virtual IPattern::Ptr getForegroundPattern() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * @return the Lock (mutex) object
 	 */
 	virtual Lock & getTreeLock() const;
@@ -1104,6 +1114,20 @@ public:
 	 * @param c
 	 */
 	virtual void setForeground(const ColorRGBA &c);
+	//------------------------------------------------------------------------
+	/**
+	 * Sets the background color of this component.
+	 * The background color affects each component differently and the parts
+	 * of the component that are affected by the background color.
+	 * @param c
+	 */
+	virtual void setBackground(IPattern::Ptr pat);
+	//-------------------------------------------------------------------------
+	/**
+	 * Sets the foreground color of this component.
+	 * @param c
+	 */
+	virtual void setForeground(IPattern::Ptr pat);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the preferred size of this component to a constant

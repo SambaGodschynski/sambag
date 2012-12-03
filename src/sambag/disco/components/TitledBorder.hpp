@@ -9,28 +9,53 @@
 #define SAMBAG_TITLEDBORDER_H
 
 #include <boost/shared_ptr.hpp>
-#include "SolidBorder.hpp"
+#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include "IBorder.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class TitledBorder.
   */
-class TitledBorder : public SolidBorder {
+class TitledBorder : public IBorder {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef SolidBorder Super;
+	typedef IBorder Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<TitledBorder> Ptr;
 protected:
+	//-------------------------------------------------------------------------
+	IBorder::Ptr border;
 	//-------------------------------------------------------------------------
 	TitledBorder();
 	//-------------------------------------------------------------------------
 	Rectangle getTextBounds(AComponentPtr c,
         IDrawContext::Ptr g, const Rectangle &r);
+	//-------------------------------------------------------------------------
+	typedef svg::graphicElements::Style Style;
+	Style style;
+	Coordinate cornerRadius;
+	//-------------------------------------------------------------------------
+	std::string getText(AComponentPtr c, const Rectangle &size) const;
+	//-------------------------------------------------------------------------
+	Point2D getTextPos(AComponentPtr c, const Rectangle &size) const;
 private:
 public:
+	//-------------------------------------------------------------------------
+	void setStyle(const Style &style);
+	//-------------------------------------------------------------------------
+	const Style & getStyle() const {
+		return style;	
+	}
+	//-------------------------------------------------------------------------
+	void setBorder(IBorder::Ptr border);
+	//-------------------------------------------------------------------------
+	IBorder::Ptr getBorder();
+	//-------------------------------------------------------------------------
+	virtual Insets getBorderInsets(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	virtual bool isBorderOpaque();
 	//-------------------------------------------------------------------------
     static Ptr create() {
         return Ptr(new TitledBorder);
