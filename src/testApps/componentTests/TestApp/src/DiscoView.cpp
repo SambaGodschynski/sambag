@@ -10,6 +10,7 @@
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
 #include <sambag/disco/components/Button.hpp>
+#include <sambag/disco/components/CheckBox.hpp>
 #include <sambag/disco/components/Menu.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
@@ -514,6 +515,11 @@ void createWindow<ACME>() {
 				addEventListener(&trackMouse);
 		con->add(btn);
 	}
+	// checkbox
+	CheckBox::Ptr chkbx = CheckBox::create();
+	chkbx->setText("sometimes yes!");
+	con->add(chkbx);
+	// label
 	Panel::Ptr labelcon = Panel::create();
     labelcon->setName("Output:");
 	TitledBorder::Ptr border = TitledBorder::create();

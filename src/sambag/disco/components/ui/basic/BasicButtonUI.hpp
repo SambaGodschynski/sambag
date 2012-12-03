@@ -43,11 +43,11 @@ protected:
 	virtual void installListener(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	virtual void installDefaults(AComponentPtr c);
+	//-------------------------------------------------------------------------
+	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
 private:
 	//-------------------------------------------------------------------------
 	IPattern::Ptr bk, roll, press, disabled;
-	//-------------------------------------------------------------------------
-	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
 	//-------------------------------------------------------------------------
 	typedef BasicButtonListener<ButtonModell> ButtonListener;
 	//-------------------------------------------------------------------------

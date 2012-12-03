@@ -19,6 +19,7 @@
 #include "BasicKnobUI.hpp"
 #include "BasicListUI.hpp"
 #include "BasicColumnViewUI.hpp"
+#include "BasicCheckBoxUI.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -35,6 +36,7 @@
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/List.hpp>
 #include <sambag/disco/components/ColumnView.hpp>
+#include <sambag/disco/components/CheckBox.hpp>
 
 
 namespace sambag { namespace disco {
@@ -59,6 +61,7 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<Viewport, BasicPanelUI >();
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
+	registerComponentUI<CheckBox, BasicCheckBoxUI<CheckBox::Model> >();
 
 	/*
 	 * Unfortunately it is not

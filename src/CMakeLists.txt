@@ -29,6 +29,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/Button.cpp
 	sambag/disco/components/ButtonGroup.cpp
 	sambag/disco/components/CellRendererPane.cpp
+	sambag/disco/components/CheckBox.cpp
 	sambag/disco/components/ColumnBrowser.cpp
 	sambag/disco/components/ColumnView.cpp
 	sambag/disco/components/DefaultBoundedRangeModel.cpp
@@ -76,6 +77,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/DefaultMenuLayout.cpp
 	sambag/disco/components/ui/UIManager.cpp
 	sambag/disco/components/ui/basic/BasicArrowButton.cpp
+	sambag/disco/components/ui/basic/BasicCheckBoxUI.cpp
 	sambag/disco/components/ui/basic/BasicColumnViewUI.cpp
 	sambag/disco/components/ui/basic/BasicKnobUI.cpp
 	sambag/disco/components/ui/basic/BasicLabelUI.cpp
