@@ -5,6 +5,7 @@ SET ( SAMBAG_SOURCES
 	sambag/com/FileSystem.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
+	sambag/cpsqlite/sqlite3.c
 	sambag/disco/CairoDiscoFactory.cpp
 	sambag/disco/CairoDrawContext.cpp
 	sambag/disco/CairoPattern.cpp
@@ -58,7 +59,9 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ScrollPane.cpp
 	sambag/disco/components/ScrollPaneLayout.cpp
 	sambag/disco/components/SizeRequirements.cpp
+	sambag/disco/components/SolidBorder.cpp
 	sambag/disco/components/Timer.cpp
+	sambag/disco/components/TitledBorder.cpp
 	sambag/disco/components/Viewport.cpp
 	sambag/disco/components/ViewportLayout.cpp
 	sambag/disco/components/Window.cpp

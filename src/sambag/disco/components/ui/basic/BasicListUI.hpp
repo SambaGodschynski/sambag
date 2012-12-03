@@ -20,6 +20,7 @@
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/ui/IListUI.hpp>
+#include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/com/events/PropertyChanged.hpp>
 
 namespace sambag { namespace disco {
