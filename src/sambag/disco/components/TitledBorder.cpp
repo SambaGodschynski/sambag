@@ -55,14 +55,21 @@ void TitledBorder::paintBorder(AComponentPtr c,IDrawContext::Ptr cn,
 {
 	style.intoContext(cn);
     Rectangle textBounds = getTextBounds(c, cn, r);
+	Rectangle borderb = r;
+	borderb.inset(-5., -5.);
+
+	if (textBounds.width() > borderb.width() ||
+		textBounds.height() > borderb.height())
+	{
+		getBorder()->paintBorder(c, cn, r);
+		return;
+	}
     cn->save();
 	cn->rect(r);
 	cn->rect(textBounds);
 	cn->setFillRule(IDrawContext::FILL_RULE_EVEN_ODD);
 	cn->clip();
 	
-	Rectangle borderb = r;
-	borderb.inset(-5., -5.);
 	getBorder()->paintBorder(c, cn, borderb);
   
 	cn->restore();
