@@ -772,6 +772,13 @@ public:
 	virtual bool getIgnoreRepaint() const;
 	//-------------------------------------------------------------------------
 	/**
+	 * Determines the insets of this container, which indicate the size of the
+	 * container's border.
+	 * @return
+	 */
+	virtual Insets getInsets() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * @return true if this AComponent is the focus owner.
 	 */
 	virtual bool hasFocus() const;

@@ -22,6 +22,7 @@ struct IHost {
 	virtual void configurationChanged() = 0;
 	virtual void parameterChanged(int index) = 0;
 	virtual HostTimeInfo * getHostTimeInfo (int filter) = 0;
+	virtual void requestEditorResize(int witdh, int height) = 0;
 };	
 //=============================================================================
 class PluginProcessorBase {

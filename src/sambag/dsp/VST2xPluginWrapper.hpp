@@ -197,6 +197,10 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual HostTimeInfo * getHostTimeInfo (int filter);
+	//-------------------------------------------------------------------------
+	virtual void requestEditorResize(int width, int height) {
+		AudioEffectX::sizeWindow(width, height);
+	}
 };
 //#############################################################################
 //	Impl.:

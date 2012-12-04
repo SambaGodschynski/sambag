@@ -43,6 +43,9 @@ void drawIcon(IDrawContext::Ptr cn, // TODO: impl. and use glyph renderer for pu
 //-----------------------------------------------------------------------------
 void BasicLabelUI::installUI(AComponentPtr c) {
 	Super::installUI(c);
+	
+	padding = Insets(17.5, 17.5, 7.5, 7.5);
+	c->getClientProperty("padding", padding);
 }
 //-----------------------------------------------------------------------------
 void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
@@ -73,7 +76,8 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	cn->setFont(l->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
 	ISurface::Ptr icon = l->getIcon();
-	Dimension res = Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 20);
+	Dimension res = Dimension(txtEx.getWidth() + padding.left() + padding.right(),
+		txtEx.getHeight() + padding.top() + padding.bottom() );
 	if (!icon)
 		return res;
 	Rectangle iconBounds = calcIconBounds(icon, l->getFont().size);

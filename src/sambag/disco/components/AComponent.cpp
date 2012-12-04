@@ -796,6 +796,12 @@ void AComponent::transferFocusBackward() {
 	SAMBA_LOG_NOT_YET_IMPL();
 }
 //-----------------------------------------------------------------------------
+Insets AComponent::getInsets() const {
+	if (border)
+		border->getBorderInsets(getPtr());
+	return Insets();
+}
+//-----------------------------------------------------------------------------
 void AComponent::validate() {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		bool wasValid = isValid();

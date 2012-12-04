@@ -45,6 +45,13 @@ protected:
 	virtual void installDefaults(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
+	//-------------------------------------------------------------------------
+	virtual Rectangle getBtnRect(IDrawContext::Ptr cn, AComponentPtr c);
+	//-------------------------------------------------------------------------
+	virtual void prepareContext(IDrawContext::Ptr cn, 
+		typename AbstractButton::Ptr b);
+	//-------------------------------------------------------------------------
+	Insets margin, padding;
 private:
 	//-------------------------------------------------------------------------
 	IPattern::Ptr bk, roll, press, disabled;
@@ -117,14 +124,25 @@ BasicButtonUI<ButtonModell>::createDefaultStyle() const
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
-	if (!b)
-		return;
-	// consider clipping
-	cn->translate(Point2D(2,2));
-	cn->scale(Point2D(0.8, 0.8));
-	
+Rectangle 
+BasicButtonUI<ButtonModell>::getBtnRect(IDrawContext::Ptr cn, AComponentPtr c)
+{
+	Insets ins = c->getInsets();
+	double sw = cn->getStrokeWidth();
+	Rectangle bounds(ins.left() + margin.left() + sw,
+		ins.top() + margin.top() + sw,
+		c->getWidth() - ins.right() - margin.right() - sw, 
+		c->getHeight() - ins.bottom() - margin.right() - sw
+	);
+	bounds.x( c->getWidth() / 2. - bounds.width() / 2. );
+	bounds.y( c->getHeight() / 2. - bounds.height() / 2. );
+	return bounds;
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::
+prepareContext(IDrawContext::Ptr cn, typename AbstractButton::Ptr b)
+{
 	if (!b->isEnabled()) {
 		sDisabled.intoContext(cn);
 	} else if (b->isButtonRollover()) {
@@ -134,16 +152,25 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 			sRoll.intoContext(cn);
 	} else
 		sNormal.intoContext(cn);
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
+	if (!b)
+		return;
+	prepareContext(cn, b);
+	Rectangle bounds = getBtnRect(cn, c);
+	cn->rect(bounds, 5.);
 	cn->fill();
-	cn->rect(Rectangle(0,0,c->getWidth(), c->getHeight()), 5);
+	cn->rect(bounds, 5.);
 	cn->stroke();
 	cn->setFont(b->getFont());
 	std::string str = sambag::com::normString(b->getText());
 	Rectangle txt = cn->textExtends(str);
 	cn->setFillColor(cn->getStrokeColor());
-	cn->translate( Point2D( 10,
-			c->getHeight() / 2.0 + txt.getHeight() / 2.0
+	cn->moveTo( Point2D( (bounds.width() / 2.0 - txt.width() / 2.0) + bounds.x(),
+			(bounds.height() / 2.0 + txt.height() / 2.0) + bounds.y()
 	));
 	cn->textPath(str);
 	cn->fill();
@@ -198,6 +225,10 @@ void BasicButtonUI<ButtonModell>::installDefaults(AComponentPtr c) {
 	m.getProperty("Button.pressed", sPress);
 	m.getProperty("Button.rollover", sRoll);
 	m.getProperty("Button.disabled", sDisabled);
+	padding = Insets(15., 15., 10., 10.);
+	margin = Insets(5., 5., 5., 5.);
+	c->getClientProperty("padding", padding);
+	c->getClientProperty("margin", margin);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -229,7 +260,8 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(b->getText()));
-	return Dimension(txtEx.getWidth() + 35, txtEx.getHeight() + 15);
+	return Dimension(txtEx.getWidth() + padding.left() + padding.right(), 
+		txtEx.getHeight() + padding.top() + padding.height());
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>

@@ -13,6 +13,7 @@ namespace sambag { namespace disco { namespace components {
 //-----------------------------------------------------------------------------
 FramedWindow::FramedWindow(Window::Ptr parent) : Window(parent) {
 	windowImpl->setFlag(WindowFlags::WND_FRAMED, true);
+	windowImpl->setFlag(WindowFlags::WND_RESIZEABLE, true);
 }
 //-------------------------------------------------------------------------
 void FramedWindow::setTitle(const std::string &title) {

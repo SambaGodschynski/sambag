@@ -182,7 +182,14 @@ void Win32WindowImpl::createWindow(HWND parent) {
 	HINSTANCE hI = getHInstance();
 	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
 	DWORD style = WS_VISIBLE;
-	style |= getFlag(WND_FRAMED) ? WS_OVERLAPPEDWINDOW : WS_POPUP | WS_BORDER; 
+	DWORD overlapped = WS_OVERLAPPED								  | 
+					   WS_CAPTION									  | 
+					   (getFlag(WND_NO_SYSTEM_MENU) ? 0 : WS_SYSMENU) | 
+					   (getFlag(WND_RESIZEABLE) ? WS_THICKFRAME : 0)  | 
+					   WS_MINIMIZEBOX								  |
+					   WS_MAXIMIZEBOX;
+	
+	style |= getFlag(WND_FRAMED) ? overlapped : WS_POPUP | WS_BORDER; 
 	// wndclass
 	wndClassHolder = WndClassManager::getWndClassHolder(STR_WNDCLASS, hI);
 	const WNDCLASS & wndClass = wndClassHolder->getWndClass();

@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/Button.hpp>
+#include <sambag/disco/components/ui/ALookAndFeel.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -23,18 +24,28 @@ public:
 	//-------------------------------------------------------------------------
 	typedef Button Super;
 	//-------------------------------------------------------------------------
+	typedef Super::Model Model;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<BasicArrowButton> Ptr;
 	//-------------------------------------------------------------------------
 	enum Direction {
 		NORTH, WEST, SOUTH, EAST
 	};
 protected:
+	//-----------------------------------------------------------------------------
+	AComponentUIPtr createComponentUI(ALookAndFeelPtr laf) const {
+		return laf->getUI<BasicArrowButton>();
+	}
 	//-------------------------------------------------------------------------
 	Direction direction;
 	//-------------------------------------------------------------------------
 	BasicArrowButton(Direction direction);
 private:
 public:
+	//-------------------------------------------------------------------------
+	Direction getDirection() const {
+		return direction;
+	}
 	//-------------------------------------------------------------------------
 	virtual Dimension getPreferredSize() {
 		return Dimension(20., 20.);

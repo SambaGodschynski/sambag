@@ -272,13 +272,6 @@ public:
 	 */
 	int getComponentZOrder(AComponent::Ptr comp) const;
 	//-------------------------------------------------------------------------
-	/**
-	 * Determines the insets of this container, which indicate the size of the
-	 * container's border.
-	 * @return
-	 */
-	virtual Insets getInsets() const;
-	//-------------------------------------------------------------------------
 	virtual ALayoutManager::Ptr getLayout() const;
 	//-------------------------------------------------------------------------
 	/**

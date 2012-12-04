@@ -214,12 +214,6 @@ void AContainer::adjustDecendantsOnParent(int num) {
 	parent->adjustDescendants(num);
 }
 //-----------------------------------------------------------------------------
-Insets AContainer::getInsets() const {
-	if (border)
-		border->getBorderInsets(getPtr());
-	return Insets();
-}
-//-----------------------------------------------------------------------------
 ALayoutManager::Ptr AContainer::getLayout() const {
 	return layoutMgr;
 }

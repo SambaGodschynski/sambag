@@ -20,6 +20,8 @@
 #include "BasicListUI.hpp"
 #include "BasicColumnViewUI.hpp"
 #include "BasicCheckBoxUI.hpp"
+#include "BasicArrowButtonUI.hpp"
+#include "BasicArrowButton.hpp"
 #include <sambag/disco/components/Panel.hpp>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
@@ -62,6 +64,7 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<ScrollPane, BasicScrollPaneUI>();
 	registerComponentUI<Knob, BasicKnobUI<Knob::Model> >();
 	registerComponentUI<CheckBox, BasicCheckBoxUI<CheckBox::Model> >();
+	registerComponentUI<BasicArrowButton, BasicArrowButtonUI<BasicArrowButton::Model> >();
 
 	/*
 	 * Unfortunately it is not
