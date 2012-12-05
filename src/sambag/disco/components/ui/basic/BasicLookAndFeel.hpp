@@ -37,8 +37,12 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		return Ptr(new BasicLookAndFeel());
+		Ptr res(new BasicLookAndFeel());
+		res->installLookAndFeel();
+		return res;
 	}
+	//-------------------------------------------------------------------------
+	virtual void installLookAndFeel();
 }; // BasicLookAndFeel
 }}}}} // namespace(s)
 

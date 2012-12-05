@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "AContainer.hpp"
 #include "ui/ALookAndFeel.hpp"
+#include "ui/UIManager.hpp"
 #include "IScrollable.hpp"
 #include "AScrollbar.hpp"
 #include <sambag/com/Common.hpp>
@@ -433,6 +434,10 @@ void AList<T, CR, DM, SM>::postConstructor() {
 	setCellRenderer(ListCellRenderer::create());
 }
 //-----------------------------------------------------------------------------
+namespace {
+	SAMBAG_PROPERTY_TAG(TagMinListWidth, "List.minCellWidth");
+	SAMBAG_PROPERTY_TAG(TagMinListHeight, "List.minCellHeight");
+}
 template < class T,
 	template <class> class CR,
 	template <class> class DM,
@@ -455,9 +460,12 @@ void AList<T, CR, DM, SM>::updateFixedCellSize() {
 		Font f = c->getFont();
 		c->setFont(getFont());
 
+		Coordinate minCellWidth = ui::getUIPropertyCached<TagMinListWidth>(Coordinate(25.));
+		Coordinate minCellHeight = ui::getUIPropertyCached<TagMinListHeight>(Coordinate(15.));
+
 		Dimension d = c->getPreferredSize();
-		fixedCellWidth = d.width();
-		fixedCellHeight = d.height();
+		fixedCellWidth = std::max( d.width(), minCellWidth);
+		fixedCellHeight = std::max( d.height(), minCellHeight);
 
 		c->setFont(f);
 	}

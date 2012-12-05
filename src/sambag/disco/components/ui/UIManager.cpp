@@ -45,7 +45,7 @@ ArbitraryType::Ptr UIManager::getProperty(const std::string &key) const
 void UIManager::putPropertyImpl(const std::string &key,
 		ArbitraryType::Ptr value)
 {
-	PropertyMap::iterator it = propertyMap.find(key);
+	/*PropertyMap::iterator it = propertyMap.find(key);
 	if (it==propertyMap.end()) {
 		if (!value)
 			return;
@@ -60,6 +60,7 @@ void UIManager::putPropertyImpl(const std::string &key,
 		propertyMap.erase(it);
 		return;
 	}
-	it->second = value;
+	it->second = value;*/
+	propertyMap[key] = value;
 }
 }}}} // namespace(s)

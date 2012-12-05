@@ -21,11 +21,15 @@ namespace sambag { namespace disco { namespace components { namespace ui {
 struct IUICreator {
 	typedef boost::shared_ptr<IUICreator> Ptr;
 	virtual AComponentUI::Ptr createUI() = 0;
+	virtual std::string toString() const = 0;
 };
 template <class ConcreteUI>
 struct UICreator : public IUICreator {
 	virtual AComponentUI::Ptr createUI() {
 		return ConcreteUI::create();
+	}
+	virtual std::string toString() const {
+		return std::string( typeid(ConcreteUI).name() );
 	}
 };
 //=============================================================================
@@ -58,7 +62,11 @@ public:
 	template <class ConcreteComponent>
 	AComponentUI::Ptr getUI() const;
 	//-------------------------------------------------------------------------
+	virtual void installLookAndFeel() = 0;
+	//-------------------------------------------------------------------------
 	virtual ~ALookAndFeel();
+	//-------------------------------------------------------------------------
+	virtual std::string toString() const;
 }; // ALookAndFeel
 //=============================================================================
 // impl,

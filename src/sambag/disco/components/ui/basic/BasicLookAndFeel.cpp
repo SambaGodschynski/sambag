@@ -48,6 +48,9 @@ namespace components { namespace ui { namespace basic {
 //=============================================================================
 //-----------------------------------------------------------------------------
 BasicLookAndFeel::BasicLookAndFeel() {
+}
+//-----------------------------------------------------------------------------
+void BasicLookAndFeel::installLookAndFeel() {
 	installDefaults(); // <= always before installComponents
 	installComponents();
 }
@@ -83,13 +86,7 @@ void BasicLookAndFeel::installComponents() {
 //-----------------------------------------------------------------------------
 svg::graphicElements::Style BasicLookAndFeel::createStyle(const std::string &str) 
 {
-		using namespace sambag::disco::svg;
-		svg::graphicElements::Style res;
-		res.font(Font()); // TODO: why has sytle no std font?
-		std::stringstream ss;
-		ss<<str;
-		ss>>res;
-		return res;
+	return ::createStyle(str);
 } 
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
@@ -121,6 +118,8 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
 	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<StringList
+	m.putProperty("List.minCellWidth", Coordinate(60.));
+	m.putProperty("List.minCellHeight", Coordinate(20.));
 	m.putProperty("StringList.background", HtmlColors::getColor("azure"));
 	m.putProperty("StringList.foreground", HtmlColors::getColor("black"));
 	m.putProperty("StringList.selectionBackground", HtmlColors::getColor("blue"));

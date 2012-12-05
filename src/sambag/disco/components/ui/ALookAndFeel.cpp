@@ -8,6 +8,7 @@
 #include "ALookAndFeel.hpp"
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <sstream>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
@@ -15,5 +16,13 @@ namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
 //-----------------------------------------------------------------------------
 ALookAndFeel::~ALookAndFeel() {
+}
+//-----------------------------------------------------------------------------
+std::string ALookAndFeel::toString() const {
+	std::stringstream ss;
+	BOOST_FOREACH(const UIMap::value_type &v, uiMap) {
+		ss<<v.first.name() << " => " << v.second->toString() << std::endl;
+	}
+	return ss.str();
 }
 }}}} // namespace(s)

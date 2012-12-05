@@ -74,7 +74,10 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(l->getFont());
-	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
+	std::string txt = sambag::com::normString(l->getText());
+	/*if (txt == "")
+		txt = "0"; // dummy*/
+	Rectangle txtEx = cn->textExtends(txt);
 	ISurface::Ptr icon = l->getIcon();
 	Dimension res = Dimension(txtEx.getWidth() + padding.left() + padding.right(),
 		txtEx.getHeight() + padding.top() + padding.bottom() );

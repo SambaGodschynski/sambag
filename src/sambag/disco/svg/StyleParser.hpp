@@ -57,4 +57,17 @@ public:
  * @return stream
  */
 extern std::istream & operator>>(std::istream&, sambag::disco::svg::graphicElements::Style&);
+//-----------------------------------------------------------------------------
+inline sambag::disco::svg::graphicElements::Style 
+createStyle(const std::string &str) 
+{
+	
+	sambag::disco::svg::graphicElements::Style res;
+	res.font(sambag::disco::Font()); // TODO: why has sytle no std font?
+	std::stringstream ss;
+	ss<<str;
+	ss>>res;
+	return res;
+}
+
 #endif /* STYLEPARSER_HPP_ */
