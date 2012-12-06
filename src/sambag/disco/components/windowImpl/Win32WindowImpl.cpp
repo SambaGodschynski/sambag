@@ -150,6 +150,10 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
 	// create window
 	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
+	{
+		styleEx |= WS_EX_TOPMOST;
+	}
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	bounds = area;
 	win = CreateWindowEx ( styleEx, 
@@ -181,6 +185,10 @@ void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = getHInstance();
 	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
+	{
+		styleEx |= WS_EX_TOPMOST;
+	}
 	DWORD style = WS_VISIBLE;
 	DWORD overlapped = WS_OVERLAPPED								  | 
 					   WS_CAPTION									  | 

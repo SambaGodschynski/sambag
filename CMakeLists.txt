@@ -54,9 +54,9 @@ include_directories(${LOKI_INCLUDE_DIRS})
 include_directories(${LUA52_INCLUDE_DIRS})
 include_directories(${SQLITE3_INCLUDE_DIRS})
 
-#include_directories(${VSTSDK_INCLUDE_DIRS})
-#include_directories(${VSTSDK_INCLUDE_DIRS}/public.sdk/source/vst2.x)
-#include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
+include_directories(${VSTSDK_INCLUDE_DIRS})
+include_directories(${VSTSDK_INCLUDE_DIRS}/public.sdk/source/vst2.x)
+include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
