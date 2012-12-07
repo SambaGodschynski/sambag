@@ -23,8 +23,8 @@ while [ "$1" != "" ]; do
         -i | --in )             shift
                                 in=$1
                                 ;;
-        -m | --mode )         shift
-				mode=$1							
+        -g | --generator )      shift
+				mode=$1
                                 ;;
         -h | --help )           usage
                                 exit
@@ -36,11 +36,12 @@ while [ "$1" != "" ]; do
 done
 
 export CLIBS=$in
-if [ -z $mode ]
+echo use generator: $mode
+if [ "$mode" = "" ]
 then
   cmake .
 else
-  cmake . -G $mode
+  cmake . -G "$mode"
 fi
 
 make

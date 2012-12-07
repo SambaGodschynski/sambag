@@ -3,11 +3,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./")
 
 project (sambag)
 
+message ("conftypes:" ${CMAKE_CONFIGURATION_TYPES})
+message ("buildtype:" ${CMAKE_BUILD_TYPE})
+
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
-#add_definitions(-DCAIRO_WIN32_STATIC_BUILD)
-
+set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} "CAIRO_WIN32_STATIC_BUILD")
 
 #to avoid name conflicts with existing FindSomeLib.cmake scripts
 #every finding script has a "X" postfix: FindSomeLibX.cmake
@@ -39,7 +41,7 @@ find_package(TinyXMLX REQUIRED)
 find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
-#find_package(VST23X REQUIRED)
+find_package(VST23X REQUIRED)
 
 SET(BOOST_ROOT $ENV{CLIBS}/boost)
 SET(Boost_USE_STATIC_LIBS        ON)
@@ -78,9 +80,9 @@ ENDIF(APPLE)
 
 set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${Boost_LIBRARIES}
-	${CPPUNIT_LIBRARY_DIRS}/${LIBCPPUNIT}
-	${CAIRO_LIBRARY_DIRS}/${LIBCAIRO}
-	${TINYXML_LIBRARY_DIRS}/${LIBTINYXML}
+	${CPPUNIT_LIBRARIES}
+	${CAIRO_LIBRARIES}
+	${TINYXML_LIBRARIES}
 	${LUA52_LIBRARY_DIRS}/${LIBLUA52}
 	${SQLITE3_LIBRARY_DIRS}/${LIBSQLITE3}
 )

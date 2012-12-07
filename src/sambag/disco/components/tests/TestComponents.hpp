@@ -80,6 +80,7 @@ namespace tests {
 		LookAndFeelForTest();
 	public:
 		typedef boost::shared_ptr<LookAndFeelForTest> Ptr;
+		virtual void installLookAndFeel() {};
 		static Ptr create() {
 			return Ptr(new LookAndFeelForTest());
 		}

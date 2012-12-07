@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="testApp"
-	ProjectGUID="{BF4EFE33-A229-41E5-9D6A-AF21497F6349}"
+	ProjectGUID="{3A6FAEAA-5333-4460-917B-6C7D679C6803}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				BasicRuntimeChecks="3"
 				CompileAs="2"
 				DebugInformationFormat="3"
@@ -34,17 +34,17 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				AssemblerListingLocation="Debug"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug/testApp.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Debug/testApp.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -65,14 +65,14 @@
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
 				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  Debug\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunitd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticppd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
-				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug\testApp.exe"
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Debug\testApp.exe"
 				Version="0.0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug/testApp.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Debug/testApp.pdb"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
-				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug\testApp.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Debug\testApp.lib"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -85,7 +85,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				CompileAs="2"
 				ExceptionHandling="1"
 				InlineFunctionExpansion="2"
@@ -96,17 +96,17 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
 				AssemblerListingLocation="Release"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release/testApp.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Release/testApp.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -126,14 +126,14 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  Release\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunitd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticppd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
-				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release\testApp.exe"
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  Release\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunit.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo-static.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticpp.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Release\testApp.exe"
 				Version="0.0"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release/testApp.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Release/testApp.pdb"
 				SubSystem="1"
-				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release\testApp.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\Release\testApp.lib"/>
 		</Configuration>
 		<Configuration
 			Name="MinSizeRel|Win32"
@@ -146,7 +146,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				CompileAs="2"
 				ExceptionHandling="1"
 				InlineFunctionExpansion="1"
@@ -157,17 +157,17 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
 				AssemblerListingLocation="MinSizeRel"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\MinSizeRel/testApp.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\MinSizeRel/testApp.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -187,14 +187,14 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  MinSizeRel\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunitd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticppd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
-				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\MinSizeRel\testApp.exe"
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  MinSizeRel\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunit.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo-static.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticpp.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\MinSizeRel\testApp.exe"
 				Version="0.0"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\MinSizeRel/testApp.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\MinSizeRel/testApp.pdb"
 				SubSystem="1"
-				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\MinSizeRel\testApp.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\MinSizeRel\testApp.lib"/>
 		</Configuration>
 		<Configuration
 			Name="RelWithDebInfo|Win32"
@@ -207,7 +207,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				CompileAs="2"
 				DebugInformationFormat="3"
 				ExceptionHandling="1"
@@ -219,17 +219,17 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
 				AssemblerListingLocation="RelWithDebInfo"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\RelWithDebInfo/testApp.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\RelWithDebInfo/testApp.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;\public.sdk\source\vst2.x;\pluginterfaces\vst2.x;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -249,62 +249,62 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  RelWithDebInfo\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunitd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticppd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
-				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\RelWithDebInfo\testApp.exe"
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  RelWithDebInfo\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunit.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo-static.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticpp.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite\win32\Release\sqlite3.lib&quot; "
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\RelWithDebInfo\testApp.exe"
 				Version="0.0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\RelWithDebInfo/testApp.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\RelWithDebInfo/testApp.pdb"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
-				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\RelWithDebInfo\testApp.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\RelWithDebInfo\testApp.lib"/>
 		</Configuration>
 	</Configurations>
 	<Files>
 			<File
-				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
-					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/satmp/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
-					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/satmp/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="MinSizeRel|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
-					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/satmp/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="RelWithDebInfo|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
-					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/satmp/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/satmp&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 			</File>
 		<Filter
 			Name="Source Files"
 			Filter="">
 			<File
-				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\testApps\componentTests\TestApp\src\DiscoView.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\satmp\src\testApps\componentTests\TestApp\src\DiscoView.cpp">
 			</File>
 		</Filter>
 	</Files>
