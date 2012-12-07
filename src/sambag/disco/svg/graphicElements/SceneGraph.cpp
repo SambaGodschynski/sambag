@@ -61,7 +61,7 @@ std::string SceneGraph::processListAsString() const {
 bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
 	bool inserted;
 	Element2Vertex::iterator it;
-	tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
+	boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
 	if (!inserted)
 		return false;
 	const Vertex &u = add_vertex(g);
