@@ -149,6 +149,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/components/tests/TestAComponent.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
 	sambag/disco/tests/TestSceneGraph.cpp
+	sambag/disco/tests/TestGenFlowLayout.cpp
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestGeometrySerialization.cpp
 	sambag/disco/tests/TestGeometrics.cpp

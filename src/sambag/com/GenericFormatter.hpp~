@@ -1,0 +1,31 @@
+/*
+ * GenericFormatter.hpp
+ *
+ *  Created on: Sat Dec  8 09:41:12 2012
+ *      Author: Johannes Unger
+ */
+
+#ifndef SAMBAG_GENERICFORMATTER_H
+#define SAMBAG_GENERICFORMATTER_H
+
+namespace sambag { namespace com {
+//=============================================================================
+/** 
+  * @class GenericFormatter.
+  */
+template <
+	class Component,
+	 template <class> class ComponentAccessPolicy,
+	 template <class, class> class FormatterPolicy
+>
+struct GenericFormatter : 
+	public ComponentAccessPolicy<Component>,
+	public FormatterPolicy<Component, ComponentAccessPolicy<Component> >
+{
+//=============================================================================
+	typedef ComponentAccessPolicy<Component> ComponentAcess;
+	typedef FormatterPolicy<Component, ComponentAccessPolicy<Component> > Formatter;
+};
+}} // namespace(s)
+
+#endif /* SAMBAG_GENERICFORMATTER_H */

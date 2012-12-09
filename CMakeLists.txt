@@ -26,6 +26,7 @@ ELSEIF(UNIX)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIRS})
 	add_definitions(-DDISCO_USE_X11)
+	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
 ELSEIF(WIN32)
         #find_package(LibPngX REQUIRED)
         #find_package(ZlibX REQUIRED)
