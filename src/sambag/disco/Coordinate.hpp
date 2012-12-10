@@ -22,8 +22,9 @@ namespace sambag { namespace disco {
 struct Coordinate {
 //=============================================================================
 	//-------------------------------------------------------------------------
+	typedef sambag::com::Number ValueType;
 private:
-	sambag::com::Number value;
+	ValueType value;
 	//-------------------------------------------------------------------------
 	friend class boost::serialization::access;
 	//-------------------------------------------------------------------------
@@ -33,9 +34,9 @@ private:
 	}
 	//-------------------------------------------------------------------------
 public:
-	Coordinate(const sambag::com::Number value=0) : value(value) {}
+	Coordinate(ValueType value=0) : value(value) {}
 	//-------------------------------------------------------------------------
-	inline operator sambag::com::Number() const {
+	inline operator ValueType() const {
 		return value;
 	}
 	//-------------------------------------------------------------------------

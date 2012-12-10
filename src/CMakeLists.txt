@@ -155,7 +155,14 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/components/tests/TestPopupMenu.cpp
 	sambag/disco/components/tests/TestRootPane.cpp
 	sambag/disco/components/tests/TestUIManager.cpp
+<<<<<<< HEAD
+	sambag/disco/components/tests/TestAComponent.cpp
+	sambag/disco/tests/TestCairoDrawContext.cpp
+	sambag/disco/tests/TestSceneGraph.cpp
+	sambag/disco/tests/TestGenFlowLayout.cpp
+=======
 	sambag/disco/components/tests/TestWindow.cpp
+>>>>>>> f4787f1092b9a71e9ec48c87b0de743cad75626f
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp

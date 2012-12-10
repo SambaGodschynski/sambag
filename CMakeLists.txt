@@ -25,6 +25,7 @@ ELSEIF(UNIX)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIRS})
 	add_definitions(-DDISCO_USE_X11)
+	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
 ENDIF(APPLE)
