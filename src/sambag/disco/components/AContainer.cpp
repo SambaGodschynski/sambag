@@ -359,6 +359,8 @@ void AContainer::draw(IDrawContext::Ptr cn) {
 	ScratchGraphics co(componentGraphics);
 
 	RedrawManager::Ptr repaintManager = RedrawManager::currentManager(getPtr());
+	if (!repaintManager)
+		return;
 	Rectangle clipRect = co.clipExtends();
 	if (clipRect == NULL_RECTANGLE) {
 		clipRect = Rectangle(0,0,getWidth(), getHeight());

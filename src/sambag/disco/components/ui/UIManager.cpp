@@ -21,6 +21,14 @@ void UIManager::installLookAndFeel(RootPane::Ptr root, ALookAndFeel::Ptr laf)
 	resetUIPorpertyCache();
 }
 //-----------------------------------------------------------------------------
+void UIManager::uninstallLookAndFeel(RootPane::Ptr root)
+{
+	LafMap::iterator it = lafMap.find(root);
+	if (it==lafMap.end())
+		return;
+	lafMap.erase(it);
+}
+//-----------------------------------------------------------------------------
 ALookAndFeel::Ptr UIManager::getLookAndFeel(RootPane::Ptr root) const {
 	LafMap::const_iterator it = lafMap.find(root);
 	if (it!=lafMap.end()) {

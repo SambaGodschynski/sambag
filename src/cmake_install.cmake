@@ -1,4 +1,4 @@
-# Install script for directory: C:/Eigene Dateien/Eigene Progs/clibs/satmp/src
+# Install script for directory: C:/Eigene Dateien/Eigene Progs/clibs/sambag/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -459,7 +459,8 @@ void AComponent::redraw() {
 //-----------------------------------------------------------------------------
 void AComponent::redraw(const Rectangle &r) {
 	RedrawManager::Ptr rd = RedrawManager::currentManager(getPtr());
-	SAMBAG_ASSERT(rd);
+	if (!rd)
+		return;
 	rd->addDirtyRegion(getPtr(), r);
 }
 //-----------------------------------------------------------------------------
@@ -483,6 +484,8 @@ void AComponent::draw(IDrawContext::Ptr cn) {
 	ScratchGraphics co(componentGraphics);
 
 	RedrawManager::Ptr repaintManager = RedrawManager::currentManager(getPtr());
+	if (!repaintManager)
+		return;
 	Rectangle clipRect = co.clipExtends();
 	if (clipRect == NULL_RECTANGLE) {
 		clipRect = Rectangle(0,0,getWidth(), getHeight());
@@ -535,7 +538,10 @@ void AComponent::revalidate() {
 		return;
 	}
 	invalidate();
-	RedrawManager::currentManager(getPtr())->addInvalidComponent(getPtr());
+	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	if (!rm)
+		return;
+	rm->addInvalidComponent(getPtr());
 	validate();
 }
 //-----------------------------------------------------------------------------
@@ -1083,6 +1089,8 @@ void AComponent::drawToOffscreen(IDrawContext::Ptr cn,
 //-----------------------------------------------------------------------------
 void AComponent::drawForceDoubleBuffered(IDrawContext::Ptr cn) {
 	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	if (!rm)
+		return;
 	Rectangle clip = cn->clipExtends();
 	setFlag(IS_REPAINTING, true);
 	rm->draw(getPtr(), getPtr(), cn, clip);

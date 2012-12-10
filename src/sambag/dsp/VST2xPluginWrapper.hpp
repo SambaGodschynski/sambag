@@ -183,6 +183,14 @@ public:
 		PluginProcessor::resume();
 	}
 	//-------------------------------------------------------------------------
+	VstInt32 getChunk(void **data, bool isPreset) {
+		return PluginProcessor::getChunk(data);
+	}
+	//-------------------------------------------------------------------------
+	VstInt32 setChunk(void *data, VstInt32 byteSize, bool isPreset) {
+		return PluginProcessor::setChunk(data, byteSize);
+	}
+	//-------------------------------------------------------------------------
 	// host impl.
 	//-------------------------------------------------------------------------
 	virtual void configurationChanged() {

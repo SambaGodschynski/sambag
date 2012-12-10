@@ -55,6 +55,8 @@ public:
 	//-------------------------------------------------------------------------
 	void installLookAndFeel(RootPane::Ptr root, ALookAndFeel::Ptr laf);
 	//-------------------------------------------------------------------------
+	void uninstallLookAndFeel(RootPane::Ptr root);
+	//-------------------------------------------------------------------------
 	ALookAndFeel::Ptr getLookAndFeel(RootPane::Ptr root) const;
 }; // UIManager
 ///////////////////////////////////////////////////////////////////////////////

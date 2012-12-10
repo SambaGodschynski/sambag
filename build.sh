@@ -44,4 +44,4 @@ else
   cmake . -G "$mode"
 fi
 
-make
+#make

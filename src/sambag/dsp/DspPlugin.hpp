@@ -45,6 +45,14 @@ public:
 	void close(){}
 	void suspend(){}
 	void resume(){}
+	int getChunk(void **data) { 
+		static char dummy[] = "\0";
+		data[0] = (void*)&dummy[0];
+		return 1; 
+	}
+	int setChunk(void *data, int byteSize) { 
+		return 1; 
+	}
 	// will be setted by client wrapper.
 	void setHost(IHost *_host) { host = _host; }
 	IHost * getHost() const { return host; }

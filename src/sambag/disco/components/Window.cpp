@@ -9,6 +9,7 @@
 #include "RootPane.hpp"
 #include "WindowToolkit.hpp"
 #include "windowImpl/WindowFlags.hpp"
+#include "ui/UIManager.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -74,6 +75,8 @@ void Window::onParentClose(void *src, const OnCloseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void Window::onWindowImplClose(void *src, const OnCloseEvent &ev) {
+	ui::UIManager &m = ui::getUIManager();
+	m.uninstallLookAndFeel(getRootPane());
 }
 //-----------------------------------------------------------------------------
 void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {

@@ -595,6 +595,9 @@ void Viewport::setViewPosition(const Point2D & p) {
 	if ((oldX != newX) || (oldY != newY)) {
 		if (!waitingForRepaint && isBlitting() && canUseWindowBlitter()) {
 			RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+			if (!rm) {
+				return;
+			}
 			Rectangle dirty = rm->getDirtyRegion(view);
 			//if (dirty.contains(jview.getVisibleRect())) {
 			if (boost::geometry::within<Rectangle::Base, Rectangle::Base>
@@ -681,6 +684,9 @@ bool Viewport::windowBlitDraw(IDrawContext::Ptr cn) {
 
 	bool retValue;
 	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	if (!rm) {
+		return false;
+	}
 	AComponentPtr view = getView();
 
 	if (lastPaintPosition == NULL_POINT2D
@@ -734,6 +740,9 @@ void Viewport::blitDoubleBuffered(AComponentPtr view, IDrawContext::Ptr cn,
 	//     not the views coordinate space.
 	//   clip* are in the views coordinate space.
 	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+	if (!rm) {
+		return;
+	}
 	Coordinate bdx = blitToX - blitFromX;
 	Coordinate bdy = blitToY - blitFromY;
 

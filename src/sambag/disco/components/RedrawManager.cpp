@@ -13,7 +13,31 @@
 #include "Window.hpp"
 namespace sambag { namespace disco { namespace components {
 namespace {
-	RedrawManager::Ptr holder;
+	typedef boost::unordered_map<Window::Ptr, RedrawManager::Ptr>
+		ManagerMap;
+	ManagerMap managerMap;
+	void onWindowClose(void *, const OnCloseEvent &ev, Window::WPtr win);
+	RedrawManager::Ptr getManager(Window::Ptr win) {
+		if (!win) {
+			return RedrawManager::Ptr();
+		}
+		RedrawManager::Ptr res = managerMap[win];
+		if (!res) {
+			res = RedrawManager::Ptr(new RedrawManager());
+			managerMap[win] = res;
+			win->addOnCloseEventListener(
+				boost::bind(&onWindowClose, _1, _2, Window::WPtr(win))
+			);
+		}
+		return res;
+	}
+	void onWindowClose(void *, const OnCloseEvent &ev, Window::WPtr _win) {
+		Window::Ptr win = _win.lock();		
+		if (!win) {
+			return;
+		}
+		managerMap.erase(win);
+	}
 }
 //=============================================================================
 //  Class RedrawManager
@@ -91,8 +115,8 @@ void RedrawManager::addInvalidComponent(AComponentPtr invalidComponent) {
 	if (!validateRoot) {
 		return;
 	}
-	BOOST_FOREACH(AComponent::Ptr c, invalidComponents) {
-		if (validateRoot == c) {
+	BOOST_FOREACH(AComponent::WPtr c, invalidComponents) {
+		if (validateRoot == c.lock()) {
 			return;
 		}
 	}
@@ -100,10 +124,13 @@ void RedrawManager::addInvalidComponent(AComponentPtr invalidComponent) {
 }
 //-----------------------------------------------------------------------------
 RedrawManager::Ptr RedrawManager::currentManager(AComponentPtr c) {
-	if (!holder) {
-		holder = Ptr(new RedrawManager());
+	if (!c) {
+		return RedrawManager::Ptr();
 	}
-	return holder;
+	Window::Ptr win = c->getFirstContainer<Window>();
+	if (!win) // no window no redraw
+		return RedrawManager::Ptr();
+	return getManager(win);
 }
 //-----------------------------------------------------------------------------
 Rectangle RedrawManager::getDirtyRegion(AComponentPtr aComponent) const {
