@@ -9,6 +9,7 @@
 
 #include <sambag/disco/Geometry.hpp>
 #include <vector>
+#include <limits>
 
 namespace sambag { namespace disco { namespace genFormatter {
 //=============================================================================
@@ -41,9 +42,9 @@ struct RectangleAccess {
 	//-------------------------------------------------------------------------
 	void setSize(ComponentType &obj, const ValueType &w, const ValueType &h);
 	//-------------------------------------------------------------------------
-	void add(ComponentContainer &container, ComponentType &obj);
+	void add(ComponentContainer &container, ComponentType *obj);
 	//-------------------------------------------------------------------------
-	void remove(ComponentContainer &container, const ComponentType &obj);
+	void remove(ComponentContainer &container, const ComponentType *obj);
 	//-------------------------------------------------------------------------
 	size_t getSize(const ComponentContainer &container) const;
 	//-------------------------------------------------------------------------
@@ -57,6 +58,14 @@ struct RectangleAccess {
 	 */	
 	void reserve(ComponentContainer &container, size_t num) {
 		container.reserve(num);	
+	}
+	//-------------------------------------------------------------------------
+	static ValueType maxValue() {
+		return std::numeric_limits<Coordinate::ValueType>::max();
+	}
+	//-------------------------------------------------------------------------
+	static ValueType minValue() {
+		return std::numeric_limits<Coordinate::ValueType>::min();
 	}
 }; // RectangleAccess
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,18 +130,18 @@ setSize(ComponentType &obj, const ValueType &w, const ValueType &h)
 //-----------------------------------------------------------------------------
 template <class DC>
 void RectangleAccess<DC>::
-add(ComponentContainer &container, ComponentType &obj)
+add(ComponentContainer &container, ComponentType *obj)
 {
-	container.push_back(&obj);
+	container.push_back(obj);
 }
 //-----------------------------------------------------------------------------
 template <class DC>
 void RectangleAccess<DC>::
-remove(ComponentContainer &container, const ComponentType &obj)
+remove(ComponentContainer &container, const ComponentType *obj)
 {
 	typename ComponentContainer::iterator it = container.begin();
 	for (; it!=container.end(); ++it) {
-		if (*(*it) == obj) {
+		if ( *it == obj) {
 			container.erase(it);		
 			break;	
 		}	
