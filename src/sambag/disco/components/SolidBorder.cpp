@@ -16,6 +16,8 @@ SolidBorder::SolidBorder() {
 	style.fillColor(Style::NONE_COLOR);
 	style.strokeColor(ColorRGBA(0));
 	style.strokeWidth(2.);
+    Font f;
+    style.font(f);
 }
 //-----------------------------------------------------------------------------
 Insets SolidBorder::getBorderInsets(AComponentPtr c) {
