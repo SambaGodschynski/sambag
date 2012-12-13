@@ -209,6 +209,11 @@ public:
 	virtual void requestEditorResize(int width, int height) {
 		AudioEffectX::sizeWindow(width, height);
 	}
+	//-------------------------------------------------------------------------
+	virtual IEditor * getEditor() const {
+		IEditor * res = dynamic_cast<IEditor*>(editor);
+		return res;
+	}
 };
 //#############################################################################
 //	Impl.:

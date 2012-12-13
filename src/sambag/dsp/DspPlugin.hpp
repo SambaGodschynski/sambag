@@ -11,11 +11,12 @@
 #include <sstream>
 #include "HostTimeInfo.hpp"
 #include "IMidiEvents.hpp"
+#include "IEditor.hpp"
 namespace sambag { namespace dsp { 
 //=============================================================================
 /** 
  * @classe IHost
- * PluginProcessor -> Wrapper calls.
+ * PluginProcessor -> Wrapper communication.
  */
 struct IHost {
 //=============================================================================
@@ -23,6 +24,10 @@ struct IHost {
 	virtual void parameterChanged(int index) = 0;
 	virtual HostTimeInfo * getHostTimeInfo (int filter) = 0;
 	virtual void requestEditorResize(int witdh, int height) = 0;
+	/**
+	 * @return editor. Is NULL if no editor which extends IEditor is used.
+	 */
+	virtual IEditor * getEditor() const = 0;
 };	
 //=============================================================================
 class PluginProcessorBase {

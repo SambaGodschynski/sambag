@@ -77,6 +77,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/DefaultMenuLayout.cpp
 	sambag/disco/components/ui/UIManager.cpp
 	sambag/disco/components/ui/basic/BasicArrowButton.cpp
+	sambag/disco/components/ui/basic/BasicArrowButtonUI.cpp
 	sambag/disco/components/ui/basic/BasicCheckBoxUI.cpp
 	sambag/disco/components/ui/basic/BasicColumnViewUI.cpp
 	sambag/disco/components/ui/basic/BasicKnobUI.cpp
@@ -155,18 +156,12 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/components/tests/TestPopupMenu.cpp
 	sambag/disco/components/tests/TestRootPane.cpp
 	sambag/disco/components/tests/TestUIManager.cpp
-<<<<<<< HEAD
-	sambag/disco/components/tests/TestAComponent.cpp
-	sambag/disco/tests/TestCairoDrawContext.cpp
-	sambag/disco/tests/TestSceneGraph.cpp
-	sambag/disco/tests/TestGenFlowLayout.cpp
-=======
 	sambag/disco/components/tests/TestWindow.cpp
->>>>>>> f4787f1092b9a71e9ec48c87b0de743cad75626f
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
 	sambag/disco/tests/TestFileResourceManager.cpp
+	sambag/disco/tests/TestGenFlowLayout.cpp
 	sambag/disco/tests/TestGeometrics.cpp
 	sambag/disco/tests/TestGeometrySerialization.cpp
 	sambag/disco/tests/TestPattern.cpp
