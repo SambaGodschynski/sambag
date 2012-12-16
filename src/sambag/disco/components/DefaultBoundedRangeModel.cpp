@@ -14,15 +14,15 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 DefaultBoundedRangeModel::DefaultBoundedRangeModel(const Coordinate &value,
-		const Coordinate &extent, const Coordinate &min,
-		const Coordinate &max)
+		const Coordinate &extent, const Coordinate &minValue,
+		const Coordinate &maxValue)
 {
-	if ((max >= min) && (value >= min) && ((value + extent) >= value)
-			&& ((value + extent) <= max)) {
+	if ((maxValue >= minValue) && (value >= minValue) && ((value + extent) >= value)
+			&& ((value + extent) <= maxValue)) {
 		this->value = value;
 		this->extent = extent;
-		this->min = min;
-		this->max = max;
+		this->minValue = minValue;
+		this->maxValue = maxValue;
 	} else {
 		using namespace sambag::com::exceptions;
 		SAMBAG_THROW(IllegalArgumentException, "invalid range properties");
@@ -34,11 +34,11 @@ const Coordinate & DefaultBoundedRangeModel::getExtent() const {
 }
 //-----------------------------------------------------------------------------
 const Coordinate & DefaultBoundedRangeModel::getMaximum() const {
-	return max;
+	return maxValue;
 }
 //-----------------------------------------------------------------------------
 const Coordinate & DefaultBoundedRangeModel::getMinimum() const {
-	return min;
+	return minValue;
 }
 //-----------------------------------------------------------------------------
 const Coordinate & DefaultBoundedRangeModel::getValue() const {
@@ -51,21 +51,21 @@ bool DefaultBoundedRangeModel::getValueIsAdjusting() const {
 //-----------------------------------------------------------------------------
 void DefaultBoundedRangeModel::setExtent(const Coordinate & n) {
 	Coordinate newExtent = std::max((Coordinate)0, n);
-	if (value + newExtent > max) {
-		newExtent = max - value;
+	if (value + newExtent > maxValue) {
+		newExtent = maxValue - value;
 	}
-	setRangeProperties(value, newExtent, min, max, isAdjusting);
+	setRangeProperties(value, newExtent, minValue, maxValue, isAdjusting);
 }
 //-----------------------------------------------------------------------------
 void DefaultBoundedRangeModel::setMaximum(const Coordinate & n) {
-	Coordinate newMin = std::min(n, min);
+	Coordinate newMin = std::min(n, minValue);
 	Coordinate newExtent = std::min(n - newMin, (Number)extent);
 	Coordinate newValue = std::min(n - newExtent, (Number)value);
 	setRangeProperties(newValue, newExtent, newMin, n, isAdjusting);
 }
 //-----------------------------------------------------------------------------
 void DefaultBoundedRangeModel::setMinimum(const Coordinate & n) {
-	Coordinate newMax = std::max(n, max);
+	Coordinate newMax = std::max(n, maxValue);
 	Coordinate newValue = std::max(n, value);
 	Coordinate newExtent = std::min(newMax - newValue, (Number)extent);
 	setRangeProperties(newValue, newExtent, n, newMax, isAdjusting);
@@ -96,13 +96,13 @@ void DefaultBoundedRangeModel::setRangeProperties(
 	}
 
 	bool isChange = (newValue != value) || (newExtent != extent) || (newMin
-			!= min) || (newMax != max) || (adjusting != isAdjusting);
+			!= minValue) || (newMax != maxValue) || (adjusting != isAdjusting);
 
 	if (isChange) {
 		value = newValue;
 		extent = newExtent;
-		min = newMin;
-		max = newMax;
+		minValue = newMin;
+		maxValue = newMax;
 		isAdjusting = adjusting;
 		fireStateChanged();
 	}
@@ -111,15 +111,15 @@ void DefaultBoundedRangeModel::setRangeProperties(
 void DefaultBoundedRangeModel::setValue(const Coordinate & n) {
 	Coordinate nv = std::min((Number)n, (Number)INT_MAX - extent);
 
-	Coordinate newValue = std::max(nv, min);
-	if (newValue + extent > max) {
-		newValue = max - extent;
+	Coordinate newValue = std::max(nv, minValue);
+	if (newValue + extent > maxValue) {
+		newValue = maxValue - extent;
 	}
-	setRangeProperties(newValue, extent, min, max, isAdjusting);
+	setRangeProperties(newValue, extent, minValue, maxValue, isAdjusting);
 }
 //-----------------------------------------------------------------------------
 void DefaultBoundedRangeModel::setValueIsAdjusting(bool b) {
-	setRangeProperties(value, extent, min, max, b);
+	setRangeProperties(value, extent, minValue, maxValue, b);
 }
 //-----------------------------------------------------------------------------
 std::string DefaultBoundedRangeModel::toString() const {
@@ -128,8 +128,8 @@ std::string DefaultBoundedRangeModel::toString() const {
 	ss << "DefaultBoundedRangeModel ["
 		<< "value=" << getValue() << ", "
 		<< "extent=" << getExtent() << ", "
-		<< "min=" << getMinimum() << ", "
-		<< "max=" << getMaximum() << ", "
+		<< "minValue=" << getMinimum() << ", "
+		<< "maxValue=" << getMaximum() << ", "
 		<< "adj=" << getValueIsAdjusting() << "]";
 	return ss.str();
 }

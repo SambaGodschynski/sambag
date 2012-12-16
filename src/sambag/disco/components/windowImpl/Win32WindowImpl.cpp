@@ -149,7 +149,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	wndClassHolder = WndClassManager::getWndClassHolder(STR_NESTEDWNDCLASS, hI);
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
 	// create window
-	DWORD styleEx = 0; //WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD styleEx = 0;
 	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
 	{
 		styleEx |= WS_EX_TOPMOST;
@@ -184,7 +184,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = getHInstance();
-	DWORD styleEx = WS_EX_TRANSPARENT | WS_EX_COMPOSITED;
+	DWORD styleEx = 0;
 	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
 	{
 		styleEx |= WS_EX_TOPMOST;

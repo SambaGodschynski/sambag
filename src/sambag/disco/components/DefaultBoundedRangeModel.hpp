@@ -42,16 +42,16 @@ protected:
 private:
 	Coordinate value;
 	Coordinate extent;
-	Coordinate min;
-	Coordinate max;
+	Coordinate minValue;
+	Coordinate maxValue;
 	sambag::com::ArithmeticWrapper<bool> isAdjusting;
 public:
 	//-------------------------------------------------------------------------
-	DefaultBoundedRangeModel() : max(100.) {}
+	DefaultBoundedRangeModel() : maxValue(100.) {}
 	//-------------------------------------------------------------------------
 	DefaultBoundedRangeModel(const Coordinate &value,
-			const Coordinate &extent, const Coordinate &min,
-			const Coordinate &max);
+			const Coordinate &extent, const Coordinate &minValue,
+			const Coordinate &maxValue);
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the model's extent.

@@ -1,0 +1,35 @@
+# $Id$
+# This module defines:
+# SAMBAG_LIBRARY_DIRS
+# SAMBAG_INCLUDE_DIRS
+
+FIND_PATH(SAMBAG_INCLUDE_DIRS sambag/disco/components/Forward.hpp
+	$ENV{CLIBS}/sambag/src
+)
+
+IF(WIN32)
+	SET(LIBSAMBAG "sambag.lib")
+ELSE(WIN32)
+	SET(LIBSAMBAG "libsambag.a")
+ENDIF(WIN32)
+
+FIND_PATH(SAMBAG_LIBRARY_DIRS ${LIBSAMBAG}
+	$ENV{CLIBS}/sambag/src
+	$ENV{CLIBS}/sambag/src/Debug/
+	$ENV{CLIBS}/sambag/lib
+)
+
+SET(SAMBAG_FOUND "NO")
+
+
+IF(SAMBAG_LIBRARY_DIRS AND SAMBAG_INCLUDE_DIRS)
+	SET(SAMBAG_FOUND "YES")
+	message(STATUS "Detecting SAMBAG: SAMBAG found.")
+else(SAMBAG_LIBRARY_DIRS AND SAMBAG_INCLUDE_DIRS)
+	if(SAMBAGX_FIND_REQUIRED)
+      		message(SEND_ERROR "Unable to find the requested SAMBAG libraries.")
+	endif(SAMBAGX_FIND_REQUIRED)
+ENDIF(SAMBAG_LIBRARY_DIRS AND SAMBAG_INCLUDE_DIRS)
+
+
+

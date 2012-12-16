@@ -6,6 +6,7 @@ project (sambag)
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
+add_definitions(-DSAMBAG_USE_LOG)
 set(CMAKE_CXX_FLAGS_RELEASE "-DCAIRO_WIN32_STATIC_BUILD")
 
 #to avoid name conflicts with existing FindSomeLib.cmake scripts

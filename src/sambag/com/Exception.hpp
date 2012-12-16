@@ -59,8 +59,7 @@ public:
 	 */
 	Exception(const std::string &what = "unknown reason",
 			  const std::string &where = "unknown location",
-			  const std::string &line = "unknown line number")
-	: line(line), where(where), _what(what) {}
+			  const std::string &line = "unknown line number");
 	//-------------------------------------------------------------------------
 	virtual const char* what() const throw();
 	//-------------------------------------------------------------------------
