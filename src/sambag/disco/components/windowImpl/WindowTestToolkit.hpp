@@ -57,6 +57,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void stopTimer( Timer::Ptr tm );
 	//-------------------------------------------------------------------------
+	/**
+	 * inits toolkit.
+	 * call directly only when no startMainLoop will or was be called.
+	 * Eg. when main app is used as nested window.
+	 */
+	virtual void initToolkit() {}
+	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new WindowTestToolkit);
 	}
@@ -75,7 +82,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 	enum {Res=100};
 	int waited = 0;
 	int sec = 1;
-	T::startUpTimer(boost::this_thread::get_id());
+	T::startUpTimer();
 	while (true) {
 		boost::this_thread::sleep(boost::posix_time::millisec(Res));
 		waited+=Res;

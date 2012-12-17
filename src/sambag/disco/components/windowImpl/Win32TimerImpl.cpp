@@ -12,6 +12,9 @@
 #include <boost/bimap/unordered_set_of.hpp>
 #include <windows.h>
 #include <sambag/com/Common.hpp>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
+#include <stack>
+#include <boost/thread.hpp>
 
 namespace sambag { namespace disco {  namespace components {
 
@@ -20,6 +23,20 @@ namespace {
 typedef boost::bimap< boost::bimaps::unordered_set_of<UINT_PTR>,
 boost::bimaps::unordered_set_of<Timer::Ptr> > Timers;
 Timers timers;
+///////////////////////////////////////////////////////////////////////////////
+typedef boost::function<void()> Proc;
+typedef std::stack<Proc> Procs;
+boost::mutex procMutex;
+Procs procs;
+UINT_PTR masterTimerId = 0;
+VOID CALLBACK masterTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) 
+{
+	while (!procs.empty()) {
+		boost::lock_guard<boost::mutex> lock(procMutex);
+		procs.top()(); // call proc
+		procs.pop();
+	}
+}
 //-----------------------------------------------------------------------------
 /**
  * Windows timer callback.
@@ -51,12 +68,6 @@ VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 //  Class Win32TimerImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
-boost::mutex Win32TimerImpl::procMutex;
-//-----------------------------------------------------------------------------
-Win32TimerImpl::Procs Win32TimerImpl::procs;
-//-----------------------------------------------------------------------------
-boost::thread::id Win32TimerImpl::mainLoopId;
-//-----------------------------------------------------------------------------
 void Win32TimerImpl::closeAllTimer() {
 	Timers::right_map::iterator it = timers.right.begin();
 	while(it != timers.right.end()) {
@@ -73,6 +84,14 @@ void Win32TimerImpl::closeAllTimer() {
 void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 	tm->__setRunningByToolkit_(true);
 	UINT_PTR timerId = SetTimer(NULL, NULL, tm->getInitialDelay(), timerProc);
+	if (timerId==NULL) {
+		std::stringstream ss;
+		ss<<"could'nt create timer (GetLastError="<<GetLastError()<<")";
+		SAMBAG_THROW(
+			sambag::com::exceptions::IllegalStateException,
+			ss.str().c_str()
+		);
+	}
 	timers.insert(
 		Timers::value_type(timerId, tm)
 	);
@@ -95,8 +114,23 @@ void Win32TimerImpl::startTimer(Timer::Ptr tm) {
 	);
 }
 //-----------------------------------------------------------------------------
-void Win32TimerImpl::startUpTimer(boost::thread::id id) {
-	mainLoopId = id;
+void Win32TimerImpl::startUpTimer() {
+	if (masterTimerId!=0) {
+		return;
+	}
+	masterTimerId = SetTimer(NULL, NULL, 10, masterTimer);
+	if (masterTimerId==NULL) {
+		std::stringstream ss;
+		ss<<"could'nt create timer (GetLastError="<<GetLastError()<<")";
+		SAMBAG_THROW(
+			sambag::com::exceptions::IllegalStateException,
+			ss.str().c_str()
+		);
+	}
+}
+//-----------------------------------------------------------------------------
+void Win32TimerImpl::tearDownTimer() {
+	KillTimer(NULL, masterTimerId);
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
@@ -104,14 +138,7 @@ void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
 	procs.push(
 		boost::bind(&Win32TimerImpl::stopTimerImpl, this, tm)
 	);
-}
-//-----------------------------------------------------------------------------
-void Win32TimerImpl::mainLoopProc() {
-	boost::lock_guard<boost::mutex> lock(procMutex);
-	while (!procs.empty()) {
-		procs.top()(); // call proc
-		procs.pop();
-	}
+	masterTimerId = 0;
 }
 }}} // namespace(s)
 

@@ -11,6 +11,7 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>
 #include <sambag/com/ArbitraryType.hpp>
+#include <math.h>
 
 #include <Windowsx.h> // GET_X_LPARAM
 
@@ -149,7 +150,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	wndClassHolder = WndClassManager::getWndClassHolder(STR_NESTEDWNDCLASS, hI);
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
 	// create window
-	DWORD styleEx = 0;
+	DWORD styleEx = 0; //WS_EX_COMPOSITED;
 	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
 	{
 		styleEx |= WS_EX_TOPMOST;
@@ -184,7 +185,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = getHInstance();
-	DWORD styleEx = 0;
+	DWORD styleEx = WS_EX_COMPOSITED;
 	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
 	{
 		styleEx |= WS_EX_TOPMOST;
@@ -360,10 +361,11 @@ void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
 		return;
 	}
 	RECT wRect;
-	SetRect ( &wRect, (int)area.x0().x(), 
-		(int)area.x0().y(), 
-		(int)area.width(), 
-		(int)area.height() 
+	SetRect ( &wRect, 
+		(int)floor( (double)area.x0().x() ), 
+		(int)floor( (double)area.x0().y() ), 
+		(int)ceil( (double)area.width() ), 
+		(int)ceil( (double)area.height() ) 
 	);
 	InvalidateRect(win, &wRect, ERASE_BG);
 }
@@ -416,8 +418,9 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 	case WM_PAINT : {
 		if (!win)
 			break;
-		if (win->getFlag(WindowFlags::WND_RAW))
+		if (win->getFlag(WindowFlags::WND_RAW)) {
 			break;
+		}
 		hdc = BeginPaint(hWnd, &ps);
 		win->update();
 		EndPaint(hWnd, &ps);

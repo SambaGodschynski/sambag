@@ -52,6 +52,13 @@ protected:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * inits toolkit.
+	 * call directly only when no startMainLoop will or was be called.
+	 * Eg. when main app is used as nested window.
+	 */
+	virtual void initToolkit();
+	//-------------------------------------------------------------------------
 	virtual WindowPtr createNestedWindow( ArbitraryType::Ptr osParent, 
 		const Rectangle &area );
 	//-------------------------------------------------------------------------

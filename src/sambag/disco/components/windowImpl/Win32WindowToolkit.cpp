@@ -28,6 +28,7 @@ Win32WindowToolkit::~Win32WindowToolkit() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startMainLoop() {
+	initToolkit();
 	mainLoop();
 }
 //-----------------------------------------------------------------------------
@@ -54,16 +55,17 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 	return &FactoryHolder::Instance();
 }
 //-----------------------------------------------------------------------------
+void Win32WindowToolkit::initToolkit() {
+	TimerPolicy::startUpTimer();
+}
+//-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
-	TimerPolicy::startUpTimer(boost::this_thread::get_id());
 	mainLoopRunning = true;
-	while (WM_QUIT != msg.message) {
-		while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE) > 0) {
-			TranslateMessage (&msg);
-			DispatchMessage (&msg);
-		}
-		TimerPolicy::mainLoopProc();
+	//TimerPolicy::startUpTimer(); //moved to initToolkit()
+	while( GetMessage(&msg, NULL, 0, 0) > 0 ) {
+		TranslateMessage (&msg);
+		DispatchMessage (&msg);
 	}
 	mainLoopRunning = false;
 	TimerPolicy::tearDownTimer();

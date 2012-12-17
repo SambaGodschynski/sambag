@@ -11,7 +11,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <sambag/com/Thread.hpp>
 #include <boost/thread.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/bimap.hpp>
@@ -44,8 +43,6 @@ private:
 	static ToInvoke toInvoke;
 public:
 	//-------------------------------------------------------------------------
-	static void mainLoopProc() {}
-	//-------------------------------------------------------------------------
 	static int getMaxNumThreads();
 	//-------------------------------------------------------------------------
 	static void closeAllTimer();
@@ -58,7 +55,7 @@ public:
 	 * Starts the timer main thread, which is needed to bring the boost
 	 * timer to run.
 	 */
-	static void startUpTimer(boost::thread::id mainLoopId);
+	static void startUpTimer();
 	//-------------------------------------------------------------------------
 	/**
 	 * Joins the main thread.
