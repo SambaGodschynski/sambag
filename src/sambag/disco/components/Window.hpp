@@ -48,6 +48,8 @@ public:
 	typedef boost::shared_ptr<Window> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<Window> WPtr;
+	//-------------------------------------------------------------------------
+	enum CloseOperation {DISPOSE_ON_CLOSE, EXIT_ON_CLOSE};
 protected:
 	//-------------------------------------------------------------------------
 	WindowWPtr parentWindow;
@@ -72,6 +74,10 @@ private:
 	//-------------------------------------------------------------------------
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
 public:
+	//-------------------------------------------------------------------------
+	void setDefaultCloseOperation(CloseOperation op);
+	//-------------------------------------------------------------------------
+	CloseOperation getDefaultCloseOperation() const;
 	//-------------------------------------------------------------------------
 	 virtual ~Window();
 	//-------------------------------------------------------------------------

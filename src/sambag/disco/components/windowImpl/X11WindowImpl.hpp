@@ -28,6 +28,7 @@ class X11WindowImpl; typedef boost::shared_ptr<X11WindowImpl> X11WindowImplPtr;
 //=============================================================================
 /** 
   * @class X11Window.
+  * TODO: impl. WindowFlags::EXIT_ON_CLOSE
   */
 class X11WindowImpl : public WindowFlags {
 //=============================================================================

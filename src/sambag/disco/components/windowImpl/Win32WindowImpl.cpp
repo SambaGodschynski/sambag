@@ -404,6 +404,10 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		if (!win)
 			break;
 		win->destroyWindow();
+		if (win->getFlag(WindowFlags::EXIT_ON_CLOSE)) 
+		{
+			PostQuitMessage(0);
+		}
 		break;
 	case WM_CLOSE:
 		if (win)

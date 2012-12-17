@@ -216,4 +216,19 @@ Window::addTrackedWindowMouseEventListener
 	}
 	return sender->addTrackedEventListener(f, ptr);
 }
+//-----------------------------------------------------------------------------
+void Window::setDefaultCloseOperation(CloseOperation op) {
+	if (op==EXIT_ON_CLOSE) {
+		windowImpl->setFlag(WindowFlags::EXIT_ON_CLOSE, true);
+	} else {
+		windowImpl->setFlag(WindowFlags::EXIT_ON_CLOSE, false);
+	}
+}
+//-----------------------------------------------------------------------------
+Window::CloseOperation Window::getDefaultCloseOperation() const {
+	if (windowImpl->getFlag(WindowFlags::EXIT_ON_CLOSE)) {
+		return EXIT_ON_CLOSE;
+	}
+	return DISPOSE_ON_CLOSE;
+}
 }}} // namespace(s)
