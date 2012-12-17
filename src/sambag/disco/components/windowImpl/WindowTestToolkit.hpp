@@ -14,6 +14,7 @@
 #include "BoostTimerImpl.hpp"
 #include "TestWindowImpl.hpp"
 #include <iostream>
+#include <boost/thread.hpp>
 namespace sambag { namespace disco { namespace components {
 //============================================================================
 /** 
@@ -74,7 +75,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 	enum {Res=100};
 	int waited = 0;
 	int sec = 1;
-	T::startUpTimer();
+	T::startUpTimer(boost::this_thread::get_id());
 	while (true) {
 		boost::this_thread::sleep(boost::posix_time::millisec(Res));
 		waited+=Res;

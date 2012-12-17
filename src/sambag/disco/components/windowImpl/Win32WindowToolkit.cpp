@@ -12,6 +12,7 @@
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/Timer.hpp>
 #include <windows.h>
+#include <boost/thread.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -55,13 +56,15 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
-	TimerPolicy::startUpTimer();
+	TimerPolicy::startUpTimer(boost::this_thread::get_id());
 	mainLoopRunning = true;
-	while( GetMessage( &msg, NULL, 0, 0 ) > 0) 
-	{
-		TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
+	while (WM_QUIT != msg.message) {
+		while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE) > 0) {
+			TranslateMessage (&msg);
+			DispatchMessage (&msg);
+		}
+		TimerPolicy::mainLoopProc();
+	}
 	mainLoopRunning = false;
 	TimerPolicy::tearDownTimer();
 }

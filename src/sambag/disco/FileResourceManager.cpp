@@ -10,6 +10,8 @@
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/svg/SvgBuilder.hpp>
+#include <fstream>
+
 namespace sambag { namespace disco {
 namespace {
 	typedef Loki::SingletonHolder<FileResourceManager> FactoryHolder;
@@ -56,6 +58,25 @@ sd::ISurface::Ptr FileResourceManager::loadSvg(const std::string &path) {
 	SAMBAG_ASSERT(cn);
 	cn->drawSurface(surf);
 	return res;
+}
+//-----------------------------------------------------------------------------
+std::string FileResourceManager::getString(const Url &url) {
+	assumeHomeDir();
+	boost::filesystem::path path = getHomeDirectory() + "/" + url;
+	if ( !boost::filesystem::exists(path) ) {
+		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
+			"file" + path.string() + " dosent exists.");
+		return "";
+	}
+	std::fstream f(path.string().c_str(), std::fstream::in);
+	std::string res;
+	std::stringstream ss;
+	std::string line;
+	while (std::getline(f, line)) {
+		ss<<line<<std::endl;
+	}
+	f.close();
+	return ss.str();
 }
 //-----------------------------------------------------------------------------
 sd::ISurface::Ptr FileResourceManager::loadImage(const std::string &_path) 

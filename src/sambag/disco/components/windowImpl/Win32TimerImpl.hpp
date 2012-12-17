@@ -9,6 +9,8 @@
 #define SAMBAG_WIN32TIMERIMPL_H
 
 #include <sambag/disco/components/Timer.hpp>
+#include <stack>
+#include <boost/thread.hpp>
 
 namespace sambag { namespace disco {  namespace components {
 
@@ -20,8 +22,22 @@ class Win32TimerImpl {
 //=============================================================================
 public:
 protected:
+	//-------------------------------------------------------------------------
+	void startTimerImpl(Timer::Ptr tm);
+	//-------------------------------------------------------------------------
+	void stopTimerImpl(Timer::Ptr tm);
 private:
-public:
+	//-------------------------------------------------------------------------
+	typedef boost::function<void()> Proc;
+	//-------------------------------------------------------------------------
+	typedef std::stack<Proc> Procs;
+	//-------------------------------------------------------------------------
+	static boost::mutex procMutex;
+	//-------------------------------------------------------------------------
+	static Procs procs;
+	//-------------------------------------------------------------------------
+	static boost::thread::id mainLoopId;
+public :
 	//-------------------------------------------------------------------------
 	static void closeAllTimer();
 	//-------------------------------------------------------------------------
@@ -30,10 +46,12 @@ public:
 	void stopTimer(Timer::Ptr tm);
 	///////////////////////////////////////////////////////////////////////////
 	//-------------------------------------------------------------------------
+	static void startUpTimer(boost::thread::id mainLoopId);
+	//-------------------------------------------------------------------------
 	/**
-	 * does nothing, only for TimerImpl concept.
+	 * mainloop callback
 	 */
-	static void startUpTimer() {}
+	static void mainLoopProc();
 	//-------------------------------------------------------------------------
 	/**
 	 * does nothing, only for TimerImpl concept.

@@ -44,6 +44,8 @@ private:
 	static ToInvoke toInvoke;
 public:
 	//-------------------------------------------------------------------------
+	static void mainLoopProc() {}
+	//-------------------------------------------------------------------------
 	static int getMaxNumThreads();
 	//-------------------------------------------------------------------------
 	static void closeAllTimer();
@@ -56,7 +58,7 @@ public:
 	 * Starts the timer main thread, which is needed to bring the boost
 	 * timer to run.
 	 */
-	static void startUpTimer();
+	static void startUpTimer(boost::thread::id mainLoopId);
 	//-------------------------------------------------------------------------
 	/**
 	 * Joins the main thread.

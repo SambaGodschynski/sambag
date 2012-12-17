@@ -18,7 +18,7 @@ namespace sd = sambag::disco;
 //=============================================================================
 /** 
   * @class IResourceManager.
-  * Loads an type idependent image by url. For example: 'images.myImage'
+  * Loads an type idependent resources by url. For example: 'images.myImage'
   * Every specific implementation has to define where the data for a related
   * url came from.
   */
@@ -43,6 +43,8 @@ public:
 	 * for the case that a caching mechanism is implemented.
 	 */
 	virtual void updateImage(const Url &url) = 0;
+	//-------------------------------------------------------------------------	
+	virtual std::string getString(const Url &url) = 0;
 }; // IResourceManager
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

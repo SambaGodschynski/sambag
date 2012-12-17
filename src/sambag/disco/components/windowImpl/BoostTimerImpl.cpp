@@ -278,7 +278,7 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 		);
 }
 //-----------------------------------------------------------------------------
-void BoostTimerImpl::startUpTimer() {
+void BoostTimerImpl::startUpTimer(boost::thread::id mainLoopId) {
 	mainThreadRunning = true;
 	mainThread = boost::thread(&mainThreadClbk);
 }
