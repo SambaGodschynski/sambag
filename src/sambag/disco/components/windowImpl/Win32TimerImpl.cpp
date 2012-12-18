@@ -24,6 +24,11 @@ typedef boost::bimap< boost::bimaps::unordered_set_of<UINT_PTR>,
 boost::bimaps::unordered_set_of<Timer::Ptr> > Timers;
 Timers timers;
 ///////////////////////////////////////////////////////////////////////////////
+/*
+	the problem: you can't call SetTimer in another thread than the
+	thread with the mainloop (messagepump). so we need a
+	masterTimer which proc(in main thread) starts the requested timer.
+*/
 typedef boost::function<void()> Proc;
 typedef std::stack<Proc> Procs;
 boost::mutex procMutex;
@@ -131,6 +136,7 @@ void Win32TimerImpl::startUpTimer() {
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::tearDownTimer() {
 	KillTimer(NULL, masterTimerId);
+	masterTimerId = 0;
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
@@ -138,7 +144,6 @@ void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
 	procs.push(
 		boost::bind(&Win32TimerImpl::stopTimerImpl, this, tm)
 	);
-	masterTimerId = 0;
 }
 }}} // namespace(s)
 

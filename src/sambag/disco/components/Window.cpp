@@ -15,6 +15,7 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class Window
 //=============================================================================
+Window::Windows Window::openWindows;
 //-----------------------------------------------------------------------------
 void Window::startMainLoop() {
 	getWindowToolkit()->startMainLoop();
@@ -136,12 +137,18 @@ void Window::open() {
 	if (isVisible())
 		return;
 	windowImpl->open();
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		openWindows.insert(getPtr());
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void Window::close() {
 	if (!isVisible())
 		return;
 	windowImpl->close();
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		openWindows.erase(getPtr());
+	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void Window::invalidateWindow(const Rectangle &area) {

@@ -27,7 +27,7 @@
 
 #define SAMBA_LOG_NOT_YET_IMPL() {								\
 		std::stringstream ss;									\
-		ss<<__FUNCTION__<< " not yet implemented."<<std::endl;	\
+		ss<<__FUNCTION__<< " not yet implemented.";				\
 		sambag::com::log(ss.str());								\
 	}	
 #define SAMBAG_WARN(msg) {										\

@@ -61,11 +61,16 @@ public:
 	virtual void invokeLater(const InvokeFunction &f) = 0;
 	//-------------------------------------------------------------------------
 	/**
+	 * aborts mainloop.
+	 */
+	virtual void quit() = 0;
+	//-------------------------------------------------------------------------
+	/**
 	 * inits toolkit.
 	 * call directly only when no startMainLoop will or was be called.
 	 * Eg. when main app is used as nested window.
 	 */
-	virtual void initToolkit() = 0;
+	virtual void useWithoutMainloop() = 0;
 }; // WindowToolkit
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

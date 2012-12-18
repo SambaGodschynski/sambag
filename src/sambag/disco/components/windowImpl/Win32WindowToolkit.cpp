@@ -26,9 +26,18 @@ Win32WindowToolkit::Win32WindowToolkit() {
 //-----------------------------------------------------------------------------
 Win32WindowToolkit::~Win32WindowToolkit() {
 }
+namespace {
+	void checkWindowCount() {
+		// if no window registred, close program
+		if (Window::getOpenWindows().size() == 0) {
+			sambag::com::log("no window registred, exit mainloop");
+			PostQuitMessage(0);
+		}
+	}
+} // namespace(s)
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startMainLoop() {
-	initToolkit();
+	invokeLater(&checkWindowCount, 1000);
 	mainLoop();
 }
 //-----------------------------------------------------------------------------
@@ -55,20 +64,29 @@ Win32WindowToolkit * Win32WindowToolkit::getToolkit() {
 	return &FactoryHolder::Instance();
 }
 //-----------------------------------------------------------------------------
-void Win32WindowToolkit::initToolkit() {
+void Win32WindowToolkit::useWithoutMainloop() {
 	TimerPolicy::startUpTimer();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::mainLoop() {
 	MSG msg          = {0};
 	mainLoopRunning = true;
-	//TimerPolicy::startUpTimer(); //moved to initToolkit()
-	while( GetMessage(&msg, NULL, 0, 0) > 0 ) {
+	TimerPolicy::startUpTimer();
+	while(GetMessage(&msg, NULL, 0, 0) > 0) {
 		TranslateMessage (&msg);
 		DispatchMessage (&msg);
 	}
 	mainLoopRunning = false;
 	TimerPolicy::tearDownTimer();
+}
+namespace {
+	void quitImpl() {
+		PostQuitMessage(0);
+	}
+} // namespace(s)
+//-----------------------------------------------------------------------------
+void Win32WindowToolkit::quit() {
+	invokeLater(&quitImpl);
 }
 //-----------------------------------------------------------------------------
 namespace {
@@ -82,7 +100,11 @@ namespace {
 } // namespace(s)
 void Win32WindowToolkit::invokeLater(const Win32WindowToolkit::InvokeFunction &f) 
 {
-	Timer::Ptr tm = Timer::create(50);
+	invokeLater(f, 50);
+}
+//----------------------------------------------------------------------------
+void Win32WindowToolkit::invokeLater(const InvokeFunction &f, int ms) {
+	Timer::Ptr tm = Timer::create(ms);
 	tm->setNumRepetitions(0);
 	tm->EventSender<TimerEvent>::addEventListener(
 		boost::bind(&_invokeLater, f)

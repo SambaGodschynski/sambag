@@ -15,6 +15,7 @@
 #include "Forward.hpp"
 #include <sambag/com/events/Events.hpp>
 #include "AContainer.hpp"
+#include <set>
 
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
@@ -50,6 +51,8 @@ public:
 	typedef boost::weak_ptr<Window> WPtr;
 	//-------------------------------------------------------------------------
 	enum CloseOperation {DISPOSE_ON_CLOSE, EXIT_ON_CLOSE};
+	//-------------------------------------------------------------------------
+	typedef std::set<WPtr> Windows;
 protected:
 	//-------------------------------------------------------------------------
 	WindowWPtr parentWindow;
@@ -73,7 +76,13 @@ private:
 	void onParentClose(void *src, const OnCloseEvent &ev);
 	//-------------------------------------------------------------------------
 	void onBoundsChanged(void *src, const OnBoundsChanged &ev);
+	//-------------------------------------------------------------------------
+	static Windows openWindows;
 public:
+	//-------------------------------------------------------------------------
+	static const Windows & getOpenWindows() {
+		return openWindows;
+	}
 	//-------------------------------------------------------------------------
 	void setDefaultCloseOperation(CloseOperation op);
 	//-------------------------------------------------------------------------

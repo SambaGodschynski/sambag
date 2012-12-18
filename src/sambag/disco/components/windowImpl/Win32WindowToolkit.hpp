@@ -57,7 +57,7 @@ public:
 	 * call directly only when no startMainLoop will or was be called.
 	 * Eg. when main app is used as nested window.
 	 */
-	virtual void initToolkit();
+	virtual void useWithoutMainloop();
 	//-------------------------------------------------------------------------
 	virtual WindowPtr createNestedWindow( ArbitraryType::Ptr osParent, 
 		const Rectangle &area );
@@ -67,6 +67,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void invokeLater(const InvokeFunction &f);
+	//-------------------------------------------------------------------------
+	virtual void invokeLater(const InvokeFunction &f, int ms);
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------
@@ -79,6 +81,8 @@ public:
 	virtual void startMainLoop();
 	//-------------------------------------------------------------------------
 	virtual Dimension getScreenSize() const;
+	//-------------------------------------------------------------------------
+	virtual void quit();
 }; // Win32WindowToolkit
 }}} // namespace(s)
 #endif // DISCO_USE_WIN32

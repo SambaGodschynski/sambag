@@ -57,12 +57,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void stopTimer( Timer::Ptr tm );
 	//-------------------------------------------------------------------------
+	virtual void quit() {}
+	//-------------------------------------------------------------------------
 	/**
 	 * inits toolkit.
 	 * call directly only when no startMainLoop will or was be called.
 	 * Eg. when main app is used as nested window.
 	 */
-	virtual void initToolkit() {}
+	virtual void useWithoutMainloop() {}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new WindowTestToolkit);
