@@ -25,11 +25,17 @@
 #include <string>
 #include <sstream>
 
+
+#ifdef SAMBA_WARN_MISSING_IMPL
 #define SAMBA_LOG_NOT_YET_IMPL() {								\
 		std::stringstream ss;									\
 		ss<<__FUNCTION__<< " not yet implemented.";				\
 		sambag::com::log(ss.str());								\
-	}	
+	}
+#else 
+#define SAMBA_LOG_NOT_YET_IMPL()
+#endif
+
 #define SAMBAG_WARN(msg) {										\
 		std::stringstream ss;									\
 		ss<<(msg)<<" in: "<<__FUNCTION__<<std::endl;			\

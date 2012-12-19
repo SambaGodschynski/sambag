@@ -7,13 +7,20 @@ FIND_PATH(SAMBAG_INCLUDE_DIRS sambag/disco/components/Forward.hpp
 	$ENV{CLIBS}/sambag/src
 )
 
-IF(WIN32)
-	SET(LIBSAMBAG "sambag.lib")
-	SET(LIBSAMBAGD "sambag.lib")
-ELSE(WIN32)
+
+IF(APPLE)
 	SET(LIBSAMBAG "libsambag.a")
 	SET(LIBSAMBAGD "libsambag.a")
-ENDIF(WIN32)
+	add_definitions(-DDISCO_USE_X11)
+ELSEIF(UNIX)
+	SET(LIBSAMBAG "libsambag.a")
+	SET(LIBSAMBAGD "libsambag.a")
+	add_definitions(-DDISCO_USE_X11)
+ELSEIF(WIN32)
+	SET(LIBSAMBAG "sambag.lib")
+	SET(LIBSAMBAGD "sambag.lib")
+        add_definitions(-DDISCO_USE_WIN32)
+ENDIF(APPLE)
 
 FIND_PATH(SAMBAG_LIBRARY_DIRS ${LIBSAMBAG}
 	$ENV{CLIBS}/sambag/src
