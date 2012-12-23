@@ -37,7 +37,7 @@ namespace {
 } // namespace(s)
 //-----------------------------------------------------------------------------
 void Win32WindowToolkit::startMainLoop() {
-	invokeLater(&checkWindowCount, 1000);
+	//invokeLater(&checkWindowCount, 1000);
 	mainLoop();
 }
 //-----------------------------------------------------------------------------
