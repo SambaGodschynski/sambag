@@ -67,7 +67,9 @@ public:
 	/**
 	 * aborts mainloop.
 	 */
-	virtual void quit() = 0;
+	virtual void quit();
+	//-------------------------------------------------------------------------
+	virtual void useWithoutMainloop() {}
 	//-------------------------------------------------------------------------
 	/**
 	 * inits toolkit.

@@ -82,7 +82,7 @@ void X11WindowToolkit::mainLoop() {
 	::Display *display = getToolkit()->getGlobals().display;
 	TimerPolicy::startUpTimer();
 	mainLoopRunning = true;
-	while ( X11WindowImpl::getNumInstances() > 0 ) {
+	while ( (X11WindowImpl::getNumInstances() > 0) && mainLoopRunning ) {
 		// read in and process all pending events for the main window
 		XEvent event;
 		while (X11WindowImpl::getNumInstances() > 0 && XPending(display)) {
@@ -98,6 +98,10 @@ void X11WindowToolkit::mainLoop() {
 	XCloseDisplay(display);
 	display = NULL;
 
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::quit() {
+	mainLoopRunning = false;
 }
 //-----------------------------------------------------------------------------
 void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f)

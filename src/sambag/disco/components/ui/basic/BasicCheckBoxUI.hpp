@@ -96,8 +96,8 @@ void BasicCheckBoxUI<ButtonModell>::installDefaults(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicCheckBoxUI<ButtonModell>::installListener(AComponentPtr c) {
-	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+	typename Super::AbstractButton::Ptr b =
+			boost::shared_dynamic_cast<typename Super::AbstractButton>(c);
 	BOOST_ASSERT(b);
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
 			boost::bind(&MouseListener::onMouseEvent, &listener, _1, _2),
@@ -113,10 +113,11 @@ void BasicCheckBoxUI<ButtonModell>::installListener(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicCheckBoxUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
+	typename Super::AbstractButton::Ptr b = 
+		boost::shared_dynamic_cast<typename Super::AbstractButton>(c);
 	if (!b)
 		return;
-	sNormal.intoContext(cn);
+	Super::sNormal.intoContext(cn);
 	// draw box
 	drawBox(cn, 
 		Rectangle(5., c->getHeight() / 2.0 - box.height() / 2.0, box.width(), box.height()),
@@ -135,8 +136,8 @@ void BasicCheckBoxUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 Dimension BasicCheckBoxUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
-	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+	typename Super::AbstractButton::Ptr b =
+			boost::shared_dynamic_cast<typename Super::AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

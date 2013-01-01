@@ -55,8 +55,8 @@ void BasicArrowButtonUI<BM>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	BasicArrowButton::Ptr b = boost::shared_dynamic_cast<BasicArrowButton>(c);
 	if (!b)
 		return;
-	Rectangle bounds = getBtnRect(cn, c);
-	prepareContext(cn, b);
+	Rectangle bounds = Super::getBtnRect(cn, c);
+	Super::prepareContext(cn, b);
 	cn->setStrokeWidth(1.);
 	cn->rect(bounds);
 	cn->fill();
