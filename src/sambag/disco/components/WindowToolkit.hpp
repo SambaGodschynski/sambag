@@ -30,6 +30,11 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual AWindowImplPtr 
 	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * holds window shared ptr until window is closed.
+	 */
+	virtual void holdWindowPtr(WindowPtr win);
 public:
 	//-------------------------------------------------------------------------
 	/**

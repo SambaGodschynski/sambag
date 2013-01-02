@@ -93,6 +93,14 @@ void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
 	UIManager &m = getUIManager();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<install twice guard
+	bool alreadyInstalled = false;
+	m.getProperty("BasicLookAndFeel.installed", alreadyInstalled);
+	if (alreadyInstalled) {
+		return;
+	}
+	alreadyInstalled = true;
+	m.putProperty("BasicLookAndFeel.installed", alreadyInstalled);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
 	m.putProperty("global.background", HtmlColors::getColor("red"));
 	m.putProperty("global.foreground", HtmlColors::getColor("white"));

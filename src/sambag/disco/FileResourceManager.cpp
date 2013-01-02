@@ -85,7 +85,7 @@ sd::ISurface::Ptr FileResourceManager::loadImage(const std::string &_path)
 	boost::filesystem::path path = getHomeDirectory() + "/" + _path;
 	if ( !boost::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
-			"file" + path.string() + " dosent exists.");
+			"file: " + path.string() + " dosent exists.");
 		return sd::ISurface::Ptr();
 	}
 	sd::ISurface::Ptr res;

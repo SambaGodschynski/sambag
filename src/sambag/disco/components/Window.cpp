@@ -137,6 +137,7 @@ void Window::open() {
 	if (isVisible())
 		return;
 	windowImpl->open();
+	getWindowToolkit()->holdWindowPtr(getPtr());
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		openWindows.insert(getPtr());
 	SAMBAG_END_SYNCHRONIZED
