@@ -527,7 +527,7 @@ int BasicListUI<LT>::convertLocationToRowInColumn(const Coordinate &y,
 {
 	int x = 0;
 	if (layoutOrientation != ListConstants::VERTICAL) {
-		x = column * cellWidth;
+		x = (int)(column * cellWidth);
 	}
 	return convertLocationToRow(x, y, true);
 }
@@ -797,7 +797,7 @@ int BasicListUI<LT>::convertLocationToRow(const Coordinate &x,
 	} else if (size > (int)cellHeights.size()) {
 		return -1;
 	} else {
-		int y = insets.top();
+		int y = (int)insets.top();
 		int row = 0;
 
 		if (closest && y0 < y) {
