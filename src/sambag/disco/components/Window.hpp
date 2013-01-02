@@ -214,6 +214,14 @@ public:
 			return false;
 		return windowImpl->isVisible();
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @return true if window is open.
+	 * @see isVisible().
+	 */
+	virtual bool isOpen() const {
+		return isVisible();
+	}
 }; // Window
 }}} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */
