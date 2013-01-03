@@ -192,6 +192,13 @@ protected:
 	int getListIndex(const Node &node) const;
 	//-------------------------------------------------------------------------
 	Path oldPath;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return list index. can be negative.
+	 */
+	int selectionPathIndexToListIndex(size_t index) {
+		return index-1;
+	}
 private:
 	//-------------------------------------------------------------------------
 	void adjustListCount();
@@ -367,7 +374,7 @@ template <class TM,
 void AColumnBrowser<TM, CR, LM, LSM>::updateLists()
 {
 	adjustListCount();
-	if (oldPath.size() > selectionPath.size()) {
+	if (oldPath.size() > selectionPath.size()) { // remove unused list content
 		for (int i = oldPath.size(); i>(int)selectionPath.size(); --i) {
 			ListTypePtr list = columnView->getList(i-1);
 			if (!list)
@@ -418,12 +425,20 @@ void AColumnBrowser<TM, CR, LM, LSM>::onSelectionChanged(void *src,
 	if  (!e)
 		return;
 	int currSelPathIndex = listIndex+1; // root is on index 0
-	if ( currSelPathIndex >= (int)selectionPath.size()) {
-		// currSelPathIndex can always be one greater
+	// update selection path
+	if ( currSelPathIndex >= (int)selectionPath.size()) { // grow up slection path
+		// consider: currSelPathIndex can always be one greater
 		selectionPath.push_back(e->node);
-	} else {
+	} else { // shrink selection path
 		while (currSelPathIndex < (int)selectionPath.size()-1) {
 			typename Path::iterator it = selectionPath.end() - 1;
+			ListTypePtr list = 
+				columnView->getList(
+					selectionPathIndexToListIndex(selectionPath.size()-1)
+				);
+			if (list) {
+				list->clearSelection();
+			}
 			selectionPath.erase(it);
 		}
 		selectionPath[currSelPathIndex] = e->node;

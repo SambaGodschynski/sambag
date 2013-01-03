@@ -79,8 +79,8 @@ private:
 		Number alpha = (value - bCoef) / aCoef;
 		Number inset = 6.;
 		Point2D p;
-		p.x(radius + cosf (alpha) * (radius - inset) + 0.5f);
-		p.y(radius - sinf (alpha) * (radius - inset) + 0.5f);
+		p.x(radius + cosf (alpha) * (radius - inset) + 0.5);
+		p.y(radius - sinf (alpha) * (radius - inset) + 0.5);
 		return p;
 	}
 	//-------------------------------------------------------------------------
