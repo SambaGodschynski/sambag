@@ -723,7 +723,8 @@ std::string AContainer::parameterString() const {
 //-----------------------------------------------------------------------------
 void AContainer::installLookAndFeel (ui::ALookAndFeelPtr laf) {
 	AComponent::installLookAndFeel(laf);
-	BOOST_FOREACH(AComponent::Ptr c, components) {
+	Components tmp = components; // issue #255: adding components while installing ui
+	BOOST_FOREACH(AComponent::Ptr c, tmp) {
 		c->installLookAndFeel(laf);
 	}
 }

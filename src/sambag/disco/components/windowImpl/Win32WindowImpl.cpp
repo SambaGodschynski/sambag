@@ -430,7 +430,9 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 	case WM_MOVE : {
 		RECT r = {0};
 		GetClientRect(hWnd, &r);
-		Rectangle nr(Point2D(r.left, r.top), Point2D(r.right, r.bottom));
+		POINT pos = {0};
+		ClientToScreen(hWnd, &pos);
+		Rectangle nr(Point2D(pos.x, pos.y), r.right, r.bottom);
 		if (win)
 			win->updateWindowToBounds(nr);
 		break;
@@ -438,7 +440,9 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 	case WM_SIZE : {
 		RECT r = {0};
 		GetClientRect(hWnd, &r);
-		Rectangle nr(Point2D(r.left, r.top), Point2D(r.right, r.bottom));
+		POINT pos = {0};
+		ClientToScreen(hWnd, &pos);
+		Rectangle nr(Point2D(pos.x, pos.y), r.right, r.bottom);
 		if (win)
 			win->updateWindowToBounds(nr);
 		break;

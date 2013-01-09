@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="unit_tests"
-	ProjectGUID="{52DF9794-0650-4338-AE86-1C53081FE03E}"
+	ProjectGUID="{267A325D-C9A8-40CE-9C24-D9715E37E938}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
 				BasicRuntimeChecks="3"
 				CompileAs="2"
 				DebugInformationFormat="3"
@@ -31,20 +31,20 @@
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				AssemblerListingLocation="Debug"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\workspace\clibs\sambag\src\Debug/unit_tests.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug/unit_tests.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"/>
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -64,15 +64,15 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Debug\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-gd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-gd-1_49.lib C:\workspace\clibs\cppunit\lib\cppunitd.lib C:\workspace\clibs\cairo\lib\cairo.lib C:\workspace\clibs\tinyxml\lib\ticppd.lib C:\workspace\clibs\lua\win32\Release\lua52.lib "
-				OutputFile="C:\workspace\clibs\sambag\src\Debug\unit_tests.exe"
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  Debug\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-gd-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunitd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticppd.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; "
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug\unit_tests.exe"
 				Version="0.0"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\workspace\clibs\sambag\src\Debug/unit_tests.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug/unit_tests.pdb"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
-				ImportLibrary="C:\workspace\clibs\sambag\src\Debug\unit_tests.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug\unit_tests.lib"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -85,25 +85,25 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
 				CompileAs="2"
 				ExceptionHandling="1"
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
-				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
 				AssemblerListingLocation="Release"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\workspace\clibs\sambag\src\Release/unit_tests.pdb"
+				ProgramDataBaseFileName="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release/unit_tests.pdb"
 />
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"/>
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"/>
 			<Tool
 				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
+				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
 				MkTypLibCompatible="FALSE"
 				TargetEnvironment="1"
 				GenerateStublessProxies="TRUE"
@@ -123,299 +123,157 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Release\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit.lib LIBPNG_LIBRARY_DIRS-NOTFOUND/libpng.lib.lib LIBZLIB_LIBRARY_DIRS-NOTFOUND/zlib.lib.lib LIBPIXMAN_LIBRARY_DIRS-NOTFOUND/pixman-1.lib.lib C:\workspace\clibs\cairo\lib\cairo-static.lib C:\workspace\clibs\tinyxml\lib\ticpp.lib C:\workspace\clibs\lua\win32\Release\lua52.lib "
-				OutputFile="C:\workspace\clibs\sambag\src\Release\unit_tests.exe"
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib  Release\sambag.lib &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\lib\cppunit.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\libpng\lib\libpng.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\zlib\lib\zlib.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\pixman\lib\pixman-1.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo\lib\cairo-static.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml\lib\ticpp.lib&quot; &quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\win32\Release\lua52.lib&quot; "
+				OutputFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release\unit_tests.exe"
 				Version="0.0"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\workspace\clibs\sambag\src\Release/unit_tests.pdb"
+				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release/unit_tests.pdb"
 				SubSystem="1"
-				ImportLibrary="C:\workspace\clibs\sambag\src\Release\unit_tests.lib"/>
-		</Configuration>
-		<Configuration
-			Name="MinSizeRel|Win32"
-			OutputDirectory="MinSizeRel"
-			IntermediateDirectory="unit_tests.dir\MinSizeRel"
-			ConfigurationType="1"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				CompileAs="2"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="1"
-				Optimization="1"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
-				AssemblerListingLocation="MinSizeRel"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\workspace\clibs\sambag\src\MinSizeRel/unit_tests.pdb"
-/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"/>
-			<Tool
-				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				MkTypLibCompatible="FALSE"
-				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
-				TypeLibraryName="$(InputName).tlb"
-				OutputDirectory="$(IntDir)"
-				HeaderFileName="$(InputName).h"
-				DLLDataFileName=""
-				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkLibraryDependencies="false"
-				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib MinSizeRel\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit.lib LIBPNG_LIBRARY_DIRS-NOTFOUND/libpng.lib.lib LIBZLIB_LIBRARY_DIRS-NOTFOUND/zlib.lib.lib LIBPIXMAN_LIBRARY_DIRS-NOTFOUND/pixman-1.lib.lib C:\workspace\clibs\cairo\lib\cairo-static.lib C:\workspace\clibs\tinyxml\lib\ticpp.lib C:\workspace\clibs\lua\win32\Release\lua52.lib "
-				OutputFile="C:\workspace\clibs\sambag\src\MinSizeRel\unit_tests.exe"
-				Version="0.0"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\workspace\clibs\sambag\src\MinSizeRel/unit_tests.pdb"
-				SubSystem="1"
-				ImportLibrary="C:\workspace\clibs\sambag\src\MinSizeRel\unit_tests.lib"/>
-		</Configuration>
-		<Configuration
-			Name="RelWithDebInfo|Win32"
-			OutputDirectory="RelWithDebInfo"
-			IntermediateDirectory="unit_tests.dir\RelWithDebInfo"
-			ConfigurationType="1"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions=" /Zm1000"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				CompileAs="2"
-				DebugInformationFormat="3"
-				ExceptionHandling="1"
-				InlineFunctionExpansion="1"
-				Optimization="2"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				WarningLevel="3"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
-				AssemblerListingLocation="RelWithDebInfo"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="C:\workspace\clibs\sambag\src\RelWithDebInfo/unit_tests.pdb"
-/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"/>
-			<Tool
-				Name="VCMIDLTool"
-				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo\src;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				MkTypLibCompatible="FALSE"
-				TargetEnvironment="1"
-				GenerateStublessProxies="TRUE"
-				TypeLibraryName="$(InputName).tlb"
-				OutputDirectory="$(IntDir)"
-				HeaderFileName="$(InputName).h"
-				DLLDataFileName=""
-				InterfaceIdentifierFileName="$(InputName)_i.c"
-				ProxyFileName="$(InputName)_p.c"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkLibraryDependencies="false"
-				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib RelWithDebInfo\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit.lib LIBPNG_LIBRARY_DIRS-NOTFOUND/libpng.lib.lib LIBZLIB_LIBRARY_DIRS-NOTFOUND/zlib.lib.lib LIBPIXMAN_LIBRARY_DIRS-NOTFOUND/pixman-1.lib.lib C:\workspace\clibs\cairo\lib\cairo-static.lib C:\workspace\clibs\tinyxml\lib\ticpp.lib C:\workspace\clibs\lua\win32\Release\lua52.lib "
-				OutputFile="C:\workspace\clibs\sambag\src\RelWithDebInfo\unit_tests.exe"
-				Version="0.0"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
-				ProgramDatabaseFile="C:\workspace\clibs\sambag\src\RelWithDebInfo/unit_tests.pdb"
-				GenerateDebugInformation="TRUE"
-				SubSystem="1"
-				ImportLibrary="C:\workspace\clibs\sambag\src\RelWithDebInfo\unit_tests.lib"/>
+				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Release\unit_tests.lib"/>
 		</Configuration>
 	</Configurations>
 	<Files>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\CMakeLists.txt">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/workspace/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Programme\CMake 2.8\bin\cmake.exe&quot; -HC:/workspace/clibs/sambag -BC:/workspace/clibs/sambag --check-stamp-file C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="C:\workspace\clibs\sambag\src\CMakeLists.txt;C:\workspace\clibs\sambag\src\CMakeLists.txt;"
-					Outputs="C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/workspace/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Programme\CMake 2.8\bin\cmake.exe&quot; -HC:/workspace/clibs/sambag -BC:/workspace/clibs/sambag --check-stamp-file C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="C:\workspace\clibs\sambag\src\CMakeLists.txt;C:\workspace\clibs\sambag\src\CMakeLists.txt;"
-					Outputs="C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="MinSizeRel|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/workspace/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Programme\CMake 2.8\bin\cmake.exe&quot; -HC:/workspace/clibs/sambag -BC:/workspace/clibs/sambag --check-stamp-file C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="C:\workspace\clibs\sambag\src\CMakeLists.txt;C:\workspace\clibs\sambag\src\CMakeLists.txt;"
-					Outputs="C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="RelWithDebInfo|Win32">
-					<Tool
-					Name="VCCustomBuildTool"
-					Description="Building Custom Rule C:/workspace/clibs/sambag/src/CMakeLists.txt"
-					CommandLine="&quot;C:\Programme\CMake 2.8\bin\cmake.exe&quot; -HC:/workspace/clibs/sambag -BC:/workspace/clibs/sambag --check-stamp-file C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
-					AdditionalDependencies="C:\workspace\clibs\sambag\src\CMakeLists.txt;C:\workspace\clibs\sambag\src\CMakeLists.txt;"
-					Outputs="C:\workspace\clibs\sambag\src\CMakeFiles\generate.stamp"/>
+					Description="Building Custom Rule C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake 2.8\bin\cmake.exe&quot; &quot;-HC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; &quot;-BC:/Eigene Dateien/Eigene Progs/clibs/sambag&quot; --check-stamp-file &quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp&quot;&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeLists.txt&quot;;"
+					Outputs="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\CMakeFiles\generate.stamp"/>
 				</FileConfiguration>
 			</File>
 		<Filter
 			Name="Source Files"
 			Filter="">
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\testApps\sambag_tests.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\testApps\sambag_tests.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\FileSystemTest.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\FileSystemTest.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\TestArithmeticWrapper.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\TestArithmeticWrapper.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\TestHelper.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\TestHelper.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\TestPropertyChanged.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\TestPropertyChanged.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\TestSharedOrWeak.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\TestSharedOrWeak.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\com\tests\TestThread.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\TestThread.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\cpsqlite\tests\DBTest.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\cpsqlite\tests\DBTest.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestAComponent.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestAComponent.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestAContainer.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestAContainer.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestBoostTimerImpl.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestBoostTimerImpl.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestComponents.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestComponents.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestConcreteComponents.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestConcreteComponents.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestDefaultTreeModel.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestDefaultTreeModel.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestFlowLayout.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestFlowLayout.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestList.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestList.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestLookAndFeel.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestLookAndFeel.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestMouseEvent.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestMouseEvent.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestPopupMenu.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestPopupMenu.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestRootPane.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestRootPane.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestUIManager.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestUIManager.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\tests\TestWindow.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\tests\TestWindow.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\HelperForTesting.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\HelperForTesting.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestAttributeParser.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestAttributeParser.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestCairoDrawContext.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestCairoDrawContext.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestFileResourceManager.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestFileResourceManager.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestGenFlowLayout.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestGenFlowLayout.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestGeometrics.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestGeometrics.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestGeometrySerialization.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestGeometrySerialization.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestPattern.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestPattern.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestSceneGraph.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestSceneGraph.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\tests\TestSvg.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\TestSvg.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\dsp\tests\TestDefaultMidiEvents.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\dsp\tests\TestDefaultMidiEvents.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\dsp\tests\TestVstMidiEventAdapter.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\dsp\tests\TestVstMidiEventAdapter.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\lua\tests\TestLuaHelper.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\lua\tests\TestLuaHelper.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\lua\tests\TestLuaRegisterFunction.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\lua\tests\TestLuaRegisterFunction.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\math\tests\VectorNTest.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\math\tests\VectorNTest.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\xml\tests\TestMarkupBuilder.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\xml\tests\TestMarkupBuilder.cpp">
 			</File>
 			<File
-				RelativePath="C:\workspace\clibs\sambag\src\sambag\xml\tests\XML2ObjTest.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\xml\tests\XML2ObjTest.cpp">
 			</File>
 		</Filter>
 	</Files>

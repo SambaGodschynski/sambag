@@ -27,6 +27,7 @@ namespace {
 #include <sstream>
 #include "VstMidiEventAdapter.hpp"
 #include "DspPlugin.hpp"
+#include <loki/Typelist.h>
 namespace sambag { namespace dsp { namespace vst {
 //=============================================================================
 struct StdConstructPlolicy {
@@ -39,6 +40,14 @@ struct StdConstructPlolicy {
 		plug.noTail (false);
 		plug.isSynth(PluginTraits::IsSynth);
 	}
+};
+//=============================================================================
+// CanDo Tags
+struct CanReceiveVstEventTag {
+	static const char * name() { return "receiveVstEvents"; }
+};
+struct CanReceiveVstMidiEventTag {
+	static const char * name() { return "receiveVstMidiEvent"; }
 };
 //=============================================================================
 /**
@@ -63,7 +72,10 @@ template <
 	int _UniqueId,
 	class _PluginTraits = StdPluginTraits<2,2,false>,
 	class _CreateEditorPolicy = CreateNoEditor,
-	class _ConstructorPolicy = StdConstructPlolicy
+	class _ConstructorPolicy = StdConstructPlolicy,
+	class _CanDoTagList = LOKI_TYPELIST_2(
+		CanReceiveVstEventTag, 
+		CanReceiveVstMidiEventTag)
 > 
 class VST2xPluginWrapper :
 	public AudioEffectX, 
@@ -85,6 +97,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _ConstructorPolicy ConstructorPolicy;
 	//-------------------------------------------------------------------------
+	typedef _CanDoTagList CanDoTagList;
+	//-------------------------------------------------------------------------
 	enum {UniqueId = _UniqueId};
 protected:
 private:	
@@ -92,13 +106,7 @@ private:
 	HostTimeInfo timeInfo;
 public:
 	//-------------------------------------------------------------------------
-	VstInt32 canDo (char *text ) {
-		if (!strcmp (text, "receiveVstEvents") )
-			return 1;
-		if (!strcmp (text, "receiveVstMidiEvent") )
-			return 1;
-		return -1;	// explicitly can't do; 0 => don't know
-	}
+	VstInt32 canDo (char *text );
 	//-------------------------------------------------------------------------
 	void setParameter (VstInt32 index, float value) {
 		PluginProcessor::setParameterValue(index, value);
@@ -219,9 +227,9 @@ public:
 //	Impl.:
 //#############################################################################
 //-----------------------------------------------------------------------------
-template <class P, int U, class T , class E , class C> 
+template <class P, int U, class T , class E , class C, class CD> 
 HostTimeInfo * 
-VST2xPluginWrapper<P,U,T,E,C>::getHostTimeInfo (int filter) 
+VST2xPluginWrapper<P,U,T,E,C,CD>::getHostTimeInfo (int filter) 
 {
 	// convert filter
 	int f = 0;
@@ -274,6 +282,24 @@ VST2xPluginWrapper<P,U,T,E,C>::getHostTimeInfo (int filter)
 	timeInfo.automationIsWriting((vstTime->flags & kVstAutomationWriting) > 0);
 	timeInfo.automationIsReading((vstTime->flags & kVstAutomationReading) > 0);
 	return &timeInfo;
+}
+//-----------------------------------------------------------------------------
+namespace {
+	// return true if one of the CanDo list compares to sbj
+	template <class CanDo>
+	bool _can(char *sbj) {
+		return strcmp(sbj, CanDo::Head::name())==0 ||
+			_can<CanDo::Tail>(sbj);
+	}
+	template<>
+	bool _can<::Loki::NullType>(char*) {
+		return false;
+	}
+}
+template <class P, int U, class T , class E , class C, class CD> 
+int VST2xPluginWrapper<P,U,T,E,C,CD>::canDo(char *sbj) {
+	// explicitly can't do; 0 => don't know
+	return _can<CanDoTagList>(sbj) ? 1 : -1;
 }
 }}} // namespace
 

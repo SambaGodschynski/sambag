@@ -152,6 +152,13 @@ void Window::close() {
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
+/*void _invalidateWindow(AWindowImpl::WPtr _win, Rectangle area) {
+	AWindowImpl::Ptr windowImpl = _win.lock();
+	if (windowImpl) {
+		windowImpl->invalidateWindow(area);
+	}
+}*/
+//-----------------------------------------------------------------------------
 void Window::invalidateWindow(const Rectangle &area) {
 	windowImpl->invalidateWindow(area);
 }

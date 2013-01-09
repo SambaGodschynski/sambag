@@ -50,7 +50,7 @@ VstEvent * VstMidiEventAdapter::allocVstEventNecessary(size_t bytes, VstEvent *o
 	if (!old) {
 		return allocVstEvent(bytes);
 	}
-	if (old->byteSize < bytes) {
+	if (old->byteSize < (int)bytes) {
 		delete old;
 		return allocVstEvent(bytes);
 	}
