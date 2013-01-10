@@ -68,6 +68,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBounds() const;
 	//-------------------------------------------------------------------------
+	virtual Rectangle getHostBounds() const { return Rectangle(); }
+	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root);
 	//-------------------------------------------------------------------------
 	virtual void setParentWindow(WindowPtr parent);

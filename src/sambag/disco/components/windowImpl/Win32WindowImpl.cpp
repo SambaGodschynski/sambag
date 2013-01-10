@@ -18,7 +18,8 @@
 namespace sambag { namespace disco { namespace components {
 namespace {
 	template <typename T>
-	void debugMsg(HWND hwnd, const T &msg) {
+	void debugMsg(HWND hwnd, const T &msg)
+	{
 		std::cout<<"["<<std::hex<<hwnd<<"]:"
 		<<msg<<";"<<std::endl<<std::flush;
 	}
@@ -45,7 +46,8 @@ namespace {
 		if( FAILED(RegisterClass(&wc)) )
 			throw std::runtime_error ("Win32 RegisterClass failed.");
 	}
-	HINSTANCE getHInstance() {
+	HINSTANCE getHInstance() 
+	{
 		HINSTANCE res;
 		sambag::com::ArbitraryType::Ptr obj =
 			getGlobalUserData("win32.hinstance");
@@ -54,6 +56,20 @@ namespace {
 		}
 		sambag::com::get(obj, res);
 		return res;
+	}
+	Rectangle _getWin32AbsBounds(HWND hWnd) 
+	{
+		RECT r = {0};
+		GetClientRect(hWnd, &r);
+		POINT pos = {0};
+		ClientToScreen(hWnd, &pos);
+		return Rectangle (Point2D(pos.x, pos.y), r.right, r.bottom);
+	}
+	Rectangle _getWin32RelBounds(HWND hWnd) 
+	{
+		RECT r = {0};
+		GetClientRect(hWnd, &r);
+		return Rectangle (Point2D(r.left, r.top), Point2D(r.right, r.bottom));
 	}
 } // namespace(s)
 //=============================================================================
@@ -293,6 +309,14 @@ bool Win32WindowImpl::isVisible() const {
 	return visible;
 }
 //-----------------------------------------------------------------------------
+Rectangle Win32WindowImpl::getHostBounds() const {
+	HWND parent = GetParent(win);
+	if (parent) {
+		return _getWin32AbsBounds(parent);
+	}
+	return Rectangle();
+}
+//-----------------------------------------------------------------------------
 Rectangle Win32WindowImpl::getBounds() const {
 	return bounds;
 }
@@ -428,23 +452,25 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		break;
 	}
 	case WM_MOVE : {
-		RECT r = {0};
-		GetClientRect(hWnd, &r);
-		POINT pos = {0};
-		ClientToScreen(hWnd, &pos);
-		Rectangle nr(Point2D(pos.x, pos.y), r.right, r.bottom);
-		if (win)
-			win->updateWindowToBounds(nr);
+		if (!win) {
+			break;
+		}
+		if (win->getFlag(WindowFlags::WND_NESTED)) {
+			win->updateWindowToBounds(_getWin32RelBounds(hWnd));
+		} else {
+			win->updateWindowToBounds(_getWin32AbsBounds(hWnd));
+		}
 		break;
 	}
 	case WM_SIZE : {
-		RECT r = {0};
-		GetClientRect(hWnd, &r);
-		POINT pos = {0};
-		ClientToScreen(hWnd, &pos);
-		Rectangle nr(Point2D(pos.x, pos.y), r.right, r.bottom);
-		if (win)
-			win->updateWindowToBounds(nr);
+		if (!win) {
+			break;
+		}
+		if (win->getFlag(WindowFlags::WND_NESTED)) {
+			win->updateWindowToBounds(_getWin32RelBounds(hWnd));
+		} else {
+			win->updateWindowToBounds(_getWin32AbsBounds(hWnd));
+		}
 		break;
 	}
 	case WM_LBUTTONDOWN : 

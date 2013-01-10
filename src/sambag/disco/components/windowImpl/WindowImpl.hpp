@@ -119,6 +119,10 @@ public:
 		return ConcreteWindowImpl::getBounds();
 	}
 	//-------------------------------------------------------------------------
+	virtual Rectangle getHostBounds() const {
+		return ConcreteWindowImpl::getHostBounds();
+	}
+	//-------------------------------------------------------------------------
 	static Ptr create(AWindowImplPtr parent) {
 		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
 		res->ConcreteWindowImpl::self = res;

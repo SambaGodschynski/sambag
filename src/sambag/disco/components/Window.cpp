@@ -113,6 +113,25 @@ void Window::setWindowBounds(const Rectangle &r) {
 	windowImpl->setBounds(r);
 }
 //-----------------------------------------------------------------------------
+void Window::setWindowSize(const Dimension &d) {
+	Rectangle neu = windowImpl->getBounds();
+	neu.setWidth(d.width());
+	neu.setHeight(d.height());
+	setWindowBounds(neu);
+}
+//-----------------------------------------------------------------------------
+void Window::setWindowLocation(const Point2D &p) {
+	Rectangle neu = windowImpl->getBounds();
+	neu.translate(p);
+	setWindowBounds(neu);
+}
+//-----------------------------------------------------------------------------
+bool Window::isVisible() const {
+	if (!windowImpl)
+		return false;
+	return windowImpl->isVisible();
+}
+//-----------------------------------------------------------------------------
 Point2D Window::getLocationOnScreen(const Point2D &p) const {
 	if (!isVisible())
 		return NULL_POINT2D;
@@ -130,6 +149,9 @@ Point2D Window::getLocationOnComponent(const Point2D &p) const {
 }
 //-----------------------------------------------------------------------------
 Rectangle Window::getWindowBounds() const {
+	if (windowImpl->getFlag(WindowFlags::WND_NESTED)) {
+		return windowImpl->getHostBounds();
+	}
 	return windowImpl->getBounds();
 }
 //-----------------------------------------------------------------------------

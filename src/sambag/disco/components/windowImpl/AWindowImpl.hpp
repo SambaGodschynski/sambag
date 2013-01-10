@@ -86,6 +86,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBounds() const = 0;
 	//-------------------------------------------------------------------------
+	/**
+	 * If this window is nested in another (the host) this function return it's
+	 * bounds.
+	 * @return bounds of host window. 
+	 * @see WindowToolkit::createNestedWindow()
+	 */
+	virtual Rectangle getHostBounds() const = 0;
+	//-------------------------------------------------------------------------
 	virtual Dimension getSize() const {
 		Rectangle curr = getBounds();
 		return curr.getDimension();

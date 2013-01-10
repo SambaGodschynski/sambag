@@ -132,11 +132,13 @@ void DataBase::Executer::_execute ( const std::string &query, DataBase::Results 
 	pL.clear();
 	// check result
 	if( rc!=SQLITE_OK ) {
+		if (zErrMsg==0) {
+			throw DataBaseQueryFailed( rc, "unknown reaon.", query );
+		}
 		std::string msg(zErrMsg);
 		msg = "SQLite3 query failed: " + msg;
 		sqlite3_free(zErrMsg);
 		throw DataBaseQueryFailed( rc, msg, query );
-		return;
 	}
 	// copy resultlist => out_results
 	out_results.reserve( res.size() );

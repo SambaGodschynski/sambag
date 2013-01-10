@@ -196,24 +196,11 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setWindowBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
-	virtual void setWindowSize(const Dimension &d) {
-		Rectangle neu = getWindowBounds();
-		neu.setWidth(d.width());
-		neu.setHeight(d.height());
-		setWindowBounds(neu);
-	}
+	virtual void setWindowSize(const Dimension &d);
 	//-------------------------------------------------------------------------
-	virtual void setWindowLocation(const Point2D &p) {
-		Rectangle neu = getWindowBounds();
-		neu.translate(p);
-		setWindowBounds(neu);
-	}
+	virtual void setWindowLocation(const Point2D &p);
 	//-------------------------------------------------------------------------
-	virtual bool isVisible() const {
-		if (!windowImpl)
-			return false;
-		return windowImpl->isVisible();
-	}
+	virtual bool isVisible() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return true if window is open.
