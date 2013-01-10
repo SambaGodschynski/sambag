@@ -28,12 +28,12 @@ struct HostTimeInfo {
 		FrxClockValid = 1<<7
 	};
 	enum Flag {
-		kTransportIsChanged = 1, 
-		kTransportCycleIsActive = 1 << 1, 
-		kTransportIsRecording = 1 << 2, 
-		kAutomationIsWriting = 1 << 3, 
-		kAutomationIsReading = 1 << 4,
-		kTransportIsPlaying = 1 << 5
+		kTransportIsChanged, 
+		kTransportCycleIsActive, 
+		kTransportIsRecording, 
+		kAutomationIsWriting, 
+		kAutomationIsReading,
+		kTransportIsPlaying
 	};
 	double tempo;
 	double sampleRate; // always valid
