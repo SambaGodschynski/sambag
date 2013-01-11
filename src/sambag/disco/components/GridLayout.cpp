@@ -133,9 +133,9 @@ void GridLayout::layoutContainer(AContainerPtr parent) {
 		return;
 	}
 	if (nrows > 0) {
-		ncols = (ncomponents + nrows - 1.) / nrows;
+		ncols = (int)((ncomponents + nrows - 1.) / nrows);
 	} else {
-		nrows = (ncomponents + ncols - 1.) / ncols;
+		nrows = (int)((ncomponents + ncols - 1.) / ncols);
 	}
 	// To position components in the center we should:
 	// 1. get an amount of extra space within Container

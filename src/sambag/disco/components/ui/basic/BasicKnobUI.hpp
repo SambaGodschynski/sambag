@@ -39,7 +39,7 @@ public:
 	typedef typename ComponentModel::StateChangedEvent StateChanged;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<KnobType> KnobTypePtr;
-		//-------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<KnobType> KnobTypeWPtr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<Class> WPtr;
@@ -79,8 +79,8 @@ private:
 		Number alpha = (value - bCoef) / aCoef;
 		Number inset = 6.;
 		Point2D p;
-		p.x(radius + cosf (alpha) * (radius - inset) + 0.5);
-		p.y(radius - sinf (alpha) * (radius - inset) + 0.5);
+		p.x(radius + cosf(alpha) * (radius - inset) + 0.5);
+		p.y(radius - sinf(alpha) * (radius - inset) + 0.5);
 		return p;
 	}
 	//-------------------------------------------------------------------------

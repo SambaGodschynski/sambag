@@ -71,6 +71,8 @@ const float AComponent::LEFT_ALIGNMENT = 0.0f;
 //-----------------------------------------------------------------------------
 const float AComponent::RIGHT_ALIGNMENT = 1.0f;
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_ICON = "icon";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() : flags(0), 
 	xalignment(CENTER_ALIGNMENT), 
 	yalignment(CENTER_ALIGNMENT)
@@ -1180,5 +1182,19 @@ void AComponent::setTooltipText(const std::string &txt) {
 //-----------------------------------------------------------------------------
 const std::string & AComponent::getTooltipText() const {
 	return tooltipText;
+}
+//-----------------------------------------------------------------------------
+ISurface::Ptr AComponent::getIcon() const {
+	return icon;
+}
+//-----------------------------------------------------------------------------
+void AComponent::setIcon(ISurface::Ptr icon) {
+	ISurface::Ptr old = this->icon;
+	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+		this->icon = icon;
+	SAMBAG_END_SYNCHRONIZED
+	firePropertyChanged(PROPERTY_ICON, old, icon);
+	invalidate();
+	redraw();
 }
 }}} // namespace(s)
