@@ -114,6 +114,8 @@ void BasicLookAndFeel::installDefaults() {
 		createStyle("stroke: black; fill: lightblue;"));
 	m.putProperty("Button.disabled",  
 		createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic"));
+	m.putProperty("Button.cornerRadius", Coordinate(3.5));
+	m.putProperty("Button.iconGap", Coordinate(2.));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
 	m.putProperty("ScrollBar.minimumThumbSize", Dimension(10., 10.));
 	m.putProperty("ScrollBar.maximumThumbSize", Dimension(9999., 9999.));

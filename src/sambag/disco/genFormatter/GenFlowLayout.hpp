@@ -267,7 +267,7 @@ void GenFlowLayout<CA>::layout()
 					maxwidth - x, rowh, start, i);
 			x = cw;
 			y = y + vgap + rowh;
-			rowh = ch;
+			rowh = (int)ch;
 			start = i;
 		}
 	}
@@ -300,7 +300,7 @@ moveComponents(const ValueType &x, const ValueType &y, const ValueType &width,
 		AccessPolicy::getWidth(m, cw);	
 		AccessPolicy::getHeight(m, ch);	
 		cy = y + (height - ch) / 2.;
-		AccessPolicy::setLocation(m, _x, cy);
+		AccessPolicy::setLocation(m, _x + this->x, cy + this->y);
 		_x = _x + cw + hgap;
 	}
 	return (int)height;

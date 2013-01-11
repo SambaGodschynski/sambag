@@ -737,6 +737,7 @@ int main() {
 		btn = Button::create();
 		btn->setText("Miller Milch");
 		btn->setTooltipText("open new Miller panel");
+		btn->setIcon(getResourceManager().getImage("IconA"));
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<MILLER>);
 		win[0]->getContentPane()->add(btn);
 

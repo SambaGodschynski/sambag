@@ -19,9 +19,41 @@
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/disco/svg/graphicElements/Style.hpp>
 
+#include <sambag/disco/genFormatter/GenFlowLayout.hpp>
+#include <sambag/disco/genFormatter/RectangleAccess.hpp>
+#include <sambag/disco/genFormatter/GenericFormatter.hpp>
+
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
-
+namespace {
+static const sambag::com::Number GAP= 5.;
+Rectangle calcIconBounds(ISurface::Ptr icon, const Coordinate &textHeight) {
+	if (!icon) {
+		return Rectangle(0,0,0,0);	
+	}
+	Rectangle res(0,0,textHeight,textHeight);
+	return res;
+}
+void drawIcon(IDrawContext::Ptr cn,
+	ISurface::Ptr icon, 
+	const Rectangle &bounds,
+	AComponent::Ptr c) 
+{
+	if (!icon) {
+		return;
+	}
+	cn->save();
+	Rectangle realBounds = icon->getSize();
+	if (realBounds.width() <= 0. || realBounds.height() <= 0.)
+		return;
+	sambag::com::Number scaleX = bounds.width() / realBounds.width();
+	sambag::com::Number scaleY = bounds.height() / realBounds.height();
+	cn->translate(bounds.x0());
+	cn->scale(Point2D(scaleX, scaleY));
+	cn->drawSurface(icon);	
+	cn->restore();
+}
+} // namespace(s)
 //=============================================================================
 /** 
   * @class BasicButtonUI.
@@ -44,6 +76,8 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void installDefaults(AComponentPtr c);
 	//-------------------------------------------------------------------------
+	virtual void installClientDefaults(AComponentPtr c);
+	//-------------------------------------------------------------------------
 	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBtnRect(IDrawContext::Ptr cn, AComponentPtr c);
@@ -52,6 +86,10 @@ protected:
 		typename AbstractButton::Ptr b);
 	//-------------------------------------------------------------------------
 	Insets margin, padding;
+	//-------------------------------------------------------------------------
+	Coordinate cornerRadius, iconGap;
+	//-------------------------------------------------------------------------
+	bool _drawRect;
 private:
 	//-------------------------------------------------------------------------
 	IPattern::Ptr bk, roll, press, disabled;
@@ -87,6 +125,14 @@ public:
 	 * @param c
 	 */
 	virtual void draw(IDrawContext::Ptr cn, AComponentPtr c);
+	//-------------------------------------------------------------------------
+	/**
+	 * Paints the specified component appropriately for the look and feel.
+	 * @param cn
+	 * @param c
+	 */
+	virtual void drawRect(IDrawContext::Ptr cn, 
+		AComponentPtr c, const Rectangle &bounds);
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the specified component's maximum size appropriate for the
@@ -155,22 +201,58 @@ prepareContext(IDrawContext::Ptr cn, typename AbstractButton::Ptr b)
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::drawRect(IDrawContext::Ptr cn, 
+	AComponentPtr c, const Rectangle &bounds) 
+{
+	cn->rect(bounds, cornerRadius);
+	cn->fill();
+	cn->rect(bounds, cornerRadius);
+	cn->stroke();
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
+	using namespace sambag::disco::genFormatter;
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
+	// draw rect
 	prepareContext(cn, b);
 	Rectangle bounds = getBtnRect(cn, c);
-	cn->rect(bounds, 5.);
-	cn->fill();
-	cn->rect(bounds, 5.);
-	cn->stroke();
+
+	if (_drawRect) {
+		drawRect(cn, c, bounds);
+	}
+
 	cn->setFont(b->getFont());
 	std::string str = sambag::com::normString(b->getText());
-	Rectangle txt = cn->textExtends(str);
+	Rectangle txtEx = cn->textExtends(str);
 	cn->setFillColor(cn->getStrokeColor());
-	cn->moveTo( Point2D( (bounds.width() / 2.0 - txt.width() / 2.0) + bounds.x(),
-			(bounds.height() / 2.0 + txt.height() / 2.0) + bounds.y()
+	
+	// draw icon and text
+	ISurface::Ptr icon = b->getIcon();
+	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
+
+	typedef GenericFormatter< Rectangle,
+		RectangleAccess,
+		GenFlowLayout
+	> Formatter;
+	Formatter form;
+	if (icon) {
+		form.setHgap(iconGap);
+	}
+	form.setAlignment(Formatter::CENTER);
+	form.setX(bounds.x());
+	form.setY(bounds.y() + cornerRadius);
+	form.setWidth(bounds.width());
+	form.setHeight(bounds.height());
+	form.addComponent(&iconBounds);	
+	form.addComponent(&txtEx);	
+	form.layout();
+
+	drawIcon(cn, icon, iconBounds, c);
+	cn->moveTo(Point2D(
+		txtEx.x(), txtEx.y() + txtEx.height()
 	));
 	cn->textPath(str);
 	cn->fill();
@@ -179,6 +261,7 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
 	installDefaults(c);
+	installClientDefaults(c); // object specific defaults
 	installListener(c);
 }
 //-----------------------------------------------------------------------------
@@ -225,10 +308,30 @@ void BasicButtonUI<ButtonModell>::installDefaults(AComponentPtr c) {
 	m.getProperty("Button.pressed", sPress);
 	m.getProperty("Button.rollover", sRoll);
 	m.getProperty("Button.disabled", sDisabled);
+	cornerRadius = 2.;
+	m.getProperty("Button.cornerRadius", cornerRadius);
+	iconGap = 2.;
+	m.getProperty("Button.iconGap", iconGap);
+	_drawRect = true;
+	m.getProperty("Button.drawRect", _drawRect);
+
 	padding = Insets(15., 15., 10., 10.);
 	margin = Insets(5., 5., 5., 5.);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicButtonUI<ButtonModell>::installClientDefaults(AComponentPtr c) {
+	// consider:
+	// if not client property setted getClientProperty() has no effect
+	c->getClientProperty("Button.normal", sNormal);
+	c->getClientProperty("Button.pressed", sPress);
+	c->getClientProperty("Button.rollover", sRoll);
+	c->getClientProperty("Button.disabled", sDisabled);
 	c->getClientProperty("padding", padding);
 	c->getClientProperty("margin", margin);
+	c->getClientProperty("Button.cornerRadius", cornerRadius);
+	c->getClientProperty("Button.iconGap", iconGap);
+	c->getClientProperty("Button.drawRect", _drawRect);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -260,8 +363,16 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(b->getText()));
-	return Dimension(txtEx.getWidth() + padding.left() + padding.right(), 
+	
+	Dimension res(txtEx.getWidth() + padding.left() + padding.right(), 
 		txtEx.getHeight() + padding.top() + padding.height());
+
+	ISurface::Ptr icon = b->getIcon();
+	if (!icon)
+		return res;
+	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
+	res.width( res.width() + iconBounds.width() + GAP*5.5);
+	return res;
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
