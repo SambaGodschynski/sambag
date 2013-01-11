@@ -133,18 +133,18 @@ void Win32WindowImpl::drawAll() {
 	}
 }
 //-----------------------------------------------------------------------------
-disco::Win32Surface::Ptr Win32WindowImpl::getSurface() {
+disco::Win32Surface::Ptr Win32WindowImpl::getSurface(HDC dc) {
 	using namespace sambag;
-//	if (!surface) { see: issue #238
+	//if (!surface) { //see: issue #238
 		Rectangle r = getBounds();
-		surface = disco::Win32Surface::create(win,
+		surface = disco::Win32Surface::create(dc,
 			(int)r.getWidth(), (int)r.getHeight());
-//	}
+	//}
 	return surface;
 }
 //-----------------------------------------------------------------------------
-void Win32WindowImpl::update() {
-	disco::Win32Surface::Ptr sf = getSurface();
+void Win32WindowImpl::update(HDC dc) {
+	disco::Win32Surface::Ptr sf = getSurface(dc);
 	this->processDraw( sf );
 	cairo_surface_flush(sf->getCairoSurface());
 }
@@ -378,20 +378,7 @@ void Win32WindowImpl::updateBoundsToWindow() {
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
 	enum { ERASE_BG = false };
-	if (!win)
-		return;
-	if (area == NULL_RECTANGLE) {
-		InvalidateRect(win, NULL, ERASE_BG);
-		return;
-	}
-	RECT wRect;
-	SetRect ( &wRect, 
-		(int)floor( (double)area.x0().x() ), 
-		(int)floor( (double)area.x0().y() ), 
-		(int)ceil( (double)area.width() ), 
-		(int)ceil( (double)area.height() ) 
-	);
-	InvalidateRect(win, &wRect, ERASE_BG);
+	InvalidateRect(win, NULL, ERASE_BG);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::updateWindowToBounds(const Rectangle &r) {
@@ -446,9 +433,8 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 			break;
 		}
 		hdc = BeginPaint(hWnd, &ps);
-		win->update();
+		win->update(hdc);
 		EndPaint(hWnd, &ps);
-		ValidateRect(hWnd, NULL);
 		break;
 	}
 	case WM_MOVE : {

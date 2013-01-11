@@ -25,19 +25,23 @@ public:
 	typedef boost::shared_ptr<Win32Surface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
-	HWND hWnd;
-	//-------------------------------------------------------------------------
-	Win32Surface(cairo_surface_t *s, HWND hWnd) : CairoSurface(s), hWnd(hWnd){}
+	Win32Surface(cairo_surface_t *s) : CairoSurface(s) {}
 public:
 	//-------------------------------------------------------------------------
-	Ptr static create (HWND hWnd, int width, int height) {
-		cairo_surface_t *s = cairo_win32_surface_create(GetDC(hWnd));
-		Ptr neu = Ptr(new Win32Surface(s, hWnd));
+	Ptr static create (HDC dc, int width, int height) {
+		cairo_surface_t *s = cairo_win32_surface_create(dc);
+		Ptr neu = Ptr(new Win32Surface(s));
 		return neu;
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const {
 		RECT r;
+		HWND hWnd = WindowFromDC (
+			cairo_win32_surface_get_dc( getCairoSurface() )
+		);
+		if (!hWnd) {
+			return NULL_RECTANGLE;
+		}
 		GetClientRect(hWnd, &r);
 		return Rectangle ( Point2D(r.left, r.top),
 			Point2D(r.right, r.bottom)
