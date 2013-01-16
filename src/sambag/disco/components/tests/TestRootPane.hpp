@@ -12,6 +12,8 @@
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/ISurface.hpp>
 #include "TestComponents.hpp"
+#include <sambag/disco/components/windowImpl/WindowTestToolkit.hpp>
+#include <sambag/disco/components/Window.hpp>
 namespace tests {
 //=============================================================================
 class TestRootPane : public CPPUNIT_NS::TestFixture {
@@ -23,10 +25,12 @@ private:
 	CPPUNIT_TEST( testRepaint );
 	CPPUNIT_TEST( testLaf );
 	CPPUNIT_TEST_SUITE_END();
+	sambag::disco::components::Window::Ptr win;
 	sambag::disco::components::RootPane::Ptr root;
 	sambag::disco::IImageSurface::Ptr surf;
 	enum { NUM_COMPOS = 14 };
 	TestComponent::Ptr comps[NUM_COMPOS];
+	sambag::disco::components::WindowTestToolkit<>::Ptr wfac;
 public:
 	void setUp();
 	void testRootPane();

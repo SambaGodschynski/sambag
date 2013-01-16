@@ -218,6 +218,9 @@ BoostTimerImpl::ToInvoke BoostTimerImpl::toInvoke;
 void BoostTimerImpl::closeAllTimer() {
 	try {
 		BOOST_FOREACH(ToInvoke::left_map::value_type &v, toInvoke.left) {
+			if (!v.first) {
+				continue;
+			}
 			v.first->cancel();
 		}
 	} catch (...) {

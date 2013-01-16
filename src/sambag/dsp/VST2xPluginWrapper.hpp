@@ -174,8 +174,12 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	VstInt32 processEvents(VstEvents * events) {
-		if (!events)
+		if (!events) {
 			return 0;
+		}
+		if (events->numEvents == 0) {
+			return 1;
+		}
 		VstMidiEventAdapter midiev(events);
 		PluginProcessor::processEvents(&midiev);
 		return 1;

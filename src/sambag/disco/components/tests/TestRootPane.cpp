@@ -18,6 +18,7 @@
 #include "TestComponents.hpp"
 #include <stack>
 #include <sambag/disco/components/RedrawManager.hpp>
+#include <sambag/disco/components/WindowToolkit.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestRootPane );
@@ -30,18 +31,27 @@ namespace tests {
 void TestRootPane::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	using namespace boost;
-	IDiscoFactory *fac = getDiscoFactory();
-	surf = fac->createImageSurface(640, 480);
-	root = RootPane::create(surf);
-	root->setSize(640, 480);
+	namespace sd = sambag::disco; // conflict with window.h Rectangle (why?)
+	if (!wfac) {
+		wfac = WindowTestToolkit<>::create();
+	}
+	sambag::disco::components::setWindowToolkit(wfac.get());
+
+	win = Window::create();
+	win->setBounds(0,0, 640, 480);
+	win->open();
+
+	surf = getDiscoFactory()->createImageSurface(640, 480);
+
+	root = win->getRootPane();
+
 	int i = 0;
 	for (; i < NUM_COMPOS / 2; ++i) {
 		std::stringstream ss;
 		ss << "TestComponent" << i;
 		comps[i] = TestComponent::create();
 		comps[i]->setName(ss.str());
-		comps[i]->setBounds(Rectangle(0,0,50 + i*10, 55 + i*10));
+		comps[i]->setBounds(sd::Rectangle(0,0,50 + i*10, 55 + i*10));
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		root->add(comps[i]);
 	}
@@ -54,7 +64,7 @@ void TestRootPane::setUp() {
 		ss << "TestComponent" << i;
 		comps[i] = TestComponent::create();
 		comps[i]->setName(ss.str());
-		comps[i]->setBounds(Rectangle(0,0,30, 30));
+		comps[i]->setBounds(sd::Rectangle(0,0,30, 30));
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		con->add(comps[i]);
 	}

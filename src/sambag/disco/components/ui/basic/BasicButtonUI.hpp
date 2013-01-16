@@ -18,42 +18,10 @@
 #include <sambag/disco/IPattern.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/disco/svg/graphicElements/Style.hpp>
-
-#include <sambag/disco/genFormatter/GenFlowLayout.hpp>
-#include <sambag/disco/genFormatter/RectangleAccess.hpp>
-#include <sambag/disco/genFormatter/GenericFormatter.hpp>
+#include "Helper.hpp"
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
-namespace {
-static const sambag::com::Number GAP= 5.;
-Rectangle calcIconBounds(ISurface::Ptr icon, const Coordinate &textHeight) {
-	if (!icon) {
-		return Rectangle(0,0,0,0);	
-	}
-	Rectangle res(0,0,textHeight,textHeight);
-	return res;
-}
-void drawIcon(IDrawContext::Ptr cn,
-	ISurface::Ptr icon, 
-	const Rectangle &bounds,
-	AComponent::Ptr c) 
-{
-	if (!icon) {
-		return;
-	}
-	cn->save();
-	Rectangle realBounds = icon->getSize();
-	if (realBounds.width() <= 0. || realBounds.height() <= 0.)
-		return;
-	sambag::com::Number scaleX = bounds.width() / realBounds.width();
-	sambag::com::Number scaleY = bounds.height() / realBounds.height();
-	cn->translate(bounds.x0());
-	cn->scale(Point2D(scaleX, scaleY));
-	cn->drawSurface(icon);	
-	cn->restore();
-}
-} // namespace(s)
 //=============================================================================
 /** 
   * @class BasicButtonUI.
@@ -212,50 +180,22 @@ void BasicButtonUI<ButtonModell>::drawRect(IDrawContext::Ptr cn,
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	using namespace sambag::disco::genFormatter;
 	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
 	if (!b)
 		return;
 	// draw rect
 	prepareContext(cn, b);
 	Rectangle bounds = getBtnRect(cn, c);
-
 	if (_drawRect) {
 		drawRect(cn, c, bounds);
 	}
 
 	cn->setFont(b->getFont());
 	std::string str = sambag::com::normString(b->getText());
-	Rectangle txtEx = cn->textExtends(str);
 	cn->setFillColor(cn->getStrokeColor());
-	
+
 	// draw icon and text
-	ISurface::Ptr icon = b->getIcon();
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
-
-	typedef GenericFormatter< Rectangle,
-		RectangleAccess,
-		GenFlowLayout
-	> Formatter;
-	Formatter form;
-	if (icon) {
-		form.setHgap(iconGap);
-	}
-	form.setAlignment(Formatter::CENTER);
-	form.setX(bounds.x());
-	form.setY(bounds.y() + cornerRadius);
-	form.setWidth(bounds.width());
-	form.setHeight(bounds.height());
-	form.addComponent(&iconBounds);	
-	form.addComponent(&txtEx);	
-	form.layout();
-
-	drawIcon(cn, icon, iconBounds, c);
-	cn->moveTo(Point2D(
-		txtEx.x(), txtEx.y() + txtEx.height()
-	));
-	cn->textPath(str);
-	cn->fill();
+	Helper::drawIconAndText(cn, b->getIcon(), str, bounds);
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -363,15 +303,18 @@ Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(b->getText()));
-	
+	txtEx.height( 
+		std::max( (double)cn->getCurrentFontHeight(), (double)txtEx.height() )
+	);
+
 	Dimension res(txtEx.getWidth() + padding.left() + padding.right(), 
 		txtEx.getHeight() + padding.top() + padding.height());
 
 	ISurface::Ptr icon = b->getIcon();
 	if (!icon)
 		return res;
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
-	res.width( res.width() + iconBounds.width() + GAP*5.5);
+	Rectangle iconBounds = Helper::calcIconBounds(icon, cn->getCurrentFontHeight());
+	res.width( res.width() + iconBounds.width() + 25.5);
 	return res;
 }
 //-----------------------------------------------------------------------------

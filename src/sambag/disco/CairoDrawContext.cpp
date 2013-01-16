@@ -142,4 +142,11 @@ void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
 	cairo_fill (cr);
 	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
+//-----------------------------------------------------------------------------
+Number CairoDrawContext::getCurrentFontHeight() const {
+	cairo_font_extents_t res = {0};
+	cairo_font_extents(context, &res);
+	SAMBAG_CHECK_CONTEXT_STATE(context);
+	return res.ascent;
+}
 }} // namespaces

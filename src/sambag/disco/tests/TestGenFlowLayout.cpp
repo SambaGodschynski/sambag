@@ -86,4 +86,32 @@ void TestGenFlowLayout::testRectangle() {
 	form.removeComponent( &(rects[0]) );
 	CPPUNIT_ASSERT_EQUAL((size_t)num-1, form.getNumComponents());
 }
+//-----------------------------------------------------------------------------
+void TestGenFlowLayout::testBounds() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::genFormatter;
+	
+	typedef GenericFormatter< Rectangle,
+		RectangleAccess,
+		GenFlowLayout
+	> Formatter;
+	Formatter form;
+	const size_t num = 10;	
+	std::vector<Rectangle> rects;
+	rects.reserve(num);
+	for (int i=0; i<num; ++i) {
+		Rectangle r(0 ,0 , (i+1)*10, (i+1)*15);
+		rects.push_back(r);
+		form.addComponent(&(rects.back()));	
+	}
+	
+	// layout
+	form.layout();	
+	
+	Coordinate x, y, w, h;
+	form.currentBounds(x,y,w,h);
+	Rectangle rIst(x, y, w, h);
+	Rectangle rSoll(0, 0, 0, 0);
+	CPPUNIT_ASSERT_EQUAL(rSoll, rIst);
+}
 } //namespace

@@ -42,41 +42,21 @@ struct DefaultMidiEvents : public IMidiEvents {
 	 * flat copy of midi data. (remember: MidiEvent contains midi data as ptr)
 	 * @note: clears all previous setted data
 	 */
-	void copyFlat(IMidiEvents *_events) {
-		events.clear();
-		events.reserve(_events->getNumEvents());
-		int num = _events->getNumEvents();
-		for (int i=0; i<num; ++i) {
-			events.push_back(
-				_events->getMidiEvent(i)
-			);
-		}
-	}
+	void copyFlat(IMidiEvents *_events);
 	//-------------------------------------------------------------------------
 	/**
 	 * deep copy of midi data.
 	 * @note: clears all previous setted data
 	 */
-	void copyDeep(IMidiEvents *_events) {
-		events.clear();
-		events.reserve(_events->getNumEvents());
-		dataContainer.reserve(_events->getNumEvents());
-		int num = _events->getNumEvents();
-		for (int i=0; i<num; ++i) {
-			MidiEvent ev = _events->getMidiEvent(i);
-			ByteSize bytes = boost::get<0>(ev);
-			DeltaFrames d = boost::get<1>(ev);
-			DataPtr srcdata = boost::get<2>(ev);
-			dataContainer.push_back(DataArray(new Data[bytes]));
-			DataPtr dstdata = dataContainer.back().get();
-			for (int j=0; j<bytes; ++j) {
-				dstdata[j] = srcdata[j];
-			}
-			events.push_back(
-				MidiEvent(bytes, d, dstdata)
-			);
-		}
-	}
+	void copyDeep(IMidiEvents *_events);
+	//-------------------------------------------------------------------------
+	/**
+	 * deep copy of midi data using a channel filter.
+	 * all channel related messages wich not belong to filterChannel will be
+	 * ignored.
+	 * @note: clears all previous setted data
+	 */
+	void copyDeepFiltered(IMidiEvents *_events, int filterChannel);
 	//-------------------------------------------------------------------------
 	void reserve(Int size) {
 		events.reserve(size);

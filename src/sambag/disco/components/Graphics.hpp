@@ -84,6 +84,7 @@ public: /*Interface impl.*/
 		cn->setFontSize(size);
 	}
 	virtual Font getCurrentFont() const { return cn->getCurrentFont(); }
+	virtual Number getCurrentFontHeight() const { return cn->getCurrentFontHeight(); }
 	virtual void textPath(const std::string &text) {
 		cn->textPath(text);
 	}

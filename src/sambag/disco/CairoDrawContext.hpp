@@ -350,6 +350,8 @@ public:
 		boost::geometry::add_point(p, Point2D(ex.x_bearing, ex.y_bearing));
 		return Rectangle(p, ex.width, ex.height);
 	}
+	//-------------------------------------------------------------------------
+	virtual Number getCurrentFontHeight() const;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Styling
 	//-------------------------------------------------------------------------
 	virtual bool isStroked() const {

@@ -167,6 +167,15 @@ public:
 	void layout();
 	//-------------------------------------------------------------------------
 	/**
+	 * @return bounds of summary objects.
+ 	 * @note Layout concept
+	 */ 
+	void currentBounds(ValueType &x, 
+		ValueType &y, 
+		ValueType &width, 
+		ValueType &height);
+	//-------------------------------------------------------------------------
+	/**
 	 * Gets the alignment for this layout.
 	 * Possible values are <code>FlowLayout.LEFT</code>,
 	 * <code>FlowLayout.RIGHT</code>, <code>FlowLayout.CENTER</code>,
@@ -273,6 +282,40 @@ void GenFlowLayout<CA>::layout()
 	}
 	moveComponents(hgap, y, maxwidth - x, rowh, start,
 			nmembers);
+}
+//-----------------------------------------------------------------------------
+template <class CA>
+void GenFlowLayout<CA>::currentBounds(ValueType &x, 
+	ValueType &y, 
+	ValueType &width, 
+	ValueType &height) 
+{
+	size_t nmembers = getNumComponents();
+	if (nmembers == 0) {
+		return;
+	}
+	ValueType x1, y1, x2, y2;
+	x1 = y1 = AccessPolicy::maxValue(); 
+	x2 = y2 = AccessPolicy::minValue(); 
+	for (size_t i = 0; i < nmembers; i++) {
+		ComponentType & m = *(getComponent(i));
+		ValueType cx1 = 0, cy1 = 0, cx2 = 0, cy2 = 0;
+		AccessPolicy::getX(m, cx1);	
+		AccessPolicy::getY(m, cy1);	
+		AccessPolicy::getWidth(m, cx2);	
+		AccessPolicy::getHeight(m, cy2);
+		cx2 = cx1 + cx2; // cx1 + witdh
+		cy2 = cy1 + cy2; // cy1 + height
+
+		x1 = std::min(cx1, x1);
+		y1 = std::min(cy1, y1);
+		x2 = std::max(cx2, x2);
+		y2 = std::max(cy2, y2);
+	}
+	x=x1;
+	y=y1;
+	width = x2 - x1;
+	height = y2 - y1;
 }
 //-----------------------------------------------------------------------------
 template <class CA>

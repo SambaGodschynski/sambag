@@ -12,38 +12,10 @@
 #include <sambag/disco/genFormatter/GenFlowLayout.hpp>
 #include <sambag/disco/genFormatter/RectangleAccess.hpp>
 #include <sambag/disco/genFormatter/GenericFormatter.hpp>
+#include "Helper.hpp"
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
-namespace {
-static const sambag::com::Number GAP= 5.;
-Rectangle calcIconBounds(ISurface::Ptr icon, const Coordinate &textHeight) {
-	if (!icon) {
-		return Rectangle(0,0,0,0);	
-	}
-	Rectangle res(0,0,textHeight,textHeight);
-	return res;
-}
-void drawIcon(IDrawContext::Ptr cn,
-	ISurface::Ptr icon, 
-	const Rectangle &bounds,
-	AComponent::Ptr c) 
-{
-	if (!icon) {
-		return;
-	}
-	cn->save();
-	Rectangle realBounds = icon->getSize();
-	if (realBounds.width() <= 0. || realBounds.height() <= 0.)
-		return;
-	sambag::com::Number scaleX = bounds.width() / realBounds.width();
-	sambag::com::Number scaleY = bounds.height() / realBounds.height();
-	cn->translate(bounds.x0());
-	cn->scale(Point2D(scaleX, scaleY));
-	cn->drawSurface(icon);	
-	cn->restore();
-}
-} // namespace(s)
 //=============================================================================
 //  Class BasicLabelUI
 //=============================================================================
@@ -59,38 +31,16 @@ void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->setFont(l->getFont());
 	cn->setFillColor(c->getForeground());
 	std::string txt = sambag::com::normString(l->getText());
-	Rectangle txtEx = cn->textExtends(txt);
 	
-	ISurface::Ptr icon = l->getIcon();
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
-	
-	typedef GenericFormatter< Rectangle,
-		RectangleAccess,
-		GenFlowLayout
-	> Formatter;
-	Formatter form;
-	form.setHgap(GAP);
-	form.setVgap(GAP);
-	form.setAlignment(Formatter::CENTER);
-	form.setWidth(c->getWidth());
-	form.setHeight(c->getHeight());
-	form.addComponent(&iconBounds);	
-	form.addComponent(&txtEx);	
-	form.layout();
-
-	drawIcon(cn, icon, iconBounds, c);
-	cn->moveTo(Point2D(
-		txtEx.x(), txtEx.y() + txtEx.height()
-	));
-	cn->textPath(txt);
-	cn->fill();
+	Helper::drawIconAndText(cn, c->getIcon(), txt, 
+		Rectangle(0, 0, c->getWidth(), c->getHeight()), false);
 }
 //-----------------------------------------------------------------------------
 Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 	
 	Dimension res = getMinimumSize(c);
-	res.width(res.width() + GAP*2.5);
-	res.height(res.height() + GAP*2.5);
+	res.width(res.width() + 25.5);
+	res.height(res.height() + 25.5);
 	return res;
 }
 //-----------------------------------------------------------------------------
@@ -102,12 +52,13 @@ Dimension BasicLabelUI::getMinimumSize(AComponentPtr c) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	cn->setFont(l->getFont());
 	Rectangle txtEx = cn->textExtends(sambag::com::normString(l->getText()));
-	Dimension res(txtEx.width(), txtEx.height());
+	Dimension res(txtEx.width(), cn->getCurrentFontHeight());
 	ISurface::Ptr icon = l->getIcon();
 	if (!icon)
 		return res;
-	Rectangle iconBounds = calcIconBounds(icon, txtEx.getHeight());
-	res.width( res.width() + iconBounds.width() + GAP*5.5);
+	Rectangle iconBounds = Helper::calcIconBounds(icon, res.height());
+	res.width( res.width() + iconBounds.width() + 25.5);
+	res.height( res.height() );
 	return res;
 
 }

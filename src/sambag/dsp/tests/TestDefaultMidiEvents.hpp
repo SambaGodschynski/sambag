@@ -17,9 +17,21 @@ class TestDefaultMidiEvents : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestDefaultMidiEvents );
 	CPPUNIT_TEST( testEventCopy );
+	CPPUNIT_TEST( testEventCopyFiltered );
+	CPPUNIT_TEST( testEventCopyFiltered02 );
+	CPPUNIT_TEST( testEventCopyFiltered03 );
+	CPPUNIT_TEST( testEventCopyFiltered04 );
+	CPPUNIT_TEST( testEventCopyFiltered05 );
+	CPPUNIT_TEST( testEventCopyFiltered06 );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testEventCopy();
+	void testEventCopyFiltered();
+	void testEventCopyFiltered02();
+	void testEventCopyFiltered03();
+	void testEventCopyFiltered04();
+	void testEventCopyFiltered05();
+	void testEventCopyFiltered06();
 };
 
 } // namespace

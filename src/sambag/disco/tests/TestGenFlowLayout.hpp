@@ -17,10 +17,12 @@ class TestGenFlowLayout : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestGenFlowLayout );
 	CPPUNIT_TEST( testRectangle );
+	CPPUNIT_TEST( testBounds );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testDiscoComponent();
 	void testRectangle();
+	void testBounds();
 };
 
 } // namespace

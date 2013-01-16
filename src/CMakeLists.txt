@@ -84,6 +84,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/basic/BasicLabelUI.cpp
 	sambag/disco/components/ui/basic/BasicLookAndFeel.cpp
 	sambag/disco/components/ui/basic/BasicScrollPaneUI.cpp
+	sambag/disco/components/ui/basic/Helper.cpp
 	sambag/disco/components/windowImpl/BoostTimerImpl.cpp
 	sambag/disco/components/windowImpl/TestWindowImpl.cpp
 	sambag/disco/components/windowImpl/Win32MMTimerImpl.cpp

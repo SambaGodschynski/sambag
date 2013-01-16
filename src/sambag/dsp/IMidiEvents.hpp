@@ -10,6 +10,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <sstream>
+#include <ostream>
 
 namespace sambag { namespace dsp {
 //=============================================================================
@@ -27,8 +29,8 @@ namespace sambag { namespace dsp {
   *       | IMidiEvents::MidiEvent event = independent->getMidiEvent(0);
   *       | ...
   *  specific unpacking:
-  *	      | VstMidiEventAdapter flatcopy(independet); // no convertion
-  *		  | XXXMidiEventAdapter deepcopy(independet); // convertion
+  *	      | VstMidiEventAdapter set(independet); // no convertion
+  *		  | XXXMidiEventAdapter set(independet); // convertion
   */
 struct IMidiEvents {
 //=============================================================================
@@ -39,7 +41,7 @@ struct IMidiEvents {
 	//-------------------------------------------------------------------------
 	typedef int DeltaFrames;
 	//-------------------------------------------------------------------------
-	typedef char Data;
+	typedef unsigned char Data;
 	//-------------------------------------------------------------------------
 	typedef Data* DataPtr;
 	//-------------------------------------------------------------------------
@@ -74,6 +76,25 @@ inline bool operator==(const IMidiEvents &a, const IMidiEvents &b) {
 }
 inline bool operator!=(const IMidiEvents &a, const IMidiEvents &b) {
 	return !(a==b);
+}
+inline std::string toString(const IMidiEvents &ev) {
+	size_t numEv = ev.getNumEvents();
+	std::stringstream ss;
+	for ( size_t i=0; i<numEv; ++i ) {
+		IMidiEvents::ByteSize size;
+		IMidiEvents::DeltaFrames d;
+		IMidiEvents::DataPtr data;
+		boost::tie(size, d, data) = ev.getMidiEvent(i);
+		for (int j=0; j<size; ++j) {
+			unsigned int val = data[j];
+			ss<<std::hex<<val<<" ";
+		}
+	}
+	return ss.str();
+}
+inline std::ostream & operator << (std::ostream& os, const IMidiEvents &b) {
+	os<<toString(b);
+	return os;
 }
 }} // namespace(s)
 
