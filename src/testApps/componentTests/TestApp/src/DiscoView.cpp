@@ -357,7 +357,7 @@ void createWindow<MILLER>() {
 	using namespace sambag::disco::components;
 	win[MILLER] = sdc::FramedWindow::create(win[0]);
 	win[MILLER]->setTitle("Miller Columns");
-	win[MILLER]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+	win[MILLER]->setWindowBounds(sambag::disco::Rectangle(110,100,900,880));
 
 	Browser::Ptr miller = Browser::create();
 	win[MILLER]->getContentPane()->add(miller);
