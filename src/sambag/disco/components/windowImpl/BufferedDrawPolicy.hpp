@@ -30,12 +30,21 @@ class BufferedDrawPolicy {
 //=============================================================================
 protected:
 	//-------------------------------------------------------------------------
+	/** 
+	 *  @note draw policy concept
+	 */
 	void processDraw(ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
 	void clearBuffer();
 	//-------------------------------------------------------------------------
+	/** 
+	 *  @note draw policy concept
+	 */
 	void init(components::RootPane::Ptr root);
 	//-------------------------------------------------------------------------
+	/** 
+	 *  @note draw policy concept
+	 */
 	void reinit(components::RootPane::Ptr root) {
 		if (bff)
 			if (bff->getSize().getDimension() ==
@@ -44,6 +53,9 @@ protected:
 		init(root);
 	}
 	//-------------------------------------------------------------------------
+	/** 
+	 *  @note draw policy concept
+	 */
 	void close() {
 		root.reset();
 		bff.reset();
@@ -63,6 +75,9 @@ public:
 	//-------------------------------------------------------------------------
 	BufferedDrawPolicy();
 	//-------------------------------------------------------------------------
+	/** 
+	 *  @note draw policy concept
+	 */
 	void update() {
 		needUpdate = true;
 	}

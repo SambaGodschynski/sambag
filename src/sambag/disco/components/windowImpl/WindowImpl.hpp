@@ -14,7 +14,8 @@
 #include "AWindowImpl.hpp"
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
-#include "BufferedDrawPolicy.hpp"
+//#include "BufferedDrawPolicy.hpp"
+#include "DoubleBufferedDrawPolicy.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -23,7 +24,7 @@ namespace sambag { namespace disco { namespace components {
   */
 template <
 	class ConcreteWindowImpl,
-	class DrawPolicy = BufferedDrawPolicy
+	class DrawPolicy = DoubleBufferedDrawPolicy
 >
 class WindowImpl :
 	public ConcreteWindowImpl,

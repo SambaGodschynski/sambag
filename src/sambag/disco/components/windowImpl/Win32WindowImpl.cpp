@@ -434,7 +434,7 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		}
 		hdc = BeginPaint(hWnd, &ps);
 		win->update(hdc);
-		EndPaint(hWnd, &ps);
+		//EndPaint(hWnd, &ps);
 		break;
 	}
 	case WM_MOVE : {

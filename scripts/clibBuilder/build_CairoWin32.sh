@@ -1,11 +1,6 @@
 #!/bin/sh
 IFS=$'\n'
 
-
-
-
-source ./vs90vcvars32.sh
-
 WHEREAMI=$(pwd)
 
 export ROOTDIR=$WHEREAMI/build
