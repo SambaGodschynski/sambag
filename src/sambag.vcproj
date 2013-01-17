@@ -152,6 +152,9 @@
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\FileSystem.cpp">
 			</File>
 			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\Win32ResourceHandler.cpp">
+			</File>
+			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\cpsqlite\DataBase.cpp">
 			</File>
 			<File
@@ -203,6 +206,12 @@
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\IPattern.cpp">
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\IResourceManager.cpp">
+			</File>
+			<File
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\Win32IntResourceManager.cpp">
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\AButton.cpp">

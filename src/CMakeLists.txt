@@ -3,6 +3,7 @@ SET ( SAMBAG_SOURCES
 	sambag/com/Exception.cpp
 	sambag/com/FileHandler.cpp
 	sambag/com/FileSystem.cpp
+	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
 	sambag/disco/CairoDiscoFactory.cpp
@@ -16,6 +17,8 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/GeometrySerialization.cpp
 	sambag/disco/IDiscoFactory.cpp
 	sambag/disco/IPattern.cpp
+	sambag/disco/IResourceManager.cpp
+	sambag/disco/Win32IntResourceManager.cpp
 	sambag/disco/components/AButton.cpp
 	sambag/disco/components/AColumnBrowser.cpp
 	sambag/disco/components/AComponent.cpp
@@ -169,6 +172,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/TestPattern.cpp
 	sambag/disco/tests/TestSceneGraph.cpp
 	sambag/disco/tests/TestSvg.cpp
+	sambag/disco/tests/TestWin32ResourceManager.cpp
 	sambag/dsp/tests/TestDefaultMidiEvents.cpp
 	sambag/dsp/tests/TestVstMidiEventAdapter.cpp
 	sambag/lua/tests/TestLuaHelper.cpp
@@ -184,6 +188,11 @@ SET ( SAMBAG_TESTAPPSOURCES
 )
 #unit tests
 SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
+#unit test resources
+IF(WIN32)
+  SET (UNIT_TESTSOURCE ${UNIT_TESTSOURCE} win32_resources/resources.rc)
+ENDIF(WIN32)
+
 add_executable(unit_tests ${UNIT_TESTSOURCE})
 target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
 #testapp

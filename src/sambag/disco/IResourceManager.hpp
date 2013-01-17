@@ -26,6 +26,10 @@ class IResourceManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
+	typedef sd::ISurface Image;
+	//-------------------------------------------------------------------------
+	typedef Image::Ptr ImagePtr;
+	//-------------------------------------------------------------------------
 	typedef std::string Url;
 	//-------------------------------------------------------------------------
 	typedef IResourceManager* Ptr;
@@ -35,7 +39,7 @@ public:
 	 * @param url
 	 * @param preferred size of image (for optimization purpose)
 	 */ 
-	virtual sd::ISurface::Ptr getImage(const Url &url,
+	virtual ImagePtr getImage(const Url &url,
 		const Dimension &prefferedSize = Dimension(0,0)) = 0;
 	//-------------------------------------------------------------------------
 	/**
@@ -48,7 +52,12 @@ public:
 }; // IResourceManager
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
-extern IResourceManager & getResourceManager();
+IResourceManager & getResourceManager();
+/**
+ * sets new ResourceManager
+ * @return old ResourceManager.
+ */
+IResourceManager * installResourceManager(IResourceManager &);
 }} // namespace(s)
 
 #endif /* SAMBAG_IGRAPHICSREPOSITORY_H */

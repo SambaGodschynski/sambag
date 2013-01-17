@@ -45,7 +45,6 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~FileHandler();
 };
-
 }} // namespace
 
 #endif /* PNGHANDLER_H_ */

@@ -11,6 +11,11 @@ SET ( SAMBAG_TESTAPPSOURCES
 )
 #unit tests
 SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
+#unit test resources
+IF(WIN32)
+  SET (UNIT_TESTSOURCE ${UNIT_TESTSOURCE} win32_resources/resources.rc)
+ENDIF(WIN32)
+
 add_executable(unit_tests ${UNIT_TESTSOURCE})
 target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
 #testapp

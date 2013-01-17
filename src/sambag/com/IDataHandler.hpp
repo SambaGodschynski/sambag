@@ -22,6 +22,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IDataHandler> Ptr;
 	//-------------------------------------------------------------------------
+	// TODO: why as shared_ptr? i think this is "mit kanonen auf spatzen".
 	typedef boost::shared_ptr<std::istream> StreamPtr;
 	//-------------------------------------------------------------------------
 	virtual StreamPtr getDataStream() = 0;

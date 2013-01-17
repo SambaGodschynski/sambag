@@ -25,21 +25,21 @@ public:
 	//-------------------------------------------------------------------------
 	typedef FileResourceManager* Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<Url, sd::ISurface::Ptr> ImageMap;
+	typedef boost::unordered_map<Url, ImagePtr> ImageMap;
 protected:
 	//-------------------------------------------------------------------------
 	ImageMap imageMap;
 	//-------------------------------------------------------------------------
 	std::string homeDir;
 	//-------------------------------------------------------------------------
-	void registerImage(const Url &url, sd::ISurface::Ptr image);
+	void registerImage(const Url &url, ImagePtr image);
 	//-------------------------------------------------------------------------
 	FileResourceManager();
 private:
 	//-------------------------------------------------------------------------
-	sd::ISurface::Ptr loadPng(const std::string &path);
+	ImagePtr loadPng(const std::string &path);
 	//-------------------------------------------------------------------------
-	sd::ISurface::Ptr loadSvg(const std::string &path);
+	ImagePtr loadSvg(const std::string &path);
 	//-------------------------------------------------------------------------
 	void setHomeDirectory(const std::string &path);
 	//-------------------------------------------------------------------------
@@ -63,9 +63,9 @@ public:
 		return homeDir;
 	}
 	//-------------------------------------------------------------------------
-	sd::ISurface::Ptr loadImage(const std::string &path);
+	ImagePtr loadImage(const std::string &path);
 	//-------------------------------------------------------------------------
-	virtual sd::ISurface::Ptr getImage(const Url &url,
+	virtual ImagePtr getImage(const Url &url,
 		const Dimension &prefferedSize = Dimension(0,0));
 	//-------------------------------------------------------------------------
 	/**

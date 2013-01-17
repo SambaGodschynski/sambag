@@ -29,13 +29,15 @@ void FileResourceManager::assumeHomeDir() {
 //-----------------------------------------------------------------------------
 FileResourceManager::FileResourceManager() {}
 //-----------------------------------------------------------------------------
-sd::ISurface::Ptr FileResourceManager::loadPng(const std::string &path) {
+FileResourceManager::ImagePtr FileResourceManager::loadPng(const std::string &path) 
+{
 	return sd::getDiscoFactory()->createImageSurface(
 		sambag::com::FileHandler::create(path)
 	);	
 }
 //-----------------------------------------------------------------------------
-sd::ISurface::Ptr FileResourceManager::loadSvg(const std::string &path) {
+FileResourceManager::ImagePtr FileResourceManager::loadSvg(const std::string &path) 
+{
 	// prepare recording surface
 	sd::IDiscoFactory *fac = sd::getDiscoFactory();
 	sd::IRecordingSurface::Ptr surf = fac->createRecordingSurface();
@@ -79,16 +81,16 @@ std::string FileResourceManager::getString(const Url &url) {
 	return ss.str();
 }
 //-----------------------------------------------------------------------------
-sd::ISurface::Ptr FileResourceManager::loadImage(const std::string &_path) 
+FileResourceManager::ImagePtr FileResourceManager::loadImage(const std::string &_path) 
 {
 	assumeHomeDir();
 	boost::filesystem::path path = getHomeDirectory() + "/" + _path;
 	if ( !boost::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
 			"file: " + path.string() + " dosent exists.");
-		return sd::ISurface::Ptr();
+		return ImagePtr();
 	}
-	sd::ISurface::Ptr res;
+	ImagePtr res;
 	if (path.extension() == ".svg") {
 		return loadSvg(path.string());
 	}
@@ -98,12 +100,12 @@ sd::ISurface::Ptr FileResourceManager::loadImage(const std::string &_path)
 	return res;
 }
 //-----------------------------------------------------------------------------
-sd::ISurface::Ptr FileResourceManager::getImage(const Url &url,
+FileResourceManager::ImagePtr FileResourceManager::getImage(const Url &url,
 	const Dimension &prefferedSize) 
 {
 	ImageMap::const_iterator it = imageMap.find(url);
 	if (it==imageMap.end())
-		return sd::ISurface::Ptr();
+		return ImagePtr();
 	return it->second;
 }
 //-----------------------------------------------------------------------------
@@ -115,7 +117,7 @@ void FileResourceManager::updateImage(const Url &url) {
 	ImageMap::iterator it = imageMap.find(url);
 	if (it==imageMap.end())
 		return;
-	sd::ISurface::Ptr img = loadImage(url);
+	ImagePtr img = loadImage(url);
 	if (!img)
 		return;
 	it->second = img; 
@@ -126,7 +128,7 @@ void FileResourceManager::init(const std::string &path) {
 }
 //-----------------------------------------------------------------------------
 void FileResourceManager::registerImage(const Url &url, 
-	sd::ISurface::Ptr image)
+	ImagePtr image)
 {
 	imageMap[url] = image;
 }
@@ -139,7 +141,7 @@ void FileResourceManager::unregisterImage(const Url &url)
 bool FileResourceManager::registerImage(const Url &url, 
 	const std::string &path) 
 {
-	sd::ISurface::Ptr img = loadImage(path);
+	ImagePtr img = loadImage(path);
 	if (!img)
 		return false;
 	registerImage(url , img);
@@ -148,10 +150,5 @@ bool FileResourceManager::registerImage(const Url &url,
 //----------------------------------------------------------------------------
 FileResourceManager & FileResourceManager::instance() {
 	return FactoryHolder::Instance();
-}
-///////////////////////////////////////////////////////////////////////////////
-//-----------------------------------------------------------------------------
-IResourceManager & getResourceManager() {
-	return FileResourceManager::instance();
 }
 }} // namespace(s)
