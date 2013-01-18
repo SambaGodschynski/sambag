@@ -20,7 +20,7 @@ void Win32IntResourceManager::checkResourceAccess() {
 	if (!hI) {
 		SAMBAG_THROW(
 			sambag::com::exceptions::IllegalStateException,
-			"no HINSTANNCE set."
+			"no HINSTANCE set."
 		);
 	}
 }

@@ -41,12 +41,12 @@ Win32ResourceHandler::loadResource(HINSTANCE hI, long resID)
 	if (!res) {
 		return SStreamPtr();
 	}
-	HGLOBAL rH = LoadResource(NULL, res);
+	HGLOBAL rH = LoadResource(hI, res);
 	if (!rH) {
 		return SStreamPtr();
 	}
 	char * cData = (char*)LockResource(rH);
-	size_t size = SizeofResource(NULL, res);
+	size_t size = SizeofResource(hI, res);
 	if (size==0) {
 		return SStreamPtr();
 	}

@@ -32,9 +32,11 @@ protected:
 	//-------------------------------------------------------------------------
 	std::string homeDir;
 	//-------------------------------------------------------------------------
-	void registerImage(const Url &url, ImagePtr image);
+	virtual void registerImage(const Url &url, ImagePtr image);
 	//-------------------------------------------------------------------------
 	FileResourceManager();
+	//-------------------------------------------------------------------------
+	virtual ImagePtr loadImage(const std::string &path);
 private:
 	//-------------------------------------------------------------------------
 	ImagePtr loadPng(const std::string &path);
@@ -53,17 +55,15 @@ public:
 	//-------------------------------------------------------------------------
 	static FileResourceManager & instance();
 	//-------------------------------------------------------------------------
-	bool registerImage(const Url &url, const std::string &path);
+	virtual bool registerImage(const Url &url, const std::string &path);
 	//-------------------------------------------------------------------------
-	void unregisterImage(const Url &url);
+	virtual void unregisterImage(const Url &url);
 	//-------------------------------------------------------------------------
 	static void init(const std::string &homeDirPath);
 	//-------------------------------------------------------------------------
 	const std::string & getHomeDirectory() const {
 		return homeDir;
 	}
-	//-------------------------------------------------------------------------
-	ImagePtr loadImage(const std::string &path);
 	//-------------------------------------------------------------------------
 	virtual ImagePtr getImage(const Url &url,
 		const Dimension &prefferedSize = Dimension(0,0));

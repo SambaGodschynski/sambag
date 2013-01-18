@@ -165,7 +165,7 @@ void BasicKnobUI<M>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->arc(loc, getKnob()->getWidth() / 3.);
 	cn->fill();
 
-	cn->setFillColor(stroke);
+	cn->setStrokeColor(stroke);
 	cn->arc(loc, getKnob()->getWidth() / 3.);
 	cn->stroke();
 
