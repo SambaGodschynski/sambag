@@ -27,6 +27,18 @@ change_makefile_to_static()
  mv $1_ $1
 }
 
+#replaces all -MD to -MT pixman workaround: pixman has no MD -> MD is default?
+change_makefile_to_static_pixman()
+{
+ if [ $_LIBLINK = 'MD' ]
+ then
+     return
+ fi
+ echo change_makefile_to_static_pixman
+ sed 's/PIXMAN_CFLAGS +=\(.*\)/PIXMAN_CFLAGS += \1 -MT/g' $1 > $1_
+ mv $1_ $1
+}
+
 #replaces all zdll.lib to zlib.lib
 change_makefile_zlib()
 {
@@ -35,7 +47,7 @@ change_makefile_zlib()
      return
  fi
  echo change_makefile_zlib
- sed 's/zdll.lib/zlib/g' $1 > $1_
+ sed 's/zdll.lib/zlib.lib/g' $1 > $1_
  mv $1_ $1
 }
 
@@ -60,8 +72,14 @@ do
        CLEAN_ALL) export CLEAN_ALL=1
                   rm -rf $ROOTDIR ;;
        MT) export _LIBLINK='MT' ;;
+       DEBUG) export _CONFIG=debug;;
   esac
 done
+if [ -z $_CONFIG ]
+then
+    _CONFIG=release
+fi
+echo build options: $_CONFIG, $_LIBLINK
 }
 
 to_dos_path()
@@ -105,9 +123,9 @@ nmake -f scripts/makefile.vcwin32
 
 #build pixman
 cd $ROOTDIR/$PIXMAN
-change_makefile_to_static $ROOTDIR/$PIXMAN/pixman/Makefile.win32
+change_makefile_to_static_pixman $ROOTDIR/$PIXMAN/pixman/Makefile.win32
 cd pixman
-make -f Makefile.win32 "CFG=release"
+make -f Makefile.win32 "CFG=$_CONFIG"
 
 #source $WHEREAMI/vs90vcvars32.sh UNIX
 
@@ -117,23 +135,31 @@ change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
 
-make -f Makefile.win32 "CFG=release"
+make -f Makefile.win32 "CFG=$_CONFIG"
 
 #deploy
 cd $ROOTDIR
-mkdir $CAIRO/lib
-cp $CAIRO/cairo-version.h $CAIRO/src/cairo-version.h
-cp $CAIRO/src/release/cairo.lib $CAIRO/lib
-cp $CAIRO/src/release/cairo-static.lib $CAIRO/lib
-cp $CAIRO/src/release/cairo.dll $CAIRO/lib
+mkdir -p out/cairo
+cp $CAIRO/cairo-version.h out/cairo/cairo-version.h
+cp $CAIRO/src/$_CONFIG/cairo.lib out/cairo/cairo-$_LIBLINK-$_CONFIG.lib
+cp $CAIRO/src/$_CONFIG/cairo-static.lib out/cairo/cairo_static-$_LIBLINK-$_CONFIG.lib
+cp $CAIRO/src/$_CONFIG/cairo.dll out/cairo/cairo-$_LIBLINK-$_CONFIG.dll
+cp $CAIRO/src/cairo-features.h out/cairo
+cp $CAIRO/src/cairo.h out/cairo
+cp $CAIRO/src/cairo-deprecated.h out/cairo
+cp $CAIRO/src/cairo-win32.h out/cairo
+cp $CAIRO/src/cairo-script.h out/cairo
+cp $CAIRO/src/cairo-ps.h out/cairo
+cp $CAIRO/src/cairo-pdf.h out/cairo
+cp $CAIRO/src/cairo-svg.h out/cairo
 
-mkdir $ZLIB/lib
-cp $ZLIB/zlib.lib $ZLIB/lib
+mkdir -p out/zlib
+cp $ZLIB/zlib.lib out/zlib/zlib-$_LIBLINK-$_CONFIG.lib
 
-mkdir $LIBPNG/lib
-cp $LIBPNG/libpng.lib $LIBPNG/lib
+mkdir -p out/libpng
+cp $LIBPNG/libpng.lib out/libpng/libpng-$_LIBLINK-$_CONFIG.lib
 
-mkdir $PIXMAN/lib
-cp $PIXMAN/pixman/release/pixman-1.lib $PIXMAN/lib
+mkdir -p out/pixman
+cp $PIXMAN/pixman/release/pixman-1.lib out/pixman/pixman-1-$_LIBLINK-$_CONFIG.lib
 
 
