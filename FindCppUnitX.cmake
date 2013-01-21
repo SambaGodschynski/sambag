@@ -10,8 +10,8 @@ FIND_PATH(CPPUNIT_INCLUDE_TMP Test.h
 SET(CPPUNIT_INCLUDE_DIRS "${CPPUNIT_INCLUDE_TMP}/..")
 
 IF(WIN32)
-	SET(LIBCPPUNIT "cppunit.lib")
-	SET(LIBCPPUNITD "cppunitd.lib")
+	SET(LIBCPPUNIT "cppunit-s-mt.lib")
+	SET(LIBCPPUNITD "cppunit-s-md-d.lib")
 ELSE(WIN32)
 	SET(LIBCPPUNIT "libcppunit.a")
 	SET(LIBCPPUNITD "libcppunit.a")

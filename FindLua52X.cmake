@@ -8,16 +8,16 @@ FIND_PATH(LUA52_INCLUDE_DIRS lua.hpp
 )
 
 IF(WIN32)
-	SET(LIBLUA52 "lua52.lib")
-	SET(LIBLUA52D "lua52.lib")
+	SET(LIBLUA52 "lua52-s-mt.lib")
+	SET(LIBLUA52D "lua52-s-md-d.lib")
 ELSE(WIN32)
 	SET(LIBLUA52 "liblua.a")
-        SET(LIBLUA52D "liblua.a")
+    SET(LIBLUA52D "liblua.a")
 ENDIF(WIN32)
 
 FIND_PATH(LUA52_LIBRARY_DIRS ${LIBLUA52}
 	$ENV{CLIBS}/lua/src
-	$ENV{CLIBS}/lua/win32/Release
+	$ENV{CLIBS}/lua/win32/lib
 )
 
 SET(LUA52_FOUND "NO")

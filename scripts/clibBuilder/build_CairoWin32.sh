@@ -155,11 +155,13 @@ cp $CAIRO/src/cairo-svg.h out/cairo
 
 mkdir -p out/zlib
 cp $ZLIB/zlib.lib out/zlib/zlib-$_LIBLINK-$_CONFIG.lib
+cp $ZLIB/*.h out/zlib
 
 mkdir -p out/libpng
 cp $LIBPNG/libpng.lib out/libpng/libpng-$_LIBLINK-$_CONFIG.lib
+cp $LIBPNG/*.h out/libpng
 
 mkdir -p out/pixman
 cp $PIXMAN/pixman/release/pixman-1.lib out/pixman/pixman-1-$_LIBLINK-$_CONFIG.lib
-
+cp $PIXMAN/pixman/*.h out/pixman
 
