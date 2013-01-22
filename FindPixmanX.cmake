@@ -9,7 +9,7 @@ FIND_PATH(LIBPIXMAN_INCLUDE_DIRS pixman.h
 
 IF(WIN32)
 	SET(LIBPIXMAN "pixman-1-MT-release.lib")
-	SET(LIBPIXMAND "pixman-1-MD-debug.lib")
+	SET(LIBPIXMAND "pixman-1-MT-debug.lib")
 ELSE(WIN32)
 	SET(LIBPIXMAN "libpixman.a")
 	SET(LIBPIXMAND "libpixman.a")

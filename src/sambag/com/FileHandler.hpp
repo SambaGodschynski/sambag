@@ -9,7 +9,6 @@
 #define DISCO_FILEHANDLER_H_
 
 #include "IDataHandler.hpp"
-#include <cairo.h>
 #include <fstream>
 
 namespace sambag { namespace com {

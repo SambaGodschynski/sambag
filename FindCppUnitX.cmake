@@ -11,7 +11,7 @@ SET(CPPUNIT_INCLUDE_DIRS "${CPPUNIT_INCLUDE_TMP}/..")
 
 IF(WIN32)
 	SET(LIBCPPUNIT "cppunit-s-mt.lib")
-	SET(LIBCPPUNITD "cppunit-s-md-d.lib")
+	SET(LIBCPPUNITD "cppunit-s-mt-d.lib")
 ELSE(WIN32)
 	SET(LIBCPPUNIT "libcppunit.a")
 	SET(LIBCPPUNITD "libcppunit.a")

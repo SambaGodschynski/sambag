@@ -9,7 +9,7 @@ FIND_PATH(SQLITE3_INCLUDE_DIRS sqlite3.h
 
 IF(WIN32)
 	SET(LIBSQLITE3 "sqlite3-s-mt.lib")
-	SET(LIBSQLITE3D "sqlite3-s-md-d.lib")
+	SET(LIBSQLITE3D "sqlite3-s-mt-d.lib")
 ELSE(WIN32)
 	SET(LIBSQLITE3 "libsqlite3.a")
 	SET(LIBSQLITE3D "libsqlite3.a")

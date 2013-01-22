@@ -9,7 +9,7 @@ FIND_PATH(LIBZLIB_INCLUDE_DIRS zlib.h
 
 IF(WIN32)
 	SET(LIBZLIB "zlib-MT-release.lib")
-	SET(LIBZLIBD "zlib-MD-debug.lib")
+	SET(LIBZLIBD "zlib-MT-debug.lib")
 ELSE(WIN32)
 	SET(LIBZLIB "zlib.a")
 	SET(LIBZLIBD "zlib.a")

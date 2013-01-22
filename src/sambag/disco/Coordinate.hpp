@@ -34,6 +34,11 @@ private:
 	}
 	//-------------------------------------------------------------------------
 public:
+	//-------------------------------------------------------------------------
+	ValueType getValue() const {
+		return value;
+	}
+	//-------------------------------------------------------------------------
 	Coordinate(ValueType value=0) : value(value) {}
 	//-------------------------------------------------------------------------
 	inline operator ValueType() const {
@@ -43,21 +48,38 @@ public:
 	std::string toString() const;
 	//-------------------------------------------------------------------------
 	void operator +=(const Coordinate &v) {
-		value +=v;
+		value +=v.getValue();
 	}
 	//-------------------------------------------------------------------------
 	void operator -=(const Coordinate &v) {
-		value -=v;
+		value -=v.getValue();
 	}
 	//-------------------------------------------------------------------------
 	void operator *=(const Coordinate &v) {
-		value *=v;
+		value *=v.getValue();
 	}
 	//-------------------------------------------------------------------------
 	void operator /=(const Coordinate &v) {
+		value /=v.getValue();
+	}
+	//-------------------------------------------------------------------------
+	void operator +=(ValueType v) {
+		value +=v;
+	}
+	//-------------------------------------------------------------------------
+	void operator -=(ValueType v) {
+		value -=v;
+	}
+	//-------------------------------------------------------------------------
+	void operator *=(ValueType v) {
+		value *=v;
+	}
+	//-------------------------------------------------------------------------
+	void operator /=(ValueType v) {
 		value /=v;
 	}
 };
+///////////////////////////////////////////////////////////////////////////////
 inline std::ostream & operator<<(std::ostream &os, const Coordinate &obj) {
 	os << obj.toString();
 	return os;

@@ -9,7 +9,7 @@ FIND_PATH(TINYXML_INCLUDE_DIRS ticpp/ticpp.h
 
 IF(WIN32)
 	SET(LIBTINYXML "ticpp-s-mt.lib")
-	SET(LIBTINYXMLD "ticpp-s-md-d.lib")
+	SET(LIBTINYXMLD "ticpp-s-mt-d.lib")
 ELSE(WIN32)
 	SET(LIBTINYXML "libticpp.a")
 	SET(LIBTINYXMLD "libticpp.a")
