@@ -23,6 +23,7 @@
 				AdditionalOptions=" /Zm1000"
 				AdditionalIncludeDirectories="&quot;C:\Eigene Dateien\Eigene Progs\clibs\sambag\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cairo&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\cppunit\include\cppunit\..&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\tinyxml&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\boost&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\loki\include&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\lua\src&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\sqlite&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\public.sdk\source\vst2.x&quot;;&quot;C:\Eigene Dateien\Eigene Progs\clibs\vstsdk2.4\pluginterfaces\vst2.x&quot;;"
 				CompileAs="2"
+				DebugInformationFormat="4"
 				ExceptionHandling="1"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
@@ -66,6 +67,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				ProgramDatabaseFile="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug/testApp.pdb"
+				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				ImportLibrary="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\Debug\testApp.lib"/>
 		</Configuration>

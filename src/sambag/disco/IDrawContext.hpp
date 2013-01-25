@@ -100,6 +100,14 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void drawSurface(ISurface::Ptr, Number opacity = 1.0) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
+	struct TextExtends {
+		double x_bearing;
+		double y_bearing;
+		double width;
+		double height;
+		double x_advance;
+		double y_advance;
+	};
 	//-------------------------------------------------------------------------
 	virtual void setFont( const Font &font ) = 0;
 	//-------------------------------------------------------------------------
@@ -205,6 +213,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle textExtends(const std::string &str) const = 0;
 	//-------------------------------------------------------------------------
+	virtual TextExtends textExtendsX(const std::string &str) const = 0;
+	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPath() const = 0;
 	//-------------------------------------------------------------------------
 	virtual Path::Ptr copyPathFlat() const = 0;
@@ -217,6 +227,12 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void copyTo(IDrawContext::Ptr cn) const = 0;
 	//-------------------------------------------------------------------------
+	/**
+	 * copy specific area of context into given context.
+	 * @param dst context
+	 * @param src area
+	 * @param where to copy
+	 */
 	virtual void copyAreaTo(IDrawContext::Ptr cn,
 			const Rectangle &src, const Point2D &dst) const = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Transformation

@@ -66,7 +66,7 @@ private:
 	//-------------------------------------------------------------------------
 	RootPane::Ptr root;
 	//-------------------------------------------------------------------------
-	void redrawRoot();
+	void redrawRoot(sambag::disco::ISurface::Ptr sf);
 	//-------------------------------------------------------------------------
 	sambag::disco::ISurface::Ptr bff;
 	//-------------------------------------------------------------------------
@@ -94,7 +94,7 @@ inline BufferedDrawPolicy::BufferedDrawPolicy() {
 	updateTimer->start();*/
 }
 //-----------------------------------------------------------------------------
-inline void BufferedDrawPolicy::redrawRoot() {
+inline void BufferedDrawPolicy::redrawRoot(sambag::disco::ISurface::Ptr sf) {
 	if (!bff || !root)
 		return;
 	try {
@@ -127,7 +127,7 @@ inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	redrawRoot();
+	redrawRoot(surface);
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
 	cn->drawSurface(bff);

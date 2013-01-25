@@ -135,11 +135,7 @@ void Win32WindowImpl::drawAll() {
 //-----------------------------------------------------------------------------
 disco::Win32Surface::Ptr Win32WindowImpl::getSurface(HDC dc) {
 	using namespace sambag;
-	//if (!surface) { //see: issue #238
-		Rectangle r = getBounds();
-		surface = disco::Win32Surface::create(dc,
-			(int)r.getWidth(), (int)r.getHeight());
-	//}
+	surface = disco::Win32Surface::create(dc);
 	return surface;
 }
 //-----------------------------------------------------------------------------
@@ -434,7 +430,7 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		}
 		hdc = BeginPaint(hWnd, &ps);
 		win->update(hdc);
-		EndPaint(hWnd, &ps);
+		//EndPaint(hWnd, &ps);
 		break;
 	}
 	case WM_MOVE : {

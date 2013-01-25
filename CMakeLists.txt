@@ -9,7 +9,7 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 add_definitions(-DSAMBAG_USE_LOG)
 add_definitions(-D_SCL_SECURE_NO_WARNINGS) #disable warning C4996: 'std::uninitialized_copy' caused by boost::ublas
 add_definitions(-D_CRT_SECURE_NO_WARNINGS) #disable strcpy warning in audioeffect.h
-set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI")
 
 #add_definitions(-DSAMBA_WARN_MISSING_IMPL) #show xy not impl. warning
 

@@ -48,6 +48,22 @@ private:
 	sdsg::Style style;
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 */
+	virtual void validate() {}
+	//-------------------------------------------------------------------------
+	/**
+	 * Overridden for performance reasons.
+	 * See the <a href="#override">Implementation Note</a>
+	 * for more information.
+	 *
+	 * @since 1.5
+	 */
+	virtual void invalidate() {}
+	//-------------------------------------------------------------------------
 	virtual void setStyle( const sdsg::Style &style ) { 
 		this->style = style;
 	}

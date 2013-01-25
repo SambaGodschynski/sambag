@@ -81,6 +81,5 @@ struct Font {
 		return *this;
 	}
 };
-
 }} //namespaces
 #endif /* FONT_HPP_ */

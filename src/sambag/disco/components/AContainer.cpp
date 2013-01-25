@@ -469,14 +469,14 @@ void AContainer::drawChildren(IDrawContext::Ptr context) {
 			Rectangle cr = comp->getBounds();
 			if (!sg.hitClip(cr)) // formally g !!
 				continue;
-			if (i > 0) {
+			/*if (i > 0) {
 				Rectangle tmp;
 				boost::geometry::intersection<Rectangle::Base,
 				Rectangle::Base, Rectangle::Base> (cr, clipBounds, tmp);
 				if(getObscuredState(i, tmp) == COMPLETELY_OBSCURED) {
 					continue;
 				}
-			} // if (i>0)
+			} // if (i>0)*/
 			sg.save();
 			sg.translate(cr.x0());
 			sg.setClip(Rectangle(Point2D(0,0), cr.getWidth(), cr.getHeight()));

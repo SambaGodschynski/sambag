@@ -748,9 +748,9 @@ int main() {
 		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
 		win[0]->getContentPane()->add(btn);
-
+	
 		win[0]->validate();
-		win[0]->pack();
+		//win[0]->pack();
 		win[0]->open();
 
 		MenuSelectionManager::defaultManager().

@@ -133,6 +133,9 @@ public: /*Interface impl.*/
 	virtual Rectangle textExtends(const std::string &str) const {
 		return cn->textExtends(str);
 	}
+	virtual TextExtends textExtendsX(const std::string &str) const {
+		return cn->textExtendsX(str);
+	}
 	virtual void copyTo(IDrawContext::Ptr dst) const {
 		cn->copyTo(dst);
 	}

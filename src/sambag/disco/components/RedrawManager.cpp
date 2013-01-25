@@ -351,8 +351,17 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 			// the window, don't do anything.
 			if (cn) {
 				cn->save();
-				g.setClip(rect);
-				//std::cout<<dirtyComponent->toString()<<std::endl;
+				rect.inset(1., 1.);
+				/**
+				 * avoid smearing:
+				 * see issue #278
+				 */ 
+				g.setClip(Rectangle(
+					floor( rect.x() ),
+					floor( rect.y() ),
+					ceil( rect.width() ),
+					ceil( rect.height() )
+				));
 				dirtyComponent->draw(g.getPtr());
 				cn->restore();
 			}

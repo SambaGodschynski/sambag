@@ -25,10 +25,12 @@ namespace sambag { namespace disco {
 //=============================================================================
 using namespace boost;
 using namespace sambag::com;
+//=============================================================================
 /**
  * @typedef Point2D.
  */
 typedef boost::geometry::model::d2::point_xy<Coordinate> Point2D;
+//=============================================================================
 //-----------------------------------------------------------------------------
 inline bool operator==(const Point2D &a, const Point2D &b) {
 	return boost::geometry::equals(a,b);
@@ -37,6 +39,10 @@ inline bool operator==(const Point2D &a, const Point2D &b) {
 inline bool operator!=(const Point2D &a, const Point2D &b) {
 	return !boost::geometry::equals(a,b);
 }
+//-----------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////
+// Point Helper
+///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 /**
  * @param a
@@ -61,6 +67,34 @@ inline Point2D maximize(const Point2D &a, const Point2D &b) {
 		a.x() > b.x() ? a.x() : b.x(),
 		a.y() > b.y() ? a.y() : b.y()
 	);
+}
+//-----------------------------------------------------------------------------
+/**
+ * @return p+=Point2D(x,y)
+ * @param x
+ * @param y
+ */
+inline Point2D 
+addTo(const Point2D &p, const Coordinate& x, const Coordinate &y = 0.) 
+{
+	Point2D r = p;
+	r.x( r.x() + x );
+	r.y( r.y() + y );
+	return r;
+}
+//-----------------------------------------------------------------------------
+/**
+ * @return p*=Point2D(x,y)
+ * @param x
+ * @param y
+ */
+inline Point2D 
+mulTo(const Point2D &p, const Coordinate& x, const Coordinate &y = 0.) 
+{
+	Point2D r = p;
+	r.x( r.x() * x );
+	r.y( r.y() * y );
+	return r;
 }
 //=============================================================================
 inline Point2D getNullPoint2D() {
