@@ -258,7 +258,6 @@ void GenFlowLayout<CA>::layout()
 	ValueType x = 0, y = vgap;
 	int rowh = 0, start = 0;
 
-
 	for (size_t i = 0; i < nmembers; i++) {
 		ComponentType & m = *(getComponent(i));
 		ValueType cw = 0, ch = 0;
@@ -282,6 +281,8 @@ void GenFlowLayout<CA>::layout()
 	}
 	moveComponents(hgap, y, maxwidth - x, rowh, start,
 			nmembers);
+
+	currentBounds(x,y,width,height);
 }
 //-----------------------------------------------------------------------------
 template <class CA>

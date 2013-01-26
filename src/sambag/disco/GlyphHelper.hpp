@@ -24,8 +24,9 @@ struct GlyphHelper {
 	typedef unsigned char Glyph;
 	typedef double Coordinate;
 	Glyph glyph;
-	Coordinate x, y, w, h;
-	GlyphHelper() : glyph(0), x(0), y(0), w(0), h(0) {}
+	Coordinate x, y, w, h, offx, offy;
+	GlyphHelper() : 
+		glyph(0), x(0), y(0), w(0), h(0), offx(0), offy(0) {}
 	std::string str() const {
 		const char res[] = {glyph, '\0'};
 		return &res[0];

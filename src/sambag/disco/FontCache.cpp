@@ -25,8 +25,12 @@ enum { CH_START = 32, CH_END= 127, CH_NUM = CH_END - CH_START + 1 };
 inline size_t glyphToIndex(GlyphHelper::Glyph ch) {
 	return ch-CH_START;
 }
-void _createFontMapImpl(IDrawContext::Ptr cn, FontCache::GlyphLocationMap &glyphes)
+ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn, 
+	FontCache::GlyphMap &glm)
 {
+	FontCache::GlyphLocationMap	&glyphes = boost::get<1>(glm);
+	FontCache::FontHeight &height = boost::get<2>(glm);
+	height = 0;
 	glyphes.resize(CH_NUM);
 	typedef genFormatter::GenericFormatter< GlyphHelper,
 		GlyphHelperAccess,
@@ -34,13 +38,16 @@ void _createFontMapImpl(IDrawContext::Ptr cn, FontCache::GlyphLocationMap &glyph
 	> Formatter;
 	Formatter f;
 	f.setWidth(800.);
-	f.setHgap(cn->getCurrentFontHeight());
-	f.setVgap(cn->getCurrentFontHeight());
+	//f.setHgap(ftCn->getCurrentFontHeight());
+	//f.setVgap(ftCn->getCurrentFontHeight());
 	for (size_t i=0; i<CH_NUM; ++i) {
 		glyphes[i].glyph = CH_START + i;
-		IDrawContext::TextExtends ex = cn->textExtendsX(glyphes[i].str());
+		IDrawContext::TextExtends ex = ftCn->textExtendsX(glyphes[i].str());
 		glyphes[i].w = ex.width;
 		glyphes[i].h = ex.height;
+		glyphes[i].offx = ex.x_bearing;
+		glyphes[i].offy = ex.y_bearing;
+		height = std::max(-ex.y_bearing, height);
 		if ( glyphes[i].w==0 || glyphes[i].h==0 ) {
 			glyphes[i].glyph = 0;
 			continue;
@@ -48,45 +55,51 @@ void _createFontMapImpl(IDrawContext::Ptr cn, FontCache::GlyphLocationMap &glyph
 		f.addComponent(&glyphes[i]);
 	}
 	f.layout();
-	// draw result
-	for (size_t i=0; i<CH_NUM; ++i) {
-		const GlyphHelper &gl = glyphes[i];
-		if (gl.glyph == 0) {
-			continue;
-		}
-		cn->moveTo(Point2D(gl.x, gl.y + gl.h));
-		cn->textPath(gl.str());
-		cn->fill();
-		
-	}
-}
-} // namespace(s)
-//-----------------------------------------------------------------------------
-void FontCache::createGlyphMap(const Font &ft, GlyphMap &map) {
-	IDiscoFactory *fac = getDiscoFactory();
-	IRecordingSurface::Ptr rec = fac->createRecordingSurface();
-	IDrawContext::Ptr cn = fac->createContext(rec);
 
-	cn->setFont(ft);
-	cn->setFillColor(ColorRGBA(1,1,1,1));
-	cn->setFillColor(ColorRGBA(0));
-	_createFontMapImpl(cn, map.second);
-
-	Rectangle size = rec->getSize();
-
-	if (size.width() == 0 || size.height() == 0) {
+	if (f.getWidth() == 0 || f.getHeight() == 0) {
 		SAMBAG_THROW(
 			sambag::com::exceptions::IllegalStateException,
 			"creating fontmap failed."
 		);
 	}
 
-	map.first = fac->createImageSurface((Integer)size.width(),
-		(Integer)size.height());
-	fac->createContext(map.first)->drawSurface(rec);
+	// draw result
+	IDiscoFactory *fac = getDiscoFactory();
+	ISurface::Ptr res = fac->createImageSurface(
+		(Integer)ceil( f.getWidth() + f.getHgap() ),
+		(Integer)ceil( f.getHeight() + f.getVgap()) 
+	);
+	IDrawContext::Ptr cn = fac->createContext(res);
+
+	cn->setFont(ftCn->getCurrentFont());
+	cn->setFillColor(ftCn->getFillColor());
+
+	for (size_t i=0; i<CH_NUM; ++i) {
+		const GlyphHelper &gl = glyphes[i];
+		if (gl.glyph == 0) {
+			continue;
+		}
+		Coordinate x = gl.x;
+		Coordinate y = gl.y;
+		cn->moveTo(Point2D(x-gl.offx, y-gl.offy));
+		cn->textPath(gl.str());
+		cn->fill();
+	}
+	return res;
+}
+} // namespace(s)
+//-----------------------------------------------------------------------------
+void FontCache::createGlyphMap(const FontTraits &ft, GlyphMap &map) {
+	IDiscoFactory *fac = getDiscoFactory();
+	IRecordingSurface::Ptr rec = fac->createRecordingSurface();
+	IDrawContext::Ptr cn = fac->createContext(rec);
+	cn->setFont(ft);
+	cn->setFillColor(ColorRGBA(0));
+	
+	boost::get<0>(map) = _createFontMapImpl(cn, map);	
 }
 //-----------------------------------------------------------------------------
-const FontCache::GlyphMap & FontCache::getGlyphMap(const Font &ft) {
+const FontCache::GlyphMap & FontCache::getGlyphMap(const FontTraits &ft) {
 	FontMap::iterator it = fontMap.find(ft);
 	bool inserted;
 	if (it!=fontMap.end()) {
@@ -104,16 +117,17 @@ const FontCache::GlyphMap & FontCache::getGlyphMap(const Font &ft) {
 	return it->second;
 }	
 //-----------------------------------------------------------------------------
-void FontCache::installFont(const Font &ft) {
+void FontCache::installFont(const FontTraits &ft) {
 	getGlyphMap(ft);
 }
 //-----------------------------------------------------------------------------
 void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) {
 	const GlyphMap &gl = getGlyphMap(cn->getCurrentFont());
-	ISurface::Ptr sf = gl.first;
+	ISurface::Ptr sf = boost::get<0>(gl);
 	IDrawContext::Ptr sfCn = getDiscoFactory()->createContext(sf);
-	const GlyphLocationMap &glm = gl.second;
+	const GlyphLocationMap &glm = boost::get<1>(gl);
 	Point2D cursor = cn->getCurrentPoint();
+	double fht = boost::get<2>(gl);
 	for (size_t i=0; i<text.length(); ++i) {
 		GlyphHelper::Glyph glyph = text[i];
 		size_t index = glyphToIndex(glyph);
@@ -121,7 +135,12 @@ void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) {
 			index = glyphToIndex('?');
 		}
 		const GlyphHelper &glh = glm[index];
-		sfCn->copyAreaTo(cn, Rectangle(glh.x, glh.y, glh.w, glh.h), cursor);
+		Coordinate x = glh.x;
+		Coordinate y = glh.y;
+		sfCn->copyAreaTo(cn, 
+			Rectangle(x, y, glh.w, glh.h), 
+			addTo(cursor, glh.offx, fht+glh.offy)
+		);
 		cursor.x( cursor.x() + glh.w ); 
 	}
 }

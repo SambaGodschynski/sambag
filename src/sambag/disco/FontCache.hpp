@@ -13,11 +13,13 @@
 #include "IDrawContext.hpp"
 #include <string>
 #include "GlyphHelper.hpp"
-#include <boost/unordered_map.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace boost {
 extern size_t hash_value(const sambag::disco::Font &o);
 }
+
+#include <boost/unordered_map.hpp>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -32,20 +34,24 @@ public:
 	//-------------------------------------------------------------------------
 	typedef std::vector<GlyphHelper> GlyphLocationMap;
 	//-------------------------------------------------------------------------
-	typedef std::pair<ISurface::Ptr, GlyphLocationMap> GlyphMap;
+	typedef double FontHeight;
 	//-------------------------------------------------------------------------
-	typedef boost::unordered_map<Font, GlyphMap> FontMap;
+	typedef boost::tuple<ISurface::Ptr, GlyphLocationMap, FontHeight> GlyphMap;
+	//-------------------------------------------------------------------------
+	typedef Font FontTraits;
+	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<FontTraits, GlyphMap> FontMap;
 protected:
 	//-------------------------------------------------------------------------
-	void createGlyphMap(const Font &ft, GlyphMap &map);
+	void createGlyphMap(const FontTraits &ft, GlyphMap &map);
 private:
 	//-------------------------------------------------------------------------
 	FontMap fontMap;
 public:
 	//-------------------------------------------------------------------------
-	void installFont(const Font &ft);
+	void installFont(const FontTraits &ft);
 	//-------------------------------------------------------------------------
-	const GlyphMap & getGlyphMap(const Font &ft);
+	const GlyphMap & getGlyphMap(const FontTraits &ft);
 	//-------------------------------------------------------------------------
 	static FontCache & instance();
 	//-------------------------------------------------------------------------
