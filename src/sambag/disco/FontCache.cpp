@@ -42,6 +42,9 @@ ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn,
 	//f.setVgap(ftCn->getCurrentFontHeight());
 	for (size_t i=0; i<CH_NUM; ++i) {
 		glyphes[i].glyph = CH_START + i;
+		if ( i == 0 ) { // whitespace
+			glyphes[i].glyph = '_';
+		}
 		IDrawContext::TextExtends ex = ftCn->textExtendsX(glyphes[i].str());
 		glyphes[i].w = ex.width;
 		glyphes[i].h = ex.height;
@@ -76,7 +79,7 @@ ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn,
 
 	for (size_t i=0; i<CH_NUM; ++i) {
 		const GlyphHelper &gl = glyphes[i];
-		if (gl.glyph == 0) {
+		if (i == 0) {	// whitespace
 			continue;
 		}
 		Coordinate x = gl.x;
