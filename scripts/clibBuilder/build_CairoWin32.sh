@@ -7,7 +7,7 @@ export ROOTDIR=$WHEREAMI/build
 export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
 export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
 export URL_PIXMAN='http://cairographics.org/releases/pixman-0.28.2.tar.gz'
-export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.8.tar.xz'
+export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.10.tar.xz'
 export _LIBLINK='MD'
 LIBPNG=libpng
 ZLIB=zlib
@@ -162,6 +162,6 @@ cp $LIBPNG/libpng.lib out/libpng/libpng-$_LIBLINK-$_CONFIG.lib
 cp $LIBPNG/*.h out/libpng
 
 mkdir -p out/pixman
-cp $PIXMAN/pixman/release/pixman-1.lib out/pixman/pixman-1-$_LIBLINK-$_CONFIG.lib
+cp $PIXMAN/pixman/$_CONFIG/pixman-1.lib out/pixman/pixman-1-$_LIBLINK-$_CONFIG.lib
 cp $PIXMAN/pixman/*.h out/pixman
 
