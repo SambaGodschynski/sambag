@@ -406,10 +406,6 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\com\tests\FileSystemTest.cpp"
-				>
-			</File>
-			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\tests\HelperForTesting.cpp"
 				>
 			</File>

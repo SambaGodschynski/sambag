@@ -138,7 +138,9 @@ void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
 	cairo_set_source_surface (cr,
 			surfaceRef->getCairoSurface(),
 			dest.x() - src.x0().x(), dest.y() - src.x0().y());
+
 	cairo_rectangle (cr, dest.x(), dest.y(), src.width(), src.height());
+
 	cairo_fill (cr);
 	SAMBAG_CHECK_CONTEXT_STATE(context);
 }

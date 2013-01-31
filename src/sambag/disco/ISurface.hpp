@@ -26,6 +26,12 @@ public:
 	virtual Rectangle getSize() const = 0;
 	//-------------------------------------------------------------------------
 	/**
+	 * @return cliprect of surface. If no clip setted the result is equal to 
+	 * getSize().
+	 */
+	virtual Rectangle getClipRect() const = 0;
+	//-------------------------------------------------------------------------
+	/**
 	 * note: not all surfaces implements this
 	 * LibCairo:
 	 * A Pixmap can never change size, so it is never necessary to call this

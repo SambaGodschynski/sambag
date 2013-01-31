@@ -44,6 +44,7 @@ public:
 	void getParameterDisplay(int index, String &outStr) const {}
 	void processEvents(IMidiEvents *ev) {}
 	void setBlockSize(int blockSize){}
+	void process(float **in, float **out, int numSamples){}
 	void setSampleRate(float blockSize){}
 	int getLatency() const {return 0;}
 	void open(){}

@@ -35,10 +35,14 @@ void TestFontCache::testGetFontMap() {
 void TestFontCache::testDrawText() {
 	using namespace sambag::disco;
 	FontCache &fc = FontCache::instance();
-	IImageSurface::Ptr surface = getDiscoFactory()->createImageSurface(320, 200);
+	IImageSurface::Ptr surface = getDiscoFactory()->createImageSurface(420, 200);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext(surface);
-	cn->setFont( Font().setSize(56.) );
+	cn->setFont( Font().setSize(57.) );
+	cn->setStrokeColor(1);
 	fc.drawText(cn,"\"Hello World!\"");
+	cn->moveTo(Point2D(0., 50.));
+	cn->lineTo(Point2D(10., 50.));
+	cn->stroke();
 	cn->moveTo(Point2D(0., 50.));
 	fc.drawText(cn,"Hällo Börld!");
 	testPng("testDrawText", surface);

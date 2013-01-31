@@ -54,6 +54,14 @@ public:
 		return surface;
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * default impl. 
+	 * @return getSize();
+	 */
+	virtual Rectangle getClipRect() const {
+		return getSize();
+	}
+	//-------------------------------------------------------------------------
 	virtual ~CairoSurface();
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const = 0;
@@ -81,6 +89,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const;
 	//-------------------------------------------------------------------------
+	/**
+	 * default impl. 
+	 * @return getSize();
+	 */
+	virtual Rectangle getClipRect() const {
+		return getSize();
+	}
 };
 //=============================================================================
 class CairoRecordingSurface : public CairoSurface, public IRecordingSurface {
@@ -105,6 +120,13 @@ public:
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const;
 	//-------------------------------------------------------------------------
+	/**
+	 * default impl. 
+	 * @return getSize();
+	 */
+	virtual Rectangle getClipRect() const {
+		return getSize();
+	}
 };
 
 }} // namespace

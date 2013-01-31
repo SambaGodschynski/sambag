@@ -135,8 +135,11 @@ void Win32TimerImpl::startUpTimer() {
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::tearDownTimer() {
-	KillTimer(NULL, masterTimerId);
-	masterTimerId = 0;
+	if (masterTimerId!=0) {
+		KillTimer(NULL, masterTimerId);
+		masterTimerId = 0;
+	}
+
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimer(Timer::Ptr tm) {

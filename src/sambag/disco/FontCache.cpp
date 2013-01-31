@@ -43,7 +43,7 @@ ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn,
 	for (size_t i=0; i<CH_NUM; ++i) {
 		glyphes[i].glyph = CH_START + i;
 		if ( i == 0 ) { // whitespace
-			glyphes[i].glyph = '_';
+			glyphes[i].glyph = 'o';
 		}
 		IDrawContext::TextExtends ex = ftCn->textExtendsX(glyphes[i].str());
 		glyphes[i].w = ex.width;

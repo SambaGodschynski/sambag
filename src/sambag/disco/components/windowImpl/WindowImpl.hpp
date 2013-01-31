@@ -15,7 +15,6 @@
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include "BufferedDrawPolicy.hpp"
-//#include "DoubleBufferedDrawPolicy.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================

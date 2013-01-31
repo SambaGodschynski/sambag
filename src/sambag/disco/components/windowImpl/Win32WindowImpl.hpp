@@ -38,7 +38,7 @@ struct WndClassManager {
 			return wndClass;
 		}
 	};
-	typedef std::map<WndClassId, WndClassHolder::WPtr> WndClassMap;
+	typedef std::map<WndClassId, WndClassHolder::Ptr> WndClassMap;
 	static WndClassMap wndClassMap;
 	static WndClassHolder::Ptr getWndClassHolder(const std::string &name, HINSTANCE hi);
 };
@@ -77,10 +77,6 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
-	disco::Win32Surface::Ptr surface;
-	//-------------------------------------------------------------------------
-	disco::Win32Surface::Ptr getSurface(HDC dc);
-	//-------------------------------------------------------------------------
 	void invalidateSurface();
 	//-------------------------------------------------------------------------
 	void destroyWindow();
@@ -95,7 +91,7 @@ private:
 	//-------------------------------------------------------------------------
 	bool visible;
 	//-------------------------------------------------------------------------
-	void update(HDC dc);
+	void update();
 	//-------------------------------------------------------------------------
 	static Win32WindowImpl * getWin32WindowImpl(HWND win);
 	//-------------------------------------------------------------------------

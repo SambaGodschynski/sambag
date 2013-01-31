@@ -12,6 +12,7 @@
 #include <sambag/com/Common.hpp>
 #include <sambag/com/ArbitraryType.hpp>
 #include <math.h>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
 
 #include <Windowsx.h> // GET_X_LPARAM
 
@@ -32,19 +33,26 @@ namespace {
 		wc.lpfnWndProc   = &Win32WindowImpl::__wndProc_;
 		wc.hInstance     = id.second;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-
+		wc.style = 0;
+		wc.hbrBackground = 0;
 		// specific values
 		if (id.first == STR_WNDCLASS) {
-			// wc.lpszClassName = id.first.c_str(); <= dosent work
 			 wc.lpszClassName = STR_WNDCLASS.c_str();
 		}
 		if (id.first == STR_NESTEDWNDCLASS) {
-			wc.style = CS_DBLCLKS | CS_GLOBALCLASS;
+			wc.style |= CS_DBLCLKS | CS_GLOBALCLASS;
 			wc.lpszClassName = STR_NESTEDWNDCLASS.c_str();
 		}
 		// register class
-		if( FAILED(RegisterClass(&wc)) )
-			throw std::runtime_error ("Win32 RegisterClass failed.");
+		if( FAILED(RegisterClass(&wc)) ) {
+			std::stringstream ss;
+			DWORD err = GetLastError();
+			ss<<"RegisterClass failed(0x"<<err<<").";
+			SAMBAG_THROW(
+				sambag::com::exceptions::IllegalStateException,
+				ss.str()
+			);
+		}
 	}
 	HINSTANCE getHInstance() 
 	{
@@ -79,7 +87,15 @@ namespace {
 WndClassManager::WndClassMap WndClassManager::wndClassMap;
 //-----------------------------------------------------------------------------
 WndClassManager::WndClassHolder::~WndClassHolder() {
-	UnregisterClass(wndClassId.first.c_str(), wndClassId.second);
+	if (!UnregisterClass(wndClassId.first.c_str(), wndClassId.second)) {
+		std::stringstream ss;
+		DWORD err = GetLastError();
+		ss<<"UnregisterClass failed(0x"<<err<<").";
+		SAMBAG_THROW(
+			sambag::com::exceptions::IllegalStateException,
+			ss.str()
+		);
+	}
 }
 //-----------------------------------------------------------------------------
 WndClassManager::WndClassHolder::Ptr 
@@ -87,7 +103,7 @@ WndClassManager::WndClassHolder::create(const WndClassId &id)
 {
 	Ptr res(new WndClassHolder());
 	res->wndClassId = id;
-	res->wndClass = nullWndClass;
+	res->wndClass = nullWndClass;	
 	initWndClass(res->wndClass, id);
 	return res;
 }
@@ -133,16 +149,18 @@ void Win32WindowImpl::drawAll() {
 	}
 }
 //-----------------------------------------------------------------------------
-disco::Win32Surface::Ptr Win32WindowImpl::getSurface(HDC dc) {
-	using namespace sambag;
-	surface = disco::Win32Surface::create(dc);
-	return surface;
-}
-//-----------------------------------------------------------------------------
-void Win32WindowImpl::update(HDC dc) {
-	disco::Win32Surface::Ptr sf = getSurface(dc);
-	this->processDraw( sf );
+void Win32WindowImpl::update() {
+
+	PAINTSTRUCT ps;
+	HDC hdc;
+	hdc = BeginPaint(win, &ps);
+	if (!hdc) {
+		return;
+	}
+	disco::Win32Surface::Ptr sf = disco::Win32Surface::create(hdc);
+	this->processDraw(sf);
 	cairo_surface_flush(sf->getCairoSurface());
+	EndPaint(win, &ps);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent, 
@@ -197,7 +215,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void Win32WindowImpl::createWindow(HWND parent) {
 	++instances;
 	HINSTANCE hI = getHInstance();
-	DWORD styleEx = WS_EX_COMPOSITED;
+	DWORD styleEx = 0; //WS_EX_COMPOSITED;
 	if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP)) 
 	{
 		styleEx |= WS_EX_TOPMOST;
@@ -318,7 +336,6 @@ Rectangle Win32WindowImpl::getBounds() const {
 }
 //-------------------------------------------------------------------------
 void Win32WindowImpl::invalidateSurface() {
-	surface.reset();
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::setBounds(const Rectangle &r) {
@@ -361,27 +378,22 @@ void Win32WindowImpl::updateBoundsToWindow() {
 	);
 	int width = wRect.right - wRect.left;
 	int height = wRect.bottom - wRect.top;
-	//SetWindowPos (win, HWND_TOP, bounds.x0().x(), 0, width, height, SWP_NOMOVE);
 	SetWindowPos(win, 
 		HWND_TOP,
 		(int)bounds.x0().x(),
 		(int)bounds.x0().y(),
 		width,
 		height,
-		0
+		0 //SWP_NOMOVE | SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE
 	);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
-	enum { ERASE_BG = false };
+	enum { ERASE_BG = true };
 	InvalidateRect(win, NULL, ERASE_BG);
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::updateWindowToBounds(const Rectangle &r) {
-	if (r.getDimension() != bounds.getDimension()) {
-		invalidateSurface();
-		UpdateWindow(win);
-	}
 	bounds = r;
 	boundsUpdated();
 }
@@ -403,9 +415,6 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 	int mbuttons = 0;
 	int x=0; int y=0;
 
-	PAINTSTRUCT ps;
-	HDC hdc;
-
 	switch(message) {
 	case WM_SETFOCUS:
 		break;
@@ -426,11 +435,12 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		if (!win)
 			break;
 		if (win->getFlag(WindowFlags::WND_RAW)) {
+			PAINTSTRUCT ps;
+			BeginPaint(hWnd, &ps);
+			EndPaint(hWnd, &ps);
 			break;
 		}
-		hdc = BeginPaint(hWnd, &ps);
-		win->update(hdc);
-		//EndPaint(hWnd, &ps);
+		win->update(); 
 		break;
 	}
 	case WM_MOVE : {

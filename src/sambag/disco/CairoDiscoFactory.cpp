@@ -7,11 +7,19 @@
 
 #include "CairoDiscoFactory.hpp"
 #include "CairoDrawContext.hpp"
+#include "cairo-version.h"
 
 namespace sambag { namespace disco {
 //=============================================================================
 // CairoDiscoFactory
 //=============================================================================
+//-----------------------------------------------------------------------------
+std::string CairoDiscoFactory::implDetails() const {
+	std::stringstream ss;
+	ss<<"using cairo ";
+	ss<<CAIRO_VERSION_MAJOR<<"."<<CAIRO_VERSION_MINOR<<"."<<CAIRO_VERSION_MICRO;
+	return ss.str();
+}
 //-----------------------------------------------------------------------------
 IDrawContext::Ptr CairoDiscoFactory::createContext() const {
 	CairoSurface::Ptr surf = CairoRecordingSurface::create();
@@ -22,7 +30,8 @@ IDrawContext::Ptr CairoDiscoFactory::createContext(ISurface::Ptr surface) const 
 	CairoSurface::Ptr surf = boost::shared_dynamic_cast<CairoSurface>(surface);
 	if (!surf)
 		return CairoDrawContext::Ptr();
-	return CairoDrawContext::create(surf);
+	CairoDrawContext::Ptr res = CairoDrawContext::create(surf);
+	return res;
 }
 //-----------------------------------------------------------------------------
 IImageSurface::Ptr CairoDiscoFactory::createImageSurface(const Integer &width,

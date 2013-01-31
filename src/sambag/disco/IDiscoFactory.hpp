@@ -28,6 +28,8 @@ public:
 private:
 public:
 	//-------------------------------------------------------------------------
+	virtual std::string implDetails() const = 0;
+	//-------------------------------------------------------------------------
 	virtual IDrawContext::Ptr createContext( ISurface::Ptr surface ) const = 0;
 	//-------------------------------------------------------------------------
 	virtual IDrawContext::Ptr createContext() const = 0;

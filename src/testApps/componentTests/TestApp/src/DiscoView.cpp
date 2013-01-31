@@ -685,6 +685,7 @@ int main() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	std::cout<<"hi"<<std::endl;
+	std::cout<<getDiscoFactory()->implDetails()<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
 	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)

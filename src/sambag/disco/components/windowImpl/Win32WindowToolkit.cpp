@@ -13,6 +13,7 @@
 #include <sambag/disco/components/Timer.hpp>
 #include <windows.h>
 #include <boost/thread.hpp>
+#include "Win32BufferedDraw.hpp"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -25,6 +26,7 @@ Win32WindowToolkit::Win32WindowToolkit() {
 }
 //-----------------------------------------------------------------------------
 Win32WindowToolkit::~Win32WindowToolkit() {
+	TimerPolicy::tearDownTimer();
 }
 namespace {
 	void checkWindowCount() {
@@ -42,7 +44,8 @@ void Win32WindowToolkit::startMainLoop() {
 }
 //-----------------------------------------------------------------------------
 AWindowImplPtr Win32WindowToolkit::createWindowImpl(AWindowImplPtr parent) const {
-	AWindowImplPtr res = WindowImpl<Win32WindowImpl>::create(parent);
+	AWindowImplPtr res = 
+		WindowImpl<Win32WindowImpl, Win32BufferedDraw>::create(parent);
 	return res;
 }
 //-------------------------------------------------------------------------
@@ -50,7 +53,7 @@ WindowPtr Win32WindowToolkit::createNestedWindow( ArbitraryType::Ptr osParent,
 	const Rectangle &area )
 {
 	AWindowImpl::Ptr windowImpl = 
-		WindowImpl<Win32WindowImpl>::create(osParent, area);
+		WindowImpl<Win32WindowImpl, Win32BufferedDraw>::create(osParent, area);
 	return Window::create(windowImpl);
 }
 //-----------------------------------------------------------------------------

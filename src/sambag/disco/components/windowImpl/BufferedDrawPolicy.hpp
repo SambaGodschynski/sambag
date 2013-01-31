@@ -35,8 +35,6 @@ protected:
 	 */
 	void processDraw(ISurface::Ptr surface);
 	//-------------------------------------------------------------------------
-	void clearBuffer();
-	//-------------------------------------------------------------------------
 	/** 
 	 *  @note draw policy concept
 	 */
@@ -114,15 +112,6 @@ inline void BufferedDrawPolicy::redrawRoot(sambag::disco::ISurface::Ptr sf) {
 	}
 }
 //-----------------------------------------------------------------------------
-inline void BufferedDrawPolicy::clearBuffer() {
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	IDrawContext::Ptr cn = getDiscoFactory()->createContext(bff);
-	cn->setFillColor(ColorRGBA());
-	cn->rect(bff->getSize());
-	cn->fill();
-}
-//-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 {
 	using namespace sambag::disco;
@@ -130,7 +119,11 @@ inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 	redrawRoot(surface);
 	IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
-	cn->drawSurface(bff);
+	IDrawContext::Ptr bffcn =
+			getDiscoFactory()->createContext(bff);
+	Rectangle clip = surface->getClipRect();
+	bffcn->copyAreaTo( cn, clip, clip.x0());
+	//cn->drawSurface(bff);
 }
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::init(components::RootPane::Ptr root)

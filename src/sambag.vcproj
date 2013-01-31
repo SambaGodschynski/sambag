@@ -567,10 +567,10 @@
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\BoostTimerImpl.cpp">
 			</File>
 			<File
-				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\DoubleBufferedDrawPolicy.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\TestWindowImpl.cpp">
 			</File>
 			<File
-				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\TestWindowImpl.cpp">
+				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\Win32BufferedDraw.cpp">
 			</File>
 			<File
 				RelativePath="C:\Eigene Dateien\Eigene Progs\clibs\sambag\src\sambag\disco\components\windowImpl\Win32MMTimerImpl.cpp">

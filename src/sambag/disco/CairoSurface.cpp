@@ -1,5 +1,4 @@
 #include "CairoSurface.hpp"
-#include "CreateAppropriateCairoSurface.hpp"
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -21,7 +20,6 @@ CairoSurface::~CairoSurface() {
 	cairo_surface_finish(surface);
 	cairo_surface_destroy(surface);
 }
-
 //=============================================================================
 // class CairoImageSurface 
 //=============================================================================
@@ -35,7 +33,9 @@ Rectangle & CairoImageSurface::getImageSurfaceRect(Rectangle &res) const {
 CairoImageSurface::Ptr CairoImageSurface::create(const Integer &width, 
 														const Integer &height) 
 {
-	cairo_surface_t *s = createAppropriateCairoImageSurface(width, height);
+	cairo_surface_t *s = cairo_image_surface_create(
+		CAIRO_FORMAT_ARGB32, width, height
+	);
 	return Ptr (new CairoImageSurface(s));
 }
 //-----------------------------------------------------------------------------
