@@ -35,7 +35,7 @@ change_makefile_to_static_pixman()
      return
  fi
  echo change_makefile_to_static_pixman
- sed 's/PIXMAN_CFLAGS +=\(.*\)/PIXMAN_CFLAGS += \1 -MT/g' $1 > $1_
+ sed 's/PIXMAN_CFLAGS +=\(.*\)/PIXMAN_CFLAGS += \1 -MT -DPIXMAN_NO_TLS/g' $1 > $1_
  mv $1_ $1
 }
 
@@ -135,7 +135,7 @@ change_makefile_to_static $ROOTDIR/$CAIRO/build/Makefile.win32.common
 change_makefile_zlib $ROOTDIR/$CAIRO/build/Makefile.win32.common
 missing_seperator_workaround $ROOTDIR/$CAIRO/src/Makefile.sources
 
-make -f Makefile.win32 "CFG=$_CONFIG"
+make -f Makefile.win32 CFG=$_CONFIG
 
 #deploy
 cd $ROOTDIR
