@@ -266,6 +266,10 @@ void Win32WindowImpl::createWindow(HWND parent) {
 void Win32WindowImpl::destroyWindow() {
 	if (win==NULL)
 		return;
+	HWND parent = GetParent(win);
+	if (parent) {
+		SetActiveWindow(parent);
+	}
 	visible = false;
 	Ptr hold = self.lock();
 	if (hold) { // if not we came from destrucor
@@ -513,10 +517,8 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		if (win)
 			win->handleMouseMotionEvent(x, y);
 		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-	return 0;
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 }}} // namespace(s)

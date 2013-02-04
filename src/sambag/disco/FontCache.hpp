@@ -55,6 +55,8 @@ public:
 	//-------------------------------------------------------------------------
 	static FontCache & instance();
 	//-------------------------------------------------------------------------
+	Rectangle getTextBounds(IDrawContext::Ptr cn, const std::string &text);
+	//-------------------------------------------------------------------------
 	void drawText(IDrawContext::Ptr cn, const std::string &text);
 }; // FontCache
 }} // namespace(s)

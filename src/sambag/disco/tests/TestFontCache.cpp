@@ -38,13 +38,22 @@ void TestFontCache::testDrawText() {
 	IImageSurface::Ptr surface = getDiscoFactory()->createImageSurface(420, 200);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext(surface);
 	cn->setFont( Font().setSize(57.) );
-	cn->setStrokeColor(1);
+	cn->setStrokeColor(ColorRGBA(1));
+	cn->rect(fc.getTextBounds(cn,"\"Hello World!\""));
+	cn->stroke();
 	fc.drawText(cn,"\"Hello World!\"");
+
 	cn->moveTo(Point2D(0., 50.));
-	cn->lineTo(Point2D(10., 50.));
+	cn->rect(fc.getTextBounds(cn,"Hällo Börld!"));
 	cn->stroke();
 	cn->moveTo(Point2D(0., 50.));
 	fc.drawText(cn,"Hällo Börld!");
+
+	cn->setStrokeColor(ColorRGBA(0, 1));
+	cn->moveTo(Point2D(0., 50.));
+	cn->lineTo(Point2D(10., 50.));
+	cn->stroke();
+
 	testPng("testDrawText", surface);
 }
 } //namespace

@@ -1,8 +1,8 @@
-# Install script for directory: C:/workspace/clibs/sambag
+# Install script for directory: C:/Eigene Dateien/Eigene Progs/clibs/sambag
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "C:/Programme/sambag")
+  SET(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/sambag")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,7 +29,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("C:/workspace/clibs/sambag/src/cmake_install.cmake")
+  INCLUDE("C:/Eigene Dateien/Eigene Progs/clibs/sambag/src/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -39,7 +39,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "C:/workspace/clibs/sambag/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "C:/Eigene Dateien/Eigene Progs/clibs/sambag/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "C:/workspace/clibs/sambag/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "C:/Eigene Dateien/Eigene Progs/clibs/sambag/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

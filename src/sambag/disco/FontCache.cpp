@@ -124,7 +124,9 @@ void FontCache::installFont(const FontTraits &ft) {
 	getGlyphMap(ft);
 }
 //-----------------------------------------------------------------------------
-void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) {
+void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) 
+{
+	cn->save();
 	const GlyphMap &gl = getGlyphMap(cn->getCurrentFont());
 	ISurface::Ptr sf = boost::get<0>(gl);
 	IDrawContext::Ptr sfCn = getDiscoFactory()->createContext(sf);
@@ -146,5 +148,29 @@ void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) {
 		);
 		cursor.x( cursor.x() + glh.w ); 
 	}
+	cn->restore();
+}
+//-----------------------------------------------------------------------------
+Rectangle FontCache::getTextBounds(IDrawContext::Ptr cn, const std::string &text) 
+{
+	const GlyphMap &gl = getGlyphMap(cn->getCurrentFont());
+	ISurface::Ptr sf = boost::get<0>(gl);
+	IDrawContext::Ptr sfCn = getDiscoFactory()->createContext(sf);
+	const GlyphLocationMap &glm = boost::get<1>(gl);
+	Rectangle res(cn->getCurrentPoint(), 0., 0.);
+	Point2D cursor = res.x0();
+	double fht = boost::get<2>(gl);
+	for (size_t i=0; i<text.length(); ++i) {
+		GlyphHelper::Glyph glyph = text[i];
+		size_t index = glyphToIndex(glyph);
+		if (index >= glm.size() ) {
+			index = glyphToIndex('?');
+		}
+		const GlyphHelper &glh = glm[index];
+		cursor.x( cursor.x() + glh.w ); 
+		cursor.y( std::max(Coordinate(res.x0().y() + glh.h), cursor.y()) ); 
+	}
+	res.x1(cursor);
+	return res;
 }
 }} // namespace(s)
