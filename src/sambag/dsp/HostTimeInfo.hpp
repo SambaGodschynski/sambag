@@ -18,14 +18,14 @@ namespace sambag { namespace dsp {
 struct HostTimeInfo {
 //=============================================================================
 	enum Filter {
-		FrxTempo = 1,
-		FrxPpqPos = 1<<1,
-		FrxNanosValid = 1<<2,
-		FrxBarsValid = 1<<3,
-		FrxCyclePosValid = 1<<4,
-		FrxTimeSigValid = 1<<5,
-		FrxSmpteValid = 1<<6,
-		FrxClockValid = 1<<7
+		FrxTempo,
+		FrxPpqPos,
+		FrxNanosValid,
+		FrxBarsValid,
+		FrxCyclePosValid,
+		FrxTimeSigValid,
+		FrxSmpteValid,
+		FrxClockValid
 	};
 	enum Flag {
 		kTransportIsChanged, 
@@ -66,16 +66,17 @@ struct HostTimeInfo {
 		flags(0)
 	{
 	}
-	void setFlag(Flag f, bool val) {
-		int fVal = f;
+	void setFlag(Flag f, bool val) 
+	{
 		if (val) {
-			flags |= (1 << fVal);
+			flags |= (1 << f);
 		} else {
-			flags &= ~(1 << fVal);
+			flags &= ~(1 << f);
 		}
 	}
-	bool getFlag(Flag f) const {
-		int fVal = f;
+	bool getFlag(Flag f) const 
+	{
+		int fVal = (1 << f);
 		return (flags & fVal) == fVal;
 	}
 	bool transportIsChanged() const // 	indicates that play, cycle or record state has changed 
@@ -87,7 +88,7 @@ struct HostTimeInfo {
 		return getFlag(kTransportCycleIsActive);
 	}
 	bool transportIsRecording() const // set if Host sequencer is in record mode
-		{
+	{
 		return getFlag(kTransportIsRecording);
 	}
 	bool automationIsWriting() const // set if automation write mode active (record parameter changes)

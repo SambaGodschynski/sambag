@@ -104,7 +104,11 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void onKnobStateChanged(void *src, const StateChanged &ev)
 	{
-		getKnob()->redraw();
+		AComponent::Ptr knob = getKnob(); 
+		if (!knob) {
+			return;
+		}
+		knob->redraw();
 	}
 	//-------------------------------------------------------------------------
 	virtual void installUI(AComponentPtr c);
