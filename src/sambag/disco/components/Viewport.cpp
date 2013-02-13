@@ -178,8 +178,11 @@ Point2D Viewport::getViewPosition() const {
 }
 //-----------------------------------------------------------------------------
 Rectangle Viewport::getViewRect() const {
-	SAMBA_LOG_NOT_YET_IMPL();
-	return NULL_RECTANGLE;
+	Dimension ex = getExtentSize();
+	return Rectangle( getViewPosition(),
+		ex.width(),
+		ex.height()
+	);
 }
 //-----------------------------------------------------------------------------
 Dimension Viewport::getViewSize() const {

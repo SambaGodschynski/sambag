@@ -1,8 +1,8 @@
-# Install script for directory: C:/Eigene Dateien/Eigene Progs/clibs/sambag/src
+# Install script for directory: C:/workspace/clibs/sambag/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  SET(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/sambag")
+  SET(CMAKE_INSTALL_PREFIX "C:/Programme/sambag")
 ENDIF(NOT DEFINED CMAKE_INSTALL_PREFIX)
 STRING(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

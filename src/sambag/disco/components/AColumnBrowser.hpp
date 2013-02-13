@@ -199,6 +199,22 @@ protected:
 	int selectionPathIndexToListIndex(size_t index) {
 		return index-1;
 	}
+	//-------------------------------------------------------------------------
+	inline Rectangle getListBounds(ListTypePtr list) const {
+		if (!list || !list->getParent() || !list->getParent()->getParent()) {
+			return NULL_RECTANGLE;
+		}
+		return list->getParent()->getParent()->getBounds();
+	}
+	//-------------------------------------------------------------------------
+	inline Rectangle getViewRect() const {
+		if (!columnView) {
+			return NULL_RECTANGLE;
+		}
+		return columnView->getScrollPane()->getViewport()->getViewRect();
+	}
+	//-------------------------------------------------------------------------
+	void scrollViewportTo(const Point2D &p);
 private:
 	//-------------------------------------------------------------------------
 	void adjustListCount();
@@ -218,6 +234,9 @@ public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
 	//-------------------------------------------------------------------------
+	/**
+	 * updates lists in browser matching to tree model.
+	 */
 	void updateLists();
 	//-------------------------------------------------------------------------
 	std::string selectionPathToString(const std::string & seperator = "/") const{
@@ -371,6 +390,17 @@ template <class TM,
 	template <class> class LM,
 	class LSM
 >
+void AColumnBrowser<TM, CR, LM, LSM>::scrollViewportTo(const Point2D &p) 
+{
+	ScrollPane::Ptr scp = columnView->getScrollPane();
+	scp->getViewport()->setViewPosition(p);
+}
+//-----------------------------------------------------------------------------
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
 void AColumnBrowser<TM, CR, LM, LSM>::updateLists()
 {
 	adjustListCount();
@@ -383,8 +413,7 @@ void AColumnBrowser<TM, CR, LM, LSM>::updateLists()
 			list->redraw();
 		}
 	}
-	// root
-	for (int i=0; i<(int)selectionPath.size(); ++i) {
+	for (int i=0; i<(int)selectionPath.size(); ++i) { // update selection path's lists
 		updateList(selectionPath[i], i);
 		/*if (i>=oldPath.size())
 			continue;
@@ -395,19 +424,22 @@ void AColumnBrowser<TM, CR, LM, LSM>::updateLists()
 			list->clearSelection();
 		}*/
 	}
-	if (selectionPath.size() > oldPath.size()) {
+	if (selectionPath.size() >= oldPath.size()) { // scroll last list if needed
 		// scroll to last list
-		/*ScrollPane::Ptr scp = columnView->getScrollPane();
-		ScrollPane::AScrollbarPtr scr = scp->getVerticalScrollBar();
-		Point2D vp = scp->getViewport()->getViewPosition();
-		std::cout<<scr->getMaximum()<<std::endl;
-		std::cout<<scr->getExtent()<<std::endl;
-		scp->getViewport()->setViewPosition(
-			Point2D(
-				scr->getMaximum(), 
-				vp.y()
-			)
-		);*/
+		size_t index = selectionPath.size() - 1;
+		ListTypePtr list = columnView->getList(index);
+		if (list) {
+			Rectangle listbounds = getListBounds(list);
+			Rectangle viewRect = getViewRect();
+			if ( listbounds.x1().x() > viewRect.x1().x() ) {
+				Point2D vp(
+					listbounds.x1().x() - viewRect.x1().x(),
+					0
+				);
+				boost::geometry::add_point(vp, viewRect.x0());
+				scrollViewportTo(vp);
+			}
+		}
 	}
 	oldPath = selectionPath;
 }
