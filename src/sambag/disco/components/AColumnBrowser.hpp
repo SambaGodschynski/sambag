@@ -23,6 +23,8 @@
 #include "DefaultListSelectionModel.hpp"
 #include "Forward.hpp"
 #include <sambag/disco/svg/graphicElements/Style.hpp>
+#include "Animation.hpp"
+#include "Tweens.hpp"
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -113,6 +115,26 @@ public:
 	}
 
 };
+namespace {
+	template <class T>
+	struct ScrollUpdater {
+		Viewport::Ptr vp;
+		void setViewport(Viewport::Ptr vp) {
+			this->vp = vp;
+		}
+		Viewport::Ptr getViewport() const {
+			return vp;
+		}
+		void update(const T &val) {
+			if (!vp) {
+				return;
+			}
+			Point2D p = vp->getViewPosition();
+			p.x(val);
+			vp->setViewPosition(p);
+		}
+	};
+} // namespace
 //=============================================================================
 /** 
   * @class AColumnBrowser.
@@ -216,6 +238,14 @@ protected:
 	//-------------------------------------------------------------------------
 	void scrollViewportTo(const Point2D &p);
 private:
+	//-------------------------------------------------------------------------
+	typedef Animation<float, defaultTweens::LinTween, ScrollUpdater>
+		ScrollAnimation;
+	//-------------------------------------------------------------------------
+	typedef ScrollAnimation::Ptr ScrollAnimationPtr;
+	ScrollAnimationPtr _scrollAni;
+	//-------------------------------------------------------------------------
+	ScrollAnimationPtr getScrollAni();
 	//-------------------------------------------------------------------------
 	void adjustListCount();
 	//-------------------------------------------------------------------------
@@ -390,10 +420,41 @@ template <class TM,
 	template <class> class LM,
 	class LSM
 >
+typename AColumnBrowser<TM, CR, LM, LSM>::ScrollAnimationPtr 
+AColumnBrowser<TM, CR, LM, LSM>::getScrollAni()
+{
+	if (_scrollAni) {
+		return _scrollAni;
+	}
+	_scrollAni = ScrollAnimation::create();
+	_scrollAni->setViewport(columnView->getScrollPane()->getViewport());
+	_scrollAni->setRefreshRate(30);
+	_scrollAni->setDuration(350);
+	return _scrollAni;
+}
+//-----------------------------------------------------------------------------
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
 void AColumnBrowser<TM, CR, LM, LSM>::scrollViewportTo(const Point2D &p) 
 {
+	if (!isVisible()) {
+		return;
+	}
+	ScrollAnimationPtr ani = getScrollAni();
+	if (ani->isRunning()) {
+		ani->stop();
+	}
 	ScrollPane::Ptr scp = columnView->getScrollPane();
-	scp->getViewport()->setViewPosition(p);
+	float b = (float)scp->getViewport()->getViewPosition().x();
+	float e = (float)p.x();
+	ani->setStartValue(b);
+	ani->setEndValue(e);
+	ani->start();
+	//scp->getViewport()->setViewPosition(p);
+
 }
 //-----------------------------------------------------------------------------
 template <class TM, 

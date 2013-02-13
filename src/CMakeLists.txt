@@ -29,6 +29,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/AKnob.cpp
 	sambag/disco/components/ALayoutManager.cpp
 	sambag/disco/components/AList.cpp
+	sambag/disco/components/Animation.cpp
 	sambag/disco/components/BorderLayout.cpp
 	sambag/disco/components/BoxLayout.cpp
 	sambag/disco/components/Button.cpp
@@ -67,6 +68,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/SolidBorder.cpp
 	sambag/disco/components/Timer.cpp
 	sambag/disco/components/TitledBorder.cpp
+	sambag/disco/components/Tweens.cpp
 	sambag/disco/components/Viewport.cpp
 	sambag/disco/components/ViewportLayout.cpp
 	sambag/disco/components/Window.cpp

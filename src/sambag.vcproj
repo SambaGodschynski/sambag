@@ -384,6 +384,10 @@
 				>
 			</File>
 			<File
+				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\Animation.cpp"
+				>
+			</File>
+			<File
 				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\svg\graphicElements\Arc.cpp"
 				>
 			</File>
@@ -873,6 +877,10 @@
 			</File>
 			<File
 				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\TitledBorder.cpp"
+				>
+			</File>
+			<File
+				RelativePath="C:\workspace\clibs\sambag\src\sambag\disco\components\Tweens.cpp"
 				>
 			</File>
 			<File
