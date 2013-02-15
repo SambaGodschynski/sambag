@@ -694,7 +694,7 @@ void BasicScrollbarUI<M>::layoutHScrollbar(typename ScrollBarType::Ptr sb)
 
 	Coordinate thumbX = rightButtonX - rightGap - thumbW;
 	if (value < (max - sb->getVisibleAmount())) {
-		float thumbRange = trackW - thumbW;
+		float thumbRange = (float)trackW - thumbW;
 		thumbX = (0.5f + (thumbRange * ((value - min) / (range
 					- extent))));
 		thumbX = thumbX + leftButtonX + leftButtonW + leftGap;

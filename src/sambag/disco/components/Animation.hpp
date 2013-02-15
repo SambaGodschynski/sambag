@@ -51,7 +51,7 @@ public:
 	static const Millisecond ONE_MILLI_IN_NANO;
 protected:
 	//-------------------------------------------------------------------------
-	Animation() : duration(0.) {}
+	Animation() : duration(0) {}
 	//-------------------------------------------------------------------------
 	void update(void *, const TimerEvent &ev);
 private:
@@ -157,15 +157,12 @@ template < class T,
 	template <class> class UP
 >
 void Animation<T,TW,UP>::update(void *, const TimerEvent &ev) {
-	Millisecond t = clock.elapsed().wall / ONE_MILLI_IN_NANO;
+	Millisecond t = (Millisecond)clock.elapsed().wall / ONE_MILLI_IN_NANO;
 	if (t>=duration) {
 		stop();
 		current = endValue;
 	} else {
-		current = std::min(
-			TweenPolicy::calc(startValue, endValue, c, t),
-			endValue
-		);
+		current = TweenPolicy::calc(startValue, duration, c, t);
 	}
 	UpdatePolicy::update(current);
 }
@@ -184,6 +181,7 @@ template < class T,
 >
 void Animation<T,TW,UP>::setEndValue(const T &val) {
 	endValue = val;
+	c = endValue - startValue;
 }
 //-----------------------------------------------------------------------------
 template < class T,

@@ -103,10 +103,10 @@ void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimerImpl(Timer::Ptr tm) {
+	tm->__setRunningByToolkit_(false);
 	Timers::right_map::iterator it = timers.right.find(tm);
 	if (it == timers.right.end())
 		return;
-	tm->__setRunningByToolkit_(false);
 	UINT_PTR idEvent = it->second;
 	KillTimer(NULL, idEvent);
 	timers.right.erase(it);
@@ -116,6 +116,13 @@ void Win32TimerImpl::startTimer(Timer::Ptr tm) {
 	boost::lock_guard<boost::mutex> lock(procMutex);
 	procs.push(
 		boost::bind(&Win32TimerImpl::startTimerImpl, this, tm)
+	);
+}
+//-----------------------------------------------------------------------------
+void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
+	boost::lock_guard<boost::mutex> lock(procMutex);
+	procs.push(
+		boost::bind(&Win32TimerImpl::stopTimerImpl, this, tm)
 	);
 }
 //-----------------------------------------------------------------------------
@@ -140,13 +147,6 @@ void Win32TimerImpl::tearDownTimer() {
 		masterTimerId = 0;
 	}
 
-}
-//-----------------------------------------------------------------------------
-void Win32TimerImpl::stopTimer(Timer::Ptr tm) {
-	boost::lock_guard<boost::mutex> lock(procMutex);
-	procs.push(
-		boost::bind(&Win32TimerImpl::stopTimerImpl, this, tm)
-	);
 }
 }}} // namespace(s)
 

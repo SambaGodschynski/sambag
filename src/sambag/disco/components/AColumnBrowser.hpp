@@ -239,7 +239,7 @@ protected:
 	void scrollViewportTo(const Point2D &p);
 private:
 	//-------------------------------------------------------------------------
-	typedef Animation<float, defaultTweens::LinTween, ScrollUpdater>
+	typedef Animation<float, defaultTweens::DynamicTween, ScrollUpdater>
 		ScrollAnimation;
 	//-------------------------------------------------------------------------
 	typedef ScrollAnimation::Ptr ScrollAnimationPtr;
@@ -259,7 +259,7 @@ private:
 	//-------------------------------------------------------------------------
 	sambag::com::ArithmeticWrapper<int> currListIndex;
 	//-------------------------------------------------------------------------
-	sambag::com::ArithmeticWrapper<int> numFixedLists;
+	sambag::com::ArithmeticWrapper<int> numInitLists;
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
@@ -355,9 +355,9 @@ void AColumnBrowser<TM, CR, LM, LSM>::init() {
 	selectionPath.push_back(Model::getRootNode());
 	oldPath = selectionPath; 
 	Model::setNodeData(Model::getRootNode(), "root");
-	numFixedLists = 3;
-	ui::getUIManager().getProperty("AColumnBrowser.numFixedLists", numFixedLists);
-	for (int i=0; i<numFixedLists; ++i) {
+	numInitLists = 3;
+	ui::getUIManager().getProperty("AColumnBrowser.numInitLists", numInitLists);
+	for (int i=0; i<numInitLists; ++i) {
 		addList(i);
 	}
 	add(columnView);
@@ -426,10 +426,18 @@ AColumnBrowser<TM, CR, LM, LSM>::getScrollAni()
 	if (_scrollAni) {
 		return _scrollAni;
 	}
+	ui::UIManager &uim = ui::getUIManager();
+	long duration = 350, rfRate = 30;
+	std::string tweenType = "lin";
+	uim.getProperty("ColumnBrowser.scrollanimation.duration", duration);
+	uim.getProperty("ColumnBrowser.scrollanimation.refreshRate", rfRate);
+	uim.getProperty("ColumnBrowser.scrollanimation.tweenType", tweenType);
+
 	_scrollAni = ScrollAnimation::create();
 	_scrollAni->setViewport(columnView->getScrollPane()->getViewport());
-	_scrollAni->setRefreshRate(30);
-	_scrollAni->setDuration(350);
+	_scrollAni->setRefreshRate(rfRate);
+	_scrollAni->setDuration(duration);
+	_scrollAni->setTweenType(tweenType);
 	return _scrollAni;
 }
 //-----------------------------------------------------------------------------

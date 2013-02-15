@@ -145,9 +145,12 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ColumnView.background", HtmlColors::getColor("lightblue"));
 	m.putProperty("ColumnView.foreground", HtmlColors::getColor("black"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ColumnBrowser
-	m.putProperty("ColumnBrowser.numFixedLists", (int)4);
+	m.putProperty("ColumnBrowser.numInitLists", (int)4);
 	m.putProperty("ColumnBrowser.fontStyle", createStyle("font-size: 16; font-family: arial; font-style:normal"));
 	m.putProperty("ColumnBrowser.fixedColumnWidth", (Coordinate)230.);
+	m.putProperty("ColumnBrowser.scrollanimation.duration", (long)350);
+	m.putProperty("ColumnBrowser.scrollanimation.refreshRate", (long)30);
+	m.putProperty("ColumnBrowser.scrollanimation.tweenType", std::string("quad"));
 }
 
 }}}}} // namespace(s)
