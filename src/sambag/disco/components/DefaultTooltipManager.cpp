@@ -102,9 +102,9 @@ bool DefaultTooltipManager::isEnabled() const {
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::registerComponent(AComponentPtr component)
 {
-	if (connectionMap.find(component) != connectionMap.end())
+	if (connectionMap.find(component.get()) != connectionMap.end())
 		return;
-	connectionMap[component] = 
+	connectionMap[component.get()] = 
 		component->EventSender<events::MouseEvent>::addEventListener(
 			boost::bind(&DefaultTooltipManager::onMouse, this, _1, _2)
 		);
@@ -128,7 +128,7 @@ void DefaultTooltipManager::setReshowDelay(int milliseconds) {
 //-----------------------------------------------------------------------------
 void DefaultTooltipManager::unregisterComponent(AComponentPtr component)
 {
-	ConnectionMap::iterator it = connectionMap.find(component);
+	ConnectionMap::iterator it = connectionMap.find(component.get());
 	if (it==connectionMap.end())
 		return;
 	it->second.disconnect();

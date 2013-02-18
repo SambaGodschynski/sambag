@@ -50,6 +50,10 @@ private:
 	Timer::Ptr getTimer();
 	//-------------------------------------------------------------------------
 	Point2D determineLocation(const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	typedef com::events::EventSender<events::MouseEvent>::Connection Connection;
+	typedef boost::unordered_map<AComponent*, Connection> ConnectionMap;
+	ConnectionMap connectionMap;
 public:
 	//-------------------------------------------------------------------------
 	virtual ~DefaultTooltipManager();
@@ -78,10 +82,6 @@ public:
 	//-------------------------------------------------------------------------
 	///////////////////////////////////////////////////////////////////////////
 	// mouse events
-	//-------------------------------------------------------------------------
-	typedef com::events::EventSender<events::MouseEvent>::Connection Connection;
-	typedef boost::unordered_map<AComponentPtr, Connection> ConnectionMap;
-	ConnectionMap connectionMap;
 	//-------------------------------------------------------------------------
 	virtual void onMouse(void *src, const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------

@@ -88,7 +88,16 @@ void Win32TimerImpl::closeAllTimer() {
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 	tm->__setRunningByToolkit_(true);
-	UINT_PTR timerId = SetTimer(NULL, NULL, tm->getInitialDelay(), timerProc);
+	UINT_PTR timerId = 0;
+	Timers::right_map::iterator it = timers.right.find(tm);
+	if (it==timers.right.end()) {
+		timerId = SetTimer(NULL, 0, tm->getInitialDelay(), timerProc);
+	} else {
+		timerId = SetTimer(NULL, it->second, tm->getInitialDelay(), timerProc);
+		if (timerId!=NULL) {
+			return;
+		}
+	}
 	if (timerId==NULL) {
 		std::stringstream ss;
 		ss<<"could'nt create timer (GetLastError="<<GetLastError()<<")";
@@ -142,6 +151,7 @@ void Win32TimerImpl::startUpTimer() {
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::tearDownTimer() {
+	closeAllTimer();
 	if (masterTimerId!=0) {
 		KillTimer(NULL, masterTimerId);
 		masterTimerId = 0;

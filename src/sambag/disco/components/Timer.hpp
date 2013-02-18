@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "events/ActionEvent.hpp"
 #include <sambag/com/events/Events.hpp>
+#include <sambag/com/ArithmeticWrapper.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace ev = sambag::com::events;
@@ -51,7 +52,10 @@ protected:
 	bool running;
 	//-------------------------------------------------------------------------
 	int numCalled;
+private:
 public:
+	//-------------------------------------------------------------------------
+	virtual ~Timer();
 	//-------------------------------------------------------------------------
 	/**
 	 * to be called by concrete TimerImpl only.

@@ -518,6 +518,7 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 			win->handleMouseMotionEvent(x, y);
 		break;
 	}
+	hold.reset();
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 

@@ -229,6 +229,7 @@ void BoostTimerImpl::closeAllTimer() {
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::startTimer(Timer::Ptr tm) {
+	// TODO: check update timer (tm exists already)
 	if (tm->isRunning())
 		return;
 	TimerThread::Ptr tmth = TimerThread::get(tm);

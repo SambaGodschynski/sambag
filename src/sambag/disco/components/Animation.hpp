@@ -131,9 +131,6 @@ template < class T,
 	template <class> class UP
 >
 void Animation<T,TW,UP>::start() {
-	if (isRunning()) {
-		return;
-	}
 	c = endValue - startValue;
 	clock.start();
 	Super::setNumRepetitions(-1);
@@ -145,9 +142,6 @@ template < class T,
 	template <class> class UP
 >
 void Animation<T,TW,UP>::stop() {
-	if (!isRunning()) {
-		return;
-	}
 	clock.stop();
 	Super::stop();
 }
