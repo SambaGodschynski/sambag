@@ -107,8 +107,16 @@ public:
 		return repetitions;
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * starts the timer.
+	 * @note: if timer is already running the timer reset and restarts.
+	 * (TODO: check this behaviour with BoostTimerImpl)
+	 */
 	virtual void start();
 	//-------------------------------------------------------------------------
+	/**
+	 * stops the timer.
+	 */
 	virtual void stop();
 	//-------------------------------------------------------------------------
 	/**

@@ -15,8 +15,17 @@
 #include "GlyphHelper.hpp"
 #include <boost/tuple/tuple.hpp>
 
+
+namespace sambag { namespace disco {
+	typedef boost::tuple<sambag::disco::ColorRGBA, 
+		sambag::disco::ColorRGBA, 
+		sambag::com::Number, 
+		sambag::disco::Font
+	> FontTraits; 
+}}
+
 namespace boost {
-extern size_t hash_value(const sambag::disco::Font &o);
+	extern size_t hash_value(const sambag::disco::FontTraits &o);
 }
 
 #include <boost/unordered_map.hpp>
@@ -38,8 +47,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<ISurface::Ptr, GlyphLocationMap, FontHeight> GlyphMap;
 	//-------------------------------------------------------------------------
-	typedef Font FontTraits;
-	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<FontTraits, GlyphMap> FontMap;
 protected:
 	//-------------------------------------------------------------------------
@@ -59,6 +66,33 @@ public:
 	//-------------------------------------------------------------------------
 	void drawText(IDrawContext::Ptr cn, const std::string &text);
 }; // FontCache
+//-----------------------------------------------------------------------------
+inline FontTraits createFontTraits(IDrawContext::Ptr cn) {
+	return FontTraits(cn->getStrokeColor(),
+		cn->getFillColor(),
+		cn->getStrokeWidth(),
+		cn->getCurrentFont()
+	);
+}
+//-----------------------------------------------------------------------------
+inline FontTraits createFontTraits(const ColorRGBA &strokeColor, 
+	const ColorRGBA &fillColor, Number strokeWidth, const Font &fnt) 
+{
+	return FontTraits(strokeColor,
+		fillColor,
+		strokeWidth,
+		fnt
+	);
+}
+//-----------------------------------------------------------------------------
+inline FontTraits createFontTraits(const ColorRGBA &color, const Font &fnt) 
+{
+	return FontTraits( ColorRGBA(),
+		color,
+		0,
+		fnt
+	);
+}
 }} // namespace(s)
 
 #endif /* SAMBAG_FONTCACHE_H */

@@ -76,6 +76,8 @@ ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn,
 
 	cn->setFont(ftCn->getCurrentFont());
 	cn->setFillColor(ftCn->getFillColor());
+	cn->setStrokeColor(ftCn->getStrokeColor());
+	cn->setStrokeWidth(ftCn->getStrokeWidth());
 
 	for (size_t i=0; i<CH_NUM; ++i) {
 		const GlyphHelper &gl = glyphes[i];
@@ -84,11 +86,29 @@ ISurface::Ptr _createFontMapImpl(IDrawContext::Ptr ftCn,
 		}
 		Coordinate x = gl.x;
 		Coordinate y = gl.y;
+		if (cn->getStrokeWidth()>0.) {
+			cn->moveTo(Point2D(x-gl.offx, y-gl.offy));
+			cn->textPath(gl.str());
+			cn->stroke();
+		}
 		cn->moveTo(Point2D(x-gl.offx, y-gl.offy));
 		cn->textPath(gl.str());
 		cn->fill();
 	}
 	return res;
+}
+//typedef boost::tuple<ColorRGBA, ColorRGBA, Number, Font> FontTraits;
+inline const ColorRGBA & getStrokeColor(const FontTraits &ft) {
+	return boost::get<0>(ft);
+}
+inline const ColorRGBA & getFillColor(const FontTraits &ft) {
+	return boost::get<1>(ft);
+}
+inline const Number & getStrokeWidth(const FontTraits &ft) {
+	return boost::get<2>(ft);
+}
+inline const Font & getFont(const FontTraits &ft) {
+	return boost::get<3>(ft);
 }
 } // namespace(s)
 //-----------------------------------------------------------------------------
@@ -96,8 +116,10 @@ void FontCache::createGlyphMap(const FontTraits &ft, GlyphMap &map) {
 	IDiscoFactory *fac = getDiscoFactory();
 	IRecordingSurface::Ptr rec = fac->createRecordingSurface();
 	IDrawContext::Ptr cn = fac->createContext(rec);
-	cn->setFont(ft);
-	cn->setFillColor(ColorRGBA(0));
+	cn->setFont(getFont(ft));
+	cn->setFillColor(getFillColor(ft));
+	cn->setStrokeColor(getStrokeColor(ft));
+	cn->setStrokeWidth(getStrokeWidth(ft));
 	
 	boost::get<0>(map) = _createFontMapImpl(cn, map);	
 }
@@ -127,7 +149,7 @@ void FontCache::installFont(const FontTraits &ft) {
 void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text) 
 {
 	cn->save();
-	const GlyphMap &gl = getGlyphMap(cn->getCurrentFont());
+	const GlyphMap &gl = getGlyphMap(createFontTraits(cn));
 	ISurface::Ptr sf = boost::get<0>(gl);
 	IDrawContext::Ptr sfCn = getDiscoFactory()->createContext(sf);
 	const GlyphLocationMap &glm = boost::get<1>(gl);
@@ -153,7 +175,7 @@ void FontCache::drawText(IDrawContext::Ptr cn, const std::string &text)
 //-----------------------------------------------------------------------------
 Rectangle FontCache::getTextBounds(IDrawContext::Ptr cn, const std::string &text) 
 {
-	const GlyphMap &gl = getGlyphMap(cn->getCurrentFont());
+	const GlyphMap &gl = getGlyphMap(createFontTraits(cn));
 	ISurface::Ptr sf = boost::get<0>(gl);
 	IDrawContext::Ptr sfCn = getDiscoFactory()->createContext(sf);
 	const GlyphLocationMap &glm = boost::get<1>(gl);
@@ -174,3 +196,17 @@ Rectangle FontCache::getTextBounds(IDrawContext::Ptr cn, const std::string &text
 	return res;
 }
 }} // namespace(s)
+
+#include <sambag/disco/svg/graphicElements/Style.hpp> 
+
+namespace boost {
+	size_t hash_value(const sambag::disco::FontTraits &o) {
+		using namespace sambag::disco;
+		size_t seed = 0;
+		boost::hash_combine(seed, getStrokeColor(o));
+		boost::hash_combine(seed, getFillColor(o));
+		boost::hash_combine(seed, getStrokeWidth(o));
+		boost::hash_combine(seed, getFont(o));
+		return seed;
+	}
+}
