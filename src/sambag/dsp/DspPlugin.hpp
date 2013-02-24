@@ -20,10 +20,14 @@ namespace sambag { namespace dsp {
  */
 struct IHost {
 //=============================================================================
-	virtual void configurationChanged() = 0;
+	virtual void delayChanged(int delaySamples) = 0;
+	virtual void ioConfigurationChanged(int numInputs, int numOutputs) = 0;
 	virtual void parameterChanged(int index) = 0;
 	virtual HostTimeInfo * getHostTimeInfo (int filter) = 0;
-	virtual void requestEditorResize(int witdh, int height) = 0;
+	/**
+	 * @return true if succeed.
+	 */
+	virtual bool requestEditorResize(int witdh, int height) = 0;
 	/**
 	 * @return editor. Is NULL if no editor which extends IEditor is used.
 	 */

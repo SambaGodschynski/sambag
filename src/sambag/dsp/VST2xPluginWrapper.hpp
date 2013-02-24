@@ -204,9 +204,14 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	// host impl.
+	virtual void delayChanged(int delaySamples) {
+		AudioEffectX::setInitialDelay( delaySamples );
+		AudioEffectX::ioChanged();
+	}
 	//-------------------------------------------------------------------------
-	virtual void configurationChanged() {
-		AudioEffectX::setInitialDelay( PluginProcessor::getLatency() );
+	virtual void ioConfigurationChanged(int numInputs, int numOutputs) {
+		AudioEffectX::setNumInputs(numInputs);
+		AudioEffectX::setNumOutputs(numOutputs);
 		AudioEffectX::ioChanged();
 	}
 	//-------------------------------------------------------------------------
@@ -218,8 +223,11 @@ public:
 	//-------------------------------------------------------------------------
 	virtual HostTimeInfo * getHostTimeInfo (int filter);
 	//-------------------------------------------------------------------------
-	virtual void requestEditorResize(int width, int height) {
-		AudioEffectX::sizeWindow(width, height);
+	virtual bool requestEditorResize(int width, int height) {
+		if (!AudioEffectX::canHostDo ("sizeWindow")) {
+			return false;
+		}
+		return AudioEffectX::sizeWindow(width, height);
 	}
 	//-------------------------------------------------------------------------
 	virtual IEditor * getEditor() const {

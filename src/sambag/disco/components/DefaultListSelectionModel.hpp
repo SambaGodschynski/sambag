@@ -66,6 +66,8 @@ private:
 	BitSet value;
 public:
 	//-------------------------------------------------------------------------
+	~DefaultListSelectionModel();
+	//-------------------------------------------------------------------------
 	int getMinSelectionIndex() const {
 		return isSelectionEmpty() ? -1 : minIndex;
 	}

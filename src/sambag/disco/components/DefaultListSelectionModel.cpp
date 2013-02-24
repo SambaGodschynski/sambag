@@ -21,7 +21,7 @@ setSelectionMode(DefaultListSelectionModel::SelectionMode mode)
 }
 //-----------------------------------------------------------------------------
 bool DefaultListSelectionModel::isSelectedIndex(int index) {
-	if (index > value.size())
+	if (index > (int)value.size())
 		return false;
 	return
 		((index < minIndex) || (index > maxIndex)) ? false : value[index];
@@ -94,7 +94,7 @@ void DefaultListSelectionModel::markAsDirty(int r)  {
 //-----------------------------------------------------------------------------
 // Sets the state at this index and update all relevant state.
 void DefaultListSelectionModel::setState(int r) {
-	if (r > value.size())
+	if (r >= (int)value.size())
 		value.resize(r+1, false);
 	if (value[r]) {
 		return;
@@ -109,7 +109,7 @@ void DefaultListSelectionModel::setState(int r) {
 //-----------------------------------------------------------------------------
 // Clears the state at this index and update all relevant state.
 void DefaultListSelectionModel::clearState(int r)  {
-	if (r > value.size())
+	if (r > (int)value.size())
 		return;
 	if (!value[r]) {
 		return;
@@ -486,6 +486,9 @@ void DefaultListSelectionModel::setLeadSelectionIndex(int leadIndex) {
 		changeSelection(newMin, newMax, oldMin, oldMax, false);
 	}
 }
-
+//-----------------------------------------------------------------------------
+DefaultListSelectionModel::~DefaultListSelectionModel() {
+	value.reset();
+}
 
 }}} // namespace(s)

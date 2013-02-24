@@ -157,6 +157,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/components/tests/TestBoostTimerImpl.cpp
 	sambag/disco/components/tests/TestComponents.cpp
 	sambag/disco/components/tests/TestConcreteComponents.cpp
+	sambag/disco/components/tests/TestDefaultSelectionModel.cpp
 	sambag/disco/components/tests/TestDefaultTreeModel.cpp
 	sambag/disco/components/tests/TestFlowLayout.cpp
 	sambag/disco/components/tests/TestList.cpp
