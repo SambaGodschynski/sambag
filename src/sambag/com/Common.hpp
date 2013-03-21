@@ -25,22 +25,46 @@
 #include <string>
 #include <sstream>
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// BEGIN LOG STUFF
+
+#ifdef SAMBAG_USE_LOG
+#include <boost/log/trivial.hpp>
+#define SAMBAG_LOG_WARN_IMPL  BOOST_LOG_TRIVIAL(warning)
+#define SAMBAG_LOG_ERR_IMPL   BOOST_LOG_TRIVIAL(error)
+#define SAMBAG_LOG_INFO_IMPL  BOOST_LOG_TRIVIAL(info)
+#define SAMBAG_LOG_DEBUG_IMPL BOOST_LOG_TRIVIAL(debug)
+#define SAMBAG_LOG_TRACE_IMPL BOOST_LOG_TRIVIAL(trace)
+#define SAMBAG_LOG_FATAL_IMPL BOOST_LOG_TRIVIAL(fatal)
+#else
+#define SAMBAG_LOG_WARN_IMPL  std::clog<<std::endl
+#define SAMBAG_LOG_ERR_IMPL   std::clog<<std::endl
+#define SAMBAG_LOG_INFO_IMPL  std::clog<<std::endl
+#define SAMBAG_LOG_DEBUG_IMPL std::clog<<std::endl
+#define SAMBAG_LOG_TRACE_IMPL std::clog<<std::endl
+#define SAMBAG_LOG_FATAL_IMPL std::clog<<std::endl
+#endif //SAMBAG_USE_LOG
+
+#define SAMBAG_LOG_WARN  SAMBAG_LOG_WARN_IMPL 
+#define SAMBAG_LOG_ERR   SAMBAG_LOG_ERR_IMPL
+#define SAMBAG_LOG_INFO  SAMBAG_LOG_INFO_IMPL 
+#define SAMBAG_LOG_DEBUG SAMBAG_LOG_DEBUG_IMPL 
+#define SAMBAG_LOG_TRACE SAMBAG_LOG_TRACE_IMPL
+#define SAMBAG_LOG_FATAL SAMBAG_LOG_FATAL_IMPL
+/**
+ * @deprecated use SAMBAG_LOG_WARN<<msg
+ */
+#define SAMBAG_WARN(msg) SAMBAG_LOG_WARN<<msg
 
 #ifdef SAMBA_WARN_MISSING_IMPL
-#define SAMBA_LOG_NOT_YET_IMPL() {								\
-		std::stringstream ss;									\
-		ss<<__FUNCTION__<< " not yet implemented.";				\
-		sambag::com::log(ss.str());								\
-	}
+	#define SAMBA_LOG_NOT_YET_IMPL()								\
+		SAMBAG_LOG_INFO<<__FUNCTION__<< " not yet implemented.";
 #else 
 #define SAMBA_LOG_NOT_YET_IMPL()
 #endif
 
-#define SAMBAG_WARN(msg) {										\
-		std::stringstream ss;									\
-		ss<<(msg)<<" in: "<<__FUNCTION__<<std::endl;			\
-		sambag::com::log(ss.str());								\
-	}
+// END LOG STUFF
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 namespace sambag { namespace com {
 using namespace boost;
@@ -64,6 +88,9 @@ typedef double Number;
 using namespace boost::logic;
 typedef tribool TriBool;
 //=============================================================================
+/**
+ * @deprecated: use SAMBAG_LOG_XXX macro.
+ */
 extern void log(const std::string &str);
 //-----------------------------------------------------------------------------
 inline Integer getNullInteger() {

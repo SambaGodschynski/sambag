@@ -10,14 +10,10 @@
 #include <boost/locale.hpp>
 
 namespace sambag { namespace com {
-
 //=============================================================================
 //-----------------------------------------------------------------------------
 void log(const std::string &str) {
-#ifdef SAMBAG_USE_LOG
-	using namespace std;
-	clog<<str<<endl;
-#endif
+	SAMBAG_LOG_INFO<<str;
 }
 //-----------------------------------------------------------------------------
 std::string normString(const std::string &v) {

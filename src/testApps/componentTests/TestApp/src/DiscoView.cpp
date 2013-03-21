@@ -36,6 +36,7 @@
 #include <boost/timer/timer.hpp>
 #include <boost/filesystem.hpp>
 #include <assert.h>
+#include <boost/log/utility/init/to_console.hpp>
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
 
@@ -677,7 +678,15 @@ void initResources() {
 	m.registerImage("IconA","disco-floor.png");
 }
 
+void initLogger() {
+	using namespace boost::log;
+	init_log_to_console();
+}
+
 int main() {
+
+	initLogger();
+
 	SAMBAG_WINONLY(
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)

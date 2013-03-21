@@ -53,7 +53,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Debug\&quot;"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
 			/>
 			<Tool
@@ -79,7 +79,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Debug\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-sgd-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt-d.lib C:\workspace\clibs\cairo\cairo-MT-debug.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt-d.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt-d.lib "
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Debug\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log-vc90-mt-sgd-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log_setup-vc90-mt-sgd-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt-d.lib C:\workspace\clibs\cairo\cairo-MT-debug.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt-d.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt-d.lib "
 				OutputFile="C:\workspace\clibs\sambag\src\Debug\testApp.exe"
 				Version="0.0"
 				LinkIncremental="2"
@@ -149,7 +149,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions=" /Zm1000"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
 				ExceptionHandling="1"
 				RuntimeTypeInfo="true"
 				AssemblerListingLocation="Release"
@@ -163,7 +163,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;Release\&quot;"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
 			/>
 			<Tool
@@ -173,7 +173,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Release\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib Release\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log_setup-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
 				OutputFile="C:\workspace\clibs\sambag\src\Release\testApp.exe"
 				Version="0.0"
 				LinkIncremental="1"
@@ -244,7 +244,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -259,7 +259,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
 			/>
 			<Tool
@@ -269,7 +269,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib MinSizeRel\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib MinSizeRel\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log_setup-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
 				OutputFile="C:\workspace\clibs\sambag\src\MinSizeRel\testApp.exe"
 				Version="0.0"
 				LinkIncremental="1"
@@ -340,7 +340,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -356,7 +356,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;SAMBAG_USE_LOG;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
 				AdditionalIncludeDirectories="C:\workspace\clibs\sambag\src;C:\workspace\clibs\cairo;C:\workspace\clibs\cppunit\include\cppunit\..;C:\workspace\clibs\tinyxml;C:\workspace\clibs\boost;C:\workspace\clibs\loki\include;C:\workspace\clibs\lua\src;C:\workspace\clibs\sqlite;C:\workspace\clibs\vstsdk2.4;C:\workspace\clibs\vstsdk2.4\public.sdk\source\vst2.x;C:\workspace\clibs\vstsdk2.4\pluginterfaces\vst2.x;"
 			/>
 			<Tool
@@ -366,7 +366,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions=" /STACK:10000000 /machine:X86 /debug"
-				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib RelWithDebInfo\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
+				AdditionalDependencies="$(NOINHERIT) kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib RelWithDebInfo\sambag.lib C:\workspace\clibs\boost\stage\lib\libboost_filesystem-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_system-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_thread-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_regex-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_signals-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_locale-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_serialization-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_date_time-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_timer-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_chrono-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log-vc90-mt-s-1_49.lib C:\workspace\clibs\boost\stage\lib\libboost_log_setup-vc90-mt-s-1_49.lib C:\workspace\clibs\cppunit\lib\cppunit-s-mt.lib C:\workspace\clibs\zlib\zlib-MT-release.lib C:\workspace\clibs\pixman\pixman-1-MT-release.lib C:\workspace\clibs\libpng\libpng-MT-release.lib C:\workspace\clibs\cairo\cairo_static-MT-release.lib C:\workspace\clibs\tinyxml\lib\ticpp-s-mt.lib C:\workspace\clibs\lua\win32\lib\lua52-s-mt.lib "
 				OutputFile="C:\workspace\clibs\sambag\src\RelWithDebInfo\testApp.exe"
 				Version="0.0"
 				LinkIncremental="2"

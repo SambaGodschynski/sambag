@@ -67,9 +67,5 @@ public:
 	{
 	}
 };
-//-----------------------------------------------------------------------------
-inline void warn(const std::string &msg) {
-	log("warning: " + msg);
-}
 }}
 #endif /* EXCEPTION_HPP_ */

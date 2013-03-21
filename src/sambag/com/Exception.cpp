@@ -15,7 +15,7 @@ namespace sambag { namespace com {
 Exception::Exception(const std::string &what, const std::string &where,
 		  const std::string &line) : line(line), where(where), _what(what)
 {
-	log("Exception: " + what + ", " + where + ":" + line);
+	SAMBAG_LOG_ERR<<"Exception: " << what << ", " << where << ":" << line;
 }
 //-----------------------------------------------------------------------------
 const char * Exception::what() const throw() {

@@ -25,8 +25,8 @@ namespace {
 		<<msg<<";"<<std::endl<<std::flush;
 	}
 	WNDCLASS  nullWndClass = {0};
-	const std::string STR_WNDCLASS = "_discowindowimpl";
-	const std::string STR_NESTEDWNDCLASS = "_disconestedwindowimpl";
+	std::string wndClass = "_discowindowimpl";
+	std::string nestedWndClass = "_disconestedwindowimpl";
 	void initWndClass(WNDCLASS &wc, const WndClassManager::WndClassId &id) 
 	{
 		// common values
@@ -36,12 +36,14 @@ namespace {
 		wc.style = 0;
 		wc.hbrBackground = 0;
 		// specific values
-		if (id.first == STR_WNDCLASS) {
-			 wc.lpszClassName = STR_WNDCLASS.c_str();
+		if (id.first == wndClass) {
+			wndClass += com::toString(id.second); 
+			wc.lpszClassName = wndClass.c_str();
 		}
-		if (id.first == STR_NESTEDWNDCLASS) {
+		if (id.first == nestedWndClass) {
 			wc.style |= CS_DBLCLKS | CS_GLOBALCLASS;
-			wc.lpszClassName = STR_NESTEDWNDCLASS.c_str();
+			nestedWndClass += com::toString(id.second);
+			wc.lpszClassName = nestedWndClass.c_str();
 		}
 		// register class
 		if( FAILED(RegisterClass(&wc)) ) {
@@ -177,7 +179,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	HINSTANCE hI = getHInstance();
 	// wndclass
-	wndClassHolder = WndClassManager::getWndClassHolder(STR_NESTEDWNDCLASS, hI);
+	wndClassHolder = WndClassManager::getWndClassHolder(nestedWndClass, hI);
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
 	// create window
 	DWORD styleEx = 0; //WS_EX_COMPOSITED;
@@ -230,7 +232,7 @@ void Win32WindowImpl::createWindow(HWND parent) {
 	
 	style |= getFlag(WND_FRAMED) ? overlapped : WS_POPUP | WS_BORDER; 
 	// wndclass
-	wndClassHolder = WndClassManager::getWndClassHolder(STR_WNDCLASS, hI);
+	wndClassHolder = WndClassManager::getWndClassHolder(wndClass, hI);
 	const WNDCLASS & wndClass = wndClassHolder->getWndClass();
 	// create window
 	win = CreateWindowEx ( styleEx, 
