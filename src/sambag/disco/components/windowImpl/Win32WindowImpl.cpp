@@ -16,6 +16,9 @@
 
 #include <Windowsx.h> // GET_X_LPARAM
 
+#define DISCO_WND_CLASS_NAME "_discowindowimpl"
+#define DISCO_NWND_CLASS_NAME "_disconestedwindowimpl"
+
 namespace sambag { namespace disco { namespace components {
 namespace {
 	template <typename T>
@@ -25,25 +28,24 @@ namespace {
 		<<msg<<";"<<std::endl<<std::flush;
 	}
 	WNDCLASS  nullWndClass = {0};
-	std::string wndClass = "_discowindowimpl";
-	std::string nestedWndClass = "_disconestedwindowimpl";
+	std::string wndClassName;
+	std::string nestedWndClassName;
 	void initWndClass(WNDCLASS &wc, const WndClassManager::WndClassId &id) 
 	{
 		// common values
 		wc.lpfnWndProc   = &Win32WindowImpl::__wndProc_;
-		wc.hInstance     = id.second;
+		wc.hInstance     = boost::get<1>(id);
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.style = 0;
 		wc.hbrBackground = 0;
 		// specific values
-		if (id.first == wndClass) {
-			wndClass += com::toString(id.second); 
-			wc.lpszClassName = wndClass.c_str();
-		}
-		if (id.first == nestedWndClass) {
+		if (boost::get<2>(id) == true) {
 			wc.style |= CS_DBLCLKS | CS_GLOBALCLASS;
-			nestedWndClass += com::toString(id.second);
-			wc.lpszClassName = nestedWndClass.c_str();
+			nestedWndClassName = boost::get<0>(id);
+			wc.lpszClassName = nestedWndClassName.c_str();
+		} else {
+			wndClassName = boost::get<0>(id);
+			wc.lpszClassName = wndClassName.c_str();
 		}
 		// register class
 		if( FAILED(RegisterClass(&wc)) ) {
@@ -89,7 +91,10 @@ namespace {
 WndClassManager::WndClassMap WndClassManager::wndClassMap;
 //-----------------------------------------------------------------------------
 WndClassManager::WndClassHolder::~WndClassHolder() {
-	if (!UnregisterClass(wndClassId.first.c_str(), wndClassId.second)) {
+	const std::string &name = boost::get<0>(wndClassId);
+	HINSTANCE hI = boost::get<1>(wndClassId);
+	if (!UnregisterClass(name.c_str(), hI)) 
+	{
 		std::stringstream ss;
 		DWORD err = GetLastError();
 		ss<<"UnregisterClass failed(0x"<<err<<").";
@@ -111,9 +116,9 @@ WndClassManager::WndClassHolder::create(const WndClassId &id)
 }
 //-----------------------------------------------------------------------------
 WndClassManager::WndClassHolder::Ptr 
-WndClassManager::getWndClassHolder(const std::string &name, HINSTANCE hi) 
+WndClassManager::getWndClassHolder(const std::string &name, HINSTANCE hi, bool nested) 
 {
-	WndClassId id(name, hi);
+	WndClassId id(name+com::toString(hi), hi, nested);
 	WndClassHolder::WPtr holder = wndClassMap[id];
 	WndClassHolder::Ptr res = holder.lock();
 	if (!res) {
@@ -179,7 +184,7 @@ void Win32WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	HINSTANCE hI = getHInstance();
 	// wndclass
-	wndClassHolder = WndClassManager::getWndClassHolder(nestedWndClass, hI);
+	wndClassHolder = WndClassManager::getWndClassHolder(DISCO_NWND_CLASS_NAME, hI);
 	const WNDCLASS & nestedWndClass = wndClassHolder->getWndClass();
 	// create window
 	DWORD styleEx = 0; //WS_EX_COMPOSITED;
@@ -232,7 +237,7 @@ void Win32WindowImpl::createWindow(HWND parent) {
 	
 	style |= getFlag(WND_FRAMED) ? overlapped : WS_POPUP | WS_BORDER; 
 	// wndclass
-	wndClassHolder = WndClassManager::getWndClassHolder(wndClass, hI);
+	wndClassHolder = WndClassManager::getWndClassHolder(DISCO_WND_CLASS_NAME, hI);
 	const WNDCLASS & wndClass = wndClassHolder->getWndClass();
 	// create window
 	win = CreateWindowEx ( styleEx, 

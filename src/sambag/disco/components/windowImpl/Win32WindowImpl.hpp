@@ -21,12 +21,13 @@
 #include <windows.h>
 #include <sambag/com/ArbitraryType.hpp>
 #include <sambag/disco/Win32Surface.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 struct WndClassManager {
 //=============================================================================
-	typedef std::pair<std::string, HINSTANCE> WndClassId;
+	typedef boost::tuple<std::string, HINSTANCE, bool> WndClassId;
 	struct WndClassHolder {
 		typedef boost::shared_ptr<WndClassHolder> Ptr;
 		typedef boost::weak_ptr<WndClassHolder> WPtr;
@@ -40,7 +41,10 @@ struct WndClassManager {
 	};
 	typedef std::map<WndClassId, WndClassHolder::Ptr> WndClassMap;
 	static WndClassMap wndClassMap;
-	static WndClassHolder::Ptr getWndClassHolder(const std::string &name, HINSTANCE hi);
+	static WndClassHolder::Ptr getWndClassHolder(
+		const std::string &name, 
+		HINSTANCE hi, 
+		bool isNestedWindow = false);
 };
 //=============================================================================
 /** 
