@@ -60,7 +60,7 @@ protected:
 	bool _drawRect;
 private:
 	//-------------------------------------------------------------------------
-	IPattern::Ptr bk, roll, press, disabled;
+	IPattern::Ptr lightMap;
 	//-------------------------------------------------------------------------
 	typedef BasicButtonListener<ButtonModell> ButtonListener;
 	//-------------------------------------------------------------------------
@@ -196,6 +196,14 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 
 	// draw icon and text
 	Helper::drawIconAndText(cn, b->getIcon(), str, bounds);
+
+	// draw lightmap
+	sambag::math::Matrix m = sambag::math::translate2D(0., -bounds.y());
+	m = boost::numeric::ublas::prod(m, sambag::math::scale2D(1, 2./bounds.height()));
+	lightMap->setMatrix(m);
+	cn->setFillPattern(lightMap);
+	cn->rect(bounds);
+	cn->fill();
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -228,7 +236,7 @@ BasicButtonUI<ButtonModell>::
 createPattern(const ColorRGBA &start, const ColorRGBA &end) const
 {
 	ILinearPattern::Ptr lp =
-		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,10.));
+		getDiscoFactory()->createLinearPattern(Point2D(), Point2D(0.,1.));
 	lp->addColorStop(start, 0);
 	lp->addColorStop(start, 0.5);
 	lp->addColorStop(end, .51);
@@ -241,10 +249,10 @@ void BasicButtonUI<ButtonModell>::installDefaults(AComponentPtr c) {
 	ui::UIManager &m = ui::getUIManager();
 	sNormal = sPress = sRoll = sDisabled = createDefaultStyle();
 	m.getProperty("Button.normal", sNormal);
-	/*bk = createPattern(
-		ColorRGBA(1.,1.,1.,1.),
-	    end
-	);*/
+	lightMap = createPattern(
+		ColorRGBA(1.,1.,1.,0.7),
+	    ColorRGBA(0.,0.,0.,0.7)
+	);
 	m.getProperty("Button.pressed", sPress);
 	m.getProperty("Button.rollover", sRoll);
 	m.getProperty("Button.disabled", sDisabled);

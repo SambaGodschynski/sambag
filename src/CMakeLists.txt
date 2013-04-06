@@ -12,6 +12,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/CairoSurface.cpp
 	sambag/disco/ColorRGBA.cpp
 	sambag/disco/Coordinate.cpp
+	sambag/disco/DiscoHelper.cpp
 	sambag/disco/FileResourceManager.cpp
 	sambag/disco/FontCache.cpp
 	sambag/disco/Geometry.cpp

@@ -31,6 +31,7 @@
 #include "HelperForTesting.hpp"
 #include <boost/assign/std/vector.hpp>
 #include "sambag/disco/IDiscoFactory.hpp"
+#include <sambag/disco/DiscoHelper.hpp>
 using namespace sambag::com;
 
 // Registers the fixture into the 'registry'
@@ -455,6 +456,7 @@ void TestCairoDrawContext::testGradient() {
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
 	// fill bk
+	context->save();
 	context->rect(Rectangle(0,0,1200,400));
 	context->setFillPattern(fac->createSolidPattern(ColorRGBA(1,1,1)));
 	context->fill();
@@ -462,6 +464,68 @@ void TestCairoDrawContext::testGradient() {
 	context->translate(Point2D(200,10));
 	context->scale(Point2D(2.0, 2.0));
 	drawGradients(context, scale2D(1., 2.));
+	context->restore();
+	// test helper
+	{
+		ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(0, 1.));
+		sol->addColorStop(ColorRGBA(1,0,0), 0);
+		sol->addColorStop(ColorRGBA(1,0,0), .5);
+		sol->addColorStop(ColorRGBA(0,1,0), .51);
+		sol->addColorStop(ColorRGBA(0,1,0), 1.0);
+		Rectangle r(570,100,100,100);
+		context->rect(r);
+		alignPattern(context, sol, r);
+		context->setFillPattern(sol);
+		context->fill();
+	}
+	{
+		ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(0, 100.));
+		sol->addColorStop(ColorRGBA(1,0,0), 0);
+		sol->addColorStop(ColorRGBA(1,0,0), .5);
+		sol->addColorStop(ColorRGBA(0,1,0), .51);
+		sol->addColorStop(ColorRGBA(0,1,0), 1.0);
+		Rectangle r(680,100,100,100);
+		context->rect(r);
+		alignPattern(context, sol, r);
+		context->setFillPattern(sol);
+		context->fill();
+	}
+	{
+		ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(0,0), Point2D(1., 1.));
+		sol->addColorStop(ColorRGBA(1,0,0), 0);
+		sol->addColorStop(ColorRGBA(1,0,0), .5);
+		sol->addColorStop(ColorRGBA(0,1,0), .51);
+		sol->addColorStop(ColorRGBA(0,1,0), 1.0);
+		Rectangle r(790,100,100,100);
+		context->rect(r);
+		alignPattern(context, sol, r);
+		context->setFillPattern(sol);
+		context->fill();
+	}
+	{
+		ILinearPattern::Ptr sol = fac->createLinearPattern(Point2D(1.,1.), Point2D(1., -2.));
+		sol->addColorStop(ColorRGBA(1,0,0), 0);
+		sol->addColorStop(ColorRGBA(1,0,0), .5);
+		sol->addColorStop(ColorRGBA(0,1,0), .51);
+		sol->addColorStop(ColorRGBA(0,1,0), 1.0);
+		Rectangle r(900,100,100,100);
+		context->rect(r);
+		alignPattern(context, sol, r);
+		context->setFillPattern(sol);
+		context->fill();
+	}
+	{
+		IRadialPattern::Ptr sol = fac->createRadialPattern(Point2D(0,0), 0, Point2D(0,0), 45);
+		sol->addColorStop(ColorRGBA(1,0,0), 0);
+		sol->addColorStop(ColorRGBA(1,0,0), .5);
+		sol->addColorStop(ColorRGBA(0,1,0), .51);
+		sol->addColorStop(ColorRGBA(0,1,0), 1.0);
+		Rectangle r(1010,100,100,100);
+		context->rect(r);
+		alignPattern(context, sol, r);
+		context->setFillPattern(sol);
+		context->fill();
+	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
 	testPng("testPattern", surface);
 }
