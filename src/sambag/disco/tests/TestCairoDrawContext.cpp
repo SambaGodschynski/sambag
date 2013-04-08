@@ -530,6 +530,55 @@ void TestCairoDrawContext::testGradient() {
 	testPng("testPattern", surface);
 }
 //-----------------------------------------------------------------------------
+void TestCairoDrawContext::testGradientParser() {
+	using namespace sambag::disco;
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+	IDiscoFactory *fac = getDiscoFactory();
+	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
+	IDrawContext::Ptr context = fac->createContext(surface);
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>draw
+	{
+		IPattern::Ptr pat = createPattern("lin(0,1,[ff0000ff:0, ff:1])");
+		CPPUNIT_ASSERT(pat);
+		Rectangle r(100,100,320,200);
+		context->rect(r);
+		alignPattern(context, pat, r);
+		context->setFillPattern(pat);
+		context->fill();
+	}
+	{
+		IPattern::Ptr pat = createPattern("lin(0,0.5,0.2,1,[ffffffff:0, ff0000ff:0.5, ff:1])");
+		CPPUNIT_ASSERT(pat);
+		Rectangle r(420,100,320,200);
+		context->rect(r);
+		alignPattern(context, pat, r);
+		context->setFillPattern(pat);
+		context->fill();
+	}
+	{
+		IPattern::Ptr pat = createPattern("rad(0,0,100,[ffffffff:0, ff0000ff:0.5, 0:1])");
+		CPPUNIT_ASSERT(pat);
+		Rectangle r(740,100,320,200);
+		context->rect(r);
+		alignPattern(context, pat, r);
+		context->setFillPattern(pat);
+		context->fill();
+	}
+	CPPUNIT_ASSERT(!createPattern("rad(0,0,100,[ffffffff])"));
+	CPPUNIT_ASSERT(!createPattern("rad(0,0,100[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("rad(1,2,[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("rad(1,2,3,4,[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("rad(1,2,3,4,5,[ffffffff:0])"));
+	CPPUNIT_ASSERT(createPattern("rad(1,2,3,4,5,6,[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("lin(1,2,3,4,5,6,[ffffffff:0])"));
+	CPPUNIT_ASSERT(createPattern("lin(1,2,3,4,[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("lin(1,2,3,[ffffffff:0])"));
+	CPPUNIT_ASSERT(createPattern("lin(1,2,[ffffffff:0])"));
+	CPPUNIT_ASSERT(!createPattern("lin(1,[ffffffff:0])"));
+	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>write and test
+	testPng("testGradientParser", surface);
+}
+//-----------------------------------------------------------------------------
 void drawMiniRect(sambag::disco::IDrawContext::Ptr context,
 		const sambag::disco::ColorRGBA col, int num)
 {

@@ -198,12 +198,12 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	Helper::drawIconAndText(cn, b->getIcon(), str, bounds);
 
 	// draw lightmap
-	sambag::math::Matrix m = sambag::math::translate2D(0., -bounds.y());
+	/*sambag::math::Matrix m = sambag::math::translate2D(0., -bounds.y());
 	m = boost::numeric::ublas::prod(m, sambag::math::scale2D(1, 2./bounds.height()));
 	lightMap->setMatrix(m);
 	cn->setFillPattern(lightMap);
 	cn->rect(bounds);
-	cn->fill();
+	cn->fill();*/
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
