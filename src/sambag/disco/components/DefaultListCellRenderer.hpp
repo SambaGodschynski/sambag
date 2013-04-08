@@ -129,8 +129,8 @@ AComponentPtr DefaultListCellRenderer<T>::getListCellRendererComponent(
 		Super::setBackground(list->getSelectionBackground());
 		Super::setForeground(list->getSelectionForeground());
 	} else {
-		Super::setBackground(list->getBackground());
-		Super::setForeground(list->getForeground());
+		Super::setBackground(list->getBackgroundPattern());
+		Super::setForeground(list->getForegroundPattern());
 	}
 
 	setText(sambag::com::toString(value));

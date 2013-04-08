@@ -56,7 +56,8 @@ void BasicArrowButtonUI<BM>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	if (!b)
 		return;
 	Rectangle bounds = Super::getBtnRect(cn, c);
-	Super::prepareContext(cn, b);
+	svg::graphicElements::Style style = Super::getStyle(b);
+	style.intoContext(cn);
 	cn->setStrokeWidth(1.);
 	cn->rect(bounds);
 	cn->fill();

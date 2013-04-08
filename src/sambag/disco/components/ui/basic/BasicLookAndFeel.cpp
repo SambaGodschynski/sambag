@@ -92,6 +92,7 @@ svg::graphicElements::Style BasicLookAndFeel::createStyle(const std::string &str
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
+	using namespace sambag::disco::svg::graphicElements;
 	UIManager &m = getUIManager();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<install twice guard
 	bool alreadyInstalled = false;
@@ -102,18 +103,26 @@ void BasicLookAndFeel::installDefaults() {
 	alreadyInstalled = true;
 	m.putProperty("BasicLookAndFeel.installed", alreadyInstalled);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
-	m.putProperty("global.background", HtmlColors::getColor("red"));
-	m.putProperty("global.foreground", HtmlColors::getColor("white"));
+	Style style = createStyle("stroke: black; fill: lavender;");
+	//style.fillPattern( createPattern("lin(0,1,[D3D3D3FF:0, B0C4DEFF:1])") );
+	m.putProperty("global.style", style);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Button
 	using namespace svg;
-	m.putProperty("Button.normal", 
-		createStyle("stroke: black; fill: lavender;"));
-	m.putProperty("Button.pressed",  
-		createStyle("stroke: black; fill: slategrey;"));
-	m.putProperty("Button.rollover",  
-		createStyle("stroke: black; fill: lightblue;"));
-	m.putProperty("Button.disabled",  
-		createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic"));
+	style = createStyle("stroke: black; fill: lavender;");
+	style.fillPattern( createPattern("lin(0,1,[87cefaff:0, 87cefaff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	m.putProperty("Button.normal", style);
+	
+	style = createStyle("stroke: black; fill: slategrey;");
+	style.fillPattern( createPattern("lin(0,1,[236a96ff:0, 236a96ff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	m.putProperty("Button.pressed",  style);
+	
+	style = createStyle("stroke: black; fill: lightblue;");
+	style.fillPattern( createPattern("lin(0,1,[a7feffff:0, a7feffff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	m.putProperty("Button.rollover",  style);
+	
+	style = createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic");
+	m.putProperty("Button.disabled", style);
+
 	m.putProperty("Button.cornerRadius", Coordinate(3.5));
 	m.putProperty("Button.iconGap", Coordinate(2.));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
@@ -127,13 +136,15 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("ScrollBar.thumb", HtmlColors::getColor("grey"));
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
 	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
-	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<StringList
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<list
 	m.putProperty("List.minCellWidth", Coordinate(60.));
 	m.putProperty("List.minCellHeight", Coordinate(20.));
-	m.putProperty("StringList.background", HtmlColors::getColor("azure"));
-	m.putProperty("StringList.foreground", HtmlColors::getColor("black"));
-	m.putProperty("StringList.selectionBackground", HtmlColors::getColor("blue"));
-	m.putProperty("StringList.selectionForeground", HtmlColors::getColor("white"));
+	style = createStyle("stroke: black; fill: white;");
+	style.fillPattern( createPattern("lin(1,0,[f0ffffff:0, D0D0D0ff:0.3, D0D0D0ff:0.6, f0ffffff:1])") );
+	m.putProperty("List.style", style);
+	style = createStyle("stroke: white; fill: blue;");
+	style.fillColor( style.fillPattern()->getColor().setA(0.5) );
+	m.putProperty("List.selectionStyle", style);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<knobs
 	m.putProperty("Knob.range", (Coordinate)200.);
 	m.putProperty("Knob.mode", std::string("circular"));

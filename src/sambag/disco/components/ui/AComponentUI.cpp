@@ -8,6 +8,8 @@
 #include "AComponentUI.hpp"
 #include <sambag/disco/components/AComponent.hpp>
 #include "UIManager.hpp"
+#include <sambag/disco/DiscoHelper.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
@@ -43,11 +45,11 @@ Dimension AComponentUI::getPreferredSize(AComponent::Ptr c) {
 //-----------------------------------------------------------------------------
 void AComponentUI::installUI(AComponent::Ptr c) {
 	UIManager &m = getUIManager();
-	ColorRGBA col;
-	m.getProperty("global.background", col);
-	c->setBackground(col);
-	m.getProperty("global.foreground", col);
-	c->setForeground(col);
+	svg::graphicElements::Style style;
+	m.getProperty("global.style", style);
+	c->setFont(style.font());
+	c->setForeground(style.strokePattern());
+	c->setBackground(style.fillPattern());
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::draw(IDrawContext::Ptr cn, AComponent::Ptr c) {
@@ -58,8 +60,13 @@ void AComponentUI::uninstallUI(AComponent::Ptr c) {
 //-----------------------------------------------------------------------------
 void AComponentUI::update(IDrawContext::Ptr cn, AComponent::Ptr c){
 	if (c->isOpaque()) {
-		cn->setFillPattern(c->getBackgroundPattern());
-		cn->rect(Rectangle(0, 0, c->getWidth(), c->getHeight()));
+		IPattern::Ptr pat = c->getBackgroundPattern();
+		Rectangle r(0, 0, c->getWidth(), c->getHeight());
+		if (isGradient(pat)) {
+			alignPattern(cn, pat, r);
+		}
+		cn->setFillPattern(pat);
+		cn->rect(r);
 		cn->fill();
 	}
 	draw(cn, c);

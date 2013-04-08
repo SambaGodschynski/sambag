@@ -22,6 +22,7 @@
 #include <sambag/disco/components/ui/IListUI.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/com/events/PropertyChanged.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -260,22 +261,15 @@ void BasicListUI<LT>::installDefaults(AComponentPtr c) {
 	list->setLayout(ALayoutManagerPtr());
 
 	UIManager &m = getUIManager();
-	ColorRGBA col(0.7, 0.7, 0.7);
-	m.getProperty("StringList.background", col);
-	c->setBackground(col);
+	svg::graphicElements::Style style;
+	m.getProperty("List.style", style);
+	c->setBackground( style.fillPattern() );
+	c->setForeground( style.strokePattern() );
+	//c->setFont( style.font() );
 
-	col = ColorRGBA();
-	m.getProperty("StringList.foreground", col);
-	c->setForeground(col);
-
-	col = ColorRGBA(0.7, 0., 1.);
-	m.getProperty("StringList.selectionBackground", col);
-	list->setSelectionBackground(col);
-
-	col = ColorRGBA(1., 1., 1.);
-	m.getProperty("StringList.selectionForeground", col);
-	list->setSelectionForeground(col);
-
+	m.getProperty("List.selectionStyle", style);
+	list->setSelectionBackground(style.fillPattern());
+	list->setSelectionForeground(style.strokePattern());
 }
 //-----------------------------------------------------------------------------
 template <class LT>

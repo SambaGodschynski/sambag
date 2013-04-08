@@ -67,8 +67,8 @@ public:
 			Super::setBackground(list->getSelectionBackground());
 			Super::setForeground(list->getSelectionForeground());
 		} else {
-			Super::setBackground(list->getBackground());
-			Super::setForeground(list->getForeground());
+			Super::setBackground(list->getBackgroundPattern());
+			Super::setForeground(list->getForegroundPattern());
 		}
 		if (!value.parent)
 			return getPtr();

@@ -95,8 +95,8 @@ private:
 	int horizontalScrollIncrement;
 	T prototypeCellValue;
 	int visibleRowCount;
-	ColorRGBA selectionForeground;
-	ColorRGBA selectionBackground;
+	IPattern::Ptr selectionForeground;
+	IPattern::Ptr selectionBackground;
 	bool dragEnabled;
 	Orientation layoutOrientation;
 	ListCellRendererPtr cellRenderer;
@@ -283,13 +283,13 @@ public:
 	 * Returns the color used to draw the background of selected items.
 	 * @return
 	 */
-	virtual ColorRGBA getSelectionBackground() const;
+	virtual IPattern::Ptr getSelectionBackground() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the color used to draw the foreground of selected items.
 	 * @return
 	 */
-	virtual ColorRGBA getSelectionForeground() const;
+	virtual IPattern::Ptr getSelectionForeground() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the value of the visibleRowCount property.
@@ -384,14 +384,14 @@ public:
 	 * which cell renderers can use fill selected cells.
 	 * @param selectionBackground
 	 */
-	virtual void setSelectionBackground(const ColorRGBA & selectionBackground);
+	virtual void setSelectionBackground(IPattern::Ptr selectionBackground);
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the color used to draw the foreground of selected items, which
 	 * cell renderers can use to render text and graphics.
 	 * @param selectionForeground
 	 */
-	virtual void setSelectionForeground(const ColorRGBA & selectionForeground);
+	virtual void setSelectionForeground(IPattern::Ptr selectionForeground);
 	//-------------------------------------------------------------------------
 	/**
 	 * 	Sets the visibleRowCount property, which has different meanings
@@ -1004,7 +1004,7 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-ColorRGBA AList<T, CR, DM, SM>::getSelectionBackground() const {
+IPattern::Ptr AList<T, CR, DM, SM>::getSelectionBackground() const {
 	return selectionBackground;
 }
 //-----------------------------------------------------------------------------
@@ -1013,7 +1013,7 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-ColorRGBA AList<T, CR, DM, SM>::getSelectionForeground() const {
+IPattern::Ptr AList<T, CR, DM, SM>::getSelectionForeground() const {
 	return selectionForeground;
 }
 //-----------------------------------------------------------------------------
@@ -1197,9 +1197,9 @@ template < class T,
 	class SM
 >
 void AList<T, CR, DM, SM>::
-setSelectionBackground(const ColorRGBA & selectionBackground)
+setSelectionBackground(IPattern::Ptr selectionBackground)
 {
-	ColorRGBA oldValue = this->selectionBackground;
+	IPattern::Ptr oldValue = this->selectionBackground;
 	this->selectionBackground = selectionBackground;
 	firePropertyChanged(PROPERTY_SELECTIONBACKGROUND,
 			oldValue, selectionBackground);
@@ -1211,9 +1211,9 @@ template < class T,
 	class SM
 >
 void AList<T, CR, DM, SM>::
-setSelectionForeground(const ColorRGBA & selectionForeground)
+setSelectionForeground(IPattern::Ptr selectionForeground)
 {
-	ColorRGBA oldValue = this->selectionForeground;
+	IPattern::Ptr oldValue = this->selectionForeground;
 	this->selectionForeground = selectionForeground;
 	firePropertyChanged(PROPERTY_SELECTIONFOREGROUND,
 			oldValue, selectionForeground);
