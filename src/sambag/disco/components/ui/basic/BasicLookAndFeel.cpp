@@ -109,15 +109,15 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Button
 	using namespace svg;
 	style = createStyle("stroke: black; fill: lavender;");
-	style.fillPattern( createPattern("lin(0,1,[87cefaff:0, 87cefaff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	style.fillPattern( createPattern("lin(0,1,[61bdf2ff:0, 61bdf2ff:0.5, 06a1fcff:0.6, 06a1fcff:1])") );
 	m.putProperty("Button.normal", style);
 	
 	style = createStyle("stroke: black; fill: slategrey;");
-	style.fillPattern( createPattern("lin(0,1,[236a96ff:0, 236a96ff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	style.fillPattern( createPattern("lin(0,1,[506a7aff:0, 506a7aff:0.5, 37515fff:0.6, 37515fff:1])") );
 	m.putProperty("Button.pressed",  style);
 	
 	style = createStyle("stroke: black; fill: lightblue;");
-	style.fillPattern( createPattern("lin(0,1,[a7feffff:0, a7feffff:0.5, 5bb9f4ff:0.6, 5bb9f4ff:1])") );
+	style.fillPattern( createPattern("lin(0,1,[c4e4f6ff:0, c4e4f6ff:0.5, 9fd5f5ff:0.6, 9fd5f5ff:1])") );
 	m.putProperty("Button.rollover",  style);
 	
 	style = createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic");
@@ -139,8 +139,8 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<list
 	m.putProperty("List.minCellWidth", Coordinate(60.));
 	m.putProperty("List.minCellHeight", Coordinate(20.));
-	style = createStyle("stroke: black; fill: white;");
-	style.fillPattern( createPattern("lin(1,0,[f0ffffff:0, D0D0D0ff:0.3, D0D0D0ff:0.6, f0ffffff:1])") );
+	style = createStyle("stroke: black; fill: lavender;");
+	//style.fillPattern( createPattern("lin(1,0,[f0ffffff:0, D0D0D0ff:0.3, D0D0D0ff:0.6, f0ffffff:1])") );
 	m.putProperty("List.style", style);
 	style = createStyle("stroke: white; fill: blue;");
 	style.fillColor( style.fillPattern()->getColor().setA(0.5) );

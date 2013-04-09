@@ -47,9 +47,12 @@ void AComponentUI::installUI(AComponent::Ptr c) {
 	UIManager &m = getUIManager();
 	svg::graphicElements::Style style;
 	m.getProperty("global.style", style);
-	c->setFont(style.font());
-	c->setForeground(style.strokePattern());
-	c->setBackground(style.fillPattern());
+	if (!c->isFontSet())
+		c->setFont(style.font());
+	if (!c->isForegroundSet())
+		c->setForeground(style.strokePattern());
+	if (!c->isBackgroundSet())
+		c->setBackground(style.fillPattern());
 }
 //-----------------------------------------------------------------------------
 void AComponentUI::draw(IDrawContext::Ptr cn, AComponent::Ptr c) {

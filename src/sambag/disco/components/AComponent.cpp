@@ -1012,6 +1012,7 @@ void AComponent::installLookAndFeel(ui::ALookAndFeelPtr laf) {
 //-----------------------------------------------------------------------------
 void AComponent::setFont(const Font &_font) {
 	Font olf = font;
+	setFlag(FONT_SET, true);
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		font = _font;
 	SAMBAG_END_SYNCHRONIZED
@@ -1196,5 +1197,9 @@ void AComponent::setIcon(ISurface::Ptr icon) {
 	firePropertyChanged(PROPERTY_ICON, old, icon);
 	invalidate();
 	redraw();
+}
+//-----------------------------------------------------------------------------
+bool AComponent::isFontSet() const {
+	return getFlag(FONT_SET);
 }
 }}} // namespace(s)

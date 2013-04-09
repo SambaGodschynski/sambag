@@ -137,12 +137,12 @@ public:
 		IS_PRINTING_ALL,
 		IS_REPAINTING,
 		WRITE_OBJ_COUNTER_FIRST,
+		FONT_SET,
 		RESERVED_1,
 		RESERVED_2,
 		RESERVED_3,
 		RESERVED_4,
 		RESERVED_5,
-		RESERVED_6,
 		WRITE_OBJ_COUNTER_LAST,
 		REQUEST_FOCUS_DISABLED,
 		INHERITS_POPUP_MENU,
@@ -493,6 +493,11 @@ public:
 	virtual void setUserUI (ui::AComponentUIPtr cui);
 	//-------------------------------------------------------------------------
 	virtual void setFont(const Font &font);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return true when font was set by client
+	 */
+	virtual bool isFontSet() const;
 	//-------------------------------------------------------------------------
 	virtual const Font & getFont() const;
 	//-------------------------------------------------------------------------
@@ -880,16 +885,6 @@ public:
 	virtual bool isMinimumSizeSet() const;
 	//-------------------------------------------------------------------------
 	/**
-	 * @return whether Background color is set
-	 */
-	virtual bool isBackgroundSet() const;
-	//-------------------------------------------------------------------------
-	/**
-	 * @return whether Foreground color is set
-	 */
-	virtual bool isForegroundSet() const;
-	//-------------------------------------------------------------------------
-	/**
 	 * Returns true if the preferred size has been set to a
 	 * non-<code>null</code> value otherwise returns false.
 	 *
@@ -1139,10 +1134,20 @@ public:
 	virtual void setBackground(IPattern::Ptr pat);
 	//-------------------------------------------------------------------------
 	/**
+	 * @return true when background was set by client
+	 */
+	virtual bool isBackgroundSet() const;
+	//-------------------------------------------------------------------------
+	/**
 	 * Sets the foreground color of this component.
 	 * @param c
 	 */
 	virtual void setForeground(IPattern::Ptr pat);
+	//-------------------------------------------------------------------------
+	/**
+	 * @return true when forground was set by client
+	 */
+	virtual bool isForegroundSet() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * Sets the preferred size of this component to a constant
