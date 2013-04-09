@@ -51,7 +51,11 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 
 	if (lastEvent.buttons>0
 			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_RELEASED)
-			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_CLICKED)) {
+			&& !(lastEvent.type == MouseEvent::DISCO_MOUSE_CLICKED)) 
+	{
+		if ( lastEvent.p == Point2D(x,y)) {
+			return;
+		}
 		lastEvent =
 			MouseEvent(root, Point2D(x, y), lastEvent.buttons, MouseEvent::DISCO_MOUSE_DRAGGED);
 		fireEvent(lastEvent);
