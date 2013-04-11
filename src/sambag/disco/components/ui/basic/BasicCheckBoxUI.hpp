@@ -49,6 +49,9 @@ private:
 	MouseListener listener;
 public:
 	//-------------------------------------------------------------------------
+	void onButtonStateChanged(void *src, const
+			typename AbstractButton::StateChangedEvent &ev);
+	//-------------------------------------------------------------------------
 	static Ptr create() {
 		return Ptr(new Class());
 	}
@@ -91,7 +94,24 @@ template <class ButtonModell>
 void BasicCheckBoxUI<ButtonModell>::installDefaults(AComponentPtr c) {
 	Super::installDefaults(c);
 	box = Rectangle(0,0,15,15);
-	c->setOpaque(true);
+}
+//-----------------------------------------------------------------------------
+template <class ButtonModell>
+void BasicCheckBoxUI<ButtonModell>::onButtonStateChanged(void *src, const
+			typename AbstractButton::StateChangedEvent &ev)
+{
+	Super::onButtonStateChanged(src, ev);
+	const AbstractButton *_btn =
+			dynamic_cast<const AbstractButton*>(&(ev.getSrc()));
+	BOOST_ASSERT(_btn);
+	typename AbstractButton::Ptr btn = _btn->getPtr();
+	if (btn->isOpaque()) {
+		return;
+	}
+	AComponent::Ptr parent = btn->getParent();
+	if (parent) {
+		parent->redraw();
+	}
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
@@ -105,7 +125,7 @@ void BasicCheckBoxUI<ButtonModell>::installListener(AComponentPtr c) {
 	);
 	b->EventSender<typename ButtonModell::StateChangedEvent>::
 	addTrackedEventListener(
-			boost::bind(&Super::onButtonStateChanged,
+		boost::bind(&Class::onButtonStateChanged,
 					this, _1, _2),
 			b
 	);

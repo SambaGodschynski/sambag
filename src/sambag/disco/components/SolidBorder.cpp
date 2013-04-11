@@ -21,7 +21,7 @@ SolidBorder::SolidBorder() {
 }
 //-----------------------------------------------------------------------------
 Insets SolidBorder::getBorderInsets(AComponentPtr c) {
-	return Insets(0,0,0,0);
+	return Insets(15,15,15,15);
 }
 //-----------------------------------------------------------------------------
 void SolidBorder::setCornerRadius(const Coordinate &c) {

@@ -109,16 +109,16 @@ void BasicLookAndFeel::installDefaults() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Button
 	using namespace svg;
 	style = createStyle("stroke: black; fill: lavender;");
-	style.fillPattern( createPattern("lin(0,1,[61bdf2ff:0, 61bdf2ff:0.5, 06a1fcff:0.6, 06a1fcff:1])") );
+	style.fillPattern( createPattern("lin(0,1,[b7e6ffff:0, b7e6ffff:0.5, 92e8fdff:0.6, 92e8fdff:1])") );
 	m.putProperty("Button.normal", style);
-	
-	style = createStyle("stroke: black; fill: slategrey;");
-	style.fillPattern( createPattern("lin(0,1,[506a7aff:0, 506a7aff:0.5, 37515fff:0.6, 37515fff:1])") );
-	m.putProperty("Button.pressed",  style);
 	
 	style = createStyle("stroke: black; fill: lightblue;");
 	style.fillPattern( createPattern("lin(0,1,[c4e4f6ff:0, c4e4f6ff:0.5, 9fd5f5ff:0.6, 9fd5f5ff:1])") );
 	m.putProperty("Button.rollover",  style);
+
+	style = createStyle("stroke: black; fill: slategrey;");
+	style.fillPattern( createPattern("lin(0,1,[506a7aff:0, 506a7aff:0.5, 37515fff:0.6, 37515fff:1])") );
+	m.putProperty("Button.pressed",  style);
 	
 	style = createStyle("stroke: darkgrey; fill: lightgrey;font-style: italic");
 	m.putProperty("Button.disabled", style);

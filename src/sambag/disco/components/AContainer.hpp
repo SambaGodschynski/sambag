@@ -362,7 +362,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setLayout(ALayoutManager::Ptr mgr);
 	//-------------------------------------------------------------------------
-	AComponentPtr findComponentAt(const Point2D &p,
+	virtual AComponentPtr findComponentAt(const Point2D &p,
 			bool includeSelf = true);
 	//-------------------------------------------------------------------------
 	AComponentPtr findComponentAt(const Coordinate &x, const Coordinate &y,
