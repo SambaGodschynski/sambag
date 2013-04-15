@@ -59,8 +59,8 @@ find_package(Boost 1.49.0 REQUIRED
 	date_time 
 	timer
 	chrono 
-	log
-	log_setup
+	#log
+	#log_setup
 )
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
