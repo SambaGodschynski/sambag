@@ -115,26 +115,27 @@ public:
 	}
 
 };
-namespace {
-	template <class T>
-	struct ScrollUpdater {
-		Viewport::Ptr vp;
-		void setViewport(Viewport::Ptr vp) {
-			this->vp = vp;
+//=============================================================================
+template <class T>
+struct ScrollUpdater {
+//=============================================================================
+	Viewport::Ptr vp;
+	void setViewport(Viewport::Ptr vp) {
+		this->vp = vp;
+	}
+	Viewport::Ptr getViewport() const {
+		return vp;
+	}
+	void update(const T &val) {
+		if (!vp) {
+			return;
 		}
-		Viewport::Ptr getViewport() const {
-			return vp;
-		}
-		void update(const T &val) {
-			if (!vp) {
-				return;
-			}
-			Point2D p = vp->getViewPosition();
-			p.x(val);
-			vp->setViewPosition(p);
-		}
-	};
-} // namespace
+		Point2D p = vp->getViewPosition();
+		p.x(val);
+		vp->setViewPosition(p);
+	}
+};
+
 //=============================================================================
 /** 
   * @class AColumnBrowser.

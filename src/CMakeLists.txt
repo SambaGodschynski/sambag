@@ -95,6 +95,9 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/basic/BasicScrollPaneUI.cpp
 	sambag/disco/components/ui/basic/Helper.cpp
 	sambag/disco/components/windowImpl/BoostTimerImpl.cpp
+	sambag/disco/components/windowImpl/CocoaTimer.cpp
+	sambag/disco/components/windowImpl/CocoaWindowImpl.cpp
+	sambag/disco/components/windowImpl/CocoaWindowToolkit.cpp
 	sambag/disco/components/windowImpl/TestWindowImpl.cpp
 	sambag/disco/components/windowImpl/Win32BufferedDraw.cpp
 	sambag/disco/components/windowImpl/Win32MMTimerImpl.cpp
@@ -146,6 +149,12 @@ SET ( SAMBAG_SOURCES
 	sambag/xml/cpAtl/MarkupBuilder.cpp
 	sambag/xml/cpAtl/SimpleTagCreator.cpp
 )
+SET ( SAMBAG_MMSOURCES
+	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
+	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
+)
+set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")
+SET(SAMBAG_SOURCES ${SAMBAG_SOURCES} ${SAMBAG_MMSOURCES})
 SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/FileSystemTest.cpp
 	sambag/com/tests/TestArithmeticWrapper.cpp

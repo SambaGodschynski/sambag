@@ -5,8 +5,8 @@
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_WIN32TIMERIMPL_H
-#define SAMBAG_WIN32TIMERIMPL_H
+#ifndef SAMBAG_COCOATIMERIMPL_H
+#define SAMBAG_COCOATIMERIMPL_H
 
 #include <sambag/disco/components/Timer.hpp>
 
@@ -16,7 +16,7 @@ namespace sambag { namespace disco {  namespace components {
 /** 
   * @class Win32TimerImpl.
   */
-class Win32TimerImpl {
+class CocoaTimerImpl {
 //=============================================================================
 public:
 protected:
@@ -38,7 +38,7 @@ public:
 	//-------------------------------------------------------------------------
 	static void tearDownTimer();
 
-}; // Win32TimerImpl
+}; // CocoaTimerImpl
 }}} // namespace(s)
 
-#endif /* SAMBAG_WIN32TIMERIMPL_H */
+#endif /* SAMBAG_COCOATIMERIMPL_H */

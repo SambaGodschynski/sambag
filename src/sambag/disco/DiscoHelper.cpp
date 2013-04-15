@@ -51,8 +51,8 @@ Rectangle getPatternRect(IPattern::Ptr p) {
 //-----------------------------------------------------------------------------
 void alignPattern(IDrawContext::Ptr cn, IPattern::Ptr p, const Rectangle &dst) {
 	Rectangle pRect = getPatternRect(p);
-	Number sx = pRect.width() == 0. ? 1. : pRect.width();
-	Number sy = pRect.height() == 0. ? 1. : pRect.height();
+	Number sx = pRect.width() == 0. ?  1. : (Number)pRect.width();
+	Number sy = pRect.height() == 0. ? 1. : (Number)pRect.height();
 	sx /= dst.width();
 	sy /= dst.height();
 	Matrix m = sambag::math::translate2D(pRect.x(), pRect.y());

@@ -15,7 +15,6 @@
 #include "GlyphHelper.hpp"
 #include <boost/tuple/tuple.hpp>
 
-
 namespace sambag { namespace disco {
 	typedef boost::tuple<sambag::disco::ColorRGBA, 
 		sambag::disco::ColorRGBA, 
@@ -25,6 +24,8 @@ namespace sambag { namespace disco {
 }}
 
 namespace boost {
+	extern size_t hash_value(const sambag::disco::ColorRGBA &o);
+	extern size_t hash_value(const sambag::disco::Font &o);
 	extern size_t hash_value(const sambag::disco::FontTraits &o);
 }
 

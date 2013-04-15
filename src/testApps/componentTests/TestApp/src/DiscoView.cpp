@@ -36,7 +36,6 @@
 #include <boost/timer/timer.hpp>
 #include <boost/filesystem.hpp>
 #include <assert.h>
-#include <boost/log/utility/init/to_console.hpp>
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
 
@@ -679,8 +678,8 @@ void initResources() {
 }
 
 void initLogger() {
-	using namespace boost::log;
-	init_log_to_console();
+	//using namespace boost::log;
+	//init_log_to_console();
 }
 
 int main() {

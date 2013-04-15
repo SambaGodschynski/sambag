@@ -32,6 +32,7 @@ class Walker():
     root = ""
     testSource = []
     source = []
+    mmsource = []
     def __init__(self, root):
         self.root = root
         
@@ -40,6 +41,9 @@ class Walker():
                
         self.fHandler = self.createCmakeFile()
         self.writeList("SAMBAG_SOURCES", self.source)
+        self.writeList("SAMBAG_MMSOURCES", self.mmsource)
+        self.writeLine('set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")')
+        self.writeLine("SET(SAMBAG_SOURCES ${SAMBAG_SOURCES} ${SAMBAG_MMSOURCES})")
         self.writeList("SAMBAG_TESTSOURCES",self.testSource)
         self.writeLine("add_library(sambag ${SAMBAG_SOURCES})")
         self.writeLine(add)
@@ -70,7 +74,10 @@ class Walker():
     def processFiles(self, files):
         for x in files:
             full = os.path.relpath(self.currDir, self.root) +'/'+x
-            if not re.match(".*?\.cp{0,2}$", x):
+            name, ext = os.path.splitext(x)
+            if ext == ".mm":
+                self.mmsource.append(full)
+            if not re.match("\.cp{0,2}$", ext):
                 continue
             if self.isTest(self.currDir):
                 self.testSource.append(full)

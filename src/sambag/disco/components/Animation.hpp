@@ -90,7 +90,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	const T & getEndValue() const {
-		return endvalue;
+		return endValue;
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(const T &s = T(), 

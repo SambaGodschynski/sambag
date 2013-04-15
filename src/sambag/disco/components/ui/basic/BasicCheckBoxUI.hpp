@@ -30,6 +30,8 @@ public:
 	typedef BasicButtonUI<_ButtonModel> Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Class> Ptr;
+	//-------------------------------------------------------------------------
+	typedef typename Super::AbstractButton AbstractButton;
 protected:
 	//-------------------------------------------------------------------------
 	BasicCheckBoxUI(){}
