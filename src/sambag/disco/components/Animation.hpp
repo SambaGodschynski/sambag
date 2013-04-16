@@ -206,7 +206,7 @@ typename Animation<T,TW,UP>::Ptr Animation<T,TW,UP>::create(const T &s, const T 
 	res->setEndValue(e);
 	res->setDuration(d);
 	res->setRefreshRate(rfsh);
-	res->EventSender<TimerEvent>::addEventListener(
+	res->com::events::EventSender<TimerEvent>::addEventListener(
 		boost::bind(&ThisClass::update, res.get(), _1, _2)
 	);
 	res->self = res;

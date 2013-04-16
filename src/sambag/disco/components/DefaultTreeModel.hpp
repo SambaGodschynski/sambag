@@ -226,7 +226,7 @@ typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
 	vertexDataMap[u] = data;
 	boost::add_edge(parent, u, tree);
 	numNodes = numNodes + 1;
-	EventSender<Event>::notifyListeners(this, Event());
+	sce::EventSender<Event>::notifyListeners(this, Event());
 	return u; 
 }
 //-----------------------------------------------------------------------------
@@ -237,7 +237,7 @@ typename DefaultTreeModel<NT>::Node DefaultTreeModel<NT>::addNode(
 	const Vertex &u = add_vertex(tree);
 	boost::add_edge(parent, u, tree);
 	numNodes = numNodes + 1;
-	EventSender<Event>::notifyListeners(this, Event());
+	sce::EventSender<Event>::notifyListeners(this, Event());
 	return u; 
 }
 //-----------------------------------------------------------------------------
@@ -263,7 +263,7 @@ void DefaultTreeModel<NT>::removeNode(
 	if (node==root)
 		return;
 	removeNodeImpl(node);
-	EventSender<Event>::notifyListeners(this, Event());
+	sce::EventSender<Event>::notifyListeners(this, Event());
 }
 //-----------------------------------------------------------------------------
 template <class NT>
@@ -297,7 +297,7 @@ void DefaultTreeModel<NT>::setNodeData(typename DefaultTreeModel<NT>::Node node,
 		const typename DefaultTreeModel<NT>::NodeDataType &v)
 {
 	vertexDataMap[node] = v;
-	EventSender<Event>::notifyListeners(this, Event());
+	sce::EventSender<Event>::notifyListeners(this, Event());
 }
 }}} // namespace(s)
 

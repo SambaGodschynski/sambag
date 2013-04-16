@@ -5,9 +5,9 @@
  *      Author: Johannes Unger
  */
 #ifdef DISCO_USE_COCOA
-//#import "_CocoaWindowImpl.h"
+#import "_CocoaWindowImpl.h"
 #import <Cocoa/Cocoa.h>
-/*
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 // @class _CocoaWindowImpl
@@ -21,6 +21,6 @@ void _CocoaWindowImpl::openWindow() {
 	[window makeKeyAndOrderFront: window];
 }
 
-}}} //namespace(s)*/
+}}} //namespace(s)
 
 #endif //DISCO_USE_COCOA

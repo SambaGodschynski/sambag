@@ -66,7 +66,7 @@ void Timer::setInitialDelay(const TimeType &_delay) {
 }
 //-----------------------------------------------------------------------------
 void Timer::timerExpired() {
-	EventSender<TimerEvent>::notifyListeners(
+	com::events::EventSender<TimerEvent>::notifyListeners(
 			this,
 			TimerEvent(getPtr())
 	);

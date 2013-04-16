@@ -8,7 +8,8 @@
 #include "SceneGraphHelper.hpp"
 #include "RefElement.hpp"
 
-namespace {
+//namespace { occurs boost::concepts::requirement<boost::concepts::failed************ ...
+//            on mac osx gcc42
 using namespace sambag::disco::svg::graphicElements;
 //=============================================================================
 /**
@@ -65,7 +66,7 @@ public:
 		dst->connectElements(currentParent, obj);
 	}
 };
-}// namespace
+//}// namespace
 
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {

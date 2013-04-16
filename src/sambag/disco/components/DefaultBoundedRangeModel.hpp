@@ -35,7 +35,7 @@ public:
 	typedef boost::shared_ptr<DefaultBoundedRangeModel> Ptr;
 protected:
 	void fireStateChanged() {
-		EventSender<DefaultBoundedRangeModelChanged>::notifyListeners(
+		com::events::EventSender<DefaultBoundedRangeModelChanged>::notifyListeners(
 				this, DefaultBoundedRangeModelChanged(*this)
 		);
 	}

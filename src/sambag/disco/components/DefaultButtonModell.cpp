@@ -124,7 +124,7 @@ DefaultButtonModell::getButtonFunction() const
 }
 //-----------------------------------------------------------------------------
 void DefaultButtonModell::fireStateChanged() {
-	EventSender<DefaultButtonModellChangedEvent>::notifyListeners(
+	com::events::EventSender<DefaultButtonModellChangedEvent>::notifyListeners(
 			this,
 			DefaultButtonModellChangedEvent(*this)
 	);

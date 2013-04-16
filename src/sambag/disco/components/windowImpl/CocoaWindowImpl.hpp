@@ -20,13 +20,17 @@
 #include "WindowFlags.hpp"
 #include <sambag/com/ArbitraryType.hpp>
 #include <boost/tuple/tuple.hpp>
+#include "cocoaimpl/_CocoaWindowImpl.h"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class CocoaWindowImpl.
   */
-class CocoaWindowImpl : public WindowFlags {
+class CocoaWindowImpl :
+	public WindowFlags,
+	public _CocoaWindowImpl // encapsulated objective-c impl.
+{
 //=============================================================================
 friend class CocoaWindowToolkit;
 public:
