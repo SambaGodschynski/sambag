@@ -3018,6 +3018,27 @@
 <stopOnError>true</stopOnError>
 <useDefaultCommand>false</useDefaultCommand>
 </target>
+<target name="[obj] sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.o" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments>-j4</buildArguments>
+<buildTarget>sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.i" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments>-j4</buildArguments>
+<buildTarget>sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.s" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments>-j4</buildArguments>
+<buildTarget>sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
 <target name="[obj] sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm.o" path="src" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
 <buildCommand>/usr/bin/make</buildCommand>
 <buildArguments>-j4</buildArguments>

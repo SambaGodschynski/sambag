@@ -16,6 +16,12 @@ namespace sambag { namespace disco { namespace components {
  * Encapsulated cocoa window implementation.
  */
 class _CocoaWindowImpl {
+protected:
+	//-------------------------------------------------------------------------
+	_CocoaWindowImpl();
+public:
+	//-------------------------------------------------------------------------
+	static void startMainApp();
 	//-------------------------------------------------------------------------
 	void openWindow();
 };

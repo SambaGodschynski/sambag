@@ -62,6 +62,7 @@ void CocoaWindowToolkit::useWithoutMainloop() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::mainLoop() {
+	CocoaWindowImpl::startMainApp();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::quit() {

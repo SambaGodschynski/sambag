@@ -889,6 +889,11 @@
 			<location>/Users/johannesunger/workspace/sambag/src/sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm</location>
 		</link>
 		<link>
+			<name>[Targets]/[lib] sambag/Source Files/AutoReleasePool.mm</name>
+			<type>1</type>
+			<location>/Users/johannesunger/workspace/sambag/src/sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm</location>
+		</link>
+		<link>
 			<name>[Targets]/[lib] sambag/Header Files</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

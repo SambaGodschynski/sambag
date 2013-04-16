@@ -12,7 +12,10 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class CocoaWindowImpl
 //=============================================================================
-
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::startMainApp() {
+	Impl::startMainApp();
+}
 //-----------------------------------------------------------------------------
 CocoaWindowImpl::CocoaWindowImpl() :
 	bounds(Rectangle(0,0,1,1)),
@@ -29,6 +32,7 @@ void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::open(AWindowImplPtr parent) {
+	Impl::openWindow();
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {

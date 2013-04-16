@@ -35,6 +35,8 @@ class CocoaWindowImpl :
 friend class CocoaWindowToolkit;
 public:
 	//-------------------------------------------------------------------------
+	typedef _CocoaWindowImpl Impl;
+	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<CocoaWindowImpl> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<CocoaWindowImpl> WPtr;
@@ -71,6 +73,8 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void processDraw(sambag::disco::ISurface::Ptr surface) = 0;
 public:
+	//-------------------------------------------------------------------------
+	static void startMainApp();
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
