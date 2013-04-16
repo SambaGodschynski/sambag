@@ -22,10 +22,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI")
 #APPLE is TRUE on Apple systems.
 
 IF(APPLE)
-	find_package(X11 REQUIRED)
-        include_directories(${X11_INCLUDE_DIRS})
+	#find_package(X11 REQUIRED)
+        #include_directories(${X11_INCLUDE_DIRS})
 	find_package(IConvX REQUIRED)
 	add_definitions(-DDISCO_USE_COCOA)
+	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
 ELSEIF(UNIX)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIRS})
@@ -77,7 +78,8 @@ include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 		${ICONV_LIBRARY_DIRS}/${LIBICONV}
-		${X11_LIBRARIES}
+		#${X11_LIBRARIES}
+		${COCOA_LIBRARIES}
 	)
 ELSEIF(UNIX)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
