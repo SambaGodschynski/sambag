@@ -7,8 +7,10 @@
 
 #ifndef SAMBAG__COCOAWINDOWIMPL_H
 #define SAMBAG__COCOAWINDOWIMPL_H
-
 #ifdef DISCO_USE_COCOA
+
+#include <ApplicationServices/ApplicationServices.h>
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /**
@@ -24,6 +26,8 @@ public:
 	static void startMainApp();
 	//-------------------------------------------------------------------------
 	void openWindow();
+	//-------------------------------------------------------------------------
+	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h) = 0;
 };
 
 }}}

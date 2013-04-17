@@ -50,6 +50,9 @@ private:
 	//-------------------------------------------------------------------------
 	std::string title;
 	//-------------------------------------------------------------------------
+	void updateBoundsToWindow();
+	//-------------------------------------------------------------------------
+	void updateWindowToBounds(const Rectangle &r);
 protected:
 	//-------------------------------------------------------------------------
 	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
@@ -72,7 +75,13 @@ protected:
 	virtual void boundsUpdated() = 0;
 	//-------------------------------------------------------------------------
 	virtual void processDraw(sambag::disco::ISurface::Ptr surface) = 0;
+	//-------------------------------------------------------------------------
+	void _open(AWindowImplPtr parent);
+	//-------------------------------------------------------------------------
+	void _close();
 public:
+	//-------------------------------------------------------------------------
+	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h);
 	//-------------------------------------------------------------------------
 	static void startMainApp();
 	//-------------------------------------------------------------------------

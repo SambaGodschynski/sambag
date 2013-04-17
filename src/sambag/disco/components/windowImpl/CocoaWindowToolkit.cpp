@@ -62,7 +62,9 @@ void CocoaWindowToolkit::useWithoutMainloop() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::mainLoop() {
+	TimerPolicy::startUpTimer();
 	CocoaWindowImpl::startMainApp();
+	TimerPolicy::tearDownTimer();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::quit() {

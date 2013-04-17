@@ -12,8 +12,73 @@
 #import <objc/message.h>
 #import <iostream>
 
-static Class viewClass = 0;
+typedef sambag::disco::components::_CocoaWindowImpl Master;
 
+@interface TestView : NSWindow
+{
+	
+}
+- (void)mouseDown:(NSEvent *)theEvent;
+- (void)mouseMoved:(NSEvent *)theEvent;
+- (BOOL)acceptsFirstResponder;
+- (void)update;
+@end
+
+
+@implementation TestView
+- (BOOL)acceptsFirstResponder {
+    return YES;
+}
+- (void)mouseDown:(NSEvent *)theEvent {
+    NSLog(@"mouseDown event detected!");
+}
+- (void)mouseMoved:(NSEvent *)theEvent {
+    NSLog(@"mouseMoved event detected!");
+}
+- (void)update {
+}
+@end
+
+@interface TestNSView : NSView
+{
+	Master *parent;
+}
+- (void)mouseDown:(NSEvent *)theEvent;
+- (void)mouseMoved:(NSEvent *)theEvent;
+- (BOOL)acceptsFirstResponder;
+- (void)drawRect:(NSRect)rect;
+- (void)setParent:(Master*) theParent;
+@end
+
+
+@implementation TestNSView
+- (BOOL)acceptsFirstResponder {
+    return YES;
+}
+- (void)mouseDown:(NSEvent *)theEvent {
+    NSLog(@"mouseDown event detected!");
+}
+- (void)mouseMoved:(NSEvent *)theEvent {
+    NSLog(@"mouseMoved event detected!");
+}
+- (void)drawRect:(NSRect)rect {
+	void *gc = [[[self window] graphicsContext] graphicsPort];
+	parent->__processDraw((CGContextRef)gc,0,0,200,200);
+	
+}
+- (void)setParent:(Master*) theParent{
+	parent = theParent;
+}
+@end
+
+
+
+static Class viewClass = 0;
+//------------------------------------------------------------------------------------
+static void _onMouseDown(id self, SEL _cmd, NSEvent *ev) {
+	/*std::cout<<"1";
+	return YES;*/
+}
 //------------------------------------------------------------------------------------
 static Class _generateUniqueClass (NSMutableString* className, Class baseClass)
 {
@@ -31,11 +96,13 @@ static Class _generateUniqueClass (NSMutableString* className, Class baseClass)
 
 
 static Class _initViewClass() {
-	[NSApplication sharedApplication];
-	AutoReleasePool ap;
 	NSMutableString * viewClassName = 
 		[[[NSMutableString alloc] initWithString:@"DISCO_NSVIEW"] autorelease ];
 	Class res = _generateUniqueClass(viewClassName, [NSView class]);
+	BOOL suc;
+	suc = class_addMethod(res, @selector(onMouseDown:), IMP(_onMouseDown), "B@:@:^:");
+	objc_registerClassPair(res);
+	std::cout<<"NSVIEW created"<<std::endl;
 	return res;
 }
 
@@ -45,27 +112,34 @@ namespace sambag { namespace disco { namespace components {
 //=================================================================================
 //---------------------------------------------------------------------------------
 void _CocoaWindowImpl::startMainApp() {
+	[NSApplication sharedApplication];
 	AutoReleasePool ap;
-	
 	//AppDelegate *appDelegate = [[AppDelegate alloc] init];
 	//[NSApp setDelegate:appDelegate];
 	[NSApp run];
 }
 //---------------------------------------------------------------------------------
 _CocoaWindowImpl::_CocoaWindowImpl(){
-	if (viewClass == 0) {
+	/*if (viewClass == 0) {
 		viewClass = _initViewClass();
-	}
+	}*/
 }
+	
 //---------------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow() {
+	//AutoReleasePool ap;
 	NSRect frame = NSMakeRect(0, 0, 200, 200);
-	NSWindow* window  = [[[NSWindow alloc] initWithContentRect:frame
+	NSWindow* window  = [[[TestView alloc] initWithContentRect:frame
 						  styleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask
 						  backing:NSBackingStoreBuffered
 						  defer:NO] autorelease];
 	[window setBackgroundColor:[NSColor blueColor]];
-	[window makeKeyAndOrderFront:NSApp];
+	[window makeKeyAndOrderFront:window];
+	[window setAcceptsMouseMovedEvents:YES];
+	
+	TestNSView *view = [[TestNSView alloc] initWithFrame: frame];
+	[[window contentView] addSubview:view];
+	[view setParent:this];
 }
 
 }}} //namespace(s)

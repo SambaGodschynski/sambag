@@ -7,11 +7,21 @@
 #ifdef DISCO_USE_COCOA
 #include "CocoaWindowImpl.hpp"
 #include "cocoaimpl/_CocoaWindowImpl.h"
+#include <sambag/disco/components/WindowToolkit.hpp>
+#include <sambag/disco/QuartzSurface.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //  Class CocoaWindowImpl
 //=============================================================================
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__processDraw(CGContextRef context, int x, int y, int w, int h)
+{
+	QuartzSurface::Ptr sf = QuartzSurface::create(context,w,h);
+	SAMBAG_ASSERT(sf);
+	this->processDraw(sf);
+	//cairo_surface_flush(sf->getCairoSurface());
+}
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::startMainApp() {
 	Impl::startMainApp();
@@ -31,8 +41,24 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::open(AWindowImplPtr parent) {
+void CocoaWindowImpl::_open(AWindowImplPtr parent) {
 	Impl::openWindow();
+	onCreated();
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::open(AWindowImplPtr parent) {
+	getWindowToolkit()->invokeLater(
+		boost::bind(&CocoaWindowImpl::_open, this, parent)
+	);
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::updateWindowToBounds(const Rectangle &r) {
+	bounds = r;
+	boundsUpdated();
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::updateBoundsToWindow() {
+	//TODO: implement
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {
@@ -68,7 +94,7 @@ void CocoaWindowImpl::setBounds(const Rectangle &r) {
 	if (!isVisible())
 		return;
 
-	//updateBoundsToWindow();
+	updateBoundsToWindow();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::setTitle(const std::string &_title) {
