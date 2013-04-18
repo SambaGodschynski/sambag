@@ -42,7 +42,12 @@ void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_open(AWindowImplPtr parent) {
-	Impl::openWindow();
+	Impl::openWindow(
+			(int)bounds.x(),
+			(int)bounds.y(),
+			(int)bounds.width(),
+			(int)bounds.height()
+	);
 	onCreated();
 }
 //-----------------------------------------------------------------------------
@@ -58,7 +63,11 @@ void CocoaWindowImpl::updateWindowToBounds(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::updateBoundsToWindow() {
-	//TODO: implement
+	Impl::setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__boundsChanged(int x, int y, int w, int h) {
+	updateWindowToBounds(Rectangle(x,y,w,h));
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {
@@ -103,12 +112,26 @@ void CocoaWindowImpl::setTitle(const std::string &_title) {
 		return;
 	//updateTitle();
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 std::string CocoaWindowImpl::getTitle() const {
 	return title;
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::invalidateWindow(const Rectangle &area) {
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__handleMouseButtonPressEvent(int x, int y, int buttons)
+{
+	handleMouseButtonPressEvent(x,y,buttons);
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__handleMouseButtonReleaseEvent(int x, int y, int buttons)
+{
+	handleMouseButtonReleaseEvent(x,y,buttons);
+}
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__handleMouseMotionEvent(int x, int y) {
+	handleMouseMotionEvent(x,y);
 }
 }}} // namespace(s)
 

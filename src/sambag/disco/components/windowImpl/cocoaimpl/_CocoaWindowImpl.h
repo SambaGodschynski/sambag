@@ -10,6 +10,7 @@
 #ifdef DISCO_USE_COCOA
 
 #include <ApplicationServices/ApplicationServices.h>
+#include "AutoReleasePool.h"
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -18,16 +19,47 @@ namespace sambag { namespace disco { namespace components {
  * Encapsulated cocoa window implementation.
  */
 class _CocoaWindowImpl {
-protected:
+public:
+	//-------------------------------------------------------------------------
+	typedef void* RawDiscoWindow;
+	typedef void* RawDiscoView;
+private:
+	//-------------------------------------------------------------------------
+	RawDiscoWindow window;
+	RawDiscoView view;
+	AutoReleasePool ap;
+public:
+	//-------------------------------------------------------------------------
+	RawDiscoWindow getRawDiscoWindow() const { return window; }
+	//-------------------------------------------------------------------------
+	RawDiscoView getRawDiscoView() const { return view; }
 	//-------------------------------------------------------------------------
 	_CocoaWindowImpl();
-public:
+	//-------------------------------------------------------------------------
+	virtual ~_CocoaWindowImpl() {}
 	//-------------------------------------------------------------------------
 	static void startMainApp();
 	//-------------------------------------------------------------------------
-	void openWindow();
+	void openWindow(int x, int y, int w, int h);
+	//-------------------------------------------------------------------------
+	void setBounds(int x, int y, int w, int h);
+	//-------------------------------------------------------------------------
+	/**
+	 * called by window delegate.
+	 */
+	void __windowDidResized();
+	///////////////////////////////////////////////////////////////////////////
+	// pseudo callbacks ( _CocoaWindowImpl => CocoaWindowImpl)
+	//-------------------------------------------------------------------------
+	virtual void __boundsChanged(int x, int y, int w, int h) = 0;
 	//-------------------------------------------------------------------------
 	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h) = 0;
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseButtonPressEvent(int x, int y, int buttons) = 0;
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseButtonReleaseEvent(int x, int y, int buttons) = 0;
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseMotionEvent(int x, int y) = 0;
 };
 
 }}}

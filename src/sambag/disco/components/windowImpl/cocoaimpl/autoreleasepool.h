@@ -10,8 +10,6 @@
 
 #ifdef DISCO_USE_COCOA
 
-@class NSAutoreleasePool;
-
 //=============================================================================
 class AutoReleasePool {
 //=============================================================================
@@ -19,7 +17,7 @@ public:
 	AutoReleasePool ();
 	~AutoReleasePool ();
 protected:
-	NSAutoreleasePool* pool;
+	void * _pool;
 };
 
 #endif //DISCO_USE_COCOA

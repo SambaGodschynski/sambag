@@ -81,8 +81,6 @@ protected:
 	void _close();
 public:
 	//-------------------------------------------------------------------------
-	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h);
-	//-------------------------------------------------------------------------
 	static void startMainApp();
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
@@ -110,6 +108,18 @@ public:
 	Rectangle getHostBounds() const;
 	//-------------------------------------------------------------------------
 	void setBounds(const Rectangle &d);
+	///////////////////////////////////////////////////////////////////////////
+	// _CocoaWindowToolkit => CocoaWindowToolkit impl.
+	//-------------------------------------------------------------------------
+	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h);
+	//-------------------------------------------------------------------------
+	virtual void __boundsChanged(int x, int y, int w, int h);
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseButtonPressEvent(int x, int y, int buttons);
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseButtonReleaseEvent(int x, int y, int buttons);
+	//-------------------------------------------------------------------------
+	virtual void __handleMouseMotionEvent(int x, int y);
 }; // CocoaWindowImpl
 }}}
 

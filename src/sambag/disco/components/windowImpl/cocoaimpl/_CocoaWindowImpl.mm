@@ -13,123 +13,117 @@
 #import <iostream>
 
 typedef sambag::disco::components::_CocoaWindowImpl Master;
+//=============================================================================
+@interface DiscoWindow : NSWindow
+{}
+@end
+@implementation DiscoWindow
+@end
 
-@interface TestView : NSWindow
+//=============================================================================
+@interface DiscoWindowDelegate : NSObject<NSWindowDelegate>
 {
-	
+	Master *master;
 }
-- (void)mouseDown:(NSEvent *)theEvent;
-- (void)mouseMoved:(NSEvent *)theEvent;
+- (void)windowDidResize:(NSNotification *)notification;
+- (void)setMaster:(Master*) theMaster;
+@end
+
+@implementation DiscoWindowDelegate
+- (void)windowDidResize:(NSNotification *)notification {
+	master->__windowDidResized();
+}
+- (void)setMaster:(Master*) theMaster{
+	master = theMaster;
+}
+@end
+
+//=============================================================================
+@interface DiscoView : NSView
+{
+	Master *master;
+}
 - (BOOL)acceptsFirstResponder;
-- (void)update;
-@end
-
-
-@implementation TestView
-- (BOOL)acceptsFirstResponder {
-    return YES;
-}
-- (void)mouseDown:(NSEvent *)theEvent {
-    NSLog(@"mouseDown event detected!");
-}
-- (void)mouseMoved:(NSEvent *)theEvent {
-    NSLog(@"mouseMoved event detected!");
-}
-- (void)update {
-}
-@end
-
-@interface TestNSView : NSView
-{
-	Master *parent;
-}
 - (void)mouseDown:(NSEvent *)theEvent;
+- (void)mouseUp:(NSEvent *)theEvent;
 - (void)mouseMoved:(NSEvent *)theEvent;
 - (BOOL)acceptsFirstResponder;
 - (void)drawRect:(NSRect)rect;
-- (void)setParent:(Master*) theParent;
+- (void)setMaster:(Master*) theMaster;
+- (NSPoint)getMouseLocation:(NSEvent *)theEvent;
 @end
 
 
-@implementation TestNSView
+@implementation DiscoView
+- (NSPoint)getMouseLocation:(NSEvent *)theEvent {
+	NSRect frame = [self frame];
+	NSPoint p = [self convertPoint: [theEvent locationInWindow] fromView: self];
+	p.y = frame.size.height - p.y;
+	return p;
+}
 - (BOOL)acceptsFirstResponder {
     return YES;
 }
 - (void)mouseDown:(NSEvent *)theEvent {
-    NSLog(@"mouseDown event detected!");
+	int btn = [NSEvent pressedMouseButtons];
+	NSPoint p = [self getMouseLocation: theEvent];
+	master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+}
+- (void)mouseUp:(NSEvent *)theEvent {
+    int btn = [NSEvent pressedMouseButtons];
+	NSPoint p = [self getMouseLocation: theEvent];
+	master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
 }
 - (void)mouseMoved:(NSEvent *)theEvent {
     NSLog(@"mouseMoved event detected!");
 }
 - (void)drawRect:(NSRect)rect {
 	void *gc = [[[self window] graphicsContext] graphicsPort];
-	parent->__processDraw((CGContextRef)gc,0,0,200,200);
+	master->__processDraw(
+	    (CGContextRef)gc,
+		 rect.origin.x, 
+		 rect.origin.y, 
+		 rect.size.width, 
+		 rect.size.height
+	);
 	
 }
-- (void)setParent:(Master*) theParent{
-	parent = theParent;
+- (void)setMaster:(Master*) theMaster {
+	master = theMaster;
 }
 @end
 
 
-
-static Class viewClass = 0;
-//------------------------------------------------------------------------------------
-static void _onMouseDown(id self, SEL _cmd, NSEvent *ev) {
-	/*std::cout<<"1";
-	return YES;*/
-}
-//------------------------------------------------------------------------------------
-static Class _generateUniqueClass (NSMutableString* className, Class baseClass)
-{
-	NSString* _className = [NSString stringWithString:className];
-	NSInteger iteration = 0;
-	id cl = nil;
-	while ((cl = objc_lookUpClass ([className UTF8String])) != nil)
-	{
-		iteration++;
-		[className setString:[NSString stringWithFormat:@"%@_%d", _className, iteration]];
-	}
-	Class resClass = objc_allocateClassPair (baseClass, [className UTF8String], 0);
-	return resClass;
-}
-
-
-static Class _initViewClass() {
-	NSMutableString * viewClassName = 
-		[[[NSMutableString alloc] initWithString:@"DISCO_NSVIEW"] autorelease ];
-	Class res = _generateUniqueClass(viewClassName, [NSView class]);
-	BOOL suc;
-	suc = class_addMethod(res, @selector(onMouseDown:), IMP(_onMouseDown), "B@:@:^:");
-	objc_registerClassPair(res);
-	std::cout<<"NSVIEW created"<<std::endl;
+namespace sambag { namespace disco { namespace components {
+namespace {
+DiscoWindow * getDiscoWindow(const Master &m) {
+	DiscoWindow *res = (DiscoWindow*)m.getRawDiscoWindow();
+	assert(res);
 	return res;
 }
-
-namespace sambag { namespace disco { namespace components {
+DiscoView * getDiscoView(const Master &m) {
+	DiscoView *res = (DiscoView*)m.getRawDiscoView();
+	assert(res);
+	return res;
+}
+} // namepsace(s)
 //=================================================================================
 // @class _CocoaWindowImpl
 //=================================================================================
 //---------------------------------------------------------------------------------
 void _CocoaWindowImpl::startMainApp() {
 	[NSApplication sharedApplication];
-	AutoReleasePool ap;
-	//AppDelegate *appDelegate = [[AppDelegate alloc] init];
-	//[NSApp setDelegate:appDelegate];
 	[NSApp run];
 }
 //---------------------------------------------------------------------------------
-_CocoaWindowImpl::_CocoaWindowImpl(){
-	/*if (viewClass == 0) {
-		viewClass = _initViewClass();
-	}*/
+_CocoaWindowImpl::_CocoaWindowImpl() : window(NULL), view(NULL)
+{
 }
-	
 //---------------------------------------------------------------------------------
-void _CocoaWindowImpl::openWindow() {
-	//AutoReleasePool ap;
-	NSRect frame = NSMakeRect(0, 0, 200, 200);
-	NSWindow* window  = [[[TestView alloc] initWithContentRect:frame
+void _CocoaWindowImpl::openWindow(int x, int y, int w, int h) {
+	ap = AutoReleasePool();
+	NSRect frame = NSMakeRect(x,y,w,h);
+	NSWindow* window  = [[[DiscoWindow alloc] initWithContentRect:frame
 						  styleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask
 						  backing:NSBackingStoreBuffered
 						  defer:NO] autorelease];
@@ -137,11 +131,42 @@ void _CocoaWindowImpl::openWindow() {
 	[window makeKeyAndOrderFront:window];
 	[window setAcceptsMouseMovedEvents:YES];
 	
-	TestNSView *view = [[TestNSView alloc] initWithFrame: frame];
+	// add view
+	DiscoView *view = [[DiscoView alloc] initWithFrame: NSMakeRect(0,0,w,h)];
 	[[window contentView] addSubview:view];
-	[view setParent:this];
+	[view setMaster: this];
+	
+	// assign raw pointer
+	this->window = window;
+	this->view = view;
+	
+	// set delegate
+	DiscoWindowDelegate *delegate = [DiscoWindowDelegate alloc];
+	[delegate setMaster: this];
+	[window setDelegate:delegate];
+	
 }
-
+//---------------------------------------------------------------------------------
+void _CocoaWindowImpl::setBounds(int x, int y, int w, int h) {
+	DiscoWindow *window = getDiscoWindow(*this);
+	DiscoView *view = getDiscoView(*this);
+	NSRect frame = NSMakeRect(x, y, w, h);
+	[window setFrame:frame display:YES animate:NO];
+	// view
+	frame = [window contentRectForFrameRect:[window frame]];
+	[view setFrameSize: frame.size];
+}
+//---------------------------------------------------------------------------------
+void _CocoaWindowImpl::__windowDidResized() {
+	DiscoWindow *window = getDiscoWindow(*this);
+	DiscoView *view = getDiscoView(*this);
+	NSRect frame = [window contentRectForFrameRect:[window frame]];
+	[view setFrameSize: frame.size];
+	__boundsChanged(frame.origin.x, 
+				  frame.origin.y, 
+				  frame.size.width, 
+				  frame.size.height);
+}
 }}} //namespace(s)
 
 #endif //DISCO_USE_COCOA

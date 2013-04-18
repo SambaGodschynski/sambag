@@ -14,12 +14,14 @@
 //-----------------------------------------------------------------------------
 AutoReleasePool::AutoReleasePool ()
 {
-	pool = [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	_pool = pool;
 }
 
 //-----------------------------------------------------------------------------
 AutoReleasePool::~AutoReleasePool ()
 {
+	NSAutoreleasePool *pool = (NSAutoreleasePool*)_pool;
 	[pool release];
 }
 
