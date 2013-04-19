@@ -118,6 +118,10 @@ std::string CocoaWindowImpl::getTitle() const {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::invalidateWindow(const Rectangle &area) {
+	Impl::invalidateWindow(area.x(),
+			area.y(),
+			area.width(),
+			area.height());
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::__handleMouseButtonPressEvent(int x, int y, int buttons)
