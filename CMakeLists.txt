@@ -78,7 +78,6 @@ include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 		${ICONV_LIBRARY_DIRS}/${LIBICONV}
-		#${X11_LIBRARIES}
 		${COCOA_LIBRARY}
 	)
 ELSEIF(UNIX)

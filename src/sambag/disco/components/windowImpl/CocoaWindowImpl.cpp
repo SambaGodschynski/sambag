@@ -38,11 +38,20 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 {
 }
 //-----------------------------------------------------------------------------
+void CocoaWindowImpl::_close() {
+	Impl::closeWindow();
+}
+//-----------------------------------------------------------------------------
 void CocoaWindowImpl::close() {
+	getWindowToolkit()->invokeLater(
+		boost::bind(&CocoaWindowImpl::_close, this)
+	);
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_open(AWindowImplPtr parent) {
+	Impl *parentImpl = dynamic_cast<Impl*>(parent.get());
 	Impl::openWindow(
+			parentImpl,
 			(int)bounds.x(),
 			(int)bounds.y(),
 			(int)bounds.width(),

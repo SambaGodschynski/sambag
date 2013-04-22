@@ -26,12 +26,16 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	Master *master;
 }
 - (void)windowDidResize:(NSNotification *)notification;
+- (void)windowDidMove:(NSNotification *)notification;
 - (void)setMaster:(Master*) theMaster;
 @end
 
 @implementation DiscoWindowDelegate
 - (void)windowDidResize:(NSNotification *)notification {
 	master->__windowDidResized();
+}
+- (void)windowDidMove:(NSNotification *)notification {
+	std::cout<<"."<<std::flush;
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
@@ -46,6 +50,8 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (BOOL)acceptsFirstResponder;
 - (void)mouseDown:(NSEvent *)theEvent;
 - (void)mouseUp:(NSEvent *)theEvent;
+- (void)rightMouseDown:(NSEvent *)theEvent;
+- (void)rightMouseUp:(NSEvent *)theEvent;
 - (void)mouseMoved:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
 - (BOOL)acceptsFirstResponder;
@@ -96,6 +102,16 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 }
 - (void)mouseUp:(NSEvent *)theEvent {
     int btn = [self getMouseBtn: theEvent];
+	NSPoint p = [self getMouseLocation: theEvent];
+	master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+}
+- (void)rightMouseDown:(NSEvent *)theEvent{
+	int btn = [self getMouseBtn: theEvent];
+	NSPoint p = [self getMouseLocation: theEvent];
+	master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+}
+- (void)rightMouseUp:(NSEvent *)theEvent{
+	int btn = [self getMouseBtn: theEvent];
 	NSPoint p = [self getMouseLocation: theEvent];
 	master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
 }
@@ -158,7 +174,8 @@ void _CocoaWindowImpl::invalidateWindow(double x, double y, double w, double h) 
 }
 
 //---------------------------------------------------------------------------------
-void _CocoaWindowImpl::openWindow(int x, int y, int w, int h) {
+void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, int x, int y, int w, int h) 
+{
 	ap = AutoReleasePool();
 	NSRect frame = NSMakeRect(x,y,w,h);
 	int options = NSTitledWindowMask | 
@@ -174,10 +191,20 @@ void _CocoaWindowImpl::openWindow(int x, int y, int w, int h) {
 	[window setBackgroundColor:[NSColor blueColor]];
 	[window makeKeyAndOrderFront:window];
 	[window setAcceptsMouseMovedEvents:YES];
+	// set parent
+	if (parent) {
+		DiscoWindow *pWin = getDiscoWindow(*parent);
+		if (pWin) {
+			[window setParentWindow:pWin];
+			std::cout<<"pwin set."<<std::endl;
+		}
+	}
 	
 	// add view
 	DiscoView *view = [[DiscoView alloc] initWithFrame: NSMakeRect(0,0,w,h)];
 	[[window contentView] addSubview:view];
+	[window makeFirstResponder: view];
+	[view becomeFirstResponder];
 	[view setMaster: this];
 	
 	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:[view frame]
@@ -199,6 +226,14 @@ void _CocoaWindowImpl::openWindow(int x, int y, int w, int h) {
 	[delegate setMaster: this];
 	[window setDelegate:delegate];
 	
+}
+//---------------------------------------------------------------------------------
+void _CocoaWindowImpl::closeWindow() {
+	DiscoWindow *window = getDiscoWindow(*this);
+	if (!window) {
+		return;
+	}
+	[window close];
 }
 //---------------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(int x, int y, int w, int h) {
