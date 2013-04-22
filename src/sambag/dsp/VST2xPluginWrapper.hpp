@@ -302,10 +302,10 @@ namespace {
 	template <class CanDo>
 	bool _can(char *sbj) {
 		return strcmp(sbj, CanDo::Head::name())==0 ||
-			_can<CanDo::Tail>(sbj);
+			_can<typename CanDo::Tail>(sbj);
 	}
 	template<>
-	bool _can<::Loki::NullType>(char*) {
+	bool _can< ::Loki::NullType>(char*) {
 		return false;
 	}
 }
