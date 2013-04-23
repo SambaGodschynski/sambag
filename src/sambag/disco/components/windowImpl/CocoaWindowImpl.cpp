@@ -15,16 +15,11 @@ namespace sambag { namespace disco { namespace components {
 //  Class CocoaWindowImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::__processDraw(CGContextRef context, int x, int y, int w, int h)
+void CocoaWindowImpl::__processDraw(CGContextRef context, Nb x, Nb y, Nb w, Nb h)
 {
 	QuartzSurface::Ptr sf = QuartzSurface::create(context,w,h);
 	SAMBAG_ASSERT(sf);
 	this->processDraw(sf);
-	//cairo_surface_flush(sf->getCairoSurface());
-}
-//-----------------------------------------------------------------------------
-void CocoaWindowImpl::startMainApp() {
-	Impl::startMainApp();
 }
 //-----------------------------------------------------------------------------
 CocoaWindowImpl::CocoaWindowImpl() :
@@ -36,6 +31,16 @@ CocoaWindowImpl::CocoaWindowImpl() :
 void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	const Rectangle &area)
 {
+	void *_win = NULL;
+	com::get(osParent, _win);
+	WindowRef win = (WindowRef)_win;
+	if (!win) {
+		SAMBAG_LOG_WARN<<"initAsNestedWindow failed because parent==NULL";
+		return;
+	}
+	Impl::openNested(win, area.x(), area.y(), area.width(), area.height());
+	bounds = area;
+	visible = true;
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_close() {
@@ -57,6 +62,8 @@ void CocoaWindowImpl::_open(AWindowImplPtr parent) {
 			(int)bounds.width(),
 			(int)bounds.height()
 	);
+	visible = true;
+	updateTitle();
 	onCreated();
 }
 //-----------------------------------------------------------------------------
@@ -75,12 +82,12 @@ void CocoaWindowImpl::updateBoundsToWindow() {
 	Impl::setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
 }
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::__boundsChanged(int x, int y, int w, int h) {
+void CocoaWindowImpl::__boundsChanged(Nb x, Nb y, Nb w, Nb h) {
 	updateWindowToBounds(Rectangle(x,y,w,h));
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {
-	return NULL;
+	return Impl::getWindowRef();
 }
 //-----------------------------------------------------------------------------
 CocoaWindowImpl::~CocoaWindowImpl() {
@@ -115,11 +122,16 @@ void CocoaWindowImpl::setBounds(const Rectangle &r) {
 	updateBoundsToWindow();
 }
 //-----------------------------------------------------------------------------
+void CocoaWindowImpl::updateTitle() {
+	if (!isVisible()) {
+		return;
+	}
+	Impl::setTitle(getTitle());
+}
+//-----------------------------------------------------------------------------
 void CocoaWindowImpl::setTitle(const std::string &_title) {
 	title = _title;
-	if (!isVisible())
-		return;
-	//updateTitle();
+	updateTitle();
 }
 //-----------------------------------------------------------------------------
 std::string CocoaWindowImpl::getTitle() const {
@@ -133,17 +145,17 @@ void CocoaWindowImpl::invalidateWindow(const Rectangle &area) {
 			area.height());
 }
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::__handleMouseButtonPressEvent(int x, int y, int buttons)
+void CocoaWindowImpl::__handleMouseButtonPressEvent(Nb x, Nb y, Nb buttons)
 {
 	handleMouseButtonPressEvent(x,y,buttons);
 }
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::__handleMouseButtonReleaseEvent(int x, int y, int buttons)
+void CocoaWindowImpl::__handleMouseButtonReleaseEvent(Nb x, Nb y, Nb buttons)
 {
 	handleMouseButtonReleaseEvent(x,y,buttons);
 }
 //-----------------------------------------------------------------------------
-void CocoaWindowImpl::__handleMouseMotionEvent(int x, int y) {
+void CocoaWindowImpl::__handleMouseMotionEvent(Nb x, Nb y) {
 	handleMouseMotionEvent(x,y);
 }
 }}} // namespace(s)

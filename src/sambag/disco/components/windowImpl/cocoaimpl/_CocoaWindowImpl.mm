@@ -12,15 +12,21 @@
 #import <objc/message.h>
 #import <iostream>
 
+namespace helper {
+	std::string toString(NSString *str) {
+		return std::string([str UTF8String]);
+	}
+} // namespace(s)
+
 typedef sambag::disco::components::_CocoaWindowImpl Master;
-//=============================================================================
+//=========================================================================
 @interface DiscoWindow : NSWindow
 {}
 @end
 @implementation DiscoWindow
 @end
 
-//=============================================================================
+//=========================================================================
 @interface DiscoWindowDelegate : NSObject<NSWindowDelegate>
 {
 	Master *master;
@@ -32,17 +38,17 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 
 @implementation DiscoWindowDelegate
 - (void)windowDidResize:(NSNotification *)notification {
-	master->__windowDidResized();
+	master->____windowBoundsChanged();
 }
 - (void)windowDidMove:(NSNotification *)notification {
-	std::cout<<"."<<std::flush;
+	master->____windowBoundsChanged();
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
 }
 @end
 
-//=============================================================================
+//=========================================================================
 @interface DiscoView : NSView
 {
 	Master *master;
@@ -152,20 +158,15 @@ DiscoView * getDiscoView(const Master &m) {
 	return res;
 }
 } // namepsace(s)
-//=================================================================================
+//=============================================================================
 // @class _CocoaWindowImpl
-//=================================================================================
-//---------------------------------------------------------------------------------
-void _CocoaWindowImpl::startMainApp() {
-	[NSApplication sharedApplication];
-	[NSApp run];
-}
-//---------------------------------------------------------------------------------
+//=============================================================================
+//-----------------------------------------------------------------------------
 _CocoaWindowImpl::_CocoaWindowImpl() : window(NULL), view(NULL)
 {
 }
-//---------------------------------------------------------------------------------
-void _CocoaWindowImpl::invalidateWindow(double x, double y, double w, double h) {
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) {
 	DiscoView *view = getDiscoView(*this);
 	if (!view) {
 		return; // happens sometimes (maybe while creating)
@@ -173,21 +174,75 @@ void _CocoaWindowImpl::invalidateWindow(double x, double y, double w, double h) 
 	[view setNeedsDisplay:YES];
 }
 
-//---------------------------------------------------------------------------------
-void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, int x, int y, int w, int h) 
+//-----------------------------------------------------------------------------
+namespace {
+DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
+	DiscoWindow *window = getDiscoWindow(*caller);
+	if (!window) {
+		return NULL; 
+	}
+	// create view
+	DiscoView *view = [
+		[DiscoView alloc] 
+				initWithFrame: NSMakeRect(0,0,frame.size.width, frame.size.height)];
+	[[window contentView] addSubview:view];
+	[window makeFirstResponder: view];
+	[view becomeFirstResponder];
+	[view setMaster: caller];
+	
+	// tracking area
+	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:[view frame]
+									 options:NSTrackingMouseEnteredAndExited | 
+									 NSTrackingMouseMoved | 
+									 NSTrackingInVisibleRect |
+									 NSTrackingActiveAlways
+									 owner:view
+									 userInfo:nil] autorelease];
+	
+	[view addTrackingArea:trackingArea];
+	
+	// set delegate
+	DiscoWindowDelegate *delegate = [DiscoWindowDelegate alloc];
+	[delegate setMaster: caller];
+	[window setDelegate:delegate];
+	
+	return view;
+}
+} // namespace(s)
+//-----------------------------------------------------------------------------
+int _CocoaWindowImpl::getWindowStyleMask() const {
+	int options = NSTitledWindowMask | 
+	NSClosableWindowMask | 
+	NSMiniaturizableWindowMask;
+	
+	if (getFlag(WND_RESIZEABLE)) {
+		options |= NSResizableWindowMask;
+	}
+	
+	if ( !getFlag(WND_FRAMED) ) {
+		options |= NSBorderlessWindowMask;
+		options &= ~NSTitledWindowMask;
+		options &= ~NSClosableWindowMask;
+		options &= ~NSMiniaturizableWindowMask;
+	}
+	
+	if ( getFlag(WND_NO_SYSTEM_MENU) ) {
+		options &= NSClosableWindowMask;
+		options &= ~NSMiniaturizableWindowMask;
+	}
+	return options;
+}
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h) 
 {
 	ap = AutoReleasePool();
 	NSRect frame = NSMakeRect(x,y,w,h);
-	int options = NSTitledWindowMask | 
-	              NSClosableWindowMask | 
-	              NSMiniaturizableWindowMask | 
-	              NSResizableWindowMask;
-	
+	int options = getWindowStyleMask();
 	NSWindow* window  = [[[DiscoWindow alloc] initWithContentRect:frame
 						  styleMask: options
 						  backing:NSBackingStoreBuffered
 						  defer:NO] autorelease];
-	
+	this->window = window;
 	[window setBackgroundColor:[NSColor blueColor]];
 	[window makeKeyAndOrderFront:window];
 	[window setAcceptsMouseMovedEvents:YES];
@@ -196,38 +251,35 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, int x, int y, int w,
 		DiscoWindow *pWin = getDiscoWindow(*parent);
 		if (pWin) {
 			[window setParentWindow:pWin];
-			std::cout<<"pwin set."<<std::endl;
 		}
 	}
+	NSView * view = _initView(this, frame);
+	this->view = view;
+}
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::openNested(WindowRef parent, 
+	Number x, Number y, Number w, Number h) 
+{
+	//ap = AutoReleasePool();
+	NSRect frame = NSMakeRect(x,y,w,h);
+	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
+	this->window = window;
 	
-	// add view
-	DiscoView *view = [[DiscoView alloc] initWithFrame: NSMakeRect(0,0,w,h)];
-	[[window contentView] addSubview:view];
-	[window makeFirstResponder: view];
-	[view becomeFirstResponder];
-	[view setMaster: this];
-	
-	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:[view frame]
-								options:NSTrackingMouseEnteredAndExited | 
-									    NSTrackingMouseMoved | 
-									    NSTrackingInVisibleRect |
-									    NSTrackingActiveAlways
-							    owner:view
-								userInfo:nil] autorelease];
-	
-	[view addTrackingArea:trackingArea];
+	NSView * view = _initView(this, frame);
 	
 	// assign raw pointer
 	this->window = window;
 	this->view = view;
-	
-	// set delegate
-	DiscoWindowDelegate *delegate = [DiscoWindowDelegate alloc];
-	[delegate setMaster: this];
-	[window setDelegate:delegate];
-	
 }
-//---------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+WindowRef _CocoaWindowImpl::getWindowRef() const {
+	NSWindow *win = getDiscoWindow(*this);
+	if (!win) {
+		return NULL;
+	}
+	return (WindowRef)[win windowRef];
+}
+//-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
 	DiscoWindow *window = getDiscoWindow(*this);
 	if (!window) {
@@ -235,8 +287,8 @@ void _CocoaWindowImpl::closeWindow() {
 	}
 	[window close];
 }
-//---------------------------------------------------------------------------------
-void _CocoaWindowImpl::setBounds(int x, int y, int w, int h) {
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
 	DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
 	NSRect frame = NSMakeRect(x, y, w, h);
@@ -245,8 +297,8 @@ void _CocoaWindowImpl::setBounds(int x, int y, int w, int h) {
 	frame = [window contentRectForFrameRect:[window frame]];
 	[view setFrameSize: frame.size];
 }
-//---------------------------------------------------------------------------------
-void _CocoaWindowImpl::__windowDidResized() {
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::____windowBoundsChanged() {
 	DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
 	NSRect frame = [window contentRectForFrameRect:[window frame]];
@@ -255,6 +307,46 @@ void _CocoaWindowImpl::__windowDidResized() {
 				  frame.origin.y, 
 				  frame.size.width, 
 				  frame.size.height);
+}
+//-----------------------------------------------------------------------------
+std::string _CocoaWindowImpl::getTitle() const {
+	NSWindow *window = getDiscoWindow(*this);
+	if (!window) {
+		return "";
+	}
+	return helper::toString( [window title] );
+}
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::setTitle(const std::string &str) {
+	NSWindow *window = getDiscoWindow(*this);
+	if (!window) {
+		return;
+	}
+	[window setTitle: [NSString stringWithUTF8String:str.c_str()]];
+}
+//=============================================================================
+// class _CocoaToolkitImpl 
+//=============================================================================
+//-----------------------------------------------------------------------------
+void _CocoaToolkitImpl::startMainApp() {
+	[NSApplication sharedApplication];
+	[NSApp run];
+}
+//-----------------------------------------------------------------------------
+void _CocoaToolkitImpl::getScreenDimension(Number &outWidth, Number &outHeight) 
+{
+	NSRect screenRect;
+    NSArray *screenArray = [NSScreen screens];
+    unsigned screenCount = [screenArray count];
+    unsigned index  = 0;
+	
+    for (index; index < screenCount; index++)
+    {
+        NSScreen *screen = [screenArray objectAtIndex: index];
+        screenRect = [screen visibleFrame];
+		outWidth+=screenRect.size.width;
+		outHeight+=screenRect.size.height;
+    }
 }
 }}} //namespace(s)
 

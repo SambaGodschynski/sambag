@@ -65,7 +65,6 @@ namespace {
 using boost::spirit::qi::hex;
 using boost::spirit::qi::parse;
 namespace lambda = boost::lambda;
-using lambda::_1;
 
 struct GradOpcodes : 
   boost::spirit::qi::symbols<char, unsigned> 
@@ -125,7 +124,6 @@ ColorRGBA __toColor(unsigned int val) {
 } // namespace(s)
 //-----------------------------------------------------------------------------
 IPattern::Ptr createPattern(const std::string &str) {
-
 	std::vector<unsigned int> colors;
 	std::vector<double> coords;
 	std::vector<double> offsets;

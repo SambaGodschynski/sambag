@@ -17,7 +17,6 @@
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>
 #include "AWindowImpl.hpp"
-#include "WindowFlags.hpp"
 #include <sambag/com/ArbitraryType.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "cocoaimpl/_CocoaWindowImpl.h"
@@ -28,7 +27,6 @@ namespace sambag { namespace disco { namespace components {
   * @class CocoaWindowImpl.
   */
 class CocoaWindowImpl :
-	public WindowFlags,
 	public _CocoaWindowImpl // encapsulated objective-c impl.
 {
 //=============================================================================
@@ -40,6 +38,8 @@ public:
 	typedef boost::shared_ptr<CocoaWindowImpl> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::weak_ptr<CocoaWindowImpl> WPtr;
+	//-------------------------------------------------------------------------
+	typedef cocoaImplTypes::Number Nb;
 private:
 public:
 private:
@@ -53,6 +53,8 @@ private:
 	void updateBoundsToWindow();
 	//-------------------------------------------------------------------------
 	void updateWindowToBounds(const Rectangle &r);
+	//-------------------------------------------------------------------------
+	void updateTitle();
 protected:
 	//-------------------------------------------------------------------------
 	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
@@ -80,8 +82,6 @@ protected:
 	//-------------------------------------------------------------------------
 	void _close();
 public:
-	//-------------------------------------------------------------------------
-	static void startMainApp();
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
@@ -111,15 +111,15 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	// _CocoaWindowToolkit => CocoaWindowToolkit impl.
 	//-------------------------------------------------------------------------
-	virtual void __processDraw(CGContextRef context, int x, int y, int w, int h);
+	virtual void __processDraw(CGContextRef context, Nb x, Nb y, Nb w, Nb h);
 	//-------------------------------------------------------------------------
-	virtual void __boundsChanged(int x, int y, int w, int h);
+	virtual void __boundsChanged(Nb x, Nb y, Nb w, Nb h);
 	//-------------------------------------------------------------------------
-	virtual void __handleMouseButtonPressEvent(int x, int y, int buttons);
+	virtual void __handleMouseButtonPressEvent(Nb x, Nb y, Nb buttons);
 	//-------------------------------------------------------------------------
-	virtual void __handleMouseButtonReleaseEvent(int x, int y, int buttons);
+	virtual void __handleMouseButtonReleaseEvent(Nb x, Nb y, Nb buttons);
 	//-------------------------------------------------------------------------
-	virtual void __handleMouseMotionEvent(int x, int y);
+	virtual void __handleMouseMotionEvent(Nb x, Nb y);
 }; // CocoaWindowImpl
 }}}
 
