@@ -11,9 +11,14 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import <iostream>
+#import <stdexcept>
+#import <Carbon/Carbon.h>
 
-namespace helper {
+namespace {
 	std::string toString(NSString *str) {
+		if (!str) {
+			return "";
+		}
 		return std::string([str UTF8String]);
 	}
 } // namespace(s)
@@ -185,6 +190,9 @@ DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
 	DiscoView *view = [
 		[DiscoView alloc] 
 				initWithFrame: NSMakeRect(0,0,frame.size.width, frame.size.height)];
+	if (!view) {
+		throw std::runtime_error("_initView() failed to create view!");
+	}
 	[[window contentView] addSubview:view];
 	[window makeFirstResponder: view];
 	[view becomeFirstResponder];
@@ -256,19 +264,75 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 	NSView * view = _initView(this, frame);
 	this->view = view;
 }
+static pascal OSStatus windowVisibilityBodge (EventHandlerCallRef, EventRef e, void* user)
+{
+    NSWindow* hostWindow = (NSWindow*) user;
+        
+    switch (GetEventKind (e))
+    {
+        case kEventWindowInit:
+            [hostWindow display];
+            break;
+        case kEventWindowShown:
+            [hostWindow orderFront: nil];
+            break;
+        case kEventWindowHidden:
+            [hostWindow orderOut: nil];
+            break;
+    }
+        
+    return eventNotHandledErr;
+}
+    
+static void attachWindowHidingHooks (void* hostWindowRef, NSWindow* nsWindow)
+{
+    const EventTypeSpec eventsToCatch[] =
+    {
+            { kEventClassWindow, kEventWindowInit },
+            { kEventClassWindow, kEventWindowShown },
+            { kEventClassWindow, kEventWindowHidden }
+        };
+        
+    EventHandlerRef ref;
+    InstallWindowEventHandler ((WindowRef) hostWindowRef,
+                                NewEventHandlerUPP (windowVisibilityBodge),
+                                GetEventTypeCount (eventsToCatch), eventsToCatch,
+                                (void*) nsWindow, &ref);
+        
+}
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openNested(WindowRef parent, 
 	Number x, Number y, Number w, Number h) 
 {
-	//ap = AutoReleasePool();
+    //ap = AutoReleasePool();
 	NSRect frame = NSMakeRect(x,y,w,h);
 	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
-	this->window = window;
+	if (!window) {
+		throw std::runtime_error("openNested() failed to create window.");
+	}
+    [window retain];
+    [window setCanHide: YES];
+    [window setReleasedWhenClosed: YES];
+    [window setIsVisible:YES];
+    
+    attachWindowHidingHooks(parent, window);
+    
+    int options = getWindowStyleMask();
+	NSWindow* pluginWindow  = [[[DiscoWindow alloc] initWithContentRect:frame
+                                                        styleMask: options
+                                                          backing:NSBackingStoreBuffered
+                                                            defer:NO] autorelease];
+
 	
+    
+    this->window = pluginWindow;
+    [window addChildWindow:pluginWindow ordered:NSWindowAbove];
+    [window orderFront: nil];
+
+
+	this->window = pluginWindow;
 	NSView * view = _initView(this, frame);
-	
 	// assign raw pointer
-	this->window = window;
 	this->view = view;
 }
 //-----------------------------------------------------------------------------
@@ -314,7 +378,7 @@ std::string _CocoaWindowImpl::getTitle() const {
 	if (!window) {
 		return "";
 	}
-	return helper::toString( [window title] );
+	return toString( [window title] );
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setTitle(const std::string &str) {
@@ -328,6 +392,10 @@ void _CocoaWindowImpl::setTitle(const std::string &str) {
 // class _CocoaToolkitImpl 
 //=============================================================================
 //-----------------------------------------------------------------------------
+void _CocoaToolkitImpl::initMainApp() {
+    assert( NSApplicationLoad() );
+}
+//-----------------------------------------------------------------------------
 void _CocoaToolkitImpl::startMainApp() {
 	[NSApplication sharedApplication];
 	[NSApp run];
@@ -340,7 +408,7 @@ void _CocoaToolkitImpl::getScreenDimension(Number &outWidth, Number &outHeight)
     unsigned screenCount = [screenArray count];
     unsigned index  = 0;
 	
-    for (index; index < screenCount; index++)
+    for (; index < screenCount; index++)
     {
         NSScreen *screen = [screenArray objectAtIndex: index];
         screenRect = [screen visibleFrame];

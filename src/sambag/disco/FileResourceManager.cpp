@@ -20,7 +20,7 @@ namespace {
 //  Class FileResourceManager
 //=============================================================================
 //-----------------------------------------------------------------------------
-void FileResourceManager::assumeHomeDir() {
+void FileResourceManager::assumeHomeDir() const {
 	if (homeDir != "")
 		return;
 	SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
@@ -62,9 +62,14 @@ FileResourceManager::ImagePtr FileResourceManager::loadSvg(const std::string &pa
 	return res;
 }
 //-----------------------------------------------------------------------------
+FileResourceManager::Url FileResourceManager::getPath(const Url &url) const {
+    assumeHomeDir();
+    return getHomeDirectory() + "/" + url;
+}
+//-----------------------------------------------------------------------------
 std::string FileResourceManager::getString(const Url &url) {
 	assumeHomeDir();
-	boost::filesystem::path path = getHomeDirectory() + "/" + url;
+	boost::filesystem::path path = getPath(url);
 	if ( !boost::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
 			"file" + path.string() + " dosent exists.");
@@ -84,7 +89,7 @@ std::string FileResourceManager::getString(const Url &url) {
 FileResourceManager::ImagePtr FileResourceManager::loadImage(const std::string &_path) 
 {
 	assumeHomeDir();
-	boost::filesystem::path path = getHomeDirectory() + "/" + _path;
+	boost::filesystem::path path = getPath(_path);
 	if ( !boost::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
 			"file: " + path.string() + " dosent exists.");

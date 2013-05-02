@@ -112,7 +112,7 @@ bool get(T &out, lua_State *L, int index) {
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 inline size_t getLen(lua_State *L, int index) {
-	lua_len(L, index);
+	lua_objlen(L, index);
 	size_t s;
 	if (!get(s, L, -1))
 		return 0;

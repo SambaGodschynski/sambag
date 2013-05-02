@@ -17,6 +17,6 @@ void log(const std::string &str) {
 }
 //-----------------------------------------------------------------------------
 std::string normString(const std::string &v) {
-	return boost::locale::conv::to_utf<char>(v,"utf-8");
+	return v; //TODO: linking fails MACOSX boost::locale::conv::to_utf<char>(v,"utf-8");
 }
 }}
