@@ -65,6 +65,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (void)rightMouseUp:(NSEvent *)theEvent;
 - (void)mouseMoved:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
+- (void)rightMouseDragged:(NSEvent *)theEvent;
 - (BOOL)acceptsFirstResponder;
 - (void)drawRect:(NSRect)rect;
 - (void)setMaster:(Master*) theMaster;
@@ -90,7 +91,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 }
 - (NSPoint)getMouseLocation:(NSEvent *)theEvent {
 	NSPoint p = [self convertPoint: [theEvent locationInWindow] fromView: self];
-	return [self flipPoint: p];
+    return [self flipPoint: p];
 }
 - (BOOL)acceptsFirstResponder {
     return YES;
@@ -131,6 +132,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)mouseDragged:(NSEvent *)theEvent{
+	NSPoint p = [self getMouseLocation: theEvent];
+	master->__handleMouseMotionEvent(p.x, p.y);
+}
+- (void)rightMouseDragged:(NSEvent *)theEvent {
 	NSPoint p = [self getMouseLocation: theEvent];
 	master->__handleMouseMotionEvent(p.x, p.y);
 }
@@ -244,6 +249,9 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h) 
 {
 	ap = AutoReleasePool();
+    Number sw=0, sh=0;
+    _CocoaToolkitImpl::getScreenDimension(sw, sh);
+    y = sh - y - h;
 	NSRect frame = NSMakeRect(x,y,w,h);
 	int options = getWindowStyleMask();
 	NSWindow* window  = [[[DiscoWindow alloc] initWithContentRect:frame
@@ -252,8 +260,10 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 						  defer:NO] autorelease];
 	this->window = window;
 	[window setBackgroundColor:[NSColor blueColor]];
-	[window makeKeyAndOrderFront:window];
+	[window makeKeyAndOrderFront:nil];
 	[window setAcceptsMouseMovedEvents:YES];
+    [window setReleasedWhenClosed: YES];
+    [window setLevel: NSFloatingWindowLevel];
 	// set parent
 	if (parent) {
 		DiscoWindow *pWin = getDiscoWindow(*parent);
@@ -305,7 +315,6 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
     //ap = AutoReleasePool();
-	NSRect frame = NSMakeRect(x,y,w,h);
 	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
 	if (!window) {
 		throw std::runtime_error("openNested() failed to create window.");
@@ -314,23 +323,26 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
     [window setCanHide: YES];
     [window setReleasedWhenClosed: YES];
     [window setIsVisible:YES];
-    
-    attachWindowHidingHooks(parent, window);
-    
-    int options = getWindowStyleMask();
-	NSWindow* pluginWindow  = [[[DiscoWindow alloc] initWithContentRect:frame
+    int options = 0; //getWindowStyleMask();
+    NSRect windowBounds = [window frame];
+    windowBounds.size.width = w;
+    windowBounds.size.height = h;
+   
+	NSWindow* pluginWindow  = [[[DiscoWindow alloc] initWithContentRect:windowBounds
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
                                                             defer:NO] autorelease];
 
 	
-    
+    [pluginWindow setAcceptsMouseMovedEvents:YES];
     this->window = pluginWindow;
     [window addChildWindow:pluginWindow ordered:NSWindowAbove];
     [window orderFront: nil];
-
+    
+    attachWindowHidingHooks(parent, window);
 
 	this->window = pluginWindow;
+    NSRect frame = NSMakeRect(x,y,w,h);
 	NSView * view = _initView(this, frame);
 	// assign raw pointer
 	this->view = view;
@@ -362,12 +374,30 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
 	[view setFrameSize: frame.size];
 }
 //-----------------------------------------------------------------------------
+void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) {
+    DiscoWindow *window = getDiscoWindow(*this);
+	DiscoView *view = getDiscoView(*this);
+	NSRect frame = [window contentRectForFrameRect:[window frame]];
+	[view setFrameSize: frame.size];
+    Number sw=0, sh=0;
+    _CocoaToolkitImpl::getScreenDimension(sw, sh);
+    frame.origin.y = sh - frame.origin.y - frame.size.height;
+	x = frame.origin.x;
+    y = frame.origin.y;
+    w = frame.size.width;
+    h = frame.size.height;
+
+}
+//-----------------------------------------------------------------------------
 void _CocoaWindowImpl::____windowBoundsChanged() {
 	DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
 	NSRect frame = [window contentRectForFrameRect:[window frame]];
 	[view setFrameSize: frame.size];
-	__boundsChanged(frame.origin.x, 
+    Number sw=0, sh=0;
+    _CocoaToolkitImpl::getScreenDimension(sw, sh);
+    frame.origin.y = sh - frame.origin.y - frame.size.height;
+	__boundsChanged(frame.origin.x,
 				  frame.origin.y, 
 				  frame.size.width, 
 				  frame.size.height);

@@ -23,8 +23,8 @@ void CocoaWindowImpl::__processDraw(CGContextRef context, Nb x, Nb y, Nb w, Nb h
 }
 //-----------------------------------------------------------------------------
 CocoaWindowImpl::CocoaWindowImpl() :
-	bounds(Rectangle(0,0,1,1)),
-	visible(false)
+	visible(false),
+    bounds(Rectangle(0,0,1,1))
 {
 }
 //-----------------------------------------------------------------------------
@@ -39,12 +39,19 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	}
 	Impl::openNested(win, area.x(), area.y(), area.width(), area.height());
-	bounds = area;
+    
+    //get real window bounds (in case of vst area location dosen't fit with the
+    // window
+    Nb x=0, y=0, h=0, w=0;
+    Impl::getBounds(x,y,w,h);
+    bounds = Rectangle(x,y,w,h);
 	visible = true;
+    onCreated();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_close() {
 	Impl::closeWindow();
+    visible = false;
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::close() {
@@ -98,7 +105,7 @@ bool CocoaWindowImpl::isVisible() const {
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getHostBounds() const {
-	return Rectangle();
+	return bounds;
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getBounds() const {

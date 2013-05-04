@@ -103,7 +103,7 @@ void BasicLookAndFeel::installDefaults() {
 	alreadyInstalled = true;
 	m.putProperty("BasicLookAndFeel.installed", alreadyInstalled);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<global
-	Style style = createStyle("stroke: black; fill: green;");
+	Style style = createStyle("stroke: black; fill: lavender;");
 	//style.fillPattern( createPattern("lin(0,1,[D3D3D3FF:0, B0C4DEFF:1])") );
 	m.putProperty("global.style", style);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Button

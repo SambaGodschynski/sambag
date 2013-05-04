@@ -63,6 +63,8 @@ public:
 	//-------------------------------------------------------------------------
 	void setBounds(Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
+	void getBounds(Number &x, Number &y, Number &w, Number &h);
+	//-------------------------------------------------------------------------
 	void invalidateWindow(Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
 	WindowRef getWindowRef() const;
