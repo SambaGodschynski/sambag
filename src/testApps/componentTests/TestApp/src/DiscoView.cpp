@@ -699,7 +699,7 @@ int main() {
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setDefaultCloseOperation(Window::EXIT_ON_CLOSE);
-		win[0]->setWindowBounds(sambag::disco::Rectangle(100,100,230,200));
+		win[0]->setWindowBounds(sambag::disco::Rectangle(0,0,230,200));
 		win[0]->setTitle("Messerschmitz 1.0");
 		win[0]->getContentPane()->setLayout(FlowLayout::create());
 		win[0]->getContentPane()->EventSender<sdc::events::MouseEvent>::addEventListener(

@@ -9,6 +9,7 @@
 #define SAMBAG_TWEENS_H
 
 #include <boost/shared_ptr.hpp>
+#include <string>
 
 namespace sambag { namespace disco { namespace components {
 

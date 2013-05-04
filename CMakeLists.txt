@@ -9,7 +9,6 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 #add_definitions(-DSAMBAG_USE_LOG)
 add_definitions(-D_SCL_SECURE_NO_WARNINGS) #disable warning C4996: 'std::uninitialized_copy' caused by boost::ublas
 add_definitions(-D_CRT_SECURE_NO_WARNINGS) #disable strcpy warning in audioeffect.h
-set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI")
 
 #add_definitions(-DSAMBA_WARN_MISSING_IMPL) #show xy not impl. warning
 
@@ -27,6 +26,7 @@ IF(APPLE)
 	find_package(IConvX REQUIRED)
 	add_definitions(-DDISCO_USE_COCOA)
 	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+	FIND_LIBRARY(CARBON_LIBRARY Carbon)
 ELSEIF(UNIX)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIRS})
@@ -34,6 +34,7 @@ ELSEIF(UNIX)
 	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
+	set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI")
 ENDIF(APPLE)
 
 find_package(Cairo REQUIRED)
@@ -79,6 +80,7 @@ IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 		${ICONV_LIBRARY_DIRS}/${LIBICONV}
 		${COCOA_LIBRARY}
+		${CARBON_LIBRARY}
 	)
 ELSEIF(UNIX)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}

@@ -9,6 +9,7 @@
 #include "CocoaWindowToolkit.hpp"
 #include "WindowImpl.hpp"
 #include "CocoaWindowImpl.hpp"
+#include "cocoaimpl/_CocoaWindowImpl.h"
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/Timer.hpp>
 #include <boost/thread.hpp>
@@ -42,14 +43,15 @@ AWindowImplPtr CocoaWindowToolkit::createWindowImpl(AWindowImplPtr parent) const
 WindowPtr CocoaWindowToolkit::createNestedWindow( ArbitraryType::Ptr osParent, 
 	const Rectangle &area )
 {
-	/*AWindowImpl::Ptr windowImpl = 
-		WindowImpl<Win32WindowImpl, Win32BufferedDraw>::create(osParent, area);
-	return Window::create(windowImpl);*/
-	return WindowPtr();
+	AWindowImpl::Ptr windowImpl =
+		WindowImpl<CocoaWindowImpl>::create(osParent, area);
+	return Window::create(windowImpl);
 }
 //-----------------------------------------------------------------------------
 Dimension CocoaWindowToolkit::getScreenSize() const {
-	return Dimension();
+	_CocoaToolkitImpl::Number w=0, h=0;
+	_CocoaToolkitImpl::getScreenDimension(w,h);
+	return Dimension(w,h);
 }
 //-----------------------------------------------------------------------------
 CocoaWindowToolkit * CocoaWindowToolkit::getToolkit() {
@@ -59,11 +61,12 @@ CocoaWindowToolkit * CocoaWindowToolkit::getToolkit() {
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::useWithoutMainloop() {
 	TimerPolicy::startUpTimer();
+    _CocoaToolkitImpl::initMainApp();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::mainLoop() {
 	TimerPolicy::startUpTimer();
-	CocoaWindowImpl::startMainApp();
+	_CocoaToolkitImpl::startMainApp();
 	TimerPolicy::tearDownTimer();
 }
 //-----------------------------------------------------------------------------

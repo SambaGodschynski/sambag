@@ -37,18 +37,20 @@ protected:
 	FileResourceManager();
 	//-------------------------------------------------------------------------
 	virtual ImagePtr loadImage(const std::string &path);
+	//-------------------------------------------------------------------------
+	void setHomeDirectory(const std::string &path);
+    //-------------------------------------------------------------------------
+    virtual Url getPath(const Url &url) const;
 private:
 	//-------------------------------------------------------------------------
 	ImagePtr loadPng(const std::string &path);
 	//-------------------------------------------------------------------------
 	ImagePtr loadSvg(const std::string &path);
 	//-------------------------------------------------------------------------
-	void setHomeDirectory(const std::string &path);
-	//-------------------------------------------------------------------------
 	/**
 	 * @throw IllegalStateException 
 	 */
-	void assumeHomeDir();
+	void assumeHomeDir() const;
 public:
 	//-------------------------------------------------------------------------	
 	virtual std::string getString(const Url &url);
