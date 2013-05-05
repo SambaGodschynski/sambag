@@ -15,6 +15,14 @@
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
 
+
+// in lua < 502 lua_len doesn't exists.
+#if LUA_VERSION_NUM < 502
+	#define SAMBAG_LUA_LEN_WORKAROUND(a1, a2) lua_objlen((a1), (a2)) 
+#else
+	#define SAMBAG_LUA_LEN_WORKAROUND(a1, a2) lua_len((a1), (a2)) 
+#endif
+
 // 'declaration does not declare anything' issue on mac. see:
 // http://stackoverflow.com/questions/8173620/c-boost-1-48-type-traits-and-cocoa-inclusion-weirdness
 #ifdef __APPLE__
@@ -112,7 +120,7 @@ bool get(T &out, lua_State *L, int index) {
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 inline size_t getLen(lua_State *L, int index) {
-	lua_objlen(L, index);
+	SAMBAG_LUA_LEN_WORKAROUND(L, index);
 	size_t s;
 	if (!get(s, L, -1))
 		return 0;
