@@ -15,12 +15,12 @@
 #include <loki/Singleton.h>
 #include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
+#include "CocoaTimer.hpp"
 
 namespace sambag { namespace disco { namespace components {
 
-//typedef Win32TimerImpl TimerImpl;
-//typedef Win32MMTimerImpl TimerImpl;
-typedef BoostTimerImpl TimerImpl;
+//typedef BoostTimerImpl TimerImpl;
+typedef CocoaTimerImpl TimerImpl;
 
 //=============================================================================
 /** 

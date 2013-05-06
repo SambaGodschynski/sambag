@@ -653,7 +653,7 @@ void timedCallbackOnce(void *src, const sdc::TimerEvent &ev) {
 }
 
 void initTimer() {
-/*	using namespace sambag::disco;
+	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	timerInf = Timer::create(1000);
 	timerInf->setNumRepetitions(-1);
@@ -667,7 +667,7 @@ void initTimer() {
 
 	Timer::Ptr timer3 = Timer::create(500);
 	timer3->EventSender<TimerEvent>::addEventListener(&timedCallbackOnce);
-	timer3->start();*/
+	timer3->start();
 }
 
 void initResources() {

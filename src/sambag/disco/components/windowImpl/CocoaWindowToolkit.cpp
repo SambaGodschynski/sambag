@@ -29,7 +29,6 @@ CocoaWindowToolkit::~CocoaWindowToolkit() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::startMainLoop() {
-	//invokeLater(&checkWindowCount, 1000);
 	mainLoop();
 }
 //-----------------------------------------------------------------------------

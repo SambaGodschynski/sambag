@@ -61,6 +61,7 @@ void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_open(AWindowImplPtr parent) {
+    std::cout<<"XYXXXXOPENYY"<<std::endl;
 	Impl *parentImpl = dynamic_cast<Impl*>(parent.get());
 	Impl::openWindow(
 			parentImpl,

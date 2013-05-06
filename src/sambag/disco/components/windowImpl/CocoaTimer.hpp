@@ -9,6 +9,7 @@
 #define SAMBAG_COCOATIMERIMPL_H
 
 #include <sambag/disco/components/Timer.hpp>
+#include "cocoaimpl/_CocoaTimer.h"
 
 namespace sambag { namespace disco {  namespace components {
 
@@ -16,14 +17,12 @@ namespace sambag { namespace disco {  namespace components {
 /** 
   * @class Win32TimerImpl.
   */
-class CocoaTimerImpl {
+class CocoaTimerImpl : public _CocoaTimer {
 //=============================================================================
 public:
+    //-------------------------------------------------------------------------
+    typedef _CocoaTimer Impl;
 protected:
-	//-------------------------------------------------------------------------
-	void startTimerImpl(Timer::Ptr tm);
-	//-------------------------------------------------------------------------
-	void stopTimerImpl(Timer::Ptr tm);
 private:
 public:
 	//-------------------------------------------------------------------------

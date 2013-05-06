@@ -3,3 +3,4 @@ lib
 svgTestSuite.html
 CMakeFiles
 cmake_install.cmake
+.DS_Store
