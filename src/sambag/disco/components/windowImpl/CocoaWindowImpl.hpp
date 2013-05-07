@@ -120,6 +120,9 @@ public:
 	virtual void __handleMouseButtonReleaseEvent(Nb x, Nb y, Nb buttons);
 	//-------------------------------------------------------------------------
 	virtual void __handleMouseMotionEvent(Nb x, Nb y);
+	//-------------------------------------------------------------------------
+	virtual void __windowWillCose();
+
 }; // CocoaWindowImpl
 }}}
 

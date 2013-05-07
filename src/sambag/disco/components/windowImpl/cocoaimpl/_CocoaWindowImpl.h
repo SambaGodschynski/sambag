@@ -13,12 +13,18 @@
 #include "AutoReleasePool.h"
 #include <string>
 #include <sambag/disco/components/windowImpl/WindowFlags.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace cocoaImplTypes {
 	typedef double Number;
 }
 
 namespace sambag { namespace disco { namespace components {
+typedef void* RawDiscoWindow;
+typedef void* RawDiscoView;
+typedef boost::shared_ptr<void> RawDiscoWindowPtr;
+typedef boost::shared_ptr<void> RawDiscoViewPtr;
+
 //=============================================================================
 /**
  * @class _CocoaWindowImpl.
@@ -28,13 +34,11 @@ class _CocoaWindowImpl : public WindowFlags {
 public:
 	//-------------------------------------------------------------------------
 	typedef WindowFlags Super;
-	typedef void* RawDiscoWindow;
-	typedef void* RawDiscoView;
 	typedef cocoaImplTypes::Number Number;
 private:
 	//-------------------------------------------------------------------------
-	RawDiscoWindow window;
-	RawDiscoView view;
+	RawDiscoWindowPtr windowPtr;
+	RawDiscoViewPtr viewPtr;
 	AutoReleasePool ap;
 	//-------------------------------------------------------------------------
 	/**
@@ -43,9 +47,9 @@ private:
 	int getWindowStyleMask() const;
 public:
 	//-------------------------------------------------------------------------
-	RawDiscoWindow getRawDiscoWindow() const { return window; }
+	RawDiscoWindowPtr getRawDiscoWindow() const { return windowPtr; }
 	//-------------------------------------------------------------------------
-	RawDiscoView getRawDiscoView() const { return view; }
+	RawDiscoViewPtr getRawDiscoView() const { return viewPtr; }
 	//-------------------------------------------------------------------------
 	_CocoaWindowImpl();
 	//-------------------------------------------------------------------------
@@ -69,6 +73,8 @@ public:
 	//-------------------------------------------------------------------------
 	WindowRef getWindowRef() const;
 	//-------------------------------------------------------------------------
+    void onClose();
+    //-------------------------------------------------------------------------
 	/**
 	 * called by window delegate.
 	 */
@@ -85,6 +91,9 @@ public:
 	virtual void __handleMouseButtonReleaseEvent(Number x, Number y, Number buttons) = 0;
 	//-------------------------------------------------------------------------
 	virtual void __handleMouseMotionEvent(Number x, Number y) = 0;
+	//-------------------------------------------------------------------------
+	virtual void __windowWillCose() = 0;
+
 };
 //=============================================================================
 /**

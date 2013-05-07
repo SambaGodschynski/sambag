@@ -32,7 +32,7 @@ namespace {
         _tm->__setRunningByToolkit_(false);
         [osTimer invalidate];
         SAMBAG_BEGIN_SYNCHRONIZED(mapLock)
-            //timers.erase(_tm);
+            timers.erase(_tm);
         SAMBAG_END_SYNCHRONIZED
     }
     void registerTimer(TimerPtr _tm, NSTimer *osTimer) {
@@ -48,10 +48,12 @@ namespace {
 }
 -(void)onTick:(NSTimer*)osTimer;
 -(id)initWithTimerPtr:(TimerPtr)ptr;
+-(void)dealloc;
 @end
 
 @implementation _Timer
 -(id)initWithTimerPtr:(TimerPtr)ptr {
+    [super init];
     _tm = ptr;
     return self;
 }
@@ -70,6 +72,9 @@ namespace {
     if (tmDelay != osDelay) {
         [osTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow: tmDelay]];
     }
+}
+-(void)dealloc {
+    [super dealloc];
 }
 @end
 
@@ -92,11 +97,15 @@ void _CocoaTimer::startTimer(TimerPtr tm)
     }
     
     _Timer *tmobj = [[_Timer alloc]initWithTimerPtr:tm];
-    t = [NSTimer scheduledTimerWithTimeInterval: i
-                                            target: tmobj
-                                            selector:@selector(onTick:)
-                                            userInfo: nil
-                                            repeats:YES];
+    t = [NSTimer timerWithTimeInterval: i
+                            target: tmobj
+                            selector:@selector(onTick:)
+                            userInfo: nil
+                            repeats:YES];
+    
+    [[NSRunLoop mainRunLoop] addTimer:t forMode:NSRunLoopCommonModes];
+    
+    [tmobj release];
     registerTimer(tm, t);
     tm->__setRunningByToolkit_(true);
 }

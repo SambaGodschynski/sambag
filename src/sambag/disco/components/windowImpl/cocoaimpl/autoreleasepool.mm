@@ -14,8 +14,8 @@
 //-----------------------------------------------------------------------------
 AutoReleasePool::AutoReleasePool ()
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	_pool = pool;
+	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	//_pool = pool;
 }
 
 //-----------------------------------------------------------------------------

@@ -7,13 +7,12 @@
 #ifdef DISCO_USE_COCOA
 #import "_CocoaWindowImpl.h"
 #import <Cocoa/Cocoa.h>
-#import "AutoReleasePool.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import <iostream>
 #import <stdexcept>
 #import <Carbon/Carbon.h>
-
+#include "AutoReleasePool.h"
 namespace {
 	std::string toString(NSString *str) {
 		if (!str) {
@@ -26,9 +25,37 @@ namespace {
 typedef sambag::disco::components::_CocoaWindowImpl Master;
 //=========================================================================
 @interface DiscoWindow : NSWindow
-{}
+{
+    NSMutableArray *objects;
+}
+-(void)initObjects;
+-(void)dealloc;
+-(void)addObject:(NSObject*)obj;
+-(void)removeObject:(NSObject*)obj;
 @end
 @implementation DiscoWindow
+-(void)initObjects {
+    if (objects) {
+        return;
+    }
+    objects = [[NSMutableArray alloc] init];
+}
+-(void)dealloc {
+    std::cout<<"-- DEALLOC WINDOW"<<std::endl;
+    if (objects) {
+       [objects release];
+    }
+    [super dealloc];
+}
+-(void)addObject:(NSObject*)obj {
+    [self initObjects];
+    [objects addObject: obj];
+
+}
+-(void)removeObject:(NSObject*)obj {
+    [self initObjects];
+    [objects removeObject: obj];
+}
 @end
 
 //=========================================================================
@@ -39,6 +66,8 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (void)windowDidResize:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
 - (void)setMaster:(Master*) theMaster;
+- (void)dealloc;
+- (void)windowWillClose:(NSNotification *)notification;
 @end
 
 @implementation DiscoWindowDelegate
@@ -50,6 +79,13 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
+}
+-(void)dealloc {
+    std::cout<<"-- DEALLOC DELEGATE"<<std::endl;
+    [super dealloc];
+}
+- (void)windowWillClose:(NSNotification *)notification {
+    master->onClose();
 }
 @end
 
@@ -73,6 +109,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (NSRect)flipRect:(NSRect)r;
 - (NSPoint)getMouseLocation:(NSEvent *)theEvent;
 - (int)getMouseBtn:(NSEvent*) ev;
+- (void)dealloc;
 @end
 
 
@@ -152,27 +189,42 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (void)setMaster:(Master*) theMaster {
 	master = theMaster;
 }
+-(void)dealloc {
+    std::cout<<"-- DEALLOC VIEW"<<std::endl;
+    [super dealloc];
+}
 @end
 
 
 namespace sambag { namespace disco { namespace components {
 namespace {
 DiscoWindow * getDiscoWindow(const Master &m) {
-	DiscoWindow *res = (DiscoWindow*)m.getRawDiscoWindow();
+	DiscoWindow *res = (DiscoWindow*)m.getRawDiscoWindow().get();
 	//assert(res);
 	return res;
 }
 DiscoView * getDiscoView(const Master &m) {
-	DiscoView *res = (DiscoView*)m.getRawDiscoView();
+	DiscoView *res = (DiscoView*)m.getRawDiscoView().get();
 	//assert(res);
 	return res;
+}
+void deallocSharedPtr(void *ptr) {
+    [(NSObject*)ptr release];
+}
+RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
+    [win retain];
+    return RawDiscoWindowPtr(win, &deallocSharedPtr);
+}
+RawDiscoViewPtr createDiscoViewPtr(DiscoView *view) {
+    [view retain];
+    return RawDiscoViewPtr(view, &deallocSharedPtr);
 }
 } // namepsace(s)
 //=============================================================================
 // @class _CocoaWindowImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
-_CocoaWindowImpl::_CocoaWindowImpl() : window(NULL), view(NULL)
+_CocoaWindowImpl::_CocoaWindowImpl()
 {
 }
 //-----------------------------------------------------------------------------
@@ -202,22 +254,26 @@ DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
 	[window makeFirstResponder: view];
 	[view becomeFirstResponder];
 	[view setMaster: caller];
+    [view release];
 	
 	// tracking area
-	NSTrackingArea *trackingArea = [[[NSTrackingArea alloc] initWithRect:[view frame]
+	NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:[view frame]
 									 options:NSTrackingMouseEnteredAndExited | 
 									 NSTrackingMouseMoved | 
 									 NSTrackingInVisibleRect |
 									 NSTrackingActiveAlways
 									 owner:view
-									 userInfo:nil] autorelease];
+									 userInfo:nil];
 	
 	[view addTrackingArea:trackingArea];
+    [trackingArea release];
 	
 	// set delegate
-	DiscoWindowDelegate *delegate = [DiscoWindowDelegate alloc];
+	DiscoWindowDelegate *delegate = [[DiscoWindowDelegate alloc] init];
 	[delegate setMaster: caller];
 	[window setDelegate:delegate];
+    [window addObject:delegate];
+    [delegate release];
 	
 	return view;
 }
@@ -248,17 +304,16 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h) 
 {
-	ap = AutoReleasePool();
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
     y = sh - y - h;
 	NSRect frame = NSMakeRect(x,y,w,h);
 	int options = getWindowStyleMask();
-	NSWindow* window  = [[[DiscoWindow alloc] initWithContentRect:frame
+	NSWindow* window  = [[DiscoWindow alloc] initWithContentRect:frame
 						  styleMask: options
 						  backing:NSBackingStoreBuffered
-						  defer:NO] autorelease];
-	this->window = window;
+						  defer:NO];
+	this->windowPtr = createDiscoWindowPtr(window);
 	[window setBackgroundColor:[NSColor blueColor]];
 	[window makeKeyAndOrderFront:nil];
 	[window setAcceptsMouseMovedEvents:YES];
@@ -272,7 +327,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 		}
 	}
 	NSView * view = _initView(this, frame);
-	this->view = view;
+	this->viewPtr = createDiscoViewPtr(view);
 }
 static pascal OSStatus windowVisibilityBodge (EventHandlerCallRef, EventRef e, void* user)
 {
@@ -314,7 +369,6 @@ static void attachWindowHidingHooks (void* hostWindowRef, NSWindow* nsWindow)
 void _CocoaWindowImpl::openNested(WindowRef parent, 
 	Number x, Number y, Number w, Number h) 
 {
-    //ap = AutoReleasePool();
 	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
 	if (!window) {
 		throw std::runtime_error("openNested() failed to create window.");
@@ -328,24 +382,23 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
     windowBounds.size.width = w;
     windowBounds.size.height = h;
    
-	NSWindow* pluginWindow  = [[[DiscoWindow alloc] initWithContentRect:windowBounds
+	NSWindow* pluginWindow  = [[DiscoWindow alloc] initWithContentRect:windowBounds
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
-                                                            defer:NO] autorelease];
+                                                            defer:NO];
 
 	
     [pluginWindow setAcceptsMouseMovedEvents:YES];
-    this->window = pluginWindow;
+    this->windowPtr = createDiscoWindowPtr(pluginWindow);
     [window addChildWindow:pluginWindow ordered:NSWindowAbove];
     [window orderFront: nil];
     
     attachWindowHidingHooks(parent, window);
 
-	this->window = pluginWindow;
     NSRect frame = NSMakeRect(x,y,w,h);
 	NSView * view = _initView(this, frame);
 	// assign raw pointer
-	this->view = view;
+	this->viewPtr = createDiscoViewPtr(view);
 }
 //-----------------------------------------------------------------------------
 WindowRef _CocoaWindowImpl::getWindowRef() const {
@@ -417,6 +470,12 @@ void _CocoaWindowImpl::setTitle(const std::string &str) {
 		return;
 	}
 	[window setTitle: [NSString stringWithUTF8String:str.c_str()]];
+}
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::onClose() {
+    __windowWillCose();
+    this->windowPtr.reset();
+    this->viewPtr.reset();
 }
 //=============================================================================
 // class _CocoaToolkitImpl 

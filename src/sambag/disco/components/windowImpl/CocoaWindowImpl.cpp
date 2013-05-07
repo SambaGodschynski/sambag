@@ -61,7 +61,6 @@ void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_open(AWindowImplPtr parent) {
-    std::cout<<"XYXXXXOPENYY"<<std::endl;
 	Impl *parentImpl = dynamic_cast<Impl*>(parent.get());
 	Impl::openWindow(
 			parentImpl,
@@ -166,6 +165,11 @@ void CocoaWindowImpl::__handleMouseButtonReleaseEvent(Nb x, Nb y, Nb buttons)
 void CocoaWindowImpl::__handleMouseMotionEvent(Nb x, Nb y) {
 	handleMouseMotionEvent(x,y);
 }
+//-----------------------------------------------------------------------------
+void CocoaWindowImpl::__windowWillCose() {
+    onDestroy();
+}
+
 }}} // namespace(s)
 
 #endif // DISCO_USE_COCOA
