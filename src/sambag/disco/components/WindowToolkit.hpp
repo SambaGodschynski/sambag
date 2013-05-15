@@ -63,7 +63,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::function<void()> InvokeFunction;
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f) = 0;
+	/**
+     * calls f after delay in ms.
+     * @param the function to call
+     * @param the minimum of time in ms which has to pass. 
+     *        (not all impl. support this)
+     */
+    virtual void invokeLater(const InvokeFunction &f, int delay=50) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * aborts mainloop.

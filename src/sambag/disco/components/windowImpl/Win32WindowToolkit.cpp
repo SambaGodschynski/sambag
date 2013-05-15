@@ -101,10 +101,6 @@ namespace {
 		f();
 	}
 } // namespace(s)
-void Win32WindowToolkit::invokeLater(const Win32WindowToolkit::InvokeFunction &f) 
-{
-	invokeLater(f, 50);
-}
 //----------------------------------------------------------------------------
 void Win32WindowToolkit::invokeLater(const InvokeFunction &f, int ms) {
 	Timer::Ptr tm = Timer::create(ms);

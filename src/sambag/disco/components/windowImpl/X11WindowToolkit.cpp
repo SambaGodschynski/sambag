@@ -104,7 +104,7 @@ void X11WindowToolkit::quit() {
 	mainLoopRunning = false;
 }
 //-----------------------------------------------------------------------------
-void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f)
+void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f, int ms)
 {
 	if (!isMainLoopRunning()) {
 		f();

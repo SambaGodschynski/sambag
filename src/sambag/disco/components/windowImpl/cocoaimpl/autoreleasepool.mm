@@ -14,15 +14,15 @@
 //-----------------------------------------------------------------------------
 AutoReleasePool::AutoReleasePool ()
 {
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	//_pool = pool;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	_pool = pool;
 }
 
 //-----------------------------------------------------------------------------
 AutoReleasePool::~AutoReleasePool ()
 {
-	//NSAutoreleasePool *pool = (NSAutoreleasePool*)_pool;
-	//[pool release];
+	NSAutoreleasePool *pool = (NSAutoreleasePool*)_pool;
+	[pool release];
 }
 
 #endif // DISCO_USE_COCOA

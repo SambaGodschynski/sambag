@@ -10,7 +10,6 @@
 #ifdef DISCO_USE_COCOA
 
 #include <ApplicationServices/ApplicationServices.h>
-#include "AutoReleasePool.h"
 #include <string>
 #include <sambag/disco/components/windowImpl/WindowFlags.hpp>
 #include <boost/shared_ptr.hpp>
@@ -39,7 +38,6 @@ private:
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr windowPtr;
 	RawDiscoViewPtr viewPtr;
-	AutoReleasePool ap;
 	//-------------------------------------------------------------------------
 	/**
 	 * creates NSWindow window style mask via Super::WindowFlags.

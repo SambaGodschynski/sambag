@@ -71,11 +71,6 @@ void CocoaWindowToolkit::mainLoop() {
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::quit() {
 }
-//-----------------------------------------------------------------------------
-void CocoaWindowToolkit::invokeLater(const CocoaWindowToolkit::InvokeFunction &f) 
-{
-	invokeLater(f, 50);
-}
 namespace {
 	/*
 	 * timer callback

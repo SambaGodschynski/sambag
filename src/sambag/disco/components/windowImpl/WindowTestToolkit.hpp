@@ -39,7 +39,7 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f) {
+	virtual void invokeLater(const InvokeFunction &f, int ms=50) {
 		f(); // call immediately
 	}
 	//-------------------------------------------------------------------------

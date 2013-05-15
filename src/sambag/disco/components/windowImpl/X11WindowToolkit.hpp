@@ -82,7 +82,10 @@ public:
 		return mainLoopRunning;
 	}
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f);
+        /**
+	 * @note delay not supported.
+	 */
+        virtual void invokeLater(const InvokeFunction &f, int delay=50);
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

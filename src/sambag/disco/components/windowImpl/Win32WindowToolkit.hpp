@@ -66,9 +66,7 @@ public:
 		return mainLoopRunning;
 	}
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f);
-	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f, int ms);
+	virtual void invokeLater(const InvokeFunction &f, int ms=50);
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

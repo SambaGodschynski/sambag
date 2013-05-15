@@ -12,6 +12,7 @@
 #include <boost/unordered_map.hpp>
 #include <boost/foreach.hpp>
 #include <sambag/com/Thread.hpp>
+#include "AutoReleasePool.h"
 
 using sambag::disco::components::_CocoaTimer;
 typedef _CocoaTimer::TimerPtr TimerPtr;
@@ -58,6 +59,7 @@ namespace {
     return self;
 }
 -(void)onTick:(NSTimer*)osTimer {
+    AutoReleasePool ap;
     _tm->timerExpired();
     int &numCalled = _tm->__getNumCalled_();
     ++numCalled;
@@ -88,6 +90,7 @@ void _CocoaTimer::startTimer(TimerPtr tm)
     if (!tm) {
         return;
     }
+    AutoReleasePool ap;
     NSTimeInterval i = tm->getInitialDelay() / 1000.;
     
     NSTimer *t = getOsTimer(tm);
