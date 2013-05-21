@@ -351,7 +351,7 @@ void ____(WindowRef window) {
     HIViewGetBounds(viewRef, &bnd);
     std::cout<<"view :"<<std::hex<<viewRef<<std::dec<<std::endl;
     std::cout<<"  --bounds:"<<bnd.origin.x<<", "<<bnd.origin.y<<", "<<bnd.size.width<<", "<<bnd.size.height<<std::endl;
-    std::cout<<"  --isVisible:"<<(HIViewIsLatentlyVisible(viewRef)==0 ? "no":"yes")<<std::endl;
+    std::cout<<"  --isVisible:"<<(HIViewIsVisible(viewRef)==0 ? "no":"yes")<<std::endl;
     std::cout<<"  --isEnabled:"<<(HIViewIsEnabled(viewRef, NULL)==0 ? "no":"yes")<<std::endl;
     std::cout<<"  --isDrawingEnabled:"<<(HIViewIsDrawingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
     std::cout<<"  --HIViewIsCompositingEnabled:"<<(HIViewIsCompositingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
@@ -399,9 +399,7 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
     [ownerWindow addChildWindow: carbonWindow
                         ordered: NSWindowAbove];
     
-    ____(wrapperWindow);
     __onCreated();
-    ____(wrapperWindow);
   
     // Check for the plugin creating its own floating window, and if there is one,
     // we need to reparent it to make it visible..
@@ -412,10 +410,6 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
         [ownerWindow addChildWindow: floatingChildWindow
                                  ordered: NSWindowAbove];
     }*/
-    sambag::disco::components::getWindowToolkit()->invokeLater(
-        boost::bind(&____, wrapperWindow),
-        5000
-    );
 }
 
 //-----------------------------------------------------------------------------

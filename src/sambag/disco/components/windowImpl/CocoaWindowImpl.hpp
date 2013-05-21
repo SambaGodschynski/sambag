@@ -21,8 +21,6 @@
 #include <boost/tuple/tuple.hpp>
 #include "cocoaimpl/_CocoaWindowImpl.h"
 
-#include "cocoaimpl/carbonWorkaround/WindowDef.hpp"
-
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
@@ -43,8 +41,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef cocoaImplTypes::Number Nb;
 private:
-    //-------------------------------------------------------------------------
-    carbonWorkaround::IWindow::Ptr carbonWorkaround;
 public:
 private:
 	//-------------------------------------------------------------------------

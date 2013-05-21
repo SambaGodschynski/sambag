@@ -53,12 +53,7 @@ void CocoaWindowImpl::_close() {
     if (!isVisible()) {
         return;
     }
-    if (carbonWorkaround) {
-        carbonWorkaround->closeWindow();
-        visible = false;
-        return;
-    }
-	Impl::closeWindow();
+ 	Impl::closeWindow();
     visible = false;
 }
 //-----------------------------------------------------------------------------
@@ -73,15 +68,6 @@ void CocoaWindowImpl::_open(AWindowImplPtr parent) {
         return;
     }
 	Impl *parentImpl = dynamic_cast<Impl*>(parent.get());
-    
-    /*if (getFlag(WindowFlags::WND_RAW)) {
-        carbonWorkaround = carbonWorkaround::createWindow(bounds, carbonWorkaround::IWindow::SYSTEM_MENU | carbonWorkaround::IWindow::TITLE_BAR);
-        carbonWorkaround->showWindow();
-        visible = true;
-        updateTitle();
-        onCreated();
-        return;
-    }*/
     
 	Impl::openWindow(
 			parentImpl,
@@ -110,10 +96,6 @@ void CocoaWindowImpl::updateWindowToBounds(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::updateBoundsToWindow() {
-    if (carbonWorkaround) {
-        carbonWorkaround->setSize(bounds);
-        return;
-    }
 	Impl::setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
 }
 //-----------------------------------------------------------------------------
@@ -123,9 +105,6 @@ void CocoaWindowImpl::__boundsChanged(Nb x, Nb y, Nb w, Nb h) {
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {
-    if (carbonWorkaround) {
-        return carbonWorkaround->getHandle();
-    }
 	return Impl::getWindowRef();
 }
 //-----------------------------------------------------------------------------
@@ -161,9 +140,6 @@ void CocoaWindowImpl::updateTitle() {
 	if (!isVisible()) {
 		return;
 	}
-    if (carbonWorkaround) {
-        return carbonWorkaround->setCaption(getTitle());
-    }
 	Impl::setTitle(getTitle());
 }
 //-----------------------------------------------------------------------------
@@ -177,9 +153,6 @@ std::string CocoaWindowImpl::getTitle() const {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::invalidateWindow(const Rectangle &area) {
-    if (carbonWorkaround) {
-        return;
-    }
 	Impl::invalidateWindow(area.x(),
 			area.y(),
 			area.width(),

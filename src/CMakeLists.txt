@@ -107,7 +107,6 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/windowImpl/WindowTestToolkit.cpp
 	sambag/disco/components/windowImpl/X11WindowImpl.cpp
 	sambag/disco/components/windowImpl/X11WindowToolkit.cpp
-	sambag/disco/components/windowImpl/cocoaimpl/carbonWorkaround/CarbonWindow.cpp
 	sambag/disco/svg/AttributeParser.cpp
 	sambag/disco/svg/HtmlColors.cpp
 	sambag/disco/svg/PathInstructions.cpp
