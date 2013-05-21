@@ -15,7 +15,6 @@
 #import <Carbon/Carbon.h>
 #include "AutoReleasePool.h"
 
-
 namespace {
 	std::string toString(NSString *str) {
 		if (!str) {
@@ -180,6 +179,9 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)drawRect:(NSRect)rect {
+    if (! [[self window] isVisible]) {
+        return;
+    }
 	void *gc = [[[self window] graphicsContext] graphicsPort];
 	master->__processDraw(
 	    (CGContextRef)gc,
@@ -214,6 +216,9 @@ DiscoView * getDiscoView(const Master &m) {
 void deallocSharedPtr(void *ptr) {
     [(NSObject*)ptr release];
 }
+void deallocCarbonWindowRef(void *ptr) {
+     
+}
 RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
     [win retain];
     return RawDiscoWindowPtr(win, &deallocSharedPtr);
@@ -221,6 +226,9 @@ RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
 RawDiscoViewPtr createDiscoViewPtr(DiscoView *view) {
     [view retain];
     return RawDiscoViewPtr(view, &deallocSharedPtr);
+}
+CarbonWindowRefPtr createCarbonWindowRefPtr(WindowRef ref) {
+    return CarbonWindowRefPtr(ref, &deallocCarbonWindowRef);
 }
 } // namepsace(s)
 //=============================================================================
@@ -242,10 +250,6 @@ void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) 
 //-----------------------------------------------------------------------------
 namespace {
 DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
-    // if RAW window skip stuff below.
-    if (caller->getFlag(WindowFlags::WND_RAW)) {
-        return NULL;
-    }
 	DiscoWindow *window = getDiscoWindow(*caller);
 	if (!window) {
 		return NULL; 
@@ -308,49 +312,153 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 	}
 	return options;
 }
-void forTest(NSWindow *win) {
-    NSWindow* floatingChildWindow = [[win childWindows] objectAtIndex: 0];
-    std::cout<<"HERE IAM"<<std::endl;
-    if (floatingChildWindow != nil) {
-        [floatingChildWindow orderFront: nil];
-        std::cout<<"YES"<<std::endl;
-    }
+//-----------------------------------------------------------------------------
+namespace {
+void recursiveHIViewRepaint (HIViewRef view)
+{
+    HIViewSetNeedsDisplay (view, true);
+    HIViewRef child = HIViewGetFirstSubview (view);
         
+    while (child != 0)
+    {
+        recursiveHIViewRepaint (child);
+        child = HIViewGetNextView (child);
+    }
 }
+void __windowCheck(WindowRef wrapperWindow,
+                   int c)
+{
+    
+    recursiveHIViewRepaint (HIViewGetRoot (wrapperWindow));
+    if (c<100) {
+        sambag::disco::components::getWindowToolkit()->invokeLater(
+            boost::bind(&__windowCheck, wrapperWindow, c+1),
+            10
+        );
+    }
+
+}
+void ____(WindowRef window) {
+    HIViewRef root_control;
+    HIViewRef viewRef;
+    GetRootControl (window, &root_control);
+    viewRef = HIViewGetFirstSubview(root_control);
+    if (!viewRef) {
+        std::cout<<"no view"<<std::endl;
+        return;
+    }
+    HIRect bnd;
+    HIViewGetBounds(viewRef, &bnd);
+    std::cout<<"view :"<<std::hex<<viewRef<<std::dec<<std::endl;
+    std::cout<<"  --bounds:"<<bnd.origin.x<<", "<<bnd.origin.y<<", "<<bnd.size.width<<", "<<bnd.size.height<<std::endl;
+    std::cout<<"  --isVisible:"<<(HIViewIsLatentlyVisible(viewRef)==0 ? "no":"yes")<<std::endl;
+    std::cout<<"  --isEnabled:"<<(HIViewIsEnabled(viewRef, NULL)==0 ? "no":"yes")<<std::endl;
+    std::cout<<"  --isDrawingEnabled:"<<(HIViewIsDrawingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
+    std::cout<<"  --HIViewIsCompositingEnabled:"<<(HIViewIsCompositingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
+    
+    sambag::disco::components::getWindowToolkit()->invokeLater(
+        boost::bind(&____, window),
+        5000
+    );
+    
+    HIViewSetVisible(viewRef, true);
+    //HIViewSetBoundsOrigin(viewRef, bnd.origin.x, bnd.origin.y);
+    HIViewSetNeedsDisplay(viewRef, true);
+}
+} // namespace(s)
+//-----------------------------------------------------------------------------
+void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
+{
+    DiscoWindow *ownerWindow = getDiscoWindow(*this);
+    assert(ownerWindow);
+    if (!ownerWindow) {
+        return;
+    }
+    
+    Rect r;
+    r.left   = (short) x;
+    r.top    = (short) y;
+    r.right  = (short) x+w;
+    r.bottom = (short) y+h;
+    
+    WindowRef wrapperWindow;
+	
+    CreateNewWindow (kDocumentWindowClass,
+                        (WindowAttributes) (kWindowStandardHandlerAttribute | kWindowCompositingAttribute
+                        | kWindowNoShadowAttribute | kWindowNoTitleBarAttribute),
+                         &r, &wrapperWindow);
+    
+    assert(wrapperWindow);
+    if (wrapperWindow == 0)
+        return;
+    
+    this->carbonWindowRef = createCarbonWindowRefPtr(wrapperWindow);
+    
+    NSWindow *carbonWindow = [[NSWindow alloc] initWithWindowRef: wrapperWindow];
+        
+    [ownerWindow addChildWindow: carbonWindow
+                        ordered: NSWindowAbove];
+    
+    ____(wrapperWindow);
+    __onCreated();
+    ____(wrapperWindow);
+  
+    // Check for the plugin creating its own floating window, and if there is one,
+    // we need to reparent it to make it visible..
+   /* NSWindow* floatingChildWindow = [[carbonWindow childWindows] objectAtIndex: 0];
+    
+    if (floatingChildWindow != nil) {
+        std::cout<<"has own floating window"<<std::endl;
+        [ownerWindow addChildWindow: floatingChildWindow
+                                 ordered: NSWindowAbove];
+    }*/
+    sambag::disco::components::getWindowToolkit()->invokeLater(
+        boost::bind(&____, wrapperWindow),
+        5000
+    );
+}
+
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h) 
 {
+    std::cout<<std::hex<<this<<std::dec<<"_CocoaWindowImpl::openWindow"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
-    y = sh - y - h;
-	NSRect frame = NSMakeRect(x,y,w,h);
+	NSRect frame = NSMakeRect(x,sh - y - h,w,h);
 	int options = getWindowStyleMask();
 	DiscoWindow* window  = [[DiscoWindow alloc] initWithContentRect:frame
 						  styleMask: options
 						  backing:NSBackingStoreBuffered
-						  defer:NO];
+						  defer:YES];
+    [window setBackgroundColor: [NSColor blueColor]];
 	this->windowPtr = createDiscoWindowPtr(window);
-	[window makeKeyAndOrderFront:nil];
-	[window setAcceptsMouseMovedEvents:YES];
-    [window setReleasedWhenClosed: YES];
-    [window setLevel: NSFloatingWindowLevel];
-    [window setAutodisplay: YES];
 	// set parent
 	if (parent) {
 		DiscoWindow *pWin = getDiscoWindow(*parent);
 		if (pWin) {
-			[window setParentWindow:pWin];
+			//[window setParentWindow:pWin];
 		}
 	}
-	DiscoView* view = _initView(this, frame);
-    if (!view) {
-        return;
+    DiscoView* view = NULL;
+    if (getFlag(WindowFlags::WND_RAW)) {
+        initAsRawWindow(x,y,w,h);
+    } else {
+        view = _initView(this, frame);
+        if (!view) {
+            return;
+        }
     }
-	this->viewPtr = createDiscoViewPtr(view);
-    sambag::disco::components::getWindowToolkit()->invokeLater(
-        boost::bind(&forTest, window),
-        1000
-    );
+    this->viewPtr = createDiscoViewPtr(view);
+    
+    [window makeKeyAndOrderFront:nil];
+	[window setAcceptsMouseMovedEvents:YES];
+    [window setReleasedWhenClosed: YES];
+    [window setLevel: NSFloatingWindowLevel];
+    [window setAutodisplay: YES];
+    
+    if (!getFlag(WindowFlags::WND_RAW)) {
+        __onCreated();
+    }
 }
 static pascal OSStatus windowVisibilityBodge (EventHandlerCallRef, EventRef e, void* user)
 {
@@ -389,10 +497,10 @@ static void attachWindowHidingHooks (void* hostWindowRef, NSWindow* nsWindow)
         
 }
 //-----------------------------------------------------------------------------
-void _CocoaWindowImpl::openNested(WindowRef parent, 
+void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
-	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
+  	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
 	if (!window) {
 		throw std::runtime_error("openNested() failed to create window.");
 	}
@@ -425,10 +533,15 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
     }
 	// assign raw pointer
 	this->viewPtr = createDiscoViewPtr(view);
+    
+    __onCreated();
 }
 //-----------------------------------------------------------------------------
 WindowRef _CocoaWindowImpl::getWindowRef() const {
-	NSWindow *win = getDiscoWindow(*this);
+	if (carbonWindowRef) {
+        return (WindowRef)carbonWindowRef.get();
+    }
+    NSWindow *win = getDiscoWindow(*this);
 	if (!win) {
 		return NULL;
 	}
@@ -445,13 +558,34 @@ void _CocoaWindowImpl::closeWindow() {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
+    
+    std::cout<<std::hex<<this<<std::dec<<"_CocoaWindowImpl::setBounds"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
+    
 	DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
-	NSRect frame = NSMakeRect(x, y, w, h);
-	[window setFrame:frame display:YES animate:NO];
+    Number sw=0, sh=0;
+    _CocoaToolkitImpl::getScreenDimension(sw, sh);
+    NSRect frame = NSMakeRect(x, sh - y - h, w, h);
+    if (window) {
+        [window setFrame:frame display:YES animate:NO];
+        [window setContentSize: frame.size];        
+    }
 	// view
-	frame = [window contentRectForFrameRect:[window frame]];
-	[view setFrameSize: frame.size];
+    if (view) {
+      	frame = [window contentRectForFrameRect:[window frame]];
+        [view setFrameSize: frame.size];
+
+    }
+    if (carbonWindowRef) {
+        Rect wr;
+        wr.left   = (short) x;
+        wr.top    = (short) y;
+        wr.right  = (short) x+w;
+        wr.bottom = (short) y+h;
+        WindowRef win = (WindowRef)carbonWindowRef.get();
+        SetWindowBounds (win, kWindowContentRgn, &wr);
+        ShowWindow (win);
+     }
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) {
@@ -481,6 +615,18 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
 				  frame.origin.y, 
 				  frame.size.width, 
 				  frame.size.height);
+    
+    
+    if (carbonWindowRef) {
+        Rect wr;
+        wr.left   = (short) frame.origin.x;
+        wr.top    = (short) frame.origin.y;
+        wr.right  = (short) frame.origin.x + frame.size.width;
+        wr.bottom = (short) frame.origin.y + frame.size.height;
+        WindowRef win = (WindowRef)carbonWindowRef.get();
+        SetWindowBounds (win, kWindowContentRgn, &wr);
+        ShowWindow (win);
+    }
 }
 //-----------------------------------------------------------------------------
 std::string _CocoaWindowImpl::getTitle() const {

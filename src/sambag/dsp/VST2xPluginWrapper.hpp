@@ -15,7 +15,7 @@ namespace {
 	struct FriendBuilder { typedef T Type; }; 
 }
 
-// TODO: find a better way (maybe cancel friend approach)
+// TODO: find a better way (maybe discart friend approach)
 #ifdef _MSC_VER
 #define SAMBAG_FRIEND_OF_T(_class) friend typename _class
 #else

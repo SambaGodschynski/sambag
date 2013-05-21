@@ -50,6 +50,14 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_close() {
+    if (!isVisible()) {
+        return;
+    }
+    if (carbonWorkaround) {
+        carbonWorkaround->closeWindow();
+        visible = false;
+        return;
+    }
 	Impl::closeWindow();
     visible = false;
 }
@@ -61,7 +69,20 @@ void CocoaWindowImpl::close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_open(AWindowImplPtr parent) {
+    if (isVisible()) {
+        return;
+    }
 	Impl *parentImpl = dynamic_cast<Impl*>(parent.get());
+    
+    /*if (getFlag(WindowFlags::WND_RAW)) {
+        carbonWorkaround = carbonWorkaround::createWindow(bounds, carbonWorkaround::IWindow::SYSTEM_MENU | carbonWorkaround::IWindow::TITLE_BAR);
+        carbonWorkaround->showWindow();
+        visible = true;
+        updateTitle();
+        onCreated();
+        return;
+    }*/
+    
 	Impl::openWindow(
 			parentImpl,
 			(int)bounds.x(),
@@ -71,7 +92,10 @@ void CocoaWindowImpl::_open(AWindowImplPtr parent) {
 	);
 	visible = true;
 	updateTitle();
-	onCreated();
+}
+//-------------------------------------------------------------------------
+void CocoaWindowImpl::__onCreated() {
+     onCreated();   
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::open(AWindowImplPtr parent) {
@@ -86,14 +110,22 @@ void CocoaWindowImpl::updateWindowToBounds(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::updateBoundsToWindow() {
+    if (carbonWorkaround) {
+        carbonWorkaround->setSize(bounds);
+        return;
+    }
 	Impl::setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::__boundsChanged(Nb x, Nb y, Nb w, Nb h) {
+    std::cout<<std::hex<<this<<std::dec<<"CocoaWindowImpl::__boundsChanged"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
 	updateWindowToBounds(Rectangle(x,y,w,h));
 }
 //-----------------------------------------------------------------------------
 void * CocoaWindowImpl::getSystemHandle() const {
+    if (carbonWorkaround) {
+        return carbonWorkaround->getHandle();
+    }
 	return Impl::getWindowRef();
 }
 //-----------------------------------------------------------------------------
@@ -122,10 +154,6 @@ void CocoaWindowImpl::setBounds(const Rectangle &r) {
 		bounds.setWidth(1.);
 	if (bounds.getHeight() < 1.)
 		bounds.setHeight(1.);
-
-	if (!isVisible())
-		return;
-
 	updateBoundsToWindow();
 }
 //-----------------------------------------------------------------------------
@@ -133,6 +161,9 @@ void CocoaWindowImpl::updateTitle() {
 	if (!isVisible()) {
 		return;
 	}
+    if (carbonWorkaround) {
+        return carbonWorkaround->setCaption(getTitle());
+    }
 	Impl::setTitle(getTitle());
 }
 //-----------------------------------------------------------------------------
@@ -146,6 +177,9 @@ std::string CocoaWindowImpl::getTitle() const {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::invalidateWindow(const Rectangle &area) {
+    if (carbonWorkaround) {
+        return;
+    }
 	Impl::invalidateWindow(area.x(),
 			area.y(),
 			area.width(),

@@ -21,6 +21,8 @@
 #include <boost/tuple/tuple.hpp>
 #include "cocoaimpl/_CocoaWindowImpl.h"
 
+#include "cocoaimpl/carbonWorkaround/WindowDef.hpp"
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
@@ -41,6 +43,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef cocoaImplTypes::Number Nb;
 private:
+    //-------------------------------------------------------------------------
+    carbonWorkaround::IWindow::Ptr carbonWorkaround;
 public:
 private:
 	//-------------------------------------------------------------------------
@@ -122,6 +126,8 @@ public:
 	virtual void __handleMouseMotionEvent(Nb x, Nb y);
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose();
+    //-------------------------------------------------------------------------
+    virtual void __onCreated();
 
 }; // CocoaWindowImpl
 }}}

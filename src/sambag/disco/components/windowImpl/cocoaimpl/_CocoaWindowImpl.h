@@ -23,6 +23,7 @@ typedef void* RawDiscoWindow;
 typedef void* RawDiscoView;
 typedef boost::shared_ptr<void> RawDiscoWindowPtr;
 typedef boost::shared_ptr<void> RawDiscoViewPtr;
+typedef boost::shared_ptr<void> CarbonWindowRefPtr;
 
 //=============================================================================
 /**
@@ -38,11 +39,14 @@ private:
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr windowPtr;
 	RawDiscoViewPtr viewPtr;
+    CarbonWindowRefPtr carbonWindowRef;
 	//-------------------------------------------------------------------------
 	/**
 	 * creates NSWindow window style mask via Super::WindowFlags.
 	 */
 	int getWindowStyleMask() const;
+    //-------------------------------------------------------------------------
+    void initAsRawWindow(Number x, Number y, Number w, Number h);
 public:
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr getRawDiscoWindow() const { return windowPtr; }
@@ -91,6 +95,8 @@ public:
 	virtual void __handleMouseMotionEvent(Number x, Number y) = 0;
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose() = 0;
+	//-------------------------------------------------------------------------
+	virtual void __onCreated() = 0;
 
 };
 //=============================================================================
