@@ -230,6 +230,14 @@ RawDiscoViewPtr createDiscoViewPtr(DiscoView *view) {
 CarbonWindowRefPtr createCarbonWindowRefPtr(WindowRef ref) {
     return CarbonWindowRefPtr(ref, &deallocCarbonWindowRef);
 }
+NSRect getBoundsOnScreen(NSView *view) {
+    NSRect r = [view frame];
+    NSWindow* viewWindow = [view window];
+    //r = [[view superview] convertRect: r toView: nil];
+    r.origin = [viewWindow convertBaseToScreen: r.origin];
+    r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
+    return r;
+}
 } // namepsace(s)
 //=============================================================================
 // @class _CocoaWindowImpl
@@ -415,7 +423,6 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h) 
 {
-    std::cout<<std::hex<<this<<std::dec<<"_CocoaWindowImpl::openWindow"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
 	NSRect frame = NSMakeRect(x,sh - y - h,w,h);
@@ -434,14 +441,12 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 		}
 	}
     DiscoView* view = NULL;
-    if (getFlag(WindowFlags::WND_RAW)) {
-        initAsRawWindow(x,y,w,h);
-    } else {
-        view = _initView(this, frame);
-        if (!view) {
-            return;
-        }
+    view = _initView(this, frame);
+    assert(view);
+    if (!view) {
+        return;
     }
+    
     this->viewPtr = createDiscoViewPtr(view);
     
     [window makeKeyAndOrderFront:nil];
@@ -449,6 +454,12 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
     [window setReleasedWhenClosed: YES];
     [window setLevel: NSFloatingWindowLevel];
     [window setAutodisplay: YES];
+    
+    if (getFlag(WindowFlags::WND_RAW)) {
+        NSRect f = getBoundsOnScreen(view);
+        initAsRawWindow(f.origin.x, f.origin.y, f.size.width, f.size.height);
+    }
+
     
     if (!getFlag(WindowFlags::WND_RAW)) {
         __onCreated();
@@ -494,7 +505,7 @@ static void attachWindowHidingHooks (void* hostWindowRef, NSWindow* nsWindow)
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
-  	NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
+    NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
 	if (!window) {
 		throw std::runtime_error("openNested() failed to create window.");
 	}
@@ -503,7 +514,7 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
     [window setReleasedWhenClosed: YES];
     [window setIsVisible:YES];
     int options = 0; //getWindowStyleMask();
-    NSRect windowBounds = [window frame];
+    NSRect windowBounds = [window contentRectForFrameRect:[window frame]];
     windowBounds.size.width = w;
     windowBounds.size.height = h;
    
@@ -553,9 +564,7 @@ void _CocoaWindowImpl::closeWindow() {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
     
-    std::cout<<std::hex<<this<<std::dec<<"_CocoaWindowImpl::setBounds"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
-    
-	DiscoWindow *window = getDiscoWindow(*this);
+    DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
@@ -570,12 +579,13 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
         [view setFrameSize: frame.size];
 
     }
-    if (carbonWindowRef) {
+    if (carbonWindowRef && view) {
+        NSRect f = getBoundsOnScreen(view);
         Rect wr;
-        wr.left   = (short) x;
-        wr.top    = (short) y;
-        wr.right  = (short) x+w;
-        wr.bottom = (short) y+h;
+        wr.left   = (short) f.origin.x;
+        wr.top    = (short) f.origin.y;
+        wr.right  = (short) f.origin.x + f.size.width;
+        wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
         ShowWindow (win);
@@ -611,12 +621,13 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
 				  frame.size.height);
     
     
-    if (carbonWindowRef) {
+    if (carbonWindowRef && view) {
+        NSRect f = getBoundsOnScreen(view);
         Rect wr;
-        wr.left   = (short) frame.origin.x;
-        wr.top    = (short) frame.origin.y;
-        wr.right  = (short) frame.origin.x + frame.size.width;
-        wr.bottom = (short) frame.origin.y + frame.size.height;
+        wr.left   = (short) f.origin.x;
+        wr.top    = (short) f.origin.y;
+        wr.right  = (short) f.origin.x + f.size.width;
+        wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
         ShowWindow (win);

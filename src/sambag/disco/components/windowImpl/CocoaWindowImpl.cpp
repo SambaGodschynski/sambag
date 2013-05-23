@@ -100,7 +100,6 @@ void CocoaWindowImpl::updateBoundsToWindow() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::__boundsChanged(Nb x, Nb y, Nb w, Nb h) {
-    std::cout<<std::hex<<this<<std::dec<<"CocoaWindowImpl::__boundsChanged"<<x<<", "<<y<<", "<<w<<", "<<h<<std::endl;
 	updateWindowToBounds(Rectangle(x,y,w,h));
 }
 //-----------------------------------------------------------------------------
