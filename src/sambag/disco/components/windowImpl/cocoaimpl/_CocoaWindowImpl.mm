@@ -321,60 +321,6 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 	return options;
 }
 //-----------------------------------------------------------------------------
-namespace {
-void recursiveHIViewRepaint (HIViewRef view)
-{
-    HIViewSetNeedsDisplay (view, true);
-    HIViewRef child = HIViewGetFirstSubview (view);
-        
-    while (child != 0)
-    {
-        recursiveHIViewRepaint (child);
-        child = HIViewGetNextView (child);
-    }
-}
-void __windowCheck(WindowRef wrapperWindow,
-                   int c)
-{
-    
-    recursiveHIViewRepaint (HIViewGetRoot (wrapperWindow));
-    if (c<100) {
-        sambag::disco::components::getWindowToolkit()->invokeLater(
-            boost::bind(&__windowCheck, wrapperWindow, c+1),
-            10
-        );
-    }
-
-}
-void ____(WindowRef window) {
-    HIViewRef root_control;
-    HIViewRef viewRef;
-    GetRootControl (window, &root_control);
-    viewRef = HIViewGetFirstSubview(root_control);
-    if (!viewRef) {
-        std::cout<<"no view"<<std::endl;
-        return;
-    }
-    HIRect bnd;
-    HIViewGetBounds(viewRef, &bnd);
-    std::cout<<"view :"<<std::hex<<viewRef<<std::dec<<std::endl;
-    std::cout<<"  --bounds:"<<bnd.origin.x<<", "<<bnd.origin.y<<", "<<bnd.size.width<<", "<<bnd.size.height<<std::endl;
-    std::cout<<"  --isVisible:"<<(HIViewIsVisible(viewRef)==0 ? "no":"yes")<<std::endl;
-    std::cout<<"  --isEnabled:"<<(HIViewIsEnabled(viewRef, NULL)==0 ? "no":"yes")<<std::endl;
-    std::cout<<"  --isDrawingEnabled:"<<(HIViewIsDrawingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
-    std::cout<<"  --HIViewIsCompositingEnabled:"<<(HIViewIsCompositingEnabled(viewRef)==0 ? "no":"yes")<<std::endl;
-    
-    sambag::disco::components::getWindowToolkit()->invokeLater(
-        boost::bind(&____, window),
-        5000
-    );
-    
-    HIViewSetVisible(viewRef, true);
-    //HIViewSetBoundsOrigin(viewRef, bnd.origin.x, bnd.origin.y);
-    HIViewSetNeedsDisplay(viewRef, true);
-}
-} // namespace(s)
-//-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
     DiscoWindow *ownerWindow = getDiscoWindow(*this);
@@ -408,16 +354,6 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
                         ordered: NSWindowAbove];
     
     __onCreated();
-  
-    // Check for the plugin creating its own floating window, and if there is one,
-    // we need to reparent it to make it visible..
-   /* NSWindow* floatingChildWindow = [[carbonWindow childWindows] objectAtIndex: 0];
-    
-    if (floatingChildWindow != nil) {
-        std::cout<<"has own floating window"<<std::endl;
-        [ownerWindow addChildWindow: floatingChildWindow
-                                 ordered: NSWindowAbove];
-    }*/
 }
 
 //-----------------------------------------------------------------------------
@@ -465,42 +401,6 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
         __onCreated();
     }
 }
-static pascal OSStatus windowVisibilityBodge (EventHandlerCallRef, EventRef e, void* user)
-{
-    NSWindow* hostWindow = (NSWindow*) user;
-        
-    switch (GetEventKind (e))
-    {
-        case kEventWindowInit:
-            [hostWindow display];
-            break;
-        case kEventWindowShown:
-            [hostWindow orderFront: nil];
-            break;
-        case kEventWindowHidden:
-            [hostWindow orderOut: nil];
-            break;
-    }
-        
-    return eventNotHandledErr;
-}
-    
-static void attachWindowHidingHooks (void* hostWindowRef, NSWindow* nsWindow)
-{
-    const EventTypeSpec eventsToCatch[] =
-    {
-            { kEventClassWindow, kEventWindowInit },
-            { kEventClassWindow, kEventWindowShown },
-            { kEventClassWindow, kEventWindowHidden }
-        };
-        
-    EventHandlerRef ref;
-    InstallWindowEventHandler ((WindowRef) hostWindowRef,
-                                NewEventHandlerUPP (windowVisibilityBodge),
-                                GetEventTypeCount (eventsToCatch), eventsToCatch,
-                                (void*) nsWindow, &ref);
-        
-}
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
@@ -529,7 +429,6 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
     [window addChildWindow:pluginWindow ordered:NSWindowAbove];
     [window orderFront: nil];
     
-    attachWindowHidingHooks(parent, window);
 
     NSRect frame = NSMakeRect(0,0,w,h);
 	DiscoView * view = _initView(this, frame);
