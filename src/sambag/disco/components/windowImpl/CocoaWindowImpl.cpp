@@ -42,9 +42,10 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
     
     //get real window bounds (in case of vst area location dosen't fit with the
     // window
-    Nb x=0, y=0, h=0, w=0;
+    /*Nb x=0, y=0, h=0, w=0;
     Impl::getBounds(x,y,w,h);
-    bounds = Rectangle(x,y,w,h);
+    bounds = Rectangle(x,y,w,h);*/
+    bounds = area;
 	visible = true;
     onCreated();
 }

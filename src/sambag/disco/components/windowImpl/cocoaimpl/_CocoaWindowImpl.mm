@@ -126,6 +126,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (NSPoint)flipPoint:(NSPoint)p {
 	NSRect frame = [self bounds];
 	p.y = frame.size.height - p.y;
+
 	return p;
 }
 - (NSPoint)getMouseLocation:(NSEvent *)theEvent {
@@ -217,7 +218,8 @@ void deallocSharedPtr(void *ptr) {
     [(NSObject*)ptr release];
 }
 void deallocCarbonWindowRef(void *ptr) {
-     
+    std::cout<<"-- DEALLOC WindowRef"<<std::endl;
+    DisposeWindow ((WindowRef)ptr);
 }
 RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
     [win retain];
@@ -367,7 +369,6 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 						  styleMask: options
 						  backing:NSBackingStoreBuffered
 						  defer:YES];
-    [window setBackgroundColor: [NSColor blueColor]];
 	this->windowPtr = createDiscoWindowPtr(window);
 	// set parent
 	if (parent) {
@@ -491,7 +492,8 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
      }
 }
 //-----------------------------------------------------------------------------
-void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) {
+void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) const
+{
     DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
 	NSRect frame = [window contentRectForFrameRect:[window frame]];
@@ -529,7 +531,6 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
         wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
-        ShowWindow (win);
     }
 }
 //-----------------------------------------------------------------------------
