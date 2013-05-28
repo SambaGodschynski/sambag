@@ -45,7 +45,7 @@ struct Listener {
 		called |= dev::MouseEvent::DISCO_MOUSE_DRAGGED;
 		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_DRAGGED);
 	}
-	void mouseWheelMoved(const dev::MouseEvent &ev) {
+	void mouseWheelRotated(const dev::MouseEvent &ev) {
 		called |= dev::MouseEvent::DISCO_MOUSE_WHEEL;
 		CPPUNIT_ASSERT_EQUAL(ev.getType(), dev::MouseEvent::DISCO_MOUSE_WHEEL);
 	}

@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace components { namespace events {
 //  Class MouseEventCreator
 //=============================================================================
 //-----------------------------------------------------------------------------
-void MouseEventCreator::fireEvent(const MouseEvent &ev) {
+void MouseEventCreator::fireEvent(MouseEvent &ev) {
 	EventSender<MouseEvent>::notifyListeners(this, ev);
 	root->processMouseEvent(ev);
 }
@@ -62,6 +62,14 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 		return;
 	}
 	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::DISCO_MOUSE_MOVED);
+	fireEvent(lastEvent);
+}
+//-------------------------------------------------------------------------
+void MouseEventCreator::
+createWheelEvent(const Coordinate &x, const Coordinate &y, int wheelRotation)
+{
+	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::DISCO_MOUSE_WHEEL);
+	lastEvent.updateWheelRotation(wheelRotation);
 	fireEvent(lastEvent);
 }
 }}}} // namespace(s)

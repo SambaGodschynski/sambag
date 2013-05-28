@@ -558,7 +558,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	//std::cout<<ev.toString()<<std::endl;
+	std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {
@@ -681,7 +681,6 @@ void initLogger() {
 	//using namespace boost::log;
 	//init_log_to_console();
 }
-
 int main() {
 
 	initLogger();
@@ -705,10 +704,10 @@ int main() {
 		win[0]->getContentPane()->EventSender<sdc::events::MouseEvent>::addEventListener(
 			&trackMouse
 		);
-
+		win[0]->getContentPane()->setMouseWheelEventsEnabled(true);
 		Button::Ptr btn = Button::create();
 		btn->setText("open ACME Panel");
-		btn->setTooltipText("open new ACME panel");
+		//btn->setTooltipText("open new ACME panel");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<ACME>);
 		btn->getFont().setFontFace("monospace");
 		win[0]->getContentPane()->add(btn);
@@ -756,8 +755,9 @@ int main() {
 		btn->setTooltipText("");
 		btn->getFont().setFontFace("monospace").setSize(50);
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onByeClicked);
+		btn->setMouseWheelEventsEnabled(true);
+
 		win[0]->getContentPane()->add(btn);
-	
 		win[0]->validate();
 		//win[0]->pack();
 		win[0]->open();

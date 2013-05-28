@@ -16,6 +16,7 @@ namespace sambag { namespace disco { namespace components { namespace events {
 MouseEvent::MouseEvent(const Point2D &p, int buttons, MouseEvent::Type type) :
 	p(p),
 	buttons(buttons),
+	wheelRotation(0),
 	type(type)
 {
 }
@@ -25,6 +26,7 @@ MouseEvent::MouseEvent(AComponentPtr source, const Point2D &p
 	source(source),
 	p(p),
 	buttons(buttons),
+	wheelRotation(0),
 	type(type)
 {
 	if (source)
@@ -41,6 +43,10 @@ const Point2D & MouseEvent::getLocationOnScreen() const {
 //-----------------------------------------------------------------------------
 int MouseEvent::getButtons() const {
 	return buttons;
+}
+//-----------------------------------------------------------------------------
+int MouseEvent::getWheelRotation() const {
+	return wheelRotation;
 }
 //-----------------------------------------------------------------------------
 AComponentPtr MouseEvent::getSource() const {
@@ -77,7 +83,7 @@ std::string MouseEvent::paramString() const {
 		ss<<"DISCO_MOUSE_RELEASED ";
 	if ((type & DISCO_MOUSE_WHEEL) == DISCO_MOUSE_WHEEL)
 		ss<<"DISCO_MOUSE_WHEEL ";
-	ss<<", "<<buttons;
+	ss<<", "<<buttons<<", "<<getWheelRotation();
 	return ss.str();
 }
 }}}} // namespace(s)

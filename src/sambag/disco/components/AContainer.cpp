@@ -13,6 +13,7 @@
 #include "RedrawManager.hpp"
 #include "ui/AComponentUI.hpp"
 #include "RootPane.hpp"
+#include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -623,7 +624,7 @@ void AContainer::validateTree() {
 void AContainer::trackMouseEnterEvents(AComponentPtr target,
 		const events::MouseEvent &ev)
 {
-	using namespace events;
+	using events::MouseEvent;
 	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
 	if (target == lastMouseTarget)
 		return;
@@ -650,10 +651,10 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 }
 //-----------------------------------------------------------------------------
 void AContainer::processMouseEvent(const events::MouseEvent &ev) {
-	using namespace events;
+	using events::MouseEvent;
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
 	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
-
+	std::cout<<getName()<<std::endl;
 	if (ev.getType() == MouseEvent::DISCO_MOUSE_DRAGGED) {
 		if(!lastMouseTarget)
 			return;
@@ -680,7 +681,6 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	}
 
 	trackMouseEnterEvents(target, ev);
-
 	if (!target || target == getPtr()) {
 		AComponent::processMouseEvent(ev);
 		return;

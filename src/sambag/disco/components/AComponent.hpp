@@ -121,6 +121,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_ICON;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_ENABLEDEVENTS;
+	//-------------------------------------------------------------------------
 	enum Flag {
 		IS_DOUBLE_BUFFERED = 0,
 		ANCESTOR_USING_BUFFER,
@@ -152,6 +154,11 @@ public:
 		FOCUS_TRAVERSAL_KEYS_BACKWARD_SET,
 		REVALIDATE_RUNNABLE_SCHEDULED
 	};// Flags
+	//-------------------------------------------------------------------------
+	enum EventsMask {
+		MouseEvents = 1 << 0,
+		MouseWheelEvents = 1 << 1
+	};
 protected:
 	//-------------------------------------------------------------------------
 	/**
@@ -269,6 +276,8 @@ private:
 	ISurface::Ptr icon;
 	//-------------------------------------------------------------------------
 	unsigned int flags;
+	//-------------------------------------------------------------------------
+	unsigned int enabledEvents;
 	//-------------------------------------------------------------------------
 	void setFlag(Flag aFlag, bool b);
 	//-------------------------------------------------------------------------
@@ -1258,6 +1267,18 @@ public:
 protected:
 	//-------------------------------------------------------------------------
 	static void computeVisibleRect(AComponent::Ptr, Rectangle &out);
+	//-------------------------------------------------------------------------
+	virtual void enableEvents(unsigned int eventMask);
+	//-------------------------------------------------------------------------
+	virtual void disableEvents(unsigned int eventMask);
+	//-------------------------------------------------------------------------
+	virtual int getEnabledEvents() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * forwards mouse event to ancestor. happens when mouseevent isn't enabled
+	 * on component.
+	 */
+	virtual void forwardToAncestor(const events::MouseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	virtual void scrollRectToVisible(const Rectangle &aRect);
@@ -1307,6 +1328,14 @@ public:
 	virtual void setComponentPopupMenu(PopupMenuPtr menu);
 	//-------------------------------------------------------------------------
 	virtual PopupMenuPtr getComponentPopupMenu() const;
+	//-------------------------------------------------------------------------
+	virtual void setMouseWheelEventsEnabled(bool b);
+	//-------------------------------------------------------------------------
+	virtual bool areMouseWheelEventsEnabled() const;
+	//-------------------------------------------------------------------------
+	virtual void setMouseEventsEnabled(bool b);
+	//-------------------------------------------------------------------------
+	virtual bool areMouseEventsEnabled() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

@@ -105,6 +105,12 @@ public:
 		mec->createMoveEvent(x,y);
 	}
 	//-------------------------------------------------------------------------
+	void handleMouseWheelEvent(int x, int y, int rot) {
+		if (!mec)
+			return;
+		mec->createWheelEvent(x,y,rot);
+	}
+	//-------------------------------------------------------------------------
 	void update() {
 		DrawPolicy::update();
 	}

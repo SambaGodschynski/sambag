@@ -6,7 +6,6 @@ SET ( SAMBAG_SOURCES
 	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
-	sambag/cpsqlite/sqlite3.c
 	sambag/disco/CairoDiscoFactory.cpp
 	sambag/disco/CairoDrawContext.cpp
 	sambag/disco/CairoPattern.cpp
@@ -76,6 +75,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/Window.cpp
 	sambag/disco/components/WindowToolkit.cpp
 	sambag/disco/components/events/ContainerEvent.cpp
+	sambag/disco/components/events/DiscoEvent.cpp
 	sambag/disco/components/events/HierarchyEvent.cpp
 	sambag/disco/components/events/ListDataEvent.cpp
 	sambag/disco/components/events/ListSelectionEvent.cpp
@@ -150,9 +150,9 @@ SET ( SAMBAG_SOURCES
 	sambag/xml/cpAtl/SimpleTagCreator.cpp
 )
 SET ( SAMBAG_MMSOURCES
+	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
-	sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm
 )
 IF(APPLE)
   set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")

@@ -524,6 +524,19 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		if (win)
 			win->handleMouseMotionEvent(x, y);
 		break;
+	case WM_MOUSEWHEEL :
+		if (!win) {
+			break;
+		}
+		x = GET_X_LPARAM(lParam); 
+		y = GET_Y_LPARAM(lParam);
+		RECT wRect;
+		GetClientRect(hWnd, &wRect);
+		x-=win->getBounds().x();
+		y-=win->getBounds().y();
+		int rot = GET_WHEEL_DELTA_WPARAM(wParam)/-120;
+		win->handleMouseWheelEvent(x, y, rot);
+		break;
 	}
 	hold.reset();
 	return DefWindowProc(hWnd, message, wParam, lParam);

@@ -36,7 +36,7 @@ protected:
 	//-------------------------------------------------------------------------
 	MouseEventCreator(RootPanePtr root) : root(root) {}
 	//-------------------------------------------------------------------------
-	void fireEvent(const MouseEvent &ev);
+	void fireEvent(MouseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create(RootPanePtr root) {
@@ -54,6 +54,9 @@ public:
 	//-------------------------------------------------------------------------
 	void
 	createMoveEvent(const Coordinate &x, const Coordinate &y);
+	//-------------------------------------------------------------------------
+	void 
+	createWheelEvent(const Coordinate &x, const Coordinate &y, int wheelRotation);
 }; // MouseEventCreator
 }}}} // namespace(s)
 

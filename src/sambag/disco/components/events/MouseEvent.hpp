@@ -11,13 +11,14 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/Geometry.hpp>
+#include "DiscoEvent.hpp"
 namespace sambag { namespace disco { namespace components { namespace events {
 
 //=============================================================================
 /** 
   * @class MouseEvent.
   */
-class MouseEvent {
+class MouseEvent : public DiscoEvent {
 friend class MouseEventCreator;
 //=============================================================================
 public:
@@ -53,6 +54,8 @@ private:
 	//-------------------------------------------------------------------------
 	int buttons;
 	//-------------------------------------------------------------------------
+	int wheelRotation;
+	//-------------------------------------------------------------------------
 	Type type;
 public:
 	//-------------------------------------------------------------------------
@@ -70,6 +73,12 @@ public:
 	//-------------------------------------------------------------------------
 	int getButtons() const;
 	//-------------------------------------------------------------------------
+	/**
+	 * negative values if the mouse wheel was rotated up/away from the user, 
+	 * and positive values if the mouse wheel was rotated down/ towards the user
+	 */
+	int getWheelRotation() const;
+	//-------------------------------------------------------------------------
 	AComponentPtr getSource() const;
 	//-------------------------------------------------------------------------
 	virtual std::string paramString() const;
@@ -82,7 +91,7 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	MouseEvent & updateSoure(AComponentPtr _new) {
+	MouseEvent & updateSource(AComponentPtr _new) {
 		source = _new;
 		return *this;
 	}
@@ -94,6 +103,11 @@ public:
 	//-------------------------------------------------------------------------
 	MouseEvent & updateButtons(int _new) {
 		buttons = _new;
+		return *this;
+	}
+	//-------------------------------------------------------------------------
+	MouseEvent & updateWheelRotation(int _new) {
+		wheelRotation = _new;
 		return *this;
 	}
 };
@@ -150,7 +164,7 @@ template <class L>
 void wheel(const MouseEvent &ev, L &l, Int2Type<0> d){}
 template <class L>
 void wheel(const MouseEvent &ev, L &l, Int2Type<Me::DISCO_MOUSE_WHEEL> d) {
-	l.mouseWheelMoved(ev);
+	l.mouseWheelRotated(ev);
 }
 } // namespace
 //=============================================================================

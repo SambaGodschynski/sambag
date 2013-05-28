@@ -73,11 +73,15 @@ const float AComponent::RIGHT_ALIGNMENT = 1.0f;
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_ICON = "icon";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_ENABLEDEVENTS = "enabled events";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() : flags(0), 
+	enabledEvents(0), 
 	xalignment(CENTER_ALIGNMENT), 
 	yalignment(CENTER_ALIGNMENT)
 {
 	setInheritsPopupMenu(true);
+	setMouseEventsEnabled(true);
 }
 //-----------------------------------------------------------------------------
 AComponent::~AComponent() {
@@ -923,12 +927,32 @@ void AComponent::putClientPropertyImpl(const std::string &key,
 	firePropertyChanged(PROPERTY_CLIENTPROPERTY, old, value);
 }
 //-----------------------------------------------------------------------------
+void AComponent::forwardToAncestor(const events::MouseEvent &ev) {
+	AContainer::Ptr parent = getParent();
+	if (!parent) {
+		return;
+	}
+	events::MouseEvent nev = ev;
+	Point2D p = nev.getLocation();
+	boost::geometry::add_point(p, getLocation());
+	nev.updateLocation(p);
+	nev.updateSource(parent);
+	parent->AComponent::processMouseEvent( nev );
+}
+//-----------------------------------------------------------------------------
 void AComponent::processMouseEvent(const events::MouseEvent &ev) {
-	using namespace events;
+	using events::MouseEvent;
+	if ((ev.getType()==MouseEvent::DISCO_MOUSE_WHEEL&&!areMouseWheelEventsEnabled())
+		 ||!areMouseEventsEnabled())
+	{
+		forwardToAncestor(ev);
+		return;
+	}
 	EventSender<MouseEvent>::notifyListeners(
 		this,
 		ev
 	);
+	ev.consume();
 }
 //-----------------------------------------------------------------------------
 RootPanePtr AComponent::getTopLevelRootPane() const {
@@ -1201,5 +1225,45 @@ void AComponent::setIcon(ISurface::Ptr icon) {
 //-----------------------------------------------------------------------------
 bool AComponent::isFontSet() const {
 	return getFlag(FONT_SET);
+}
+//-----------------------------------------------------------------------------
+void AComponent::enableEvents(unsigned int eventMask) {
+	unsigned int old = enabledEvents;
+	enabledEvents |= eventMask;
+	firePropertyChanged(PROPERTY_ENABLEDEVENTS, old, enabledEvents);
+}
+//-----------------------------------------------------------------------------
+void AComponent::disableEvents(unsigned int eventMask) {
+	unsigned int old = enabledEvents;
+	enabledEvents &= ~eventMask;
+	firePropertyChanged(PROPERTY_ENABLEDEVENTS, old, enabledEvents);
+}
+//-----------------------------------------------------------------------------
+int AComponent::getEnabledEvents() const {
+	return enabledEvents;
+}
+//-----------------------------------------------------------------------------
+void AComponent::setMouseWheelEventsEnabled(bool b) {
+	if (b) {
+		enableEvents(getEnabledEvents() | MouseWheelEvents);
+	} else {
+		disableEvents(getEnabledEvents() | MouseWheelEvents);
+	}
+}
+//-----------------------------------------------------------------------------
+bool AComponent::areMouseWheelEventsEnabled() const {
+	return (getEnabledEvents() & MouseWheelEvents) == MouseWheelEvents;
+}
+//-----------------------------------------------------------------------------
+void AComponent::setMouseEventsEnabled(bool b) {
+	if (b) {
+		enableEvents(getEnabledEvents() | MouseEvents);
+	} else {
+		disableEvents(getEnabledEvents() | MouseEvents);
+	}
+}
+//-----------------------------------------------------------------------------
+bool AComponent::areMouseEventsEnabled() const {
+	return (getEnabledEvents() & MouseEvents) == MouseEvents;
 }
 }}} // namespace(s)
