@@ -93,6 +93,11 @@ void BasicScrollPaneUI::installUI(AComponentPtr c) {
 			self
 		);
 	}
+	scrollpane->EventSender<events::MouseEvent>::addTrackedEventListener(
+		boost::bind(&BasicScrollPaneUI::onMouse, this, _1, _2),
+		self
+	);
+	scrollpane->setMouseWheelEventsEnabled(true);
 }
 //-----------------------------------------------------------------------------
 void BasicScrollPaneUI::vsbStateChanged(void *src,
@@ -121,5 +126,23 @@ void BasicScrollPaneUI::viewportStateChanged(void *src,
 {
 	syncScrollPaneWithViewport();
 }
-
+//-----------------------------------------------------------------------------
+void BasicScrollPaneUI::onMouse(void *, const events::MouseEvent &ev) {
+	enum { Filter = events::MouseEvent::DISCO_MOUSE_WHEEL }; 
+	events::MouseEventSwitch<Filter>::delegate(ev, *this);
+}
+//-----------------------------------------------------------------------------
+void BasicScrollPaneUI::mouseWheelRotated(const events::MouseEvent &ev) {
+	ScrollPane::Ptr scrollpane = _scrollpane.lock();
+	SAMBAG_ASSERT(scrollpane);
+	if (!scrollpane) {
+		return;
+	}
+	ScrollPane::AScrollbarPtr sb = scrollpane->getVerticalScrollBar();
+	if (!sb) {
+		return;
+	}
+	Coordinate c = sb->getBlockIncrement() * ev.getWheelRotation();
+	sb->setValue( sb->getValue() + c );
+}
 }}}}} // namespace(s)

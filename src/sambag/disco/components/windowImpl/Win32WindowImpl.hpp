@@ -120,7 +120,7 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void handleMouseMotionEvent(int x, int y) = 0;
 	//-------------------------------------------------------------------------
-	virtual void handleMouseWheelEvent(int x, int y,  int rot) = 0;
+	virtual void handleMouseWheelEvent(int x, int y,  float rot) = 0;
 	//-------------------------------------------------------------------------
 	virtual void onCreated() = 0;
 	//-------------------------------------------------------------------------

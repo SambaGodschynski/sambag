@@ -303,13 +303,18 @@ private:
 		void mouseExited(const events::MouseEvent &ev);
 		void mouseDragged(const events::MouseEvent &ev);
 		void mouseMoved(const events::MouseEvent &ev);
+		void mouseWheelRotated(const events::MouseEvent &ev);
 		void setValueFrom(const events::MouseEvent &ev);
 		void startScrollTimerIfNecessary();
 		Coordinate adjustValueIfNecessary(const Coordinate &scrollBarValue);
 		typedef events::MouseEvent Ev;
 		enum {
-			Filter = Ev::DISCO_MOUSE_PRESSED | Ev::DISCO_MOUSE_RELEASED |
-				Ev::DISCO_MOUSE_EXITED | Ev::DISCO_MOUSE_DRAGGED | Ev::DISCO_MOUSE_MOVED
+			Filter = Ev::DISCO_MOUSE_PRESSED | 
+					Ev::DISCO_MOUSE_RELEASED |
+					Ev::DISCO_MOUSE_EXITED | 
+					Ev::DISCO_MOUSE_DRAGGED | 
+					Ev::DISCO_MOUSE_MOVED |
+					Ev::DISCO_MOUSE_WHEEL
 		};
 	};
 	//-------------------------------------------------------------------------
@@ -461,6 +466,7 @@ void BasicScrollbarUI<M>::installListeners() {
 			boost::bind(&BasicScrollbarUI<M>::onTrack, this, _1, _2),
 			self
 		);
+		scrollbar->setMouseWheelEventsEnabled(true);
 	}
 	//scrollListener = createScrollListener();
 	scrollTimer = Timer::create(scrollSpeedThrottle);
@@ -1102,6 +1108,14 @@ TrackListener::mouseMoved(const events::MouseEvent &ev) {
 	if (!parent.isDragging) {
 		parent.updateThumbState(ev.getLocation());
 	}
+}
+//-----------------------------------------------------------------------------
+template <class M>
+void BasicScrollbarUI<M>::
+TrackListener::mouseWheelRotated(const events::MouseEvent &ev) {
+	ScrollBarType::Direction dir = 
+		ev.getWheelRotation() > 0.f ? ScrollBarType::INCR : ScrollBarType::DECR;
+	parent.scrollByBlock(dir);
 }
 //-----------------------------------------------------------------------------
 template <class M>

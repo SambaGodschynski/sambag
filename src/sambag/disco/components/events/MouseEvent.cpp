@@ -16,7 +16,7 @@ namespace sambag { namespace disco { namespace components { namespace events {
 MouseEvent::MouseEvent(const Point2D &p, int buttons, MouseEvent::Type type) :
 	p(p),
 	buttons(buttons),
-	wheelRotation(0),
+	wheelRotation(0.f),
 	type(type)
 {
 }
@@ -45,7 +45,7 @@ int MouseEvent::getButtons() const {
 	return buttons;
 }
 //-----------------------------------------------------------------------------
-int MouseEvent::getWheelRotation() const {
+float MouseEvent::getWheelRotation() const {
 	return wheelRotation;
 }
 //-----------------------------------------------------------------------------

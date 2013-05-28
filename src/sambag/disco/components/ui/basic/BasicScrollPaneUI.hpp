@@ -13,6 +13,7 @@
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Viewport.hpp>
 #include <sambag/disco/components/Forward.hpp>
+#include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -73,6 +74,10 @@ public:
 	//-------------------------------------------------------------------------
 	void viewportStateChanged(void *src,
 			const Viewport::StateChangedEvent &ev);
+	//-------------------------------------------------------------------------
+	void onMouse(void *, const events::MouseEvent &ev);
+	//-------------------------------------------------------------------------
+	void mouseWheelRotated(const events::MouseEvent &ev);
 }; // BasicScrollPaneUI
 }}}}} // namespace(s)
 #endif /* SAMBAG_BASICSCROLLPANEUI_H */

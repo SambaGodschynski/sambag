@@ -105,7 +105,7 @@ public:
 		mec->createMoveEvent(x,y);
 	}
 	//-------------------------------------------------------------------------
-	void handleMouseWheelEvent(int x, int y, int rot) {
+	void handleMouseWheelEvent(int x, int y, float rot) {
 		if (!mec)
 			return;
 		mec->createWheelEvent(x,y,rot);

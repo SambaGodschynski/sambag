@@ -632,7 +632,7 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 //		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
 //				ev.getButtons(), MouseEvent::DISCO_MOUSE_EXITED);
 		MouseEvent nev = ev;
-		nev.updateSoure(getPtr()).updateType(MouseEvent::DISCO_MOUSE_EXITED);
+		nev.updateSource(getPtr()).updateType(MouseEvent::DISCO_MOUSE_EXITED);
 		retargetMouseEvent(lastMouseTarget, nev);
 		lastMouseTarget->EventSender<MouseEvent>::notifyListeners(
 				lastMouseTarget.get(),
@@ -643,7 +643,7 @@ void AContainer::trackMouseEnterEvents(AComponentPtr target,
 //		MouseEvent nev = MouseEvent(getPtr(), ev.getLocation(),
 //				ev.getButtons(), MouseEvent::DISCO_MOUSE_ENTERED);
 		MouseEvent nev = ev;
-		nev.updateSoure(getPtr()).updateType(MouseEvent::DISCO_MOUSE_ENTERED);
+		nev.updateSource(getPtr()).updateType(MouseEvent::DISCO_MOUSE_ENTERED);
 		retargetMouseEvent(target, nev);
 		 target->EventSender<MouseEvent>::notifyListeners(target.get(), nev);
 	}
@@ -654,7 +654,6 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	using events::MouseEvent;
 	AComponent::Ptr target = findComponentAt(ev.getLocation());
 	AComponentPtr lastMouseTarget = _lastMouseTarget.lock();
-	std::cout<<getName()<<std::endl;
 	if (ev.getType() == MouseEvent::DISCO_MOUSE_DRAGGED) {
 		if(!lastMouseTarget)
 			return;
@@ -687,7 +686,7 @@ void AContainer::processMouseEvent(const events::MouseEvent &ev) {
 	}
 	// MouseEvent nev = MouseEvent(getPtr(), ev);
 	MouseEvent nev = ev;
-	nev.updateSoure(getPtr());
+	nev.updateSource(getPtr());
 	retargetMouseEvent(target, nev);
 	target->processMouseEvent(nev);
 }
@@ -702,7 +701,7 @@ void AContainer::retargetMouseEvent(AComponentPtr c, events::MouseEvent &ev)
 		boost::geometry::subtract_point(p, component->getLocation());
 	}
 	//ev = MouseEvent(c, p, ev.getButtons(), ev.getType());
-	ev.updateSoure(c).updateLocation(p);
+	ev.updateSource(c).updateLocation(p);
 }
 //-----------------------------------------------------------------------------
 std::string AContainer::parameterString() const {

@@ -66,7 +66,7 @@ MouseEventCreator::createMoveEvent(const Coordinate &x,
 }
 //-------------------------------------------------------------------------
 void MouseEventCreator::
-createWheelEvent(const Coordinate &x, const Coordinate &y, int wheelRotation)
+createWheelEvent(const Coordinate &x, const Coordinate &y, float wheelRotation)
 {
 	lastEvent = MouseEvent(root, Point2D(x, y), 0, MouseEvent::DISCO_MOUSE_WHEEL);
 	lastEvent.updateWheelRotation(wheelRotation);

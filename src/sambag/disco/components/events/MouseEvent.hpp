@@ -54,7 +54,7 @@ private:
 	//-------------------------------------------------------------------------
 	int buttons;
 	//-------------------------------------------------------------------------
-	int wheelRotation;
+	float wheelRotation;
 	//-------------------------------------------------------------------------
 	Type type;
 public:
@@ -77,7 +77,7 @@ public:
 	 * negative values if the mouse wheel was rotated up/away from the user, 
 	 * and positive values if the mouse wheel was rotated down/ towards the user
 	 */
-	int getWheelRotation() const;
+	float getWheelRotation() const;
 	//-------------------------------------------------------------------------
 	AComponentPtr getSource() const;
 	//-------------------------------------------------------------------------
@@ -106,7 +106,7 @@ public:
 		return *this;
 	}
 	//-------------------------------------------------------------------------
-	MouseEvent & updateWheelRotation(int _new) {
+	MouseEvent & updateWheelRotation(float _new) {
 		wheelRotation = _new;
 		return *this;
 	}

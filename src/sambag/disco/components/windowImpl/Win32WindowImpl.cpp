@@ -528,14 +528,12 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		if (!win) {
 			break;
 		}
-		x = GET_X_LPARAM(lParam); 
-		y = GET_Y_LPARAM(lParam);
-		RECT wRect;
-		GetClientRect(hWnd, &wRect);
-		x-=win->getBounds().x();
-		y-=win->getBounds().y();
-		int rot = GET_WHEEL_DELTA_WPARAM(wParam)/-120;
-		win->handleMouseWheelEvent(x, y, rot);
+		POINT p;
+		p.x = GET_X_LPARAM(lParam); 
+		p.y = GET_Y_LPARAM(lParam);
+		ScreenToClient(hWnd, &p);
+		float rot = GET_WHEEL_DELTA_WPARAM(wParam)/-120.f;
+		win->handleMouseWheelEvent(p.x, p.y, rot);
 		break;
 	}
 	hold.reset();

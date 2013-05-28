@@ -56,7 +56,7 @@ public:
 	createMoveEvent(const Coordinate &x, const Coordinate &y);
 	//-------------------------------------------------------------------------
 	void 
-	createWheelEvent(const Coordinate &x, const Coordinate &y, int wheelRotation);
+	createWheelEvent(const Coordinate &x, const Coordinate &y, float wheelRotation);
 }; // MouseEventCreator
 }}}} // namespace(s)
 
