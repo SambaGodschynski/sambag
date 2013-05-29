@@ -119,6 +119,8 @@ public:
 	//-------------------------------------------------------------------------
 	void mouseDragged(const sdce::MouseEvent &ev);
 	//-------------------------------------------------------------------------
+	void mouseWheelRotated(const sdce::MouseEvent &ev);
+	//-------------------------------------------------------------------------
 	void installDefaults(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	void installListeners(AComponentPtr c);
@@ -190,13 +192,15 @@ template <class M>
 void BasicKnobUI<M>::onMouse(void *src, const sdce::MouseEvent &ev) {
 	enum { Filter = 
 		sdce::MouseEvent::DISCO_MOUSE_PRESSED |
-		sdce::MouseEvent::DISCO_MOUSE_DRAGGED
+		sdce::MouseEvent::DISCO_MOUSE_DRAGGED |
+		sdce::MouseEvent::DISCO_MOUSE_WHEEL
 	};
 	sdce::MouseEventSwitch<Filter>::delegate(ev, *this);
 }
 namespace {
 	SAMBAG_PROPERTY_TAG(RangePropertyTag, "Knob.range");
 	SAMBAG_PROPERTY_TAG(ModePropertyTag, "Knob.mode");
+	SAMBAG_PROPERTY_TAG(WheelPropertyTag, "Knob.wheelIncrement");
 } // namespace
 //-----------------------------------------------------------------------------
 template <class M>
@@ -260,6 +264,15 @@ void BasicKnobUI<M>::mouseDragged(const sdce::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 template <class M>
+void BasicKnobUI<M>::mouseWheelRotated(const sdce::MouseEvent &ev) {
+	double incr = getUIPropertyCached<WheelPropertyTag>((double)0.1);
+	if (ev.getWheelRotation() > 0) {
+		incr*=-1.;
+	}
+	getKnob()->setValue( getKnob()->getValue() + incr );
+}
+//-----------------------------------------------------------------------------
+template <class M>
 void BasicKnobUI<M>::installDefaults(AComponentPtr c) {
 	UIManager &m = getUIManager();
 	Dimension size(25., 25.);
@@ -286,6 +299,7 @@ void BasicKnobUI<M>::installListeners(AComponentPtr c) {
 		boost::bind(&Class::onKnobStateChanged, this, _1, _2),
 		getPtr()
 	);
+	c->setMouseWheelEventsEnabled(true);
 }
 //-----------------------------------------------------------------------------
 template <class M>

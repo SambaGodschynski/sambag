@@ -519,10 +519,15 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 			win->handleMouseButtonReleaseEvent(x, y, 4);
 		break;
 	case WM_MOUSEMOVE :
+		if (!win) {
+			break;
+		}
 		x = GET_X_LPARAM(lParam); 
 		y = GET_Y_LPARAM(lParam);
-		if (win)
-			win->handleMouseMotionEvent(x, y);
+		win->handleMouseMotionEvent(x, y);
+		if (win->getFlag(WindowFlags::WND_NESTED)) {
+			SetFocus(hWnd);
+		}
 		break;
 	case WM_MOUSEWHEEL :
 		if (!win) {
