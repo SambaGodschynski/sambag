@@ -113,6 +113,7 @@ typename ComponentWrapper<Drawable>::Ptr ComponentWrapper<Drawable>::create()
 	Ptr res( new Class() );
 	res->self = res;
 	res->postConstructor();
+	res->setName("Unnamed ComponentWrapper");
 	return res;
 }
 //-----------------------------------------------------------------------------

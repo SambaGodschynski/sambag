@@ -66,6 +66,11 @@ public:
 	// will be setted by client wrapper.
 	void setHost(IHost *_host) { host = _host; }
 	IHost * getHost() const { return host; }
+	template <class String> 
+	void getVendor(String &outStr) const {}
+	template <class String> 
+	void getProductName(String &outStr) const {} 
+	int getProductVersion() const { return 0; }
 protected:
 	IHost *host;
 };

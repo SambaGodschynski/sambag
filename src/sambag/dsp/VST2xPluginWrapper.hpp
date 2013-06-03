@@ -28,6 +28,8 @@ namespace {
 #include "VstMidiEventAdapter.hpp"
 #include "DspPlugin.hpp"
 #include <loki/Typelist.h>
+#include <algorithm>
+
 namespace sambag { namespace dsp { namespace vst {
 //=============================================================================
 struct StdConstructPlolicy {
@@ -121,19 +123,19 @@ public:
 	void getParameterLabel(VstInt32 index, char * outLabel) {
 		typename PluginTraits::StringType label;
 		PluginProcessor::getParameterLabel(index, label);
-		vst_strncpy ( outLabel , label.c_str(), label.length() );
+		vst_strncpy ( outLabel , label.c_str(), std::min((size_t)8, label.length()) );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterDisplay(VstInt32 index, char * outDisplay) {
 		typename PluginTraits::StringType display;
 		PluginProcessor::getParameterDisplay(index, display);
-		vst_strncpy ( outDisplay , display.c_str(), display.length() );
+		vst_strncpy ( outDisplay , display.c_str(), std::min((size_t)24, display.length()) );
 	}
 	//-------------------------------------------------------------------------
 	void getParameterName(VstInt32 index, char * outName) {
 		typename PluginTraits::StringType name;
 		PluginProcessor::getParameterName(index, name);
-		vst_strncpy ( outName , name.c_str(), name.length() );
+		vst_strncpy ( outName , name.c_str(), std::min((size_t)16, name.length()) );
 	}
 	//-------------------------------------------------------------------------
 	VST2xPluginWrapper(audioMasterCallback audioMaster) : 
@@ -234,6 +236,24 @@ public:
 		IEditor * res = dynamic_cast<IEditor*>(editor);
 		return res;
 	}
+	//-------------------------------------------------------------------------
+	virtual bool getVendorString (char* text) { 
+		typename PluginTraits::StringType name;
+		PluginProcessor::getVendor(name);
+		vst_strncpy ( text , name.c_str(), std::min((size_t)64, name.length()) );
+		return true; 
+	}
+	//-------------------------------------------------------------------------
+	virtual bool getProductString (char* text) { 
+		typename PluginTraits::StringType name;
+		PluginProcessor::getProductName(name);
+		vst_strncpy ( text , name.c_str(), std::min((size_t)64, name.length()) );
+		return true; 
+	}
+	//-------------------------------------------------------------------------
+	virtual VstInt32 getVendorVersion () { 
+		return PluginProcessor::getProductVersion(); 
+	}	
 };
 //#############################################################################
 //	Impl.:
