@@ -36,7 +36,7 @@ protected:
 	//-------------------------------------------------------------------------
 	MouseEventCreator(RootPanePtr root) : root(root) {}
 	//-------------------------------------------------------------------------
-	void fireEvent(MouseEvent &ev);
+	void fireEvent(const MouseEvent &ev);
 public:
 	//-------------------------------------------------------------------------
 	static Ptr create(RootPanePtr root) {

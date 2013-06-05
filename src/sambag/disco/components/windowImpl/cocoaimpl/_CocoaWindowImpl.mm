@@ -103,6 +103,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (void)rightMouseUp:(NSEvent *)theEvent;
 - (void)mouseMoved:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
+- (void)scrollWheel:(NSEvent *)theEvent;
 - (void)rightMouseDragged:(NSEvent *)theEvent;
 - (BOOL)acceptsFirstResponder;
 - (void)drawRect:(NSRect)rect;
@@ -198,6 +199,11 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 -(void)dealloc {
     std::cout<<"-- DEALLOC VIEW"<<std::endl;
     [super dealloc];
+}
+- (void)scrollWheel:(NSEvent *)theEvent {
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
+    
 }
 @end
 
@@ -317,7 +323,7 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 	}
 	
 	if ( getFlag(WND_NO_SYSTEM_MENU) ) {
-		options &= NSClosableWindowMask;
+		options &= ~NSClosableWindowMask;
 		options &= ~NSMiniaturizableWindowMask;
 	}
 	return options;
@@ -401,6 +407,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
     if (!getFlag(WindowFlags::WND_RAW)) {
         __onCreated();
     }
+    [window display];
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openNested(WindowRef parent,
@@ -495,9 +502,7 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
 void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) const
 {
     DiscoWindow *window = getDiscoWindow(*this);
-	DiscoView *view = getDiscoView(*this);
-	NSRect frame = [window contentRectForFrameRect:[window frame]];
-	[view setFrameSize: frame.size];
+    NSRect frame = [window contentRectForFrameRect:[window frame]];
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
     frame.origin.y = sh - frame.origin.y - frame.size.height;
@@ -520,7 +525,6 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
 				  frame.origin.y, 
 				  frame.size.width, 
 				  frame.size.height);
-    
     
     if (carbonWindowRef && view) {
         NSRect f = getBoundsOnScreen(view);
@@ -554,6 +558,10 @@ void _CocoaWindowImpl::onClose() {
     __windowWillCose();
     this->windowPtr.reset();
     this->viewPtr.reset();
+    if (getFlag(WindowFlags::EXIT_ON_CLOSE))
+    {
+        _CocoaToolkitImpl::quit();
+    }
 }
 //=============================================================================
 // class _CocoaToolkitImpl 
@@ -576,13 +584,20 @@ void _CocoaToolkitImpl::getScreenDimension(Number &outWidth, Number &outHeight)
     unsigned screenCount = [screenArray count];
     unsigned index  = 0;
 	
+    NSScreen *screen = [screenArray objectAtIndex: index];
+    screenRect = [screen visibleFrame];
+    outWidth=screenRect.size.width;
+    outHeight=screenRect.size.height;
+    index++;
     for (; index < screenCount; index++)
     {
-        NSScreen *screen = [screenArray objectAtIndex: index];
-        screenRect = [screen visibleFrame];
+        screen = [screenArray objectAtIndex: index];
 		outWidth+=screenRect.size.width;
-		outHeight+=screenRect.size.height;
     }
+}
+//-----------------------------------------------------------------------------
+void _CocoaToolkitImpl::quit() {
+    [NSApp terminate:nil];
 }
 }}} //namespace(s)
 

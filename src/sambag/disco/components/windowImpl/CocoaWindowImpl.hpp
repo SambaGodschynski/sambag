@@ -70,6 +70,8 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void handleMouseMotionEvent(int x, int y) = 0;
 	//-------------------------------------------------------------------------
+	virtual void handleMouseWheelEvent(int x, int y, float wheelRotation) = 0;
+	//-------------------------------------------------------------------------
 	virtual void onCreated() = 0;
 	//-------------------------------------------------------------------------
 	virtual void onDestroy() = 0;
@@ -120,6 +122,8 @@ public:
 	virtual void __handleMouseButtonReleaseEvent(Nb x, Nb y, Nb buttons);
 	//-------------------------------------------------------------------------
 	virtual void __handleMouseMotionEvent(Nb x, Nb y);
+    //-------------------------------------------------------------------------
+    virtual void __handleMouseWheelEvent(Nb x, Nb y, Nb wheelRotation);
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose();
     //-------------------------------------------------------------------------

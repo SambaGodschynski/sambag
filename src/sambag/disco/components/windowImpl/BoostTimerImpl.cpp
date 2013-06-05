@@ -135,7 +135,6 @@ void TimerThread::startTimer() {
 		boost::asio::placeholders::error,
 		t)
 	);
-	tm->__setRunningByToolkit_(true);
 	timerIsRunning = true;
 	if (!threadIsRunning)
 		startThread();
@@ -240,13 +239,10 @@ void BoostTimerImpl::startTimer(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::stopTimer(Timer::Ptr tm) {
-	if (!tm->isRunning())
-		return;
 	ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
 	if (it==toInvoke.right.end()) // timerImpl not found
 			return;
 	BoostTimer *timerImpl = it->second;
-	tm->__setRunningByToolkit_(false);
 	timerImpl->cancel();
 }
 //-----------------------------------------------------------------------------
@@ -265,7 +261,6 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 			!mainThreadRunning ||
 			!tm->isRunning()) // stop forced
 		{
-				tm->__setRunningByToolkit_(false);
 			SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
 				toInvoke.left.erase(it);
 				delete timerImpl;

@@ -39,12 +39,6 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	}
 	Impl::openNested(win, area.x(), area.y(), area.width(), area.height());
-    
-    //get real window bounds (in case of vst area location dosen't fit with the
-    // window
-    /*Nb x=0, y=0, h=0, w=0;
-    Impl::getBounds(x,y,w,h);
-    bounds = Rectangle(x,y,w,h);*/
     bounds = area;
 	visible = true;
     onCreated();
@@ -116,7 +110,13 @@ bool CocoaWindowImpl::isVisible() const {
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getHostBounds() const {
-	return bounds;
+    //get real window bounds (in case of vst area location dosen't fit with the
+    // window
+    Nb x=0, y=0, h=0, w=0;
+    Impl::getBounds(x,y,w,h);
+    Rectangle _bounds = Rectangle(x,y,w,h);
+
+    return _bounds;
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getBounds() const {
@@ -173,7 +173,12 @@ void CocoaWindowImpl::__handleMouseMotionEvent(Nb x, Nb y) {
 	handleMouseMotionEvent(x,y);
 }
 //-----------------------------------------------------------------------------
+void CocoaWindowImpl::__handleMouseWheelEvent(Nb x, Nb y, Nb wheelRotation) {
+    handleMouseWheelEvent(x,y,wheelRotation);
+}
+//-----------------------------------------------------------------------------
 void CocoaWindowImpl::__windowWillCose() {
+    visible = false;
     onDestroy();
 }
 

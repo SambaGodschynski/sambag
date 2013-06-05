@@ -117,7 +117,7 @@ public:
 };
 //=============================================================================
 template <class T>
-struct ScrollUpdater {
+struct ScrollUpdater : BasicUpdater<T> {
 //=============================================================================
 	Viewport::Ptr vp;
 	void setViewport(Viewport::Ptr vp) {

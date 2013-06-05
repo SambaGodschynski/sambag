@@ -58,7 +58,6 @@ VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 	if (tm->getNumRepetitions() != -1 &&
 		numCalled > tm->getNumRepetitions()) 
 	{
-		tm->__setRunningByToolkit_(false);
 		KillTimer(hwnd, idEvent);
 		timers.left.erase(it);
 		return;
@@ -77,7 +76,6 @@ void Win32TimerImpl::closeAllTimer() {
 	Timers::right_map::iterator it = timers.right.begin();
 	while(it != timers.right.end()) {
 		Timer::Ptr tm = it->first;
-		tm->__setRunningByToolkit_(false);
 		UINT_PTR idEvent = it->second;
 		KillTimer(NULL, idEvent);
 		// remove timermap entry and incr. it
@@ -87,7 +85,6 @@ void Win32TimerImpl::closeAllTimer() {
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
-	tm->__setRunningByToolkit_(true);
 	UINT_PTR timerId = 0;
 	Timers::right_map::iterator it = timers.right.find(tm);
 	if (it==timers.right.end()) {
@@ -112,7 +109,6 @@ void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimerImpl(Timer::Ptr tm) {
-	tm->__setRunningByToolkit_(false);
 	Timers::right_map::iterator it = timers.right.find(tm);
 	if (it == timers.right.end())
 		return;

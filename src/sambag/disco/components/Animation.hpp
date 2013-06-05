@@ -15,6 +15,12 @@
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
+template <class T>
+struct BasicUpdater {
+    void update(const T &val) {}
+	void finished(const T &val) {}
+};
+//=============================================================================
 /** 
   * @class Animation.
   *
@@ -142,8 +148,13 @@ template < class T,
 	template <class> class UP
 >
 void Animation<T,TW,UP>::stop() {
-	clock.stop();
+    // stop timer
 	Super::stop();
+	// reset clock
+    clock.stop();
+    clock.start();
+    clock.stop();
+    UpdatePolicy::finished(current);
 }
 //-----------------------------------------------------------------------------
 template < class T,
@@ -155,6 +166,7 @@ void Animation<T,TW,UP>::update(void *, const TimerEvent &ev) {
 	if (t>=duration) {
 		stop();
 		current = endValue;
+        UpdatePolicy::finished(current);
 	} else {
 		current = TweenPolicy::calc(startValue, duration, c, t);
 	}

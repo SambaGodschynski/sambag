@@ -59,12 +59,6 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * to be called by concrete TimerImpl only.
-	 * @param r
-	 */
-	void __setRunningByToolkit_(bool r);
-	//-------------------------------------------------------------------------
-	/**
-	 * to be called by concrete TimerImpl only.
 	 */
 	int & __getNumCalled_() {
 		return numCalled;

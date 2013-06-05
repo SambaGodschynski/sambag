@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace components { namespace events {
 //  Class MouseEventCreator
 //=============================================================================
 //-----------------------------------------------------------------------------
-void MouseEventCreator::fireEvent(MouseEvent &ev) {
+void MouseEventCreator::fireEvent(const MouseEvent &ev) {
 	EventSender<MouseEvent>::notifyListeners(this, ev);
 	root->processMouseEvent(ev);
 }

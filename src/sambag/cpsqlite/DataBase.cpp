@@ -106,6 +106,7 @@ DataBase::Executer::Executer ( DataBase *parent ) : db(parent) {
 	try {
 		// setup db
 		execute("PRAGMA foreign_keys=ON;");
+        execute("PRAGMA synchronous = 1");
 	} catch ( DataBaseQueryFailed ex ) {
 		sqlite3_close(sqlite);
 		throw DataBaseConnectionFailed();

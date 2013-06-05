@@ -70,6 +70,7 @@ void CocoaWindowToolkit::mainLoop() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::quit() {
+    _CocoaToolkitImpl::quit();
 }
 namespace {
 	/*

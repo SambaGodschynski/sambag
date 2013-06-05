@@ -58,7 +58,6 @@ void Win32MMTimerImpl::closeAllTimer() {
 	Timers::right_map::iterator it = timers.right.begin();
 	while(it != timers.right.end()) {
 		Timer::Ptr tm = it->first;
-		tm->__setRunningByToolkit_(false);
 		MMRESULT idEvent = it->second;
 		timeKillEvent(idEvent);
 		// remove timermap entry and incr. it
@@ -84,7 +83,6 @@ void Win32MMTimerImpl::tearDownTimer() {
 }
 //-----------------------------------------------------------------------------
 void Win32MMTimerImpl::startTimer(Timer::Ptr tm) {
-	tm->__setRunningByToolkit_(true);
 	MMRESULT timerId = timeSetEvent(tm->getInitialDelay(), period, 
 		&timerProc, NULL, TIME_PERIODIC);
 	SAMBAG_ASSERT(timerId);
@@ -98,7 +96,6 @@ void Win32MMTimerImpl::stopTimer(Timer::Ptr tm) {
 	Timers::right_map::iterator it = timers.right.find(tm);
 	if (it == timers.right.end())
 		return;
-	tm->__setRunningByToolkit_(false);
 	MMRESULT idEvent = it->second;
 	MMRESULT res = timeKillEvent(idEvent);
 	SAMBAG_ASSERT(res==TIMERR_NOERROR);

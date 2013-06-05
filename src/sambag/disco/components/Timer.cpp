@@ -25,13 +25,6 @@ Timer::Timer() :
 Timer::~Timer() {
 }
 //-----------------------------------------------------------------------------
-void Timer::__setRunningByToolkit_(bool r) {
-	running = r;
-	if (!running) {
-		numCalled = 0;
-	}
-}
-//-----------------------------------------------------------------------------
 Timer::Ptr Timer::create(const TimeType &ms) {
 	Ptr res(new Timer());
 	res->self = res;
@@ -42,10 +35,12 @@ Timer::Ptr Timer::create(const TimeType &ms) {
 void Timer::start() {
 	if (initialDelay==-1)
 		initialDelay = delay;
+    running = true;
 	getWindowToolkit()->startTimer(getPtr());
 }
 //-----------------------------------------------------------------------------
 void Timer::stop() {
+    running = false;
 	getWindowToolkit()->stopTimer(getPtr());
 }
 //-----------------------------------------------------------------------------
@@ -66,6 +61,9 @@ void Timer::setInitialDelay(const TimeType &_delay) {
 }
 //-----------------------------------------------------------------------------
 void Timer::timerExpired() {
+    if (!isRunning()) {
+        return;
+    }
 	com::events::EventSender<TimerEvent>::notifyListeners(
 			this,
 			TimerEvent(getPtr())

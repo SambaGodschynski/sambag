@@ -30,7 +30,6 @@ namespace {
         SAMBAG_END_SYNCHRONIZED
     }
     void stopTimerImpl(TimerPtr _tm, NSTimer *osTimer) {
-        _tm->__setRunningByToolkit_(false);
         [osTimer invalidate];
         SAMBAG_BEGIN_SYNCHRONIZED(mapLock)
             timers.erase(_tm);
@@ -110,11 +109,10 @@ void _CocoaTimer::startTimer(TimerPtr tm)
     
     [tmobj release];
     registerTimer(tm, t);
-    tm->__setRunningByToolkit_(true);
 }
 //-----------------------------------------------------------------------------
 void _CocoaTimer::stopTimer(TimerPtr tm) {
-    if (!tm || !tm->isRunning()) {
+    if (!tm) {
         return;
     }
     NSTimer *t = getOsTimer(tm);

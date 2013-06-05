@@ -93,6 +93,8 @@ public:
 	virtual void __handleMouseButtonReleaseEvent(Number x, Number y, Number buttons) = 0;
 	//-------------------------------------------------------------------------
 	virtual void __handleMouseMotionEvent(Number x, Number y) = 0;
+    //-------------------------------------------------------------------------
+    virtual void __handleMouseWheelEvent(Number x, Number y, Number wheelRotation) = 0;
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose() = 0;
 	//-------------------------------------------------------------------------
@@ -113,6 +115,8 @@ public:
 	static void startMainApp();
 	//-------------------------------------------------------------------------
 	static void initMainApp();
+	//-------------------------------------------------------------------------
+	static void quit();
 	//-------------------------------------------------------------------------
 	static void getScreenDimension(Number &outWidth, Number &outHeight);
 };

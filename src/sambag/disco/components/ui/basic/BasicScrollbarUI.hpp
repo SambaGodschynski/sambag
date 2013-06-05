@@ -1113,7 +1113,7 @@ TrackListener::mouseMoved(const events::MouseEvent &ev) {
 template <class M>
 void BasicScrollbarUI<M>::
 TrackListener::mouseWheelRotated(const events::MouseEvent &ev) {
-	ScrollBarType::Direction dir = 
+	typename ScrollBarType::Direction dir =
 		ev.getWheelRotation() > 0.f ? ScrollBarType::INCR : ScrollBarType::DECR;
 	parent.scrollByBlock(dir);
 }
