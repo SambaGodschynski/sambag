@@ -1,4 +1,4 @@
-# Install script for directory: /Users/johannesunger/clibs/sambag/src
+# Install script for directory: /Users/johannesunger/workspace/sambag/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

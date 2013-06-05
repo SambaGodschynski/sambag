@@ -6,6 +6,7 @@ SET ( SAMBAG_SOURCES
 	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
+	sambag/cpsqlite/sqlite3.c
 	sambag/disco/CairoDiscoFactory.cpp
 	sambag/disco/CairoDrawContext.cpp
 	sambag/disco/CairoPattern.cpp
@@ -15,12 +16,14 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/DiscoHelper.cpp
 	sambag/disco/FileResourceManager.cpp
 	sambag/disco/FontCache.cpp
+	sambag/disco/GenericAnimator.cpp
 	sambag/disco/Geometry.cpp
 	sambag/disco/GeometrySerialization.cpp
 	sambag/disco/GlyphHelper.cpp
 	sambag/disco/IDiscoFactory.cpp
 	sambag/disco/IPattern.cpp
 	sambag/disco/IResourceManager.cpp
+	sambag/disco/Tweens.cpp
 	sambag/disco/Win32IntResourceManager.cpp
 	sambag/disco/components/AButton.cpp
 	sambag/disco/components/AColumnBrowser.cpp
@@ -69,7 +72,6 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/SolidBorder.cpp
 	sambag/disco/components/Timer.cpp
 	sambag/disco/components/TitledBorder.cpp
-	sambag/disco/components/Tweens.cpp
 	sambag/disco/components/Viewport.cpp
 	sambag/disco/components/ViewportLayout.cpp
 	sambag/disco/components/Window.cpp

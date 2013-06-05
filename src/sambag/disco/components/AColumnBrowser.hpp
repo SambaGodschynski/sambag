@@ -24,7 +24,7 @@
 #include "Forward.hpp"
 #include <sambag/disco/svg/graphicElements/Style.hpp>
 #include "Animation.hpp"
-#include "Tweens.hpp"
+#include "sambag/disco/Tweens.hpp"
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;

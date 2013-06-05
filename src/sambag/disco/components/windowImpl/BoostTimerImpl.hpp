@@ -22,6 +22,7 @@ class TimerThread;
 //=============================================================================
 /** 
   * @class BoostTimerImpl.
+  * TODO: buggy like hell!!!!!!!
   */
 class BoostTimerImpl {
 friend class TimerThread;

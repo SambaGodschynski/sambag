@@ -229,8 +229,10 @@ void BoostTimerImpl::closeAllTimer() {
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::startTimer(Timer::Ptr tm) {
 	// TODO: check update timer (tm exists already)
-	if (tm->isRunning())
-		return;
+	ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
+	if (it!=toInvoke.right.end()) { // timerImpl found
+        return;
+    }
 	TimerThread::Ptr tmth = TimerThread::get(tm);
 	// invoke: add thread
 	SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)

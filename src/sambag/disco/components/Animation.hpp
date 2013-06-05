@@ -11,32 +11,10 @@
 #include <boost/shared_ptr.hpp>
 #include "Timer.hpp"
 #include <sambag/com/Common.hpp>
-#include <boost/timer/timer.hpp>
+#include <sambag/disco/GenericAnimator.hpp>
 
 namespace sambag { namespace disco { namespace components {
-//=============================================================================
-template <class T>
-struct BasicUpdater {
-    void update(const T &val) {}
-	void finished(const T &val) {}
-};
-//=============================================================================
-/** 
-  * @class Animation.
-  *
-  * TweenPolicy concept:
-  *   T calc(T b, T e, T d, T c, T t);
-  * UpdatePolicy concept:
-  *   void update(T val);
-  */
-template < class T,
-	template <class> class _TweenPolicy,
-	template <class> class _UpdatePolicy
->
-class Animation : public Timer, 
-	public _TweenPolicy<T>,
-	public _UpdatePolicy<T>
-{
+class DefaultTimerImpl : public Timer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -44,66 +22,26 @@ public:
 	//-------------------------------------------------------------------------
 	typedef TimeType Millisecond;
 	//-------------------------------------------------------------------------
-	typedef T ValueType;
-	//-------------------------------------------------------------------------
-	typedef _TweenPolicy<T> TweenPolicy;
-	//-------------------------------------------------------------------------
-	typedef _UpdatePolicy<T> UpdatePolicy;
-	//-------------------------------------------------------------------------
-	typedef Animation<T, _TweenPolicy, _UpdatePolicy> ThisClass;
+	typedef DefaultTimerImpl ThisClass;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ThisClass> Ptr;
-	//-------------------------------------------------------------------------
-	static const Millisecond ONE_MILLI_IN_NANO;
 protected:
 	//-------------------------------------------------------------------------
-	Animation() : duration(0) {}
-	//-------------------------------------------------------------------------
-	void update(void *, const TimerEvent &ev);
+	DefaultTimerImpl() {}
 private:
-	//-------------------------------------------------------------------------
-	typedef boost::timer::cpu_timer Clock;
-	//-------------------------------------------------------------------------
-	Clock clock;
-	//-------------------------------------------------------------------------
-	T startValue, endValue, c, current;
-	//-------------------------------------------------------------------------
-	Millisecond startTime, duration;
 public:
 	//-------------------------------------------------------------------------
-	const T & getCurrentValue() const {
-		return current;
-	}
-	//-------------------------------------------------------------------------
-	void setStartValue(const T &val);
-	//-------------------------------------------------------------------------
-	void setEndValue(const T &val);
-	//-------------------------------------------------------------------------
-	void setDuration(Millisecond d);
-	//-------------------------------------------------------------------------
 	void setRefreshRate(Millisecond d);
-	//-------------------------------------------------------------------------
-	Millisecond getDuration() const {
-		return duration;
-	}
 	//-------------------------------------------------------------------------
 	Millisecond getRefreshRate() const {
 		return (Millisecond)Super::getDelay();
 	}
-	//-------------------------------------------------------------------------
-	const T & getStartValue() const {
-		return startValue;
-	}
-	//-------------------------------------------------------------------------
-	const T & getEndValue() const {
-		return endValue;
-	}
-	//-------------------------------------------------------------------------
-	static Ptr create(const T &s = T(), 
-		const T &e = T(), 
-		Millisecond d = 0, 
-		Millisecond rfsh = 0
-	);
+    //-------------------------------------------------------------------------
+    typedef Super::Event TimerEvent;
+    //-------------------------------------------------------------------------
+    typedef com::events::EventSender<Super::Event>::EventFunction EventFunction;
+    //-------------------------------------------------------------------------
+    void addTimerListener(const EventFunction &f);
 	//-------------------------------------------------------------------------
 	/**
 	 * @overide
@@ -122,108 +60,30 @@ public:
 	 * has no effect
 	 */
 	virtual void setNumRepetitions(int numRepeats){}
-}; // Animation
-///////////////////////////////////////////////////////////////////////////////
-//-----------------------------------------------------------------------------
+}; // DefaultTimerImpl
+////////////////////////////////////////////////////////////////////////////////
 template < class T,
-	template <class> class TW,
-	template <class> class UP
+	template <class> class Tween,
+	template <class> class UpdatePolicy
 >
-const typename Animation<T,TW,UP>::Millisecond 
-Animation<T,TW,UP>::ONE_MILLI_IN_NANO = 1000000;
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::start() {
-	c = endValue - startValue;
-	clock.start();
-	Super::setNumRepetitions(-1);
-	Super::start();
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::stop() {
-    // stop timer
-	Super::stop();
-	// reset clock
-    clock.stop();
-    clock.start();
-    clock.stop();
-    UpdatePolicy::finished(current);
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::update(void *, const TimerEvent &ev) {
-	Millisecond t = (Millisecond)clock.elapsed().wall / ONE_MILLI_IN_NANO;
-	if (t>=duration) {
-		stop();
-		current = endValue;
-        UpdatePolicy::finished(current);
-	} else {
-		current = TweenPolicy::calc(startValue, duration, c, t);
-	}
-	UpdatePolicy::update(current);
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::setStartValue(const T &val) {
-	startValue = val;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::setEndValue(const T &val) {
-	endValue = val;
-	c = endValue - startValue;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::setDuration(Millisecond d) {
-	duration = d;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-void Animation<T,TW,UP>::setRefreshRate(Millisecond d) {
-	Super::setDelay((TimeType)d);
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class TW,
-	template <class> class UP
->
-typename Animation<T,TW,UP>::Ptr Animation<T,TW,UP>::create(const T &s, const T &e, 
-	Millisecond d, Millisecond rfsh)
+struct Animation :
+    public GenericAnimator<T, DefaultTimerImpl, Tween, UpdatePolicy>
 {
-	Ptr res( new ThisClass() );
-	res->setStartValue(s);
-	res->setEndValue(e);
-	res->setDuration(d);
-	res->setRefreshRate(rfsh);
-	res->com::events::EventSender<TimerEvent>::addEventListener(
-		boost::bind(&ThisClass::update, res.get(), _1, _2)
-	);
-	res->self = res;
-	return res;
-}
+    typedef Animation<T, Tween, UpdatePolicy> ThisClass;
+    typedef boost::shared_ptr<ThisClass> Ptr;
+    typedef typename DefaultTimerImpl::Millisecond Ms;
+    static Ptr create(const T &s=T(), const T &e=T(), Ms d=0, Ms rfsh=0)
+    {
+        Ptr res( new ThisClass() );
+        res->setStartValue(s);
+        res->setEndValue(e);
+        res->setDuration(d);
+        res->setRefreshRate(rfsh);
+        res->self = res;
+        return res;
+    }
+
+};
 }}} // namespace(s)
 
 #endif /* SAMBAG_ANIMATON_H */
