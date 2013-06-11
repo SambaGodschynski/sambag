@@ -53,7 +53,11 @@ void CocoaWindowImpl::_close() {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::close() {
-	getWindowToolkit()->invokeLater(
+    if (getFlag(WND_NESTED)) {
+        _close();
+        return;
+    }
+    getWindowToolkit()->invokeLater(
 		boost::bind(&CocoaWindowImpl::_close, this)
 	);
 }

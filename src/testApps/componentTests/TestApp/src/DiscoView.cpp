@@ -558,7 +558,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	std::cout<<ev.toString()<<std::endl;
+	//std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {
@@ -694,7 +694,7 @@ int main() {
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getDiscoFactory()->implDetails()<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	initTimer();
+	//initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setDefaultCloseOperation(Window::EXIT_ON_CLOSE);

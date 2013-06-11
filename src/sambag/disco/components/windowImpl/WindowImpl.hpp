@@ -158,10 +158,6 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {
-		// is window nested open/close is deactivated.
-		if (getFlag(WindowFlags::WND_NESTED)) {
-			return; 
-		}
 		ConcreteWindowImpl::close();
 	}
 	//--------------------------------------------------------------------------

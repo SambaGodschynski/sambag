@@ -306,6 +306,10 @@ void Win32WindowImpl::unregisterWindow() {
 }
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::_close() {
+    // is window nested open/close is deactivated.
+    if (getFlag(WindowFlags::WND_NESTED)) {
+        return;
+    }
 	if (!visible)
 		return;
 	invalidateSurface();

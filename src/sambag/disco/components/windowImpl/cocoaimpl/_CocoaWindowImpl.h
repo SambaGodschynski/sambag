@@ -19,10 +19,8 @@ namespace cocoaImplTypes {
 }
 
 namespace sambag { namespace disco { namespace components {
-typedef void* RawDiscoWindow;
-typedef void* RawDiscoView;
-typedef boost::shared_ptr<void> RawDiscoWindowPtr;
-typedef boost::shared_ptr<void> RawDiscoViewPtr;
+typedef void* RawDiscoWindowPtr;
+typedef void* RawDiscoViewPtr;
 typedef boost::shared_ptr<void> CarbonWindowRefPtr;
 
 //=============================================================================
@@ -55,7 +53,7 @@ public:
 	//-------------------------------------------------------------------------
 	_CocoaWindowImpl();
 	//-------------------------------------------------------------------------
-	virtual ~_CocoaWindowImpl() {}
+	virtual ~_CocoaWindowImpl();
 	//-------------------------------------------------------------------------
 	void openWindow(_CocoaWindowImpl*, Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
