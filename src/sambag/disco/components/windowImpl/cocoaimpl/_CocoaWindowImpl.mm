@@ -482,13 +482,13 @@ void _CocoaWindowImpl::closeWindow() {
     this->windowPtr = NULL;
     this->viewPtr = NULL;
     __windowWillCose();
+    if (getFlag(WindowFlags::EXIT_ON_CLOSE) && !getFlag(WindowFlags::WND_NESTED))
+    {
+        _CocoaToolkitImpl::quit();
+    }
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::onClose() {
-    if (getFlag(WindowFlags::EXIT_ON_CLOSE))
-    {
-            //_CocoaToolkitImpl::quit();
-    }
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
@@ -613,7 +613,20 @@ void _CocoaToolkitImpl::getScreenDimension(Number &outWidth, Number &outHeight)
 }
 //-----------------------------------------------------------------------------
 void _CocoaToolkitImpl::quit() {
-    [NSApp terminate:nil];
+    //[NSApp terminate:nil];
+    [NSApp stop:nil];
+    // dummy event:
+    // http://www.cocoabuilder.com/archive/cocoa/219842-nsapp-stop.html
+    NSEvent* event = [NSEvent otherEventWithType: NSApplicationDefined
+                                        location: NSMakePoint(0,0)
+                                   modifierFlags: 0
+                                       timestamp: 0.0
+                                    windowNumber: 0
+                                         context: nil
+                                         subtype: 0
+                                           data1: 0
+                                           data2: 0];
+    [NSApp postEvent: event atStart: true];
 }
 }}} //namespace(s)
 

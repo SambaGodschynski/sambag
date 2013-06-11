@@ -48,8 +48,8 @@ void CocoaWindowImpl::_close() {
     if (!isVisible()) {
         return;
     }
- 	Impl::closeWindow();
     visible = false;
+ 	Impl::closeWindow();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::close() {
