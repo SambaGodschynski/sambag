@@ -76,10 +76,14 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 
 @implementation DiscoWindowDelegate
 - (void)windowDidResize:(NSNotification *)notification {
-	master->____windowBoundsChanged();
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        master->____windowBoundsChanged();
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)windowDidMove:(NSNotification *)notification {
-	master->____windowBoundsChanged();
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        master->____windowBoundsChanged();
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
@@ -151,36 +155,50 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	return btn;
 }
 - (void)mouseDown:(NSEvent *)theEvent {
-	int btn = [self getMouseBtn: theEvent];
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        int btn = [self getMouseBtn: theEvent];
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)mouseUp:(NSEvent *)theEvent {
-    int btn = [self getMouseBtn: theEvent];
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        int btn = [self getMouseBtn: theEvent];
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)rightMouseDown:(NSEvent *)theEvent{
-	int btn = [self getMouseBtn: theEvent];
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        int btn = [self getMouseBtn: theEvent];
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)rightMouseUp:(NSEvent *)theEvent{
-	int btn = [self getMouseBtn: theEvent];
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        int btn = [self getMouseBtn: theEvent];
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)mouseMoved:(NSEvent *)theEvent {
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)mouseDragged:(NSEvent *)theEvent{
-	NSPoint p = [self getMouseLocation: theEvent];
-    master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-	NSPoint p = [self getMouseLocation: theEvent];
-	master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseMotionEvent(p.x, p.y);
+    SAMBAG_END_SYNCHRONIZED
 }
 - (void)drawRect:(NSRect)rect {
     SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
@@ -204,8 +222,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     [super dealloc];
 }
 - (void)scrollWheel:(NSEvent *)theEvent {
-    NSPoint p = [self getMouseLocation: theEvent];
-    master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
+    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+        NSPoint p = [self getMouseLocation: theEvent];
+        master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
+    SAMBAG_END_SYNCHRONIZED
     
 }
 @end

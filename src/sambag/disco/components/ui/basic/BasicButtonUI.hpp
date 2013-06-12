@@ -128,7 +128,7 @@ BasicButtonUI<ButtonModell>::createDefaultStyle() const
 	svg::graphicElements::Style style;
 	style.fillColor(ColorRGBA(0,0,0,0));
 	style.strokeColor(ColorRGBA(0,0,0,1.));
-	style.strokeWidth(1.5);
+	style.strokeWidth(1.);
 	return style;
 }
 //-----------------------------------------------------------------------------
@@ -244,7 +244,7 @@ void BasicButtonUI<ButtonModell>::installDefaults(AComponentPtr c) {
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::installClientDefaults(AComponentPtr c) {
 	// consider:
-	// if not client property setted getClientProperty() has no effect
+	// if no client property setted getClientProperty() has no effect
 	c->getClientProperty("Button.normal", sNormal);
 	c->getClientProperty("Button.pressed", sPress);
 	c->getClientProperty("Button.rollover", sRoll);
@@ -264,7 +264,11 @@ void BasicButtonUI<ButtonModell>::onButtonStateChanged(void *src, const
 			dynamic_cast<const AbstractButton*>(&(ev.getSrc()));
 	BOOST_ASSERT(_btn);
 	typename AbstractButton::Ptr btn = _btn->getPtr();
-	btn->redraw();
+    AContainer::Ptr parent = btn->getParent();
+    if (!parent) {
+        return;
+    }
+	parent->redraw();
 }
 //------------------------------------------------------------------------------
 template <class ButtonModell>
