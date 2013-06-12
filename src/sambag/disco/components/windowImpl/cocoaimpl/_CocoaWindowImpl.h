@@ -13,6 +13,7 @@
 #include <string>
 #include <sambag/disco/components/windowImpl/WindowFlags.hpp>
 #include <boost/shared_ptr.hpp>
+#include <sambag/com/Thread.hpp>
 
 namespace cocoaImplTypes {
 	typedef double Number;
@@ -34,6 +35,8 @@ public:
 	typedef WindowFlags Super;
 	typedef cocoaImplTypes::Number Number;
 private:
+    //-------------------------------------------------------------------------
+    sambag::com::RecursiveMutex mutex;
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr windowPtr;
 	RawDiscoViewPtr viewPtr;
@@ -46,6 +49,10 @@ private:
     //-------------------------------------------------------------------------
     void initAsRawWindow(Number x, Number y, Number w, Number h);
 public:
+    //-------------------------------------------------------------------------
+    sambag::com::RecursiveMutex & getMutex() {
+        return mutex;
+    }
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr getRawDiscoWindow() const { return windowPtr; }
 	//-------------------------------------------------------------------------
