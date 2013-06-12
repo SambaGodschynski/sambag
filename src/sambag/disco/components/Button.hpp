@@ -9,6 +9,7 @@
 #define SAMBAG_BUTTON_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "DefaultButtonModell.hpp"
 #include "AButton.hpp"
 
@@ -23,6 +24,8 @@ public:
 	typedef AButton<DefaultButtonModell> Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Button> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<Button> WPtr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 private:

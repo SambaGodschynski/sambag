@@ -622,6 +622,7 @@ void _CocoaToolkitImpl::quit() {
     [NSApp stop:nil];
     // dummy event:
     // http://www.cocoabuilder.com/archive/cocoa/219842-nsapp-stop.html
+    AutoReleasePool ap;
     NSEvent* event = [NSEvent otherEventWithType: NSApplicationDefined
                                         location: NSMakePoint(0,0)
                                    modifierFlags: 0

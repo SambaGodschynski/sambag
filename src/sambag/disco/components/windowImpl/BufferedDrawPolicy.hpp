@@ -108,7 +108,7 @@ inline void BufferedDrawPolicy::redrawRoot(sambag::disco::ISurface::Ptr sf) {
 		SAMBAG_END_SYNCHRONIZED
 	} catch (const std::exception &ex) {
 		std::cout<<ex.what()<<std::endl;
-		exit(0);
+		throw;
 	}
 }
 //-----------------------------------------------------------------------------
