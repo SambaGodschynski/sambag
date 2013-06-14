@@ -23,7 +23,7 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS) #disable strcpy warning in audioeffec
 IF(APPLE)
 	#find_package(X11 REQUIRED)
         #include_directories(${X11_INCLUDE_DIRS})
-	find_package(IConvX REQUIRED)
+	#find_package(IConvX REQUIRED)
 	add_definitions(-DDISCO_USE_COCOA)
 	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
 	FIND_LIBRARY(CARBON_LIBRARY Carbon)
@@ -78,8 +78,7 @@ include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-		${ICONV_LIBRARY_DIRS}/${LIBICONV}
-		${COCOA_LIBRARY}
+	    	${COCOA_LIBRARY}
 		${CARBON_LIBRARY}
 	)
 ELSEIF(UNIX)

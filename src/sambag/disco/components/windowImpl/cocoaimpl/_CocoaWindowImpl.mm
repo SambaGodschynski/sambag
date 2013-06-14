@@ -17,6 +17,8 @@
 #include "AutoReleasePool.h"
 
 
+
+
 namespace {
 	std::string toString(NSString *str) {
 		if (!str) {
@@ -24,6 +26,14 @@ namespace {
 		}
 		return std::string([str UTF8String]);
 	}
+    NSRect getBoundsOnScreen(NSView *view) {
+        NSRect r = [view frame];
+        NSWindow* viewWindow = [view window];
+        r.origin = [viewWindow convertBaseToScreen: r.origin];
+        r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
+        return r;
+    }
+
 } // namespace(s)
 
 typedef sambag::disco::components::_CocoaWindowImpl Master;
@@ -31,11 +41,19 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 @interface DiscoWindow : NSWindow
 {
     NSMutableArray *objects;
+    WindowRef carbonParent;
+    Master *master;
 }
 -(void)initObjects;
 -(void)dealloc;
 -(void)addObject:(NSObject*)obj;
 -(void)removeObject:(NSObject*)obj;
+-(void)setMaster:(Master*) theMaster;
+-(WindowRef)carbonParent;
+-(void)setCarbonParent:(WindowRef)theParent;
+-(void)setFrame:(NSRect)windowFrame
+        display:(BOOL)displayViews
+        animate:(BOOL)performAnimation;
 @end
 @implementation DiscoWindow
 -(void)initObjects {
@@ -45,7 +63,6 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     objects = [[NSMutableArray alloc] init];
 }
 -(void)dealloc {
-    std::cout<<"-- DEALLOC WINDOW"<<std::endl;
     [super dealloc];
     if (objects) {
         [objects release];
@@ -59,6 +76,35 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 -(void)removeObject:(NSObject*)obj {
     [self initObjects];
     [objects removeObject: obj];
+}
+-(WindowRef)carbonParent {
+    return carbonParent;
+}
+-(void)setCarbonParent:(WindowRef)theParent {
+    carbonParent = theParent;
+}
+-(void)setMaster:(Master*) theMaster{
+	master = theMaster;
+}
+-(void)setFrame:(NSRect)windowFrame
+        display:(BOOL)displayViews
+        animate:(BOOL)performAnimation
+{
+    [super setFrame:windowFrame
+           display:displayViews
+            animate:performAnimation];
+    
+    if (!carbonParent) {
+        return;
+    }
+    NSRect f = getBoundsOnScreen([self contentView]);
+    Rect wr;
+    wr.left   = (short) f.origin.x;
+    wr.top    = (short) f.origin.y;
+    wr.right  = (short) f.origin.x + f.size.width;
+    wr.bottom = (short) f.origin.y + f.size.height;
+    SetWindowBounds (carbonParent, kWindowContentRgn, &wr);
+    ShowWindow (carbonParent);
 }
 @end
 
@@ -89,7 +135,6 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	master = theMaster;
 }
 -(void)dealloc {
-    std::cout<<"-- DEALLOC DELEGATE "<<std::hex<<master<<std::endl;
     [super dealloc];
 }
 - (void)windowWillClose:(NSNotification *)notification {
@@ -218,7 +263,6 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	master = theMaster;
 }
 -(void)dealloc {
-    std::cout<<"-- DEALLOC VIEW "<<std::hex<<master<<std::endl;
     [super dealloc];
 }
 - (void)scrollWheel:(NSEvent *)theEvent {
@@ -247,7 +291,6 @@ void deallocSharedPtr(void *ptr) {
     [(NSObject*)ptr release];
 }
 void deallocCarbonWindowRef(void *ptr) {
-    std::cout<<"-- DEALLOC WindowRef"<<std::endl;
     //DisposeWindow ((WindowRef)ptr);
 }
 RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
@@ -258,14 +301,6 @@ RawDiscoViewPtr createDiscoViewPtr(DiscoView *view) {
 }
 CarbonWindowRefPtr createCarbonWindowRefPtr(WindowRef ref) {
     return CarbonWindowRefPtr(ref, &deallocCarbonWindowRef);
-}
-NSRect getBoundsOnScreen(NSView *view) {
-    NSRect r = [view frame];
-    NSWindow* viewWindow = [view window];
-    //r = [[view superview] convertRect: r toView: nil];
-    r.origin = [viewWindow convertBaseToScreen: r.origin];
-    r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
-    return r;
 }
 } // namepsace(s)
 //=============================================================================
@@ -301,7 +336,8 @@ DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
 		throw std::runtime_error("_initView() failed to create view!");
 	}
 	[window setContentView:view];
-	[window makeFirstResponder: view];
+	[window setMaster: caller];
+    [window makeFirstResponder: view];
 	[view becomeFirstResponder];
 	[view setMaster: caller];
     [view release];
@@ -354,7 +390,6 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
-    std::cout<<std::hex<<this<<": as raw"<<std::endl;
     DiscoWindow *ownerWindow = getDiscoWindow(*this);
     assert(ownerWindow);
     if (!ownerWindow) {
@@ -392,7 +427,6 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h)
 {
     SAMBAG_BEGIN_SYNCHRONIZED( getMutex() )
-        std::cout<<std::hex<<this<<": open"<<std::endl;
         Number sw=0, sh=0;
         _CocoaToolkitImpl::getScreenDimension(sw, sh);
         NSRect frame = NSMakeRect(x,sh - y - h,w,h);
@@ -440,8 +474,6 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
     SAMBAG_BEGIN_SYNCHRONIZED( getMutex() )
-        std::cout<<std::hex<<this<<": open Nested"<<std::endl;
-    
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
             throw std::runtime_error("openNested() failed to create window.");
@@ -458,6 +490,7 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
                                                             defer:NO];
+        [pluginWindow setCarbonParent: parent];
         this->windowPtr = createDiscoWindowPtr(pluginWindow);
 
         // show window
@@ -602,7 +635,6 @@ void _CocoaWindowImpl::setTitle(const std::string &str) {
 }
 //-----------------------------------------------------------------------------
 _CocoaWindowImpl::~_CocoaWindowImpl() {
-    std::cout<<std::hex<<this<<": ~"<<std::endl;
 }
 //=============================================================================
 // class _CocoaToolkitImpl 
