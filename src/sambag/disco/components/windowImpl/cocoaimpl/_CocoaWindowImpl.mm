@@ -17,7 +17,7 @@
 #include "AutoReleasePool.h"
 
 
-
+#define NOP(x)
 
 namespace {
 	std::string toString(NSString *str) {
@@ -103,8 +103,8 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     wr.top    = (short) f.origin.y;
     wr.right  = (short) f.origin.x + f.size.width;
     wr.bottom = (short) f.origin.y + f.size.height;
-    SetWindowBounds (carbonParent, kWindowContentRgn, &wr);
-    ShowWindow (carbonParent);
+    NOP(SetWindowBounds (carbonParent, kWindowContentRgn, &wr);
+    ShowWindow (carbonParent);)
 }
 @end
 
@@ -390,7 +390,7 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
-    DiscoWindow *ownerWindow = getDiscoWindow(*this);
+    NOP(DiscoWindow *ownerWindow = getDiscoWindow(*this);
     assert(ownerWindow);
     if (!ownerWindow) {
         return;
@@ -420,7 +420,7 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
     [ownerWindow addChildWindow: carbonWindow
                         ordered: NSWindowAbove];
     
-    __onCreated();
+    __onCreated();)
 }
 
 //-----------------------------------------------------------------------------
@@ -566,7 +566,7 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
         [view setFrameSize: frame.size];
 
     }
-    if (carbonWindowRef && view) {
+    NOP(if (carbonWindowRef && view) {
         NSRect f = getBoundsOnScreen(view);
         Rect wr;
         wr.left   = (short) f.origin.x;
@@ -576,7 +576,7 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
         ShowWindow (win);
-     }
+     })
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) const
@@ -606,7 +606,7 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
 				  frame.size.width, 
 				  frame.size.height);
     
-    if (carbonWindowRef && view) {
+    NOP(if (carbonWindowRef && view) {
         NSRect f = getBoundsOnScreen(view);
         Rect wr;
         wr.left   = (short) f.origin.x;
@@ -615,7 +615,7 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
         wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
-    }
+    })
 }
 //-----------------------------------------------------------------------------
 std::string _CocoaWindowImpl::getTitle() const {

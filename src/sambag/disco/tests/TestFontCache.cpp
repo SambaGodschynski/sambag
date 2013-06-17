@@ -47,3 +47,16 @@ void TestFontCache::testDrawText() {
 	fc.drawText(cn,"\"Hello World!\"");
 
 	cn->moveTo(Point2D(0., 50.));
+	cn->rect(fc.getTextBounds(cn,"Hällo Börld!"));
+	cn->stroke();
+	cn->moveTo(Point2D(0., 50.));
+	fc.drawText(cn,"Hällo Börld!");
+
+	cn->setStrokeColor(ColorRGBA(0, 1));
+	cn->moveTo(Point2D(0., 50.));
+	cn->lineTo(Point2D(10., 50.));
+	cn->stroke();
+
+	testPng("testDrawText", surface);
+}
+} //namespace
