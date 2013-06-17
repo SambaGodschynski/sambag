@@ -4,6 +4,7 @@
  *  Created on: Mar 15, 2012
  *      Author: samba
  */
+#if 0
 
 #include "TestLuaRegisterFunction.hpp"
 #include <sambag/lua/Lua.hpp>
@@ -300,3 +301,5 @@ void TestLuaScript::testReturnTuple01() {
 	
 }
 } // namespace
+
+#endif

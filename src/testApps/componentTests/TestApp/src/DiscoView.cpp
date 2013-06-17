@@ -694,7 +694,7 @@ int main() {
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getDiscoFactory()->implDetails()<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
-	//initTimer();
+	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setDefaultCloseOperation(Window::EXIT_ON_CLOSE);

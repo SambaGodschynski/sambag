@@ -154,7 +154,7 @@ SET ( SAMBAG_SOURCES
 SET ( SAMBAG_MMSOURCES
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
-	sambag/disco/components/windowImpl/cocoaimpl/AutoReleasePool.mm
+	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 )
 IF(APPLE)
   set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")
@@ -186,6 +186,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
+	sambag/disco/tests/TestCoordinate.cpp
 	sambag/disco/tests/TestFileResourceManager.cpp
 	sambag/disco/tests/TestFontCache.cpp
 	sambag/disco/tests/TestGenFlowLayout.cpp

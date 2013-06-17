@@ -23,13 +23,13 @@ int FlowLayout::moveComponents(AContainerPtr target, Coordinate x,
 {
 	switch (align) {
 	case LEFT:
-		x = x + ltr ? (Coordinate)0 : width;
+		x = (x + ltr) ? (Coordinate)0 : width;
 		break;
 	case CENTER:
 		x = x + width / 2.;
 		break;
 	case RIGHT:
-		x = x + ltr ? width : (Coordinate)0;
+		x = (x + ltr) ? width : (Coordinate)0;
 		break;
 	}
 	Coordinate maxAscent = 0;

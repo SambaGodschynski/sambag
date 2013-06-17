@@ -8,6 +8,7 @@
 #include "CairoDiscoFactory.hpp"
 #include "CairoDrawContext.hpp"
 #include "cairo-version.h"
+#include <boost/shared_ptr.hpp>
 
 namespace sambag { namespace disco {
 //=============================================================================

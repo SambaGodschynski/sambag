@@ -78,6 +78,10 @@ public:
 	void operator /=(ValueType v) {
 		value /=v;
 	}
+    //-------------------------------------------------------------------------
+    bool operator==(Coordinate &b) {
+        return this->value == b.value;
+    }
 };
 ///////////////////////////////////////////////////////////////////////////////
 inline std::ostream & operator<<(std::ostream &os, const Coordinate &obj) {
