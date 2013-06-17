@@ -175,7 +175,7 @@ void BasicButtonUI<ButtonModell>::drawRect(IDrawContext::Ptr cn,
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
+	typename AbstractButton::Ptr b = boost::dynamic_pointer_cast<AbstractButton>(c);
 	if (!b)
 		return;
 	// draw rect
@@ -208,7 +208,7 @@ void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::installListener(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+			boost::dynamic_pointer_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
 			boost::bind(&ButtonListener::onMouseEvent, &listener, _1, _2),
@@ -284,7 +284,7 @@ Dimension BasicButtonUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
 template <class ButtonModell>
 Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+			boost::dynamic_pointer_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

@@ -32,12 +32,12 @@ void ViewportLayout::addLayoutComponent(const AComponentSharedOrWeak &comp,
 }
 //-----------------------------------------------------------------------------
 void ViewportLayout::layoutContainer(AContainerPtr parent) {
-	Viewport::Ptr vp = boost::shared_dynamic_cast<Viewport>(parent);
+	Viewport::Ptr vp = boost::dynamic_pointer_cast<Viewport>(parent);
 	AComponentPtr view = vp->getView();
 	if (!view) {
 		return;
 	}
-	IScrollable::Ptr scrollable=boost::shared_dynamic_cast<IScrollable>(view);
+	IScrollable::Ptr scrollable=boost::dynamic_pointer_cast<IScrollable>(view);
 
 	/* All of the dimensions below are in view coordinates, except
 	 * vpSize which we're converting.
@@ -117,10 +117,10 @@ Dimension ViewportLayout::minimumLayoutSize(AContainerPtr parent) {
 }
 //-----------------------------------------------------------------------------
 Dimension ViewportLayout::preferredLayoutSize(AContainerPtr parent) {
-	Viewport::Ptr vp = boost::shared_dynamic_cast<Viewport>(parent);
+	Viewport::Ptr vp = boost::dynamic_pointer_cast<Viewport>(parent);
 	SAMBAG_ASSERT(vp);
 	AComponentPtr view = vp->getView();
-	IScrollable::Ptr scrollable=boost::shared_dynamic_cast<IScrollable>(view);
+	IScrollable::Ptr scrollable=boost::dynamic_pointer_cast<IScrollable>(view);
 	if (!view) {
 		return Dimension(0, 0);
 	} else if (scrollable) {

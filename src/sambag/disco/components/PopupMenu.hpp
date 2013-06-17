@@ -33,7 +33,7 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<PopupMenu>(AComponent::getPtr());
+		return boost::dynamic_pointer_cast<PopupMenu>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(AComponentPtr parent = AComponentPtr()) {

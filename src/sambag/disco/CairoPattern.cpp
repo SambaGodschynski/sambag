@@ -117,7 +117,7 @@ CairoPatternBase::Extend CairoPatternBase::getExtendType() const {
 //-----------------------------------------------------------------------------
 CairoSurfacePattern::Ptr CairoSurfacePattern::create(ISurface::Ptr _surf) {
 	CairoSurface::Ptr surf =
-		boost::shared_dynamic_cast<CairoSurface>(_surf);
+		boost::dynamic_pointer_cast<CairoSurface>(_surf);
 	if (!surf)
 		return Ptr();
 	CairoPatternRef ref = createPatternRef(

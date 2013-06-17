@@ -48,7 +48,7 @@ public:
 	{
 		Viewport::Ptr vp = parent.getViewport();
 		IScrollable::Ptr sc =
-				boost::shared_dynamic_cast<IScrollable>(vp->getView());
+				boost::dynamic_pointer_cast<IScrollable>(vp->getView());
 		if (!unitIncrementSet && vp && sc) {
 			Rectangle vr = vp->getViewRect();
 			return sc->getScrollableUnitIncrement(vr, getOrientation(),
@@ -69,7 +69,7 @@ public:
 			return Super::getBlockIncrement(direction);
 		}
 		IScrollable::Ptr sc =
-				boost::shared_dynamic_cast<IScrollable>(vp->getView());
+				boost::dynamic_pointer_cast<IScrollable>(vp->getView());
 		if (sc) {
 			Rectangle vr = vp->getViewRect();
 			return sc->getScrollableBlockIncrement(vr, getOrientation(),
@@ -142,7 +142,7 @@ void ScrollPane::postConstructor() {
 //-----------------------------------------------------------------------------
 void ScrollPane::setLayout(ALayoutManagerPtr layout) {
 	ScrollPaneLayout::Ptr _layout =
-			boost::shared_dynamic_cast<ScrollPaneLayout>(layout);
+			boost::dynamic_pointer_cast<ScrollPaneLayout>(layout);
 	if (_layout) {
 		Super::setLayout(layout);
 		_layout->syncWithScrollPane(getPtr());

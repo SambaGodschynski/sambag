@@ -20,7 +20,7 @@
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
 		return 																\
-		  boost::shared_dynamic_cast<window_class_name>                     \
+		  boost::dynamic_pointer_cast<window_class_name>                     \
             ( ::sambag::disco::components::Window::getPtr() ); 	            \
 	}																		\
 	static Ptr create(::sambag::disco::components::Window::Ptr parent =     \
@@ -183,7 +183,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<Window>(self.lock());
+		return boost::dynamic_pointer_cast<Window>(self.lock());
 	}
 	//-------------------------------------------------------------------------
 	RootPane::Ptr getRootPane() const;

@@ -72,7 +72,7 @@ void UIManager::putProperty(const std::string &name, const T &c) {
 template <typename T>
 void UIManager::getProperty(const std::string &name, T &out) const {
 	typedef ConcreteType<T> Type;
-	typename Type::Ptr val = boost::shared_dynamic_cast<Type>(
+	typename Type::Ptr val = boost::dynamic_pointer_cast<Type>(
 			getProperty(name)
 	);
 	if (val)

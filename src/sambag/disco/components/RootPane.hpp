@@ -81,7 +81,7 @@ public:
 	void getComponentsByTag(const std::string &tag, Container &out) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<RootPane>(AComponent::getPtr());
+		return boost::dynamic_pointer_cast<RootPane>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	ui::ALookAndFeelPtr getCurrentLookAndFeel() const;

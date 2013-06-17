@@ -365,7 +365,7 @@ void TestCairoDrawContext::testLineStyle() {
 	context->stroke();
 	context->disableDash();
 
-	CairoDrawContext::Ptr cr = boost::shared_dynamic_cast<CairoDrawContext>(context);
+	CairoDrawContext::Ptr cr = boost::dynamic_pointer_cast<CairoDrawContext>(context);
 
 	// ensure that cairo_set_dash make deep copies.
 	Number *ddash = new Number[2];

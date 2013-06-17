@@ -32,7 +32,7 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
-		SvgColorStop::Ptr stop = boost::shared_dynamic_cast<SvgColorStop>(obj);
+		SvgColorStop::Ptr stop = boost::dynamic_pointer_cast<SvgColorStop>(obj);
 		if (!stop)
 			return;
 		addColorStop(stop);

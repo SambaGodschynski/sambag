@@ -26,7 +26,7 @@ void TestFontCache::setUp() {
 void TestFontCache::testGetFontMap() {
 	using namespace sambag::disco;
 	FontCache &fc = FontCache::instance();
-	IImageSurface::Ptr surface = boost::shared_dynamic_cast<IImageSurface>(
+	IImageSurface::Ptr surface = boost::dynamic_pointer_cast<IImageSurface>(
 		boost::get<0>( 
 			fc.getGlyphMap( createFontTraits(ColorRGBA(0), Font().setSize(56.)) 
 		))
@@ -47,16 +47,3 @@ void TestFontCache::testDrawText() {
 	fc.drawText(cn,"\"Hello World!\"");
 
 	cn->moveTo(Point2D(0., 50.));
-	cn->rect(fc.getTextBounds(cn,"Hällo Börld!"));
-	cn->stroke();
-	cn->moveTo(Point2D(0., 50.));
-	fc.drawText(cn,"Hällo Börld!");
-
-	cn->setStrokeColor(ColorRGBA(0, 1));
-	cn->moveTo(Point2D(0., 50.));
-	cn->lineTo(Point2D(10., 50.));
-	cn->stroke();
-
-	testPng("testDrawText", surface);
-}
-} //namespace

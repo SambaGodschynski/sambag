@@ -44,7 +44,7 @@ void BasicMenuListener<ComponentModell>::
 {
 	using namespace events;
 	Menu::Ptr b =
-			boost::shared_dynamic_cast<Menu>(ev.getSource());
+			boost::dynamic_pointer_cast<Menu>(ev.getSource());
 	SAMBAG_ASSERT(b);
 	switch(ev.getType()) {
 	case MouseEvent::DISCO_MOUSE_ENTERED:
@@ -73,7 +73,7 @@ void BasicMenuListener<ComponentModell>::
 				b.get(),
 				events::ActionEvent(b)
 		);
-		Window::Ptr w = boost::shared_dynamic_cast<Window>(b->getRootContainer());
+		Window::Ptr w = boost::dynamic_pointer_cast<Window>(b->getRootContainer());
 		if (w)
 			w->close();
 		break;

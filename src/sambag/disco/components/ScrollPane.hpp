@@ -324,7 +324,7 @@ public:
 	virtual ViewportPtr getViewport() const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<ScrollPane>(Super::getPtr());
+		return boost::dynamic_pointer_cast<ScrollPane>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(AComponentPtr view, VerticalScrollbarPolicy vsbPolicy,

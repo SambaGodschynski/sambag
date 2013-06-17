@@ -46,7 +46,7 @@ FileResourceManager::ImagePtr FileResourceManager::loadSvg(const std::string &pa
 	SAMBAG_ASSERT(cn);
 	// load svg
 	sd::svg::SvgBuilder builder;
-	sd::svg::SvgRoot::Ptr rootObject = boost::shared_dynamic_cast<sd::svg::SvgRoot>
+	sd::svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<sd::svg::SvgRoot>
 			( builder.buildSvgFromFilename(path) );
 	sd::svg::graphicElements::SceneGraph::Ptr g = 
 		rootObject->getRelatedSceneGraph();

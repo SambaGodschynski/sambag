@@ -46,7 +46,7 @@ void BasicMenuItemListener<ComponentModell>::
 {
 	using namespace events;
 	MenuItem::Ptr b =
-			boost::shared_dynamic_cast<MenuItem>(ev.getSource());
+			boost::dynamic_pointer_cast<MenuItem>(ev.getSource());
 	SAMBAG_ASSERT(b);
 	switch(ev.getType()) {
 	case MouseEvent::DISCO_MOUSE_ENTERED:

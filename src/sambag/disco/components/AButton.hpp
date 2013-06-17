@@ -38,7 +38,7 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<AbstractButton>(AComponent::getPtr());
+		return boost::dynamic_pointer_cast<AbstractButton>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	/**

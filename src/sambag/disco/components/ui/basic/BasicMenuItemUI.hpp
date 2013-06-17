@@ -75,7 +75,7 @@ BasicMenuItemUI<ButtonModell>::BasicMenuItemUI() {
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::shared_dynamic_cast<AbstractButton>(c);
+	typename AbstractButton::Ptr b = boost::dynamic_pointer_cast<AbstractButton>(c);
 	if (!b)
 		return;
 	if (b->isButtonRollover()) {
@@ -105,7 +105,7 @@ void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 template <class ButtonModell>
 void BasicMenuItemUI<ButtonModell>::installUI(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+			boost::dynamic_pointer_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
 	typedef BasicMenuItemListener<ButtonModell> ButtonListener;
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
@@ -134,7 +134,7 @@ void BasicMenuItemUI<ButtonModell>::onButtonStateChanged(void *src, const
 template <class ButtonModell>
 Dimension BasicMenuItemUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::shared_dynamic_cast<AbstractButton>(c);
+			boost::dynamic_pointer_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

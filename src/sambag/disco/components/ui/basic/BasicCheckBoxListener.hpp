@@ -48,7 +48,7 @@ typename BasicCheckBoxListener<BM>::ButtonClassPtr
 BasicCheckBoxListener<BM>::getButton(const events::MouseEvent &ev) const
 {
 	return
-		boost::shared_dynamic_cast<ButtonClass>(ev.getSource());
+		boost::dynamic_pointer_cast<ButtonClass>(ev.getSource());
 }
 //-----------------------------------------------------------------------------
 template <class BM>

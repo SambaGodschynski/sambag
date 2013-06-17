@@ -158,7 +158,7 @@ bool BasicKnobUI<M>::contains(AComponentPtr c, const Point2D &p) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::installUI(AComponentPtr c) {
-	knob = boost::shared_dynamic_cast<KnobType>(c);
+	knob = boost::dynamic_pointer_cast<KnobType>(c);
 	installDefaults(c);
 	installListeners(c);
 }

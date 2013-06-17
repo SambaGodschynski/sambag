@@ -221,7 +221,7 @@ public:
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::installUI(AComponentPtr c) {
-	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
+	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
 	this->_list = list;
 	layoutOrientation = list->getLayoutOrientation();
 	rendererPane = CellRendererPane::create();
@@ -240,7 +240,7 @@ void BasicListUI<LT>::installListeners(AComponentPtr c) {
 		boost::bind(&Class::onMouse, this, _1, _2),
 		getPtr()
 	);
-	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
+	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
 	SAMBAG_ASSERT(list);
 	list->EventSender<events::ListSelectionEvent>::addTrackedEventListener(
 		boost::bind(&Class::onSelectionStateChanged, this, _1, _2),
@@ -255,7 +255,7 @@ void BasicListUI<LT>::installListeners(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::installDefaults(AComponentPtr c) {
-	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
+	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
 	SAMBAG_ASSERT(list);
 
 	list->setLayout(ALayoutManagerPtr());
@@ -552,7 +552,7 @@ template <class LT>
 Rectangle BasicListUI<LT>::getCellBounds(AComponentPtr c,
 		int index1, int index2)
 {
-	ListTypePtr list = boost::shared_dynamic_cast<ListType>(c);
+	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
 	if (!list)
 		return NULL_RECTANGLE;
 	return getCellBounds(*(list.get()), index1, index2);

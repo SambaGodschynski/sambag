@@ -38,7 +38,7 @@ void SvgObject::add(Ptr obj) {
 void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
 	// TODO: problem is: pattern needs bounds at creation,
 	// can maybe solved using cliprect
-	/*SvgPattern::Ptr svgPattern = boost::shared_dynamic_cast<SvgPattern>(fillObj);
+	/*SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(fillObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
@@ -53,7 +53,7 @@ void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj)
 {
 	// TODO: problem is: pattern needs bounds at creation,
 	// can maybe solved using cliprect
-	/*SvgPattern::Ptr svgPattern = boost::shared_dynamic_cast<SvgPattern>(strokeObj);
+	/*SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(strokeObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
@@ -72,7 +72,7 @@ void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,
 	// check whether referenced by id
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
-		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
+		SvgRoot::Ptr root = boost::dynamic_pointer_cast<SvgRoot>(this->getRoot());
 		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onStrokeObject, this, _1);
@@ -96,7 +96,7 @@ void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
 	// check whether referenced by id
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
-		SvgRoot::Ptr root = boost::shared_dynamic_cast<SvgRoot>(this->getRoot());
+		SvgRoot::Ptr root = boost::dynamic_pointer_cast<SvgRoot>(this->getRoot());
 		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onFillObject, this, _1);

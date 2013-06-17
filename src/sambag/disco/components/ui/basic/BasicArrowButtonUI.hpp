@@ -52,7 +52,7 @@ public:
 //-----------------------------------------------------------------------------
 template <class BM>
 void BasicArrowButtonUI<BM>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	BasicArrowButton::Ptr b = boost::shared_dynamic_cast<BasicArrowButton>(c);
+	BasicArrowButton::Ptr b = boost::dynamic_pointer_cast<BasicArrowButton>(c);
 	if (!b)
 		return;
 	Rectangle bounds = Super::getBtnRect(cn, c);

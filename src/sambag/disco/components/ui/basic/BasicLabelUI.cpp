@@ -27,7 +27,7 @@ void BasicLabelUI::installUI(AComponentPtr c) {
 void BasicLabelUI::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 
 	using namespace sambag::disco::genFormatter;
-	Label::Ptr l = boost::shared_dynamic_cast<Label>(c);
+	Label::Ptr l = boost::dynamic_pointer_cast<Label>(c);
 	cn->setFont(l->getFont());
 	cn->setFillColor(c->getForeground());
 	std::string txt = sambag::com::normString(l->getText());
@@ -45,7 +45,7 @@ Dimension BasicLabelUI::getPreferredSize(AComponentPtr c) {
 }
 //-----------------------------------------------------------------------------
 Dimension BasicLabelUI::getMinimumSize(AComponentPtr c) {
-	Label::Ptr l = boost::shared_dynamic_cast<Label>(c);
+	Label::Ptr l = boost::dynamic_pointer_cast<Label>(c);
 	if (!l) {
 		return Dimension();
 	}

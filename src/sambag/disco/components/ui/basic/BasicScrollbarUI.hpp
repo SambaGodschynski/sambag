@@ -349,7 +349,7 @@ bool BasicScrollbarUI<M>::contains(AComponent::Ptr c, const Point2D &p) {
 template <class M>
 void BasicScrollbarUI<M>::installUI(AComponentPtr c) {
 	typename ScrollBarType::Ptr scrollbar = 
-		boost::shared_dynamic_cast<ScrollBarType>(c);
+		boost::dynamic_pointer_cast<ScrollBarType>(c);
 	SAMBAG_ASSERT(scrollbar);
 	_scrollbar = scrollbar;
 	thumbRect = Rectangle(0, 0, 0, 0);
@@ -756,7 +756,7 @@ void BasicScrollbarUI<M>::layoutContainer(AContainerPtr c) {
 	}
 
 	typename ScrollBarType::Ptr scrollbar =
-			boost::shared_dynamic_cast<ScrollBarType>(c);
+			boost::dynamic_pointer_cast<ScrollBarType>(c);
 	SAMBAG_ASSERT(scrollbar);
 	switch (scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
@@ -1215,7 +1215,7 @@ template <class M>
 Coordinate BasicScrollbarUI<M>::
 TrackListener::adjustValueIfNecessary(const Coordinate &scrollBarValue) {
 	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
-	ScrollPane::Ptr scrollBar = boost::shared_dynamic_cast<ScrollPane>(
+	ScrollPane::Ptr scrollBar = boost::dynamic_pointer_cast<ScrollPane>(
 			scrollbar->getParent());
 	if (!scrollBar)
 		return scrollBarValue;

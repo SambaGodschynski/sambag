@@ -149,7 +149,7 @@ public:
 	virtual void printComponentTree(std::ostream &ss) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		Ptr s = boost::shared_dynamic_cast<AContainer>(self.lock());
+		Ptr s = boost::dynamic_pointer_cast<AContainer>(self.lock());
 		return s;
 	}
 	//-------------------------------------------------------------------------

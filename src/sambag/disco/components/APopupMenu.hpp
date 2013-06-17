@@ -147,7 +147,7 @@ template <class SM>
 void APopupMenu<SM>::getSubElements(MenuElements &out) const {
 	for (size_t i=0; i<getComponentCount(); ++i) {
 		AComponentPtr comp = AContainer::getComponent(i);
-		IMenuElement::Ptr el = boost::shared_dynamic_cast<IMenuElement>(comp);
+		IMenuElement::Ptr el = boost::dynamic_pointer_cast<IMenuElement>(comp);
 		if (!el)
 			continue;
 		out.push_back(el);
@@ -166,7 +166,7 @@ AComponentPtr APopupMenu<SM>::getInvoker() const {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::menuSelectionChanged(bool isIncluded) {
-	Menu::Ptr m = boost::shared_dynamic_cast<Menu>(getInvoker());
+	Menu::Ptr m = boost::dynamic_pointer_cast<Menu>(getInvoker());
 	if (m)
 		m->setPopupMenuVisible(isIncluded);
 	else

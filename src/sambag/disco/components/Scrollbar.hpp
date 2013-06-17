@@ -36,7 +36,7 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<Scrollbar>(Super::getPtr());
+		return boost::dynamic_pointer_cast<Scrollbar>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(Scrollbar::Orientation orientation, const Coordinate &value,

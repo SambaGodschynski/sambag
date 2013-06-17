@@ -61,7 +61,7 @@ template <typename T>
 void get(ArbitraryType::Ptr src, T &target) {
 	typedef ConcreteType<T> Dst;
 	typedef boost::shared_ptr<Dst> DstPtr;
-	DstPtr dst = boost::shared_dynamic_cast<Dst>(src);
+	DstPtr dst = boost::dynamic_pointer_cast<Dst>(src);
 	if (!dst)
 		return;
 	target = *dst;

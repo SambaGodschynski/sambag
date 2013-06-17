@@ -133,7 +133,7 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::shared_dynamic_cast<Class>(Super::getPtr());
+		return boost::dynamic_pointer_cast<Class>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -505,7 +505,7 @@ template < class T,
 Rectangle AList<T, CR, DM, SM>::getCellBounds(int index0, int index1) const
 {
 	using namespace ui;
-	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->getCellBounds(getPtr(), index0, index1) : NULL_RECTANGLE;
 }
 //-----------------------------------------------------------------------------
@@ -836,7 +836,7 @@ bool AList<T, CR, DM, SM>::getScrollableTracksViewportHeight() {
 		return true;
 	}
 	Viewport::Ptr parent = // TODO:SwingUtilities.getUnwrappedParent(this);
-			boost::shared_dynamic_cast<Viewport> (
+			boost::dynamic_pointer_cast<Viewport> (
 				getParent()
 			);
 	if (parent) {
@@ -856,7 +856,7 @@ bool AList<T, CR, DM, SM>::getScrollableTracksViewportWidth() {
 		return true;
 	}
 	Viewport::Ptr parent = // TODO:SwingUtilities.getUnwrappedParent(this);
-			boost::shared_dynamic_cast<Viewport> (
+			boost::dynamic_pointer_cast<Viewport> (
 				getParent()
 			);
 
@@ -1033,7 +1033,7 @@ template < class T,
 >
 Point2D AList<T, CR, DM, SM>::indexToLocation(int index) const {
 	using namespace ui;
-	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->indexToLocation(getPtr(), index) : NULL_POINT2D;
 }
 //-----------------------------------------------------------------------------
@@ -1045,7 +1045,7 @@ template < class T,
 int AList<T, CR, DM, SM>::locationToIndex(const Point2D & location) const
 {
 	using namespace ui;
-	IListUI::Ptr ui = boost::shared_dynamic_cast<IListUI>(getUI());
+	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->locationToIndex(getPtr(), location) : -1;
 }
 //-----------------------------------------------------------------------------

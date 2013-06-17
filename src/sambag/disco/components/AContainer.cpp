@@ -48,7 +48,7 @@ int AContainer::__dispatchHierarchyEvents_(events::HierarchyEvent::Type id,
 }
 //-----------------------------------------------------------------------------
 void AContainer::checkAddToSelf(AComponent::Ptr comp) const {
-	AContainer::Ptr tmp = boost::shared_dynamic_cast<AContainer>(comp);
+	AContainer::Ptr tmp = boost::dynamic_pointer_cast<AContainer>(comp);
 	if (!tmp)
 		return;
 	for (AContainer::Ptr cn = getPtr(); cn; cn = cn->getParent()) {
@@ -299,7 +299,7 @@ AComponentPtr AContainer::findComponentAt(const Point2D &p,
 			{
 				// found a component that intersects the point, see if there
 				// is a deeper possibility.
-				AContainer::Ptr con = boost::shared_dynamic_cast<AContainer>(comp);
+				AContainer::Ptr con = boost::dynamic_pointer_cast<AContainer>(comp);
 				if (con) {
 					AComponent::Ptr deeper = con->findComponentAt(
 						trP,
@@ -582,7 +582,7 @@ void AContainer::validate() {
 void AContainer::invalidateTree() {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
-			AContainer::Ptr con = boost::shared_dynamic_cast<AContainer>(comp);
+			AContainer::Ptr con = boost::dynamic_pointer_cast<AContainer>(comp);
 			if (con && (!comp->isValid() || descendUnconditionallyWhenValidating))
 			{
 				con->invalidateTree();
@@ -609,7 +609,7 @@ void AContainer::validateTree() {
 			doLayout();
 		}
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
-			AContainer::Ptr con = boost::shared_dynamic_cast<AContainer>(comp);
+			AContainer::Ptr con = boost::dynamic_pointer_cast<AContainer>(comp);
 			if (con && (!comp->isValid() || descendUnconditionallyWhenValidating))
 			{
 				con->validateTree();

@@ -68,23 +68,23 @@ void ScrollPaneLayout::addLayoutComponent(const AComponentSharedOrWeak &c,
 	com::get(constraint, location);
 	switch(location) {
 	case ScrollPane::VIEWPORT:
-		viewport = boost::shared_dynamic_cast<Viewport>(
+		viewport = boost::dynamic_pointer_cast<Viewport>(
 			addSingletonComponent(viewport, c));
 		break;
 	case ScrollPane::VERTICAL_SCROLLBAR:
-		vsb = boost::shared_dynamic_cast<Scrollbar>(
+		vsb = boost::dynamic_pointer_cast<Scrollbar>(
 			addSingletonComponent(vsb, c));
 		break;
 	case ScrollPane::HORIZONTAL_SCROLLBAR:
-		hsb = boost::shared_dynamic_cast<Scrollbar>(
+		hsb = boost::dynamic_pointer_cast<Scrollbar>(
 			addSingletonComponent(hsb, c));
 		break;
 	case ScrollPane::ROW_HEADER:
-		rowHead = boost::shared_dynamic_cast<Viewport>(
+		rowHead = boost::dynamic_pointer_cast<Viewport>(
 			addSingletonComponent(rowHead, c));
 		break;
 	case ScrollPane::COLUMN_HEADER:
-		colHead = boost::shared_dynamic_cast<Viewport>(
+		colHead = boost::dynamic_pointer_cast<Viewport>(
 				addSingletonComponent(colHead, c));
 		break;
 	case ScrollPane::LOWER_LEFT_CORNER:
@@ -161,7 +161,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	/* Sync the (now obsolete) policy fields with the
 	 * ScrollPane.
 	 */
-	ScrollPane::Ptr scrollPane = boost::shared_dynamic_cast<ScrollPane>(parent);
+	ScrollPane::Ptr scrollPane = boost::dynamic_pointer_cast<ScrollPane>(parent);
 	vsbPolicy = scrollPane->getVerticalScrollBarPolicy();
 	hsbPolicy = scrollPane->getHorizontalScrollBarPolicy();
 
@@ -255,7 +255,7 @@ void ScrollPaneLayout::layoutContainer(AContainerPtr parent) {
 	bool viewTracksViewportWidth = false;
 	bool viewTracksViewportHeight = false;
 	bool isEmpty = (availR.width() < 0 || availR.height() < 0);
-	IScrollable::Ptr sv = boost::shared_dynamic_cast<IScrollable>(view);
+	IScrollable::Ptr sv = boost::dynamic_pointer_cast<IScrollable>(view);
 	// Don't bother checking the Scrollable methods if there is no room
 	// for the viewport, we aren't going to show any scrollbars in this
 	// case anyway.
@@ -478,7 +478,7 @@ Dimension ScrollPaneLayout::
 	/* Sync the (now obsolete) policy fields with the
 	 * ScrollPane.
 	 */
-	ScrollPane::Ptr scrollPane = boost::shared_dynamic_cast<ScrollPane>(parent);
+	ScrollPane::Ptr scrollPane = boost::dynamic_pointer_cast<ScrollPane>(parent);
 	vsbPolicy = scrollPane->getVerticalScrollBarPolicy();
 	hsbPolicy = scrollPane->getHorizontalScrollBarPolicy();
 
@@ -559,7 +559,7 @@ Dimension ScrollPaneLayout::
 		{
 			bool canScroll = true;
 			IScrollable::Ptr scrollable =
-				boost::shared_dynamic_cast<IScrollable>(view);
+				boost::dynamic_pointer_cast<IScrollable>(view);
 			if (scrollable) {
 				canScroll
 						= !scrollable->getScrollableTracksViewportHeight();
@@ -577,7 +577,7 @@ Dimension ScrollPaneLayout::
 		{
 			bool canScroll = true;
 			IScrollable::Ptr scrollable =
-				boost::shared_dynamic_cast<IScrollable>(view);
+				boost::dynamic_pointer_cast<IScrollable>(view);
 			if (scrollable) {
 				canScroll = !scrollable->getScrollableTracksViewportWidth();
 			}
@@ -593,7 +593,7 @@ Dimension ScrollPaneLayout::minimumLayoutSize(AContainerPtr parent) {
     /* Sync the (now obsolete) policy fields with the
 	 * ScrollPane.
 	 */
-	ScrollPane::Ptr scrollPane = boost::shared_dynamic_cast<ScrollPane>(parent);
+	ScrollPane::Ptr scrollPane = boost::dynamic_pointer_cast<ScrollPane>(parent);
 	vsbPolicy = scrollPane->getVerticalScrollBarPolicy();
 	hsbPolicy = scrollPane->getHorizontalScrollBarPolicy();
 

@@ -384,7 +384,7 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::removeInvalidComponent(AComponentPtr component) {
-	AContainer::Ptr c = boost::shared_dynamic_cast<AContainer>(component);
+	AContainer::Ptr c = boost::dynamic_pointer_cast<AContainer>(component);
 	if (c)
 		invalidComponents.remove(c);
 }

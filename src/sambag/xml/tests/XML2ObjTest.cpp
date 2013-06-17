@@ -194,7 +194,7 @@ void XML2ObjectTest::testClosure() {
 	xml2Obj.registerObject<Root>("root");
 	xml2Obj.setClosure(&pv);
 	BaseObject::Ptr base = xml2Obj.buildWithXmlString("<root/>");
-	Root::Ptr root = boost::shared_dynamic_cast<Root>(base);
+	Root::Ptr root = boost::dynamic_pointer_cast<Root>(base);
 	CPPUNIT_ASSERT( root );
 	CPPUNIT_ASSERT( root->closure == pv );
 }
@@ -259,11 +259,11 @@ void XML2ObjectTest::testBuildStructure() {
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert x
   BOOST_FOREACH( BaseObject::Ptr obj, ptr->oL ) {
 	  if (obj->getClassName() == "ObjectA") {
-		  ObjectA::Ptr oa = boost::shared_dynamic_cast<ObjectA, BaseObject>(obj);
+		  ObjectA::Ptr oa = boost::dynamic_pointer_cast<ObjectA, BaseObject>(obj);
 		  CPPUNIT_ASSERT_EQUAL( 10, oa->x);
 	  }
 	  if (obj->getClassName() == "ObjectB") {
-		  ObjectB::Ptr ob = boost::shared_dynamic_cast<ObjectB, BaseObject>(obj);
+		  ObjectB::Ptr ob = boost::dynamic_pointer_cast<ObjectB, BaseObject>(obj);
 	  	  CPPUNIT_ASSERT_EQUAL( 20, ob->x);
 	  }
   }
