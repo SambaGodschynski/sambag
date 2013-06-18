@@ -10,9 +10,9 @@
 #include <sambag/com/Helper.hpp>
 #include <boost/foreach.hpp>
 #include "Graphics.hpp"
-#include "RedrawManager.hpp"
+//#include "RedrawManager.hpp"
 #include "ui/AComponentUI.hpp"
-#include "RootPane.hpp"
+//#include "RootPane.hpp"
 #include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
@@ -90,14 +90,14 @@ void AContainer::addComponent(const AComponentSharedOrWeak &comp, int index) {
 	comp->__updateParent_(getPtr());
 	
 	// update ui
-	if (!comp->isUiSettedByUser()) {
+	/*if (!comp->isUiSettedByUser()) {
 		RootPane::Ptr root = getTopLevelRootPane();
 		if (root) {
 			ui::ALookAndFeelPtr laf = root->getCurrentLookAndFeel();
 			if (laf)
 				comp->installLookAndFeel(laf);
 		}
-	}
+	}*/
 	adjustDescendants(comp->__countHierarchyMembers_());
 	__invalidateIfValid_();
 }
@@ -352,7 +352,7 @@ void AContainer::invalidateParent() {
 }
 //-----------------------------------------------------------------------------
 void AContainer::draw(IDrawContext::Ptr cn) {
-	if ((getWidth() <= 0) || (getHeight() <= 0)) {
+/*	if ((getWidth() <= 0) || (getHeight() <= 0)) {
 		return;
 	}
 
@@ -382,7 +382,7 @@ void AContainer::draw(IDrawContext::Ptr cn) {
 			drawBorder(co.getPtr());
 			drawChildren(co.getPtr());
 		}
-	}
+	}*/
 }
 //-----------------------------------------------------------------------------
 AContainer::ObscuredState AContainer::getObscuredState(int compIndex,

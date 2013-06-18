@@ -14,10 +14,10 @@
 #include "ui/AComponentUI.hpp"
 #include "Graphics.hpp"
 #include <boost/tuple/tuple.hpp>
-#include "RedrawManager.hpp"
-#include "RootPane.hpp"
-#include "CellRendererPane.hpp"
-#include "ITooltipManager.hpp"
+//#include "RedrawManager.hpp"
+//#include "RootPane.hpp"
+//#include "CellRendererPane.hpp"
+//#include "ITooltipManager.hpp"
 #include <sambag/disco/IDiscoFactory.hpp>
 
 namespace sambag { namespace disco { namespace components {
@@ -464,10 +464,10 @@ void AComponent::redraw() {
 }
 //-----------------------------------------------------------------------------
 void AComponent::redraw(const Rectangle &r) {
-	RedrawManager::Ptr rd = RedrawManager::currentManager(getPtr());
+/*	RedrawManager::Ptr rd = RedrawManager::currentManager(getPtr());
 	if (!rd)
 		return;
-	rd->addDirtyRegion(getPtr(), r);
+	rd->addDirtyRegion(getPtr(), r);*/
 }
 //-----------------------------------------------------------------------------
 void AComponent::requestFocus() {
@@ -482,7 +482,7 @@ void AComponent::drawBorder(IDrawContext::Ptr cn) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::draw(IDrawContext::Ptr cn) {
-	if ((getWidth() <= 0) || (getHeight() <= 0)) {
+/*	if ((getWidth() <= 0) || (getHeight() <= 0)) {
 		return;
 	}
 
@@ -509,7 +509,7 @@ void AComponent::draw(IDrawContext::Ptr cn) {
 	else {
 		drawComponent(co.getPtr());
 		drawBorder(co.getPtr());
-	}
+	}*/
 }
 //-----------------------------------------------------------------------------
 void AComponent::redrawParentIfNeeded(const Rectangle &r) {
@@ -540,7 +540,7 @@ bool AComponent::isPreferredSizeSet() const {
 }
 //-----------------------------------------------------------------------------
 void AComponent::revalidate() {
-	if (!getParent()) {
+/*	if (!getParent()) {
 		return;
 	}
 	invalidate();
@@ -548,7 +548,7 @@ void AComponent::revalidate() {
 	if (!rm)
 		return;
 	rm->addInvalidComponent(getPtr());
-	validate();
+	validate();*/
 }
 //-----------------------------------------------------------------------------
 void AComponent::setBounds(const Rectangle &r) {
@@ -963,9 +963,9 @@ RootPanePtr AComponent::getTopLevelRootPane() const {
 		RootPanePtr rt = boost::dynamic_pointer_cast<RootPane>(p);
 		if (rt)
 			return rt;
-	}
-	return RootPanePtr();*/
-	return getLastContainer<RootPane>();
+	}*/
+	return RootPanePtr();
+	//return getLastContainer<RootPane>();
 }
 //-----------------------------------------------------------------------------
 WindowPtr AComponent::getTopLevelAncestor() const {
@@ -976,9 +976,9 @@ WindowPtr AComponent::getTopLevelAncestor() const {
 		WindowPtr w = boost::dynamic_pointer_cast<Window>(p);
 		if (w)
 			return w;
-	}
-	return WindowPtr();*/
-	return getLastContainer<Window>();
+	}*/
+	return WindowPtr();
+	//return getLastContainer<Window>();
 }
 //-----------------------------------------------------------------------------
 AContainerPtr AComponent::getValidateRoot() const {
@@ -1115,13 +1115,13 @@ void AComponent::drawToOffscreen(IDrawContext::Ptr cn,
 }
 //-----------------------------------------------------------------------------
 void AComponent::drawForceDoubleBuffered(IDrawContext::Ptr cn) {
-	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
+/*	RedrawManager::Ptr rm = RedrawManager::currentManager(getPtr());
 	if (!rm)
 		return;
 	Rectangle clip = cn->clipExtends();
 	setFlag(IS_REPAINTING, true);
 	rm->draw(getPtr(), getPtr(), cn, clip);
-	setFlag(IS_REPAINTING, false);
+	setFlag(IS_REPAINTING, false);*/
 }
 //-----------------------------------------------------------------------------
 bool AComponent::isDrawing() const {
@@ -1181,7 +1181,7 @@ PopupMenuPtr AComponent::getComponentPopupMenu() const {
 }
 //-----------------------------------------------------------------------------
 void AComponent::scrollRectToVisible(const Rectangle &aRect) {
-	Rectangle rect = aRect;
+/*	Rectangle rect = aRect;
 	AContainerPtr parent = getParent();
 	CellRendererPane::Ptr cellR = 
 		boost::dynamic_pointer_cast<CellRendererPane>(parent);
@@ -1190,11 +1190,11 @@ void AComponent::scrollRectToVisible(const Rectangle &aRect) {
 		rect.x ( rect.x() + dx );
 		rect.y ( rect.y() + dy );
 		parent->scrollRectToVisible(rect);
-	}
+	}*/
 }
 //-----------------------------------------------------------------------------
 void AComponent::setTooltipText(const std::string &txt) {
-	std::string old = getTooltipText();
+/*	std::string old = getTooltipText();
 	tooltipText = txt;
 	firePropertyChanged(PROPERTY_TOOLTIP, old, tooltipText);
 	ITooltipManager &tm = getTooltipManager();
@@ -1202,7 +1202,7 @@ void AComponent::setTooltipText(const std::string &txt) {
 		tm.unregisterComponent(getPtr());
 	} else {
 		tm.registerComponent(getPtr());
-	}
+	}*/
 }
 //-----------------------------------------------------------------------------
 const std::string & AComponent::getTooltipText() const {

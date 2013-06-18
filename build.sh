@@ -44,6 +44,6 @@ if [ "$mode" = "" ]
 then
   cmake $flags .
 else
-  cmake $flags -G "$mode" .
+  cmake $flags -G "$mode" -DCMAKE_BUILD_TYPE=Release . 
 fi
 

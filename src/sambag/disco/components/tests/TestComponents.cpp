@@ -38,9 +38,9 @@ void TestComponent::drawComponent(sambag::disco::IDrawContext::Ptr cn) {
 	cn->fill();
 }
 //-----------------------------------------------------------------------------
-LookAndFeelForTest::LookAndFeelForTest() {
+/*LookAndFeelForTest::LookAndFeelForTest() {
 	registerComponentUI<TestComponent, TestComponentUI>();
-}
+}*/
 //-----------------------------------------------------------------------------
 sdc::ui::AComponentUIPtr
 TestComponent::createComponentUI(sdc::ui::ALookAndFeelPtr laf) const

@@ -24,7 +24,7 @@ IF(APPLE)
 	#find_package(X11 REQUIRED)
         #include_directories(${X11_INCLUDE_DIRS})
 	#find_package(IConvX REQUIRED)
-	add_definitions(-DDISCO_USE_COCOA)
+#	add_definitions(-DDISCO_USE_COCOA)
 	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
 	FIND_LIBRARY(CARBON_LIBRARY Carbon)
 ELSEIF(UNIX)
@@ -61,8 +61,8 @@ find_package(Boost 1.49.0 REQUIRED
 	date_time 
 	timer
 	chrono 
-	#log
-	#log_setup
+#	log
+#	log_setup
 )
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
@@ -78,8 +78,8 @@ include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
 
 IF(APPLE)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-	    	${COCOA_LIBRARY}
-		${CARBON_LIBRARY}
+#	    	${COCOA_LIBRARY}
+#		${CARBON_LIBRARY}
 	)
 ELSEIF(UNIX)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
@@ -92,9 +92,9 @@ ENDIF(APPLE)
 set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${Boost_LIBRARIES}
 	${CPPUNIT_LIBRARIES}
-	${CAIRO_LIBRARIES}
-	${TINYXML_LIBRARIES}
-	${LUA52_LIBRARIES}
+#	${CAIRO_LIBRARIES}
+#	${TINYXML_LIBRARIES}
+#	${LUA52_LIBRARIES}
 )
 
 add_subdirectory(src)

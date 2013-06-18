@@ -67,15 +67,15 @@ namespace tests {
 		return os;
 	}
 	//=========================================================================
-	class TestComponentUI : public sdc::ui::AComponentUI {
+	/*class TestComponentUI : public sdc::ui::AComponentUI {
 	public:
 		typedef boost::shared_ptr<TestComponentUI> Ptr;
 		static Ptr create() {
 			return Ptr(new TestComponentUI());
 		}
-	};
+	};*/
 	//=========================================================================
-	class LookAndFeelForTest : public sdc::ui::ALookAndFeel {
+	/*class LookAndFeelForTest : public sdc::ui::ALookAndFeel {
 	protected:
 		LookAndFeelForTest();
 	public:
@@ -84,7 +84,7 @@ namespace tests {
 		static Ptr create() {
 			return Ptr(new LookAndFeelForTest());
 		}
-	};
+	};*/
 	//=============================================================================
 	class TestComponent : public sdc::AComponent {
 	protected:

@@ -11,16 +11,27 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
-#include "BoostTimerImpl.hpp"
+//#include "BoostTimerImpl.hpp"
 #include "TestWindowImpl.hpp"
 #include <iostream>
 #include <boost/thread.hpp>
 namespace sambag { namespace disco { namespace components {
+class DummyTimerImpl {
+//=============================================================================
+public:
+private:
+public:
+    static void closeAllTimer() {}
+    void startTimer(Timer::Ptr tm) {}
+    void stopTimer(Timer::Ptr tm) {}
+    static void startUpTimer() {}
+    static void tearDownTimer() {}
+};
 //============================================================================
 /** 
   * @class WindowTestToolkit.
   */
-template <class TimerPolicy = BoostTimerImpl, class _Window = TestWindowImpl>
+template <class TimerPolicy = DummyTimerImpl, class _Window = TestWindowImpl>
 class WindowTestToolkit : public WindowToolkit, public TimerPolicy{
 //=============================================================================
 friend struct Loki::CreateUsingNew<WindowTestToolkit>;
@@ -81,7 +92,7 @@ WindowTestToolkit<T, W>::createWindowImpl(AWindowImplPtr parent) const
 //----------------------------------------------------------------------------
 template <class T, class W>
 void WindowTestToolkit<T, W>::startMainLoop() {
-	enum {Res=100};
+/*	enum {Res=100};
 	int waited = 0;
 	int sec = 1;
 	T::startUpTimer();
@@ -95,7 +106,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 		if ( waited > mainLoopWaiting )
 			break;
 	}
-	T::tearDownTimer();
+	T::tearDownTimer();*/
 }
 //-----------------------------------------------------------------------------
 template <class T, class W>

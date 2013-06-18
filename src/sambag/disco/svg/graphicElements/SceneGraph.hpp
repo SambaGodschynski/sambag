@@ -855,7 +855,7 @@ void SceneGraph::createProcessList (Container &out) const
 	 * the depth_first_search alg. selects the out_edges.
 	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph#building_process_list
 	 */
-	if (boost::num_vertices(g)==0)
+	/*if (boost::num_vertices(g)==0)
 		return;
 	Vertex startVertex =  *(boost::vertices(g).first);
 	DFSVisitor<Container> vis(*this, out, startVertex);
@@ -869,7 +869,7 @@ void SceneGraph::createProcessList (Container &out) const
 	boost::depth_first_search(
 		g2,
 		boost::visitor(vis)
-	);
+	);*/
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename Container>

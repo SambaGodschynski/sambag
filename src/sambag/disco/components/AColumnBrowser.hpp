@@ -73,9 +73,9 @@ public:
 		if (!value.parent)
 			return getPtr();
 		if (value.parent->isFolder(value.node)) {
-			setText("[" + sambag::com::toString(value.data) + "]");
+            Class::setText("[" + sambag::com::toString(value.data) + "]");
 		} else {
-			setText(sambag::com::toString(value.data));
+            Class::setText(sambag::com::toString(value.data));
 		}
 		Super::setEnabled(list->isEnabled());
 		Super::setFont(list->getFont());
