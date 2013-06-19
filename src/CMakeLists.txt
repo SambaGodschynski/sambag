@@ -186,7 +186,6 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/disco/tests/HelperForTesting.cpp
 	sambag/disco/tests/TestAttributeParser.cpp
 	sambag/disco/tests/TestCairoDrawContext.cpp
-	sambag/disco/tests/TestCoordinate.cpp
 	sambag/disco/tests/TestFileResourceManager.cpp
 	sambag/disco/tests/TestFontCache.cpp
 	sambag/disco/tests/TestGenFlowLayout.cpp

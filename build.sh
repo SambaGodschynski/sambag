@@ -17,7 +17,7 @@ usage()
 
 mode=""
 flags=""
-
+build_type="-D CMAKE_BUILD_TYPE=Release"
 #passing arguments
 while [ "$1" != "" ]; do
     case $1 in
@@ -28,7 +28,7 @@ while [ "$1" != "" ]; do
 	                        #TODO: flags="-G '$1'" 
 				mode=$1
                                 ;;
-        -d )                    flags="$flags -D CMAKE_BUILD_TYPE=Debug"
+        -d )                    build_type="-D CMAKE_BUILD_TYPE=Debug"
 	                        ;;
         -h | --help )           usage
                                 exit
@@ -40,7 +40,9 @@ while [ "$1" != "" ]; do
 done
 export CLIBS=$in
 echo use generator: $mode
+flags="$flags $build_type"
 if [ "$mode" = "" ]
+echo "$flags"
 then
   cmake $flags .
 else
