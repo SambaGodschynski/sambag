@@ -33,7 +33,11 @@ while [ "$1" != "" ]; do
         -h | --help )           usage
                                 exit
                                 ;;
-        * )                     usage
+       
+	-f | --flag )		shift
+				flags="$flags $1"
+				;;
+	 * )                     usage
                                 exit 1
     esac
     shift
