@@ -45,10 +45,19 @@ find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
 find_package(VST23X REQUIRED)
 
-SET(BOOST_ROOT $ENV{CLIBS}/boost)
-#SET(Boost_USE_STATIC_LIBS        ON)
-#SET(Boost_USE_MULTITHREADED      ON)
-#SET(Boost_USE_STATIC_RUNTIME    ON)
+IF(WIN32)
+	SET(BOOST_ROOT $ENV{CLIBS}/boost)
+	SET(Boost_NO_SYSTEM_PATHS         ON)
+	#SET(Boost_USE_STATIC_LIBS        ON)
+	SET(Boost_USE_MULTITHREADED      OFF)
+	#SET(Boost_USE_STATIC_RUNTIME    ON)
+ELSE(WIN32)
+	SET(BOOST_ROOT $ENV{CLIBS})
+        SET(Boost_NO_SYSTEM_PATHS         ON)
+        #SET(Boost_USE_STATIC_LIBS        ON)
+        SET(Boost_USE_MULTITHREADED      OFF)
+        #SET(Boost_USE_STATIC_RUNTIME    ON)
+ENDIF(WIN32)
 
 find_package(Boost 1.49.0 REQUIRED 
 	filesystem 
@@ -56,7 +65,6 @@ find_package(Boost 1.49.0 REQUIRED
 	thread 
 	regex 
 	signals 
-	locale 
 	serialization 
 	date_time 
 	timer
