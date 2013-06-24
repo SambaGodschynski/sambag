@@ -45,8 +45,8 @@ done
 export CLIBS=$in
 echo use generator: $mode
 flags="$flags $build_type"
+echo $flags
 if [ "$mode" = "" ]
-echo "$flags"
 then
   cmake $flags .
 else
