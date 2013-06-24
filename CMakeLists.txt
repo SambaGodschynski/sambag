@@ -46,9 +46,9 @@ find_package(Sqlite3X REQUIRED)
 find_package(VST23X REQUIRED)
 
 SET(BOOST_ROOT $ENV{CLIBS}/boost)
-SET(Boost_USE_STATIC_LIBS        ON)
+#SET(Boost_USE_STATIC_LIBS        ON)
 #SET(Boost_USE_MULTITHREADED      ON)
-SET(Boost_USE_STATIC_RUNTIME    ON)
+#SET(Boost_USE_STATIC_RUNTIME    ON)
 
 find_package(Boost 1.49.0 REQUIRED 
 	filesystem 

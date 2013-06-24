@@ -220,15 +220,14 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::processDraw(
 template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::boundsUpdated() {
 	using namespace components;
-	// create offbuffer
-    if (!rootPane) {
-        return;
-    }
 	Dimension dim = ConcreteWindowImpl::getBounds().getDimension();
-	if (dim != rootPane->getSize()) {
-		rootPane->setSize(dim);
-		DrawPolicy::reinit(rootPane);
-		rootPane->invalidate();
+	// create offbuffer
+	if (rootPane) {
+		if (dim != rootPane->getSize()) {
+			rootPane->setSize(dim);
+			DrawPolicy::reinit(rootPane);
+			rootPane->invalidate();
+		}
 	}
 	EventSender<OnBoundsChanged>::notifyListeners(this, OnBoundsChanged(dim));
 }

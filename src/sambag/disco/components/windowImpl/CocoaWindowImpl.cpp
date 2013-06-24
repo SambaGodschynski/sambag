@@ -39,9 +39,9 @@ void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 		return;
 	}
 	Impl::openNested(win, area.x(), area.y(), area.width(), area.height());
-    bounds = area;
+	bounds = area;
 	visible = true;
-    onCreated();
+	onCreated();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::_close() {
@@ -95,7 +95,16 @@ void CocoaWindowImpl::updateWindowToBounds(const Rectangle &r) {
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::updateBoundsToWindow() {
-	Impl::setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+	Nb x = bounds.x();
+	Nb y = bounds.y();
+	Nb w = bounds.width();
+	Nb h = bounds.height();
+	if (getFlag(WindowFlags::WND_NESTED)) {
+		Rectangle r = getHostBounds();
+		x = r.x();
+		y = r.y();
+	}
+	Impl::setBounds(x,y,w,h);
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::__boundsChanged(Nb x, Nb y, Nb w, Nb h) {
@@ -114,16 +123,20 @@ bool CocoaWindowImpl::isVisible() const {
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getHostBounds() const {
-    //get real window bounds (in case of vst area location dosen't fit with the
-    // window
-    Nb x=0, y=0, h=0, w=0;
-    Impl::getBounds(x,y,w,h);
-    Rectangle _bounds = Rectangle(x,y,w,h);
-
-    return _bounds;
+	//get real window bounds (in case of vst area location dosen't fit with the
+	// window
+	Nb x=0, y=0, h=0, w=0;
+	Impl::getBounds(x,y,w,h);
+	Rectangle _bounds = Rectangle(x,y,w,h);
+	return _bounds;
 }
 //-----------------------------------------------------------------------------
 Rectangle CocoaWindowImpl::getBounds() const {
+	if (getFlag(WindowFlags::WND_NESTED)) {
+		Rectangle res = bounds;
+		res.x0(Point2D(0,0));
+		return res;
+	}
 	return bounds;
 }
 //-----------------------------------------------------------------------------

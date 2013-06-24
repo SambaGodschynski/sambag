@@ -14,7 +14,13 @@
 #import <iostream>
 #import <stdexcept>
 #import <Carbon/Carbon.h>
+#include <iostream>
 #include "AutoReleasePool.h"
+
+
+
+#define SAMBAG_SYNC(x) //SAMBAG_BEGIN_SYNCHRONIZED(x)
+#define SAMBAG_SYNC_END //SAMBAG_END_SYNCHRONIZED
 
 namespace {
 	std::string toString(NSString *str) {
@@ -23,6 +29,9 @@ namespace {
 		}
 		return std::string([str UTF8String]);
 	}
+    /*
+     * @return bounds of view on screen with origin on top left corner.
+     */
     NSRect getBoundsOnScreen(NSView *view) {
         NSRect r = [view frame];
         NSWindow* viewWindow = [view window];
@@ -30,8 +39,13 @@ namespace {
         r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
         return r;
     }
-
 } // namespace(s)
+
+static std::ostream & operator<< (std::ostream &os, const NSRect &r) {
+    os<<r.origin.x<<", "<<r.origin.y<<", "<<r.size.width<<", "<<r.size.height;
+    return os;
+}
+
 
 typedef sambag::disco::components::_CocoaWindowImpl Master;
 //=========================================================================
@@ -94,12 +108,14 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     if (!carbonParent) {
         return;
     }
-    NSRect f = getBoundsOnScreen([self contentView]);
+    NSRect r = windowFrame;
+    r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
+
     Rect wr;
-    wr.left   = (short) f.origin.x;
-    wr.top    = (short) f.origin.y;
-    wr.right  = (short) f.origin.x + f.size.width;
-    wr.bottom = (short) f.origin.y + f.size.height;
+    wr.left   = (short) r.origin.x;
+    wr.top    = (short) r.origin.y;
+    wr.right  = (short) r.origin.x + r.size.width;
+    wr.bottom = (short) r.origin.y + r.size.height;
     SetWindowBounds (carbonParent, kWindowContentRgn, &wr);
     ShowWindow (carbonParent);
 }
@@ -119,14 +135,14 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 
 @implementation DiscoWindowDelegate
 - (void)windowDidResize:(NSNotification *)notification {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         master->____windowBoundsChanged();
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)windowDidMove:(NSNotification *)notification {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         master->____windowBoundsChanged();
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
@@ -197,53 +213,53 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	return btn;
 }
 - (void)mouseDown:(NSEvent *)theEvent {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         int btn = [self getMouseBtn: theEvent];
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseButtonPressEvent(p.x, p.y, btn);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)mouseUp:(NSEvent *)theEvent {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         int btn = [self getMouseBtn: theEvent];
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)rightMouseDown:(NSEvent *)theEvent{
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         int btn = [self getMouseBtn: theEvent];
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseButtonPressEvent(p.x, p.y, btn);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)rightMouseUp:(NSEvent *)theEvent{
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         int btn = [self getMouseBtn: theEvent];
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)mouseMoved:(NSEvent *)theEvent {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)mouseDragged:(NSEvent *)theEvent{
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)drawRect:(NSRect)rect {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         if (! [[self window] isVisible]) {
             return;
         }
@@ -254,7 +270,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
                               rect.origin.y, 
                               rect.size.width, 
                               rect.size.height);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 - (void)setMaster:(Master*) theMaster {
 	master = theMaster;
@@ -263,10 +279,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     [super dealloc];
 }
 - (void)scrollWheel:(NSEvent *)theEvent {
-    SAMBAG_BEGIN_SYNCHRONIZED( master->getMutex() )
+    SAMBAG_SYNC( master->getMutex() )
         NSPoint p = [self getMouseLocation: theEvent];
         master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
     
 }
 @end
@@ -423,7 +439,7 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h)
 {
-    SAMBAG_BEGIN_SYNCHRONIZED( getMutex() )
+    SAMBAG_SYNC( getMutex() )
         Number sw=0, sh=0;
         _CocoaToolkitImpl::getScreenDimension(sw, sh);
         NSRect frame = NSMakeRect(x,sh - y - h,w,h);
@@ -464,13 +480,13 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
             __onCreated();
         }
         [window display];
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
-    SAMBAG_BEGIN_SYNCHRONIZED( getMutex() )
+    SAMBAG_SYNC( getMutex() )
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
             throw std::runtime_error("openNested() failed to create window.");
@@ -482,7 +498,6 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         NSRect windowBounds = [window contentRectForFrameRect:[window frame]];
         windowBounds.size.width = w;
         windowBounds.size.height = h;
-   
         DiscoWindow* pluginWindow  = [[DiscoWindow alloc] initWithContentRect:windowBounds
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
@@ -503,7 +518,7 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         // assign raw pointer
         this->viewPtr = createDiscoViewPtr(view);
         __onCreated();
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
 WindowRef _CocoaWindowImpl::getWindowRef() const {
@@ -523,7 +538,7 @@ void _CocoaWindowImpl::closeWindow() {
 	if (!window) {
 		return;
 	}
-    SAMBAG_BEGIN_SYNCHRONIZED( getMutex() )
+    SAMBAG_SYNC( getMutex() )
         if (getFlag(WindowFlags::WND_NESTED)) {
             NSWindow * parent = [window parentWindow];
             if (parent) {
@@ -535,7 +550,7 @@ void _CocoaWindowImpl::closeWindow() {
         this->carbonWindowRef.reset();
         this->windowPtr = NULL;
         this->viewPtr = NULL;
-    SAMBAG_END_SYNCHRONIZED
+    SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::onClose() {
@@ -547,7 +562,6 @@ void _CocoaWindowImpl::onClose() {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
-    
     DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
     Number sw=0, sh=0;
@@ -612,7 +626,7 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
         wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
         SetWindowBounds (win, kWindowContentRgn, &wr);
-    }
+   }
 }
 //-----------------------------------------------------------------------------
 std::string _CocoaWindowImpl::getTitle() const {

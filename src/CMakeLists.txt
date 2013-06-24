@@ -205,20 +205,5 @@ SET ( SAMBAG_TESTSOURCES
 )
 add_library(sambag ${SAMBAG_SOURCES})
 
-SET ( SAMBAG_TESTAPPSOURCES
-	testApps/componentTests/TestApp/src/DiscoView.cpp
-)
-#unit tests
-SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
-#unit test resources
-IF(WIN32)
-  SET (UNIT_TESTSOURCE ${UNIT_TESTSOURCE} win32_resources/resources.rc)
-ENDIF(WIN32)
-
-add_executable(unit_tests ${UNIT_TESTSOURCE})
-target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
-#testapp
-add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
-target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
 
 

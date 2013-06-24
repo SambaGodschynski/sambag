@@ -123,7 +123,6 @@ inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 			getDiscoFactory()->createContext(bff);
 	Rectangle clip = surface->getClipRect();
 	bffcn->copyAreaTo( cn, clip, clip.x0());
-	//cn->drawSurface(bff);
 }
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::init(components::RootPane::Ptr root)

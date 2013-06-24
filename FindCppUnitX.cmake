@@ -5,6 +5,8 @@
 
 FIND_PATH(CPPUNIT_INCLUDE_TMP Test.h
 	$ENV{CLIBS}/cppunit/include/cppunit
+	/opt/local/include/cppunit
+	/opt/local/include
 )
 
 SET(CPPUNIT_INCLUDE_DIRS "${CPPUNIT_INCLUDE_TMP}/..")
@@ -21,6 +23,7 @@ FIND_PATH(CPPUNIT_LIBRARY_DIRS ${LIBCPPUNIT}
 	$ENV{CLIBS}/cppunit/lib/lib
 	$ENV{CLIBS}/cppunit/bin/lib
 	$ENV{CLIBS}/cppunit/lib
+	/opt/local/lib
 )
 
 SET(CPPUNIT_FOUND "NO")

@@ -18,11 +18,12 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 	/opt/local/include # DarwinPorts
 	/opt/csw/include # Blastwave
 	/opt/include
+	/opt/local/include/cairo
 )
 
 IF(APPLE)
-	SET(LIBCAIRO "libcairo.a")
-	SET(LIBCAIROD "libcairo.a")
+	SET(LIBCAIRO "libcairo.dylib")
+	SET(LIBCAIROD "libcairo.dylib")
 ELSEIF(UNIX)
 	SET(LIBCAIRO "libcairo.so")
 	SET(LIBCAIROD "libcairo.so")
@@ -61,23 +62,23 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(APPLE)
-	find_package(LibPngX REQUIRED)
-        find_package(ZlibX REQUIRED)
-	find_package(PixmanX REQUIRED)
-	FIND_PATH(CAIRO_APPLE_ADD libexpat.a /opt/local/lib)
-	IF(NOT CAIRO_APPLE_ADD)
-	       message(SEND_ERROR "Unable to find the requested CairoAppleAdd libraries.") 
-	ENDIF(NOT CAIRO_APPLE_ADD)
+	#find_package(LibPngX REQUIRED)
+        #find_package(ZlibX REQUIRED)
+	#find_package(PixmanX REQUIRED)
+	#FIND_PATH(CAIRO_APPLE_ADD libexpat.a /opt/local/lib)
+	#IF(NOT CAIRO_APPLE_ADD)
+	#       message(SEND_ERROR "Unable to find the requested CairoAppleAdd libraries.") 
+	#ENDIF(NOT CAIRO_APPLE_ADD)
 	
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libexpat.a)
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libbz2.a)
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfreetype.a)
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfontconfig.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libexpat.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libbz2.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfreetype.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfontconfig.a)
 
 
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBZLIB_LIBRARY_DIRS}/${LIBZLIB})
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPIXMAN_LIBRARY_DIRS}/${LIBPIXMAN})
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPNG_LIBRARY_DIRS}/${LIBPNG})
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBZLIB_LIBRARY_DIRS}/${LIBZLIB})
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPIXMAN_LIBRARY_DIRS}/${LIBPIXMAN})
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPNG_LIBRARY_DIRS}/${LIBPNG})
 ENDIF(APPLE)
 
 
