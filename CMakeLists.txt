@@ -44,34 +44,8 @@ find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
 find_package(VST23X REQUIRED)
+find_package(BoostX REQUIRED)
 
-IF(WIN32)
-	SET(BOOST_ROOT $ENV{CLIBS}/boost)
-	SET(Boost_NO_SYSTEM_PATHS         ON)
-	#SET(Boost_USE_STATIC_LIBS        ON)
-	SET(Boost_USE_MULTITHREADED      OFF)
-	#SET(Boost_USE_STATIC_RUNTIME    ON)
-ELSE(WIN32)
-	SET(BOOST_ROOT $ENV{CLIBS})
-        SET(Boost_NO_SYSTEM_PATHS         ON)
-        #SET(Boost_USE_STATIC_LIBS        ON)
-        SET(Boost_USE_MULTITHREADED      OFF)
-        #SET(Boost_USE_STATIC_RUNTIME    ON)
-ENDIF(WIN32)
-
-find_package(Boost 1.49.0 REQUIRED 
-	filesystem 
-	system 
-	thread 
-	regex 
-	signals 
-	serialization 
-	date_time 
-	timer
-	chrono 
-	#log
-	#log_setup
-)
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
 include_directories(${TINYXML_INCLUDE_DIRS})
