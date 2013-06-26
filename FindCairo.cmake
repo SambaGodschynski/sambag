@@ -22,8 +22,8 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 )
 
 IF(APPLE)
-	SET(LIBCAIRO "libcairo.a")
-	SET(LIBCAIROD "libcairo.a")
+	SET(LIBCAIRO "libcairo.dylib")
+	SET(LIBCAIROD "libcairo.dylib")
 ELSEIF(UNIX)
 	SET(LIBCAIRO "libcairo.so")
 	SET(LIBCAIROD "libcairo.so")
