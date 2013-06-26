@@ -5,6 +5,7 @@
 
 FIND_PATH(LUA52_INCLUDE_DIRS lua.hpp
 	$ENV{CLIBS}/lua/src
+	/opt/local/include
 )
 
 IF(WIN32)
@@ -18,6 +19,7 @@ ENDIF(WIN32)
 FIND_PATH(LUA52_LIBRARY_DIRS ${LIBLUA52}
 	$ENV{CLIBS}/lua/src
 	$ENV{CLIBS}/lua/win32/lib
+	/opt/local/lib/
 )
 
 SET(LUA52_FOUND "NO")
