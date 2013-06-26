@@ -5,7 +5,6 @@
 
 FIND_PATH(CPPUNIT_INCLUDE_TMP Test.h
 	$ENV{CLIBS}/cppunit/include/cppunit
-	$ENV{CLIBS}/include/cppunit
 	/opt/local/include/cppunit
 	/opt/local/include
 )
@@ -24,7 +23,6 @@ FIND_PATH(CPPUNIT_LIBRARY_DIRS ${LIBCPPUNIT}
 	$ENV{CLIBS}/cppunit/lib/lib
 	$ENV{CLIBS}/cppunit/bin/lib
 	$ENV{CLIBS}/cppunit/lib
-	$ENV{CLIBS}/lib
 	/opt/local/lib
 )
 

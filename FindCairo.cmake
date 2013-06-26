@@ -10,7 +10,6 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 	$ENV{CLIBS}/cairo/src
 	$ENV{CLIBS}/cairo/include/cairo
 	$ENV{CLIBS}/cairo
-	$ENV{CLIBS}/include/cairo
 	~/Library/Frameworks
 	/Library/Frameworks
 	/usr/include/cairo
@@ -23,8 +22,8 @@ FIND_PATH(CAIRO_INCLUDE_DIRS cairo.h
 )
 
 IF(APPLE)
-	SET(LIBCAIRO "libcairo.a")
-	SET(LIBCAIROD "libcairo.a")
+	SET(LIBCAIRO "libcairo.dylib")
+	SET(LIBCAIROD "libcairo.dylib")
 ELSEIF(UNIX)
 	SET(LIBCAIRO "libcairo.so")
 	SET(LIBCAIROD "libcairo.so")
@@ -38,7 +37,6 @@ FIND_PATH(CAIRO_LIBRARY_DIRS ${LIBCAIRO}
 	$ENV{CAIRODIR}
 	$ENV{CLIBS}/cairo/lib
 	$ENV{CLIBS}/cairo
-	$ENV{CLIBS}/lib
 	~/Library/Frameworks
 	/Library/Frameworks
 	/usr/local/lib
@@ -64,12 +62,23 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(APPLE)
-	find_package(LibPngX REQUIRED)
-        find_package(ZlibX REQUIRED)
-	find_package(PixmanX REQUIRED)
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBZLIB_LIBRARY_DIRS}/${LIBZLIB})
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPIXMAN_LIBRARY_DIRS}/${LIBPIXMAN})
-	SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPNG_LIBRARY_DIRS}/${LIBPNG})
+	#find_package(LibPngX REQUIRED)
+        #find_package(ZlibX REQUIRED)
+	#find_package(PixmanX REQUIRED)
+	#FIND_PATH(CAIRO_APPLE_ADD libexpat.a /opt/local/lib)
+	#IF(NOT CAIRO_APPLE_ADD)
+	#       message(SEND_ERROR "Unable to find the requested CairoAppleAdd libraries.") 
+	#ENDIF(NOT CAIRO_APPLE_ADD)
+	
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libexpat.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libbz2.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfreetype.a)
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES}  ${CAIRO_APPLE_ADD}/libfontconfig.a)
+
+
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBZLIB_LIBRARY_DIRS}/${LIBZLIB})
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPIXMAN_LIBRARY_DIRS}/${LIBPIXMAN})
+	#SET(CAIRO_LIBRARIES ${CAIRO_LIBRARIES} ${LIBPNG_LIBRARY_DIRS}/${LIBPNG})
 ENDIF(APPLE)
 
 
