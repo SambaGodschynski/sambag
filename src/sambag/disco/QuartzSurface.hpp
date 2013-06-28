@@ -11,7 +11,7 @@
 //.............................................................................
 #ifdef DISCO_USE_COCOA
 //.............................................................................
-#include <cairo-quartz.h>
+
 #include "CairoSurface.hpp"
 
 namespace sambag { namespace disco {
@@ -28,38 +28,23 @@ protected:
 	sambag::disco::Rectangle _size;
 public:
 	//-------------------------------------------------------------------------
-	Ptr static create (CGContextRef cgContext, int width, int height) {
-		/* http://cairographics.org/manual/cairo-Quartz-Surfaces.html
-		 * If the CGContext is in the Quartz coordinate space
-		 * (with the origin at the bottom left), then it should be flipped
-		 * before this function is called.
-		 */
-		CGContextTranslateCTM (cgContext, 0.0, height);
-		CGContextScaleCTM (cgContext, 1.0, -1.0);
-
-		cairo_surface_t *s = cairo_quartz_surface_create_for_cg_context(cgContext, width, height);
-		Ptr neu = Ptr(new QuartzSurface(s));
-		neu->_size = Rectangle(0,0,width,height);
-		return neu;
-	}
+	Ptr static create (void *cgContext, int width, int height);
 	//-------------------------------------------------------------------------
-	virtual Rectangle getSize() const {
-		return _size;
-	}
+	virtual Rectangle getSize() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * default impl. 
 	 * @return getSize();
 	 */
-	virtual Rectangle getClipRect() const {
-		return _size;
-	}
+	virtual Rectangle getClipRect() const;
 	//-------------------------------------------------------------------------
 	virtual void setSize(const Rectangle &r) {
 	}
+	//-------------------------------------------------------------------------
+	virtual ~QuartzSurface();
 };
 }}
 //.............................................................................
 #endif //DISCO_USE_COCOA
 //.............................................................................
-#endif /* WIN32SURFACE_HPP_ */
+#endif /* QUARTZSURFACE_HPP_ */

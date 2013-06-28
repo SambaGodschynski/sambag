@@ -6,6 +6,7 @@
 FIND_PATH(LIBPNG_INCLUDE_DIRS png.h
 	$ENV{CLIBS}/libpng
 	/opt/local/include
+	$ENV{CLIBS}/include
 )
 
 IF(WIN32)
@@ -19,6 +20,7 @@ ENDIF(WIN32)
 FIND_PATH(LIBPNG_LIBRARY_DIRS ${LIBPNG}
 	$ENV{CLIBS}/libpng
 	/opt/local/lib
+	$ENV{CLIBS}/lib
 )
 
 SET(LIBPNG_FOUND "NO")

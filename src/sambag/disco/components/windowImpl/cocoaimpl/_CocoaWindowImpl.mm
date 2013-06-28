@@ -332,6 +332,9 @@ void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) 
 		return; // happens sometimes (maybe while creating)
 	}
 	[view setNeedsDisplay:YES];
+    /*NSRect r = NSMakeRect(x,y,w,h);
+    std::cout<<r<<std::endl;
+    [view setNeedsDisplayInRect: r];*/
 }
 
 //-----------------------------------------------------------------------------

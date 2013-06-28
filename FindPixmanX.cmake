@@ -6,6 +6,7 @@
 FIND_PATH(LIBPIXMAN_INCLUDE_DIRS pixman.h
 	$ENV{CLIBS}/pixman
 	/opt/local/include/pixman-1
+	$ENV{CLIBS}/include/pixman-1
 )
 
 IF(WIN32)
@@ -19,6 +20,7 @@ ENDIF(WIN32)
 FIND_PATH(LIBPIXMAN_LIBRARY_DIRS ${LIBPIXMAN}
 	$ENV{CLIBS}/pixman
 	/opt/local/lib
+	$ENV{CLIBS}/lib
 )
 
 SET(LIBPIXMAN_FOUND "NO")

@@ -6,6 +6,7 @@
 FIND_PATH(LIBZLIB_INCLUDE_DIRS zlib.h
 	$ENV{CLIBS}/zlib
 	/opt/local/include
+	$ENV{CLIBS}/include
 )
 
 IF(WIN32)
@@ -19,6 +20,7 @@ ENDIF(WIN32)
 FIND_PATH(LIBZLIB_LIBRARY_DIRS ${LIBZLIB}
 	$ENV{CLIBS}/zlib
 	/opt/local/lib
+	$ENV{CLIBS}/lib
 )
 
 SET(LIBZLIB_FOUND "NO")

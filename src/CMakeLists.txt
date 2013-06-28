@@ -23,6 +23,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/IDiscoFactory.cpp
 	sambag/disco/IPattern.cpp
 	sambag/disco/IResourceManager.cpp
+	sambag/disco/QuartzSurface.cpp
 	sambag/disco/Tweens.cpp
 	sambag/disco/Win32IntResourceManager.cpp
 	sambag/disco/components/AButton.cpp
