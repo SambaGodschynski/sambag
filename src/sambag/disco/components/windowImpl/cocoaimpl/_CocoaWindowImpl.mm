@@ -74,10 +74,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     objects = [[NSMutableArray alloc] init];
 }
 -(void)dealloc {
-    [super dealloc];
     if (objects) {
         [objects release];
     }
+    [super dealloc];
 }
 -(void)addObject:(NSObject*)obj {
     [self initObjects];
@@ -301,7 +301,7 @@ DiscoView * getDiscoView(const Master &m) {
 	return res;
 }
 void deallocSharedPtr(void *ptr) {
-    [(NSObject*)ptr release];
+    //[(NSObject*)ptr release];
 }
 void deallocCarbonWindowRef(void *ptr) {
     //DisposeWindow ((WindowRef)ptr);
