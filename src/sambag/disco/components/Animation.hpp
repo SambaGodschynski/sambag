@@ -63,13 +63,13 @@ public:
 }; // DefaultTimerImpl
 ////////////////////////////////////////////////////////////////////////////////
 template < class T,
-	template <class> class Tween,
-	template <class> class UpdatePolicy
+	template <class> class _Tween,
+	template <class> class _UpdatePolicy
 >
 struct Animation :
-    public GenericAnimator<T, DefaultTimerImpl, Tween, UpdatePolicy>
+    public GenericAnimator<T, DefaultTimerImpl, _Tween, _UpdatePolicy>
 {
-    typedef Animation<T, Tween, UpdatePolicy> ThisClass;
+    typedef Animation<T, _Tween, _UpdatePolicy> ThisClass;
     typedef boost::shared_ptr<ThisClass> Ptr;
     typedef typename DefaultTimerImpl::Millisecond Ms;
     static Ptr create(const T &s=T(), const T &e=T(), Ms d=0, Ms rfsh=0)

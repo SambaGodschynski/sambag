@@ -38,7 +38,6 @@ VOID CALLBACK timerProc(UINT idEvent, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD 
 	if (tm->getNumRepetitions() != -1 &&
 		numCalled > tm->getNumRepetitions()) 
 	{
-		tm->__setRunningByToolkit_(false);
 		timeKillEvent(idEvent);
 		timers.left.erase(it);
 		return;
