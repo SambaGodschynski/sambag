@@ -135,14 +135,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 
 @implementation DiscoWindowDelegate
 - (void)windowDidResize:(NSNotification *)notification {
-    SAMBAG_SYNC( master->getMutex() )
-        master->____windowBoundsChanged();
-    SAMBAG_SYNC_END
+    master->____windowBoundsChanged();
 }
 - (void)windowDidMove:(NSNotification *)notification {
-    SAMBAG_SYNC( master->getMutex() )
-        master->____windowBoundsChanged();
-    SAMBAG_SYNC_END
+    master->____windowBoundsChanged();
 }
 - (void)setMaster:(Master*) theMaster{
 	master = theMaster;
@@ -213,50 +209,38 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 	return btn;
 }
 - (void)mouseDown:(NSEvent *)theEvent {
-    SAMBAG_SYNC( master->getMutex() )
-        int btn = [self getMouseBtn: theEvent];
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseButtonPressEvent(p.x, p.y, btn);
-    SAMBAG_SYNC_END
+    int btn = [self getMouseBtn: theEvent];
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseButtonPressEvent(p.x, p.y, btn);
+    
 }
 - (void)mouseUp:(NSEvent *)theEvent {
-    SAMBAG_SYNC( master->getMutex() )
-        int btn = [self getMouseBtn: theEvent];
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
-    SAMBAG_SYNC_END
+   int btn = [self getMouseBtn: theEvent];
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
+    
 }
 - (void)rightMouseDown:(NSEvent *)theEvent{
-    SAMBAG_SYNC( master->getMutex() )
-        int btn = [self getMouseBtn: theEvent];
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseButtonPressEvent(p.x, p.y, btn);
-    SAMBAG_SYNC_END
+    int btn = [self getMouseBtn: theEvent];
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseButtonPressEvent(p.x, p.y, btn);
 }
 - (void)rightMouseUp:(NSEvent *)theEvent{
-    SAMBAG_SYNC( master->getMutex() )
-        int btn = [self getMouseBtn: theEvent];
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
-    SAMBAG_SYNC_END
+   int btn = [self getMouseBtn: theEvent];
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
 }
 - (void)mouseMoved:(NSEvent *)theEvent {
-    SAMBAG_SYNC( master->getMutex() )
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_SYNC_END
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)mouseDragged:(NSEvent *)theEvent{
-    SAMBAG_SYNC( master->getMutex() )
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_SYNC_END
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-    SAMBAG_SYNC( master->getMutex() )
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseMotionEvent(p.x, p.y);
-    SAMBAG_SYNC_END
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)drawRect:(NSRect)rect {
     SAMBAG_SYNC( master->getMutex() )
@@ -279,11 +263,8 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     [super dealloc];
 }
 - (void)scrollWheel:(NSEvent *)theEvent {
-    SAMBAG_SYNC( master->getMutex() )
-        NSPoint p = [self getMouseLocation: theEvent];
-        master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
-    SAMBAG_SYNC_END
-    
+    NSPoint p = [self getMouseLocation: theEvent];
+    master->__handleMouseWheelEvent(p.x, p.y, [theEvent deltaY] * -1.);
 }
 @end
 
@@ -292,19 +273,17 @@ namespace sambag { namespace disco { namespace components {
 namespace {
 DiscoWindow * getDiscoWindow(const Master &m) {
 	DiscoWindow *res = (DiscoWindow*)m.getRawDiscoWindow();
-	//assert(res);
 	return res;
 }
 DiscoView * getDiscoView(const Master &m) {
 	DiscoView *res = (DiscoView*)m.getRawDiscoView();
-	//assert(res);
 	return res;
 }
 void deallocSharedPtr(void *ptr) {
-    //[(NSObject*)ptr release];
+    [(NSObject*)ptr release];
 }
 void deallocCarbonWindowRef(void *ptr) {
-    //DisposeWindow ((WindowRef)ptr);
+    DisposeWindow ((WindowRef)ptr);
 }
 RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
     return win;
@@ -332,7 +311,7 @@ void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) 
 		return; // happens sometimes (maybe while creating)
 	}
 	[view setNeedsDisplay:YES];
-    /*NSRect r = NSMakeRect(x,y,w,h);
+    /*NSRect r = NSMakeRect(x,y,w,h); see #346
     std::cout<<r<<std::endl;
     [view setNeedsDisplayInRect: r];*/
 }
