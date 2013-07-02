@@ -36,7 +36,8 @@ public:
 	typedef cocoaImplTypes::Number Number;
 private:
     //-------------------------------------------------------------------------
-    sambag::com::RecursiveMutex mutex;
+    typedef sambag::com::RecursiveMutex Mutex;
+    Mutex mutex;
 	//-------------------------------------------------------------------------
 	RawDiscoWindowPtr windowPtr;
 	RawDiscoViewPtr viewPtr;
@@ -50,7 +51,7 @@ private:
     void initAsRawWindow(Number x, Number y, Number w, Number h);
 public:
     //-------------------------------------------------------------------------
-    sambag::com::RecursiveMutex & getMutex() {
+    Mutex & getMutex() {
         return mutex;
     }
 	//-------------------------------------------------------------------------

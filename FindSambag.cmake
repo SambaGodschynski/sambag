@@ -30,6 +30,7 @@ ELSE(WIN32)
 		$ENV{CLIBS}/sambag/src
 		$ENV{CLIBS}/sambag/src/Debug
 		$ENV{CLIBS}/sambag/src/Release
+		$ENV{CLIBS}/sambag/src/RelWithDebInfo
 		$ENV{CLIBS}/sambag/lib	 
 	)
 ENDIF (WIN32)
