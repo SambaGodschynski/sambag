@@ -6,7 +6,6 @@ SET ( SAMBAG_SOURCES
 	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
-	sambag/cpsqlite/sqlite3.c
 	sambag/disco/cairoCGContextWorkaround.cpp
 	sambag/disco/cairoCreateImageSurfaceDelegate.cpp
 	sambag/disco/CairoDiscoFactory.cpp
@@ -155,9 +154,9 @@ SET ( SAMBAG_SOURCES
 	sambag/xml/cpAtl/SimpleTagCreator.cpp
 )
 SET ( SAMBAG_MMSOURCES
+	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
-	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 )
 IF(APPLE)
   set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")

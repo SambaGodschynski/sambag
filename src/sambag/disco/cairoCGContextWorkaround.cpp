@@ -7,6 +7,7 @@
  * (produces a bunch of compiler errors)
  * are the reason for this file.
  */
+#ifdef DISCO_USE_COCOA
 #include <cairo.h>
 #include <cairo-quartz.h>
 
@@ -26,4 +27,4 @@ disco_cairo_quartz_surface_create (void *_cg,
     );
     return s;
 }
-
+#endif // DISCO_USE_COCOA
