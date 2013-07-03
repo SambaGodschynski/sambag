@@ -15,6 +15,8 @@
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/components/RootPane.hpp>
 #include "BufferedDrawPolicy.hpp"
+#include <sambag/disco/components/WindowToolkit.hpp>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -59,7 +61,7 @@ public:
 		return ConcreteWindowImpl::getSystemHandle();
 	}
 	//-------------------------------------------------------------------------
-	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
+	virtual EventSender<events::MouseEvent> * getMouseEventCreator() {
 		return mec.get();
 	}
 	//-------------------------------------------------------------------------
@@ -185,7 +187,14 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::initRootPane() {
 	DrawPolicy::init(rootPane);
 	rootPane->validate();
 	// create mousevent creator
-	mec = events::MouseEventCreator::create(rootPane);
+    events::MouseEventCreator::Ptr proto =
+        getWindowToolkit()->getMouseEventCreatorPrototype();
+    if (!proto) {
+        SAMBAG_THROW(com::exceptions::IllegalStateException,
+        "MouseEventCreatorPrototype == NULL");
+    }
+    mec = proto->clone();
+    mec->setRootPane(rootPane);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

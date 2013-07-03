@@ -62,4 +62,19 @@ void WindowToolkit::holdWindowPtr(WindowPtr win) {
 		boost::bind(&onWindowClose, _1, _2, WindowWPtr(win))
 	);
 }
+//-----------------------------------------------------------------------------
+void
+WindowToolkit::setMouseEventCreatorPrototype(events::MouseEventCreator::Ptr obj)
+{
+    mecPrototype = obj;
+}
+//-----------------------------------------------------------------------------
+events::MouseEventCreator::Ptr
+WindowToolkit::getMouseEventCreatorPrototype()
+{
+    if (!mecPrototype) {
+        mecPrototype = events::MouseEventCreator::create();
+    }
+    return mecPrototype;
+}
 }}} // namespace(s)

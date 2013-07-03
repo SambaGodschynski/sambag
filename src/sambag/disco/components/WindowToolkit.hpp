@@ -17,6 +17,7 @@
 #include <sambag/com/ArbitraryType.hpp>
 #include <sambag/com/Common.hpp>
 #include <stdexcept>
+#include <sambag/disco/components/events/MouseEventCreator.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -35,6 +36,9 @@ protected:
 	 * holds window shared ptr until window is closed.
 	 */
 	virtual void holdWindowPtr(WindowPtr win);
+private:
+    //-------------------------------------------------------------------------
+    events::MouseEventCreator::Ptr mecPrototype;
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -82,6 +86,20 @@ public:
 	 * Eg. when main app is used as nested window.
 	 */
 	virtual void useWithoutMainloop() = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * sets the mouse event creator which is the prototype for all
+     * crated windows in future.
+     * @arg the prototype object
+     * 
+     */
+    virtual void setMouseEventCreatorPrototype(events::MouseEventCreator::Ptr obj);
+    //-------------------------------------------------------------------------
+    /**
+     * return the mouse event creator which is the prototype for all
+     * crated windows in future.
+     */
+    virtual events::MouseEventCreator::Ptr getMouseEventCreatorPrototype();
 }; // WindowToolkit
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

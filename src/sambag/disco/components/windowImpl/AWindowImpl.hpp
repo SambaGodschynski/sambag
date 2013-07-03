@@ -56,7 +56,7 @@ protected:
 private:
 public:
 	//-------------------------------------------------------------------------
-	virtual EventSender<events::MouseEvent> * getMouseEventSender() = 0;
+	virtual EventSender<events::MouseEvent> * getMouseEventCreator() = 0;
 	//-------------------------------------------------------------------------
 	virtual void open() = 0;
 	//-------------------------------------------------------------------------

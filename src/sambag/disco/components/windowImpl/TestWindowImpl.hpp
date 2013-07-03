@@ -43,7 +43,7 @@ public:
 		return NULL;
 	}
 	//-------------------------------------------------------------------------
-	virtual EventSender<events::MouseEvent> * getMouseEventSender() {
+	virtual EventSender<events::MouseEvent> * getMouseEventCreator() {
 		return NULL;
 	}
 	//-------------------------------------------------------------------------

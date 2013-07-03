@@ -7,6 +7,7 @@
 
 #include "MouseEventCreator.hpp"
 #include <sambag/disco/components/RootPane.hpp>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace events {
 //=============================================================================
@@ -14,8 +15,22 @@ namespace sambag { namespace disco { namespace components { namespace events {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void MouseEventCreator::fireEvent(const MouseEvent &ev) {
+    if (!root) {
+        SAMBAG_THROW(com::exceptions::IllegalStateException,"root==NULL");
+    }
 	EventSender<MouseEvent>::notifyListeners(this, ev);
 	root->processMouseEvent(ev);
+}
+//-----------------------------------------------------------------------------
+MouseEventCreator::Ptr MouseEventCreator::clone() const {
+    Ptr res = MouseEventCreator::create();
+    res->root = root;
+    res->lastEvent = lastEvent;
+    return res;
+}
+//-----------------------------------------------------------------------------
+void MouseEventCreator::setRootPane(RootPanePtr root) {
+    this->root = root;
 }
 //-----------------------------------------------------------------------------
 void

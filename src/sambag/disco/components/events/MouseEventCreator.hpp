@@ -34,28 +34,38 @@ protected:
 	//-------------------------------------------------------------------------
 	RootPanePtr root;
 	//-------------------------------------------------------------------------
-	MouseEventCreator(RootPanePtr root) : root(root) {}
+	MouseEventCreator() {}
 	//-------------------------------------------------------------------------
-	void fireEvent(const MouseEvent &ev);
+private:
+    //-------------------------------------------------------------------------
+    void fireEvent(const MouseEvent &ev);
 public:
+    //-------------------------------------------------------------------------
+    virtual Ptr clone() const;
 	//-------------------------------------------------------------------------
-	static Ptr create(RootPanePtr root) {
-		Ptr res(new MouseEventCreator(root));
+	static Ptr create() {
+		Ptr res(new MouseEventCreator());
 		return res;
 	}
+    //-------------------------------------------------------------------------
+    virtual void setRootPane(RootPanePtr root);
+    //-------------------------------------------------------------------------
+    RootPanePtr getRootPane() const {
+        return root;
+    }
 	//-------------------------------------------------------------------------
-	void
+	virtual void
 	createPressEvent(const Coordinate &x,
 			const Coordinate &y, Bitmask buttons);
 	//-------------------------------------------------------------------------
-	void
+	virtual void
 	createReleaseEvent(const Coordinate &x,
 			const Coordinate &y, Bitmask buttons);
 	//-------------------------------------------------------------------------
-	void
+	virtual void
 	createMoveEvent(const Coordinate &x, const Coordinate &y);
 	//-------------------------------------------------------------------------
-	void 
+	virtual void 
 	createWheelEvent(const Coordinate &x, const Coordinate &y, float wheelRotation);
 }; // MouseEventCreator
 }}}} // namespace(s)

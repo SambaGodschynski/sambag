@@ -233,7 +233,7 @@ Window::WindwowMouseEvent::Connection
 Window::addWindowMouseEventListener(const Window::WindwowMouseEvent::EventFunction &f) 
 {
 	EventSender<events::MouseEvent> *sender =
-		windowImpl->getMouseEventSender();
+		windowImpl->getMouseEventCreator();
 	if (!sender) {
 		SAMBAG_WARN("WindowImpl EventSender==NULL");
 		return WindwowMouseEvent::Connection();
@@ -246,7 +246,7 @@ Window::addTrackedWindowMouseEventListener
 (const Window::WindwowMouseEvent::EventFunction &f, Window::AnyWPtr ptr )
 {
 	EventSender<events::MouseEvent> *sender =
-		windowImpl->getMouseEventSender();
+		windowImpl->getMouseEventCreator();
 	if (!sender) {
 		SAMBAG_WARN("WindowImpl EventSender==NULL");
 		return WindwowMouseEvent::Connection();
