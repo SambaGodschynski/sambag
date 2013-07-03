@@ -7,6 +7,7 @@ SET ( SAMBAG_SOURCES
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
 	sambag/cpsqlite/sqlite3.c
+	sambag/disco/cairoCGContextWorkaround.cpp
 	sambag/disco/cairoCreateImageSurfaceDelegate.cpp
 	sambag/disco/CairoDiscoFactory.cpp
 	sambag/disco/CairoDrawContext.cpp
