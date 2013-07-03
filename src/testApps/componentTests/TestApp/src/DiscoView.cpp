@@ -36,6 +36,7 @@
 #include <boost/timer/timer.hpp>
 #include <boost/filesystem.hpp>
 #include <assert.h>
+#include <sambag/disco/components/events/MouseEventRecorder.hpp>
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
 
@@ -694,6 +695,9 @@ int main() {
 	std::cout<<"hi"<<std::endl;
 	std::cout<<getDiscoFactory()->implDetails()<<std::endl;
 	std::cout<<getWindowToolkit()->getScreenSize()<<std::endl;
+    getWindowToolkit()->setMouseEventCreatorPrototype(
+        sambag::disco::components::events::MouseEventRecorder::create()
+    );
 	initTimer();
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();

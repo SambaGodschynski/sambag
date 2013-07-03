@@ -22,10 +22,14 @@ void MouseEventCreator::fireEvent(const MouseEvent &ev) {
 	root->processMouseEvent(ev);
 }
 //-----------------------------------------------------------------------------
+void MouseEventCreator::copyFields(MouseEventCreator::Ptr dst) const {
+    dst->root = root;
+    dst->lastEvent = lastEvent;
+}
+//-----------------------------------------------------------------------------
 MouseEventCreator::Ptr MouseEventCreator::clone() const {
     Ptr res = MouseEventCreator::create();
-    res->root = root;
-    res->lastEvent = lastEvent;
+    copyFields(res);
     return res;
 }
 //-----------------------------------------------------------------------------
