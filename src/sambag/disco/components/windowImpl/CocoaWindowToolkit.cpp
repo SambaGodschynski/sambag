@@ -60,7 +60,7 @@ CocoaWindowToolkit * CocoaWindowToolkit::getToolkit() {
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::useWithoutMainloop() {
 	TimerPolicy::startUpTimer();
-    _CocoaToolkitImpl::initMainApp();
+    _CocoaToolkitImpl::loadMainApp();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowToolkit::mainLoop() {

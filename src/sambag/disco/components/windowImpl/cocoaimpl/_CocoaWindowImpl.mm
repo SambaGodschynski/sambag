@@ -468,6 +468,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
+    AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
@@ -633,7 +634,7 @@ _CocoaWindowImpl::~_CocoaWindowImpl() {
 // class _CocoaToolkitImpl 
 //=============================================================================
 //-----------------------------------------------------------------------------
-void _CocoaToolkitImpl::initMainApp() {
+void _CocoaToolkitImpl::loadMainApp() {
     assert( NSApplicationLoad() );
 }
 //-----------------------------------------------------------------------------
