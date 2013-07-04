@@ -306,6 +306,7 @@ viewPtr(NULL)
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) {
+	AutoReleasePool ap;
 	DiscoView *view = getDiscoView(*this);
 	if (!view) {
 		return; // happens sometimes (maybe while creating)
@@ -319,6 +320,7 @@ void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) 
 //-----------------------------------------------------------------------------
 namespace {
 DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
+	AutoReleasePool ap;
 	DiscoWindow *window = getDiscoWindow(*caller);
 	if (!window) {
 		return NULL; 
@@ -385,6 +387,7 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
+	AutoReleasePool ap;
     DiscoWindow *ownerWindow = getDiscoWindow(*this);
     assert(ownerWindow);
     if (!ownerWindow) {
@@ -421,6 +424,7 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h)
 {
+	AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
         Number sw=0, sh=0;
         _CocoaToolkitImpl::getScreenDimension(sw, sh);
@@ -468,6 +472,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
+	AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
@@ -504,6 +509,7 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
 }
 //-----------------------------------------------------------------------------
 WindowRef _CocoaWindowImpl::getWindowRef() const {
+	AutoReleasePool ap;
 	if (carbonWindowRef) {
         return (WindowRef)carbonWindowRef.get();
     }
@@ -530,8 +536,8 @@ void _CocoaWindowImpl::closeWindow() {
             }
         }
     
+		//this->carbonWindowRef.reset();
         [window close];
-        this->carbonWindowRef.reset();
         this->windowPtr = NULL;
         this->viewPtr = NULL;
     SAMBAG_SYNC_END
@@ -546,6 +552,7 @@ void _CocoaWindowImpl::onClose() {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
+	AutoReleasePool ap;
     DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
     Number sw=0, sh=0;
@@ -576,6 +583,7 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) const
 {
+	AutoReleasePool ap;
     DiscoWindow *window = getDiscoWindow(*this);
     NSRect frame = [window contentRectForFrameRect:[window frame]];
     Number sw=0, sh=0;
@@ -589,6 +597,7 @@ void _CocoaWindowImpl::getBounds(Number &x, Number &y, Number &w, Number &h) con
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::____windowBoundsChanged() {
+	AutoReleasePool ap;
 	DiscoWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
 	NSRect frame = [window contentRectForFrameRect:[window frame]];
@@ -614,6 +623,7 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
 }
 //-----------------------------------------------------------------------------
 std::string _CocoaWindowImpl::getTitle() const {
+	AutoReleasePool ap;
 	NSWindow *window = getDiscoWindow(*this);
 	if (!window) {
 		return "";
@@ -622,6 +632,7 @@ std::string _CocoaWindowImpl::getTitle() const {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setTitle(const std::string &str) {
+	AutoReleasePool ap;
 	NSWindow *window = getDiscoWindow(*this);
 	if (!window) {
 		return;

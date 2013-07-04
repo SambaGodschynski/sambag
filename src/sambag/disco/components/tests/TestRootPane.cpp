@@ -126,7 +126,8 @@ void TestRootPane::testMouseEvent() {
 	root->EventSender<MouseEvent>::addEventListener(
 			boost::bind(&TestListener::onMouseClick, &tl, _1, _2)
 	);
-	MouseEventCreator::Ptr evc = MouseEventCreator::create(root);
+	MouseEventCreator::Ptr evc = MouseEventCreator::create();
+    evc->setRootPane(root);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	evc->createPressEvent(50, 50, 1);
 	CPPUNIT_ASSERT_EQUAL((size_t)2, tl.lastEvents.size());

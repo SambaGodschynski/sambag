@@ -44,7 +44,8 @@ void TestConcreteComponents::testButton() {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco::components::events;
 	using namespace boost;
-	MouseEventCreator::Ptr evc = MouseEventCreator::create(root);
+	MouseEventCreator::Ptr evc = MouseEventCreator::create();
+    evc->setRootPane(root);
 	tests::TestButtonAction action;
 	Button::Ptr btn = Button::create();
 	btn->setText("do it!");
