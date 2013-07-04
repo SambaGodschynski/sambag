@@ -468,7 +468,6 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
-    AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
@@ -517,13 +516,15 @@ WindowRef _CocoaWindowImpl::getWindowRef() const {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
-	DiscoWindow *window = getDiscoWindow(*this);
+	AutoReleasePool ap;
+    DiscoWindow *window = getDiscoWindow(*this);
 	if (!window) {
 		return;
 	}
     SAMBAG_SYNC( getMutex() )
         if (getFlag(WindowFlags::WND_NESTED)) {
             NSWindow * parent = [window parentWindow];
+            
             if (parent) {
                 [parent removeChildWindow: window];
             }
