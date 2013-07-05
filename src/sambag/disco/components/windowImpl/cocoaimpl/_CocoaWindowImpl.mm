@@ -305,7 +305,8 @@ viewPtr(NULL)
 {
 }
 //-----------------------------------------------------------------------------
-void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h) {
+void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h)
+{
 	AutoReleasePool ap;
 	DiscoView *view = getDiscoView(*this);
 	if (!view) {
@@ -387,6 +388,7 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
+    
 	AutoReleasePool ap;
     DiscoWindow *ownerWindow = getDiscoWindow(*this);
     assert(ownerWindow);
@@ -544,6 +546,7 @@ void _CocoaWindowImpl::closeWindow() {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::onClose() {
+    boost::shared_ptr<void> hold = __getPtr();
     __windowWillCose();
     if (getFlag(WindowFlags::EXIT_ON_CLOSE) && !getFlag(WindowFlags::WND_NESTED))
     {

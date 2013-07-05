@@ -101,6 +101,8 @@ public:
 	virtual void __handleMouseMotionEvent(Number x, Number y) = 0;
     //-------------------------------------------------------------------------
     virtual void __handleMouseWheelEvent(Number x, Number y, Number wheelRotation) = 0;
+    //-------------------------------------------------------------------------
+    virtual boost::shared_ptr<void> __getPtr() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose() = 0;
 	//-------------------------------------------------------------------------
