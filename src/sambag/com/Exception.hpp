@@ -31,12 +31,12 @@
 		 : sambag::com::Exception(what, where, line) {}\
 	} \
 
-#define SAMBAG_DERIVATED_EXCEPTION_CLASS(base, name) \
-	struct name : public base { \
+#define SAMBAG_DERIVATED_EXCEPTION_CLASS(___samba___base, name) \
+	struct name : public ___samba___base { \
 		name(const std::string &what = "unknown reason", \
 			 const std::string &where = "unknown location", \
 			 const std::string &line = "unknown line number") \
-		 : sambag::com::Exception(what, where, line) {}\
+		 : ___samba___base(what, where, line) {}\
 	} \
 
 #define SAMBAG_ASSERT(x) assert((x))
