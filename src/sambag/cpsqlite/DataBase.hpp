@@ -10,6 +10,7 @@
 #include <map> 
 #include <boost/unordered_map.hpp>
 #include "Parameter.hpp"
+#include <exception>
 
 namespace sambag {
 namespace cpsqlite {
@@ -17,10 +18,46 @@ using namespace std;
 //============================================================================================================
 // Class DataBase Exceptions
 //============================================================================================================
-struct DataBaseException {};
-struct DataBaseConnectionFailed : public DataBaseException {};
-struct DataBaseLocationIsLink : public DataBaseException {};
-struct DataBaseQueryTimeout : public DataBaseException {};
+struct DataBaseException : public std::exception {
+protected:
+    mutable string tmp;
+public:
+    virtual const char* what() const throw() {
+        return tmp.c_str();
+    }
+	virtual ~DataBaseException() throw()
+	{
+	}
+};
+struct DataBaseConnectionFailed : public DataBaseException {
+    virtual const char* what() const throw() {
+        tmp = "data base connection failed";
+        return DataBaseException::what();
+    }
+	virtual ~DataBaseConnectionFailed() throw()
+	{
+	}
+
+};
+struct DataBaseLocationIsLink : public DataBaseException {
+    virtual const char* what() const throw() {
+        tmp = "data base location is link";
+        return DataBaseException::what();
+    }
+	virtual ~DataBaseLocationIsLink() throw()
+	{
+	}
+
+};
+struct DataBaseQueryTimeout : public DataBaseException {
+    virtual const char* what() const throw() {
+        tmp = "data base query timeout";
+        return DataBaseException::what();
+    }
+	virtual ~DataBaseQueryTimeout() throw()
+	{
+	}
+};
 struct DataBaseQueryFailed : public DataBaseException {
 	typedef int ResultCode;
 	typedef std::string ErrorMessage;
@@ -32,6 +69,14 @@ struct DataBaseQueryFailed : public DataBaseException {
 		                  const ErrorMessage &errorMessage,
 						  const Query query ) : 
 		errorMessage(errorMessage), resultCode(resultCode), query(query) {}
+    
+    virtual const char* what() const throw() {
+        tmp = errorMessage;
+        return DataBaseException::what();
+    }
+	virtual ~DataBaseQueryFailed() throw()
+	{
+	}
 };
 //============================================================================================================
 // Class DataBase : <Singleton>
