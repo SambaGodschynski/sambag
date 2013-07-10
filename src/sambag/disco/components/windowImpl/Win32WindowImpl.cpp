@@ -486,6 +486,9 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		y = GET_Y_LPARAM(lParam);
 		if (win)
 			win->handleMouseButtonPressEvent(x, y, 1);
+		if (win->getFlag(WindowFlags::WND_NESTED)) {
+			SetFocus(hWnd);
+		}
 		break;
 	case WM_RBUTTONDOWN :
 		SetCapture(hWnd);
@@ -529,9 +532,6 @@ LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message,
 		x = GET_X_LPARAM(lParam); 
 		y = GET_Y_LPARAM(lParam);
 		win->handleMouseMotionEvent(x, y);
-		if (win->getFlag(WindowFlags::WND_NESTED)) {
-			SetFocus(hWnd);
-		}
 		break;
 	case WM_MOUSEWHEEL :
 		if (!win) {
