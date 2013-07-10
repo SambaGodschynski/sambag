@@ -419,7 +419,18 @@ void BasicScrollbarUI<M>::installDefaults() {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicScrollbarUI<M>::installComponents() {
-	typename ScrollBarType::Ptr scrollbar = getScrollbar();
+    typename ScrollBarType::Ptr scrollbar = getScrollbar();
+    // Force the children's enabled state to be updated.
+	scrollbar->setEnabled(scrollbar->isEnabled());
+    
+    bool useArrowBtns = true;
+    UIManager::instance().getProperty("ScrollBar.useArrowButtons", useArrowBtns);
+	if (!useArrowBtns) {
+        return;
+    }
+    /**
+     * Arrowbuttons ONLY!
+     */
 	switch (scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
 		incrButton = BasicArrowButton::create(BasicArrowButton::SOUTH);
@@ -435,8 +446,6 @@ void BasicScrollbarUI<M>::installComponents() {
 	}
 	scrollbar->add(incrButton);
 	scrollbar->add(decrButton);
-	// Force the children's enabled state to be updated.
-	scrollbar->setEnabled(scrollbar->isEnabled());
 }
 //-----------------------------------------------------------------------------
 template <class M>
@@ -544,21 +553,25 @@ void BasicScrollbarUI<M>::drawThumb(IDrawContext::Ptr cn,
 	Coordinate h = thumbBounds.height();
 
 	g.translate(thumbBounds.x0());
-
-	g.setStrokeColor(thumbDarkShadowColor);
+    
+    /*g.setStrokeColor(thumbDarkShadowColor);
 	g.rect(Rectangle(0, 0, w - 1, h - 1));
-	g.stroke();
-	g.setFillColor(thumbColor);
-	g.rect(Rectangle(0, 0, w - 1, h - 1));
+	g.stroke();*/
+    
+    
+    double radius = scrollBarWidth * 0.5;
+	
+    g.setFillColor(thumbColor);
+	g.rect(Rectangle(0, 0, w - 1, h - 1), radius);
 	g.fill();
 
-	g.setStrokeColor(thumbHighlightColor);
+	/*g.setStrokeColor(thumbHighlightColor);
 	g.drawLine(1, 1, 1, h - 2);
 	g.drawLine(2, 1, w - 3, 1);
 
 	g.setStrokeColor(thumbLightShadowColor);
 	g.drawLine(2, h - 2, w - 2, h - 2);
-	g.drawLine(w - 2, 1, w - 2, h - 3);
+	g.drawLine(w - 2, 1, w - 2, h - 3);*/
 
 	g.translate(Point2D(-thumbBounds.x0().x(), -thumbBounds.x0().y()));
 }
@@ -575,12 +588,21 @@ void BasicScrollbarUI<M>::layoutVScrollbar(typename ScrollBarType::Ptr sb)
 	Coordinate itemW = sbSize.width() - (sbInsets.left() + sbInsets.right());
 	Coordinate itemX = sbInsets.left();
 
+    Coordinate decrButtonH;
+    Coordinate decrButtonY;
+	if (decrButton) {
+        decrButtonH = decrButton->getPreferredSize().height();
+    }
+    
+    decrButtonY = sbInsets.top();
 
-	Coordinate decrButtonH = decrButton->getPreferredSize().height();
-	Coordinate decrButtonY = sbInsets.top();
-
-	Coordinate incrButtonH = incrButton->getPreferredSize().height();
-	Coordinate incrButtonY = sbSize.height() - (sbInsets.bottom() + incrButtonH);
+    Coordinate incrButtonH;
+	Coordinate incrButtonY;
+    if (incrButton) {
+        incrButtonH = incrButton->getPreferredSize().height();
+    }
+    
+    incrButtonY = sbSize.height() - (sbInsets.bottom() + incrButtonH);
 
 	/* The thumb must fit within the height left over after we
 	 * subtract the preferredSize of the buttons and the insets
@@ -623,9 +645,12 @@ void BasicScrollbarUI<M>::layoutVScrollbar(typename ScrollBarType::Ptr sb)
 		incrButtonH = decrButtonH = sbAvailButtonH / 2.;
 		incrButtonY = sbSize.height() - (sbInsets.bottom() + incrButtonH);
 	}
-	decrButton->setBounds(itemX, decrButtonY, itemW, decrButtonH);
-	incrButton->setBounds(itemX, incrButtonY, itemW, incrButtonH);
-
+    if (decrButton) {
+        decrButton->setBounds(itemX, decrButtonY, itemW, decrButtonH);
+	}
+    if (incrButton) {
+        incrButton->setBounds(itemX, incrButtonY, itemW, incrButtonH);
+    }
 	/* Update the trackRect field.
 	 */
 	Coordinate itrackY = decrButtonY + decrButtonH + decrGap;
@@ -665,8 +690,14 @@ void BasicScrollbarUI<M>::layoutHScrollbar(typename ScrollBarType::Ptr sb)
 	/* Nominal locations of the buttons, assuming their preferred
 	 * size will fit.
 	 */
-	Coordinate leftButtonW = decrButton->getPreferredSize().width();
-	Coordinate rightButtonW =  incrButton->getPreferredSize().width();
+    Coordinate leftButtonW;
+	Coordinate rightButtonW;
+    if (decrButton) {
+        leftButtonW = decrButton->getPreferredSize().width();
+    }
+    if (incrButton) {
+        rightButtonW =  incrButton->getPreferredSize().width();
+    }
 	Coordinate leftButtonX = sbInsets.left();
 	Coordinate rightButtonX = sbSize.width() - (sbInsets.right() + rightButtonW);
 	Coordinate leftGap = decrGap;
@@ -716,11 +747,14 @@ void BasicScrollbarUI<M>::layoutHScrollbar(typename ScrollBarType::Ptr sb)
 				- (sbInsets.right() + rightButtonW + rightGap);
 	}
 
-	decrButton->setBounds(leftButtonX, itemY, leftButtonW,
-			itemH);
-	incrButton->setBounds(rightButtonX, itemY,
-			rightButtonW, itemH);
-
+    if (decrButton) {
+        decrButton->setBounds(leftButtonX, itemY, leftButtonW,
+            itemH);
+    }
+    if (incrButton) {
+        incrButton->setBounds(rightButtonX, itemY,
+            rightButtonW, itemH);
+    }
 	/* Update the trackRect field.
 	 */
 	Coordinate itrackX = leftButtonX + leftButtonW + leftGap;

@@ -129,16 +129,18 @@ void BasicLookAndFeel::installDefaults() {
 	m.putProperty("Button.cornerRadius", Coordinate(3.5));
 	m.putProperty("Button.iconGap", Coordinate(2.));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ScrollBar
-	m.putProperty("ScrollBar.minimumThumbSize", Dimension(10., 10.));
+    m.putProperty("ScrollBar.useArrowButtons", (bool)false);
+    m.putProperty("ScrollBar.width", Coordinate(12.));
+	m.putProperty("ScrollBar.minimumThumbSize", Dimension(15., 15.));
 	m.putProperty("ScrollBar.maximumThumbSize", Dimension(9999., 9999.));
-	m.putProperty("ScrollBar.incrementButtonGap", Coordinate(5.));
-	m.putProperty("ScrollBar.decrementButtonGap", Coordinate(5.));
-	m.putProperty("ScrollBar.thumbHighlight", HtmlColors::getColor("lightblue"));
-	m.putProperty("ScrollBar.thumbShadow", HtmlColors::getColor("darkgrey"));
-	m.putProperty("ScrollBar.thumbDarkShadow", HtmlColors::getColor("black"));
+	m.putProperty("ScrollBar.incrementButtonGap", Coordinate(0.));
+	m.putProperty("ScrollBar.decrementButtonGap", Coordinate(0.));
+	//m.putProperty("ScrollBar.thumbHighlight", HtmlColors::getColor("lightblue"));
+	//m.putProperty("ScrollBar.thumbShadow", HtmlColors::getColor("darkgrey"));
+	//m.putProperty("ScrollBar.thumbDarkShadow", HtmlColors::getColor("black"));
 	m.putProperty("ScrollBar.thumb", HtmlColors::getColor("grey"));
 	m.putProperty("ScrollBar.track", HtmlColors::getColor("lightgrey"));
-	m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
+	//m.putProperty("ScrollBar.trackHighlight", HtmlColors::getColor("lightblue"));
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<list
 	m.putProperty("List.minCellWidth", Coordinate(60.));
 	m.putProperty("List.minCellHeight", Coordinate(20.));
