@@ -419,6 +419,20 @@ void Win32WindowImpl::updateTitle() {
 	SetWindowText(win, title.c_str());
 }
 //-----------------------------------------------------------------------------
+void Win32WindowImpl::setEnabled(bool b) {
+	if (!win) {
+		return;
+	}
+	EnableWindow(win, b);
+}
+//-----------------------------------------------------------------------------
+bool Win32WindowImpl::isEnabled() const {
+	if (!win) {
+		return false;
+	}
+	return IsWindowEnabled(win) == 0 ? false : true;
+}
+//-----------------------------------------------------------------------------
 LRESULT CALLBACK Win32WindowImpl::__wndProc_(HWND hWnd, UINT message, 
 	WPARAM wParam, LPARAM lParam) 
 {

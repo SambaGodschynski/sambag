@@ -209,6 +209,23 @@ public:
 	virtual bool isOpen() const {
 		return isVisible();
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 */
+	virtual void setEnabled(bool b);
+	//-------------------------------------------------------------------------
+	/**
+	 * @override
+	 */
+	virtual bool isEnabled() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * determines the optimal location of the window related to the given window.
+	 * @param the window which is the base for the location determination.
+	 *        If null, the parentwindow will be used.
+	 */
+	virtual void positionWindow(Window::Ptr win = Window::Ptr());
 }; // Window
 }}} // namespace(s)
 #endif /* SAMBAG_AWINDOW_H */

@@ -170,6 +170,14 @@ public:
 	virtual std::string getTitle() const {
 		return ConcreteWindowImpl::getTitle();
 	}
+	//-------------------------------------------------------------------------
+	virtual void setEnabled(bool b) {
+		ConcreteWindowImpl::setEnabled(b);
+	}
+	//-------------------------------------------------------------------------
+	virtual bool isEnabled() const {
+		return ConcreteWindowImpl::isEnabled();
+	}
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

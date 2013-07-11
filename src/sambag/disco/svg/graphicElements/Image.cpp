@@ -25,6 +25,10 @@ void Image::drawPlaceholder(IDrawContext::Ptr cn) {
 	cn->fill();
 }
 //-----------------------------------------------------------------------------
+void Image::setSurface(ISurface::Ptr sf) {
+	image = sf;
+}
+//-----------------------------------------------------------------------------
 void Image::draw( IDrawContext::Ptr cn ) {
 	if (!image) {
 		loadImage();

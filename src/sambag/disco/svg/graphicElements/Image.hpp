@@ -36,6 +36,8 @@ protected:
 	void loadImage();
 public:
 	//-------------------------------------------------------------------------
+	void setSurface(ISurface::Ptr sf);
+	//-------------------------------------------------------------------------
 	ISurface::Ptr getSurface() const {
 		return image;
 	}

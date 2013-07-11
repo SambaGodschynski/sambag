@@ -37,6 +37,8 @@ private:
 	RootPanePtr root;
 	//-------------------------------------------------------------------------
 	WindowPtr parent;
+	//-------------------------------------------------------------------------
+	bool _enabled;
 public:
 	//-------------------------------------------------------------------------
 	virtual void * getSystemHandle() {
@@ -87,6 +89,14 @@ public:
 	virtual void setTitle(const std::string &title);
 	//-------------------------------------------------------------------------
 	virtual std::string getTitle() const;
+	//-------------------------------------------------------------------------
+	virtual void setEnabled(bool b) {
+		_enabled = b;
+	}
+	//-------------------------------------------------------------------------
+	virtual bool isEnabled() const {
+		return _enabled;
+	}
 }; // TestWindowImpl
 }}} // namespace(s)
 

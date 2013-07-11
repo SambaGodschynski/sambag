@@ -130,6 +130,15 @@ public:
     virtual void __onCreated();
     //-------------------------------------------------------------------------
     virtual boost::shared_ptr<void> __getPtr() const { return getPtr(); }
+	//-------------------------------------------------------------------------
+	void setEnabled(bool b) {
+		// TODO
+	}
+	//-------------------------------------------------------------------------
+	bool isEnabled() const {
+		// TODO
+		return true;
+	}
 
 }; // CocoaWindowImpl
 }}}

@@ -268,4 +268,26 @@ Window::CloseOperation Window::getDefaultCloseOperation() const {
 	}
 	return DISPOSE_ON_CLOSE;
 }
+//-----------------------------------------------------------------------------
+void Window::setEnabled(bool b) {
+	windowImpl->setEnabled(b);
+	Super::setEnabled(b);
+}
+//-----------------------------------------------------------------------------
+bool Window::isEnabled() const {
+	return windowImpl->isEnabled();
+}
+//-----------------------------------------------------------------------------
+void Window::positionWindow(Window::Ptr win) {
+	if (!win) {
+		win = getParentWindow();
+	}
+	if (!win) {
+		return;
+	}
+	Point2D p = win->getWindowLocation();
+	p.x( p.x() + (win->getWidth()  - getWidth())  / 2. );
+	p.y( p.y() + (win->getHeight() - getHeight()) / 2. );
+	setWindowLocation(p);
+}
 }}} // namespace(s)

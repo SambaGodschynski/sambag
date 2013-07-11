@@ -104,6 +104,13 @@ public:
 		return curr.x0();
 	}
 	//-------------------------------------------------------------------------
+	/**
+	 * Enables or disables this component, depending on the value of the parameter b.
+	 */
+	virtual void setEnabled(bool b) = 0;
+	//-------------------------------------------------------------------------
+	virtual bool isEnabled() const = 0;
+	//-------------------------------------------------------------------------
 	virtual void invalidateWindow(const Rectangle &area = NULL_RECTANGLE) = 0;
 	//-------------------------------------------------------------------------
 	virtual void setRootPane(components::RootPanePtr root) = 0;

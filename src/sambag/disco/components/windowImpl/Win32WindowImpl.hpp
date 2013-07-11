@@ -166,8 +166,12 @@ public:
 	Rectangle getHostBounds() const;
 	//-------------------------------------------------------------------------
 	void setBounds(const Rectangle &d);
-}; // X11Window
+	//-------------------------------------------------------------------------
+	void setEnabled(bool b);
+	//-------------------------------------------------------------------------
+	bool isEnabled() const;
+}; // Win32Window
 }}}
 
-#endif //DISCO_USE_X11
+#endif
 #endif /* SAMBAG_WIN32WINDOW_H */

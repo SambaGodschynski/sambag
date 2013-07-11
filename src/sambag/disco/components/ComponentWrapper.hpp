@@ -81,7 +81,14 @@ public:
 	 */
 	virtual void updateBounds();
 	//-------------------------------------------------------------------------
+	/**
+	 * @deprecated use getDrawable instead
+	 */
 	typename Drawable::Ptr getObject() const {
+		return drawable;
+	}
+	//-------------------------------------------------------------------------
+	typename Drawable::Ptr getDrawable() const {
 		return drawable;
 	}
 	//-------------------------------------------------------------------------
