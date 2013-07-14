@@ -18,18 +18,21 @@ namespace sambag { namespace com {
 /** 
   * @class GenericTimer.
   *
+  * EventPolicy:
+  *     template <class Timer> fireEvent(const Timer &t)
+  *
   * TimerImplPolicy:
   *
   *    template <class Timer> startTimer(const Timer &t);
   *    template <class Timer> stopTimer(const Timer &t);   
   */
 template <
-    class _EventType,
+    class _EventPolicy,
     class _TimerImplPolicy
 >
 class GenericTimer : public ITimer,
-                     public _TimerImplPolicy,
-                     public events::EventSender<_EventType>
+                     public _EventPolicy,
+                     public _TimerImplPolicy
 {
 //=============================================================================
 public:
@@ -40,11 +43,11 @@ public:
     typedef long TimeType;
     typedef long Milliseconds;
 	//-------------------------------------------------------------------------
-	typedef _EventType Event;
+	typedef _EventPolicy EventPolicy;
     //-------------------------------------------------------------------------
     typedef _TimerImplPolicy TimerImplPolicy;
     //-------------------------------------------------------------------------
-    typedef GenericTimer<Event, TimerImplPolicy> ThisClass;
+    typedef GenericTimer<EventPolicy, TimerImplPolicy> ThisClass;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ThisClass> Ptr;
 	//-------------------------------------------------------------------------
@@ -162,6 +165,7 @@ void GenericTimer<Ev, Impl>::start() {
 	if (initialDelay==-1)
 		initialDelay = delay;
     running = true;
+    numCalled = 0;
 	TimerImplPolicy::startTimer(*this);
 }
 //-----------------------------------------------------------------------------
@@ -196,10 +200,7 @@ void GenericTimer<Ev, Impl>::timerExpired() {
     if (!isRunning()) {
         return;
     }
-	events::EventSender<Event>::notifyListeners(
-			this,
-			Event(getPtr())
-	);
+	EventPolicy::fireEvent(*this);
 }
 }} // namespace(s)
 

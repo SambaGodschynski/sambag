@@ -1,5 +1,8 @@
 SET ( SAMBAG_SOURCES
+	sambag/com/BoostTimer.cpp
+	sambag/com/BoostTimer2.cpp
 	sambag/com/BoostTimerImpl.cpp
+	sambag/com/BoostTimerImpl2.cpp
 	sambag/com/Common.cpp
 	sambag/com/Exception.cpp
 	sambag/com/FileHandler.cpp
@@ -169,6 +172,7 @@ ENDIF(APPLE)
 SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/FileSystemTest.cpp
 	sambag/com/tests/TestArithmeticWrapper.cpp
+	sambag/com/tests/TestBoostTimer2.cpp
 	sambag/com/tests/TestHelper.cpp
 	sambag/com/tests/TestPropertyChanged.cpp
 	sambag/com/tests/TestSharedOrWeak.cpp

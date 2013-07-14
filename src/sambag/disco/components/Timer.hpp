@@ -24,6 +24,18 @@ struct TimerEvent {
 	sambag::com::ITimer::Ptr getSource() const { return src; }
 
 };
+struct TookitTimerEventPolicy :
+    public sambag::com::events::EventSender<TimerEvent>
+{
+    typedef TimerEvent Event;
+    template <class _Timer>
+    void fireEvent(const _Timer &ev) {
+        sambag::com::events::EventSender<TimerEvent>::notifyListeners(
+            this,
+            TimerEvent(ev.getPtr())
+        );
+    }
+};
 
 template <class _Timer>
 void __startTimer(const _Timer &tm) {
@@ -48,7 +60,7 @@ public:
     }
 };
 
-typedef sambag::com::GenericTimer<TimerEvent, ToolkitTimer> Timer;
+typedef sambag::com::GenericTimer<TookitTimerEventPolicy, ToolkitTimer> Timer;
 template <>
 void __startTimer<Timer>(const Timer &tm);
 template <>

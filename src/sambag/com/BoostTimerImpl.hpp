@@ -22,6 +22,7 @@ class TimerThread;
 //=============================================================================
 /** 
   * @class BoostTimerImpl.
+  * @deprectated use BoostTimerImpl2.
   */
 class BoostTimerImpl {
 friend class TimerThread;
@@ -47,9 +48,9 @@ public:
 	//-------------------------------------------------------------------------
 	static void closeAllTimer();
 	//-------------------------------------------------------------------------
-	void startTimer(ITimer::Ptr tm);
+	static void startTimer(ITimer::Ptr tm);
 	//-------------------------------------------------------------------------
-	void stopTimer(ITimer::Ptr tm);
+	static void stopTimer(ITimer::Ptr tm);
 	//-------------------------------------------------------------------------
 	/**
 	 * Starts the timer main thread, which is needed to bring the boost
