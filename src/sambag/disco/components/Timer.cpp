@@ -9,64 +9,12 @@
 #include "WindowToolkit.hpp"
 
 namespace sambag { namespace disco { namespace components {
-//=============================================================================
-//  Class Timer
-//=============================================================================
-//-----------------------------------------------------------------------------
-Timer::Timer() :
-	repetitions(0),
-	delay(1),
-	initialDelay(-1),
-	running(false),
-	numCalled(0)
-{
+template <>
+void __startTimer<Timer>(const Timer &tm) {
+     getWindowToolkit()->startTimer(tm.getPtr());
 }
-//-----------------------------------------------------------------------------
-Timer::~Timer() {
-}
-//-----------------------------------------------------------------------------
-Timer::Ptr Timer::create(const TimeType &ms) {
-	Ptr res(new Timer());
-	res->self = res;
-	res->setDelay(ms);
-	return res;
-}
-//-----------------------------------------------------------------------------
-void Timer::start() {
-	if (initialDelay==-1)
-		initialDelay = delay;
-    running = true;
-	getWindowToolkit()->startTimer(getPtr());
-}
-//-----------------------------------------------------------------------------
-void Timer::stop() {
-    running = false;
-	getWindowToolkit()->stopTimer(getPtr());
-}
-//-----------------------------------------------------------------------------
-void Timer::setNumRepetitions(int numRepeats) {
-	repetitions = numRepeats;
-}
-//-----------------------------------------------------------------------------
-bool Timer::isRunning() const {
-	return running;
-}
-//-----------------------------------------------------------------------------
-void Timer::setDelay(const TimeType &_delay) {
-	delay = _delay;
-}
-//-----------------------------------------------------------------------------
-void Timer::setInitialDelay(const TimeType &_delay) {
-	initialDelay = _delay;
-}
-//-----------------------------------------------------------------------------
-void Timer::timerExpired() {
-    if (!isRunning()) {
-        return;
-    }
-	com::events::EventSender<TimerEvent>::notifyListeners(
-			this,
-			TimerEvent(getPtr())
-	);
+template <>
+void __stopTimer<Timer>(const Timer &tm) {
+     getWindowToolkit()->stopTimer(tm.getPtr());
 }
 }}} // namespace(s)

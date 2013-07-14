@@ -83,7 +83,8 @@ namespace {
 } // namespace(s)
 //----------------------------------------------------------------------------
 void CocoaWindowToolkit::invokeLater(const InvokeFunction &f, int ms) {
-	Timer::Ptr tm = Timer::create(ms);
+	sambag::disco::components::Timer::Ptr tm =
+        sambag::disco::components::Timer::create(ms);
 	tm->setNumRepetitions(0);
 	tm->EventSender<TimerEvent>::addEventListener(
 		boost::bind(&_invokeLater, f)

@@ -12,115 +12,47 @@
 #include "events/ActionEvent.hpp"
 #include <sambag/com/events/Events.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
+#include <sambag/com/GenericTimer.hpp>
+#include <boost/static_assert.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace ev = sambag::com::events;
-class Timer;
 //=============================================================================
 struct TimerEvent {
-	typedef boost::shared_ptr<Timer> TimerPtr;
-	TimerPtr src;
-	TimerEvent(TimerPtr src) : src(src) {}
-	TimerPtr getSource() const { return src; }
+	sambag::com::ITimer::Ptr src;
+	TimerEvent(sambag::com::ITimer::Ptr src) : src(src) {}
+	sambag::com::ITimer::Ptr getSource() const { return src; }
 
 };
-//=============================================================================
-/** 
-  * @class Timer.
-  */
-class Timer : public ev::EventSender<TimerEvent> {
-//=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef TimerEvent Event;
-	//-------------------------------------------------------------------------
-	typedef long TimeType; // ms
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Timer> Ptr;
-	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Timer> WPtr;
-protected:
-	//-------------------------------------------------------------------------
-	Timer();
-	//-------------------------------------------------------------------------
-	int repetitions;
-	//-------------------------------------------------------------------------
-	TimeType delay, initialDelay;
-	//-------------------------------------------------------------------------
-	WPtr self;
-	//-------------------------------------------------------------------------
-	bool running;
-	//-------------------------------------------------------------------------
-	int numCalled;
+
+template <class _Timer>
+void __startTimer(const _Timer &tm) {
+    BOOST_STATIC_ASSERT(sizeof(_Timer) == 0);
+}
+
+template <class _Timer>
+void __stopTimer(const _Timer &tm) {
+    BOOST_STATIC_ASSERT(sizeof(_Timer) == 0);
+}
+
+class ToolkitTimer {
 private:
 public:
-	//-------------------------------------------------------------------------
-	virtual ~Timer();
-	//-------------------------------------------------------------------------
-	/**
-	 * to be called by concrete TimerImpl only.
-	 */
-	int & __getNumCalled_() {
-		return numCalled;
-	}
-	//-------------------------------------------------------------------------
-	int getNumCalled() const {
-		return numCalled;
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * to be called by concrete WindowToolkit only.
-	 */
-	virtual void timerExpired();
-	//-------------------------------------------------------------------------
-	Ptr getPtr() const {
-		return self.lock();
-	}
-	//-------------------------------------------------------------------------
-	static Ptr create(const TimeType &ms);
-	//-------------------------------------------------------------------------
-	/**
-	 * @param delay in ms
-	 */
-	virtual void setDelay(const TimeType &delay);
-	//-------------------------------------------------------------------------
-	/**
-	 * @param delay in ms
-	 */
-	virtual void setInitialDelay(const TimeType &delay);
-	//-------------------------------------------------------------------------
-	virtual const TimeType & getDelay() const {
-		return delay;
-	}
-	//-------------------------------------------------------------------------
-	virtual const TimeType & getInitialDelay() const {
-		return initialDelay;
-	}
-	//-------------------------------------------------------------------------
-	virtual int getNumRepetitions() const {
-		return repetitions;
-	}
-	//-------------------------------------------------------------------------
-	/**
-	 * starts the timer.
-	 * @note: if timer is already running the timer reset and restarts.
-	 * (TODO: check this behaviour with BoostTimerImpl)
-	 */
-	virtual void start();
-	//-------------------------------------------------------------------------
-	/**
-	 * stops the timer.
-	 */
-	virtual void stop();
-	//-------------------------------------------------------------------------
-	/**
-	 *
-	 * @param numRepeats number of repeates where -1 means infinite
-	 */
-	virtual void setNumRepetitions(int numRepeats);
-	//-------------------------------------------------------------------------
-	virtual bool isRunning() const;
-}; // Timer
+    template <class _Timer>
+    void startTimer(const _Timer &t) {
+        __startTimer(t);
+    }
+    template <class _Timer>
+    void stopTimer(const _Timer &t) {
+        __stopTimer(t);
+    }
+};
+
+typedef sambag::com::GenericTimer<TimerEvent, ToolkitTimer> Timer;
+template <>
+void __startTimer<Timer>(const Timer &tm);
+template <>
+void __stopTimer<Timer>(const Timer &tm);
 }}} // namespace(s)
 
 #endif /* SAMBAG_TIMER_H */

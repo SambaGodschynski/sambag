@@ -14,7 +14,7 @@
 #include <vector>
 #include <queue>
 
-namespace sambag { namespace disco {  namespace components {
+namespace sambag { namespace com {
 ///////////////////////////////////////////////////////////////////////////////
 namespace { // thread stuff
 	//-------------------------------------------------------------------------
@@ -56,14 +56,14 @@ public:
 private:
 	static FreeTimerThreads freeThreads;
 	static sambag::com::RecursiveMutex freeTimerLock;
-	Timer::Ptr tm;
+	ITimer::Ptr tm;
 	boost::thread *thread;
 	boost::asio::io_service *io;
 	bool threadIsRunning;
 	bool timerIsRunning;
 protected:
 	WPtr self;
-	TimerThread( Timer::Ptr tm = Timer::Ptr() ) : 
+	TimerThread( ITimer::Ptr tm = ITimer::Ptr() ) : 
 		tm(tm), 
 		thread(NULL),
 		io(NULL), 
@@ -86,7 +86,7 @@ public:
 	bool isSleeping() const {
 		return !timerIsRunning && threadIsRunning;
 	}
-	static Ptr get(Timer::Ptr tm = Timer::Ptr());
+	static Ptr get(ITimer::Ptr tm = ITimer::Ptr());
 	Ptr getPtr() const {
 		return self.lock();
 	}
@@ -97,7 +97,7 @@ public:
 FreeTimerThreads TimerThread::freeThreads;
 sambag::com::RecursiveMutex TimerThread::freeTimerLock;
 //-----------------------------------------------------------------------------
-TimerThread::Ptr TimerThread::get(Timer::Ptr tm) {
+TimerThread::Ptr TimerThread::get(ITimer::Ptr tm) {
 	Ptr tmth;
 	// look for free thread
 	SAMBAG_BEGIN_SYNCHRONIZED(freeTimerLock)
@@ -124,7 +124,7 @@ void TimerThread::startTimer() {
 	if (!io)
 		io = new boost::asio::io_service();
 	// prepare timer
-	Timer::TimeType ms = tm->getInitialDelay();
+	ITimer::Milliseconds ms = tm->getInitialDelay();
 	BoostTimerImpl::BoostTimer *t = 
 		new BoostTimerImpl::BoostTimer(*io, boost::posix_time::millisec(ms));
 	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
@@ -227,7 +227,7 @@ void BoostTimerImpl::closeAllTimer() {
 	}
 }
 //-----------------------------------------------------------------------------
-void BoostTimerImpl::startTimer(Timer::Ptr tm) {
+void BoostTimerImpl::startTimer(ITimer::Ptr tm) {
 	// TODO: check update timer (tm exists already)
 	ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
 	if (it!=toInvoke.right.end()) { // timerImpl found
@@ -240,7 +240,7 @@ void BoostTimerImpl::startTimer(Timer::Ptr tm) {
 	SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
-void BoostTimerImpl::stopTimer(Timer::Ptr tm) {
+void BoostTimerImpl::stopTimer(ITimer::Ptr tm) {
 	ToInvoke::right_map::iterator it = toInvoke.right.find(tm);
 	if (it==toInvoke.right.end()) // timerImpl not found
 			return;
@@ -254,7 +254,7 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 		ToInvoke::left_map::iterator it = toInvoke.left.find(timerImpl);
 		if (it==toInvoke.left.end())
 			return;
-		Timer::Ptr tm = it->second;
+		ITimer::Ptr tm = it->second;
 		int &numCalled = tm->__getNumCalled_();
 		++numCalled;
 		tm->timerExpired();
@@ -294,4 +294,4 @@ int BoostTimerImpl::getMaxNumThreads() {
 	return timerThreads.size();
 }
 
-}}} // namespace(s)
+}} // namespace(s)

@@ -1,11 +1,15 @@
 SET ( SAMBAG_SOURCES
+	sambag/com/BoostTimerImpl.cpp
 	sambag/com/Common.cpp
 	sambag/com/Exception.cpp
 	sambag/com/FileHandler.cpp
 	sambag/com/FileSystem.cpp
+	sambag/com/GenericTimer.cpp
+	sambag/com/ITimer.cpp
 	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
 	sambag/cpsqlite/sambag_sqlite.c
+	sambag/cpsqlite/sqlite3.c
 	sambag/disco/cairoCGContextWorkaround.cpp
 	sambag/disco/cairoCreateImageSurfaceDelegate.cpp
 	sambag/disco/CairoDiscoFactory.cpp
@@ -99,7 +103,6 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/basic/BasicLookAndFeel.cpp
 	sambag/disco/components/ui/basic/BasicScrollPaneUI.cpp
 	sambag/disco/components/ui/basic/Helper.cpp
-	sambag/disco/components/windowImpl/BoostTimerImpl.cpp
 	sambag/disco/components/windowImpl/CocoaTimer.cpp
 	sambag/disco/components/windowImpl/CocoaWindowImpl.cpp
 	sambag/disco/components/windowImpl/CocoaWindowToolkit.cpp
@@ -155,9 +158,9 @@ SET ( SAMBAG_SOURCES
 	sambag/xml/cpAtl/SimpleTagCreator.cpp
 )
 SET ( SAMBAG_MMSOURCES
-	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
+	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm
 )
 IF(APPLE)
   set_source_files_properties(${SAMBAG_MMSOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")

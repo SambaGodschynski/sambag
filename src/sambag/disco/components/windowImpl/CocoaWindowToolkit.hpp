@@ -13,15 +13,11 @@
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
-#include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
 #include "CocoaTimer.hpp"
 
 namespace sambag { namespace disco { namespace components {
-
-//typedef BoostTimerImpl TimerImpl;
 typedef CocoaTimerImpl TimerImpl;
-
 //=============================================================================
 /** 
   * @class CocoaWindowToolkit.

@@ -3,9 +3,9 @@
 #ifdef DISCO_USE_COCOA
 
 #include <boost/shared_ptr.hpp>
+#include <sambag/com/ITimer.hpp>
 
 namespace sambag { namespace disco { namespace components {
-class Timer;
 //=============================================================================
 /**
  * @class _CocoaTimer.
@@ -15,7 +15,8 @@ class _CocoaTimer {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<Timer> TimerPtr;
+    typedef sambag::com::ITimer::Ptr TimerPtr;
+
 protected:
     //-------------------------------------------------------------------------
     void startTimer(TimerPtr tm);
