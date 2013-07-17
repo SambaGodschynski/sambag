@@ -16,7 +16,7 @@
 #import <Carbon/Carbon.h>
 #include <iostream>
 #include "AutoReleasePool.h"
-
+#include <boost/tuple/tuple.hpp>
 
 
 #define SAMBAG_SYNC(x) SAMBAG_BEGIN_SYNCHRONIZED(x)
@@ -38,6 +38,11 @@ namespace {
         r.origin = [viewWindow convertBaseToScreen: r.origin];
         r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
         return r;
+    }
+    
+    void flipRect(NSRect &r) {
+        r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height
+            - r.origin.y - r.size.height;
     }
 } // namespace(s)
 
@@ -388,7 +393,6 @@ int _CocoaWindowImpl::getWindowStyleMask() const {
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
 {
-    
 	AutoReleasePool ap;
     DiscoWindow *ownerWindow = getDiscoWindow(*this);
     assert(ownerWindow);
@@ -470,12 +474,58 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
         [window display];
     SAMBAG_SYNC_END
 }
+
+
+static boost::tuple<float, float> getViewPos (HIViewRef view)
+{
+
+    HIRect r;
+    HIViewGetFrame (view, &r);
+    HIViewRef root;
+    HIViewFindByID (HIViewGetRoot (HIViewGetWindow (view)), kHIViewWindowContentID, &root);
+    HIViewConvertRect (&r, HIViewGetSuperview (view), root);
+
+    Rect windowPos;
+    GetWindowBounds (HIViewGetWindow (view), kWindowContentRgn, &windowPos);
+
+    return boost::make_tuple(windowPos.left + r.origin.x,
+        windowPos.top + r.origin.y);
+}
+
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
-	AutoReleasePool ap;
+    AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
+    
+    
+        HIViewRef parentView = 0;
+
+        WindowAttributes attributes;
+        GetWindowAttributes ((WindowRef) parent, &attributes);
+        if ((attributes & kWindowCompositingAttribute) != 0)
+        {
+            HIViewRef root = HIViewGetRoot ((WindowRef) parent);
+            HIViewFindByID (root, kHIViewWindowContentID, &parentView);
+
+            if (parentView == 0)
+                parentView = root;
+        }
+        else
+        {
+            GetRootControl ((WindowRef) parent, (ControlRef*) &parentView);
+
+            if (parentView == 0)
+                CreateRootControl ((WindowRef) parent, (ControlRef*) &parentView);
+        }
+    
+    
+        float xp, yp;
+        boost::tie(xp, yp) = getViewPos (parentView);
+    
+    
+    
         NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
         if (!window) {
             throw std::runtime_error("openNested() failed to create window.");
@@ -484,9 +534,9 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         [window setIsVisible:YES];
         [window release];
         int options = 0; //getWindowStyleMask();
-        NSRect windowBounds = [window contentRectForFrameRect:[window frame]];
-        windowBounds.size.width = w;
-        windowBounds.size.height = h;
+        NSRect windowBounds = NSMakeRect(xp, yp, w, h);
+        flipRect(windowBounds);
+       
         DiscoWindow* pluginWindow  = [[DiscoWindow alloc] initWithContentRect:windowBounds
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
