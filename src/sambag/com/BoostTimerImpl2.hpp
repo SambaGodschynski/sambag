@@ -40,16 +40,6 @@ public:
     virtual ~BoostTimerImpl2();
 	//-------------------------------------------------------------------------
 	static void closeAllTimer();
-	//-------------------------------------------------------------------------
-	/**
-	 * TimerImpl. concept only.
-	 */
-	static void startUpTimer();
-	//-------------------------------------------------------------------------
-	/**
-	 * TimerImpl. concept only.
-	 */
-	static void tearDownTimer();
 }; // BoostTimerImpl2
 }} // namespace(s)
 

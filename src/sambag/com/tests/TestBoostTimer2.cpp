@@ -31,11 +31,9 @@ namespace tests {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::setUp() {
-    sambag::com::BoostTimer2::startUpTimer();
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::tearDown() {
-    sambag::com::BoostTimer2::tearDownTimer();
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::testStartTimer() {
@@ -51,7 +49,7 @@ void TestBoostTimer2::testStartTimer() {
         timerInf->start();
         boost::this_thread::sleep(boost::posix_time::millisec(5000));
         timerInf->stop();
-    } // Timers destructor joins timer thread
+    } 
 	CPPUNIT_ASSERT_EQUAL(3, counter01);
 }
 //-----------------------------------------------------------------------------
@@ -69,7 +67,7 @@ void TestBoostTimer2::testStopTimer() {
         boost::this_thread::sleep(boost::posix_time::millisec(2500));
         timerInf->stop();
         boost::this_thread::sleep(boost::posix_time::millisec(2000));
-    } // Timers destructor joins timer thread
+    } 
 	CPPUNIT_ASSERT_EQUAL(2, counter01);
 
 
@@ -89,7 +87,7 @@ void TestBoostTimer2::testRestartTimer() {
         boost::this_thread::sleep(boost::posix_time::millisec(5000));
         timerInf->start();
         boost::this_thread::sleep(boost::posix_time::millisec(5000));
-    } // Timers destructor joins timer thread
+    } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
     
     counter01 = 0;
@@ -104,8 +102,27 @@ void TestBoostTimer2::testRestartTimer() {
         boost::this_thread::sleep(boost::posix_time::millisec(3000));
         timerInf->start();
         boost::this_thread::sleep(boost::posix_time::millisec(3000));
-    } // Timers destructor joins timer thread
+    } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
+
+    counter01 = 0;
+    {
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        Timer::Ptr timerInf = Timer::create(1000);
+        timerInf->setNumRepetitions(-1);
+        timerInf->events::EventSender<Timer::Event>::addEventListener(
+            boost::bind(&onTimerInf, _1, _2, &counter01)
+        );
+        timerInf->start();
+        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        timerInf->stop();
+        timerInf->start();
+        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        timerInf->stop();
+    } 
+	CPPUNIT_ASSERT_EQUAL(6, counter01);
+
+
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::testFailure() {

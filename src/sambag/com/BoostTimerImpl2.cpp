@@ -46,9 +46,13 @@ WorkerThread * __getWkt() {
     return __wkt.get();
 }
 
-void timerExpired(sambag::com::ITimer::WPtr _tm,
+void timerExpired(const boost::system::error_code& error,
+sambag::com::ITimer::WPtr _tm,
 sambag::com::BoostTimerImpl2::Timer *timerImpl)
 {
+    if (error == boost::asio::error::operation_aborted) {
+        return;
+    }
     sambag::com::ITimer::Ptr tm = _tm.lock();
     if (tm) {
         if (!tm->isRunning()) {
@@ -62,7 +66,7 @@ sambag::com::BoostTimerImpl2::Timer *timerImpl)
         }
         sambag::com::ITimer::Milliseconds ms = tm->getDelay();
         timerImpl->expires_from_now(boost::posix_time::milliseconds(ms));
-        timerImpl->async_wait( boost::bind(&timerExpired, _tm, timerImpl) );
+        timerImpl->async_wait( boost::bind(&timerExpired, _1, _tm, timerImpl) );
     }
 }
 } // namespace(s)
@@ -78,10 +82,11 @@ BoostTimerImpl2::BoostTimerImpl2() : timer(__getWkt()->io) {
 void BoostTimerImpl2::startTimer(ITimer::Ptr tm) {
     ITimer::Milliseconds ms = tm->getInitialDelay();
     timer.expires_from_now(boost::posix_time::milliseconds(ms));
-    timer.async_wait( boost::bind(&timerExpired, ITimer::WPtr(tm), &timer) );
+    timer.async_wait( boost::bind(&timerExpired, _1, ITimer::WPtr(tm), &timer) );
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl2::stopTimer(ITimer::Ptr tm) {
+    timer.cancel();
 }
 //-----------------------------------------------------------------------------
 BoostTimerImpl2::~BoostTimerImpl2() {
@@ -89,24 +94,4 @@ BoostTimerImpl2::~BoostTimerImpl2() {
 //-------------------------------------------------------------------------
 void BoostTimerImpl2::closeAllTimer() {
 }
-//-------------------------------------------------------------------------
-void BoostTimerImpl2::startUpTimer() {
-    /*SAMBAG_BEGIN_SYNCHRONIZED(__mutex)
-        if (__wkt) {
-            return;
-        }
-        __wkt = new WorkerThread();
-    SAMBAG_END_SYNCHRONIZED*/
-}
-//-------------------------------------------------------------------------
-void BoostTimerImpl2::tearDownTimer() {
-    /*SAMBAG_BEGIN_SYNCHRONIZED(__mutex)
-        if (!__wkt) {
-            return;
-        }
-        delete __wkt;
-        __wkt = NULL;
-    SAMBAG_END_SYNCHRONIZED*/
-}
-
 }} // namespace(s)

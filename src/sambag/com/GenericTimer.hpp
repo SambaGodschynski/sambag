@@ -197,9 +197,6 @@ void GenericTimer<Ev, Impl>::setInitialDelay(const Milliseconds &_delay) {
 //-----------------------------------------------------------------------------
 template <class Ev, class Impl>
 void GenericTimer<Ev, Impl>::timerExpired() {
-    if (!isRunning()) {
-        return;
-    }
 	EventPolicy::fireEvent(*this);
 }
 }} // namespace(s)
