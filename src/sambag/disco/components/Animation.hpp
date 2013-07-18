@@ -9,57 +9,18 @@
 #define SAMBAG_ANIMATON_H
 
 #include <boost/shared_ptr.hpp>
-#include "Timer.hpp"
+#include <sambag/com/BoostTimer2.hpp>
 #include <sambag/com/Common.hpp>
 #include <sambag/disco/GenericAnimator.hpp>
+#include <sambag/com/events/Events.hpp>
 
 namespace sambag { namespace disco { namespace components {
-class DefaultTimerImpl : public Timer {
-//=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef Timer Super;
-	//-------------------------------------------------------------------------
-	typedef TimeType Millisecond;
-	//-------------------------------------------------------------------------
-	typedef DefaultTimerImpl ThisClass;
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ThisClass> Ptr;
-protected:
-	//-------------------------------------------------------------------------
-	DefaultTimerImpl() {}
-private:
-public:
-	//-------------------------------------------------------------------------
-	void setRefreshRate(Millisecond d);
-	//-------------------------------------------------------------------------
-	Millisecond getRefreshRate() const {
-		return (Millisecond)Super::getDelay();
-	}
-    //-------------------------------------------------------------------------
-    typedef Super::Event TimerEvent;
-    //-------------------------------------------------------------------------
-    typedef com::events::EventSender<Super::Event>::EventFunction EventFunction;
-    //-------------------------------------------------------------------------
-    void addTimerListener(const EventFunction &f);
-	//-------------------------------------------------------------------------
-	/**
-	 * @overide
-	 * starts animation
-	 */
-	virtual void start();
-	//-------------------------------------------------------------------------
-	/**
-	 * @overide
-	 * stops animation
-	 */
-	virtual void stop();
-	//-------------------------------------------------------------------------
-	/**
-	 * @overide
-	 * has no effect
-	 */
-	virtual void setNumRepetitions(int numRepeats){}
+struct DefaultTimerImpl : public sambag::com::BoostTimer2 {
+    typedef sambag::com::BoostTimer2 Impl;
+    void addListener(const sambag::com::events::EventSender<Impl::Event>::EventFunction &f)
+    {
+        sambag::com::events::EventSender<Impl::Event>::addEventListener(f);
+    }
 }; // DefaultTimerImpl
 ////////////////////////////////////////////////////////////////////////////////
 template < class T,
@@ -71,7 +32,7 @@ struct Animation :
 {
     typedef Animation<T, _Tween, _UpdatePolicy> ThisClass;
     typedef boost::shared_ptr<ThisClass> Ptr;
-    typedef typename DefaultTimerImpl::Millisecond Ms;
+    typedef typename DefaultTimerImpl::Milliseconds Ms;
     static Ptr create(const T &s=T(), const T &e=T(), Ms d=0, Ms rfsh=0)
     {
         Ptr res( new ThisClass() );

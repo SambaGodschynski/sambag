@@ -28,9 +28,9 @@ struct BasicUpdater {
  *   void update(T val);
  *   void finished(const T &val) {}
  *  TimerPolicy:
- *    TimerPolicy::TimeType Millisecond;
- *    TimerPolicy::TimeType TimerEvent;
- *    void addTimerListener(boost::function<void(void*, TimerEvent));
+ *    TimerPolicy::Milliseconds;
+ *    TimerPolicy::Event;
+ *    void addListener(boost::function<void(void*, TimerEvent));
  *    void start();
  *    void stop();
  */
@@ -57,11 +57,11 @@ public:
     //-------------------------------------------------------------------------
     typedef GenericAnimator<T, _TimerPolicy, _TweenPolicy, _UpdatePolicy> ThisClass;
     //-------------------------------------------------------------------------
-    typedef typename TimerPolicy::TimeType Millisecond;
+    typedef typename TimerPolicy::Milliseconds Milliseconds;
     //-------------------------------------------------------------------------
-    typedef typename TimerPolicy::TimerEvent TimerEvent;
+    typedef typename TimerPolicy::Event TimerEvent;
     //-------------------------------------------------------------------------
-    static const Millisecond ONE_MILLI_IN_NANO;
+    static const Milliseconds ONE_MILLI_IN_NANO;
 protected:
     //-------------------------------------------------------------------------
     GenericAnimator() : firstInit(true), duration(0) {}
@@ -77,7 +77,7 @@ private:
     //-------------------------------------------------------------------------
     T startValue, endValue, c, current;
     //-------------------------------------------------------------------------
-    Millisecond startTime, duration;
+    Milliseconds startTime, duration;
 public:
     //-------------------------------------------------------------------------
     const T & getCurrentValue() const {
@@ -88,13 +88,13 @@ public:
     //-------------------------------------------------------------------------
     void setEndValue(const T &val);
     //-------------------------------------------------------------------------
-    void setDuration(Millisecond d);
+    void setDuration(Milliseconds d);
     //-------------------------------------------------------------------------
     void start();
     //-------------------------------------------------------------------------
     void stop();
     //-------------------------------------------------------------------------
-    Millisecond getDuration() const {
+    Milliseconds getDuration() const {
         return duration;
     }
     //-------------------------------------------------------------------------
@@ -105,6 +105,15 @@ public:
     const T & getEndValue() const {
         return endValue;
     }
+    //-------------------------------------------------------------------------
+    void setRefreshRate(Milliseconds d) {
+        TimerPolicy::setDelay(d);
+    }
+    //-------------------------------------------------------------------------
+    Milliseconds getRefreshRate() {
+        return TimerPolicy::getDelay();
+    }
+
 }; // GenericAnimatior
     
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,7 +123,7 @@ class Tm,
 template <class> class TW,
 template <class> class UP
 >
-const typename GenericAnimator<T,Tm,TW,UP>::Millisecond
+const typename GenericAnimator<T,Tm,TW,UP>::Milliseconds
     GenericAnimator<T,Tm,TW,UP>::ONE_MILLI_IN_NANO = 1000000;
 //-----------------------------------------------------------------------------
 template < class T,
@@ -125,12 +134,13 @@ template <class> class UP
 void GenericAnimator<T,Tm,TW,UP>::start() {
     if (firstInit) {
         firstInit=false;
-        TimerPolicy::addEventListener(
+        TimerPolicy::addListener(
             boost::bind(&ThisClass::update, this, _1, _2)
         );
     }
     c = endValue - startValue;
     clock.start();
+    TimerPolicy::setNumRepetitions(-1);
     TimerPolicy::start();
 }
 //-----------------------------------------------------------------------------
@@ -155,7 +165,7 @@ template <class> class TW,
 template <class> class UP
 >
 void GenericAnimator<T,Tm,TW,UP>::update(void *, const TimerEvent &ev) {
-    Millisecond t = (Millisecond)clock.elapsed().wall / ONE_MILLI_IN_NANO;
+    Milliseconds t = (Milliseconds)clock.elapsed().wall / ONE_MILLI_IN_NANO;
     if (t>=duration) {
         stop();
         current = endValue;
@@ -190,7 +200,7 @@ class Tm,
 template <class> class TW,
 template <class> class UP
 >
-void GenericAnimator<T,Tm,TW,UP>::setDuration(Millisecond d) {
+void GenericAnimator<T,Tm,TW,UP>::setDuration(Milliseconds d) {
     duration = d;
 }
 }}} // namespace(s)
