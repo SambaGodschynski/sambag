@@ -22,7 +22,7 @@ class TimerThread;
 //=============================================================================
 /** 
   * @class BoostTimerImpl.
-  * @deprectated use BoostTimerImpl2.
+  * @deprectated: impl. has errors, don't use it anymore.
   */
 class BoostTimerImpl {
 friend class TimerThread;

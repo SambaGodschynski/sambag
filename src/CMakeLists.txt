@@ -1,7 +1,5 @@
 SET ( SAMBAG_SOURCES
-	sambag/com/BoostTimer.cpp
 	sambag/com/BoostTimer2.cpp
-	sambag/com/BoostTimerImpl.cpp
 	sambag/com/BoostTimerImpl2.cpp
 	sambag/com/Common.cpp
 	sambag/com/Exception.cpp
@@ -106,6 +104,7 @@ SET ( SAMBAG_SOURCES
 	sambag/disco/components/ui/basic/BasicLookAndFeel.cpp
 	sambag/disco/components/ui/basic/BasicScrollPaneUI.cpp
 	sambag/disco/components/ui/basic/Helper.cpp
+	sambag/disco/components/windowImpl/BoostTimerImpl.cpp
 	sambag/disco/components/windowImpl/CocoaTimer.cpp
 	sambag/disco/components/windowImpl/CocoaWindowImpl.cpp
 	sambag/disco/components/windowImpl/CocoaWindowToolkit.cpp
@@ -180,7 +179,6 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/cpsqlite/tests/DBTest.cpp
 	sambag/disco/components/tests/TestAComponent.cpp
 	sambag/disco/components/tests/TestAContainer.cpp
-	sambag/disco/components/tests/TestBoostTimerImpl.cpp
 	sambag/disco/components/tests/TestComponents.cpp
 	sambag/disco/components/tests/TestConcreteComponents.cpp
 	sambag/disco/components/tests/TestDefaultSelectionModel.cpp

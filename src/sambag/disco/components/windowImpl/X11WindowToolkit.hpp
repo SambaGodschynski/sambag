@@ -15,7 +15,7 @@
 #include <loki/Singleton.h>
 #include <X11/Xlib.h>
 #include <sambag/com/ICommand.hpp>
-#include <sambag/com/BoostTimerImpl.hpp>
+#include "BoostTimerImpl.hpp"
 #include <queue>
 
 namespace sambag { namespace disco { namespace components {

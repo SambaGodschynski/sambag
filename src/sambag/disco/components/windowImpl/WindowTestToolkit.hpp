@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
-#include <sambag/com/BoostTimerImpl.hpp>
+#include <sambag/disco/components/windowImpl/BoostTimerImpl.hpp>
 #include "TestWindowImpl.hpp"
 #include <iostream>
 #include <boost/thread.hpp>

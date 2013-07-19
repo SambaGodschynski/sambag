@@ -81,6 +81,7 @@ BoostTimerImpl2::BoostTimerImpl2() : timer(__getWkt()->io) {
 //-----------------------------------------------------------------------------
 void BoostTimerImpl2::startTimer(ITimer::Ptr tm) {
     ITimer::Milliseconds ms = tm->getInitialDelay();
+    tm->__getNumCalled_() = 0;
     timer.expires_from_now(boost::posix_time::milliseconds(ms));
     timer.async_wait( boost::bind(&timerExpired, _1, ITimer::WPtr(tm), &timer) );
 }

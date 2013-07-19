@@ -99,9 +99,9 @@ void TestBoostTimer2::testRestartTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3000));
+        boost::this_thread::sleep(boost::posix_time::millisec(3500));
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3000));
+        boost::this_thread::sleep(boost::posix_time::millisec(3500));
     } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
 
@@ -126,9 +126,9 @@ void TestBoostTimer2::testRestartTimer() {
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::testFailure() {
-    //sambag::com::BoostTimer2::tearDownTimer();
-    //Timer::Ptr timerInf = Timer::create(1000);
-    //timerInf->start();
+    Timer::Ptr timerInf = Timer::create(1000);
+    timerInf->setNumRepetitions(-1);
+    timerInf->start();
 }
 
 
