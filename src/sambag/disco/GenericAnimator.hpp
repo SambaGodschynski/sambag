@@ -156,7 +156,8 @@ void GenericAnimator<T,Tm,TW,UP>::stop() {
     clock.stop();
     clock.start();
     clock.stop();
-    UpdatePolicy::finished(current);
+    UpdatePolicy::update(endValue);
+    UpdatePolicy::finished(endValue);
 }
 //-----------------------------------------------------------------------------
 template < class T,

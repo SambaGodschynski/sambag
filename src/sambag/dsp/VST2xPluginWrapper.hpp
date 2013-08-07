@@ -220,7 +220,9 @@ public:
 	virtual void parameterChanged(int index) {
 		typename PluginTraits::ParameterType value;
 		getParameterValue(index, value);
+        beginEdit(index);
 		setParameterAutomated(index, value);
+        endEdit(index);
 	}
 	//-------------------------------------------------------------------------
 	virtual HostTimeInfo * getHostTimeInfo (int filter);

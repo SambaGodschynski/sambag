@@ -80,7 +80,7 @@ struct QuintTween {
 //=============================================================================
 template <class T>
 struct DynamicTween {
-	enum Type { LIN, QUAD, QUART, QUINT };
+	enum Type { LIN, QUAD, QUART, QUINT, NUM_TYPES };
 	Type type;
 	DynamicTween() : type(LIN) {}
 	void setTweenType(Type type) {
@@ -112,6 +112,16 @@ struct DynamicTween {
 		}
 		return T();
 	}
+    std::string toString() {
+		switch (type) {
+			case LIN  : return "lin";
+			case QUAD : return "quad";
+			case QUART: return "quart";
+			case QUINT: return "quint";
+		}
+		return "Undefined";
+	}
+
 };
 } // defaultTweens
 

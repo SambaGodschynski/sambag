@@ -39,8 +39,6 @@ WkPtr __wkt;
 
 WorkerThread * __getWkt() {
     if (!__wkt) {
-            //SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
-            //"BoostTimer2 workerthread == NULL");
             __wkt = WkPtr( new WorkerThread() );
     }
     return __wkt.get();
@@ -75,6 +73,14 @@ namespace sambag {  namespace com {
 //=============================================================================
 //  Class BoostTimerImpl2
 //=============================================================================
+//-----------------------------------------------------------------------------
+bool BoostTimerImpl2::startWorkerThread() {
+    if (__wkt) {
+        return false;
+    }
+    __getWkt();
+    return true;
+}
 //-----------------------------------------------------------------------------
 BoostTimerImpl2::BoostTimerImpl2() : timer(__getWkt()->io) {
 }

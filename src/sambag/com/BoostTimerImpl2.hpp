@@ -31,6 +31,15 @@ private:
     Timer timer;
 public:
     //-------------------------------------------------------------------------
+    /**
+     * @return false if workerthread is already running.
+     * @note calling startWorkerThread is optional. It exists to have the
+     * possibility to set the thread start timepoint manually (before timers,
+     * will be started)
+     * Otherwise the thread starts on first need. 
+     */
+    static bool startWorkerThread();
+    //-------------------------------------------------------------------------
     BoostTimerImpl2();
 	//-------------------------------------------------------------------------
 	void startTimer(ITimer::Ptr tm);
