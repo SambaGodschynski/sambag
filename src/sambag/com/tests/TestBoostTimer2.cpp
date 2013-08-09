@@ -30,10 +30,13 @@ namespace tests {
 // TestBoostTimerImpl
 //=============================================================================
 //-----------------------------------------------------------------------------
+static sambag::com::BoostTimer2::WorkerThreadHolder _timerThreadHolder;
 void TestBoostTimer2::setUp() {
+	_timerThreadHolder = sambag::com::BoostTimer2::startWorkerThread();
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::tearDown() {
+	_timerThreadHolder.reset();
 }
 //-----------------------------------------------------------------------------
 void TestBoostTimer2::testStartTimer() {

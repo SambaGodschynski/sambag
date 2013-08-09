@@ -27,24 +27,30 @@ class BoostTimerImpl2 {
 public:
     //-------------------------------------------------------------------------
     typedef boost::asio::deadline_timer Timer;
+	typedef boost::shared_ptr<Timer> TimerPtr;
 private:
-    Timer timer;
+    TimerPtr timer;
 public:
     //-------------------------------------------------------------------------
     /**
-     * @return false if workerthread is already running.
+     * @return shared pointer to the worker thread.
+	 * If the shared pointer will be released the thread will be closed.
      * @note calling startWorkerThread is optional. It exists to have the
-     * possibility to set the thread start timepoint manually (before timers,
-     * will be started)
+     * possibility to set the thread start and end timepoint manually 
+	 * (call it before starting a timer)
      * Otherwise the thread starts on first need. 
      */
-    static bool startWorkerThread();
+	typedef boost::shared_ptr<void> WorkerThreadHolder;
+    static WorkerThreadHolder startWorkerThread();
     //-------------------------------------------------------------------------
     BoostTimerImpl2();
 	//-------------------------------------------------------------------------
 	void startTimer(ITimer::Ptr tm);
 	//-------------------------------------------------------------------------
-	void stopTimer(ITimer::Ptr tm);
+	/**
+	 * @param not needed only for concept purpose
+	 */
+	void stopTimer(ITimer::Ptr tm=ITimer::Ptr());
     //-------------------------------------------------------------------------
     virtual ~BoostTimerImpl2();
 	//-------------------------------------------------------------------------
