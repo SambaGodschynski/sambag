@@ -140,8 +140,10 @@ void GenericAnimator<T,Tm,TW,UP>::start() {
     }
     c = endValue - startValue;
     clock.start();
-    TimerPolicy::setNumRepetitions(-1);
-    TimerPolicy::start();
+    if (!TimerPolicy::isRunning()) {
+        TimerPolicy::setNumRepetitions(-1);
+        TimerPolicy::start();
+    }
 }
 //-----------------------------------------------------------------------------
 template < class T,

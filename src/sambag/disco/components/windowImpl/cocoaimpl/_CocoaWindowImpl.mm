@@ -222,6 +222,9 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 - (void)mouseUp:(NSEvent *)theEvent {
    int btn = [self getMouseBtn: theEvent];
     NSPoint p = [self getMouseLocation: theEvent];
+    if (([theEvent modifierFlags] & NSControlKeyMask) > 0) {
+        btn = 2;
+    }
     master->__handleMouseButtonReleaseEvent(p.x, p.y, btn);
     
 }
