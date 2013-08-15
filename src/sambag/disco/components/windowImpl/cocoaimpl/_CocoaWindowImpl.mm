@@ -494,8 +494,37 @@ static boost::tuple<float, float> getViewPos (HIViewRef view)
     return boost::make_tuple(windowPos.left + r.origin.x,
         windowPos.top + r.origin.y);
 }
-
 //-----------------------------------------------------------------------------
+static pascal OSStatus
+issue384WorkaroundHandler(EventHandlerCallRef, EventRef e, void* user)
+{
+    NSWindow* hostWindow = (NSWindow*) user;
+
+    switch (GetEventKind (e))
+    {
+        case kEventWindowInit:    [hostWindow display]; break;
+        case kEventWindowShown:   [hostWindow orderFront: nil]; break;
+        case kEventWindowHidden:  [hostWindow orderOut: nil]; break;
+    }
+
+    return eventNotHandledErr;
+}
+//
+void attachIssue384Hander(WindowRef hostWindowRef, NSWindow *nsWindow) {
+    const EventTypeSpec eventsToCatch[] =
+    {
+        { kEventClassWindow, kEventWindowInit },
+        { kEventClassWindow, kEventWindowShown },
+        { kEventClassWindow, kEventWindowHidden }
+    };
+
+    EventHandlerRef ref;
+    InstallWindowEventHandler ((WindowRef) hostWindowRef,
+                               NewEventHandlerUPP (issue384WorkaroundHandler),
+                               GetEventTypeCount (eventsToCatch), eventsToCatch,
+                               (void*) nsWindow, &ref);
+}
+//
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
@@ -559,6 +588,9 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         }
         // assign raw pointer
         this->viewPtr = createDiscoViewPtr(view);
+    
+        attachIssue384Hander(parent, window);
+
         __onCreated();
     SAMBAG_SYNC_END
 }
