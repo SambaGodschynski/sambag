@@ -87,9 +87,9 @@ void Win32TimerImpl::closeAllTimer() {
 void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 	UINT_PTR timerId = 0;
 	Timers::right_map::iterator it = timers.right.find(tm);
-	if (it==timers.right.end()) {
+	if (it==timers.right.end()) { // timer is running already
 		timerId = SetTimer(NULL, 0, tm->getInitialDelay(), timerProc);
-	} else {
+	} else { // create new timer
 		timerId = SetTimer(NULL, it->second, tm->getInitialDelay(), timerProc);
 		if (timerId!=NULL) {
 			return;
@@ -106,6 +106,7 @@ void Win32TimerImpl::startTimerImpl(Timer::Ptr tm) {
 	timers.insert(
 		Timers::value_type(timerId, tm)
 	);
+	tm->__setIsRunning_(true);
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::stopTimerImpl(Timer::Ptr tm) {
@@ -115,6 +116,7 @@ void Win32TimerImpl::stopTimerImpl(Timer::Ptr tm) {
 	UINT_PTR idEvent = it->second;
 	KillTimer(NULL, idEvent);
 	timers.right.erase(it);
+	tm->__setIsRunning_(false);
 }
 //-----------------------------------------------------------------------------
 void Win32TimerImpl::startTimer(Timer::Ptr tm) {

@@ -44,6 +44,7 @@ struct Animation :
 {
     typedef Animation<T, _Tween, _UpdatePolicy, _TimerImpl> ThisClass;
     typedef boost::shared_ptr<ThisClass> Ptr;
+	typedef boost::weak_ptr<ThisClass> WPtr;
     typedef typename _TimerImpl::Milliseconds Ms;
     static Ptr create(const T &s=T(), const T &e=T(), Ms d=0, Ms rfsh=0)
     {

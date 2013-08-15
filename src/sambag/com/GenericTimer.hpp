@@ -77,6 +77,10 @@ public:
 		return numCalled;
 	}
 	//-------------------------------------------------------------------------
+	virtual void __setIsRunning_(bool val) {
+		running = val;
+	}
+	//-------------------------------------------------------------------------
 	int getNumCalled() const {
 		return numCalled;
 	}

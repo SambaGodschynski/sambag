@@ -10,6 +10,7 @@
 
 #include <boost/timer/timer.hpp>
 #include <boost/bind.hpp>
+#include <sambag/com/Thread.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
