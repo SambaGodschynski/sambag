@@ -6,7 +6,7 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <boost/function.hpp>
 #include <sstream>
 #include "ticpp/ticpp.h"
@@ -214,7 +214,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef std::string TagName;
 	//-------------------------------------------------------------------------
-	typedef boost::signal<void(BaseTypePtr, const TagName&)> CreatedSignal;
+	typedef boost::signals2::signal<void(BaseTypePtr, const TagName&)> CreatedSignal;
 	//-------------------------------------------------------------------------
 	typedef boost::function<void(BaseTypePtr, const TagName&)>
 		CreatedSignalFunction;
@@ -337,7 +337,7 @@ public:
 		return sObjCreated;
 	}
 	//-------------------------------------------------------------------------
-	boost::signals::connection
+	boost::signals2::connection
 	addObjectCreatedSlot(const CreatedSignalFunction &f)
 	{
 		return sObjCreated.connect(f);
