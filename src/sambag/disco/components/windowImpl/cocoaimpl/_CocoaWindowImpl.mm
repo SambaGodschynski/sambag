@@ -18,6 +18,8 @@
 #include "AutoReleasePool.h"
 #include <boost/tuple/tuple.hpp>
 
+#include "_Delegate.h"
+
 
 #define SAMBAG_SYNC(x) SAMBAG_BEGIN_SYNCHRONIZED(x)
 #define SAMBAG_SYNC_END SAMBAG_END_SYNCHRONIZED
@@ -115,14 +117,9 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     }
     NSRect r = windowFrame;
     r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
+    
+    arch_delegate::setBounds(carbonParent, r);
 
-    Rect wr;
-    wr.left   = (short) r.origin.x;
-    wr.top    = (short) r.origin.y;
-    wr.right  = (short) r.origin.x + r.size.width;
-    wr.bottom = (short) r.origin.y + r.size.height;
-    SetWindowBounds (carbonParent, kWindowContentRgn, &wr);
-    ShowWindow (carbonParent);
 }
 @end
 
@@ -291,7 +288,7 @@ void deallocSharedPtr(void *ptr) {
     [(NSObject*)ptr release];
 }
 void deallocCarbonWindowRef(void *ptr) {
-    DisposeWindow ((WindowRef)ptr);
+    arch_delegate::disposeCarbonWindow(ptr);
 }
 RawDiscoWindowPtr createDiscoWindowPtr(DiscoWindow *win) {
     return win;
@@ -403,29 +400,13 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
         return;
     }
     
-    Rect r;
-    r.left   = (short) x;
-    r.top    = (short) y;
-    r.right  = (short) x+w;
-    r.bottom = (short) y+h;
     
-    WindowRef wrapperWindow;
-	
-    CreateNewWindow (kDocumentWindowClass,
-                        (WindowAttributes) (kWindowStandardHandlerAttribute | kWindowCompositingAttribute
-                        | kWindowNoShadowAttribute | kWindowNoTitleBarAttribute),
-                         &r, &wrapperWindow);
+    void *wrapperWindow = arch_delegate::initAsRawWindow(ownerWindow, NSMakeRect(x,y,w,h));
+    if (!wrapperWindow) {
+        throw std::runtime_error("initAsRawWindow() failed to create window.");
+    }
     
-    assert(wrapperWindow);
-    if (wrapperWindow == 0)
-        return;
-    
-    this->carbonWindowRef = createCarbonWindowRefPtr(wrapperWindow);
-    
-    NSWindow *carbonWindow = [[NSWindow alloc] initWithWindowRef: wrapperWindow];
-        
-    [ownerWindow addChildWindow: carbonWindow
-                        ordered: NSWindowAbove];
+    this->carbonWindowRef = createCarbonWindowRefPtr((WindowRef)wrapperWindow);
     
     __onCreated();
 }
@@ -477,91 +458,21 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
         [window display];
     SAMBAG_SYNC_END
 }
-
-
-static boost::tuple<float, float> getViewPos (HIViewRef view)
-{
-
-    HIRect r;
-    HIViewGetFrame (view, &r);
-    HIViewRef root;
-    HIViewFindByID (HIViewGetRoot (HIViewGetWindow (view)), kHIViewWindowContentID, &root);
-    HIViewConvertRect (&r, HIViewGetSuperview (view), root);
-
-    Rect windowPos;
-    GetWindowBounds (HIViewGetWindow (view), kWindowContentRgn, &windowPos);
-
-    return boost::make_tuple(windowPos.left + r.origin.x,
-        windowPos.top + r.origin.y);
-}
 //-----------------------------------------------------------------------------
-static pascal OSStatus
-issue384WorkaroundHandler(EventHandlerCallRef, EventRef e, void* user)
-{
-    NSWindow* hostWindow = (NSWindow*) user;
-
-    switch (GetEventKind (e))
-    {
-        case kEventWindowInit:    [hostWindow display]; break;
-        case kEventWindowShown:   [hostWindow orderFront: nil]; break;
-        case kEventWindowHidden:  [hostWindow orderOut: nil]; break;
-    }
-
-    return eventNotHandledErr;
-}
-//
-void attachIssue384Hander(WindowRef hostWindowRef, NSWindow *nsWindow) {
-    const EventTypeSpec eventsToCatch[] =
-    {
-        { kEventClassWindow, kEventWindowInit },
-        { kEventClassWindow, kEventWindowShown },
-        { kEventClassWindow, kEventWindowHidden }
-    };
-
-    EventHandlerRef ref;
-    InstallWindowEventHandler ((WindowRef) hostWindowRef,
-                               NewEventHandlerUPP (issue384WorkaroundHandler),
-                               GetEventTypeCount (eventsToCatch), eventsToCatch,
-                               (void*) nsWindow, &ref);
-}
-//
 void _CocoaWindowImpl::openNested(WindowRef parent,
 	Number x, Number y, Number w, Number h) 
 {
     AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
     
-    
-        HIViewRef parentView = 0;
-
-        WindowAttributes attributes;
-        GetWindowAttributes ((WindowRef) parent, &attributes);
-        if ((attributes & kWindowCompositingAttribute) != 0)
-        {
-            HIViewRef root = HIViewGetRoot ((WindowRef) parent);
-            HIViewFindByID (root, kHIViewWindowContentID, &parentView);
-
-            if (parentView == 0)
-                parentView = root;
-        }
-        else
-        {
-            GetRootControl ((WindowRef) parent, (ControlRef*) &parentView);
-
-            if (parentView == 0)
-                CreateRootControl ((WindowRef) parent, (ControlRef*) &parentView);
-        }
-    
-    
-        float xp, yp;
-        boost::tie(xp, yp) = getViewPos (parentView);
-    
-    
-    
-        NSWindow *window = [[NSWindow alloc] initWithWindowRef:parent];
+        NSWindow *window = arch_delegate::getParentWindowForNesting(parent);
         if (!window) {
             throw std::runtime_error("openNested() failed to create window.");
         }
+    
+        float xp, yp;
+        boost::tie(xp, yp) = arch_delegate::getViewPos(parent);
+    
         [window setCanHide: YES];
         [window setIsVisible:YES];
         [window release];
@@ -589,7 +500,7 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         // assign raw pointer
         this->viewPtr = createDiscoViewPtr(view);
     
-        attachIssue384Hander(parent, window);
+        arch_delegate::attachIssue384Hander(parent, window);
 
         __onCreated();
     SAMBAG_SYNC_END
@@ -658,14 +569,8 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
     }
    if (carbonWindowRef && view) {
         NSRect f = getBoundsOnScreen(view);
-        Rect wr;
-        wr.left   = (short) f.origin.x;
-        wr.top    = (short) f.origin.y;
-        wr.right  = (short) f.origin.x + f.size.width;
-        wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
-        SetWindowBounds (win, kWindowContentRgn, &wr);
-        ShowWindow (win);
+        arch_delegate::setBounds(win, f);
     }
 }
 //-----------------------------------------------------------------------------
@@ -700,13 +605,8 @@ void _CocoaWindowImpl::____windowBoundsChanged() {
     
    if (carbonWindowRef && view) {
         NSRect f = getBoundsOnScreen(view);
-        Rect wr;
-        wr.left   = (short) f.origin.x;
-        wr.top    = (short) f.origin.y;
-        wr.right  = (short) f.origin.x + f.size.width;
-        wr.bottom = (short) f.origin.y + f.size.height;
         WindowRef win = (WindowRef)carbonWindowRef.get();
-        SetWindowBounds (win, kWindowContentRgn, &wr);
+        arch_delegate::setBounds(win, f);
    }
 }
 //-----------------------------------------------------------------------------

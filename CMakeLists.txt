@@ -84,4 +84,9 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${LUA52_LIBRARIES}
 )
 
+CONFIGURE_FILE(
+  "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"
+  "${PROJECT_BINARY_DIR}/src/sambag/com/Config.h"
+)
+
 add_subdirectory(src)

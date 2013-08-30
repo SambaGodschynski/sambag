@@ -34,7 +34,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef WindowFlags Super;
 	typedef cocoaImplTypes::Number Number;
-private:
     //-------------------------------------------------------------------------
     typedef sambag::com::RecursiveMutex Mutex;
     Mutex mutex;
@@ -49,7 +48,6 @@ private:
 	int getWindowStyleMask() const;
     //-------------------------------------------------------------------------
     void initAsRawWindow(Number x, Number y, Number w, Number h);
-public:
     //-------------------------------------------------------------------------
     Mutex & getMutex() {
         return mutex;
