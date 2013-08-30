@@ -14,7 +14,6 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
 #include "Win32TimerImpl.hpp"
-#include "Win32MMTimerImpl.hpp"
 #include "BoostTimerImpl.hpp"
 #include "NullTimerImpl.hpp"
 
