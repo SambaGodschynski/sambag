@@ -17,7 +17,7 @@
 #include <iostream>
 #include "AutoReleasePool.h"
 #include <boost/tuple/tuple.hpp>
-
+#include <sambag/com/Config.h>
 #include "_Delegate.h"
 
 
@@ -68,7 +68,7 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 -(void)removeObject:(NSObject*)obj;
 -(void)setMaster:(Master*) theMaster;
 -(WindowRef)carbonParent;
--(void)setCarbonParent:(WindowRef)theParent;
+-(void)setCarbonParent:(void*)theParent;
 -(void)setFrame:(NSRect)windowFrame
         display:(BOOL)displayViews
         animate:(BOOL)performAnimation;
@@ -98,8 +98,10 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
 -(WindowRef)carbonParent {
     return carbonParent;
 }
--(void)setCarbonParent:(WindowRef)theParent {
-    carbonParent = theParent;
+-(void)setCarbonParent:(void*)theParent {
+    #ifdef SAMBAG_32
+        carbonParent = (WindowRef)theParent;
+    #endif
 }
 -(void)setMaster:(Master*) theMaster{
 	master = theMaster;
@@ -402,19 +404,17 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
     
     
     void *wrapperWindow = arch_delegate::initAsRawWindow(ownerWindow, NSMakeRect(x,y,w,h));
-    if (!wrapperWindow) {
-        throw std::runtime_error("initAsRawWindow() failed to create window.");
+   
+    if (wrapperWindow) {
+        this->carbonWindowRef = createCarbonWindowRefPtr((WindowRef)wrapperWindow);
     }
-    
-    this->carbonWindowRef = createCarbonWindowRefPtr((WindowRef)wrapperWindow);
-    
     __onCreated();
 }
 
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, Number w, Number h)
 {
-	AutoReleasePool ap;
+ 	AutoReleasePool ap;
     SAMBAG_SYNC( getMutex() )
         Number sw=0, sh=0;
         _CocoaToolkitImpl::getScreenDimension(sw, sh);
@@ -459,7 +459,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
     SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
-void _CocoaWindowImpl::openNested(WindowRef parent,
+void _CocoaWindowImpl::openNested(void *parent,
 	Number x, Number y, Number w, Number h) 
 {
     AutoReleasePool ap;
@@ -469,13 +469,12 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         if (!window) {
             throw std::runtime_error("openNested() failed to create window.");
         }
-    
         float xp, yp;
         boost::tie(xp, yp) = arch_delegate::getViewPos(parent);
     
         [window setCanHide: YES];
         [window setIsVisible:YES];
-        [window release];
+        //[window release];
         int options = 0; //getWindowStyleMask();
         NSRect windowBounds = NSMakeRect(xp, yp, w, h);
         flipRect(windowBounds);
@@ -484,7 +483,9 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
                                                         styleMask: options
                                                           backing:NSBackingStoreBuffered
                                                             defer:NO];
+    
         [pluginWindow setCarbonParent: parent];
+        
         this->windowPtr = createDiscoWindowPtr(pluginWindow);
 
         // show window
@@ -500,14 +501,15 @@ void _CocoaWindowImpl::openNested(WindowRef parent,
         // assign raw pointer
         this->viewPtr = createDiscoViewPtr(view);
     
-        arch_delegate::attachIssue384Hander(parent, window);
+        arch_delegate::attachIssue384Handler(parent, window);
 
         __onCreated();
     SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
-WindowRef _CocoaWindowImpl::getWindowRef() const {
-	AutoReleasePool ap;
+void * _CocoaWindowImpl::getWindowRef() const {
+#ifdef SAMBAG_32
+    AutoReleasePool ap;
 	if (carbonWindowRef) {
         return (WindowRef)carbonWindowRef.get();
     }
@@ -517,6 +519,9 @@ WindowRef _CocoaWindowImpl::getWindowRef() const {
 	}
     WindowRef ref = (WindowRef)[win windowRef];
     return ref;
+#else
+    return getDiscoWindow(*this);
+#endif // SAMBAG_32
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
@@ -681,5 +686,20 @@ void _CocoaToolkitImpl::quit() {
     [NSApp postEvent: event atStart: true];
 }
 }}} //namespace(s)
+
+
+//-----------------------------------------------------------------------------
+void * __getHandlerForVstPlugins_(void *ptr) {
+    #ifdef SAMBAG_32
+        return ptr;
+    #else
+    if (!ptr) {
+        return NULL;
+    }
+    NSWindow *win = (NSWindow*)ptr;
+    return [win contentView];
+    #endif
+}
+
 
 #endif //DISCO_USE_COCOA

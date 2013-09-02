@@ -13,4 +13,8 @@
  #define SAMBAG_32
 #endif
 
+#define SAMBAG_VERSION_BUILD "@SAMBAG_VERSION_BUILD@"
+
+
 #endif // SAMBAG_CONFIG_H
+

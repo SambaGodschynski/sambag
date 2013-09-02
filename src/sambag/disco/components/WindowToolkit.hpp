@@ -19,6 +19,9 @@
 #include <stdexcept>
 #include <sambag/disco/components/events/MouseEventCreator.hpp>
 
+
+extern void * __toNSViewIfApple64_(void*ptr);
+
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 

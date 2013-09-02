@@ -19,6 +19,11 @@
 #define DISCO_WND_CLASS_NAME "_discowindowimpl"
 #define DISCO_NWND_CLASS_NAME "_disconestedwindowimpl"
 
+void * __getHandlerForVstPlugins_(void* ptr) {
+    return ptr;
+}
+
+
 namespace sambag { namespace disco { namespace components {
 namespace {
 	template <typename T>

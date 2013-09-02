@@ -160,6 +160,7 @@ SET ( SAMBAG_SOURCES
 )
 SET ( SAMBAG_MMSOURCES
 	sambag/disco/components/windowImpl/cocoaimpl/_CarbonDelegate.mm
+	sambag/disco/components/windowImpl/cocoaimpl/_CocoaDelegate.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaTimer.mm
 	sambag/disco/components/windowImpl/cocoaimpl/_CocoaWindowImpl.mm
 	sambag/disco/components/windowImpl/cocoaimpl/autoreleasepool.mm

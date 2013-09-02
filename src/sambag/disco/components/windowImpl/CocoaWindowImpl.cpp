@@ -31,9 +31,8 @@ CocoaWindowImpl::CocoaWindowImpl() :
 void CocoaWindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	const Rectangle &area)
 {
-	void *_win = NULL;
-	com::get(osParent, _win);
-	WindowRef win = (WindowRef)_win;
+	void *win = NULL;
+	com::get(osParent, win);
 	if (!win) {
 		SAMBAG_LOG_WARN<<"initAsNestedWindow failed because parent==NULL";
 		return;

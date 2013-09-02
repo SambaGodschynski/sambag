@@ -38,7 +38,7 @@ IDrawContext::Ptr CairoDiscoFactory::createContext(ISurface::Ptr surface) const 
 IImageSurface::Ptr CairoDiscoFactory::createImageSurface(const Integer &width,
 		const Integer &height) const
 {
-	return CairoImageSurface::create(width, height);
+    return CairoImageSurface::create(width, height);
 }
 //-----------------------------------------------------------------------------
 IImageSurface::Ptr

@@ -44,10 +44,6 @@ while [ "$1" != "" ]; do
 done
 export CLIBS=$in
 
-cd $CLIBS/sambag
-export SAMBAG_BUILD=$(git log --pretty=format:"%h" -n 1)
-cd -
-
 echo use generator: $mode
 flags="$flags $build_type"
 echo $flags
