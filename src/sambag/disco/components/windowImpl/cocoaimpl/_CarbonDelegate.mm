@@ -156,6 +156,17 @@ boost::tuple<float, float> getViewPos (void *windowRef)
         windowPos.top + r.origin.y);
 }
 
+void closeNestedWindow(NSWindow *window)
+{
+    if (!window) {
+        return;
+    }
+    NSWindow * parent = [window parentWindow];
+    if (parent) {
+        [parent removeChildWindow: window];
+    }
+    [window close];
+}
 
 } // namespace(s)
 

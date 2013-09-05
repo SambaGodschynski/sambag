@@ -53,14 +53,13 @@ void * initAsRawWindow(NSWindow *ownerWindow,
 
 NSWindow * getParentWindowForNesting(void *windowRef)
 {
-    NSWindow *window = (NSWindow*)windowRef;
-    return window;
+    NSView *view = (NSView*)windowRef;
+    return [view window];
 }
 
 boost::tuple<float, float> getViewPos (void *windowRef)
 {
-    NSWindow *win = (NSWindow*)windowRef;
-    NSView *view = (NSView*)[win contentView];
+    NSView *view = (NSView*)windowRef;
     if (!view) {
         return boost::make_tuple(0.f, 0.f);
     }
@@ -72,6 +71,9 @@ void attachIssue384Handler(void *parent, NSWindow *nsWindow)
 {
 }
 
+void closeNestedWindow(NSWindow *window)
+{
+}
 
 } // namespace(s)
 
