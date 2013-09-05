@@ -34,7 +34,6 @@ public:
 	//-------------------------------------------------------------------------
 	typedef WindowFlags Super;
 	typedef cocoaImplTypes::Number Number;
-private:
     //-------------------------------------------------------------------------
     typedef sambag::com::RecursiveMutex Mutex;
     Mutex mutex;
@@ -49,7 +48,6 @@ private:
 	int getWindowStyleMask() const;
     //-------------------------------------------------------------------------
     void initAsRawWindow(Number x, Number y, Number w, Number h);
-public:
     //-------------------------------------------------------------------------
     Mutex & getMutex() {
         return mutex;
@@ -65,7 +63,7 @@ public:
 	//-------------------------------------------------------------------------
 	void openWindow(_CocoaWindowImpl*, Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
-	void openNested(WindowRef, Number x, Number y, Number w, Number h);
+	void openNested(void *, Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
 	void closeWindow();
 	//-------------------------------------------------------------------------
@@ -79,7 +77,7 @@ public:
 	//-------------------------------------------------------------------------
 	void invalidateWindow(Number x, Number y, Number w, Number h);
 	//-------------------------------------------------------------------------
-	WindowRef getWindowRef() const;
+	void * getWindowRef() const;
 	//-------------------------------------------------------------------------
     void onClose();
     //-------------------------------------------------------------------------

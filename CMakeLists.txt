@@ -3,6 +3,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./")
 
 project (sambag)
 
+execute_process(COMMAND git log --pretty=format:%h -n 1
+                OUTPUT_VARIABLE SAMBAG_VERSION_BUILD)
+
+
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
@@ -29,7 +33,7 @@ IF(APPLE)
 	FIND_LIBRARY(CARBON_LIBRARY Carbon)
 	#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O1") #problems with llvm optimization > O1
                                                                       #see minDep branch->testsuite
-	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O1")
+	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O0")
 	#set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -O1")
 	set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
 ELSEIF(UNIX)
@@ -82,6 +86,11 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${CAIRO_LIBRARIES}
 	${TINYXML_LIBRARIES}
 	${LUA52_LIBRARIES}
+)
+
+CONFIGURE_FILE(
+  "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"
+  "${PROJECT_BINARY_DIR}/src/sambag/com/Config.h"
 )
 
 add_subdirectory(src)
