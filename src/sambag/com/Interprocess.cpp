@@ -6,6 +6,7 @@
  */
 
 #include "Interprocess.hpp"
+#include <boost/interprocess/mapped_region.hpp>
 
 namespace sambag {  namespace com { namespace interprocess {
 //=============================================================================

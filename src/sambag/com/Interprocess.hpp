@@ -21,10 +21,9 @@
 #include <utility>
 
 namespace sambag {  namespace com { namespace interprocess {
-    
+
 namespace bi = ::boost::interprocess;
 typedef bi::managed_shared_memory ManagedSharedMemory;
-
 //-----------------------------------------------------------------------------
 class SharedMemoryHolder {
     ManagedSharedMemory shm;
