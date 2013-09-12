@@ -48,15 +48,24 @@ void TestInterprocess::testCreatingSharedMemory() {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder m1("M1", 1000);
     CPPUNIT_ASSERT_EQUAL( (size_t)1000, m1.get().get_size() );
-    
+    String::Class *str = String::findOrCreate("s1", m1.get());
+    *str="";
+    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m1.get()) );
     {
         SharedMemoryHolder m2("M1", 500);
         CPPUNIT_ASSERT_EQUAL( (size_t)1000, m2.get().get_size() );
+        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m2.get()) );
         SharedMemoryHolder m3("M2", 500);
         CPPUNIT_ASSERT_EQUAL( (size_t)500, m3.get().get_size() );
-        // releasing m2
+        CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(m3.get()) );
+        // releasing m2, m3
+    }
+    {
+        SharedMemoryHolder m2("M1", 1000);
+        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m2.get()) );
     }
     // assume m1 is still valid
+    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m1.get()) );
     CPPUNIT_ASSERT( m1.get().check_sanity() );
 }
 //-----------------------------------------------------------------------------
@@ -89,11 +98,11 @@ void TestInterprocess::testMap() {
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
     CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
-    typedef Map<std::string, float> TheMap;
+    typedef Map<int, float> TheMap;
     TheMap::Class *map = TheMap::findOrCreate("map1", shmh.get());
-    map->insert( TheMap::ValueType("bauer", 1.0) );
-    map->insert( TheMap::ValueType("laufer", 1.1) );
-    map->insert( TheMap::ValueType("koenig", 1.5) );
+    map->insert( TheMap::ValueType(1, 1.0) );
+    map->insert( TheMap::ValueType(2, 1.1) );
+    map->insert( TheMap::ValueType(3, 1.5) );
     {
         SharedMemoryHolder shmh2("M1", 64000);
         CPPUNIT_ASSERT_EQUAL(shmh2.get(), shmh2.get());
@@ -147,5 +156,24 @@ void TestInterprocess::testSharedMemory() {
     
     String::Class *str_res = String::findOrCreate("result", shmh.get());
     CPPUNIT_ASSERT_EQUAL(std::string("result=5050"), std::string(str_res->c_str()));
+    
+    CPPUNIT_ASSERT_EQUAL(std::string("opc, result, to_sum, "), sambag::com::toString(shmh.get()) );
+    
+    typedef Vector<float> FloatVector;
+    typedef Vector< FloatVector::Class > ComplexVector;
+    ComplexVector::Class *cv1 = ComplexVector::findOrCreate("cv1", shmh.get());
+    
+    FloatVector::TheAllocator falloc(shmh.get().get_segment_manager());
+    cv1->push_back(FloatVector::Class(falloc));
+    cv1->push_back(FloatVector::Class(falloc));
+    
+    for (int i=0; i<3; ++i) {
+        (*cv1)[0].push_back((float)i);
+        (*cv1)[1].push_back((float)i*2);
+    }
+
+    *opc="cvector_tostring";
+    CPPUNIT_ASSERT_EQUAL((int) 0, std::system(COUNTERPART_EXEC));
+    CPPUNIT_ASSERT_EQUAL(std::string("{{0,1,2,},{0,2,4,}}"), std::string(str_res->c_str()));
 }
 } //namespace
