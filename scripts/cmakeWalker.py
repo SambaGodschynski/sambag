@@ -18,13 +18,21 @@ ENDIF(WIN32)
 
 add_executable(unit_tests ${UNIT_TESTSOURCE})
 target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
+
+add_executable(test_shm_counterpart sambag/com/tests/test_shm_counterpart.cpp)
+target_link_libraries (test_shm_counterpart sambag ${SAMBAG_CLIBS})
+
 #testapp
 add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
 target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
 
 """
 
-ignoreDirs = ("TestFolders", "CMakeFiles", ".*testApps.*")
+ignoreDirs = ("TestFolders", 
+              "CMakeFiles", 
+              ".*testApps.*")
+
+ignoreFiles = ("test_shm_counterpart.cpp",)
 
 class Walker():
     fHandler = None
@@ -68,6 +76,12 @@ class Walker():
             if re.match("%s" % (x), _dir):
                 return False
         return True
+
+    def passFile(self, _file):
+        for x in ignoreFiles:
+            if re.match("%s" % (x), _file):
+                return False
+        return True
     
     def processSubDirs(self, subDirs):
         pass
@@ -80,6 +94,8 @@ class Walker():
             if ext == ".mm":
                 self.mmsource.append(full)
             if not re.match("\.cp{0,2}$", ext):
+                continue
+            if not self.passFile(x):
                 continue
             if self.isTest(self.currDir):
                 self.testSource.append(full)

@@ -6,6 +6,7 @@ SET ( SAMBAG_SOURCES
 	sambag/com/FileHandler.cpp
 	sambag/com/FileSystem.cpp
 	sambag/com/GenericTimer.cpp
+	sambag/com/Interprocess.cpp
 	sambag/com/ITimer.cpp
 	sambag/com/Win32ResourceHandler.cpp
 	sambag/cpsqlite/DataBase.cpp
@@ -174,6 +175,7 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/TestArithmeticWrapper.cpp
 	sambag/com/tests/TestBoostTimer2.cpp
 	sambag/com/tests/TestHelper.cpp
+	sambag/com/tests/TestInterprocess.cpp
 	sambag/com/tests/TestPropertyChanged.cpp
 	sambag/com/tests/TestSharedOrWeak.cpp
 	sambag/com/tests/TestThread.cpp
@@ -226,6 +228,10 @@ ENDIF(WIN32)
 
 add_executable(unit_tests ${UNIT_TESTSOURCE})
 target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
+
+add_executable(test_shm_counterpart sambag/com/tests/test_shm_counterpart.cpp)
+target_link_libraries (test_shm_counterpart sambag ${SAMBAG_CLIBS})
+
 #testapp
 add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
 target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
