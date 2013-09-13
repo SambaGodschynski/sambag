@@ -1,6 +1,6 @@
 /*
  * Interprocess.hpp
- *
+ * Helper for boost interprocess.
  *  Created on: Wed Sep 11 14:18:18 2013
  *      Author: Johannes Unger
  */
@@ -18,6 +18,8 @@
 #include <boost/interprocess/sync/interprocess_upgradable_mutex.hpp>
 #include <boost/interprocess/smart_ptr/shared_ptr.hpp>
 #include <boost/interprocess/smart_ptr/weak_ptr.hpp>
+#include <boost/unordered_map.hpp>
+#include <sambag/com/ArithmeticWrapper.hpp>
 #include <utility>
 
 namespace sambag {  namespace com { namespace interprocess {
@@ -25,12 +27,17 @@ namespace sambag {  namespace com { namespace interprocess {
 namespace bi = ::boost::interprocess;
 typedef bi::managed_shared_memory ManagedSharedMemory;
 //-----------------------------------------------------------------------------
+/**
+ * Releases shared memory when last instance is gone.
+ */
 class SharedMemoryHolder {
     ManagedSharedMemory shm;
     SharedMemoryHolder(const SharedMemoryHolder&) {}
     std::string name;
     void initMemory(size_t size, int tried = 0);
+    int *ref_counter;
 public:
+    static const std::string NAME_REF_COUNTER;
     SharedMemoryHolder(const char *name, size_t size);
     ~SharedMemoryHolder();
     ManagedSharedMemory & get() { return shm; }

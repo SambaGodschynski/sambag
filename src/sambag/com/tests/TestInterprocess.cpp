@@ -28,7 +28,11 @@ std::ostream & operator<<(std::ostream &os,
     using namespace sambag::com::interprocess;
     ManagedSharedMemory::const_named_iterator it = m.named_begin();
     for (; it!=m.named_end(); ++it) {
-        os<<it->name()<<", ";
+        std::string name(it->name());
+        if (name==SharedMemoryHolder::NAME_REF_COUNTER) {
+            continue;
+        }
+        os<<name<<", ";
     }
     return os;
 }

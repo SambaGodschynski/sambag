@@ -234,10 +234,9 @@ public:
 		return AudioEffectX::sizeWindow(width, height);
 	}
 	//-------------------------------------------------------------------------
-	virtual IEditor * getEditor() const {
-		IEditor * res = dynamic_cast<IEditor*>(editor);
-		return res;
-	}
+	virtual void * getEditor() const {
+            return editor;
+    }
 	//-------------------------------------------------------------------------
 	virtual bool getVendorString (char* text) { 
 		typename PluginTraits::StringType name;

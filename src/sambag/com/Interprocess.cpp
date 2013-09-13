@@ -7,11 +7,14 @@
 
 #include "Interprocess.hpp"
 #include <boost/interprocess/mapped_region.hpp>
+#include <sambag/com/Exception.hpp>
 
 namespace sambag {  namespace com { namespace interprocess {
 //=============================================================================
 // class SharedMemoryHolder 
 //=============================================================================
+//-----------------------------------------------------------------------------
+const std::string SharedMemoryHolder::NAME_REF_COUNTER = "ref_counter";
 //-----------------------------------------------------------------------------
 void SharedMemoryHolder::initMemory(size_t size, int tried) {
     try {
@@ -23,6 +26,8 @@ void SharedMemoryHolder::initMemory(size_t size, int tried) {
         bi::shared_memory_object::remove(name.c_str());
         initMemory(size, tried+1);
     }
+    ref_counter = get().find_or_construct<int>(NAME_REF_COUNTER.c_str())(0);
+    ++(*ref_counter);
 }
 //-----------------------------------------------------------------------------
 SharedMemoryHolder::SharedMemoryHolder(const char *name, size_t size) : name(name)
@@ -31,6 +36,8 @@ SharedMemoryHolder::SharedMemoryHolder(const char *name, size_t size) : name(nam
 }
 //-----------------------------------------------------------------------------
 SharedMemoryHolder::~SharedMemoryHolder() {
-    bi::shared_memory_object::remove(name.c_str());
+    if (--(*ref_counter) == 0) {
+        bi::shared_memory_object::remove(name.c_str());
+    }
 }
 }}} // namespace(s)
