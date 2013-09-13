@@ -176,7 +176,6 @@ SET ( SAMBAG_TESTSOURCES
 	sambag/com/tests/TestBoostTimer2.cpp
 	sambag/com/tests/TestHelper.cpp
 	sambag/com/tests/TestInterprocess.cpp
-	sambag/com/tests/TestMultiMalloc.cpp
 	sambag/com/tests/TestPropertyChanged.cpp
 	sambag/com/tests/TestSharedOrWeak.cpp
 	sambag/com/tests/TestThread.cpp
