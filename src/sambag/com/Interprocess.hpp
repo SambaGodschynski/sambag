@@ -96,7 +96,7 @@ struct PlacementAlloc {
     struct rebind {
         typedef PlacementAlloc<U> other;
     };
-    mutable PointerIterator it;
+    PointerIterator &it;
     T * allocate(size_t size) {
         if (size>max_size()) {
             SAMBAG_THROW(
@@ -106,12 +106,15 @@ struct PlacementAlloc {
         }
         T * res = (T*) *it;
         it.next<T>(size);
+        //std::cout<<typeid(T).name()<<": "<<std::hex<<*it<<std::endl;
         return res;
     }
     void deallocate(T* to_dealloc, size_t size) {}
     PlacementAlloc(PointerIterator &ptr_it) : it(ptr_it) {}
     template <class U>
-    PlacementAlloc( const PlacementAlloc<U> &other ) : it(other.it) {}
+    PlacementAlloc( const PlacementAlloc<U> &other ) : it(other.it) {
+        std::cout<<std::hex<<&it<<std::endl;
+    }
     void construct (pointer p, const_reference val) {
         new (p) T(val);
     }

@@ -293,5 +293,26 @@ void TestInterprocess::testPlacementAllocator3() {
     }
     free(mem);
 }
+//-----------------------------------------------------------------------------
+void TestInterprocess::testPlacementAllocator4() {
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<float> Alloc1;
+    void * mem = malloc(64000);
+    
+    PointerIterator pIt(mem, 64000);
+    Alloc1 alloc(pIt);
+    int *num_references = Alloc1::rebind<int>::other(alloc).allocate(1);
+    *num_references = 100;
+    size_t *blockSize_ist = Alloc1::rebind<size_t>::other(alloc).allocate(1);
+    *blockSize_ist = 512;
+    size_t *numChannels_ist = Alloc1::rebind<size_t>::other(alloc).allocate(1);
+    *numChannels_ist = 2;
+    
+    CPPUNIT_ASSERT_EQUAL((int)100, *num_references);
+    CPPUNIT_ASSERT_EQUAL((size_t)512, *blockSize_ist);
+    CPPUNIT_ASSERT_EQUAL((size_t)2, *numChannels_ist);
+    
+    free(mem);
+}
 
 } //namespace

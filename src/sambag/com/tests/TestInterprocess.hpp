@@ -25,6 +25,7 @@ private:
     CPPUNIT_TEST( testPlacementAllocator1 );
     CPPUNIT_TEST( testPlacementAllocator2 );
     CPPUNIT_TEST( testPlacementAllocator3 );
+    CPPUNIT_TEST( testPlacementAllocator4 );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testCreatingSharedMemory();
@@ -36,6 +37,7 @@ public:
     void testPlacementAllocator1();
     void testPlacementAllocator2();
     void testPlacementAllocator3();
+    void testPlacementAllocator4();
 };
 
 } // namespace
