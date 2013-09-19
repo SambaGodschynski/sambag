@@ -11,6 +11,7 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <ostream>
 #include <sambag/com/Common.hpp>
+#include <cstdlib>
 
 #ifdef WIN32
     const char * COUNTERPART_EXEC = "./test_shm_counterpart.exe";
@@ -96,6 +97,25 @@ void TestInterprocess::testVector() {
         CPPUNIT_ASSERT(*vector != *vector3);
     }
 }
+
+//-----------------------------------------------------------------------------
+void TestInterprocess::testSet() {
+    using namespace sambag::com::interprocess;
+    SharedMemoryHolder shmh("M1", 64000);
+    // confirm memory is empty
+    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    typedef Set<String::Class> StrSet;
+    StrSet::Class *set = StrSet::findOrCreate("s1", shmh.get());
+   
+    String::TheAllocator str_alloc(shmh.get().get_segment_manager());
+   
+    set->insert(String::Class("a", str_alloc));
+    set->insert(String::Class("b", str_alloc));
+    set->insert(String::Class("c", str_alloc));
+    set->insert(String::Class("c", str_alloc));
+    
+    CPPUNIT_ASSERT_EQUAL((size_t)3, set->size());
+}
 //-----------------------------------------------------------------------------
 void TestInterprocess::testMap() {
     using namespace sambag::com::interprocess;
@@ -120,25 +140,31 @@ void TestInterprocess::testMap() {
     CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
 }
 //-----------------------------------------------------------------------------
+namespace {
+    struct TestClass {
+        int _int;
+    };
+
+}
 void TestInterprocess::testSharedPtr() {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
     CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
-    typedef SharedPtr<std::string> StringPtr;
-    typedef WeakPtr<std::string> StringWPtr;
+    typedef SharedPtr<TestClass> TestPtr;
+    typedef WeakPtr<TestClass> TestWPtr;
     {
-        StringPtr::Class pStr = StringPtr::create("pStr1", shmh.get());
-        CPPUNIT_ASSERT_EQUAL(std::string("pStr1, "), sambag::com::toString(shmh.get()) );
-        *pStr = "nuff nuff";
+        TestPtr::Class pStr = TestPtr::create("pStr1", shmh.get());
+        //CPPUNIT_ASSERT_EQUAL(std::string("pStr1, "), sambag::com::toString(shmh.get()) );
+        pStr->_int = 101;
         CPPUNIT_ASSERT_EQUAL((long int)1, pStr.use_count());
         {
-            StringPtr::Class pStr2 = pStr;
-            StringWPtr::Class wpStr = pStr;
+            TestPtr::Class pStr2 = pStr;
+            TestWPtr::Class wpStr = pStr;
             CPPUNIT_ASSERT_EQUAL((long int)2, pStr.use_count());
-            StringPtr::Class pStr3 = wpStr.lock();
+            TestPtr::Class pStr3 = wpStr.lock();
             CPPUNIT_ASSERT_EQUAL((long int)3, pStr.use_count());
-            CPPUNIT_ASSERT_EQUAL(std::string("nuff nuff"), *pStr3);
+            CPPUNIT_ASSERT_EQUAL((int)101, pStr3->_int);
         }
         CPPUNIT_ASSERT_EQUAL((long int)1, pStr.use_count());
     }
@@ -179,5 +205,93 @@ void TestInterprocess::testSharedMemory() {
     *opc="cvector_tostring";
     CPPUNIT_ASSERT_EQUAL((int) 0, std::system(COUNTERPART_EXEC));
     CPPUNIT_ASSERT_EQUAL(std::string("{{0,1,2,},{0,2,4,}}"), std::string(str_res->c_str()));
+    
+    typedef String::Class IPString;
+    typedef Vector< IPString > StringVector;
+    StringVector::Class *sv = StringVector::findOrCreate("strV1", shmh.get());
+    
+    String::TheAllocator str_alloc(shmh.get().get_segment_manager());
+    
+    sv->push_back(IPString("fritz", str_alloc));
+    sv->push_back(IPString("und", str_alloc));
+    sv->push_back(IPString("spitz", str_alloc));
+    
+    *opc="strvector_tostring";
+    CPPUNIT_ASSERT_EQUAL((int) 0, std::system(COUNTERPART_EXEC));
+    CPPUNIT_ASSERT_EQUAL(std::string("fritz und spitz "), std::string(str_res->c_str()));
 }
+//-----------------------------------------------------------------------------
+void TestInterprocess::testPlacementAllocator1() {
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<int> Alloc1;
+    void * mem = malloc(sizeof(int)*20);
+    PointerIterator pIt(mem, sizeof(int)*20);
+    Alloc1 a1(pIt);
+    CPPUNIT_ASSERT_EQUAL((size_t)20, a1.max_size());
+    int *ints1 = a1.allocate(10);
+    CPPUNIT_ASSERT_EQUAL((size_t)10, a1.max_size());
+    for (int i=0; i<10; ++i) {
+        ints1[i] = i+1;
+    }
+    
+    int *ints2 = a1.allocate(10);
+    CPPUNIT_ASSERT_EQUAL((size_t)0, a1.max_size());
+    for (int i=0; i<10; ++i) {
+        ints2[i] = i+11;
+    }
+    
+    int * sum = (int*)mem;
+    for (int i=0; i<20; ++i) {
+        CPPUNIT_ASSERT_EQUAL((int)i+1, sum[i]);
+    }
+    free(mem);
+}
+//-----------------------------------------------------------------------------
+void TestInterprocess::testPlacementAllocator2() {
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<int*> Alloc1;
+    void * mem = malloc(sizeof(int)*20+sizeof(int*)*2);
+    PointerIterator pIt(mem, sizeof(int)*20+sizeof(int*)*2);
+    Alloc1 a1(pIt);
+    int **ints = a1.allocate(2);
+    
+    
+    typedef Alloc1::rebind<int>::other Alloc2;
+    Alloc2 a2(a1);
+    CPPUNIT_ASSERT_EQUAL((size_t)20, a2.max_size());
+    int *il = a2.allocate(10);
+    CPPUNIT_ASSERT_EQUAL((size_t)10, a2.max_size());
+    CPPUNIT_ASSERT_THROW(a2.allocate(11), sambag::com::exceptions::IllegalStateException);
+    int *ir = a2.allocate(10);
+    ints[0] = il;
+    ints[1] = ir;
+    
+    for (int i=0; i<10; ++i) {
+        ints[0][i] = i+1;
+        ints[1][i] = i+11;
+    }
+    
+    CPPUNIT_ASSERT_EQUAL((void*)ints, mem);
+    int * sum = (int*)(ints+2);
+    for (int i=0; i<20; ++i) {
+        CPPUNIT_ASSERT_EQUAL((int)i+1, sum[i]);
+    }
+    
+    free(mem);
+}
+//-----------------------------------------------------------------------------
+void TestInterprocess::testPlacementAllocator3() {
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<int> Alloc1;
+    void * mem = malloc(sizeof(int)*20);
+    PointerIterator pIt(mem, sizeof(int)*20);
+    Alloc1 a1(pIt);
+    std::vector<int, Alloc1> v1(a1);
+    v1.reserve(20);
+    for (int i=0; i<20; ++i) {
+        v1.push_back(i);
+    }
+    free(mem);
+}
+
 } //namespace

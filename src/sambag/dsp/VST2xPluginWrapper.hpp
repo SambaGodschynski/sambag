@@ -254,7 +254,15 @@ public:
 	//-------------------------------------------------------------------------
 	virtual VstInt32 getVendorVersion () { 
 		return PluginProcessor::getProductVersion(); 
-	}	
+	}
+    //-------------------------------------------------------------------------
+	virtual size_t getNumInputs() const {
+        return (size_t)AudioEffectX::cEffect.numInputs;
+    }
+    //-------------------------------------------------------------------------
+	virtual size_t getNumOutputs() const {
+        return (size_t)AudioEffectX::cEffect.numOutputs;
+    }
 };
 //#############################################################################
 //	Impl.:

@@ -32,6 +32,14 @@ struct IHost {
 	 * @return editor. Is NULL if no editor is used.
 	 */
 	virtual void * getEditor() const = 0;
+    /**
+	 * @return number of inputs
+	 */
+	virtual size_t getNumInputs() const = 0;
+    /**
+	 * @return number of outputs
+	 */
+	virtual size_t getNumOutputs() const = 0;
 };	
 //=============================================================================
 class PluginProcessorBase {

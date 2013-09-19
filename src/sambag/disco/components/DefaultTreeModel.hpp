@@ -157,6 +157,11 @@ public:
 	size_t getNumChildren(Node node) const {
 		return boost::out_degree(node, tree);
 	}
+    //-------------------------------------------------------------------------
+    /**
+     * removes all children from node
+     */
+    void removeAllChildren(Node node);
 	//-------------------------------------------------------------------------
 	/**
 	 *
@@ -298,6 +303,20 @@ void DefaultTreeModel<NT>::setNodeData(typename DefaultTreeModel<NT>::Node node,
 {
 	vertexDataMap[node] = v;
 	sce::EventSender<Event>::notifyListeners(this, Event());
+}
+//-----------------------------------------------------------------------------
+template <class NT>
+void DefaultTreeModel<NT>::removeAllChildren(Node node)
+{
+    size_t num = getNumChildren(node);
+    if (num==0) {
+        return;
+    }
+    std::vector<Node> res(num);
+    getChildren(node, res);
+    BOOST_FOREACH(const Node &x, res) {
+        removeNode(x);
+    }
 }
 }}} // namespace(s)
 

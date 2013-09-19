@@ -35,6 +35,11 @@ SharedMemoryHolder::SharedMemoryHolder(const char *name, size_t size) : name(nam
     initMemory(size);
 }
 //-----------------------------------------------------------------------------
+void SharedMemoryHolder::initMemory(const char *name, size_t size) {
+    this->name = std::string(name);
+    initMemory(size);
+}
+//-----------------------------------------------------------------------------
 SharedMemoryHolder::~SharedMemoryHolder() {
     if (--(*ref_counter) == 0) {
         bi::shared_memory_object::remove(name.c_str());
