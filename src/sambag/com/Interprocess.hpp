@@ -61,8 +61,9 @@ public:
     void * operator*() {
         return ptr;
     }
-    void setPointer(void *ptr) {
+    void setPointer(void *ptr, size_t byteSize) {
         this->ptr=ptr;
+        this->size = byteSize;
     }
     template <class T>
     void next(size_t num=1) {
@@ -82,6 +83,7 @@ public:
 };
 /**
  * Allocator doesn't alloc anything but assign given allready allocated memory.
+ * @note when PointerIterator is going invalid, PlacementAlloc is invalid.
  */
 template <class T>
 struct PlacementAlloc {
@@ -106,15 +108,12 @@ struct PlacementAlloc {
         }
         T * res = (T*) *it;
         it.next<T>(size);
-        //std::cout<<typeid(T).name()<<": "<<std::hex<<*it<<std::endl;
         return res;
     }
     void deallocate(T* to_dealloc, size_t size) {}
     PlacementAlloc(PointerIterator &ptr_it) : it(ptr_it) {}
     template <class U>
-    PlacementAlloc( const PlacementAlloc<U> &other ) : it(other.it) {
-        std::cout<<std::hex<<&it<<std::endl;
-    }
+    PlacementAlloc( const PlacementAlloc<U> &other ) : it(other.it) {}
     void construct (pointer p, const_reference val) {
         new (p) T(val);
     }
