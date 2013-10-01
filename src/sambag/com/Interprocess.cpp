@@ -8,6 +8,7 @@
 #include "Interprocess.hpp"
 #include <boost/interprocess/mapped_region.hpp>
 #include <sambag/com/Exception.hpp>
+#include <sambag/com/Common.hpp>
 
 namespace sambag {  namespace com { namespace interprocess {
 //=============================================================================
@@ -18,7 +19,7 @@ const std::string SharedMemoryHolder::NAME_REF_COUNTER = "ref_counter";
 //-----------------------------------------------------------------------------
 void SharedMemoryHolder::initMemory(size_t size, int tried) {
     try {
-        shm = ManagedSharedMemory(bi::open_or_create, name.c_str(), size);
+        shm = new ManagedSharedMemory(bi::open_or_create, name.c_str(), size);
     } catch (...) {
         if (tried>0) {
             throw;
@@ -26,7 +27,7 @@ void SharedMemoryHolder::initMemory(size_t size, int tried) {
         bi::shared_memory_object::remove(name.c_str());
         initMemory(size, tried+1);
     }
-    ref_counter = get().find_or_construct<int>(NAME_REF_COUNTER.c_str())(0);
+    ref_counter = get().find_or_construct<Integer>(NAME_REF_COUNTER.c_str())(0);
     ++(*ref_counter);
 }
 //-----------------------------------------------------------------------------
@@ -35,14 +36,19 @@ SharedMemoryHolder::SharedMemoryHolder(const char *name, size_t size) : name(nam
     initMemory(size);
 }
 //-----------------------------------------------------------------------------
-void SharedMemoryHolder::initMemory(const char *name, size_t size) {
-    this->name = std::string(name);
-    initMemory(size);
-}
-//-----------------------------------------------------------------------------
 SharedMemoryHolder::~SharedMemoryHolder() {
-    if (--(*ref_counter) == 0) {
-        bi::shared_memory_object::remove(name.c_str());
+    SAMBAG_LOG_INFO<<"removing "<<name<<": ...";
+    int refc = --(*ref_counter);
+    delete shm;
+    if ( refc == 0) {
+        try {
+            bi::shared_memory_object::remove(name.c_str());
+        } catch(const std::exception &ex) {
+            SAMBAG_LOG_FATAL<<"removing "<<name<<": FAILED, "<<ex.what();
+        } catch(...) {
+            SAMBAG_LOG_FATAL<<"removing "<<name<<": FAILED";
+        }
     }
+    SAMBAG_LOG_INFO<<"removing "<<name<<": SUCCEED";
 }
 }}} // namespace(s)

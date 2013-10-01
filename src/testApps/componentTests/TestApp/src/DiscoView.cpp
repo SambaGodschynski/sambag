@@ -679,8 +679,8 @@ void initResources() {
 }
 
 void initLogger() {
-	//using namespace boost::log;
-	//init_log_to_console();
+    sambag::com::addLogFile("testApp.log");
+    SAMBAG_LOG_ERR<<"running";
 }
 int main() {
 

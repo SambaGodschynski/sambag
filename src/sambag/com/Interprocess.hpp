@@ -23,8 +23,18 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <utility>
+#include <boost/integer.hpp>
+#include <boost/static_assert.hpp>
 
 namespace sambag {  namespace com { namespace interprocess {
+
+//-----------------------------------------------------------------------------
+/**
+ * Common types for 32/64 bit
+ */
+typedef boost::int_t<32>::exact Integer;
+typedef boost::uint_t<32>::exact UInteger;
+
 
 namespace bi = ::boost::interprocess;
 typedef bi::managed_shared_memory ManagedSharedMemory;
@@ -33,19 +43,20 @@ typedef bi::managed_shared_memory ManagedSharedMemory;
  * Releases shared memory when last instance is gone.
  */
 class SharedMemoryHolder {
-    ManagedSharedMemory shm;
+    BOOST_STATIC_ASSERT(sizeof(Integer) == 4);
+    BOOST_STATIC_ASSERT(sizeof(UInteger) == 4);
+    ManagedSharedMemory *shm;
     SharedMemoryHolder(const SharedMemoryHolder&) {}
     std::string name;
     void initMemory(size_t size, int tried = 0);
-    int *ref_counter;
+    Integer *ref_counter;
 public:
     static const std::string NAME_REF_COUNTER;
     SharedMemoryHolder(const char *name, size_t size);
     SharedMemoryHolder() {}
     ~SharedMemoryHolder();
-    void initMemory(const char *name, size_t size);
-    ManagedSharedMemory & get() { return shm; }
-    const ManagedSharedMemory & get() const { return shm; }
+    ManagedSharedMemory & get() { return *shm; }
+    const ManagedSharedMemory & get() const { return *shm; }
 };
 //-----------------------------------------------------------------------------
 /**

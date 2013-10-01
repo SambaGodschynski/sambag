@@ -17,6 +17,7 @@
 #include "BufferedDrawPolicy.hpp"
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
+#include <sambag/com/Common.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -139,15 +140,17 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * ceates nested window.
+	 * creates a nested window.
 	 */
 	static Ptr create(ArbitraryType::Ptr osParent, 
 		const Rectangle &area) 
 	{
+        SAMBAG_LOG_INFO<<"creating nested view: ..., ("<<area<<")";
 		Ptr res(new WindowImpl<ConcreteWindowImpl, DrawPolicy>());
 		res->ConcreteWindowImpl::initAsNestedWindow(osParent, area);
 		res->ConcreteWindowImpl::self = res;
 		res->setFlag(WindowFlags::WND_NESTED, true);
+        SAMBAG_LOG_INFO<<"creating nested view: SUCCEED";
 		return res;
 	}
 	//-------------------------------------------------------------------------
@@ -156,11 +159,16 @@ public:
 		if (getFlag(WindowFlags::WND_NESTED))
 			return; 
 		// init surface
-		ConcreteWindowImpl::open(_parent.lock());
+		SAMBAG_LOG_INFO<<"opening window: ...";
+        ConcreteWindowImpl::open(_parent.lock());
+        SAMBAG_LOG_INFO<<"opening window: SUCCEED";
+        
 	}
 	//-------------------------------------------------------------------------
 	virtual void close() {
+        SAMBAG_LOG_INFO<<"closing window: ...";
 		ConcreteWindowImpl::close();
+        SAMBAG_LOG_INFO<<"closing window: SUCCEED";
 	}
 	//--------------------------------------------------------------------------
 	virtual void setTitle(const std::string &title) {
@@ -213,6 +221,7 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
 		this,
 		OnOpenEvent()
 	);
+    SAMBAG_LOG_INFO<<"  + view created ("<<getBounds()<<")";
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

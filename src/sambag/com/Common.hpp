@@ -93,6 +93,8 @@ typedef tribool TriBool;
  */
 extern void log(const std::string &str);
 //-----------------------------------------------------------------------------
+extern void addLogFile(const std::string &filename);
+//-----------------------------------------------------------------------------
 inline Integer getNullInteger() {
 	return INT_MAX;
 }
