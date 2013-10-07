@@ -18,6 +18,8 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/detail/default_attribute_names.hpp>
+#include <boost/log/attributes/attribute.hpp>
 #endif // SAMBAG_USE_LOG
 
 namespace sambag { namespace com {
@@ -37,7 +39,7 @@ extern void addLogFile(const std::string &filename) {
     logging::add_file_log (
         keywords::file_name = filename,
         //keywords::rotation_size = 10 * 1024 * 1024,
-        keywords::format = "[%TimeStamp%]: %Message%"
+        keywords::format = "#%LineID% [%TimeStamp%][%ProcessID%][%ThreadID%]: %Message%"
     );
     logging::add_common_attributes();
 }

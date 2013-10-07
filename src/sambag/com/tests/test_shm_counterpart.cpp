@@ -27,7 +27,7 @@ std::ostream & operator<<(std::ostream &os,
 void sum_int() {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder shmh("sambag.unit_test", 64000);
-    typedef Vector<int> IntVector;
+    typedef Vector<Integer> IntVector;
     IntVector::Class *v = IntVector::findOrCreate("to_sum", shmh.get());
     int res=0;
     BOOST_FOREACH(int x, *v) {
@@ -84,7 +84,7 @@ void strvector_tostring() {
 }
 
 
-int main(int argc, const char **argv) {
+int mainManaged(int argc, const char **argv) {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder shmh("sambag.unit_test", 64000);
     //std::cout<<shmh.get()<<std::endl;
@@ -108,3 +108,62 @@ int main(int argc, const char **argv) {
     std::cout<<argv[0]<<": unknown opcode"<<std::endl;
     return 1;
 }
+
+int mainUnmanaged(int argc, const char **argv) {
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<Integer> Alloc;
+    using namespace boost::interprocess;
+    SharedMemoryObject shm = SharedMemoryObject(open_only, "interarch", read_write);
+    MappedRegion mp = MappedRegion(shm, read_write);
+    void *ptr = mp.get_address();
+    PointerIterator pIt(ptr, 6400);
+    Alloc alloc(pIt);
+    Integer *i = alloc.allocate(1);
+    if ( (*i) != 101 ) {
+        return -1;
+    }
+    char *opc = Alloc::rebind<char>::other(alloc).allocate(4);
+    if (std::string(opc) !="opc") {
+        return -1;
+    }
+    
+    pIt.next<Integer>(20);
+
+    typedef OffsetPtr<Integer>::Class Ints;
+    Ints *rl = Alloc::rebind<Ints>::other(alloc).allocate(2);
+  
+    for (size_t i=0; i<10; ++i) {
+        if (rl[0][i] != (Integer)i) {
+            return -1;
+        }
+        if (rl[1][i] != (Integer)i*2) {
+            return -1;
+        }
+    }
+
+    pIt.next<float>(20);
+
+    typedef OffsetPtr<float>::Class Floats;
+    Floats *frl = Alloc::rebind<Floats>::other(alloc).allocate(2);
+  
+    for (size_t i=0; i<10; ++i) {
+        if (frl[0][i] != (Integer)i) {
+            return -1;
+        }
+        if (frl[1][i] != (Integer)i*2) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+
+int main(int argc, const char **argv) {
+    if (argc==2) {
+        if (std::string(argv[1]) == "unmanaged") {
+            return mainUnmanaged(argc, argv);
+        }
+    }
+    return mainManaged(argc, argv);
+}
+

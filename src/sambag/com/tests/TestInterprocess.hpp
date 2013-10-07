@@ -22,6 +22,7 @@ private:
     CPPUNIT_TEST( testMap );
     CPPUNIT_TEST( testSharedPtr );
     CPPUNIT_TEST( testSharedMemory );
+    CPPUNIT_TEST( testSharedMemoryInterArch );
     CPPUNIT_TEST( testPlacementAllocator1 );
     CPPUNIT_TEST( testPlacementAllocator2 );
     CPPUNIT_TEST( testPlacementAllocator3 );
@@ -34,6 +35,7 @@ public:
     void testMap();
     void testSharedPtr();
     void testSharedMemory();
+    void testSharedMemoryInterArch();
     void testPlacementAllocator1();
     void testPlacementAllocator2();
     void testPlacementAllocator3();

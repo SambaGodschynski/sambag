@@ -15,8 +15,10 @@
 
 #ifdef WIN32
     const char * COUNTERPART_EXEC = "./test_shm_counterpart.exe";
+    const char * COUNTERPART_EXEC_32 = "./test_shm_counterpart.exe";
 #else   
     const char * COUNTERPART_EXEC = "./test_shm_counterpart";
+    const char * COUNTERPART_EXEC_32 = "arch -32 ./test_shm_counterpart unmanaged";
 #endif
 
 
@@ -52,16 +54,16 @@ namespace tests {
 void TestInterprocess::testCreatingSharedMemory() {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder m1("M1", 1000);
-    CPPUNIT_ASSERT_EQUAL( (size_t)1000, m1.get().get_size() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)1000, (size_t)m1.get().get_size() );
     String::Class *str = String::findOrCreate("s1", m1.get());
     *str="";
     CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m1.get()) );
     {
         SharedMemoryHolder m2("M1", 500);
-        CPPUNIT_ASSERT_EQUAL( (size_t)1000, m2.get().get_size() );
+        CPPUNIT_ASSERT_EQUAL( (size_t)1000, (size_t)m2.get().get_size() );
         CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m2.get()) );
         SharedMemoryHolder m3("M2", 500);
-        CPPUNIT_ASSERT_EQUAL( (size_t)500, m3.get().get_size() );
+        CPPUNIT_ASSERT_EQUAL( (size_t)500, (size_t)m3.get().get_size() );
         CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(m3.get()) );
         // releasing m2, m3
     }
@@ -84,7 +86,7 @@ void TestInterprocess::testVector() {
     for (int i=0; i<10; ++i) {
         vector->push_back(i*1.0f);
     }
-    CPPUNIT_ASSERT_EQUAL((size_t)10, vector->size());
+    CPPUNIT_ASSERT_EQUAL((size_t)10, (size_t)vector->size());
     {
         SharedMemoryHolder shmh2("M1", 64000);
         CPPUNIT_ASSERT_EQUAL(shmh2.get(), shmh2.get());
@@ -114,7 +116,7 @@ void TestInterprocess::testSet() {
     set->insert(String::Class("c", str_alloc));
     set->insert(String::Class("c", str_alloc));
     
-    CPPUNIT_ASSERT_EQUAL((size_t)3, set->size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, (size_t)set->size());
 }
 //-----------------------------------------------------------------------------
 void TestInterprocess::testMap() {
@@ -172,18 +174,76 @@ void TestInterprocess::testSharedPtr() {
     CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
 }
 //-----------------------------------------------------------------------------
+void TestInterprocess::testSharedMemoryInterArch() {
+    /**
+     * as long the boost interarchitecture (32/64 bit) managed shared memory
+     * is broken, we need to use a "raw and brutal" approach:
+     */
+    using namespace sambag::com::interprocess;
+    typedef PlacementAlloc<Integer> Alloc;
+    using namespace boost::interprocess;
+    static const char * NAME="interarch";
+    
+    struct Autoremove {
+        ~Autoremove() {
+            using namespace boost::interprocess;
+            shared_memory_object::remove(NAME);
+        }
+    } autoremove;
+    
+    static const size_t size = 6400*sizeof(char);
+    SharedMemoryObject shm = SharedMemoryObject(open_or_create, NAME, read_write);
+    shm.truncate(size);
+    MappedRegion mp = MappedRegion(shm, read_write);
+    void *ptr = mp.get_address();
+    PointerIterator pIt(ptr, size);
+    Alloc alloc(pIt);
+    
+    Integer *i = alloc.allocate(1);
+    CPPUNIT_ASSERT_EQUAL(0, *i);
+    *i = 101;
+    
+    char *opc = Alloc::rebind<char>::other(alloc).allocate(4);
+    strcpy(opc, "opc");
+
+    Integer *r = alloc.allocate(10);
+    Integer *l = alloc.allocate(10);
+    for (size_t i=0; i<10; ++i) {
+        r[i] = i;
+        l[i] = i*2;
+    }
+    
+    typedef OffsetPtr<Integer>::Class Ints;
+    Ints *rl = Alloc::rebind<Ints>::other(alloc).allocate(2);
+    rl[0] = r;
+    rl[1] = l;
+
+    float *fr = Alloc::rebind<float>::other(alloc).allocate(10);
+    float *fl = Alloc::rebind<float>::other(alloc).allocate(10);
+    for (size_t i=0; i<10; ++i) {
+        fr[i] = i;
+        fl[i] = i*2;
+    }
+    
+    typedef OffsetPtr<float>::Class Floats;
+    Floats *frl = Alloc::rebind<Floats>::other(alloc).allocate(2);
+    frl[0] = fr;
+    frl[1] = fl;
+    
+    CPPUNIT_ASSERT_EQUAL((int) 0, std::system(COUNTERPART_EXEC_32));
+}
+//-----------------------------------------------------------------------------
 void TestInterprocess::testSharedMemory() {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder shmh("sambag.unit_test", 64000);
-    typedef Vector<int> IntVector;
+    typedef Vector<Integer> IntVector;
     IntVector::Class *v = IntVector::findOrCreate("to_sum", shmh.get());
-    for (int i=1; i<=100; ++i) {
+    for (Integer i=1; i<=100; ++i) {
         v->push_back(i);
     }
     String::Class *opc = String::findOrCreate("opc", shmh.get());
     *opc="sum";
     CPPUNIT_ASSERT_EQUAL((int) 0, std::system(COUNTERPART_EXEC));
-    
     String::Class *str_res = String::findOrCreate("result", shmh.get());
     CPPUNIT_ASSERT_EQUAL(std::string("result=5050"), std::string(str_res->c_str()));
     

@@ -17,11 +17,26 @@ namespace sambag {  namespace com { namespace interprocess {
 //-----------------------------------------------------------------------------
 const std::string SharedMemoryHolder::NAME_REF_COUNTER = "ref_counter";
 //-----------------------------------------------------------------------------
-void SharedMemoryHolder::initMemory(size_t size, int tried) {
+void SharedMemoryHolder::initMemory(size_t size, size_t tried) {
     try {
+        SAMBAG_LOG_INFO<<"alloc "<<name<<": ...";
         shm = new ManagedSharedMemory(bi::open_or_create, name.c_str(), size);
+        if (!shm->check_sanity()) {
+            SAMBAG_LOG_INFO<<"  + check sanity failed. trying again.";
+            bi::shared_memory_object::remove(name.c_str());
+            initMemory(size, tried+1);
+        }
+        SAMBAG_LOG_INFO<<"alloc "<<name<<": SUCCEED";
+    } catch (std::exception &ex) {
+        if (tried>0) {
+            SAMBAG_LOG_ERR<<"alloc "<<name<<": FAILED, "<<ex.what();
+            throw;
+        }
+        bi::shared_memory_object::remove(name.c_str());
+        initMemory(size, tried+1);
     } catch (...) {
         if (tried>0) {
+            SAMBAG_LOG_ERR<<"alloc "<<name<<": FAILED";
             throw;
         }
         bi::shared_memory_object::remove(name.c_str());
