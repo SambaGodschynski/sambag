@@ -28,6 +28,11 @@
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // BEGIN LOG STUFF
 
+struct __LogDummy_ {
+        template <typename T>
+        __LogDummy_ & operator << (const T & t) { return *this; }
+};
+
 #ifdef SAMBAG_USE_LOG
 #include <boost/log/trivial.hpp>
 #define SAMBAG_LOG_WARN_IMPL  BOOST_LOG_TRIVIAL(warning)
@@ -37,12 +42,12 @@
 #define SAMBAG_LOG_TRACE_IMPL BOOST_LOG_TRIVIAL(trace)
 #define SAMBAG_LOG_FATAL_IMPL BOOST_LOG_TRIVIAL(fatal)
 #else
-#define SAMBAG_LOG_WARN_IMPL  std::clog<<std::endl
-#define SAMBAG_LOG_ERR_IMPL   std::clog<<std::endl
-#define SAMBAG_LOG_INFO_IMPL  std::clog<<std::endl
-#define SAMBAG_LOG_DEBUG_IMPL std::clog<<std::endl
-#define SAMBAG_LOG_TRACE_IMPL std::clog<<std::endl
-#define SAMBAG_LOG_FATAL_IMPL std::clog<<std::endl
+#define SAMBAG_LOG_WARN_IMPL  __LogDummy_()
+#define SAMBAG_LOG_ERR_IMPL   __LogDummy_()
+#define SAMBAG_LOG_INFO_IMPL  __LogDummy_()
+#define SAMBAG_LOG_DEBUG_IMPL __LogDummy_()
+#define SAMBAG_LOG_TRACE_IMPL __LogDummy_()
+#define SAMBAG_LOG_FATAL_IMPL __LogDummy_()
 #endif //SAMBAG_USE_LOG
 
 #define SAMBAG_LOG_WARN  SAMBAG_LOG_WARN_IMPL 

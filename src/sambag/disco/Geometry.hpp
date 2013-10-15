@@ -130,12 +130,14 @@ public:
 		return size.y();
 	}
 	//-------------------------------------------------------------------------
-	void width(const Coordinate &v) {
+	Dimension & width(const Coordinate &v) {
 		size.x(v);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
-	void height(const Coordinate &v) {
+	Dimension & height(const Coordinate &v) {
 		size.y(v);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
 	bool operator==(const Dimension &b) const {
@@ -194,13 +196,26 @@ public:
 		_size = val;
 		boost::geometry::subtract_point(_size, _x0);
 	}
-	void x(const Coordinate &val) { _x0.x(val); }
-	void y(const Coordinate &val) { _x0.y(val); }
-	void width(const Coordinate &val) { _size.x(val); }
-	void height(const Coordinate &val) { _size.y(val); }
-	void size(const Dimension &val) {
+	Rectangle & x(const Coordinate &val) {
+        _x0.x(val);
+        return *this;
+    }
+	Rectangle & y(const Coordinate &val) {
+        _x0.y(val);
+        return *this;
+    }
+	Rectangle & width(const Coordinate &val) {
+        _size.x(val);
+        return *this;
+    }
+	Rectangle & height(const Coordinate &val) {
+        _size.y(val);
+        return *this;
+    }
+	Rectangle & size(const Dimension &val) {
 		width(val.width());
 		height(val.height());
+        return *this;
 	}
 	bool isEmpty() const {
 		return boost::geometry::equals(x0(), x1());
@@ -218,12 +233,13 @@ public:
 	bool operator!=(const Rectangle &b) const {
 		return !(*this==b);
 	}
-	void inset(const Coordinate &_x, const Coordinate &_y) {
+	Rectangle & inset(const Coordinate &_x, const Coordinate &_y) {
 		Coordinate w = _x / 2.;
 		x( x() - w );
 		y( y() - w );
 		width( width() + _y );
 		height( height() + _y );
+        return *this;
 	}
 	// deprecated stuff ///////////////////////////////////////////////////////
 	/**
@@ -345,36 +361,40 @@ public:
 private:
 public:
 	//-------------------------------------------------------------------------
-	void left(Coordinate &v) {
+	Insets & left(Coordinate &v) {
 		Rectangle::x(v);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & left() const {
 		return Rectangle::x();
 	}
 	//-------------------------------------------------------------------------
-	void top(Coordinate &v) {
+	Insets & top(Coordinate &v) {
 		Rectangle::y(v);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & top() const {
 		return Rectangle::y();
 	}
 	//-------------------------------------------------------------------------
-	void right(Coordinate &v) {
+	Insets & right(Coordinate &v) {
 		Point2D p = Rectangle::x1();
 		p.x(v);
 		Rectangle::x1(p);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & right() const {
 		return Rectangle::x1().x();
 	}
 	//-------------------------------------------------------------------------
-	void bottom(Coordinate &v) {
+	Insets & bottom(Coordinate &v) {
 		Point2D p = Rectangle::x1();
 		p.y(v);
 		Rectangle::x1(p);
+        return *this;
 	}
 	//-------------------------------------------------------------------------
 	const Coordinate & bottom() const {

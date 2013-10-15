@@ -144,6 +144,7 @@ public:
 		PluginTraits::NumParameter
 	){
 		PluginProcessor::setHost(this);
+		PluginProcessor::setPluginTraits( PluginTraits() );
 		ConstructorPolicy::template construct<AudioEffectX, PluginTraits>(*this);
 		setEditor (
 			CreateEditorPolicy::template createEditor<AEffEditor>(this)
@@ -262,6 +263,10 @@ public:
     //-------------------------------------------------------------------------
 	virtual size_t getNumOutputs() const {
         return (size_t)AudioEffectX::cEffect.numOutputs;
+    }
+    //-------------------------------------------------------------------------
+	virtual size_t getNumParameter() const {
+        return (size_t)AudioEffectX::cEffect.numParams;
     }
 };
 //#############################################################################

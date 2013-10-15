@@ -52,5 +52,9 @@ void TestGeometrics::testRectangle() {
 	CPPUNIT_ASSERT_EQUAL(Dimension(15., 15.), r.size());
 	CPPUNIT_ASSERT_EQUAL(Point2D(-2.5, -2.5), r.x0());
 	CPPUNIT_ASSERT_EQUAL(Point2D(12.5, 12.5), r.x1());
+    //<<<<<<<<<<<<<<<<<<<<<<<<<check nesting
+    r = Rectangle(0.,0.,20.,20.);
+    CPPUNIT_ASSERT_EQUAL(Rectangle(10,15,20,20), r.x(10).y(15));
+    CPPUNIT_ASSERT_EQUAL(Rectangle(0,0,30,35), r.width(30).height(35));
 }
 } // namespace

@@ -32,14 +32,18 @@ struct IHost {
 	 * @return editor. Is NULL if no editor is used.
 	 */
 	virtual void * getEditor() const = 0;
-    /**
+        /**
 	 * @return number of inputs
 	 */
 	virtual size_t getNumInputs() const = 0;
-    /**
+       /**
 	 * @return number of outputs
 	 */
 	virtual size_t getNumOutputs() const = 0;
+       /**
+        * @return number of parameter
+	*/
+	virtual size_t getNumParameter() const = 0;
 };	
 //=============================================================================
 class PluginProcessorBase {
@@ -79,6 +83,8 @@ public:
 	template <class String> 
 	void getProductName(String &outStr) const {} 
 	int getProductVersion() const { return 0; }
+        template <class Traits>
+	void setPluginTraits(const Traits& traits) {}
 protected:
 	IHost *host;
 };
