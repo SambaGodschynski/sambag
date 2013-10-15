@@ -25,7 +25,7 @@ find_package(Boost 1.49.0 REQUIRED
         timer
         chrono
 	program_options 
-        #log
-        #log_setup
+        log
+        log_setup
 )
 

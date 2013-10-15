@@ -8,6 +8,17 @@
 #ifndef SAMBAG_INTERPROCESS_H
 #define SAMBAG_INTERPROCESS_H
 
+/*
+ according to: http://stackoverflow.com/questions/11915142/64bit-and-32bit-process-intercommunication-boostmessage-queue#15171596
+*/
+/*namespace boost { namespace interprocess { namespace ipcdetail {
+    //Rounds "orig_size" by excess to round_to bytes
+    template<class SizeType, class ST2>
+    inline SizeType get_rounded_size(SizeType orig_size, ST2 round_to) {
+        return ((orig_size-1)/round_to+1)*round_to;
+    }
+}}}*/
+
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <boost/interprocess/managed_shared_memory.hpp>
@@ -19,33 +30,64 @@
 #include <boost/interprocess/sync/interprocess_upgradable_mutex.hpp>
 #include <boost/interprocess/smart_ptr/shared_ptr.hpp>
 #include <boost/interprocess/smart_ptr/weak_ptr.hpp>
+#include <boost/interprocess/mem_algo/simple_seq_fit.hpp>
 #include <boost/unordered_map.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <utility>
+#include <boost/integer.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/interprocess/shared_memory_object.hpp>
+#include <boost/interprocess/mapped_region.hpp>
 
 namespace sambag {  namespace com { namespace interprocess {
 
+//-----------------------------------------------------------------------------
+/**
+ * Common types for 32/64 bit
+ */
+typedef boost::int_t<32>::exact Integer;
+typedef boost::uint_t<32>::exact UInteger;
+
+
+
 namespace bi = ::boost::interprocess;
+typedef bi::shared_memory_object SharedMemoryObject;
+typedef bi::mapped_region MappedRegion;
+
+/**
+ * Offset ptr which is usable for 32 and 64 bit. 
+ */
+template <class T>
+struct OffsetPtr {
+    typedef bi::offset_ptr<T, Integer, UInteger> Class;
+};
+
+/*typedef bi::basic_managed_shared_memory <char,
+    bi::simple_seq_fit<bi::mutex_family, OffsetPtr<void>::Class >,
+    bi::iset_index> ManagedSharedMemory;*/
+
 typedef bi::managed_shared_memory ManagedSharedMemory;
+
 //-----------------------------------------------------------------------------
 /**
  * Releases shared memory when last instance is gone.
  */
 class SharedMemoryHolder {
-    ManagedSharedMemory shm;
+    BOOST_STATIC_ASSERT(sizeof(Integer) == 4);
+    BOOST_STATIC_ASSERT(sizeof(UInteger) == 4);
+    ManagedSharedMemory *shm;
     SharedMemoryHolder(const SharedMemoryHolder&) {}
     std::string name;
-    void initMemory(size_t size, int tried = 0);
-    int *ref_counter;
+    void initMemory(size_t size, size_t tried = 0);
+    Integer *ref_counter;
 public:
     static const std::string NAME_REF_COUNTER;
     SharedMemoryHolder(const char *name, size_t size);
     SharedMemoryHolder() {}
     ~SharedMemoryHolder();
-    void initMemory(const char *name, size_t size);
-    ManagedSharedMemory & get() { return shm; }
-    const ManagedSharedMemory & get() const { return shm; }
+    ManagedSharedMemory & get() { return *shm; }
+    const ManagedSharedMemory & get() const { return *shm; }
 };
 //-----------------------------------------------------------------------------
 /**
@@ -124,7 +166,6 @@ struct PlacementAlloc {
         return it.bytesLeft() / sizeof(T);
     }
 };
-
 //-----------------------------------------------------------------------------
 template <class _ManagedSharedMemory>
 struct GetSegmentManager {
