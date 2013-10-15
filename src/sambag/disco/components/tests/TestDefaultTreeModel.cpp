@@ -8,6 +8,7 @@
 #include "TestDefaultTreeModel.hpp"
 #include <cppunit/config/SourcePrefix.h>
 #include <sambag/disco/components/DefaultTreeModel.hpp>
+#include <sambag/com/Common.hpp>
 #include <string>
 #include <vector>
 
@@ -38,6 +39,7 @@ void TestDefaultTreeModel::testAddRemove() {
 	//  +--------folder0
 	//  +          +
 	//  +          +-file1
+    //  +
 	//  +--------folder1
 	//  +          +
 	//  +          +------folder2
@@ -80,5 +82,13 @@ void TestDefaultTreeModel::testAddRemove() {
 	tree.getChildren(tree.getRootNode(), nl);
 	CPPUNIT_ASSERT_EQUAL((size_t)1, nl.size());
 	CPPUNIT_ASSERT_EQUAL(tree.getNodeData(nl[0]), std::string("file1"));
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add N files
+    for (int i=0; i<100; ++i) {
+        tree.addNode(tree.getRootNode(), "file"+sambag::com::toString(i+2));
+    }
+    CPPUNIT_ASSERT_EQUAL((size_t)102, tree.size());
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<remove all children
+    tree.removeAllChildren(tree.getRootNode());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, tree.size());
 }
 } //namespace

@@ -18,16 +18,26 @@ private:
 	CPPUNIT_TEST_SUITE( TestInterprocess );
 	CPPUNIT_TEST( testCreatingSharedMemory );
     CPPUNIT_TEST( testVector );
+    CPPUNIT_TEST( testSet );
     CPPUNIT_TEST( testMap );
     CPPUNIT_TEST( testSharedPtr );
     CPPUNIT_TEST( testSharedMemory );
+    CPPUNIT_TEST( testPlacementAllocator1 );
+    CPPUNIT_TEST( testPlacementAllocator2 );
+    CPPUNIT_TEST( testPlacementAllocator3 );
+    CPPUNIT_TEST( testPlacementAllocator4 );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testCreatingSharedMemory();
     void testVector();
+    void testSet();
     void testMap();
     void testSharedPtr();
     void testSharedMemory();
+    void testPlacementAllocator1();
+    void testPlacementAllocator2();
+    void testPlacementAllocator3();
+    void testPlacementAllocator4();
 };
 
 } // namespace

@@ -29,9 +29,17 @@ struct IHost {
 	 */
 	virtual bool requestEditorResize(int witdh, int height) = 0;
 	/**
-	 * @return editor. Is NULL if no editor which extends IEditor is used.
+	 * @return editor. Is NULL if no editor is used.
 	 */
-	virtual IEditor * getEditor() const = 0;
+	virtual void * getEditor() const = 0;
+    /**
+	 * @return number of inputs
+	 */
+	virtual size_t getNumInputs() const = 0;
+    /**
+	 * @return number of outputs
+	 */
+	virtual size_t getNumOutputs() const = 0;
 };	
 //=============================================================================
 class PluginProcessorBase {

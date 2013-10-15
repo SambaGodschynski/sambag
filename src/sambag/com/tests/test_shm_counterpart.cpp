@@ -63,6 +63,27 @@ void cvector_tostring() {
 }
 
 
+void strvector_tostring() {
+    using namespace sambag::com::interprocess;
+    SharedMemoryHolder shmh("sambag.unit_test", 64000);
+    String::Class *str_result = String::findOrCreate("result", shmh.get());
+    typedef Vector<String::Class> StringVector;
+    StringVector::Class *strv1 = StringVector::findOrCreate("strV1", shmh.get());
+    
+    if (!strv1 || strv1->empty() ) {
+        *str_result="{}";
+        return;
+    }
+    std::stringstream ss;
+    BOOST_FOREACH( const String::Class &str, *strv1) {
+        ss<<str<<" ";
+    }
+    
+   
+    *str_result = ss.str().c_str();
+}
+
+
 int main(int argc, const char **argv) {
     using namespace sambag::com::interprocess;
     SharedMemoryHolder shmh("sambag.unit_test", 64000);
@@ -78,6 +99,10 @@ int main(int argc, const char **argv) {
     }
     if (*opc=="cvector_tostring") {
         cvector_tostring();
+        return 0;
+    }
+    if (*opc=="strvector_tostring") {
+        strvector_tostring();
         return 0;
     }
     std::cout<<argv[0]<<": unknown opcode"<<std::endl;

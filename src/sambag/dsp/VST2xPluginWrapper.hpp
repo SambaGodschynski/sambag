@@ -234,10 +234,9 @@ public:
 		return AudioEffectX::sizeWindow(width, height);
 	}
 	//-------------------------------------------------------------------------
-	virtual IEditor * getEditor() const {
-		IEditor * res = dynamic_cast<IEditor*>(editor);
-		return res;
-	}
+	virtual void * getEditor() const {
+            return editor;
+    }
 	//-------------------------------------------------------------------------
 	virtual bool getVendorString (char* text) { 
 		typename PluginTraits::StringType name;
@@ -255,7 +254,15 @@ public:
 	//-------------------------------------------------------------------------
 	virtual VstInt32 getVendorVersion () { 
 		return PluginProcessor::getProductVersion(); 
-	}	
+	}
+    //-------------------------------------------------------------------------
+	virtual size_t getNumInputs() const {
+        return (size_t)AudioEffectX::cEffect.numInputs;
+    }
+    //-------------------------------------------------------------------------
+	virtual size_t getNumOutputs() const {
+        return (size_t)AudioEffectX::cEffect.numOutputs;
+    }
 };
 //#############################################################################
 //	Impl.:

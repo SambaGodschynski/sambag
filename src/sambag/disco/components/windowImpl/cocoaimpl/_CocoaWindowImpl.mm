@@ -37,10 +37,6 @@ namespace {
     NSRect getBoundsOnScreen(NSView *view) {
         NSRect r = [view frame];
         NSWindow* viewWindow = [view window];
-        /*NSView* cView = [viewWindow contentView];
-        if (cView!=view) {
-            r = [cView convertRect:r toView:cView];
-        }*/
         r.origin = [viewWindow convertBaseToScreen: r.origin];
         r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
         return r;
@@ -250,18 +246,17 @@ typedef sambag::disco::components::_CocoaWindowImpl Master;
     master->__handleMouseMotionEvent(p.x, p.y);
 }
 - (void)drawRect:(NSRect)rect {
-    SAMBAG_SYNC( master->getMutex() )
-        if (! [[self window] isVisible]) {
-            return;
-        }
-        void *gc = [[[self window] graphicsContext] graphicsPort];
-        master->__processDraw(
-                              (CGContextRef)gc,
-                              rect.origin.x, 
-                              rect.origin.y, 
-                              rect.size.width, 
-                              rect.size.height);
-    SAMBAG_SYNC_END
+    if (! [[self window] isVisible]) {
+        return;
+    }
+    void *gc = [[[self window] graphicsContext] graphicsPort];
+    master->__processDraw(
+                            (CGContextRef)gc,
+                            rect.origin.x,
+                            rect.origin.y, 
+                            rect.size.width, 
+                            rect.size.height);
+    
 }
 - (void)setMaster:(Master*) theMaster {
 	master = theMaster;
@@ -553,6 +548,7 @@ void * _CocoaWindowImpl::getWindowRef() const {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
+    boost::shared_ptr<void> hold = __getPtr();
 	AutoReleasePool ap;
     NSWindow *window = getDiscoWindow(*this);
 	if (!window) {
@@ -562,6 +558,9 @@ void _CocoaWindowImpl::closeWindow() {
         if (getFlag(WindowFlags::WND_NESTED)) {
             arch_delegate::closeNestedWindow(window);
             #ifdef SAMBAG_64
+                NSView *view = getDiscoView(*this);
+                [view setNeedsDisplay:NO];
+                [view removeFromSuperview];
                 __windowWillCose();
             #endif
         } else {
