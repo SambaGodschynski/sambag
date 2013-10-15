@@ -32,7 +32,7 @@ void log(const std::string &str) {
 extern void addLogFile(const std::string &filename) {
 #ifndef SAMBAG_USE_LOG
     return;
-#endif // !SAMBAG_USE_LOG
+#else
     namespace logging = boost::log;
     namespace keywords = boost::log::keywords;
     
@@ -42,6 +42,7 @@ extern void addLogFile(const std::string &filename) {
         keywords::format = "#%LineID% [%TimeStamp%][%ProcessID%][%ThreadID%]: %Message%"
     );
     logging::add_common_attributes();
+#endif // !SAMBAG_USE_LOG
 }
 //-----------------------------------------------------------------------------
 std::string normString(const std::string &v) {
