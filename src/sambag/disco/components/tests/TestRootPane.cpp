@@ -98,7 +98,7 @@ void TestRootPane::testRootPane() {
 	using namespace sambag::disco::components;
 	root->draw( root->getDrawContext() );
 	surf->writeToFile(OUTPUT_FOLDER + "/testRootPane.png");
-	filesystem::exists(OUTPUT_FOLDER + "/testRootPane.png");
+	boost::filesystem::exists(OUTPUT_FOLDER + "/testRootPane.png");
 }
 //-----------------------------------------------------------------------------
 struct TestListener {

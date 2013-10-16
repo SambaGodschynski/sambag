@@ -14,13 +14,12 @@
 
 namespace sambag {
 namespace cpsqlite {
-using namespace std;
 //============================================================================================================
 // Class DataBase Exceptions
 //============================================================================================================
 struct DataBaseException : public std::exception {
 protected:
-    mutable string tmp;
+    mutable std::string tmp;
 public:
     virtual const char* what() const throw() {
         return tmp.c_str();
@@ -99,7 +98,7 @@ public:
 		//...................................................................................................
 		template<typename T>
 		T getConv( const Column &col ) const {
-			stringstream ss;
+			std::stringstream ss;
 			T ret;
 			ss<<get(col);
 			ss>>ret;
@@ -108,7 +107,7 @@ public:
 		//...................................................................................................
 		template<typename T>
 		T getConv( const Column &col, const T &null /*returned if covertion failed*/ ) const {
-			stringstream ss;
+			std::stringstream ss;
 			T ret;
 			ss<<get(col);
 			ss>>ret;
@@ -122,7 +121,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------
 	typedef com::Location Path;
 	//--------------------------------------------------------------------------------------------------------
-        typedef vector<Result::Ptr> Results;
+	typedef std::vector<Result::Ptr> Results;
 	//--------------------------------------------------------------------------------------------------------
 	typedef boost::shared_ptr<DataBase> Ptr;
 	//--------------------------------------------------------------------------------------------------------

@@ -90,7 +90,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual sambag::math::Matrix getMatrixValue() const {
 		cairo_matrix_t cm;
-		Matrix res(3,3);
+		math::Matrix res(3,3);
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
 		discoMatrixToCairoMatrix(res, cm);
 		return res;

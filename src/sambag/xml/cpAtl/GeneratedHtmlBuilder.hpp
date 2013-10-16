@@ -33,7 +33,7 @@ template <typename T>
 class GeneratedHtmlBuilder : public MarkupBuilder<T> {
 public:
 
-	GeneratedHtmlBuilder(ostream & writer) : MarkupBuilder<T>(writer) {}
+	GeneratedHtmlBuilder(std::ostream & writer) : MarkupBuilder<T>(writer) {}
 	typedef typename MarkupBuilder<T>::TagClosingPolicy TagClosingPolicy;
 	/**
 	 * Starts the &lt;a&gt; tag.
@@ -1021,7 +1021,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  abbr(const string & value) {
+	virtual T &  abbr(const std::string & value) {
 		return MarkupBuilder<T>::attr("abbr", value);
 	}
 
@@ -1032,7 +1032,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  accept(const string & value) {
+	virtual T &  accept(const std::string & value) {
 		return MarkupBuilder<T>::attr("accept", value);
 	}
 
@@ -1043,7 +1043,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  acceptCharset(const string & value) {
+	virtual T &  acceptCharset(const std::string & value) {
 		return MarkupBuilder<T>::attr("accept-charset", value);
 	}
 
@@ -1054,7 +1054,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  accesskey(const string & value) {
+	virtual T &  accesskey(const std::string & value) {
 		return MarkupBuilder<T>::attr("accesskey", value);
 	}
 
@@ -1065,7 +1065,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  action(const string & value) {
+	virtual T &  action(const std::string & value) {
 		return MarkupBuilder<T>::attr("action", value);
 	}
 
@@ -1076,7 +1076,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  align(const string & value) {
+	virtual T &  align(const std::string & value) {
 		return MarkupBuilder<T>::attr("align", value);
 	}
 
@@ -1087,7 +1087,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  alink(const string & value) {
+	virtual T &  alink(const std::string & value) {
 		return MarkupBuilder<T>::attr("alink", value);
 	}
 
@@ -1098,7 +1098,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  alt(const string & value) {
+	virtual T &  alt(const std::string & value) {
 		return MarkupBuilder<T>::attr("alt", value);
 	}
 
@@ -1109,7 +1109,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  archive(const string & value) {
+	virtual T &  archive(const std::string & value) {
 		return MarkupBuilder<T>::attr("archive", value);
 	}
 
@@ -1120,7 +1120,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  axis(const string & value) {
+	virtual T &  axis(const std::string & value) {
 		return MarkupBuilder<T>::attr("axis", value);
 	}
 
@@ -1131,7 +1131,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  background(const string & value) {
+	virtual T &  background(const std::string & value) {
 		return MarkupBuilder<T>::attr("background", value);
 	}
 
@@ -1142,7 +1142,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  bgcolor(const string & value) {
+	virtual T &  bgcolor(const std::string & value) {
 		return MarkupBuilder<T>::attr("bgcolor", value);
 	}
 
@@ -1153,7 +1153,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  border(const string & value) {
+	virtual T &  border(const std::string & value) {
 		return MarkupBuilder<T>::attr("border", value);
 	}
 
@@ -1164,7 +1164,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  cellpadding(const string & value) {
+	virtual T &  cellpadding(const std::string & value) {
 		return MarkupBuilder<T>::attr("cellpadding", value);
 	}
 
@@ -1175,7 +1175,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  cellspacing(const string & value) {
+	virtual T &  cellspacing(const std::string & value) {
 		return MarkupBuilder<T>::attr("cellspacing", value);
 	}
 
@@ -1186,7 +1186,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  charAttr(const string & value) {
+	virtual T &  charAttr(const std::string & value) {
 		return MarkupBuilder<T>::attr("char", value);
 	}
 
@@ -1197,7 +1197,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  charoff(const string & value) {
+	virtual T &  charoff(const std::string & value) {
 		return MarkupBuilder<T>::attr("charoff", value);
 	}
 
@@ -1208,7 +1208,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  charset(const string & value) {
+	virtual T &  charset(const std::string & value) {
 		return MarkupBuilder<T>::attr("charset", value);
 	}
 
@@ -1219,7 +1219,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  checked(const string & value) {
+	virtual T &  checked(const std::string & value) {
 		return MarkupBuilder<T>::attr("checked", value);
 	}
 
@@ -1230,7 +1230,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  cite(const string & value) {
+	virtual T &  cite(const std::string & value) {
 		return MarkupBuilder<T>::attr("cite", value);
 	}
 
@@ -1241,7 +1241,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  classAttr(const string & value) {
+	virtual T &  classAttr(const std::string & value) {
 		return MarkupBuilder<T>::attr("class", value);
 	}
 
@@ -1252,7 +1252,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  classid(const string & value) {
+	virtual T &  classid(const std::string & value) {
 		return MarkupBuilder<T>::attr("classid", value);
 	}
 
@@ -1263,7 +1263,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  clear(const string & value) {
+	virtual T &  clear(const std::string & value) {
 		return MarkupBuilder<T>::attr("clear", value);
 	}
 
@@ -1274,7 +1274,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  code(const string & value) {
+	virtual T &  code(const std::string & value) {
 		return MarkupBuilder<T>::attr("code", value);
 	}
 
@@ -1285,7 +1285,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  codebase(const string & value) {
+	virtual T &  codebase(const std::string & value) {
 		return MarkupBuilder<T>::attr("codebase", value);
 	}
 
@@ -1296,7 +1296,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  codetype(const string & value) {
+	virtual T &  codetype(const std::string & value) {
 		return MarkupBuilder<T>::attr("codetype", value);
 	}
 
@@ -1307,7 +1307,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  color(const string & value) {
+	virtual T &  color(const std::string & value) {
 		return MarkupBuilder<T>::attr("color", value);
 	}
 
@@ -1318,7 +1318,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  cols(const string & value) {
+	virtual T &  cols(const std::string & value) {
 		return MarkupBuilder<T>::attr("cols", value);
 	}
 
@@ -1329,7 +1329,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  colspan(const string & value) {
+	virtual T &  colspan(const std::string & value) {
 		return MarkupBuilder<T>::attr("colspan", value);
 	}
 
@@ -1340,7 +1340,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  compact(const string & value) {
+	virtual T &  compact(const std::string & value) {
 		return MarkupBuilder<T>::attr("compact", value);
 	}
 
@@ -1351,7 +1351,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  content(const string & value) {
+	virtual T &  content(const std::string & value) {
 		return MarkupBuilder<T>::attr("content", value);
 	}
 
@@ -1362,7 +1362,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  coords(const string & value) {
+	virtual T &  coords(const std::string & value) {
 		return MarkupBuilder<T>::attr("coords", value);
 	}
 
@@ -1373,7 +1373,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  data(const string & value) {
+	virtual T &  data(const std::string & value) {
 		return MarkupBuilder<T>::attr("data", value);
 	}
 
@@ -1384,7 +1384,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  datetime(const string & value) {
+	virtual T &  datetime(const std::string & value) {
 		return MarkupBuilder<T>::attr("datetime", value);
 	}
 
@@ -1395,7 +1395,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  declare(const string & value) {
+	virtual T &  declare(const std::string & value) {
 		return MarkupBuilder<T>::attr("declare", value);
 	}
 
@@ -1406,7 +1406,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  defer(const string & value) {
+	virtual T &  defer(const std::string & value) {
 		return MarkupBuilder<T>::attr("defer", value);
 	}
 
@@ -1417,7 +1417,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  dir(const string & value) {
+	virtual T &  dir(const std::string & value) {
 		return MarkupBuilder<T>::attr("dir", value);
 	}
 
@@ -1428,7 +1428,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  disabled(const string & value) {
+	virtual T &  disabled(const std::string & value) {
 		return MarkupBuilder<T>::attr("disabled", value);
 	}
 
@@ -1439,7 +1439,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  enctype(const string & value) {
+	virtual T &  enctype(const std::string & value) {
 		return MarkupBuilder<T>::attr("enctype", value);
 	}
 
@@ -1450,7 +1450,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  face(const string & value) {
+	virtual T &  face(const std::string & value) {
 		return MarkupBuilder<T>::attr("face", value);
 	}
 
@@ -1461,7 +1461,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  forAttr(const string & value) {
+	virtual T &  forAttr(const std::string & value) {
 		return MarkupBuilder<T>::attr("for", value);
 	}
 
@@ -1472,7 +1472,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  frame(const string & value) {
+	virtual T &  frame(const std::string & value) {
 		return MarkupBuilder<T>::attr("frame", value);
 	}
 
@@ -1483,7 +1483,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  frameborder(const string & value) {
+	virtual T &  frameborder(const std::string & value) {
 		return MarkupBuilder<T>::attr("frameborder", value);
 	}
 
@@ -1494,7 +1494,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  headers(const string & value) {
+	virtual T &  headers(const std::string & value) {
 		return MarkupBuilder<T>::attr("headers", value);
 	}
 
@@ -1505,7 +1505,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  height(const string & value) {
+	virtual T &  height(const std::string & value) {
 		return MarkupBuilder<T>::attr("height", value);
 	}
 
@@ -1516,7 +1516,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  href(const string & value) {
+	virtual T &  href(const std::string & value) {
 		return MarkupBuilder<T>::attr("href", value);
 	}
 
@@ -1527,7 +1527,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  hreflang(const string & value) {
+	virtual T &  hreflang(const std::string & value) {
 		return MarkupBuilder<T>::attr("hreflang", value);
 	}
 
@@ -1538,7 +1538,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  hspace(const string & value) {
+	virtual T &  hspace(const std::string & value) {
 		return MarkupBuilder<T>::attr("hspace", value);
 	}
 
@@ -1549,7 +1549,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  httpEquiv(const string & value) {
+	virtual T &  httpEquiv(const std::string & value) {
 		return MarkupBuilder<T>::attr("http-equiv", value);
 	}
 
@@ -1560,7 +1560,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  id(const string & value) {
+	virtual T &  id(const std::string & value) {
 		return MarkupBuilder<T>::attr("id", value);
 	}
 
@@ -1571,7 +1571,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  ismap(const string & value) {
+	virtual T &  ismap(const std::string & value) {
 		return MarkupBuilder<T>::attr("ismap", value);
 	}
 
@@ -1582,7 +1582,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  label(const string & value) {
+	virtual T &  label(const std::string & value) {
 		return MarkupBuilder<T>::attr("label", value);
 	}
 
@@ -1593,7 +1593,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  lang(const string & value) {
+	virtual T &  lang(const std::string & value) {
 		return MarkupBuilder<T>::attr("lang", value);
 	}
 
@@ -1604,7 +1604,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  language(const string & value) {
+	virtual T &  language(const std::string & value) {
 		return MarkupBuilder<T>::attr("language", value);
 	}
 
@@ -1615,7 +1615,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  link(const string & value) {
+	virtual T &  link(const std::string & value) {
 		return MarkupBuilder<T>::attr("link", value);
 	}
 
@@ -1626,7 +1626,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  longdesc(const string & value) {
+	virtual T &  longdesc(const std::string & value) {
 		return MarkupBuilder<T>::attr("longdesc", value);
 	}
 
@@ -1637,7 +1637,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  marginheight(const string & value) {
+	virtual T &  marginheight(const std::string & value) {
 		return MarkupBuilder<T>::attr("marginheight", value);
 	}
 
@@ -1648,7 +1648,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  marginwidth(const string & value) {
+	virtual T &  marginwidth(const std::string & value) {
 		return MarkupBuilder<T>::attr("marginwidth", value);
 	}
 
@@ -1659,7 +1659,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  maxlength(const string & value) {
+	virtual T &  maxlength(const std::string & value) {
 		return MarkupBuilder<T>::attr("maxlength", value);
 	}
 
@@ -1670,7 +1670,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  media(const string & value) {
+	virtual T &  media(const std::string & value) {
 		return MarkupBuilder<T>::attr("media", value);
 	}
 
@@ -1681,7 +1681,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  method(const string & value) {
+	virtual T &  method(const std::string & value) {
 		return MarkupBuilder<T>::attr("method", value);
 	}
 
@@ -1692,7 +1692,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  multiple(const string & value) {
+	virtual T &  multiple(const std::string & value) {
 		return MarkupBuilder<T>::attr("multiple", value);
 	}
 
@@ -1703,7 +1703,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  name(const string & value) {
+	virtual T &  name(const std::string & value) {
 		return MarkupBuilder<T>::attr("name", value);
 	}
 
@@ -1714,7 +1714,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  nohref(const string & value) {
+	virtual T &  nohref(const std::string & value) {
 		return MarkupBuilder<T>::attr("nohref", value);
 	}
 
@@ -1725,7 +1725,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  noshade(const string & value) {
+	virtual T &  noshade(const std::string & value) {
 		return MarkupBuilder<T>::attr("noshade", value);
 	}
 
@@ -1736,7 +1736,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  nowrap(const string & value) {
+	virtual T &  nowrap(const std::string & value) {
 		return MarkupBuilder<T>::attr("nowrap", value);
 	}
 
@@ -1747,7 +1747,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  object(const string & value) {
+	virtual T &  object(const std::string & value) {
 		return MarkupBuilder<T>::attr("object", value);
 	}
 
@@ -1758,7 +1758,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onblur(const string & value) {
+	virtual T &  onblur(const std::string & value) {
 		return MarkupBuilder<T>::attr("onblur", value);
 	}
 
@@ -1769,7 +1769,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onchange(const string & value) {
+	virtual T &  onchange(const std::string & value) {
 		return MarkupBuilder<T>::attr("onchange", value);
 	}
 
@@ -1780,7 +1780,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onclick(const string & value) {
+	virtual T &  onclick(const std::string & value) {
 		return MarkupBuilder<T>::attr("onclick", value);
 	}
 
@@ -1791,7 +1791,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  ondblclick(const string & value) {
+	virtual T &  ondblclick(const std::string & value) {
 		return MarkupBuilder<T>::attr("ondblclick", value);
 	}
 
@@ -1802,7 +1802,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onfocus(const string & value) {
+	virtual T &  onfocus(const std::string & value) {
 		return MarkupBuilder<T>::attr("onfocus", value);
 	}
 
@@ -1813,7 +1813,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onkeydown(const string & value) {
+	virtual T &  onkeydown(const std::string & value) {
 		return MarkupBuilder<T>::attr("onkeydown", value);
 	}
 
@@ -1824,7 +1824,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onkeypress(const string & value) {
+	virtual T &  onkeypress(const std::string & value) {
 		return MarkupBuilder<T>::attr("onkeypress", value);
 	}
 
@@ -1835,7 +1835,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onkeyup(const string & value) {
+	virtual T &  onkeyup(const std::string & value) {
 		return MarkupBuilder<T>::attr("onkeyup", value);
 	}
 
@@ -1846,7 +1846,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onload(const string & value) {
+	virtual T &  onload(const std::string & value) {
 		return MarkupBuilder<T>::attr("onload", value);
 	}
 
@@ -1857,7 +1857,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onmousedown(const string & value) {
+	virtual T &  onmousedown(const std::string & value) {
 		return MarkupBuilder<T>::attr("onmousedown", value);
 	}
 
@@ -1868,7 +1868,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onmousemove(const string & value) {
+	virtual T &  onmousemove(const std::string & value) {
 		return MarkupBuilder<T>::attr("onmousemove", value);
 	}
 
@@ -1879,7 +1879,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onmouseout(const string & value) {
+	virtual T &  onmouseout(const std::string & value) {
 		return MarkupBuilder<T>::attr("onmouseout", value);
 	}
 
@@ -1890,7 +1890,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onmouseover(const string & value) {
+	virtual T &  onmouseover(const std::string & value) {
 		return MarkupBuilder<T>::attr("onmouseover", value);
 	}
 
@@ -1901,7 +1901,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onmouseup(const string & value) {
+	virtual T &  onmouseup(const std::string & value) {
 		return MarkupBuilder<T>::attr("onmouseup", value);
 	}
 
@@ -1912,7 +1912,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onreset(const string & value) {
+	virtual T &  onreset(const std::string & value) {
 		return MarkupBuilder<T>::attr("onreset", value);
 	}
 
@@ -1923,7 +1923,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onselect(const string & value) {
+	virtual T &  onselect(const std::string & value) {
 		return MarkupBuilder<T>::attr("onselect", value);
 	}
 
@@ -1934,7 +1934,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onsubmit(const string & value) {
+	virtual T &  onsubmit(const std::string & value) {
 		return MarkupBuilder<T>::attr("onsubmit", value);
 	}
 
@@ -1945,7 +1945,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  onunload(const string & value) {
+	virtual T &  onunload(const std::string & value) {
 		return MarkupBuilder<T>::attr("onunload", value);
 	}
 
@@ -1956,7 +1956,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  profile(const string & value) {
+	virtual T &  profile(const std::string & value) {
 		return MarkupBuilder<T>::attr("profile", value);
 	}
 
@@ -1967,7 +1967,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  prompt(const string & value) {
+	virtual T &  prompt(const std::string & value) {
 		return MarkupBuilder<T>::attr("prompt", value);
 	}
 
@@ -1978,7 +1978,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  readonly(const string & value) {
+	virtual T &  readonly(const std::string & value) {
 		return MarkupBuilder<T>::attr("readonly", value);
 	}
 
@@ -1989,7 +1989,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  rel(const string & value) {
+	virtual T &  rel(const std::string & value) {
 		return MarkupBuilder<T>::attr("rel", value);
 	}
 
@@ -2000,7 +2000,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  rev(const string & value) {
+	virtual T &  rev(const std::string & value) {
 		return MarkupBuilder<T>::attr("rev", value);
 	}
 
@@ -2011,7 +2011,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  rows(const string & value) {
+	virtual T &  rows(const std::string & value) {
 		return MarkupBuilder<T>::attr("rows", value);
 	}
 
@@ -2022,7 +2022,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  rowspan(const string & value) {
+	virtual T &  rowspan(const std::string & value) {
 		return MarkupBuilder<T>::attr("rowspan", value);
 	}
 
@@ -2033,7 +2033,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  rules(const string & value) {
+	virtual T &  rules(const std::string & value) {
 		return MarkupBuilder<T>::attr("rules", value);
 	}
 
@@ -2044,7 +2044,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  scheme(const string & value) {
+	virtual T &  scheme(const std::string & value) {
 		return MarkupBuilder<T>::attr("scheme", value);
 	}
 
@@ -2055,7 +2055,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  scope(const string & value) {
+	virtual T &  scope(const std::string & value) {
 		return MarkupBuilder<T>::attr("scope", value);
 	}
 
@@ -2066,7 +2066,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  scrolling(const string & value) {
+	virtual T &  scrolling(const std::string & value) {
 		return MarkupBuilder<T>::attr("scrolling", value);
 	}
 
@@ -2077,7 +2077,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  selected(const string & value) {
+	virtual T &  selected(const std::string & value) {
 		return MarkupBuilder<T>::attr("selected", value);
 	}
 
@@ -2088,7 +2088,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  shape(const string & value) {
+	virtual T &  shape(const std::string & value) {
 		return MarkupBuilder<T>::attr("shape", value);
 	}
 
@@ -2099,7 +2099,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  size(const string & value) {
+	virtual T &  size(const std::string & value) {
 		return MarkupBuilder<T>::attr("size", value);
 	}
 
@@ -2110,7 +2110,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  span(const string & value) {
+	virtual T &  span(const std::string & value) {
 		return MarkupBuilder<T>::attr("span", value);
 	}
 
@@ -2121,7 +2121,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  src(const string & value) {
+	virtual T &  src(const std::string & value) {
 		return MarkupBuilder<T>::attr("src", value);
 	}
 
@@ -2132,7 +2132,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  standby(const string & value) {
+	virtual T &  standby(const std::string & value) {
 		return MarkupBuilder<T>::attr("standby", value);
 	}
 
@@ -2143,7 +2143,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  startAttr(const string & value) {
+	virtual T &  startAttr(const std::string & value) {
 		return MarkupBuilder<T>::attr("start", value);
 	}
 
@@ -2154,7 +2154,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  style(const string & value) {
+	virtual T &  style(const std::string & value) {
 		return MarkupBuilder<T>::attr("style", value);
 	}
 
@@ -2165,7 +2165,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  summary(const string & value) {
+	virtual T &  summary(const std::string & value) {
 		return MarkupBuilder<T>::attr("summary", value);
 	}
 
@@ -2176,7 +2176,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  tabindex(const string & value) {
+	virtual T &  tabindex(const std::string & value) {
 		return MarkupBuilder<T>::attr("tabindex", value);
 	}
 
@@ -2187,7 +2187,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  target(const string & value) {
+	virtual T &  target(const std::string & value) {
 		return MarkupBuilder<T>::attr("target", value);
 	}
 
@@ -2198,7 +2198,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  textAttr(const string & value) {
+	virtual T &  textAttr(const std::string & value) {
 		return MarkupBuilder<T>::attr("text", value);
 	}
 
@@ -2209,7 +2209,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  title(const string & value) {
+	virtual T &  title(const std::string & value) {
 		return MarkupBuilder<T>::attr("title", value);
 	}
 
@@ -2220,7 +2220,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  type(const string & value) {
+	virtual T &  type(const std::string & value) {
 		return MarkupBuilder<T>::attr("type", value);
 	}
 
@@ -2231,7 +2231,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  usemap(const string & value) {
+	virtual T &  usemap(const std::string & value) {
 		return MarkupBuilder<T>::attr("usemap", value);
 	}
 
@@ -2242,7 +2242,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  valign(const string & value) {
+	virtual T &  valign(const std::string & value) {
 		return MarkupBuilder<T>::attr("valign", value);
 	}
 
@@ -2253,7 +2253,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  value(const string & value) {
+	virtual T &  value(const std::string & value) {
 		return MarkupBuilder<T>::attr("value", value);
 	}
 
@@ -2264,7 +2264,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  valuetype(const string & value) {
+	virtual T &  valuetype(const std::string & value) {
 		return MarkupBuilder<T>::attr("valuetype", value);
 	}
 
@@ -2275,7 +2275,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  vlink(const string & value) {
+	virtual T &  vlink(const std::string & value) {
 		return MarkupBuilder<T>::attr("vlink", value);
 	}
 
@@ -2286,7 +2286,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  vspace(const string & value) {
+	virtual T &  vspace(const std::string & value) {
 		return MarkupBuilder<T>::attr("vspace", value);
 	}
 
@@ -2297,7 +2297,7 @@ public:
 	 * @param value the value to set, maybe <code>null</code>
 	 * @return this, never <code>null</code>
 	 */
-	virtual T &  width(const string & value) {
+	virtual T &  width(const std::string & value) {
 		return MarkupBuilder<T>::attr("width", value);
 	}
 };

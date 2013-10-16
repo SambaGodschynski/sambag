@@ -6,6 +6,9 @@
  */
 
 #include <sambag/com/Interprocess.hpp>
+#include <sambag/com/SharedMemory.hpp>
+#include <sambag/com/SharedMemoryImpl.hpp>
+#include <sambag/com/PlacementAlloc.hpp>
 #include <iostream>
 #include <boost/foreach.hpp>
 #include <sambag/com/Common.hpp>

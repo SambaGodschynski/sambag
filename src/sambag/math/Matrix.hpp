@@ -13,7 +13,6 @@
 #include <boost/numeric/ublas/matrix.hpp>
 
 namespace sambag { namespace math {
-using namespace boost;
 //#############################################################################
 // Matrix definitions
 //#############################################################################

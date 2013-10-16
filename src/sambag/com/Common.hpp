@@ -72,7 +72,6 @@ struct __LogDummy_ {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 namespace sambag { namespace com {
-using namespace boost;
 //#############################################################################
 // metrics
 //#############################################################################
@@ -90,8 +89,7 @@ typedef double Number;
 #define boost_for_each BOOST_FOREACH
 #define boost_reverse_for_each BOOST_REVERSE_FOREACH
 //=============================================================================
-using namespace boost::logic;
-typedef tribool TriBool;
+typedef boost::logic::tribool TriBool;
 //=============================================================================
 /**
  * @deprecated: use SAMBAG_LOG_XXX macro.

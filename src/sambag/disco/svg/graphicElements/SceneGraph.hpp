@@ -709,7 +709,6 @@ public:
  *  http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph&#building_process_list
  */
 //=============================================================================
-using namespace boost;
 template <typename Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:

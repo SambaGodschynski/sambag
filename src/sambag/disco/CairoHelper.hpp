@@ -12,14 +12,13 @@
 #include "sambag/math/Matrix.hpp"
 
 namespace sambag { namespace disco {
-using namespace sambag::math;
 //-----------------------------------------------------------------------------
 /**
  * assumes a 3x3 src. matrix
  * @param dM
  * @param cM
  */
-inline void discoMatrixToCairoMatrix ( const Matrix &dM, cairo_matrix_t &cM ) {
+inline void discoMatrixToCairoMatrix ( const math::Matrix &dM, cairo_matrix_t &cM ) {
 	if ( dM.size1() != 3 || dM.size2() != 3 ) return;
 	cM.xx = dM(0,0); cM.yx = dM(1,0);
 	cM.xy = dM(0,1); cM.yy = dM(1,1);
@@ -31,7 +30,7 @@ inline void discoMatrixToCairoMatrix ( const Matrix &dM, cairo_matrix_t &cM ) {
  * @param cM
  * @param dM
  */
-inline void cairoMatrixToDiscoMatrix ( const cairo_matrix_t &cM, Matrix &dM ) {
+inline void cairoMatrixToDiscoMatrix ( const cairo_matrix_t &cM, math::Matrix &dM ) {
 	if ( dM.size1() != 3 || dM.size2() != 3 ) return;
 	dM(0,0) = cM.xx; dM(0,1) = cM.xy; dM(0,2) = cM.x0;
 	dM(1,0) = cM.yx; dM(1,1) = cM.yy; dM(1,2) = cM.y0;

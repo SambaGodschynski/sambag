@@ -20,10 +20,10 @@ const std::string SharedMemoryHolder::NAME_REF_COUNTER = "ref_counter";
 void SharedMemoryHolder::initMemory(size_t size, size_t tried) {
     try {
         SAMBAG_LOG_INFO<<"alloc "<<name<<": ...";
-        shm = new ManagedSharedMemory(bi::open_or_create, name.c_str(), size);
+        shm = new ManagedSharedMemory(boost::interprocess::open_or_create, name.c_str(), size);
         if (!shm->check_sanity()) {
             SAMBAG_LOG_INFO<<"  + check sanity failed. trying again.";
-            bi::shared_memory_object::remove(name.c_str());
+            boost::interprocess::shared_memory_object::remove(name.c_str());
             initMemory(size, tried+1);
         }
         SAMBAG_LOG_INFO<<"alloc "<<name<<": SUCCEED";
@@ -32,14 +32,14 @@ void SharedMemoryHolder::initMemory(size_t size, size_t tried) {
             SAMBAG_LOG_ERR<<"alloc "<<name<<": FAILED, "<<ex.what();
             throw;
         }
-        bi::shared_memory_object::remove(name.c_str());
+        boost::interprocess::shared_memory_object::remove(name.c_str());
         initMemory(size, tried+1);
     } catch (...) {
         if (tried>0) {
             SAMBAG_LOG_ERR<<"alloc "<<name<<": FAILED";
             throw;
         }
-        bi::shared_memory_object::remove(name.c_str());
+        boost::interprocess::shared_memory_object::remove(name.c_str());
         initMemory(size, tried+1);
     }
     ref_counter = get().find_or_construct<Integer>(NAME_REF_COUNTER.c_str())(0);
@@ -57,7 +57,7 @@ SharedMemoryHolder::~SharedMemoryHolder() {
     delete shm;
     if ( refc == 0) {
         try {
-            bi::shared_memory_object::remove(name.c_str());
+            boost::interprocess::shared_memory_object::remove(name.c_str());
         } catch(const std::exception &ex) {
             SAMBAG_LOG_FATAL<<"removing "<<name<<": FAILED, "<<ex.what();
         } catch(...) {

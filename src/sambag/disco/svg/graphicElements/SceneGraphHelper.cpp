@@ -16,7 +16,7 @@ using namespace sambag::disco::svg::graphicElements;
  * @class CopyVisitor
  * copies subgraph of SceneGraph into other instance.
  */
-class CopyVisitor : public bfs_visitor<> {
+class CopyVisitor : public boost::bfs_visitor<> {
 //=============================================================================
 private:
 	//-------------------------------------------------------------------------

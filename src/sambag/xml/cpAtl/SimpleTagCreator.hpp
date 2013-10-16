@@ -16,11 +16,11 @@ class SimpleTagCreator : public MarkupBuilder<SimpleTagCreator> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	SimpleTagCreator(ostream &os) : MarkupBuilder<SimpleTagCreator>(os) {}
+	SimpleTagCreator(std::ostream &os) : MarkupBuilder<SimpleTagCreator>(os) {}
 	//-------------------------------------------------------------------------
 	virtual ~SimpleTagCreator() {}
 	//-------------------------------------------------------------------------
-	SimpleTagCreator & addTag(const string &tagName) {
+	SimpleTagCreator & addTag(const std::string &tagName) {
 		return start(tagName);
 	}
 	//-------------------------------------------------------------------------

@@ -8,7 +8,6 @@
 
 namespace sambag {
 namespace cpsqlite {
-using namespace std;
 //============================================================================================================
 // Class IParameter : 
 // to be used in that way: http://www.sqlite.org/c3ref/bind_blob.html
@@ -17,7 +16,7 @@ struct IParameter {
 	typedef boost::shared_ptr<IParameter> Ptr;
 	virtual int bind ( sqlite3_stmt* ) = 0;
 };
-typedef list<IParameter::Ptr> ParameterList;
+typedef std::list<IParameter::Ptr> ParameterList;
 struct NullType {};
 //============================================================================================================
 // Class Parameter : 
@@ -113,8 +112,8 @@ struct ValueParameter : Parameter<sqlite3_value*> {
 //============================================================================================================
 // Class TextParameter : 
 //============================================================================================================
-struct TextParameter : Parameter<string> {
-	typedef Parameter<string> ParameterType;
+struct TextParameter : Parameter<std::string> {
+	typedef Parameter<std::string> ParameterType;
 	typedef boost::shared_ptr< ParameterType > Ptr;
 	TextParameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 

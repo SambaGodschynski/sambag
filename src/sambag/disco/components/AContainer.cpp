@@ -139,7 +139,7 @@ AComponent::Ptr AContainer::getComponentAt(const Point2D &p) const {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
 			Point2D trP = p;
-			geometry::subtract_point(trP, comp->getLocation());
+			boost::geometry::subtract_point(trP, comp->getLocation());
 			if (comp) {
 				if (comp->contains(trP)) {
 					return comp;
@@ -294,7 +294,7 @@ AComponentPtr AContainer::findComponentAt(const Point2D &p,
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
 			Point2D trP = p;
-			geometry::subtract_point(trP, comp->getLocation());
+			boost::geometry::subtract_point(trP, comp->getLocation());
 			if (comp && comp->isVisible() && comp->contains(trP))
 			{
 				// found a component that intersects the point, see if there

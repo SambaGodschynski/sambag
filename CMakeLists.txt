@@ -39,6 +39,7 @@ ELSEIF(UNIX)
 	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
+	add_definitions(-DWIN32_LEAN_AND_MEAN)
 	set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI")
 ENDIF(APPLE)
 

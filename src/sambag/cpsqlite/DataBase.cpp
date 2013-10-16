@@ -37,7 +37,7 @@ const DataBase::Result::Entry DataBase::Result::NULL_ENTRY = "NULL";
 //------------------------------------------------------------------------------------------------------------
 const DataBase::Result::Entry & DataBase::Result::get( const Column &col ) const {
 	if ( col2Entry.empty() ) return NULL_ENTRY;
-	string in = col;
+	std::string in = col;
 	boost::to_lower(in);
 	Column2Entry::const_iterator it = col2Entry.find( in );
 	if ( it == col2Entry.end() ) return NULL_ENTRY;
@@ -82,7 +82,7 @@ DataBase::Ptr DataBase::getDataBase(  const std::string &dbLocation ) {
 	// nein: erzeuge neue db
 	Ptr neu( new DataBase( loc.string() ) );
 	neu->self = neu;
-	_loc2DB->insert( pair<U, V> ( loc, neu ) );
+	_loc2DB->insert( std::pair<U, V> ( loc, neu ) );
 	return neu;
 }
 //------------------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ int sqliteCallback ( void *resultsPtr, int argc, char **argv, char **azColName )
 		ColumnType col( azColName[i] );
 		EntryType entry( argv[i] ? argv[i] : DataBase::Result::NULL_ENTRY );
 		boost::to_lower(col);
-		res->col2Entry.insert( pair<ColumnType, EntryType>( col, entry ) );
+		res->col2Entry.insert( std::pair<ColumnType, EntryType>( col, entry ) );
 	}
 	return 0;
 }

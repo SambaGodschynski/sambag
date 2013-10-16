@@ -9,6 +9,7 @@
 #define DASH_HPP_
 
 #include "sambag/com/Common.hpp"
+#include "Geometry.hpp"
 #include <algorithm>
 #include <vector>
 

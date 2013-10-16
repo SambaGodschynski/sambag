@@ -38,13 +38,12 @@
 #include <boost/algorithm/string.hpp>
 
 namespace sambag { namespace xml { namespace cpAtl {
-using namespace std;
 using namespace sambag::com;
 namespace {
-	inline string operator*(const string &str, size_t c) {
+	inline std::string operator*(const std::string &str, size_t c) {
 		if (c==0)
 			return "";
-		stringstream ss(str);
+		std::stringstream ss(str);
 		while (c-- > 0) {
 			ss<<str;
 		}
@@ -105,21 +104,21 @@ public:
 	};
 private:
 	//---------------------------------------------------------------------
-	static bool isBlank(const string &str) {
+	static bool isBlank(const std::string &str) {
 		using namespace boost::algorithm;
 		return trim_copy(str).size() == 0;
 	}
 	//---------------------------------------------------------------------
 	struct Tag {
 		int depth;
-		string name;
-		string prefix;
+		std::string name;
+		std::string prefix;
 		bool empty;
 		bool start;
 		bool end;
 		TagClosingPolicy closePolicy;
 		//---------------------------------------------------------------------
-		Tag(const string & name) :
+		Tag(const std::string & name) :
 			depth(0),
 			name(name),
 			empty(true),
@@ -130,8 +129,8 @@ private:
 		}
 	public:
 		//---------------------------------------------------------------------
-		string getQualifiedName() const {
-			return isBlank(prefix) || name.find(":")!=string::npos ? name :
+		std::string getQualifiedName() const {
+			return isBlank(prefix) || name.find(":")!=std::string::npos ? name :
 			prefix + ":"  + name;
 		}
 		//---------------------------------------------------------------------
@@ -141,18 +140,18 @@ private:
 	};
 private:
 	class Tag;
-	stack<Tag> tagStack;
-	ostream &writer;
-	typedef pair<string, string> Attribute;
-	typedef list<Attribute> Attributes;
+	std::stack<Tag> tagStack;
+	std::ostream &writer;
+	typedef std::pair<std::string, std::string> Attribute;
+	typedef std::list<Attribute> Attributes;
 	Attributes attributes;
 	//map<string, Object> bindings = new HashMap<String, Object>();
 	//MarkupBuilder<T> previousBuilder = null;
 	int depth;
-	string namespacePrefix;
+	std::string namespacePrefix;
 	//Indenter previousIndenter = indentOn;
 	//Indenter indenter = indentOn;
-	static const string _q;
+	static const std::string _q;
 
 public:
 	/**
@@ -160,7 +159,7 @@ public:
 	* @param writer never <code>null</code>.
 	*/
 	//-------------------------------------------------------------------------
-	MarkupBuilder(ostream &writer) : writer(writer), depth(0) {}
+	MarkupBuilder(std::ostream &writer) : writer(writer), depth(0) {}
 	//-------------------------------------------------------------------------
 //
 //        /**
@@ -264,7 +263,7 @@ public:
 	* @param prefix maybe <code>null</code>
 	* @return this, not <code>null</code>.
 	*/
-	virtual T & ns(const string & prefix) {
+	virtual T & ns(const std::string & prefix) {
 		namespacePrefix = prefix;
 		return getSelf();
 	}
@@ -277,7 +276,7 @@ public:
 	* @see #raw(String)
 	* @see #bind(String, Object)
 	*/
-	virtual T & text(const string & text) {
+	virtual T & text(const std::string & text) {
 		if (text.length()>0) {
 				writeCurrentTag();
 				write(escapeMarkup(expand(text)));
@@ -291,7 +290,7 @@ public:
 	* @return never <code>null</code>.
 	* @see #raw(String, boolean)
 	*/
-	virtual T & raw(const string & text) {
+	virtual T & raw(const std::string & text) {
 		return raw(text, false);
 	}
 	//-------------------------------------------------------------------------
@@ -301,7 +300,7 @@ public:
 	* @param expand <code>true</code> does variable expansion.
 	* @return never <code>null</code>.
 	*/
-	virtual T & raw(const string & text, bool _expand) {
+	virtual T & raw(const std::string & text, bool _expand) {
 		if (text.length()>0) {
 			writeCurrentTag();
 			write(text);
@@ -371,7 +370,7 @@ public:
 	* @return this, never <code>null</code>.
 	* @see #start(String, TagClosingPolicy)
 	*/
-	virtual T & start(const string & tag) {
+	virtual T & start(const std::string & tag) {
 		return start(tag, TagClosingPolicy::NORMAL);
 	}
 	//-------------------------------------------------------------------------
@@ -387,7 +386,7 @@ public:
 	* @return never <code>null</code>.
 	* @see #end()
 	*/
-	virtual T & start(const string & tag, TagClosingPolicy policy) {
+	virtual T & start(const std::string & tag, TagClosingPolicy policy) {
 		writeCurrentTag();
 		Tag t(tag);
 		t.closePolicy = policy;
@@ -403,7 +402,7 @@ public:
 	* @return this, never <code>null</code>.
 	* @see #xmlns(String, String)
 	*/
-	virtual T & xmlns(const string & uri) {
+	virtual T & xmlns(const std::string & uri) {
 		return xmlns(uri, "");
 	}
 	//-------------------------------------------------------------------------
@@ -414,7 +413,7 @@ public:
 	* @return never <code>null</code>.
 	* @throws IllegalArgumentException odd number of arguments.
 	*/
-	virtual T & attr(const string &n, const string &v) {
+	virtual T & attr(const std::string &n, const std::string &v) {
 		getAttributes().push_back( std::make_pair(n, v));
 		return getSelf();
 	}
@@ -426,9 +425,9 @@ public:
 	*      like the default namespace and no prefix.
 	* @return this, never <code>null</code>.
 	*/
-	virtual T & xmlns(const string & uri, const string & prefix) {
+	virtual T & xmlns(const std::string & uri, const std::string & prefix) {
 		if (isBlank(uri)) return getSelf();
-		string n = isBlank(prefix) ? "xmlns" : prefix + ":xmlns";
+		std::string n = isBlank(prefix) ? "xmlns" : prefix + ":xmlns";
 		return attr(n, uri);
 	}
 	//-------------------------------------------------------------------------
@@ -524,7 +523,7 @@ private:
 		}
 	}
 	//-------------------------------------------------------------------------
-	virtual void writeTag(const string & tag, bool close) {
+	virtual void writeTag(const std::string & tag, bool close) {
 		Attributes &attrs = getAttributes();
 		write("<" + tag);
 		if (!attrs.empty()) {
@@ -559,23 +558,23 @@ private:
 		}
 	}
 	//-------------------------------------------------------------------------
-	virtual void writeAttr(const string & name, const string & value) {
+	virtual void writeAttr(const std::string & name, const std::string & value) {
 		if (value.length() > 0 && name.length() > 0) {
 			write(expand(name + "=" + q(value)));
 		}
 	}
 	//-------------------------------------------------------------------------
-	virtual string q(const string &raw) {
+	virtual std::string q(const std::string &raw) {
 		return _q + escapeMarkup(expand(raw)) + _q;
 	}
 	//-------------------------------------------------------------------------
-	virtual string expand(const string & text) const {
+	virtual std::string expand(const std::string & text) const {
 		//StrSubstitutor s = new StrSubstitutor(bindings);
 		//return s.replace(text);
 		return text;
 	}
 	//-------------------------------------------------------------------------
-	virtual void write(const string & raw) {
+	virtual void write(const std::string & raw) {
 		writer << raw;
 	}
 protected:
@@ -587,7 +586,7 @@ protected:
 	* @return maybe <code>null</code> if null for input.
 	* @see #text(String)
 	*/
-	virtual string escapeMarkup(const string & raw) const {
+	virtual std::string escapeMarkup(const std::string & raw) const {
 		return boost::spirit::classic::xml::encode(raw);
 	}
 private:
@@ -596,7 +595,7 @@ private:
 			const Tag & t,
 			TagIndentSpot spot)
 	{
-		string v;
+		std::string v;
 		switch (spot) {
 			case BEFORE_START_TAG :
 				writer<<(std::string("\t") * (size_t)t.depth);
@@ -614,7 +613,7 @@ private:
 };
 //-----------------------------------------------------------------------------
 template <typename T>
-const string MarkupBuilder<T>::_q = "'";
+const std::string MarkupBuilder<T>::_q = "'";
 }}}
 
 #endif /* MARKUPBUILDER_HPP_ */

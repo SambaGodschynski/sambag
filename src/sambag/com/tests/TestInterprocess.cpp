@@ -12,6 +12,9 @@
 #include <ostream>
 #include <sambag/com/Common.hpp>
 #include <cstdlib>
+#include <sambag/com/SharedMemory.hpp>
+#include <sambag/com/PlacementAlloc.hpp>
+#include <sambag/com/SharedMemoryImpl.hpp>
 
 #ifdef WIN32
     const char * COUNTERPART_EXEC = "./test_shm_counterpart.exe";
@@ -191,9 +194,11 @@ void TestInterprocess::testSharedMemoryInterArch() {
         }
     } autoremove;
     
-    static const size_t size = 6400*sizeof(char);
-    SharedMemoryObject shm = SharedMemoryObject(open_or_create, NAME, read_write);
-    shm.truncate(size);
+    static const size_t size = 6400;
+    
+	SharedMemoryObject shm = 
+		SAMBAG_SHARED_MEMORY_OBJECT_CREATE(open_or_create, NAME, read_write, 6400);
+	SAMBAG_SHARED_MEMORY_TRUNC(shm, size);
     MappedRegion mp = MappedRegion(shm, read_write);
     void *ptr = mp.get_address();
     PointerIterator pIt(ptr, size);
