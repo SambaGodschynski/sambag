@@ -35,6 +35,7 @@
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <utility>
 #include <boost/static_assert.hpp>
+#include "SharedMemory.hpp"
 
 namespace sambag {  namespace com { namespace interprocess {
 /*typedef bi::basic_managed_shared_memory <char,

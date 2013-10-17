@@ -28,8 +28,8 @@ namespace sambag {  namespace com { namespace interprocess {
 namespace sambag {  namespace com { namespace interprocess {
 	typedef class boost::interprocess::shared_memory_object SharedMemoryObject;
 }}}
-#define SAMBAG_SHARED_MEMORY_OBJECT(createmode, name, rw_mode, size) \
-	 sambag::com::interprocess::SharedMemoryObject((createmode), (name), (rw_mode));
+#define SAMBAG_SHARED_MEMORY_OBJECT_CREATE(createmode, name, rw_mode, size) \
+	 sambag::com::interprocess::SharedMemoryObject((createmode), (name), (rw_mode))
 #define SAMBAG_SHARED_MEMORY_TRUNC(shm, size) \
 	(shm).truncate((size))
 #define SAMBAG_SHARED_MEMORY_REMOVE(name) \
