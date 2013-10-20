@@ -5,6 +5,7 @@
 
 FIND_PATH(LOKI_INCLUDE_DIRS loki/Typelist.h
 	$ENV{CLIBS}/loki/include
+	/usr/include/
 )
 
 SET(LOKI_FOUND "NO")

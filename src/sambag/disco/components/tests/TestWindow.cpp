@@ -53,11 +53,11 @@ void TestWindow::testComponentScreenPointConverts() {
 	CPPUNIT_ASSERT_EQUAL(Point2D(0, 0),
 		win->getContentPane()->getLocationOnComponent(Point2D(1000,200))
 	);
-	CPPUNIT_ASSERT_EQUAL(Point2D(1644.5, 205),
+	CPPUNIT_ASSERT_EQUAL(Point2D(1000, 200),
 		btn->getLocationOnScreen(Point2D(0,0))
 	);
 	CPPUNIT_ASSERT_EQUAL(Point2D(0, 0),
-		btn->getLocationOnComponent(Point2D(1644.5, 205))
+		btn->getLocationOnComponent(Point2D(1000, 200))
 	);
 }
 } //namespace

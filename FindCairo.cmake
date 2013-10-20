@@ -49,6 +49,7 @@ FIND_PATH(CAIRO_LIBRARY_DIRS ${LIBCAIRO}
 	/opt/csw/lib
 	/opt/lib
 	/usr/freeware/lib64
+	/usr/lib/powerpc-linux-gnu/
 )
 
 SET(CAIRO_FOUND "NO")

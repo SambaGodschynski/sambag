@@ -136,6 +136,10 @@ public:
 	Rectangle getHostBounds() const { return Rectangle(); }
 	//-------------------------------------------------------------------------
 	void setBounds(const Rectangle &d);
+	//-------------------------------------------------------------------------
+	void setEnabled(bool v) {}
+	//-------------------------------------------------------------------------
+	bool isEnabled() const { return true; }
 }; // X11Window
 }}}
 

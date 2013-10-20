@@ -37,6 +37,8 @@ ELSEIF(UNIX)
 	include_directories(${X11_INCLUDE_DIRS})
 	add_definitions(-DDISCO_USE_X11)
 	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
+	SET (CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS_INIT} $ENV{LDFLAGS}
+             CACHE STRING "Flags used by the linker during the creation of modules.")
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)

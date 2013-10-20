@@ -80,7 +80,6 @@ Dimension FlowLayout::preferredLayoutSize(AContainerPtr target) {
 	bool useBaseline = getAlignOnBaseline();
 	Coordinate maxAscent = 0;
 	Coordinate maxDescent = 0;
-
 	for (size_t i = 0; i < nmembers; ++i) {
 		AComponentPtr m = target->getComponent(i);
 		if (m->isVisible()) {
@@ -124,6 +123,7 @@ Dimension FlowLayout::minimumLayoutSize(AContainerPtr target) {
 		AComponent::Ptr m = target->getComponent(i);
 		if (m->isVisible()) {
 			Dimension d = m->getMinimumSize();
+			//std::cout<<d<<std::endl;
 			dim.height( std::max(dim.height(), d.height()) );
 			if (firstVisibleComponent) {
 				firstVisibleComponent = false;

@@ -55,6 +55,6 @@ void TestGeometrics::testRectangle() {
     //<<<<<<<<<<<<<<<<<<<<<<<<<check nesting
     r = Rectangle(0.,0.,20.,20.);
     CPPUNIT_ASSERT_EQUAL(Rectangle(10,15,20,20), r.x(10).y(15));
-    CPPUNIT_ASSERT_EQUAL(Rectangle(0,0,30,35), r.width(30).height(35));
+    CPPUNIT_ASSERT_EQUAL(Rectangle(10,15,30,35), r.width(30).height(35));
 }
 } // namespace
