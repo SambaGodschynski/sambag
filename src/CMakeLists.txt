@@ -232,6 +232,6 @@ add_executable(test_shm_counterpart sambag/com/tests/test_shm_counterpart.cpp)
 target_link_libraries (test_shm_counterpart sambag ${SAMBAG_CLIBS})
 
 #testapp
-add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
-target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
+#add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
+#target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
 

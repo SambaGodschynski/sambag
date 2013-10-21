@@ -113,6 +113,7 @@ namespace tests {
 		static Ptr create() {
 			Ptr res(new TestContainer());
 			res->self = res;
+			res->postConstructor();
 			return res;
 		}
 	};

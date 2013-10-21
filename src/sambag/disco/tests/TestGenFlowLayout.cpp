@@ -11,8 +11,22 @@
 #include <sambag/disco/genFormatter/RectangleAccess.hpp>
 #include <sambag/disco/genFormatter/GenericFormatter.hpp>
 #include <sambag/disco/Geometry.hpp>
+#include <sstream>
+
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestGenFlowLayout );
+
+namespace {
+
+	std::string toString( sambag::disco::Rectangle *r, size_t n) {
+		std::stringstream ss;
+		for (size_t i=0; i<n; ++i) {
+			ss<<r[i]<<"; ";
+		}
+		return ss.str();
+	}
+
+}
 
 namespace tests {
 //=============================================================================
@@ -44,19 +58,16 @@ void TestGenFlowLayout::testRectangle() {
 	// layout
 	form.layout();	
 
-	Rectangle exp01[] = { Rectangle(Point2D(0, 67.5), Point2D(10, 82.5)),
-						Rectangle(Point2D(10, 60), Point2D(30, 90)),
-						Rectangle(Point2D(30, 52.5), Point2D(60, 97.5)),
-						Rectangle(Point2D(60, 45), Point2D(100, 105)),
-						Rectangle(Point2D(100, 37.5), Point2D(150, 112.5)),
-						Rectangle(Point2D(150, 30), Point2D(210, 120)),
-						Rectangle(Point2D(210, 22.5), Point2D(280, 127.5)),
-						Rectangle(Point2D(280, 15), Point2D(360, 135)),
-						Rectangle(Point2D(360, 7.5), Point2D(450, 142.5)),
-						Rectangle(Point2D(450, 0), Point2D(550, 150)) };
-	for (int i=0; i<num; ++i) {
-		CPPUNIT_ASSERT_EQUAL( exp01[i], rects[i] );
-	}
+	std::string exp01 = "Rectangle(Point2D(0, 67.5), Point2D(10, 82.5)); Rectangle(Point2D(1\
+0, 60), Point2D(30, 90)); Rectangle(Point2D(30, 52.5), Point2D(60, 97.5)); Rect\
+angle(Point2D(60, 45), Point2D(100, 105)); Rectangle(Point2D(100, 37.5), Point2\
+D(150, 112.5)); Rectangle(Point2D(150, 30), Point2D(210, 120)); Rectangle(Point\
+2D(210, 22.5), Point2D(280, 127.5)); Rectangle(Point2D(280, 15), Point2D(360, 1\
+35)); Rectangle(Point2D(360, 7.5), Point2D(450, 142.5)); Rectangle(Point2D(450,\
+ 0), Point2D(550, 150)); ";
+	
+	CPPUNIT_ASSERT_EQUAL( exp01, toString(&rects[0], num) );
+
 	// change size
 	form.setX(10.);
 	form.setY(10.);
@@ -67,20 +78,16 @@ void TestGenFlowLayout::testRectangle() {
 	form.setAlignment(Formatter::CENTER);
 	form.layout();
 
-	Rectangle exp02[] = {Rectangle(Point2D(12.5, 42.5), Point2D(22.5, 57.5)),
-						Rectangle(Point2D(27.5, 35), Point2D(47.5, 65)),
-						Rectangle(Point2D(52.5, 27.5), Point2D(82.5, 72.5)),
-						Rectangle(Point2D(87.5, 20), Point2D(127.5, 80)),
-						Rectangle(Point2D(132.5, 12.5), Point2D(182.5, 87.5)),
-						Rectangle(Point2D(187.5, 5), Point2D(247.5, 95)),
-						Rectangle(Point2D(5, 115), Point2D(75, 220)),
-						Rectangle(Point2D(80, 107.5), Point2D(160, 227.5)),
-						Rectangle(Point2D(165, 100), Point2D(255, 235)),
-						Rectangle(Point2D(80, 240), Point2D(180, 390))};
+	std::string exp02 = "Rectangle(Point2D(22.5, 52.5), Point2D(32.5, 67.5)); Rectangle(Poin\
+t2D(37.5, 45), Point2D(57.5, 75)); Rectangle(Point2D(62.5, 37.5), Point2D(92.5,\
+ 82.5)); Rectangle(Point2D(97.5, 30), Point2D(137.5, 90)); Rectangle(Point2D(14\
+2.5, 22.5), Point2D(192.5, 97.5)); Rectangle(Point2D(197.5, 15), Point2D(257.5,\
+ 105)); Rectangle(Point2D(15, 125), Point2D(85, 230)); Rectangle(Point2D(90, 11\
+7.5), Point2D(170, 237.5)); Rectangle(Point2D(175, 110), Point2D(265, 245)); Re\
+ctangle(Point2D(90, 250), Point2D(190, 400)); ";
 
-	for (int i=0; i<num; ++i) {
-		CPPUNIT_ASSERT_EQUAL( exp02[i], rects[i] );
-	}
+	CPPUNIT_ASSERT_EQUAL( exp02 , toString(&rects[0], num) );
+
 
 	// test remove
 	form.removeComponent( &(rects[0]) );
@@ -111,7 +118,7 @@ void TestGenFlowLayout::testBounds() {
 	Coordinate x, y, w, h;
 	form.currentBounds(x,y,w,h);
 	Rectangle rIst(x, y, w, h);
-	Rectangle rSoll(0, 0, 0, 0);
+	Rectangle rSoll(0, 0, 550, 150);
 	CPPUNIT_ASSERT_EQUAL(rSoll, rIst);
 }
 } //namespace

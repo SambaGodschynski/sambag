@@ -55,10 +55,9 @@ void TestRootPane::setUp() {
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		root->add(comps[i]);
 	}
-	TestContainer::Ptr con = TestContainer::create();
-	con->setLayout(FlowLayout::create());
-	con->setPreferredSize(Dimension(150, 100));
-	root->add(con);
+	TestContainer::Ptr con = win->getContentPane();
+	//con->setLayout(FlowLayout::create());
+	//con->setPreferredSize(Dimension(640, 480));
 	for (; i < NUM_COMPOS; ++i) {
 		std::stringstream ss;
 		ss << "TestComponent" << i;
@@ -68,7 +67,7 @@ void TestRootPane::setUp() {
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		con->add(comps[i]);
 	}
-	root->validate();
+	win->validate();
 }
 //-----------------------------------------------------------------------------
 void TestRootPane::testRepaint() {
@@ -96,6 +95,9 @@ void TestRootPane::testRepaint() {
 void TestRootPane::testRootPane() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
+
+	root->printComponentTree(std::cout);	
+
 	root->draw( root->getDrawContext() );
 	surf->writeToFile(OUTPUT_FOLDER + "/testRootPane.png");
 	boost::filesystem::exists(OUTPUT_FOLDER + "/testRootPane.png");
