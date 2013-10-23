@@ -55,7 +55,7 @@ void TestRootPane::setUp() {
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		root->add(comps[i]);
 	}
-	TestContainer::Ptr con = win->getContentPane();
+	AContainer::Ptr con = win->getContentPane();
 	//con->setLayout(FlowLayout::create());
 	//con->setPreferredSize(Dimension(640, 480));
 	for (; i < NUM_COMPOS; ++i) {
