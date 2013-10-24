@@ -5,7 +5,7 @@ IF(WIN32)
         SET(Boost_USE_STATIC_LIBS        ON)
         SET(Boost_USE_STATIC_RUNTIME    ON)
 	SET(xboost_libs ${xboost_libs} "locale")
-ELSEIF(APPLE) 
+ELSE(APPLE) # !! ELSE NOT ELSEIF OCCURS LINKER ERROR OTHERWISE
         #SET(BOOST_ROOT $ENV{CLIBS})
         #SET(Boost_NO_SYSTEM_PATHS       ON)
         SET(Boost_USE_STATIC_LIBS       ON)
