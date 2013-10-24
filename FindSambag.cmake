@@ -21,19 +21,14 @@ ENDIF(APPLE)
 
 
 
-IF (WIN32)
-	FIND_PATH(SAMBAG_LIBRARY_DIRS Debug/${LIBSAMBAG}
-		$ENV{CLIBS}/sambag/src
-	)
-ELSE(WIN32)
-	FIND_PATH(SAMBAG_LIBRARY_DIRS ${LIBSAMBAG}
-		$ENV{CLIBS}/sambag/src
-		$ENV{CLIBS}/sambag/src/Debug
-		$ENV{CLIBS}/sambag/src/Release
-		$ENV{CLIBS}/sambag/src/RelWithDebInfo
-		$ENV{CLIBS}/sambag/lib	 
-	)
-ENDIF (WIN32)
+FIND_PATH(SAMBAG_LIBRARY_DIRS ${LIBSAMBAG}
+	$ENV{CLIBS}/sambag/src
+	$ENV{CLIBS}/sambag/src/Debug
+	$ENV{CLIBS}/sambag/src/Release
+	$ENV{CLIBS}/sambag/src/RelWithDebInfo
+	$ENV{CLIBS}/sambag/lib	 
+)
+
 
 SET(SAMBAG_FOUND "NO")
 

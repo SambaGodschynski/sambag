@@ -43,6 +43,7 @@ ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /ZI")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 ENDIF(APPLE)
 
 find_package(Cairo REQUIRED)
