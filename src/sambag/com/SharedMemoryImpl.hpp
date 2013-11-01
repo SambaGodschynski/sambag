@@ -12,7 +12,7 @@
 /**
  * get shm in windows is slightly different to the default way.
  */
-#ifdef WIN32
+#if defined WIN32 && defined SAMBAG_USE_WINDOWS_SHARED_MEMORY
 	#include <boost/interprocess/windows_shared_memory.hpp>
 #else
 	#include <boost/interprocess/shared_memory_object.hpp>
