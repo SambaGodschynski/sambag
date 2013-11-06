@@ -32,6 +32,10 @@ WorkerThread::WorkerThread() {
 WorkerThread::~WorkerThread() {  
 	work.reset();
     io.stop();
+	if (th.try_join_for(boost::chrono::seconds(1))) {
+		return;
+	}
+	SAMBAG_LOG_WARN<<"WorkerThread does not close";
     th.join();
 }
 

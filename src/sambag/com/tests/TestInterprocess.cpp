@@ -17,8 +17,13 @@
 #include <sambag/com/SharedMemoryImpl.hpp>
 
 #ifdef WIN32
-    const char * COUNTERPART_EXEC = "./test_shm_counterpart.exe";
-    const char * COUNTERPART_EXEC_32 = "./test_shm_counterpart.exe";
+	#ifdef _DEBUG
+		const char * COUNTERPART_EXEC = "src\\Debug\\test_shm_counterpart.exe";
+		const char * COUNTERPART_EXEC_32 = "src\\Debug\\test_shm_counterpart.exe unmanaged";
+	#else
+		const char * COUNTERPART_EXEC = "src\\Release\\test_shm_counterpart.exe";
+		const char * COUNTERPART_EXEC_32 = "src\\Release\\test_shm_counterpart.exe unmanaged";
+	#endif
 #else   
     const char * COUNTERPART_EXEC = "./test_shm_counterpart";
     const char * COUNTERPART_EXEC_32 = "arch -32 ./test_shm_counterpart unmanaged";
