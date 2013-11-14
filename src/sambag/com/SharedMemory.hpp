@@ -12,7 +12,7 @@
 /**
  * get shm in windows is slightly different to the default way.
  */
-#if defined WIN32 && defined SAMBAG_USE_WINDOWS_SHARED_MEMORY
+#ifdef SAMBAG_USE_WINDOWS_SHARED_MEMORY
 namespace boost { namespace interprocess {
 	class windows_shared_memory;
 	class mapped_region;

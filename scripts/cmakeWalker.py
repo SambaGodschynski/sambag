@@ -89,7 +89,7 @@ class Walker():
 
     def processFiles(self, files):
         for x in files:
-            full = os.path.relpath(self.currDir, self.root) +'/'+x
+            full = ( os.path.relpath(self.currDir, self.root) +'/'+x ).replace("\\","/")
             name, ext = os.path.splitext(x)
             if ext == ".mm":
                 self.mmsource.append(full)
