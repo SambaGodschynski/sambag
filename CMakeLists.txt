@@ -3,7 +3,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./")
 
 project (sambag)
 
-execute_process(COMMAND git log --pretty=format:%h -n 1
+execute_process(COMMAND git --work-tree=${PROJECT_SOURCE_DIR} log --pretty=format:%h -n 1
                 OUTPUT_VARIABLE SAMBAG_VERSION_BUILD)
 
 
