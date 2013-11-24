@@ -10,7 +10,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <sambag/disco/components/Forward.hpp>
-
+#include <sambag/com/UnitEx.hpp>
 
 namespace tests {
 //=============================================================================
@@ -24,7 +24,7 @@ private:
 	CPPUNIT_TEST(test_toString);
 	CPPUNIT_TEST(test_alignment);
 	CPPUNIT_TEST(test_getComponentAt);
-	CPPUNIT_TEST(test_minMaxSize);
+	CPPUNIT_TEST_KNOWN_ISSUE(test_minMaxSize);
 	CPPUNIT_TEST(test_name);
 	CPPUNIT_TEST(test_preferredSize);
 	CPPUNIT_TEST(test_actionMap);

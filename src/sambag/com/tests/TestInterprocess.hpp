@@ -9,6 +9,7 @@
 #define SAMBAG_TESTINTERPROCESS_H
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <sambag/com/UnitEx.hpp>
 
 namespace tests {
 //=============================================================================
@@ -22,7 +23,7 @@ private:
     CPPUNIT_TEST( testMap );
     CPPUNIT_TEST( testSharedPtr );
     CPPUNIT_TEST( testSharedMemory );
-    CPPUNIT_TEST( testSharedMemoryInterArch );
+    CPPUNIT_TEST_KNOWN_ISSUE( testSharedMemoryInterArch );
     CPPUNIT_TEST( testPlacementAllocator1 );
     CPPUNIT_TEST( testPlacementAllocator2 );
     CPPUNIT_TEST( testPlacementAllocator3 );

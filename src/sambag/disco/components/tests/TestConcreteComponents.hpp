@@ -10,13 +10,15 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <sambag/disco/components/RootPane.hpp>
+#include <sambag/com/UnitEx.hpp>
+
 namespace tests {
 //=============================================================================
 class TestConcreteComponents : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestConcreteComponents );
-	CPPUNIT_TEST( testButton );
+	CPPUNIT_TEST_KNOWN_ISSUE( testButton );
 	CPPUNIT_TEST_SUITE_END();
 	sambag::disco::components::RootPane::Ptr root;
 	sambag::disco::IImageSurface::Ptr surf;

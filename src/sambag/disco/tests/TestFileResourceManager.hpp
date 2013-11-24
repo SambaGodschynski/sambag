@@ -9,6 +9,7 @@
 #define SAMBAG_TESTGRAPHICSREPOSITIORY_H
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <sambag/com/UnitEx.hpp>
 
 namespace tests {
 //=============================================================================
@@ -16,7 +17,7 @@ class TestFileResourceManager : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestFileResourceManager );
-	CPPUNIT_TEST( testImageLoader );
+	CPPUNIT_TEST_KNOWN_ISSUE( testImageLoader );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	virtual void setUp();

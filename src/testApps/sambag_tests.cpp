@@ -6,7 +6,7 @@
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/BriefTestProgressListener.h>
 #include <stdlib.h>
-
+#include <sambag/com/UnitEx.hpp>
 
 #ifdef WIN32
 #include <crtdbg.h>
@@ -26,11 +26,16 @@ int main ( const int argc, char **argv ) {
 	SAMBAG_WINONLY(
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF ); //VS memory tracking
 	)
+    
+    sambag::com::unitex::processArguments(argc, argv);
 	using namespace std;
 	//using namespace tests;
 	cout<<"* cpsqlite TestApp *"<<endl;
 	cout<<"==================================="<<endl;
-	
+	if (sambag::com::unitex::ignoreKnownIssues) {
+        cout<<"! ignoring known issues !"<<endl;
+    }
+    
 	// Informiert Test-Listener ueber Testresultate
     CPPUNIT_NS :: TestResult testresult;
 

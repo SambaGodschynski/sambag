@@ -11,6 +11,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include "sambag/xml/cpAtl/Html.hpp"
 #include <fstream>
+#include <sambag/com/UnitEx.hpp>
 
 namespace tests {
 //=============================================================================
@@ -49,7 +50,7 @@ private:
 	CPPUNIT_TEST( testLineCapStyle );
 	CPPUNIT_TEST( testLineJoinStyle );
 	CPPUNIT_TEST( testIssue146 );
-	CPPUNIT_TEST( testUnits );
+	CPPUNIT_TEST_KNOWN_ISSUE( testUnits );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	TestSvg();

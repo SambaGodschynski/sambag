@@ -14,6 +14,8 @@
 #include "TestComponents.hpp"
 #include <sambag/disco/components/windowImpl/WindowTestToolkit.hpp>
 #include <sambag/disco/components/Window.hpp>
+#include <sambag/com/UnitEx.hpp>
+
 namespace tests {
 //=============================================================================
 class TestRootPane : public CPPUNIT_NS::TestFixture {
@@ -21,8 +23,8 @@ class TestRootPane : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestRootPane );
 	CPPUNIT_TEST( testRootPane );
-	CPPUNIT_TEST( testMouseEvent );
-	CPPUNIT_TEST( testRepaint );
+	CPPUNIT_TEST_KNOWN_ISSUE( testMouseEvent );
+	CPPUNIT_TEST_KNOWN_ISSUE( testRepaint );
 	CPPUNIT_TEST( testLaf );
 	CPPUNIT_TEST_SUITE_END();
 	sambag::disco::components::Window::Ptr win;
