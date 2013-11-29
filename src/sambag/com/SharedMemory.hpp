@@ -25,6 +25,9 @@ namespace sambag {  namespace com { namespace interprocess {
 #define SAMBAG_SHARED_MEMORY_TRUNC(shm, size)
 #define SAMBAG_SHARED_MEMORY_REMOVE(name)
 #else
+namespace boost { namespace interprocess {
+    class shared_memory_object;
+}}
 namespace sambag {  namespace com { namespace interprocess {
 	typedef class boost::interprocess::shared_memory_object SharedMemoryObject;
 }}}
