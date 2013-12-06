@@ -55,13 +55,12 @@ WorkerThread * __getWkt() {
 }
 
 void timerExpired(const boost::system::error_code& error,
-sambag::com::ITimer::WPtr _tm,
+sambag::com::ITimer::Ptr tm,
 sambag::com::BoostTimerImpl2::Timer *timerImpl)
 {
     if (error == boost::asio::error::operation_aborted) {
         return;
     }
-    sambag::com::ITimer::Ptr tm = _tm.lock();
     if (tm) {
         if (!tm->isRunning()) {
             return;
@@ -74,7 +73,7 @@ sambag::com::BoostTimerImpl2::Timer *timerImpl)
         }
         sambag::com::ITimer::Milliseconds ms = tm->getDelay();
         timerImpl->expires_from_now(boost::posix_time::milliseconds(ms));
-        timerImpl->async_wait( boost::bind(&timerExpired, _1, _tm, timerImpl) );
+        timerImpl->async_wait( boost::bind(&timerExpired, _1, tm, timerImpl) );
     }
 }
 } // namespace(s)
@@ -106,7 +105,7 @@ void BoostTimerImpl2::startTimer(ITimer::Ptr tm) {
     ITimer::Milliseconds ms = tm->getInitialDelay();
     tm->__getNumCalled_() = 0;
     timer->expires_from_now(boost::posix_time::milliseconds(ms));
-    timer->async_wait( boost::bind(&timerExpired, _1, ITimer::WPtr(tm), timer.get()) );
+    timer->async_wait( boost::bind(&timerExpired, _1, tm, timer.get()) );
 }
 //-----------------------------------------------------------------------------
 void BoostTimerImpl2::stopTimer(ITimer::Ptr tm) {
