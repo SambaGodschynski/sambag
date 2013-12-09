@@ -410,6 +410,9 @@ void Win32WindowImpl::updateBoundsToWindow() {
 //-----------------------------------------------------------------------------
 void Win32WindowImpl::invalidateWindow(const Rectangle &area) {
 	enum { ERASE_BG = true };
+	if (!win) {
+		return;
+	}
 	InvalidateRect(win, NULL, ERASE_BG);
 }
 //-----------------------------------------------------------------------------
