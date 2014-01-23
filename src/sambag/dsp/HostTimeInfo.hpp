@@ -9,6 +9,7 @@
 #define SAMBAG_HOSTTIMEINFO_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/integer.hpp>
 
 namespace sambag { namespace dsp {
 //=============================================================================
@@ -18,17 +19,17 @@ namespace sambag { namespace dsp {
 struct HostTimeInfo {
 //=============================================================================
 	enum Filter {
-		FrxTempo,
-		FrxPpqPos,
-		FrxNanosValid,
-		FrxBarsValid,
-		FrxCyclePosValid,
-		FrxTimeSigValid,
-		FrxSmpteValid,
-		FrxClockValid
+		FrxTempo = 1,
+		FrxPpqPos = 1 << 1,
+		FrxNanosValid = 1 << 2,
+		FrxBarsValid = 1 << 3,
+		FrxCyclePosValid = 1 << 4,
+		FrxTimeSigValid = 1 << 5,
+		FrxSmpteValid = 1 << 6,
+		FrxClockValid = 1 << 7
 	};
 	enum Flag {
-		kTransportIsChanged, 
+		kTransportIsChanged = 1,
 		kTransportCycleIsActive, 
 		kTransportIsRecording, 
 		kAutomationIsWriting, 
@@ -43,12 +44,13 @@ struct HostTimeInfo {
 	double barStartPos; // last Bar Start Position, in Quarter Note
 	double cycleStartPos; // Cycle Start (left locator), in Quarter Note.
 	double cycleEndPos; // Cycle End (right locator), in Quarter Note.
-	int timeSigNumerator; // Time Signature Numerator (e.g. 3 for 3/4).
-	int timeSigDenominator; // Time Signature Denominator (e.g. 4 for 3/4).
-	int smpteOffset; // SMPTE offset (in SMPTE subframes (bits; 1/80 of a frame)).
-	int smpteFrameRate;
-	int samplesToNextClock; // MIDI Clock Resolution (24 Per Quarter Note), can be negative (nearest clock). 
-	int flags;
+    typedef boost::int_t<32>::exact Integer;
+	Integer timeSigNumerator; // Time Signature Numerator (e.g. 3 for 3/4).
+	Integer timeSigDenominator; // Time Signature Denominator (e.g. 4 for 3/4).
+	Integer smpteOffset; // SMPTE offset (in SMPTE subframes (bits; 1/80 of a frame)).
+	Integer smpteFrameRate;
+	Integer samplesToNextClock; // MIDI Clock Resolution (24 Per Quarter Note), can be negative (nearest clock). 
+	Integer flags;
 	HostTimeInfo() :
 		tempo(0.),
 		sampleRate(0.),

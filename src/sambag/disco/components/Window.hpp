@@ -31,7 +31,7 @@
 		neu->postConstructor();                                             \
 		neu->initWindow();													\
 		return neu;															\
-	}
+	}                                                                       
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -61,7 +61,7 @@ protected:
 	//-------------------------------------------------------------------------
 	Window(Window::Ptr parentWindow);
 	//-------------------------------------------------------------------------
-	Window(AWindowImpl::Ptr windowImpl);
+	Window(AWindowImpl::Ptr windowImpl, Window::Ptr parentWindow=WindowPtr());
 	//-------------------------------------------------------------------------
 	AWindowImpl::Ptr windowImpl;
 	//-------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
 	//-------------------------------------------------------------------------
 	CloseOperation getDefaultCloseOperation() const;
 	//-------------------------------------------------------------------------
-	 virtual ~Window();
+    virtual ~Window();
 	//-------------------------------------------------------------------------
 	/**
 	 * notifys the (system) window to invalidate the given area.
@@ -171,13 +171,15 @@ public:
 	static Ptr create(Window::Ptr parentWindow=WindowPtr()) {
 		Ptr res(new Window(parentWindow));
 		res->self = res;
+        res->postConstructor();
 		res->initWindow();
 		return res;
 	}
 	//-------------------------------------------------------------------------
-	static Ptr create(AWindowImpl::Ptr winImpl) {
-		Ptr res(new Window(winImpl));
+	static Ptr create(AWindowImpl::Ptr impl, Window::Ptr parentWindow=WindowPtr()) {
+		Ptr res(new Window(impl, parentWindow));
 		res->self = res;
+        res->postConstructor();
 		res->initWindow();
 		return res;
 	}

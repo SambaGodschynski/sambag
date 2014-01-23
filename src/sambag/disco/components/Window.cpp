@@ -44,7 +44,9 @@ Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 Window::~Window() {
 }
 //-----------------------------------------------------------------------------
-Window::Window(AWindowImpl::Ptr windowImpl) : windowImpl(windowImpl) {
+Window::Window(AWindowImpl::Ptr windowImpl, Window::Ptr parentWindow) :
+    windowImpl(windowImpl), parentWindow(parentWindow)
+{
 	SAMBAG_ASSERT(windowImpl);
 	rootPane = components::RootPane::create();
 	windowImpl->setRootPane(rootPane);

@@ -24,10 +24,20 @@ public:
 	typedef boost::shared_ptr<FramedWindow> Ptr;
 protected:
 	FramedWindow(Window::Ptr parent=Window::Ptr());
+    //-------------------------------------------------------------------------
+	FramedWindow(AWindowImpl::Ptr windowImpl, Window::Ptr parentWindow=WindowPtr());
 private:
 public:
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_WINDOW_CREATOR(FramedWindow)
+	//-------------------------------------------------------------------------
+	static Ptr create(AWindowImpl::Ptr impl, Window::Ptr parentWindow=WindowPtr())
+    {
+		Ptr res(new FramedWindow(impl, parentWindow));
+		res->self = res;
+		res->initWindow();
+		return res;
+	}
 	//-------------------------------------------------------------------------
 	virtual void setTitle(const std::string &title);
 	//-------------------------------------------------------------------------

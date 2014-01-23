@@ -29,6 +29,7 @@ namespace {
 #include "DspPlugin.hpp"
 #include <loki/Typelist.h>
 #include <algorithm>
+#include "TimeInfoVst2xHelper.hpp"
 
 namespace sambag { namespace dsp { namespace vst {
 //=============================================================================
@@ -278,55 +279,14 @@ HostTimeInfo *
 VST2xPluginWrapper<P,U,T,E,C,CD>::getHostTimeInfo (int filter) 
 {
 	// convert filter
-	int f = 0;
-	if ((HostTimeInfo::FrxTempo & filter) > 0) {
-		f |= kVstTempoValid; 
-	}
-	if ((HostTimeInfo::FrxPpqPos & filter) > 0) {
-		f |= kVstPpqPosValid;
-	}
-	if ((HostTimeInfo::FrxNanosValid & filter) > 0) {
-		f |= kVstNanosValid;
-	}
-	if ((HostTimeInfo::FrxBarsValid & filter) > 0) {
-		f |= kVstBarsValid;
-	}
-	if ((HostTimeInfo::FrxCyclePosValid & filter) > 0) {
-		f |= kVstCyclePosValid;
-	}
-	if ((HostTimeInfo::FrxTimeSigValid & filter) > 0) {
-		f |= kVstTimeSigValid;
-	}
-	if ((HostTimeInfo::FrxSmpteValid & filter) > 0) {
-		f |= kVstSmpteValid;
-	}
-	if ((HostTimeInfo::FrxClockValid & filter) > 0) {
-		f |= kVstClockValid;
-	} 
-	timeInfo = HostTimeInfo();
+	VstTimeInfoFlags f =
+        timeInfoVst2xHelper::toVst2xFilter((HostTimeInfo::Filter)filter);
+    timeInfo = HostTimeInfo();
 	VstTimeInfo * vstTime = AudioEffectX::getTimeInfo(f);
 	if (!vstTime) 
 		return &timeInfo;
-	// set values
-	timeInfo.tempo = vstTime->tempo;
-	timeInfo.sampleRate = vstTime->sampleRate;
-	timeInfo.ppqPos = vstTime->ppqPos;
-	timeInfo.samplePos = vstTime->samplePos;
-	timeInfo.nanoSeconds = vstTime->nanoSeconds;
-	timeInfo.barStartPos = vstTime->barStartPos;
-	timeInfo.cycleStartPos = vstTime->cycleStartPos;
-	timeInfo.cycleEndPos = vstTime->cycleEndPos;
-	timeInfo.timeSigNumerator = vstTime->timeSigNumerator;
-	timeInfo.timeSigDenominator = vstTime->timeSigDenominator;
-	timeInfo.smpteOffset = vstTime->smpteOffset;
-	timeInfo.smpteFrameRate = vstTime->smpteFrameRate;
-	timeInfo.samplesToNextClock = vstTime->samplesToNextClock;
-	timeInfo.transportIsChanged((vstTime->flags & kVstTransportChanged) > 0);
-	timeInfo.transportIsPlaying((vstTime->flags & kVstTransportPlaying) > 0);
-	timeInfo.transportCycleIsActive((vstTime->flags & kVstTransportCycleActive) > 0);
-	timeInfo.transportIsRecording((vstTime->flags & kVstTransportRecording) > 0);
-	timeInfo.automationIsWriting((vstTime->flags & kVstAutomationWriting) > 0);
-	timeInfo.automationIsReading((vstTime->flags & kVstAutomationReading) > 0);
+    
+    timeInfoVst2xHelper::convert(timeInfo, *vstTime);
 
 	return &timeInfo;
 }

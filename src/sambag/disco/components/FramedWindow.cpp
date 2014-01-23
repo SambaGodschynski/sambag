@@ -15,6 +15,13 @@ FramedWindow::FramedWindow(Window::Ptr parent) : Window(parent) {
 	windowImpl->setFlag(WindowFlags::WND_FRAMED, true);
 	windowImpl->setFlag(WindowFlags::WND_RESIZEABLE, true);
 }
+//-----------------------------------------------------------------------------
+FramedWindow::FramedWindow(AWindowImpl::Ptr windowImpl, Window::Ptr parentWindow)
+    : Window(windowImpl, parentWindow)
+{
+	windowImpl->setFlag(WindowFlags::WND_FRAMED, true);
+	windowImpl->setFlag(WindowFlags::WND_RESIZEABLE, true);
+}
 //-------------------------------------------------------------------------
 void FramedWindow::setTitle(const std::string &title) {
 	windowImpl->setTitle(title);
