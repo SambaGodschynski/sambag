@@ -9,6 +9,8 @@
 #include <cppunit/config/SourcePrefix.h>
 #include <sambag/dsp/HostTimeInfo.hpp>
 #include <sambag/dsp/TimeInfoVst2xHelper.hpp>
+#include <sambag/dsp/IMidiEvents.hpp>
+#include <sambag/dsp/MidiEventAdapter.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestTimeInfoVst2xHelper );
