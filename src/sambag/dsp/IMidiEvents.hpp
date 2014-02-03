@@ -10,8 +10,10 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/integer.hpp>
 #include <sstream>
 #include <ostream>
+#include <vector>
 
 namespace sambag { namespace dsp {
 //=============================================================================
@@ -35,11 +37,11 @@ namespace sambag { namespace dsp {
 struct IMidiEvents {
 //=============================================================================
 	//-------------------------------------------------------------------------
-	typedef int Int;
+	typedef boost::int_t<32>::exact Int;
 	//-------------------------------------------------------------------------
 	typedef Int ByteSize;
 	//-------------------------------------------------------------------------
-	typedef int DeltaFrames;
+	typedef boost::int_t<32>::exact DeltaFrames;
 	//-------------------------------------------------------------------------
 	typedef unsigned char Data;
 	//-------------------------------------------------------------------------
@@ -96,6 +98,17 @@ inline std::ostream & operator << (std::ostream& os, const IMidiEvents &b) {
 	os<<toString(b);
 	return os;
 }
+
+/**
+ * @return vector with bytestream representation of MidiEvents
+ * @note we use a vector because it's storage has a usefull auto grow up strategy
+ */
+extern void createFlatRawData(const IMidiEvents &ev, std::vector<IMidiEvents::Data> &out);
+/**
+ * @brief unpacks datastream and creates MidiEvent
+ * @note uses DefaultMidiEvents as concrete container.
+ */
+extern IMidiEvents * createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize);
 }} // namespace(s)
 
 #endif /* SAMBAG_IMIDIEVENTS_H */

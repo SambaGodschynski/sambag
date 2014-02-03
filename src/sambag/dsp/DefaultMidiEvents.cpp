@@ -43,11 +43,26 @@ void DefaultMidiEvents::copyDeep(IMidiEvents *_events) {
 		);
 	}
 }
+//-----------------------------------------------------------------------------
+void DefaultMidiEvents::insertDeep(const MidiEvent &ev) {
+    ByteSize bytes = boost::get<0>(ev);
+    DeltaFrames d = boost::get<1>(ev);
+    DataPtr srcdata = boost::get<2>(ev);
+    dataContainer.push_back(DataArray(new Data[bytes]));
+    DataPtr dstdata = dataContainer.back().get();
+    for (int j=0; j<bytes; ++j) {
+        dstdata[j] = srcdata[j];
+    }
+    events.push_back(
+        MidiEvent(bytes, d, dstdata)
+    );
+}
+
 namespace {
 	typedef DefaultMidiEvents::Data Data;
 	template <class SrcIt, class DstIt>
 	size_t copySysEx(SrcIt srcIt, DstIt dstIt, size_t size) {
-		Data status = ( *srcIt & 0xf0 ) >> 4;
+		// Data status = ( *srcIt & 0xf0 ) >> 4;
 		if (*srcIt!=0xf0) {
 			return 0;
 		}
@@ -104,10 +119,56 @@ void DefaultMidiEvents::copyDeepFiltered(IMidiEvents *_events, int channel)
 				dstdata[wrote++] = srcdata[j++];
 			}
 		}
-		
+        
 		events.push_back(
 			MidiEvent(wrote, d, dstdata)
 		);
 	}
+}
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+namespace {
+    template<typename T>
+    void veccpy(std::vector<IMidiEvents::Data> &out, const T *src, size_t num)
+    {
+        out.insert(out.end(), (IMidiEvents::DataPtr)src,
+            (IMidiEvents::DataPtr)(src + num)
+        );
+    }
+}
+//-----------------------------------------------------------------------------
+void createFlatRawData(const IMidiEvents &ev, std::vector<IMidiEvents::Data> &out)
+{
+    for (int i=0; i<ev.getNumEvents(); ++i) {
+        IMidiEvents::ByteSize bz;
+        IMidiEvents::DeltaFrames d;
+        IMidiEvents::DataPtr ptr;
+        boost::tie(bz, d, ptr) = ev.getMidiEvent(i);
+        veccpy(out, &bz, 1);
+        veccpy(out, &d, 1);
+        veccpy(out, ptr, bz);
+    }
+}
+//-----------------------------------------------------------------------------
+IMidiEvents * createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize) {
+    IMidiEvents::DataPtr it = data;
+    IMidiEvents::DataPtr end = data+byteSize;
+    DefaultMidiEvents *res = new DefaultMidiEvents();
+    while(it<end) {
+        size_t eventSize;
+        // copy data
+        IMidiEvents::MidiEvent ev;
+        boost::get<0>(ev) = eventSize = *((IMidiEvents::ByteSize*)it);
+        it+=sizeof(IMidiEvents::ByteSize);
+        IMidiEvents::DeltaFrames d;
+        boost::get<1>(ev) = d = *((IMidiEvents::DeltaFrames*)it);
+        it+=sizeof(IMidiEvents::DeltaFrames);
+        boost::get<2>(ev) = it;
+        // insert event
+        res->insertDeep(ev);
+        // iterate
+        it+=eventSize;
+    }
+    return res;
 }
 }} // namespace(s)

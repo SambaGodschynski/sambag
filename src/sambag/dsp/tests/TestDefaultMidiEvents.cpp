@@ -41,6 +41,67 @@ void TestDefaultMidiEvents::testEventCopy() {
 	CPPUNIT_ASSERT(a==b);
 }
 //-----------------------------------------------------------------------------
+void TestDefaultMidiEvents::testInsertDeep() {
+	using namespace sambag::dsp;
+	typedef boost::shared_array<IMidiEvents::Data> DataArray;
+    typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
+	DataArray statData[1024];
+	DataArray tmp[1024];
+    DefaultMidiEvents deep;
+    DefaultMidiEvents stat;
+	for (int i=0; i<1024; ++i) {
+		int bytes = (i%15) + 1;
+		statData[i] = DataArray(new IMidiEvents::Data[bytes]);
+        tmp[i] = DataArray(new IMidiEvents::Data[bytes]);
+		for (int j=0; j<bytes; ++j) {
+			statData[i][j] = j % 26 + 'a';
+            tmp[i][j] = j % 26 + 'a';
+		}
+        // use the static data
+        stat.insertFlat(IMidiEvents::MidiEvent(bytes, i, statData[i].get()));
+        // use the tmp data
+		deep.insertDeep(IMidiEvents::MidiEvent(bytes, i, tmp[i].get()));
+	}
+    // clear tmp
+    for (int i=0; i<1024; ++i) {
+        int bytes = (i%15) + 1;
+        memset(tmp[i].get(), 0, bytes);
+    }
+    CPPUNIT_ASSERT(stat==deep);
+}
+
+//-----------------------------------------------------------------------------
+void TestDefaultMidiEvents::testCreateFlatRawData() {
+	using namespace sambag::dsp;
+	typedef boost::shared_array<IMidiEvents::Data> DataArray;
+    typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
+	DataArray data[1024];
+	DefaultMidiEvents orig;
+    size_t sumBytes = 0;
+	for (int i=0; i<1024; ++i) {
+		int bytes = (i%15) + 1;
+		data[i] = DataArray(new IMidiEvents::Data[bytes]);
+		for (int j=0; j<bytes; ++j) {
+			data[i][j] = j % 26 + 'a';
+		}
+        sumBytes+=bytes+sizeof(IMidiEvents::ByteSize)+sizeof(IMidiEvents::DeltaFrames);
+		orig.insertFlat(IMidiEvents::MidiEvent(bytes, i, data[i].get()));
+	}
+	DataArray bff;
+    size_t size = 0;
+    {
+        std::vector<IMidiEvents::Data> tmp;
+        tmp.reserve(size);
+        createFlatRawData(orig, tmp);
+        size = tmp.size();
+        CPPUNIT_ASSERT_EQUAL(size, sumBytes);
+        bff = DataArray( new IMidiEvents::Data[size] );
+        memcpy(bff.get(), &tmp[0], sizeof(IMidiEvents::Data) * size);
+    }
+    MidiEventsPtr newEvent = MidiEventsPtr( createMidiEvents(bff.get(), size) );
+    CPPUNIT_ASSERT(orig==(*newEvent));
+}
+//-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopyFiltered() {
 	using namespace sambag::dsp;
 	IMidiEvents::Data data[] = {
