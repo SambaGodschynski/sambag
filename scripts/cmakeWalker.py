@@ -9,6 +9,18 @@ add = """
 SET ( SAMBAG_TESTAPPSOURCES
 	testApps/componentTests/TestApp/src/DiscoView.cpp
 )
+
+IF(APPLE)
+  add_library(sambag SHARED ${SAMBAG_SOURCES})
+  target_link_libraries (sambag ${SAMBAG_CLIBS})
+  SET(SAMBAG_EXT_LIBS sambag)
+ELSE(APPLE)
+  add_library(sambag ${SAMBAG_SOURCES})
+  SET(SAMBAG_EXT_LIBS sambag ${SAMBAG_CLIBS})
+ENDIF(APPLE)
+
+
+
 #unit tests
 SET( UNIT_TESTSOURCE testApps/sambag_tests.cpp ${SAMBAG_TESTSOURCES})
 #unit test resources
@@ -17,14 +29,14 @@ IF(WIN32)
 ENDIF(WIN32)
 
 add_executable(unit_tests ${UNIT_TESTSOURCE})
-target_link_libraries (unit_tests sambag ${SAMBAG_CLIBS})
+target_link_libraries (unit_tests ${SAMBAG_EXT_LIBS})
 
 add_executable(test_shm_counterpart sambag/com/tests/test_shm_counterpart.cpp)
-target_link_libraries (test_shm_counterpart sambag ${SAMBAG_CLIBS})
+target_link_libraries (test_shm_counterpart ${SAMBAG_EXT_LIBS})
 
 #testapp
 add_executable(testApp ${SAMBAG_TESTAPPSOURCES})
-target_link_libraries (testApp sambag ${SAMBAG_CLIBS})
+target_link_libraries (testApp ${SAMBAG_EXT_LIBS})
 
 """
 
@@ -32,7 +44,7 @@ ignoreDirs = ("TestFolders",
               "CMakeFiles", 
               ".*testApps.*")
 
-ignoreFiles = ("test_shm_counterpart.cpp",)
+ignoreFiles = ("test_shm_counterpart.cpp","sqlite3.c")
 
 class Walker():
     fHandler = None
@@ -55,7 +67,6 @@ class Walker():
         self.writeLine("  SET(SAMBAG_SOURCES ${SAMBAG_SOURCES} ${SAMBAG_MMSOURCES})")
         self.writeLine("ENDIF(APPLE)")
         self.writeList("SAMBAG_TESTSOURCES",self.testSource)
-        self.writeLine("add_library(sambag ${SAMBAG_SOURCES})")
         self.writeLine(add)
         self.fHandler.close()
 

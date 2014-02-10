@@ -9,8 +9,8 @@ FIND_PATH(SAMBAG_INCLUDE_DIRS sambag/disco/components/Forward.hpp
 
 	
 IF(APPLE)
-	SET(LIBSAMBAG "libsambag.a")
-	SET(LIBSAMBAGD "libsambag.a")
+	SET(LIBSAMBAG "libsambag.dylib")
+	SET(LIBSAMBAGD "libsambag.dylib")
 ELSEIF(UNIX)
 	SET(LIBSAMBAG "libsambag.a")
 	SET(LIBSAMBAGD "libsambag.a")
