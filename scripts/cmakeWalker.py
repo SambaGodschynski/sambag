@@ -10,14 +10,10 @@ SET ( SAMBAG_TESTAPPSOURCES
 	testApps/componentTests/TestApp/src/DiscoView.cpp
 )
 
-IF(APPLE)
-  add_library(sambag SHARED ${SAMBAG_SOURCES})
-  target_link_libraries (sambag ${SAMBAG_CLIBS})
-  SET(SAMBAG_EXT_LIBS sambag)
-ELSE(APPLE)
-  add_library(sambag ${SAMBAG_SOURCES})
-  SET(SAMBAG_EXT_LIBS sambag ${SAMBAG_CLIBS})
-ENDIF(APPLE)
+
+add_library(sambag ${SAMBAG_SOURCES})
+SET(SAMBAG_EXT_LIBS sambag ${SAMBAG_CLIBS})
+
 
 
 
