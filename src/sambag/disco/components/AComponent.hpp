@@ -1303,12 +1303,16 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the first parent container which is a instance of ContainerType.
+     * @note its a bit confusing because the meant pov is from botton to the top.
+     *       Thus "The Last Container" is the root container.
 	 */
 	template <class ContainerType>
 	typename ContainerType::Ptr getFirstContainer() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the last parent container which is a instance of ContainerType.
+     * @note its a bit confusing because the meant pov is from botton to the top.
+     *       Thus "The Last Container" is the root container.
 	 */
 	template <class ContainerType>
 	typename ContainerType::Ptr getLastContainer() const;

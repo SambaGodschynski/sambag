@@ -11,6 +11,25 @@
 #include <algorithm>
 #include <boost/foreach.hpp>
 #include "Window.hpp"
+#include <boost/timer/timer.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <sambag/disco/TimedUpdater.hpp>
+
+
+namespace {
+    /**
+     * delaying window invalidate if time of execution is earlier than
+     */
+    enum { SAMBAG_REFRESH_TRIGGER_TIME = 33 };
+    typedef boost::timer::nanosecond_type NanosecondsType;
+	typedef boost::timer::cpu_timer CPUTimer;
+    typedef boost::shared_ptr<CPUTimer> CPUTimerPtr;
+    const  NanosecondsType ONE_MILLI_IN_NANO = 1000000;
+}
+
+
+
+
 namespace sambag { namespace disco { namespace components {
 namespace {
 	typedef boost::unordered_map<Window::Ptr, RedrawManager::Ptr>
@@ -42,6 +61,68 @@ namespace {
 //=============================================================================
 //  Class RedrawManager
 //=============================================================================
+//-----------------------------------------------------------------------------
+namespace {
+	template <class T>
+	struct RefreshWindow {
+		bool update(const T &val) {
+            WindowPtr win = val.lock();
+            if (!win) {
+                // seems that is no job anymore
+                return true;
+            }
+            Rectangle bounds;
+            win->getClientProperty("redrawManager.bounds", bounds);
+            
+            CPUTimerPtr tm;
+            win->getClientProperty("redrawManager.timer", tm);
+            
+            if (!tm) {
+                // dito
+                return true;
+            }
+            
+            long timestamp = (tm->elapsed().wall / ONE_MILLI_IN_NANO);
+            long lastRefresh = 0;
+            win->getClientProperty("redrawManager.timestamp", lastRefresh);
+            if ((timestamp-lastRefresh) < SAMBAG_REFRESH_TRIGGER_TIME) {
+                // not yet, not yet
+                return false;
+            }
+            win->putClientProperty("redrawManager.timestamp", timestamp);
+            win->invalidateWindow(bounds);
+            return true;
+        }
+	};
+}
+void RedrawManager::invalidateWindow(WindowPtr win, Rectangle bounds) {
+    /**
+     * try to avoid frequently refreshing so the invalidate will be delayed
+     * if the last execution was earlier than SAMBAG_REFRESH_TRIGGER_TIME
+     */
+	if (!win) {
+		return;
+        
+	}
+    static CPUTimerPtr timer = CPUTimerPtr(new CPUTimer);
+    long timestamp = (timer->elapsed().wall / ONE_MILLI_IN_NANO);
+    long lastRefresh = 0;
+    win->getClientProperty("redrawManager.timestamp", lastRefresh);
+    if ((timestamp-lastRefresh) > SAMBAG_REFRESH_TRIGGER_TIME) {
+        // last invalidation was after refresh trigger time
+        // so refresh immediately
+        win->putClientProperty("redrawManager.timestamp", timestamp);
+        win->invalidateWindow(bounds);
+        return;
+    }
+    // delay refreshing
+    typedef TimedUpdater<WindowWPtr,
+        RefreshWindow,
+        SAMBAG_REFRESH_TRIGGER_TIME> Updater;
+    win->putClientProperty("redrawManager.bounds", bounds );
+    win->putClientProperty("redrawManager.timer", timer);
+	Updater::instance().update( WindowWPtr(win) );
+}
 //-----------------------------------------------------------------------------
 void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 	/* Special cases we don't have to bother with.
@@ -80,9 +161,7 @@ void RedrawManager::addDirtyRegion(AComponentPtr c, const Rectangle &r) {
 	// invalidate containing window:
 	Window::Ptr win = c->getTopLevelAncestor();
 	//SAMBAG_ASSERT(win); // if c is visible win has to be valid.
-	if (win) {
-		win->invalidateWindow(r);
-	}
+    invalidateWindow(win, r);
 }
 //-------------------------------------------------------------------------
 void RedrawManager::updateDirtyComponent(
@@ -356,13 +435,14 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 				/**
 				 * avoid smearing:
 				 * see issue #278
-				 */ 
-				/*g.setClip(Rectangle(       //deactivated cause #388
+				 */
+                Rectangle nr = Rectangle(
 					floor( rect.x() ),
 					floor( rect.y() ),
 					ceil( rect.width() ),
-					ceil( rect.height() )
-				));*/
+					ceil( rect.height() ));
+				//SAMBAG_LOG_TRACE<<nr;
+                g.setClip(nr);
 				dirtyComponent->draw(g.getPtr());
 				cn->restore();
 			}

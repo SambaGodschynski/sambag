@@ -45,6 +45,8 @@ protected:
 	void collectDirtyComponents(ComponentMap &dirtyComponents,
 			AComponentPtr dirtyComponent,
 			Components &roots);
+    //-------------------------------------------------------------------------
+    void invalidateWindow(WindowPtr win, Rectangle bounds);
 private:
 	//-------------------------------------------------------------------------
 	void updateDirtyComponent(ComponentMap &dirtyComponents, 
