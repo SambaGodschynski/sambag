@@ -25,6 +25,7 @@
 #include <boost/unordered_map.hpp>
 #include <sambag/com/ArbitraryType.hpp>
 #include <sstream>
+#include <sambag/com/Thread.hpp>
 
 /**
  *  +++
@@ -1279,6 +1280,8 @@ protected:
 	 * on component.
 	 */
 	virtual void forwardToAncestor(const events::MouseEvent &ev);
+    //-------------------------------------------------------------------------
+    
 public:
 	//-------------------------------------------------------------------------
 	virtual void scrollRectToVisible(const Rectangle &aRect);
@@ -1303,15 +1306,17 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the first parent container which is a instance of ContainerType.
-     * @note its a bit confusing because the meant pov is from botton to the top.
+     * @note its a bit confusing because the meant pov is from botton to the top,
+     *       AKA the first contaier of type X you will find while going upward.
      *       Thus "The Last Container" is the root container.
 	 */
 	template <class ContainerType>
 	typename ContainerType::Ptr getFirstContainer() const;
 	//-------------------------------------------------------------------------
 	/**
-	 * @return the last parent container which is a instance of ContainerType.
-     * @note its a bit confusing because the meant pov is from botton to the top.
+	 * @return the first parent container which is a instance of ContainerType.
+     * @note its a bit confusing because the meant pov is from botton to the top,
+     *       AKA the first contaier of type X you will find while going upward.
      *       Thus "The Last Container" is the root container.
 	 */
 	template <class ContainerType>
@@ -1340,6 +1345,11 @@ public:
 	virtual void setMouseEventsEnabled(bool b);
 	//-------------------------------------------------------------------------
 	virtual bool areMouseEventsEnabled() const;
+    //-------------------------------------------------------------------------
+    /**
+     * @return the @see ThreadId of its containing Window
+     */
+    virtual com::ThreadId getWindowThreadId() const;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------

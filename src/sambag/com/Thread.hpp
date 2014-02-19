@@ -14,6 +14,7 @@
 namespace sambag { namespace com {
 	typedef boost::recursive_timed_mutex RecursiveMutex;
 	typedef boost::timed_mutex Mutex;
+    typedef boost::thread::id ThreadId;
 	SAMBAG_EXCEPTION_CLASS(DeadLockException);
 	inline void wait(long sec) {
 		boost::this_thread::sleep(boost::posix_time::seconds(sec));

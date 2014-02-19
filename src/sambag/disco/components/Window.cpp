@@ -292,4 +292,8 @@ void Window::positionWindow(Window::Ptr win) {
 	p.y( p.y() + (win->getHeight() - getHeight()) / 2. );
 	setWindowLocation(p);
 }
+//-----------------------------------------------------------------------------
+com::ThreadId Window::getThreadId() const {
+    return windowImpl->getThreadId();
+}
 }}} // namespace(s)

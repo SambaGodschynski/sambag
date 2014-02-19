@@ -97,6 +97,10 @@ public:
 	virtual bool isEnabled() const {
 		return _enabled;
 	}
+    //-------------------------------------------------------------------------
+    com::ThreadId getThreadId() const {
+        return com::ThreadId();
+    }
 }; // TestWindowImpl
 }}} // namespace(s)
 

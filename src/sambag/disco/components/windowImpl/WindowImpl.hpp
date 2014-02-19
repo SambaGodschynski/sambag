@@ -43,7 +43,7 @@ protected:
 	//-------------------------------------------------------------------------
 	components::RootPanePtr rootPane;
 	//-------------------------------------------------------------------------
-	WindowImpl() {}
+	WindowImpl() : _thID( boost::this_thread::get_id() ) {}
 	//-------------------------------------------------------------------------
 	virtual void processDraw( sambag::disco::ISurface::Ptr surface );
 	//-------------------------------------------------------------------------
@@ -51,6 +51,8 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void onDestroy();
 private:
+    //-------------------------------------------------------------------------
+    com::ThreadId _thID;
 	//-------------------------------------------------------------------------
 	components::events::MouseEventCreator::Ptr mec;
 	//-------------------------------------------------------------------------
@@ -186,6 +188,10 @@ public:
 	virtual bool isEnabled() const {
 		return ConcreteWindowImpl::isEnabled();
 	}
+    //-------------------------------------------------------------------------
+    com::ThreadId getThreadId() const {
+        
+    }
 };
 ///////////////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -215,7 +221,7 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::initRootPane() {
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
-	if (rootPane)
+    if (rootPane)
 		initRootPane();
 	EventSender<OnOpenEvent>::notifyListeners (
 		this,

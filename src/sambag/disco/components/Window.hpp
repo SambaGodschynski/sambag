@@ -16,6 +16,7 @@
 #include <sambag/com/events/Events.hpp>
 #include "AContainer.hpp"
 #include <set>
+#include <sambag/com/Thread.hpp>
 
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
@@ -79,6 +80,11 @@ private:
 	//-------------------------------------------------------------------------
 	static Windows openWindows;
 public:
+    //-------------------------------------------------------------------------
+    /**
+     * @return the Id of the Window thread.
+     */
+    com::ThreadId getThreadId() const;
 	//-------------------------------------------------------------------------
 	static const Windows & getOpenWindows() {
 		return openWindows;

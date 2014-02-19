@@ -1266,4 +1266,12 @@ void AComponent::setMouseEventsEnabled(bool b) {
 bool AComponent::areMouseEventsEnabled() const {
 	return (getEnabledEvents() & MouseEvents) == MouseEvents;
 }
+//-----------------------------------------------------------------------------
+com::ThreadId AComponent::getWindowThreadId() const {
+    Window::Ptr win = getTopLevelAncestor();
+    if (!win) {
+        return com::ThreadId();
+    }
+    return win->getThreadId();
+}
 }}} // namespace(s)

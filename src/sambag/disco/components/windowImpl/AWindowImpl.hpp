@@ -15,6 +15,7 @@
 #include "WindowFlags.hpp"
 #include <string>
 #include <sambag/disco/components/events/MouseEvent.hpp>
+#include <sambag/com/Thread.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -126,6 +127,11 @@ public:
 	virtual void setTitle(const std::string &title) = 0;
 	//-------------------------------------------------------------------------
 	virtual std::string getTitle() const = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @return the Id of the Window thread.
+     */
+    virtual com::ThreadId getThreadId() const = 0;
 
 }; // AWindowImpl
 }}} // namespace(s)
