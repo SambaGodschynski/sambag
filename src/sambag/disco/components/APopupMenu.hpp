@@ -9,6 +9,7 @@
 #define SAMBAG_APOPUPMENU_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "AContainer.hpp"
 #include "FlowLayout.hpp"
 #include <sambag/disco/components/Window.hpp>
@@ -18,7 +19,10 @@
 
 
 namespace sambag { namespace disco { namespace components {
-
+namespace popupEvents {
+    struct BeforeShowingEvent {};
+    struct BeforeHidingEvent {};
+};
 //=============================================================================
 /** 
   * @class PopupMenu.
@@ -27,15 +31,28 @@ template <class SingleSelectionModell>
 class APopupMenu :
 	public AContainer,
 	public IMenuElement,
-	public SingleSelectionModell {
+	public SingleSelectionModell,
+    public com::events::EventSender<OnOpenEvent>,
+    public com::events::EventSender<OnCloseEvent>,
+    public com::events::EventSender<popupEvents::BeforeShowingEvent>,
+    public com::events::EventSender<popupEvents::BeforeHidingEvent>
+{
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<APopupMenu> Ptr;
 	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<APopupMenu> WPtr;
+	//-------------------------------------------------------------------------
 	typedef SingleSelectionModell Model;
 	//-------------------------------------------------------------------------
+    typedef APopupMenu<Model> Class;
+    //-------------------------------------------------------------------------
 	static const std::string PROPERTY_POPUP_LOCATION;
+    //-------------------------------------------------------------------------
+    typedef popupEvents::BeforeShowingEvent BeforeShowingEvent;
+    //-------------------------------------------------------------------------
+    typedef popupEvents::BeforeHidingEvent BeforeHidingEvent;   
 private:
 	//-------------------------------------------------------------------------
 	AComponentWPtr _invoker;
@@ -43,12 +60,21 @@ private:
 	void initWindow();
 	//-------------------------------------------------------------------------
 	WindowPtr window;
+    //-------------------------------------------------------------------------
+    template <class Event>
+    void dispatch(const Event &ev) {
+        com::events::EventSender<Event>::notifyListeners(this, ev);
+    }
 protected:
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
 	APopupMenu(AComponentPtr invoker = AComponentPtr());
 public:
+    //-------------------------------------------------------------------------
+    WindowPtr getPopupWindow() const {
+        return window;
+    }
 	//-------------------------------------------------------------------------
 	void setInvoker(AComponentPtr _invoker);
 	//-------------------------------------------------------------------------
@@ -114,6 +140,10 @@ APopupMenu<SM>::APopupMenu(AComponentPtr invoker) : _invoker(invoker) {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::showPopup(const Point2D &_where) {
+
+    com::events::EventSender<BeforeShowingEvent>::notifyListeners(this,
+        BeforeShowingEvent());
+
 	setPopupLocation(_where);
 	if (!window)
 		initWindow();
@@ -123,6 +153,10 @@ void APopupMenu<SM>::showPopup(const Point2D &_where) {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::hidePopup() {
+
+    com::events::EventSender<BeforeHidingEvent>::notifyListeners(this,
+        BeforeHidingEvent());
+
 	if (window) {
 		window->close();
 	}
@@ -141,6 +175,12 @@ void APopupMenu<SM>::initWindow() {
 	window = Window::create(parentW);
 	window->getContentPane()->add(AsWeakPtr<AComponent>(getPtr()));
 	window->setWindowLocation(location);
+    window->addOnOpenEventListener(
+        boost::bind(&Class::template dispatch<OnOpenEvent>, this, _2)
+    );
+    window->addOnCloseEventListener(
+        boost::bind(&Class::template dispatch<OnCloseEvent>, this, _2)
+    );
 }
 //-----------------------------------------------------------------------------
 template <class SM>

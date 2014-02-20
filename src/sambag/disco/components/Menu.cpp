@@ -29,6 +29,14 @@ void Menu::add(AComponent::Ptr comp, size_t index) {
 	popupMenu->add(comp, index);
 }
 //-----------------------------------------------------------------------------
+void Menu::remove(AComponent::Ptr comp) {
+    popupMenu->remove(comp);
+}
+//-----------------------------------------------------------------------------
+void Menu::removeAll() {
+    popupMenu->removeAll();
+}
+//-----------------------------------------------------------------------------
 ui::AComponentUIPtr Menu::createComponentUI(ui::ALookAndFeelPtr laf) const {
 	return laf->getUI<Menu>();
 }

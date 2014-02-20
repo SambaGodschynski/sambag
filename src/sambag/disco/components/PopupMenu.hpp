@@ -9,6 +9,7 @@
 #define SAMBAG_POPUPMENU_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "APopupMenu.hpp"
 #include "DefaultSingleSelectionModell.hpp"
 #include "Forward.hpp"
@@ -24,6 +25,8 @@ class PopupMenu : public APopupMenu<DefaultSingleSelectionModell> {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<PopupMenu> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<PopupMenu> WPtr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 private:

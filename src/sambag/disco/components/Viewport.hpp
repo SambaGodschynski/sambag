@@ -9,6 +9,7 @@
 #define SAMBAG_VIEWPORT_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "AContainer.hpp"
 #include "IBorder.hpp"
 #include "Forward.hpp"
@@ -36,6 +37,8 @@ public:
 	typedef ViewportChanged StateChangedEvent;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<Viewport> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<Viewport> WPtr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------
