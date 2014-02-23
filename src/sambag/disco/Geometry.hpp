@@ -173,9 +173,21 @@ public:
 		  const Coordinate &w, const Coordinate &h) : _x0(x, y), _size(w, h) {}
 	Rectangle(const Point2D &x0, const Dimension &size)
 		: _x0(x0), _size(size.width(), size.height()) {}
-	Rectangle(const Point2D &x0_, const Point2D &x1_) {
-		x0(minimize(x0_, x1_));
-		x1(maximize(x0_, x1_));
+	/**
+     * @brief creates rectangle using two points.
+     * @param x0
+     * @param x1
+     * @param if normalizing the resulting rect has always a dimension
+     *        width > 0 and height > 0
+     */ 	
+	Rectangle(const Point2D &x0_, const Point2D &x1_, bool normalize = true) {
+		if (normalize) {		
+			x0(minimize(x0_, x1_));
+			x1(maximize(x0_, x1_));
+		} else {
+			x0(x0_);
+			x1(x1_);		
+		}
 	}
 	// getter /////////////////////////////////////////////////////////////////
 	const Coordinate & x() const { return _x0.x(); }
@@ -328,7 +340,8 @@ inline Rectangle union_(const Rectangle &a, const Rectangle &b) {
 	 */
 	return Rectangle(
 			minimize(a.x0(), b.x0()),
-			maximize(a.x1(), b.x1())
+			maximize(a.x1(), b.x1()),
+			false
 	);
 }
 //-----------------------------------------------------------------------------
@@ -404,7 +417,7 @@ public:
 			const Coordinate &top = 0,
 			const Coordinate &right = 0,
 			const Coordinate &bottom = 0) :
-		Rectangle(Point2D(left, top), Point2D(right, bottom))
+		Rectangle(Point2D(left, top), Point2D(right, bottom), false)
 	{
 	}
 };

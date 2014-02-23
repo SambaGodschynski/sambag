@@ -33,7 +33,12 @@ void Arc::draw( IDrawContext::Ptr cn ) {
 		// (arc is drawn at (0,0) but a fill pattern has (c.x, c.y) bounds.
 		cn->identityMatrix();
 		cn->transform(tmp);
+		
+		cn->save();
+		__fitPatternForFill(cn, cn->pathExtends());
 		cn->fill();
+		cn->restore();
+
 		if (!cn->isStroked()) // skip re- transform if possible
 			return;
 		// re- transform

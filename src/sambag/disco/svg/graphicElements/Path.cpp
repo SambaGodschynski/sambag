@@ -500,7 +500,10 @@ void Path::drawPath( IDrawContext::Ptr cn ) {
 void Path::draw( IDrawContext::Ptr cn ) {
 	if ( cn->isFilled() ) {
 		drawPath(cn);
+		//cn->save(); TODO:fails with pathExtends
+		//__fitPatternForFill(cn, cn->pathExtends());
 		cn->fill();
+		//cn->restore();
 	}
 	if ( cn->isStroked() ) {
 		drawPath(cn);

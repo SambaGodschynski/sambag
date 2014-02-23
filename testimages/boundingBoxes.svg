@@ -8,19 +8,19 @@
     <g id="scene" class="bBox" stroke="blue" stroke-width="15" fill="none">    	
     	<line class="bBox" x1="100" y1="300" x2="300" y2="100"/>
     	<line class="bBox" x1="550" y1="300" x2="350" y2="100"/>
-        <rect class="bBox" x="600" y="100" width="200" height="200" rx="15" ry="15"/>
+        <rect class="bBox" x="600" y="100" width="200" height="200" rx="15" ry="15" stroke-width="35"/>
         <circle class="bBox" cx="950" cy="200" r="100"/>
         <ellipse class="bBox" cx="200" cy="500" rx="100" ry="50"/>
         <ellipse class="bBox" cx="450" cy="500" rx="50" ry="100"/>
         <path class="bBox" d="M550,500 c0,100 150,100 150,0 s150,-100 150,0"/>
-        <g class="bBox">
-	    <circle cx="930" cy="500" r="10"/>
-            <line x1="940" y1="500" x2="1010" y2="500"/>
-            <circle cx="1030" cy="500" r="20"/>
+        <g class="bBox" transform="translate(930, 500)">
+	    <circle cx="0" cy="0" r="10"/>
+            <line x1="10" y1="0" x2="70" y2="0"/>
+            <circle cx="90" cy="0" r="20"/>
    	</g>
     </g>
-    <use xlink:href="#scene" transform="translate(100,700)scale(0.2)" />
+    <!--use xlink:href="#scene" transform="translate(100,700)scale(0.2)" />
     <use xlink:href="#scene" transform="translate(460,660)rotate(45)scale(0.2)" />
     <use xlink:href="#scene" transform="translate(580,760)scale(0.2)rotate(-45)" />
-    <use xlink:href="#scene" transform="translate(800,760)scale(0.2)rotate(-15)" />
+    <use xlink:href="#scene" transform="translate(800,760)scale(0.2)rotate(-15)" /-->
 </svg>

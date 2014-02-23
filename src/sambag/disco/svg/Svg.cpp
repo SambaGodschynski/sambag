@@ -36,32 +36,28 @@ void SvgObject::add(Ptr obj) {
 }
 //-----------------------------------------------------------------------------
 void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
-	// TODO: problem is: pattern needs bounds at creation,
-	// can maybe solved using cliprect
-	/*SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(fillObj);
+	SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(fillObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
 	if (!obj) return;
 	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-	Rectangle bBox = getRelatedSceneGraph()->getBoundingBox(obj, cn);
+	Rectangle bBox = Rectangle(Point2D(0,0), Point2D(100,0), false);
 	neu.fillPattern(svgPattern->createPattern(bBox));
-	copyStyleToGraphicElement(neu);*/
+	copyStyleToGraphicElement(neu);
 }
 //-----------------------------------------------------------------------------
 void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj)
 {
-	// TODO: problem is: pattern needs bounds at creation,
-	// can maybe solved using cliprect
-	/*SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(strokeObj);
+	SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(strokeObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
 	if (!obj) return;
 	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-	Rectangle bBox = getRelatedSceneGraph()->getBoundingBox(obj, cn);
+	Rectangle bBox = Rectangle(Point2D(0,0), Point2D(100,0), false);
 	neu.strokePattern(svgPattern->createPattern(bBox));
-	copyStyleToGraphicElement(neu);*/
+	copyStyleToGraphicElement(neu);
 }
 //-----------------------------------------------------------------------------
 void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,

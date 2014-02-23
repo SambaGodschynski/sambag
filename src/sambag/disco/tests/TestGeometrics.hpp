@@ -17,9 +17,11 @@ class TestGeometrics : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestGeometrics );
 	CPPUNIT_TEST( testRectangle );
+	CPPUNIT_TEST( testXimize );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testRectangle();
+	void testXimize();
 
 };
 

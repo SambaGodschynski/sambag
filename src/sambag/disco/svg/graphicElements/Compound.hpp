@@ -43,6 +43,10 @@ public:
 		neu->__setSelf(neu);
 		return neu;
 	}
+	//-------------------------------------------------------------------------
+	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) {
+		return NULL_RECTANGLE;
+	}
 };
 
 }}}} // namespaces

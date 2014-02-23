@@ -14,8 +14,9 @@ namespace sambag { namespace disco { namespace svg {
 // class SvgLinearGradient
 //=============================================================================
 //-----------------------------------------------------------------------------
-IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &rect) const {
+IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &_rect) const {
 	// cal. rect mid point
+	Rectangle rect(0,0,100,100);
 	Point2D c0 = rect.x0();
 	Point2D tmp = rect.x1();
 	boost::geometry::subtract_point(tmp, rect.x0());

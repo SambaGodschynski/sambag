@@ -29,6 +29,13 @@ protected:
 	boost::weak_ptr<GraphicElement> __self;
 	//-------------------------------------------------------------------------
 	void __setSelf( Ptr self ) { __self = self; }
+	//-------------------------------------------------------------------------
+	/**
+	 * @brief all patterns with bounds (gradients) extents 0,0,100,100
+	 *        this function transforms the context to the given rect
+	 *        according to fit the pattern.
+     */	
+	void __fitPatternForFill(IDrawContext::Ptr cn, const Rectangle &r);
 public:
 	//-------------------------------------------------------------------------
 	std::string toString() const = 0;

@@ -19,10 +19,12 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //-----------------------------------------------------------------------------
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	context->save();
-	if (transformation)
+	if (transformation) {
 		context->transform( *(transformation.get()) );
-	if (style)
+	}
+	if (style) {
 		style->intoContext(context);
+	}
 	drawable->draw(context);
 	// only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
@@ -253,38 +255,53 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
 	IDrawContext::Ptr cn) const
 {
 	MatrixPtr m = getTransformationRef(obj);
-	if (m) {
+	StylePtr s =  getStyleRef(obj);
+	if (m||s) {
 		cn->save();
+	}
+	if (m) {
 		cn->transform(*m);
 	}
+	if (s) {
+		s->intoContext(cn);
+	}
 	Rectangle res = obj->getBoundingBox(cn);
-	if (m) {
+	if (m||s) {
 		cn->restore();
 	}
 	if (res==NULL_RECTANGLE) {
 		typedef std::numeric_limits<Number> L;
-		res = Rectangle::Base(
+		res = Rectangle(
 			Point2D(L::max(), L::max()),
-			Point2D(L::min(), L::min())
+			Point2D(-L::max(), -L::max()),
+			false
 		);
 	}
 	std::list<SceneGraphElement> l;
 	getChildren(obj, l, true);
 	boost_for_each(SceneGraphElement o, l) {
 		MatrixPtr m = getTransformationRef(o);
-		if (m) {
+		StylePtr s =  getStyleRef(o);
+		if (m||s) {
 			cn->save();
+		}	
+		if (m) {
 			cn->transform(*m);
 		}
-		Rectangle r = o->getBoundingBox(cn);
-		if (m) {
+		if (s) {
+			s->intoContext(cn);
+		}
+		Rectangle r = o->getBoundingBox(cn);		
+		if (m||s) {
 			cn->restore();
 		}
-		if (r==NULL_RECTANGLE)
+		if (r==NULL_RECTANGLE) {
 			continue;
-		res = Rectangle::Base(
+		}
+		res = Rectangle(
 			minimize(res.x0(), r.x0()),
-			maximize(res.x1(), r.x1())
+			maximize(res.x1(), r.x1()),
+			false
 		);
 	}
 	return res;
