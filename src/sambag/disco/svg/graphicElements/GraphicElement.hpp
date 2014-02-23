@@ -10,13 +10,13 @@
 
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/com/Common.hpp"
-#include "sambag/disco/Shape.hpp"
+#include "sambag/disco/IDrawable.hpp"
 #include "sambag/disco/Coordinate.hpp"
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 // Abstract base class for all graphic elements.
-class GraphicElement : public Shape {
+class GraphicElement : public virtual IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

@@ -10,6 +10,7 @@
 
 #include "GraphicElement.hpp"
 #include "SceneGraph.hpp"
+#include <sambag/disco/Shape.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -64,7 +65,7 @@ public:
     //-------------------------------------------------------------------------
 	virtual void shape( IDrawContext::Ptr context ) {
         Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(ref);
-        if (ref) {
+        if (shape) {
             shape->shape(context);
         }
     }

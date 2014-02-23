@@ -11,10 +11,11 @@
 #include "GraphicElement.hpp"
 #include <sambag/disco/svg/units/Units.hpp>
 #include <string>
+#include <sambag/disco/Shape.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Text : public GraphicElement {
+class Text : public virtual GraphicElement, public virtual Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

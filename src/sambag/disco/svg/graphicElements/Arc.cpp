@@ -35,10 +35,8 @@ void Arc::shape( IDrawContext::Ptr cn ) {
 		cn->identityMatrix();
 		cn->transform(tmp);
 		
-		cn->save();
-		__fitPatternForFill(cn, cn->pathExtends());
+		
 		cn->fill();
-		cn->restore();
 
 		if (!cn->isStroked()) // skip re- transform if possible
 			return;

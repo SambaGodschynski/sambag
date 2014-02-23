@@ -15,7 +15,7 @@ namespace sambag { namespace disco {
 /** 
   * @class Shape.
   */
-class Shape : public IDrawable {
+class Shape : public virtual IDrawable {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------

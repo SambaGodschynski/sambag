@@ -12,10 +12,11 @@
 #include "PointContainer.hpp"
 #include <list>
 #include "sambag/com/Helper.hpp"
+#include <sambag/disco/Shape.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Path : public GraphicElement {
+class Path : public virtual GraphicElement, public virtual Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
