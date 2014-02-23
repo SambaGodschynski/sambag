@@ -33,7 +33,10 @@ void Text::draw( IDrawContext::Ptr cn ) {
 	if ( cn->isFilled() ) {
 		cn->moveTo(pos.solve(cn));
 		drawPath(cn);
+		cn->save();
+		__fitPatternForFill(cn, cn->pathExtends());
 		cn->fill();
+		cn->restore();
 	}
 	if ( cn->isStroked() ) {
 		cn->moveTo(pos.solve(cn));

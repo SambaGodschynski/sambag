@@ -37,7 +37,7 @@ ELSEIF(UNIX)
 	include_directories(${X11_INCLUDE_DIRS})
 	add_definitions(-DDISCO_USE_X11)
 	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
-	SET (CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS_INIT} "-Wl,--no-as-needed -lrt -lpthread"
+	SET (CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS_INIT} "-Wl,--no-as-needed"
              CACHE STRING "Flags used by the linker during the creation of modules.")
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
@@ -75,11 +75,10 @@ IF(APPLE)
 	)
 ELSEIF(UNIX)
 	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-		${X11_LIBRARIES}
+	     ${X11_LIBRARIES}
 	)
 ELSEIF(WIN32)
 ENDIF(APPLE)
-
 
 set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${Boost_LIBRARIES}
@@ -88,6 +87,14 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${TINYXML_LIBRARIES}
 	${LUA52_LIBRARIES}
 )
+
+IF(UNIX) #this has to be at least (since gcc4.6?)
+        set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
+             rt
+	     pthread
+        )
+
+ENDIF(UNIX)
 
 CONFIGURE_FILE(
   "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"

@@ -91,7 +91,10 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 void Rect::draw( IDrawContext::Ptr cn ) {
 	if ( cn->isFilled() ) {
 		_rect(cn);
+		cn->save();
+		__fitPatternForFill(cn, cn->pathExtends());
 		cn->fill();
+		cn->restore();
 	}
 	if ( cn->isStroked() ) {
 		_rect(cn);
