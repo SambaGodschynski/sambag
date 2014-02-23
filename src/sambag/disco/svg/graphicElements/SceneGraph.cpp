@@ -11,6 +11,7 @@
 #include <sstream>
 #include <limits.h>
 #include <limits>
+#include <sambag/disco/Shape.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -22,11 +23,44 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	if (transformation) {
 		context->transform( *(transformation.get()) );
 	}
+    IPattern::Ptr pat;
 	if (style) {
 		style->intoContext(context);
+        pat = style->fillPattern();
 	}
-	drawable->draw(context);
-	// only need to restore state if no children in scenegraph.
+    
+    
+    Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
+	if (!shape) {
+        drawable->draw(context);
+	} else {
+        if (context->isFilled()) {
+            context->save();
+            shape->shape(context);
+            Rectangle b = context->pathExtends();
+            context->translate( b.x0() );
+            
+            if (pat) {
+                Rectangle patBox = pat->getBounds();
+                if (patBox!=NULL_RECTANGLE) {
+                    Number w = patBox.width();
+                    Number h = patBox.height();
+                    w = w>0. ? w:1.;
+                    h = h>0. ? h:1.;
+                    context->scale( Point2D(b.width()/w, b.height()/h) );
+                }
+            }
+            
+            context->fill();
+            context->restore();
+        }
+        if (context->isStroked()) {
+            shape->shape(context);
+            context->stroke();
+        }
+    }
+    
+    // only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
 	if (resetContextState==true) {
 		context->restore();

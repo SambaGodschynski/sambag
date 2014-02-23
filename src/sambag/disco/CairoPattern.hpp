@@ -52,7 +52,7 @@ IGradient::ColorStop getColorStop ( CairoPatternRef ref,
  * A pattern is the basic fill structure for every drawing operation.
  * Its structure is similar to Cairos cairo_pattern_t
  */
-class CairoPatternBase : public IPattern {
+class CairoPatternBase : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -101,7 +101,7 @@ public:
 	virtual Extend getExtendType() const;
 };
 //=============================================================================
-class CairoSolidPattern : public CairoPatternBase, public ISolidPattern {
+class CairoSolidPattern : public CairoPatternBase, public virtual ISolidPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -178,7 +178,7 @@ public:
 //=============================================================================
 class CairoLinearPattern :
 	public CairoPatternBase,
-	public ILinearPattern
+	public virtual ILinearPattern
 {
 //=============================================================================
 public:
@@ -295,7 +295,7 @@ public:
 //=============================================================================
 class CairoRadialPattern :
 	public CairoPatternBase,
-	public IRadialPattern
+	public virtual IRadialPattern
 {
 //=============================================================================
 public:
@@ -414,7 +414,7 @@ public:
 //=============================================================================
 class CairoSurfacePattern :
 	public CairoPatternBase,
-	public ISurfacePattern
+	public virtual ISurfacePattern
 {
 //=============================================================================
 public:

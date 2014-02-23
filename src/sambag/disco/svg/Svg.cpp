@@ -42,8 +42,7 @@ void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
 	GraphicElement::Ptr obj = getGraphicElement();
 	if (!obj) return;
 	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-	Rectangle bBox = Rectangle(Point2D(0,0), Point2D(100,0), false);
-	neu.fillPattern(svgPattern->createPattern(bBox));
+	neu.fillPattern(svgPattern->createPattern());
 	copyStyleToGraphicElement(neu);
 }
 //-----------------------------------------------------------------------------
@@ -55,8 +54,7 @@ void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj)
 	GraphicElement::Ptr obj = getGraphicElement();
 	if (!obj) return;
 	Style neu = getRelatedSceneGraph()->getStyleOf(obj);
-	Rectangle bBox = Rectangle(Point2D(0,0), Point2D(100,0), false);
-	neu.strokePattern(svgPattern->createPattern(bBox));
+	neu.strokePattern(svgPattern->createPattern());
 	copyStyleToGraphicElement(neu);
 }
 //-----------------------------------------------------------------------------

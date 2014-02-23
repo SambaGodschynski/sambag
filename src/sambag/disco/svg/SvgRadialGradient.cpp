@@ -14,7 +14,7 @@ namespace sambag { namespace disco { namespace svg {
 // class SvgLinearGradient
 //=============================================================================
 //-----------------------------------------------------------------------------
-IPattern::Ptr SvgRadialGradient::createPattern(const Rectangle &_rect) const {
+IPattern::Ptr SvgRadialGradient::createPattern() const {
 	// cal. rect mid point
 	Rectangle rect(0,0,100,100);
 	Point2D c0 = rect.x0();

@@ -68,6 +68,11 @@ public:
 	 * @return representing color if exists. Otherwise NULL_COLOR.
 	 */
 	virtual ColorRGBA getColor() const = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @return bounds of pattern if exist otherwise NULL_RECTANGLE
+     */
+    virtual Rectangle getBounds() const = 0;
 };
 //=============================================================================
 class ISolidPattern : public virtual IPattern {
@@ -77,6 +82,8 @@ public:
 	typedef boost::shared_ptr<ISolidPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getSolidColor() const = 0;
+    //-------------------------------------------------------------------------
+    virtual Rectangle getBounds() const;
 };
 //=============================================================================
 class IGradient {
@@ -113,6 +120,8 @@ public:
 	typedef boost::tuple<Point2D, Point2D> LinearPoints;
 	//-------------------------------------------------------------------------
 	virtual LinearPoints getLinearPoints() const = 0;
+    //-------------------------------------------------------------------------
+    virtual Rectangle getBounds() const;
 };
 //=============================================================================
 class IRadialPattern : public virtual IPattern, public virtual IGradient {
@@ -124,6 +133,8 @@ public:
 	typedef boost::shared_ptr<IRadialPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual RadialCircles getRadialCircles() const = 0;
+    //-------------------------------------------------------------------------
+    virtual Rectangle getBounds() const;
 };
 //=============================================================================
 class ISurfacePattern : public virtual IPattern {
@@ -133,6 +144,8 @@ public:
 	typedef boost::shared_ptr<ISurfacePattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr getSurface() const = 0;
+    //-------------------------------------------------------------------------
+    virtual Rectangle getBounds() const;
 };
 }} // namespace
 #endif /* PATTERN_HPP_ */

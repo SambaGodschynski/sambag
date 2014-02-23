@@ -34,7 +34,7 @@ public:
 	 * @param rect
 	 * @return
 	 */
-	virtual IPattern::Ptr createPattern(const Rectangle &rect) const = 0;
+	virtual IPattern::Ptr createPattern() const = 0;
 	//-------------------------------------------------------------------------
 	virtual ~SvgPattern(){}
 };
