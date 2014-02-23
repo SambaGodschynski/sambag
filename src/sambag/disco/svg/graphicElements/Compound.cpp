@@ -24,8 +24,5 @@ GraphicElement::Ptr Compound::clone() const {
 //	}
 	return neu;
 }
-//-----------------------------------------------------------------------------
-void Compound::draw( IDrawContext::Ptr cn ) {
-}
 }}}}
 

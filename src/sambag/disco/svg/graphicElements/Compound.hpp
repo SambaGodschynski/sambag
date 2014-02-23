@@ -36,7 +36,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~Compound(){}
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
+	virtual void draw( IDrawContext::Ptr context ) {}
+	//-------------------------------------------------------------------------
+	virtual void shape( IDrawContext::Ptr context ) {}
 	//-------------------------------------------------------------------------
 	static Ptr create() {
 		Ptr neu(new Compound());

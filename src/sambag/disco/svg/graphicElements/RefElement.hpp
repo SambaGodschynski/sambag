@@ -61,6 +61,13 @@ public:
 		if (ref)
 			ref->draw(context);
 	}
+    //-------------------------------------------------------------------------
+	virtual void shape( IDrawContext::Ptr context ) {
+        Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(ref);
+        if (ref) {
+            shape->shape(context);
+        }
+    }
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) {
 		if (!ref) 

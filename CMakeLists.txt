@@ -88,13 +88,13 @@ set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
 	${LUA52_LIBRARIES}
 )
 
-IF(UNIX) #this has to be at least (since gcc4.6?)
+IF(APPLE)
+ELSEIF(UNIX) #this has to be at least (since gcc4.6?)
         set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
              rt
 	     pthread
         )
-
-ENDIF(UNIX)
+ENDIF(APPLE)
 
 CONFIGURE_FILE(
   "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"

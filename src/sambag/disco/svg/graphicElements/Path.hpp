@@ -69,7 +69,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual ~Path();
 	//-------------------------------------------------------------------------
-	virtual void draw( IDrawContext::Ptr context );
+	virtual void shape( IDrawContext::Ptr context );
 };
 
 }}}} // namespace

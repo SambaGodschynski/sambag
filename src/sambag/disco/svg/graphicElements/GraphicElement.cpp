@@ -19,13 +19,6 @@ GraphicElement::GraphicElement() {
 GraphicElement::~GraphicElement() {
 }
 //-----------------------------------------------------------------------------
-void GraphicElement::__fitPatternForFill(IDrawContext::Ptr cn, const Rectangle &b)
-{
-	//std::cout<<toString()<<b<<std::endl;	
-	cn->translate(b.x0());
-	cn->scale(Point2D(b.width()/100., 1.));
-}
-//-----------------------------------------------------------------------------
 Rectangle GraphicElement::getBoundingBox(IDrawContext::Ptr context) {
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	Coordinate w = context->getStrokeWidth();

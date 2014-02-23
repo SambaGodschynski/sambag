@@ -88,18 +88,8 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 	path->appendPathToContext(cn);
 }
 //-----------------------------------------------------------------------------
-void Rect::draw( IDrawContext::Ptr cn ) {
-	if ( cn->isFilled() ) {
-		_rect(cn);
-		cn->save();
-		__fitPatternForFill(cn, cn->pathExtends());
-		cn->fill();
-		cn->restore();
-	}
-	if ( cn->isStroked() ) {
-		_rect(cn);
-		cn->stroke();
-	}
+void Rect::shape( IDrawContext::Ptr cn ) {
+    _rect(cn);
 }
 
 }}}}

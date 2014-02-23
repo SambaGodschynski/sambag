@@ -497,18 +497,8 @@ void Path::drawPath( IDrawContext::Ptr cn ) {
 	storedPath = cn->copyPath();
 }
 //-----------------------------------------------------------------------------
-void Path::draw( IDrawContext::Ptr cn ) {
-	if ( cn->isFilled() ) {
-		drawPath(cn);
-		//cn->save(); TODO:fails with pathExtends
-		//__fitPatternForFill(cn, cn->pathExtends());
-		cn->fill();
-		//cn->restore();
-	}
-	if ( cn->isStroked() ) {
-		drawPath(cn);
-		cn->stroke();
-	}
+void Path::shape( IDrawContext::Ptr cn ) {
+    drawPath(cn);
 }
 //-----------------------------------------------------------------------------
 void Path::drawInstructions( IDrawContext::Ptr cn ) const {

@@ -32,7 +32,7 @@ namespace sambag { namespace xml { namespace cpAtl {
 template <typename T>
 class GeneratedHtmlBuilder : public MarkupBuilder<T> {
 public:
-
+    virtual ~GeneratedHtmlBuilder(){}
 	GeneratedHtmlBuilder(std::ostream & writer) : MarkupBuilder<T>(writer) {}
 	typedef typename MarkupBuilder<T>::TagClosingPolicy TagClosingPolicy;
 	/**
