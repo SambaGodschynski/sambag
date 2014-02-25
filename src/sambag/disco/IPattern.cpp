@@ -22,7 +22,7 @@ Rectangle IRadialPattern::getBounds() const {
     Point2D c0, c1;
     Number r0, r1;
     boost::tie(c0, r0, c1, r1) = getRadialCircles();
-    return Rectangle(Point2D(0, 0), Point2D(r1,r1), false);
+    return Rectangle(Point2D(0, 0), Point2D(r1*2,r1*2), false);
 }
 //-----------------------------------------------------------------------------
 Rectangle ISurfacePattern::getBounds() const {

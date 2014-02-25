@@ -47,13 +47,22 @@ public:
 	 * delivers coordinates pixelvalue. To solve relative unit types
 	 * an IDrawContext object is needed.
 	 * @param cn
-	 * @param absolute is needed to solve percent value type.
+	 * @param absolute is needed to solve percent value type otherwise 
+	 * cn->clipExtends() will bee used.
 	 * @return
 	 */
 	Coordinate solve(IDrawContext::Ptr cn, Coordinate absolute = NULL_NUMBER) const;
 	//-------------------------------------------------------------------------
 	void setValue(const Coordinate &v) { value = v; }
 	//-------------------------------------------------------------------------
+	/**
+     * @return the value
+     */	
+	Coordinate getValue() const { return value; }
+	//-------------------------------------------------------------------------
+	/**
+     * @return the type
+     */		
 	Type getType() const { return type; }
 	//-------------------------------------------------------------------------
 	void setType(Type t) { type = t; }

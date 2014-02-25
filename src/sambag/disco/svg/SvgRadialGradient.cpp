@@ -15,23 +15,12 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgRadialGradient::createPattern() const {
-	// cal. rect mid point
-	Rectangle rect(0,0,100,100);
-	Point2D c0 = rect.x0();
-	Point2D tmp = rect.x1();
-	boost::geometry::subtract_point(tmp, rect.x0());
-	boost::geometry::divide_value(tmp, 2.0);
-	boost::geometry::add_point(c0, tmp);
 
-	// create pattern at (0,0) with r=witdh/2
+	Coordinate cx=c.x().getValue(), cy=c.y().getValue(), 
+			   fx=f.x().getValue(), fy=f.y().getValue(), _r=r.getValue();
+
 	IRadialPattern::Ptr pattern = getDiscoFactory()->
-		createRadialPattern(Point2D(0,0), 0, Point2D(0,0), rect.getWidth()/2.0);
-
-	// translate and scale pattern space to fit
-	Number ratio = rect.getWidth() / rect.getHeight();
-	Matrix trans = scale2D(1., ratio);
-	trans = boost::numeric::ublas::prod(trans, translate2D(-c0.x(), -c0.y()));
-	pattern->setMatrix(trans);
+		createRadialPattern(Point2D(fx,fy), 0, Point2D(cx,cy), _r);
 
 	pattern->addColorStops(getColorStops());
 	return pattern;
