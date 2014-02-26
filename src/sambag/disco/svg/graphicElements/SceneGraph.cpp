@@ -12,6 +12,7 @@
 #include <limits.h>
 #include <limits>
 #include <sambag/disco/Shape.hpp>
+#include <sambag/math/Matrix.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -19,6 +20,8 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
+	namespace ublas=boost::numeric::ublas;
+	using namespace sambag::math;
 	context->save();
 	if (transformation) {
 		context->transform( *(transformation.get()) );
@@ -35,43 +38,41 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	if (!shape) {
         drawable->draw(context);
 	} else {
-        if (context->isFilled()) {
-            context->save();
+        if (fpat) {
             shape->shape(context);
             Rectangle b = context->pathExtends();
-            context->translate( b.x0() );
-            
-            if (fpat) {
-                Rectangle patBox = fpat->getBounds();
-                if (patBox!=NULL_RECTANGLE) {
-                    Number w = patBox.width();
-                    Number h = patBox.height();
-                    w = w>0. ? w:1.;
-                    h = h>0. ? h:1.;
-                    context->scale( Point2D(b.width()/w, b.height()/h) );
-                }
+			// pattern matrices: inverse values, inverse mul order!!
+			math::Matrix matr = IDENTITY_MATRIX;
+            Rectangle patBox = fpat->getBounds();
+            if (patBox!=NULL_RECTANGLE) {
+      			Number w = patBox.width();
+                Number h = patBox.height();
+                w = w>0. ? w:1.;
+                h = h>0. ? h:1.;
+				matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
             }
-            context->fill();
-            context->restore();
+			matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+			fpat->setMatrix(matr);
+			context->setFillPattern(fpat);
+        	context->fill();
         }
-        if (context->isStroked()) {
-			context->save();
+		if (spat) {
             shape->shape(context);
             Rectangle b = context->pathExtends();
-            context->translate( b.x0() );
-            
-            if (spat) {
-                Rectangle patBox = spat->getBounds();
-                if (patBox!=NULL_RECTANGLE) {
-                    Number w = patBox.width();
-                    Number h = patBox.height();
-                    w = w>0. ? w:1.;
-                    h = h>0. ? h:1.;
-                    context->scale( Point2D(b.width()/w, b.height()/h) );
-                }
+			// pattern matrices: inverse values, inverse mul order!!
+			math::Matrix matr = IDENTITY_MATRIX;
+            Rectangle patBox = spat->getBounds();
+            if (patBox!=NULL_RECTANGLE) {
+      			Number w = patBox.width();
+                Number h = patBox.height();
+                w = w>0. ? w:1.;
+                h = h>0. ? h:1.;
+				matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
             }
-			context->stroke();
-			context->restore();
+			matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+			spat->setMatrix(matr);
+			context->setStrokePattern(spat);
+        	context->stroke();
         }
     }
     
