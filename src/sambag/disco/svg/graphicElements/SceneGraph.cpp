@@ -23,10 +23,11 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	if (transformation) {
 		context->transform( *(transformation.get()) );
 	}
-    IPattern::Ptr pat;
+    IPattern::Ptr fpat, spat;
 	if (style) {
 		style->intoContext(context);
-        pat = style->fillPattern();
+        fpat = style->fillPattern();
+		spat = style->strokePattern();
 	}
     
     
@@ -40,8 +41,8 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
             Rectangle b = context->pathExtends();
             context->translate( b.x0() );
             
-            if (pat) {
-                Rectangle patBox = pat->getBounds();
+            if (fpat) {
+                Rectangle patBox = fpat->getBounds();
                 if (patBox!=NULL_RECTANGLE) {
                     Number w = patBox.width();
                     Number h = patBox.height();
@@ -50,13 +51,27 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
                     context->scale( Point2D(b.width()/w, b.height()/h) );
                 }
             }
-            
             context->fill();
             context->restore();
         }
         if (context->isStroked()) {
+			context->save();
             shape->shape(context);
-            context->stroke();
+            Rectangle b = context->pathExtends();
+            context->translate( b.x0() );
+            
+            if (spat) {
+                Rectangle patBox = spat->getBounds();
+                if (patBox!=NULL_RECTANGLE) {
+                    Number w = patBox.width();
+                    Number h = patBox.height();
+                    w = w>0. ? w:1.;
+                    h = h>0. ? h:1.;
+                    context->scale( Point2D(b.width()/w, b.height()/h) );
+                }
+            }
+			context->stroke();
+			context->restore();
         }
     }
     
