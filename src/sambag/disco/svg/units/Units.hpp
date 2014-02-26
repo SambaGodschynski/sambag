@@ -44,14 +44,19 @@ public:
 	explicit Unit(const Coordinate &v = 0) : value(v), type(NONE) {}
 	//-------------------------------------------------------------------------
 	/**
-	 * delivers coordinates pixelvalue. To solve relative unit types
-	 * an IDrawContext object is needed.
-	 * @param cn
-	 * @param absolute is needed to solve percent value type otherwise 
-	 * cn->clipExtends() will bee used.
-	 * @return
+	 * @return coordinates pixelvalue. To solve relative unit types
+	 * an IDrawContext object or an absolute value is needed. If both NULL
+     * NULL_NUMBER will be returned. 
+	 * @param cn solves accordig to http://www.w3.org/TR/SVG/coords.html#Units
+	 * @param absolute value to solve percent value type 
+	 * @note if an absolute value and the context given 
+	 * the absolute value it has the higher priority
+     *
 	 */
 	Coordinate solve(IDrawContext::Ptr cn, Coordinate absolute = NULL_NUMBER) const;
+	Coordinate solve(Coordinate absolute) const {
+		return solve(IDrawContext::Ptr(), absolute);
+	}
 	//-------------------------------------------------------------------------
 	void setValue(const Coordinate &v) { value = v; }
 	//-------------------------------------------------------------------------

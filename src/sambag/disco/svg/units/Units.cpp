@@ -17,6 +17,9 @@ namespace sambag { namespace disco { namespace svg { namespace units {
 sambag::disco::Coordinate
 Unit::solve(IDrawContext::Ptr cn, Coordinate absolute) const
 {
+	if (!cn && absolute==NULL_NUMBER) {
+		return NULL_NUMBER;
+	}
 	switch (type) {
 	case NONE:
 		return 0;
@@ -44,6 +47,7 @@ Unit::solve(IDrawContext::Ptr cn, Coordinate absolute) const
 			// viewport, the percentage is calculated as the specified
 			// percentage of
 			// sqrt((actual-width)**2 + (actual-height)**2))/sqrt(2).
+			// see http://www.w3.org/TR/SVG/coords.html#Units
 			sambag::disco::Rectangle clip = cn->clipExtends();
 			Coordinate w = pow(clip.width(), 2);
 			Coordinate h = pow(clip.height(), 2);
