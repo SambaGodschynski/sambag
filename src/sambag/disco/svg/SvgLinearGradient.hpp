@@ -10,6 +10,7 @@
 
 #include "Svg.hpp"
 #include "SvgPattern.hpp"
+#include "units/Units.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -26,10 +27,30 @@ public:
 	typedef boost::shared_ptr<SvgLinearGradient> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
+	//-------------------------------------------------------------------------
+	units::Point x1, x2;
 protected:
 	//-------------------------------------------------------------------------
-	SvgLinearGradient(){}
+	SvgLinearGradient(){
+		x1.x().setType(units::Unit::PERCENT);
+		x1.y().setType(units::Unit::PERCENT);
+		x2.x().setType(units::Unit::PERCENT);
+		x2.y().setType(units::Unit::PERCENT);
+
+		x1.x().setValue(0.);
+		x1.y().setValue(0.);
+		x2.x().setValue(100.);
+		x2.y().setValue(0.);
+	}
 public:
+	//-------------------------------------------------------------------------
+	struct X1_tag { typedef units::Unit Type; };
+	//-------------------------------------------------------------------------
+	struct Y1_tag { typedef units::Unit Type; };
+	//-------------------------------------------------------------------------
+	struct X2_tag { typedef units::Unit Type; };
+	//-------------------------------------------------------------------------
+	struct Y2_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
 		SvgColorStop::Ptr stop = boost::dynamic_pointer_cast<SvgColorStop>(obj);
@@ -59,8 +80,27 @@ public:
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute setter
 	//-------------------------------------------------------------------------
+	virtual void set( const X1_tag::Type &coord, X1_tag ) {
+		x1.x(coord);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const Y1_tag::Type &coord, Y1_tag ) {
+		x1.y(coord);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const X2_tag::Type &coord, X2_tag ) {
+		x2.x(coord);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const Y2_tag::Type &coord, Y2_tag ) {
+		x2.y(coord);
+	}
+	//-------------------------------------------------------------------------
 	static void registerAttributes( SvgObject::BuilderType &binder ) {
-
+		binder.registerAttribute<X1_tag::Type, X1_tag, SvgLinearGradient>("x1");
+		binder.registerAttribute<Y1_tag::Type, Y1_tag, SvgLinearGradient>("y1");
+		binder.registerAttribute<X2_tag::Type, X2_tag, SvgLinearGradient>("x2");
+		binder.registerAttribute<Y1_tag::Type, Y2_tag, SvgLinearGradient>("y2");
 	}
 };
 }}}

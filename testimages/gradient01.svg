@@ -12,25 +12,46 @@
         <stop offset="5%" stop-color="#F60" />
         <stop offset="95%" stop-color="#FF6" />
       </linearGradient>
-      <linearGradient id="grad3">
+      <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stop-color="white" />
-	<stop offset="5%" stop-color="black" />
-        <stop offset="100%" stop-color="lightgrey" />
+	<stop offset="40%" stop-color="black" />
+        <stop offset="100%" stop-color="red" />
       </linearGradient>
-
+      <radialGradient id="grad4" cx="0%" cy="0%" r="80%" fx="50%" fy="50%">
+        <stop offset="0%" stop-color="white" />
+	<stop offset="40%" stop-color="black" />
+        <stop offset="100%" stop-color="red" />
+      </radialGradient>
       <radialGradient id="grad2">
-        <stop offset="0%" stop-color="#f00"/>
-	<stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+        <stop offset="0%" stop-color="white"/>
+	<stop offset="50%" stop-color="red"/>
+	<stop offset="100%" stop-color="white" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="gradBg" cx="50%" cy="50%" fx="30%" fy="30%" r="50%">
+        <stop offset="0%" stop-color="white"/>
+	<stop offset="50%" stop-color="white"/>
+	<stop offset="99%" stop-color="yellow" stop-opacity="1"/>	
+	<stop offset="100%" stop-color="yellow" stop-opacity="0"/>
       </radialGradient>
     </defs>
 
     <!-- Outline the drawing area in blue -->
-    <rect fill="none" stroke="blue" 
+    <rect fill="url(#gradBg)" stroke="blue" 
           x="1" y="1" width="798" height="398"/>
 
     <!-- The rectangle is filled using a linear gradient paint server -->
     <rect fill="url(#grad1)" stroke="black" stroke-width="5"  
           x="100" y="100" width="600" height="200" fill-opacity=".5"/>
+    <text x="150" y="280" 
+	  font-size="200" 
+	  font-family="arial" 
+	  font-weight="bold"
+	  fill="url(#grad3)"
+	  stroke="url(#grad4)"
+	  stroke-width="5px"
+	  >
+      Watta
+    </text>
     <ellipse cx="400" cy="200" rx="85" ry="55" fill="url(#grad2)" />
     <rect x="490" y="180" width="100" height="50" fill="url(#grad2)" />
     <rect x="490" y="180" width="100" height="50" fill="url(#grad2)" transform="translate(-280)" />
@@ -38,13 +59,5 @@
      transform="translate(0,-80)" />
     <ellipse cx="400" cy="200" rx="85" ry="55" fill="url(#grad2)" fill-opacity="0.5"
      transform="translate(0,80)" />
-    <text x="150" y="280" 
-	  font-size="200" 
-	  font-family="arial" 
-	  font-weight="bold"
-	  fill="url(#grad3)"
-	  >
-      Watta
-    </text>
  </g>
 </svg>

@@ -8,6 +8,7 @@
 #include "TestDefaultMidiEvents.hpp"
 #include <sambag/dsp/DefaultMidiEvents.hpp>
 #include <cppunit/config/SourcePrefix.h>
+#include <cstring>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestDefaultMidiEvents );
