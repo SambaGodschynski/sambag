@@ -19,6 +19,7 @@ namespace sambag { namespace dsp {
 struct HostTimeInfo {
 //=============================================================================
 	enum Filter {
+		FrxDefault = 0,
 		FrxTempo = 1,
 		FrxPpqPos = 1 << 1,
 		FrxNanosValid = 1 << 2,
