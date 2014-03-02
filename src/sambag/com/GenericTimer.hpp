@@ -137,6 +137,13 @@ public:
 	virtual void setNumRepetitions(int numRepeats);
 	//-------------------------------------------------------------------------
 	virtual bool isRunning() const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return true if sender has no listeners
+     */	
+	bool unconnected() const {
+		return EventPolicy::unconnected();
+	}
 }; // GenericTimer
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------

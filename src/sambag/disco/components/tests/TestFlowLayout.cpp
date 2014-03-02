@@ -47,10 +47,10 @@ void TestFlowLayout::testLayout() {
 			"[TestComponent2,225,5,50x55,invalid]\n"
 			"[TestComponent3,280,5,50x55,invalid]\n"
 			"[TestComponent4,335,5,50x55,invalid]\n");
-	static const std::string soll02("[TestComponent0,22.5,5,50x55,invalid]\n"
-			"[TestComponent1,77.5,5,50x55,invalid]\n"
-			"[TestComponent2,22.5,65,50x55,invalid]\n"
-			"[TestComponent3,77.5,65,50x55,invalid]\n"
+	static const std::string soll02("[TestComponent0,22,5,50x55,invalid]\n"
+			"[TestComponent1,77,5,50x55,invalid]\n"
+			"[TestComponent2,22,65,50x55,invalid]\n"
+			"[TestComponent3,77,65,50x55,invalid]\n"
 			"[TestComponent4,50,125,50x55,invalid]\n");
 	std::stringstream ss;
 	con->doLayout();
