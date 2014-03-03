@@ -21,6 +21,7 @@ private:
 	CPPUNIT_TEST_KNOWN_ISSUE( testButton );
 	CPPUNIT_TEST_SUITE_END();
 	sambag::disco::components::RootPane::Ptr root;
+	sambag::disco::components::AContainer::Ptr cont;
 	sambag::disco::IImageSurface::Ptr surf;
 public:
 	void setUp();

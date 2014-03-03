@@ -9,6 +9,7 @@
 #include "AContainer.hpp"
 #include <algorithm>
 #include <sstream>
+#include <math.h>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -62,9 +63,9 @@ int FlowLayout::moveComponents(AContainerPtr target, Coordinate x,
 				cy = y + (height - m->getHeight()) / 2.;
 			}
 			if (ltr) {
-				m->setLocation(x, cy);
+				m->setLocation(floor(x), floor(cy));
 			} else {
-				m->setLocation(target->getWidth() - x - m->getWidth(), cy);
+				m->setLocation(floor(target->getWidth() - x - m->getWidth()), floor(cy));
 			}
 			x = x + m->getWidth() + hgap;
 		}

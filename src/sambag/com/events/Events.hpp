@@ -49,6 +49,13 @@ private:
 protected:
 public:
 	//-------------------------------------------------------------------------
+	/**
+	 * @return true if sender has no listeners
+     */	
+	bool unconnected() const {
+		return signal.empty();	
+	}
+	//-------------------------------------------------------------------------
 	Connection addEventListener ( const EventFunction &vCl ) {
 		return signal.connect(vCl);
 	}

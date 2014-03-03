@@ -79,6 +79,11 @@ public:
 	virtual void setNumRepetitions(int numRepeats) = 0;
 	//-------------------------------------------------------------------------
 	virtual bool isRunning() const = 0;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return true if sender has no listeners
+     */	
+	virtual bool unconnected() const = 0;
 
 }; // ITimer
 }} // namespace(s)
