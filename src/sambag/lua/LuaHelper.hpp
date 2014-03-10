@@ -67,6 +67,11 @@ template <>
 inline bool isType<std::string>(lua_State *L, int index) {
 	return lua_isstring(L, index) == 1;
 }
+//-----------------------------------------------------------------------------
+template <>
+inline bool isType<bool>(lua_State *L, int index) {
+	return lua_isboolean(L, index) == 1;
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 namespace {
 typedef com::Int2Type<0> NoImpl;
@@ -116,6 +121,17 @@ bool get(T &out, lua_State *L, int index) {
 	// if T is instance of ILuaTable
 	enum {isString=boost::is_convertible<T*, std::string*>::value};
 	__getString(out, L, index, com::Int2Type<isString>());
+	return true;
+}
+/**
+ * @note bool needs extra impl because the lack of 
+ * boost::is_bool<T>
+ */
+template <>
+inline bool get<bool>(bool &out, lua_State *L, int index) {
+	if (!isType<bool>(L, index))
+		return false;
+	out = lua_toboolean(L, index);
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -211,6 +227,14 @@ void push(lua_State *L, const T &value) {
 	// if T is instance of ILuaTable
 	enum {isString=boost::is_convertible<T*, std::string*>::value};
 	__pushString(value, L, com::Int2Type<isString>());
+}
+/**
+ * @note bool needs extra impl because the lack of 
+ * boost::is_bool<T>
+ */
+template <>
+inline void push<bool>(lua_State *L, const bool &value) {
+    lua_pushboolean(L, value);
 }
 //-----------------------------------------------------------------------------
 /**

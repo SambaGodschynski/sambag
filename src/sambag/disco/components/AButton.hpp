@@ -9,7 +9,7 @@
 #define SAMBAG_ABUTTON_H
 
 #include <boost/shared_ptr.hpp>
-#include "AContainer.hpp"
+#include "AComponent.hpp"
 #include <string>
 
 namespace sambag { namespace disco { namespace components {
@@ -18,7 +18,7 @@ namespace sambag { namespace disco { namespace components {
   * @class AButton.
   */
 template <class ButtonModell>
-class AButton : public AContainer, public ButtonModell {
+class AButton : public AComponent, public ButtonModell {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------

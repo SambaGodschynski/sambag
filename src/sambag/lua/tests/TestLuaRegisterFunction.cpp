@@ -10,6 +10,7 @@
 #include <boost/bind.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "Helper.hpp"
+#include <sambag/com/Common.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaScript );
@@ -40,7 +41,8 @@ struct FooGodMonster {
 	int intValue;
 	typedef Str S;
 	S stringValue;
-	FooGodMonster() : wasCalled(false), intValue(0) {}
+    lua_State *L;
+	FooGodMonster(lua_State *L) : wasCalled(false), intValue(0), L(L) {}
 	//-------------------------------------------------------------------------
 	// 0..1 args
 	void foo() { wasCalled = true; }
@@ -64,6 +66,12 @@ struct FooGodMonster {
 	// 5args
 	S sum(S a, S b, S c, S d, S e) { return a+b+c+d+e; }
 	void add(S a, S b, S c, S d, S e) { stringValue+= a+b+c+d+e; }
+    //-------------------------------------------------------------------------
+    int incr() {
+        lua_getfield(L, -1, "x");
+        int x = lua_tonumber(L, -1);
+        return x+1;
+    }
 	//-------------------------------------------------------------------------
 	// return tuple
 	boost::tuple<int> returnTuple01() { return boost::make_tuple(100); }
@@ -71,6 +79,18 @@ struct FooGodMonster {
 	boost::tuple<int, std::string> returnTuple02() { 
 		return boost::make_tuple(11, "yezz02!"); 
 	}
+    //-------------------------------------------------------------------------
+    void fucking_macros_assert(bool x) {
+        CPPUNIT_ASSERT(x);
+    }
+    //-------------------------------------------------------------------------
+    bool invert(bool x) {
+        return !x;
+    }
+    //-------------------------------------------------------------------------
+    void createObject() {
+    
+    }
 };
 
 namespace tests {
@@ -86,7 +106,7 @@ void TestLuaScript::tearDown() {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction() {
 	using namespace sambag::lua;
-	FooGodMonster foo, foo2;
+	FooGodMonster foo(L), foo2(L);
 	LuaStateRef parallel = createLuaStateRef();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<FooFunction_Tag>(
@@ -144,7 +164,7 @@ struct DiffArgsFunction_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction02() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<Sum02Function_Tag>(
 		L,
@@ -184,7 +204,7 @@ struct Add03Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction03() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<Sum03Function_Tag>(
 		L,
@@ -212,7 +232,7 @@ struct Add04Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction04() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
     typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
 	registerFunctions<Fs>(
@@ -230,7 +250,7 @@ void TestLuaScript::testRegisterFunction04() {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterModuleFunction() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
     registerFunctions<Fs>(L,
@@ -262,6 +282,60 @@ void TestLuaScript::testRegisterModuleFunction() {
 	executeLuaString(L, "extend.add( extend.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
 }
+//-----------------------------------------------------------------------------
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+struct Incr_Tag {
+	typedef boost::function<int()> Function;
+	static const char * name() { return "incr"; }
+};
+struct Assert_Tag {
+	typedef boost::function<void(bool)> Function;
+	static const char * name() { return "assert"; }
+};
+void TestLuaScript::testRegisterClass() {
+	using namespace sambag::lua;
+	FooGodMonster foo(L);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	typedef LOKI_TYPELIST_4(Sum04Function_Tag, Add04Function_Tag, Incr_Tag, Assert_Tag) Fs;
+    registerClass<Fs>(L,
+        boost::make_tuple(
+            boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
+            boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4),
+            boost::bind(&FooGodMonster::incr, &foo),
+            boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1)
+        ),
+        "mod"
+    );
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "mod:add( mod.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
+    CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
+    executeLuaString(L, "mod.x = 100");
+    executeLuaString(L, "mod:assert( mod:incr() == 101 )");
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+struct Invert_Tag {
+	typedef boost::function<bool(bool)> Function;
+	static const char * name() { return "invert"; }
+};
+void TestLuaScript::testBooleanIssue() {
+	using namespace sambag::lua;
+	FooGodMonster foo(L);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	typedef LOKI_TYPELIST_2(Invert_Tag, Assert_Tag) Fs;
+    registerClass<Fs>(L,
+        boost::make_tuple(
+            boost::bind(&FooGodMonster::invert, &foo, _1),
+            boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1)
+        ),
+        "obj"
+    );
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "obj:assert( obj:invert(false) )");
+    executeLuaString(L, "obj:assert( not obj:invert(true) )");
+}
+
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
@@ -276,7 +350,7 @@ struct Add05Function_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testRegisterFunction05() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<Sum05Function_Tag>(
 		L,
@@ -305,7 +379,7 @@ struct RTuple02_Tag {
 //-----------------------------------------------------------------------------
 void TestLuaScript::testReturnTuple01() {
 	using namespace sambag::lua;
-	FooGodMonster foo;
+	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	registerFunction<RTuple01_Tag>(
 		L,

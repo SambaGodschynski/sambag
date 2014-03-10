@@ -22,6 +22,8 @@ private:
 	CPPUNIT_TEST( testRegisterFunction04 );
 	CPPUNIT_TEST( testRegisterFunction05 );
     CPPUNIT_TEST( testRegisterModuleFunction );
+    CPPUNIT_TEST( testRegisterClass );
+    CPPUNIT_TEST( testBooleanIssue );
 	CPPUNIT_TEST( testReturnTuple01 );
 	CPPUNIT_TEST_SUITE_END();
 	lua_State *L;
@@ -34,6 +36,8 @@ public:
 	void testRegisterFunction04();
 	void testRegisterFunction05();
     void testRegisterModuleFunction();
+    void testRegisterClass();
+    void testBooleanIssue();
 	void testReturnTuple01();
 };
 } // namespace

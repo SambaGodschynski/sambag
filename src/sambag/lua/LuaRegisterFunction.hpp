@@ -417,11 +417,23 @@ namespace {
             registerFunction<T>(L, boost::get<Index>(tuple));
             __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple);
         }
+        static void add(lua_State *L, const FunctionTuple &tuple, luaL_Reg *reg)
+        {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
+            typedef RegisterHelperClass<T> Helper;
+            Helper::fMap[L] = boost::get<Index>(tuple);
+            reg[Index].name = T::name();
+            reg[Index].func = &Helper::luaCallback;
+            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple, reg);
+        }
     };
     template<class FunctionTuple, class FunctionTagList>
     struct __AddFunc<Loki::NullType, FunctionTuple, FunctionTagList> {
         static void add(lua_State *L, const FunctionTuple &tuple, int top) {}
         static void add(lua_State *L, const FunctionTuple &tuple) {}
+        static void add(lua_State *L, const FunctionTuple &tuple, luaL_Reg *reg){}
     };
     
 }
@@ -459,7 +471,42 @@ void registerFunctions(
     __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple);
 }
 
+//-----------------------------------------------------------------------------
+/**
+ * @brief register functions as class
+ */
+ template <class FunctionTagList, class FunctionTuple>
+void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &name) {
+// https://stackoverflow.com/questions/11100435/how-do-i-create-a-class-object-in-lua-c-api-5-2
+    int lib_id, meta_id;
+    enum {Size = Loki::TL::Length<FunctionTagList>::value};
+    static luaL_Reg fs[Size+1] = {{0}};
+    
+    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, fs);
+    
+    /* newclass = {} */
+    lua_createtable(L, 0, 0);
+    lib_id = lua_gettop(L);
 
+    /* metatable = {} */
+    luaL_newmetatable(L, name.c_str());
+    meta_id = lua_gettop(L);
+    //luaL_setfuncs(L, _meta, 0);
+
+    /* metatable.__index = _methods */
+    luaL_newlib(L, fs);
+    lua_setfield(L, meta_id, "__index");
+
+    /* metatable.__metatable = _meta */
+    //luaL_newlib(L, _meta);
+    //lua_setfield(L, meta_id, "__metatable");
+
+    /* class.__metatable = metatable */
+    lua_setmetatable(L, lib_id);
+
+    /* _G["Foo"] = newclass */
+    lua_setglobal(L, name.c_str());
+}
 
 
 
