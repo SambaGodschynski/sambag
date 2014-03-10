@@ -11,6 +11,10 @@
 #include <boost/tuple/tuple.hpp>
 #include "Helper.hpp"
 #include <sambag/com/Common.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaScript );
@@ -88,8 +92,13 @@ struct FooGodMonster {
         return !x;
     }
     //-------------------------------------------------------------------------
-    void createObject() {
-    
+    Loki::NullType createObject() {
+        sambag::lua::registerClass(L, "ClassX");
+        lua_getglobal(L, "ClassX");
+        int lib_id = lua_gettop(L);
+        lua_pushinteger(L, 1010);
+        lua_setfield(L, lib_id, "x");
+        return Loki::NullType();
     }
 };
 
@@ -292,17 +301,23 @@ struct Assert_Tag {
 	typedef boost::function<void(bool)> Function;
 	static const char * name() { return "assert"; }
 };
+struct CreateObject_Tag {
+	typedef boost::function<Loki::NullType()> Function;
+	static const char * name() { return "createObject"; }
+};
 void TestLuaScript::testRegisterClass() {
 	using namespace sambag::lua;
 	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	typedef LOKI_TYPELIST_4(Sum04Function_Tag, Add04Function_Tag, Incr_Tag, Assert_Tag) Fs;
+	typedef LOKI_TYPELIST_5(Sum04Function_Tag,
+        Add04Function_Tag, Incr_Tag, Assert_Tag, CreateObject_Tag) Fs;
     registerClass<Fs>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::incr, &foo),
-            boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1)
+            boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1),
+            boost::bind(&FooGodMonster::createObject, &foo)
         ),
         "mod"
     );
@@ -312,6 +327,11 @@ void TestLuaScript::testRegisterClass() {
     CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
     executeLuaString(L, "mod.x = 100");
     executeLuaString(L, "mod:assert( mod:incr() == 101 )");
+    executeLuaString(L, "o1 = mod:createObject()");
+    executeLuaString(L, "o2 = mod:createObject()");
+    executeLuaString(L, "o2.x = o1.x + o2.x");
+    executeLuaString(L, "mod:assert(o1.x == 1010)");
+    executeLuaString(L, "mod:assert(o2.x == 2020)");
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct Invert_Tag {

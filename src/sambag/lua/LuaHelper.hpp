@@ -14,7 +14,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
-
+#include <loki/NullType.h>
 
 // in lua < 502 lua_len doesn't exists.
 #if LUA_VERSION_NUM < 502
@@ -235,6 +235,14 @@ void push(lua_State *L, const T &value) {
 template <>
 inline void push<bool>(lua_State *L, const bool &value) {
     lua_pushboolean(L, value);
+}
+/**
+ * @note useful when mixing register function and manually stack
+ * manipulation
+ */
+template <>
+inline void push<Loki::NullType>(lua_State *L, const Loki::NullType &value)
+{
 }
 //-----------------------------------------------------------------------------
 /**

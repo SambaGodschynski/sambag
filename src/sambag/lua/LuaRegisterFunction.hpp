@@ -507,6 +507,28 @@ void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &
     /* _G["Foo"] = newclass */
     lua_setglobal(L, name.c_str());
 }
+//-----------------------------------------------------------------------------
+/**
+ * @brief register functions as class
+ */
+void registerClass(lua_State *L, const std::string &name) {
+    int lib_id, meta_id;
+    
+    /* newclass = {} */
+    lua_createtable(L, 0, 0);
+    lib_id = lua_gettop(L);
+
+    /* metatable = {} */
+    luaL_newmetatable(L, name.c_str());
+    meta_id = lua_gettop(L);
+    //luaL_setfuncs(L, _meta, 0);
+
+    /* class.__metatable = metatable */
+    lua_setmetatable(L, lib_id);
+
+    /* _G["Foo"] = newclass */
+    lua_setglobal(L, name.c_str());
+}
 
 
 
