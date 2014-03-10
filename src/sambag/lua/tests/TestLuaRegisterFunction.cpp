@@ -4,8 +4,6 @@
  *  Created on: Mar 15, 2012
  *      Author: samba
  */
-#if 0
-
 #include "TestLuaRegisterFunction.hpp"
 #include <sambag/lua/Lua.hpp>
 #include <boost/function.hpp>
@@ -216,19 +214,55 @@ void TestLuaScript::testRegisterFunction04() {
 	using namespace sambag::lua;
 	FooGodMonster foo;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
-	registerFunction<Sum04Function_Tag>(
-		L,
-		boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4)
-	);
-	registerFunction<Add04Function_Tag>(
-		L,
-		boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
+    typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
+	registerFunctions<Fs>(
+		L, boost::make_tuple(
+            boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
+            boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
+        )
 	);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
 	executeLuaString(L, "add( sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
 	CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
 }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//-----------------------------------------------------------------------------
+void TestLuaScript::testRegisterModuleFunction() {
+	using namespace sambag::lua;
+	FooGodMonster foo;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
+    registerFunctions<Fs>(L,
+        boost::make_tuple(
+            boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
+            boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
+        ),
+        "mod"
+    );
+	typedef LOKI_TYPELIST_1(Sum04Function_Tag) Extend;
+    registerFunctions<Extend>(L,
+        boost::make_tuple(
+            boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4)
+        ),
+        "extend"
+    );
+	typedef LOKI_TYPELIST_1(Add04Function_Tag) Extend2;
+    registerFunctions<Extend2>(L,
+        boost::make_tuple(
+            boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
+        ),
+        "extend"
+    );
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
+	executeLuaString(L, "mod.add( mod.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
+	CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
+	foo.stringValue = "";
+	executeLuaString(L, "extend.add( extend.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
+	CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
+}
+
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //-----------------------------------------------------------------------------
 struct Sum05Function_Tag {
@@ -301,5 +335,3 @@ void TestLuaScript::testReturnTuple01() {
 	
 }
 } // namespace
-
-#endif

@@ -41,6 +41,8 @@ public:
 			// TODO: check sequence
 			// uses 'key' (at index -2) and 'value' (at index -1)
 			Key k;
+            // TODO: fails if map's key is a number but we call lua_tostring, see:
+            // https://stackoverflow.com/questions/22052579/how-to-validate-lua-table-keys-from-c
 			if (get(k, L, -2)) {
 				Value v;
 				if (!get(v, L, -1))

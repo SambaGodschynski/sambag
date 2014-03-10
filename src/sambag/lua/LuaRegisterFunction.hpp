@@ -12,6 +12,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <lua.hpp>
 #include <sambag/com/Helper.hpp>
+#include <loki/Typelist.h>
 
 #ifndef LUASCRIPT_HPP_
 #define LUASCRIPT_HPP_
@@ -394,6 +395,74 @@ void registerFunction(
 	Helper::fMap[L] = f;
 	lua_register(L, FunctionTag::name(), &Helper::luaCallback);
 }
+//-----------------------------------------------------------------------------
+namespace {
+    template<class It, class FunctionTuple, class FunctionTagList=It>
+    struct __AddFunc {
+        static void add(lua_State *L, const FunctionTuple &tuple, int top) {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            typedef RegisterHelperClass<T> Helper;
+            enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
+            Helper::fMap[L] = boost::get<Index>(tuple);
+            lua_pushstring(L, T::name());
+            lua_pushcfunction(L, &Helper::luaCallback);
+            lua_settable(L, top);
+            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple, top);
+        }
+        static void add(lua_State *L, const FunctionTuple &tuple) {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
+            registerFunction<T>(L, boost::get<Index>(tuple));
+            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple);
+        }
+    };
+    template<class FunctionTuple, class FunctionTagList>
+    struct __AddFunc<Loki::NullType, FunctionTuple, FunctionTagList> {
+        static void add(lua_State *L, const FunctionTuple &tuple, int top) {}
+        static void add(lua_State *L, const FunctionTuple &tuple) {}
+    };
+    
+}
+
+/**
+ * @brief register functions within a module
+ */
+template <class FunctionTagList, class FunctionTuple>
+void registerFunctions(
+	lua_State *L,
+    const FunctionTuple &tuple,
+	const std::string &modulename)
+{
+    lua_getglobal(L, modulename.c_str());
+    if (lua_istable(L, -1) != 1) {
+        lua_newtable(L);
+        int top = lua_gettop(L);
+        __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, top);
+        lua_setglobal(L, modulename.c_str());
+        return;
+    }
+    int top = lua_gettop(L);
+    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, top);
+    
+}
+
+/**
+ * @brief register functions
+ */
+template <class FunctionTagList, class FunctionTuple>
+void registerFunctions(
+	lua_State *L,
+    const FunctionTuple &tuple)
+{
+    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple);
+}
+
+
+
+
+
 
 }} // namespace
 #endif /* LUASCRIPT_HPP_ */
