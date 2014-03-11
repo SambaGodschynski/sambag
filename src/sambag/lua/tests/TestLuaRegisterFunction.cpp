@@ -109,7 +109,7 @@ struct FooGodMonster {
     Loki::NullType createObject() {
         typedef Loki::NullType Fs;
         typedef LOKI_TYPELIST_1(ObjXToString_Tag) MetaFs;
-        sambag::lua::registerClass<Fs, MetaFs>(L,
+        sambag::lua::registerClass<Fs, MetaFs, sambag::lua::TupleAccessor>(L,
             boost::make_tuple(),
             boost::make_tuple(
                 boost::bind(&FooGodMonster::oxToString, this)
@@ -269,7 +269,7 @@ void TestLuaScript::testRegisterFunction04() {
 	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
     typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
-	registerFunctions<Fs>(
+	registerFunctions<Fs, TupleAccessor>(
 		L, boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
@@ -287,22 +287,19 @@ void TestLuaScript::testRegisterModuleFunction() {
 	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_2(Sum04Function_Tag, Add04Function_Tag) Fs;
-    registerFunctions<Fs>(L,
-        boost::make_tuple(
+    registerFunctions<Fs, TupleAccessor>( L, boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
-        ),
-        "mod"
-    );
+        ), "mod");
 	typedef LOKI_TYPELIST_1(Sum04Function_Tag) Extend;
-    registerFunctions<Extend>(L,
+    registerFunctions<Extend, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4)
         ),
         "extend"
     );
 	typedef LOKI_TYPELIST_1(Add04Function_Tag) Extend2;
-    registerFunctions<Extend2>(L,
+    registerFunctions<Extend2, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4)
         ),
@@ -336,7 +333,7 @@ void TestLuaScript::testRegisterClass() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_5(Sum04Function_Tag,
         Add04Function_Tag, Incr_Tag, Assert_Tag, CreateObject_Tag) Fs;
-    registerClass<Fs>(L,
+    registerClass<Fs, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4),
@@ -369,7 +366,7 @@ void TestLuaScript::testBooleanIssue() {
 	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_2(Invert_Tag, Assert_Tag) Fs;
-    registerClass<Fs>(L,
+    registerClass<Fs, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::invert, &foo, _1),
             boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1)

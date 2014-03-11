@@ -397,92 +397,114 @@ void registerFunction(
 }
 //-----------------------------------------------------------------------------
 namespace {
-    template<class It, class FunctionTuple, class FunctionTagList=It>
+    template<class It,
+        class Functions,
+        class FunctionsAccessor,
+        class FunctionTagList=It>
     struct __AddFunc {
-        static void add(lua_State *L, const FunctionTuple &tuple, int top) {
+        static void add(lua_State *L, const Functions &functions, int top) {
             typedef typename It::Head T;
             typedef typename It::Tail Next;
             typedef RegisterHelperClass<T> Helper;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
-            Helper::fMap[L] = boost::get<Index>(tuple);
+            Helper::fMap[L] = FunctionsAccessor::template get<Index>(functions);
             lua_pushstring(L, T::name());
             lua_pushcfunction(L, &Helper::luaCallback);
             lua_settable(L, top);
-            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple, top);
+            __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::add(L, functions, top);
         }
-        static void add(lua_State *L, const FunctionTuple &tuple) {
+        static void add(lua_State *L, const Functions &functions) {
             typedef typename It::Head T;
             typedef typename It::Tail Next;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
-            registerFunction<T>(L, boost::get<Index>(tuple));
-            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple);
+            registerFunction<T>(L, FunctionsAccessor::template get<Index>(functions) );
+            __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::add(L, functions);
         }
-        static void add(lua_State *L, const FunctionTuple &tuple, luaL_Reg *reg)
+        static void add(lua_State *L, const Functions &functions, luaL_Reg *reg)
         {
             typedef typename It::Head T;
             typedef typename It::Tail Next;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
             typedef RegisterHelperClass<T> Helper;
-            Helper::fMap[L] = boost::get<Index>(tuple);
+            Helper::fMap[L] = FunctionsAccessor::template get<Index>(functions);
             reg[Index].name = T::name();
             reg[Index].func = &Helper::luaCallback;
-            __AddFunc<Next, FunctionTuple, FunctionTagList>::add(L, tuple, reg);
+            __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::add(L, functions, reg);
         }
     };
-    template<class FunctionTuple, class FunctionTagList>
-    struct __AddFunc<Loki::NullType, FunctionTuple, FunctionTagList> {
-        static void add(lua_State *L, const FunctionTuple &tuple, int top) {}
-        static void add(lua_State *L, const FunctionTuple &tuple) {}
-        static void add(lua_State *L, const FunctionTuple &tuple, luaL_Reg *reg){}
+    template<class Functions,
+        class FunctionsAccessor,
+        class FunctionTagList>
+    struct __AddFunc<Loki::NullType,
+        Functions,
+        FunctionsAccessor,
+        FunctionTagList>
+    {
+        static void add(lua_State *L, const Functions &functions, int top) {}
+        static void add(lua_State *L, const Functions &functions) {}
+        static void add(lua_State *L, const Functions &functions, luaL_Reg *reg){}
     };
     
 }
 
 /**
- * @brief register functions within a module
+ * @accessor for tuples used in @see registerFunction() when Functions
+ * are stored in a tuple
  */
-template <class FunctionTagList, class FunctionTuple>
-void registerFunctions(
-	lua_State *L,
-    const FunctionTuple &tuple,
-	const std::string &modulename)
-{
+template <class Tuple>
+struct TupleAccessor {
+    template <int Index>
+    static const typename boost::tuples::element<Index, Tuple>::type &
+    get(const Tuple &tuple) {
+        return boost::get<Index>(tuple);
+    }
+};
+
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerFunctions(lua_State *L, const Functions &f, const std::string &modulename) {
     lua_getglobal(L, modulename.c_str());
     if (lua_istable(L, -1) != 1) {
         lua_newtable(L);
         int top = lua_gettop(L);
-        __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, top);
+        __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f, top);
         lua_setglobal(L, modulename.c_str());
         return;
     }
     int top = lua_gettop(L);
-    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, top);
-    
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f, top);
 }
+
+
 
 /**
  * @brief register functions
  */
-template <class FunctionTagList, class FunctionTuple>
-void registerFunctions(
-	lua_State *L,
-    const FunctionTuple &tuple)
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerFunctions(lua_State *L, const Functions &f)
 {
-    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple);
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f);
 }
-
 //-----------------------------------------------------------------------------
 /**
  * @brief register functions as class
  */
- template <class FunctionTagList, class FunctionTuple>
-void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &name) {
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerClass(lua_State *L, const Functions &functions, const std::string &name) {
 // https://stackoverflow.com/questions/11100435/how-do-i-create-a-class-object-in-lua-c-api-5-2
     int lib_id, meta_id;
     enum {Size = Loki::TL::Length<FunctionTagList>::value};
     static luaL_Reg fs[Size+1] = {{0}};
     
-    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, fs);
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, functions, fs);
     
     /* newclass = {} */
     lua_createtable(L, 0, 0);
@@ -491,15 +513,10 @@ void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &
     /* metatable = {} */
     luaL_newmetatable(L, name.c_str());
     meta_id = lua_gettop(L);
-    //luaL_setfuncs(L, _meta, 0);
 
     /* metatable.__index = _methods */
     luaL_newlib(L, fs);
     lua_setfield(L, meta_id, "__index");
-
-    /* metatable.__metatable = _meta */
-    //luaL_newlib(L, _meta);
-    //lua_setfield(L, meta_id, "__metatable");
 
     /* class.__metatable = metatable */
     lua_setmetatable(L, lib_id);
@@ -513,12 +530,13 @@ void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &
  */
 template <class FunctionTagList,
     class MetaFunctionTagList,
-    class FunctionTuple,
-    class MetaFunctionTuple
+    template <class> class FunctionsAccessor,
+    class Functions,
+    class MetaFunctions
 >
 void registerClass(lua_State *L,
-    const FunctionTuple &tuple,
-    const MetaFunctionTuple &mTuple,
+    const Functions &functions,
+    const MetaFunctions &mFunctions,
     const std::string &name)
 {
 // https://stackoverflow.com/questions/11100435/how-do-i-create-a-class-object-in-lua-c-api-5-2
@@ -528,8 +546,8 @@ void registerClass(lua_State *L,
     static luaL_Reg fs[Size+1] = {{0}};
     static luaL_Reg m_fs[MSize+1] = {{0}};
     
-    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, fs);
-    __AddFunc<MetaFunctionTagList, MetaFunctionTuple>::add(L, mTuple, m_fs);
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, functions, fs);
+    __AddFunc<MetaFunctionTagList, MetaFunctions, FunctionsAccessor<MetaFunctions> >::add(L, mFunctions, m_fs);
     
     /* newclass = {} */
     lua_createtable(L, 0, 0);
@@ -558,7 +576,7 @@ void registerClass(lua_State *L,
 /**
  * @brief register functions as class
  */
-void registerClass(lua_State *L, const std::string &name) {
+inline void registerClass(lua_State *L, const std::string &name) {
     int lib_id, meta_id;
     
     /* newclass = {} */
@@ -576,9 +594,6 @@ void registerClass(lua_State *L, const std::string &name) {
     /* _G["Foo"] = newclass */
     lua_setglobal(L, name.c_str());
 }
-
-
-
 
 }} // namespace
 #endif /* LUASCRIPT_HPP_ */
