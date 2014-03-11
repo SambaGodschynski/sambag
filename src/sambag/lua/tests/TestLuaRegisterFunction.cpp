@@ -29,6 +29,11 @@ struct WhoAmIFunction_Tag {
 	static const char * name() { return "whoAmI"; }
 };
 
+struct ObjXToString_Tag {
+	typedef boost::function<std::string()> Function;
+	static const char * name() { return "__tostring"; }
+};
+
 struct StrLenFunction_Tag {
 	typedef boost::function<size_t(std::string)> Function;
 	static const char * name() { return "strLen"; }
@@ -92,12 +97,32 @@ struct FooGodMonster {
         return !x;
     }
     //-------------------------------------------------------------------------
+    std::string oxToString() {
+        lua_getfield(L, -1, "__usr");
+        int *x = (int*)lua_touserdata(L, -1);
+        if (!x) {
+            return "no userdata";
+        }
+        return sambag::com::toString(*x);
+    }
+    //-------------------------------------------------------------------------
     Loki::NullType createObject() {
-        sambag::lua::registerClass(L, "ClassX");
+        typedef Loki::NullType Fs;
+        typedef LOKI_TYPELIST_1(ObjXToString_Tag) MetaFs;
+        sambag::lua::registerClass<Fs, MetaFs>(L,
+            boost::make_tuple(),
+            boost::make_tuple(
+                boost::bind(&FooGodMonster::oxToString, this)
+            ),
+            "ClassX"
+        );
         lua_getglobal(L, "ClassX");
         int lib_id = lua_gettop(L);
         lua_pushinteger(L, 1010);
         lua_setfield(L, lib_id, "x");
+        int *usr = (int*)lua_newuserdata (L, 1);
+        *usr = 999;
+        lua_setfield(L, lib_id, "__usr");
         return Loki::NullType();
     }
 };
@@ -332,6 +357,7 @@ void TestLuaScript::testRegisterClass() {
     executeLuaString(L, "o2.x = o1.x + o2.x");
     executeLuaString(L, "mod:assert(o1.x == 1010)");
     executeLuaString(L, "mod:assert(o2.x == 2020)");
+    executeLuaString(L, "mod:assert(tostring(o1) == '999')");
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct Invert_Tag {

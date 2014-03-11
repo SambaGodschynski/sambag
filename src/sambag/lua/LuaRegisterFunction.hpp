@@ -511,6 +511,53 @@ void registerClass(lua_State *L, const FunctionTuple &tuple, const std::string &
 /**
  * @brief register functions as class
  */
+template <class FunctionTagList,
+    class MetaFunctionTagList,
+    class FunctionTuple,
+    class MetaFunctionTuple
+>
+void registerClass(lua_State *L,
+    const FunctionTuple &tuple,
+    const MetaFunctionTuple &mTuple,
+    const std::string &name)
+{
+// https://stackoverflow.com/questions/11100435/how-do-i-create-a-class-object-in-lua-c-api-5-2
+    int lib_id, meta_id;
+    enum {Size = Loki::TL::Length<FunctionTagList>::value};
+    enum {MSize = Loki::TL::Length<MetaFunctionTagList>::value};
+    static luaL_Reg fs[Size+1] = {{0}};
+    static luaL_Reg m_fs[MSize+1] = {{0}};
+    
+    __AddFunc<FunctionTagList, FunctionTuple>::add(L, tuple, fs);
+    __AddFunc<MetaFunctionTagList, MetaFunctionTuple>::add(L, mTuple, m_fs);
+    
+    /* newclass = {} */
+    lua_createtable(L, 0, 0);
+    lib_id = lua_gettop(L);
+
+    /* metatable = {} */
+    luaL_newmetatable(L, name.c_str());
+    meta_id = lua_gettop(L);
+    luaL_setfuncs(L, m_fs, 0);
+
+    /* metatable.__index = _methods */
+    luaL_newlib(L, fs);
+    lua_setfield(L, meta_id, "__index");
+
+    /* metatable.__metatable = _meta */
+    luaL_newlib(L, m_fs);
+    lua_setfield(L, meta_id, "__metatable");
+
+    /* class.__metatable = metatable */
+    lua_setmetatable(L, lib_id);
+
+    /* _G["Foo"] = newclass */
+    lua_setglobal(L, name.c_str());
+}
+//-----------------------------------------------------------------------------
+/**
+ * @brief register functions as class
+ */
 void registerClass(lua_State *L, const std::string &name) {
     int lib_id, meta_id;
     
