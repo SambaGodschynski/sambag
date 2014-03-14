@@ -9,6 +9,7 @@
 #define $$$ONCE$$$
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "AComponent.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -23,6 +24,7 @@ public:
 	typedef AComponent / AContainer Super;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<$$$NAME$$$> Ptr;
+	typedef boost::weak_ptr<$$$NAME$$$> WPtr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:

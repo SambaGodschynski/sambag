@@ -25,6 +25,7 @@
 #include <sambag/disco/svg/graphicElements/Style.hpp>
 #include "Animation.hpp"
 #include "sambag/disco/Tweens.hpp"
+#include <boost/algorithm/string.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace sce = sambag::com::events;
@@ -270,12 +271,14 @@ public:
 	 */
 	void updateLists();
 	//-------------------------------------------------------------------------
-	std::string selectionPathToString(const std::string & seperator = "/") const{
-		return pathToString(getSelectionPath(), seperator);
+	std::string selectionPathToString(char separator = '/') const {
+		return pathToString(getSelectionPath(), separator);
 	}
+    //-------------------------------------------------------------------------
+    void setSelectionPath(const std::string &path, char separator = '/');
 	//-------------------------------------------------------------------------
 	std::string pathToString( const Path &path, 
-		const std::string & seperator = "/" ) const;
+		char separator = '/' ) const;
 	//-------------------------------------------------------------------------
 	const Path & getSelectionPath() const {
 		return selectionPath;
@@ -564,16 +567,62 @@ template <class TM,
 std::string 
 AColumnBrowser<TM, CR, LM, LSM>::pathToString(
 	const typename AColumnBrowser<TM, CR, LM, LSM>::Path &path,
-	const std::string & seperator) const
+	char separator) const
 {
 	if (path.size()<=1) // only root inside
 		return "";
 	std::stringstream ss;
 	ss<<Model::getNodeData(path[1]);
 	for (int i=2; i<(int)path.size(); ++i) {
-		ss<<seperator<<Model::getNodeData(path[i]);
+		ss<<separator<<Model::getNodeData(path[i]);
 	}
 	return ss.str();
+}
+//-------------------------------------------------------------------------
+template <class TM, 
+	template <class> class CR,
+	template <class> class LM,
+	class LSM
+>
+void AColumnBrowser<TM, CR, LM, LSM>::
+setSelectionPath(const std::string &path, char separator) {
+    using namespace boost::algorithm;
+    
+    std::vector<std::string> strNodes;
+    const char strSep[] = {separator, '\0'};
+    split( strNodes, path, is_any_of(std::string(strSep)), token_compress_on );
+    
+    selectionPath.clear();
+    selectionPath.push_back(Model::getRootNode());
+    bool found = true;
+    
+    for (size_t i=0; i<strNodes.size(); ++i) {
+        if (!found) {
+            break;
+        }
+        found = false;
+        std::vector<Node> nodes;
+        Model::getChildren(selectionPath.back(), nodes);
+        size_t index = 0;
+        BOOST_FOREACH(const Node &x, nodes) {
+            if (com::toString(getNodeData(x)) == strNodes[i]) {
+                // found some match
+                selectionPath.push_back(x);
+                found = true;
+                ListTypePtr list = columnView->getList(
+                    selectionPathIndexToListIndex(selectionPath.size()-1));
+                if (!list) {
+                    break;
+                }
+                list->clearSelection();
+                list->setSelectedIndex(index);
+                break; //continue
+            }
+            ++index;
+        }
+    }
+    
+    
 }
 }}} // namespace(s)
 #endif /* SAMBAG_ACOLUMNBROWSER_H */

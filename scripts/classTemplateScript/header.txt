@@ -9,6 +9,7 @@
 #define $$$ONCE$$$
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 namespace sambag {
 
@@ -21,6 +22,8 @@ class $$$NAME$$$ {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<$$$NAME$$$> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<$$$NAME$$$> WPtr;
 protected:
 private:
 public:

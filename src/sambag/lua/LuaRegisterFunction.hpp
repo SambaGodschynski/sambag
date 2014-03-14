@@ -407,7 +407,7 @@ namespace {
             typedef typename It::Tail Next;
             typedef RegisterHelperClass<T> Helper;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
-            Helper::fMap[L] = FunctionsAccessor::template get<Index>(functions);
+            FunctionsAccessor::template get<Index>(functions, Helper::fMap[L]);
             lua_pushstring(L, T::name());
             lua_pushcfunction(L, &Helper::luaCallback);
             lua_settable(L, top);
@@ -417,7 +417,9 @@ namespace {
             typedef typename It::Head T;
             typedef typename It::Tail Next;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
-            registerFunction<T>(L, FunctionsAccessor::template get<Index>(functions) );
+            typename T::Function f;
+            FunctionsAccessor::template get<Index>(functions, f);
+            registerFunction<T>(L, f);
             __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::add(L, functions);
         }
         static void add(lua_State *L, const Functions &functions, luaL_Reg *reg)
@@ -426,7 +428,7 @@ namespace {
             typedef typename It::Tail Next;
             enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
             typedef RegisterHelperClass<T> Helper;
-            Helper::fMap[L] = FunctionsAccessor::template get<Index>(functions);
+            FunctionsAccessor::template get<Index>(functions, Helper::fMap[L]);
             reg[Index].name = T::name();
             reg[Index].func = &Helper::luaCallback;
             __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::add(L, functions, reg);
@@ -453,10 +455,9 @@ namespace {
  */
 template <class Tuple>
 struct TupleAccessor {
-    template <int Index>
-    static const typename boost::tuples::element<Index, Tuple>::type &
-    get(const Tuple &tuple) {
-        return boost::get<Index>(tuple);
+    template <int Index, class Result>
+    static void get(const Tuple &tuple, Result &out) {
+        out = boost::get<Index>(tuple);
     }
 };
 
