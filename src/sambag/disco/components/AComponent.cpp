@@ -353,6 +353,10 @@ AComponent::getComponentDrawContext(IDrawContext::Ptr cn) const
 	//              componentGraphics = new DebugGraphics(g,this);
 	//          }
 	//      }
+	if (!cn) {
+		SAMBAG_LOG_WARN<<"AComponent::getComponentDrawContext() context == NULL";
+		return IDrawContext::Ptr();	
+	}
 	cn->setStrokeColor(getForeground());
 	cn->setFillColor(getForeground());
 	cn->setFont(getFont());

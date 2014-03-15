@@ -57,7 +57,7 @@ void TestConcreteComponents::testButton() {
 		boost::bind(&tests::TestButtonAction::execute, &action)
 	);
 	cont->add(btn);
-	cont->validate();
+	root->revalidate();
 	
 	std::stringstream ss;
 	root->printComponentTree(std::cout);
