@@ -31,7 +31,7 @@ namespace tests {
 void TestRootPane::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	namespace sd = sambag::disco; // conflict with window.h Rectangle (why?)
+	namespace sd = sambag::disco;
 	if (!wfac) {
 		wfac = WindowTestToolkit<>::create();
 	}
