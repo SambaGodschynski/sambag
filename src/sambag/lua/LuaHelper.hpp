@@ -34,6 +34,16 @@
 
 namespace sambag { namespace lua {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * @brief special values for lua func. register, use its reg. system
+ * but ignore arguments/return values
+ */
+typedef void IgnoreArgs;
+typedef Loki::NullType IgnoreReturn;
+typedef boost::tuple<IgnoreReturn, IgnoreReturn> IgnoreReturn2;
+typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn3;
+typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn4;
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 typedef boost::shared_ptr<lua_State> LuaStateRef;
 inline LuaStateRef createLuaStateRef(bool openLibs = true) {
 	LuaStateRef lRef(luaL_newstate(), &lua_close);
@@ -132,6 +142,10 @@ inline bool get<bool>(bool &out, lua_State *L, int index) {
 	if (!isType<bool>(L, index))
 		return false;
 	out = lua_toboolean(L, index);
+	return true;
+}
+template <>
+inline bool get<Loki::NullType>(Loki::NullType &out, lua_State *L, int index) {
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -406,6 +420,11 @@ void getGlobal(lua_State *L, T &outValue, const T &failed, const std::string &na
 	if (!getGlobal(L, outValue, name)) {
 		outValue = failed;
 	}
+}
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+inline void pushLuaError(lua_State *L, const std::string &msg) {
+    push(L, msg);
+    lua_error(L);
 }
 }} //namespaces
 #endif /* LUAHELPER_HPP_ */

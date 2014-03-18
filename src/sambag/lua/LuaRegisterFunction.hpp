@@ -13,6 +13,7 @@
 #include <lua.hpp>
 #include <sambag/com/Helper.hpp>
 #include <loki/Typelist.h>
+#include <sambag/com/exceptions/IllegalArgumentException.hpp>
 
 #ifndef LUASCRIPT_HPP_
 #define LUASCRIPT_HPP_
@@ -461,6 +462,25 @@ struct TupleAccessor {
     }
 };
 
+
+/**
+ * @brief add functions to table on stack index
+ */
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerFunctions(lua_State *L, const Functions &f, int index) {
+    if (lua_istable(L, -1) != 1) {
+        SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+        "registerFunctions: index not a table");
+    }
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f, index);
+}
+
+/**
+ * @brief finds or creates table and add functions to it
+ */
 template <class FunctionTagList,
     template <class> class FunctionsAccessor,
     class Functions
@@ -479,9 +499,8 @@ void registerFunctions(lua_State *L, const Functions &f, const std::string &modu
 }
 
 
-
 /**
- * @brief register functions
+ * @brief register as global functions
  */
 template <class FunctionTagList,
     template <class> class FunctionsAccessor,
@@ -494,12 +513,13 @@ void registerFunctions(lua_State *L, const Functions &f)
 //-----------------------------------------------------------------------------
 /**
  * @brief register functions as class
+ * @return lua stack index of created table
  */
 template <class FunctionTagList,
     template <class> class FunctionsAccessor,
     class Functions
 >
-void registerClass(lua_State *L, const Functions &functions, const std::string &name) {
+int createClass(lua_State *L, const Functions &functions, const std::string &name) {
 // https://stackoverflow.com/questions/11100435/how-do-i-create-a-class-object-in-lua-c-api-5-2
     int lib_id, meta_id;
     enum {Size = Loki::TL::Length<FunctionTagList>::value};
@@ -521,13 +541,13 @@ void registerClass(lua_State *L, const Functions &functions, const std::string &
 
     /* class.__metatable = metatable */
     lua_setmetatable(L, lib_id);
-
-    /* _G["Foo"] = newclass */
-    lua_setglobal(L, name.c_str());
+    
+    return lib_id;
 }
 //-----------------------------------------------------------------------------
 /**
  * @brief register functions as class
+ * @return lua stack index of created table
  */
 template <class FunctionTagList,
     class MetaFunctionTagList,
@@ -535,7 +555,7 @@ template <class FunctionTagList,
     class Functions,
     class MetaFunctions
 >
-void registerClass(lua_State *L,
+int createClass(lua_State *L,
     const Functions &functions,
     const MetaFunctions &mFunctions,
     const std::string &name)
@@ -569,15 +589,15 @@ void registerClass(lua_State *L,
 
     /* class.__metatable = metatable */
     lua_setmetatable(L, lib_id);
-
-    /* _G["Foo"] = newclass */
-    lua_setglobal(L, name.c_str());
+    
+    return lib_id;
 }
 //-----------------------------------------------------------------------------
 /**
  * @brief register functions as class
+ * @return lua stack index of created table
  */
-inline void registerClass(lua_State *L, const std::string &name) {
+inline int createClass(lua_State *L, const std::string &name) {
     int lib_id, meta_id;
     
     /* newclass = {} */
@@ -591,9 +611,8 @@ inline void registerClass(lua_State *L, const std::string &name) {
 
     /* class.__metatable = metatable */
     lua_setmetatable(L, lib_id);
-
-    /* _G["Foo"] = newclass */
-    lua_setglobal(L, name.c_str());
+    
+    return lib_id;
 }
 
 }} // namespace

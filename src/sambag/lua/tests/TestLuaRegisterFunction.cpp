@@ -109,14 +109,13 @@ struct FooGodMonster {
     Loki::NullType createObject() {
         typedef Loki::NullType Fs;
         typedef LOKI_TYPELIST_1(ObjXToString_Tag) MetaFs;
-        sambag::lua::registerClass<Fs, MetaFs, sambag::lua::TupleAccessor>(L,
+        sambag::lua::createClass<Fs, MetaFs, sambag::lua::TupleAccessor>(L,
             boost::make_tuple(),
             boost::make_tuple(
                 boost::bind(&FooGodMonster::oxToString, this)
             ),
             "ClassX"
         );
-        lua_getglobal(L, "ClassX");
         int lib_id = lua_gettop(L);
         lua_pushinteger(L, 1010);
         lua_setfield(L, lib_id, "x");
@@ -333,7 +332,7 @@ void TestLuaScript::testRegisterClass() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_5(Sum04Function_Tag,
         Add04Function_Tag, Incr_Tag, Assert_Tag, CreateObject_Tag) Fs;
-    registerClass<Fs, TupleAccessor>(L,
+    createClass<Fs, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::sum, &foo, _1, _2, _3, _4),
             boost::bind(&FooGodMonster::add, &foo, _1, _2, _3, _4),
@@ -343,6 +342,7 @@ void TestLuaScript::testRegisterClass() {
         ),
         "mod"
     );
+    lua_setglobal(L, "mod");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
 	executeLuaString(L, "mod:add( mod.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
@@ -366,13 +366,14 @@ void TestLuaScript::testBooleanIssue() {
 	FooGodMonster foo(L);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_2(Invert_Tag, Assert_Tag) Fs;
-    registerClass<Fs, TupleAccessor>(L,
+    createClass<Fs, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&FooGodMonster::invert, &foo, _1),
             boost::bind(&FooGodMonster::fucking_macros_assert, &foo, _1)
         ),
         "obj"
     );
+    lua_setglobal(L, "obj");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
 	executeLuaString(L, "obj:assert( obj:invert(false) )");
