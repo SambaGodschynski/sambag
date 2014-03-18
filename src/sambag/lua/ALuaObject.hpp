@@ -37,7 +37,7 @@ public:
     //-------------------------------------------------------------------------
     SAMBAG_LUA_FTAG(__gc, void());
     SAMBAG_LUA_FTAG(__tostring, std::string());
-     SAMBAG_LUA_FTAG(__eq, bool());
+    SAMBAG_LUA_FTAG(__eq, bool());
     typedef Loki::NullType Functions;
     typedef LOKI_TYPELIST_3(Frx___gc_Tag,
                             Frx___tostring_Tag,
