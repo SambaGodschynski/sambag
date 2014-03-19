@@ -345,7 +345,7 @@ void TestLuaScript::testRegisterClass() {
     lua_setglobal(L, "mod");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
 	CPPUNIT_ASSERT_EQUAL( Str(""), foo.stringValue);
-	executeLuaString(L, "mod:add( mod.sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
+	executeLuaString(L, "mod:add( mod:sum('a', 'b', 'c', 'd' ), 'e', 'f', 'g' )");
     CPPUNIT_ASSERT_EQUAL( Str("abcdefg"), foo.stringValue);
     executeLuaString(L, "mod.x = 100");
     executeLuaString(L, "mod:assert( mod:incr() == 101 )");
@@ -355,6 +355,59 @@ void TestLuaScript::testRegisterClass() {
     executeLuaString(L, "mod:assert(o1.x == 1010)");
     executeLuaString(L, "mod:assert(o2.x == 2020)");
     executeLuaString(L, "mod:assert(tostring(o1) == '999')");
+}
+//-----------------------------------------------------------------------------
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+struct LuaClass {
+    std::string id() const {
+        std::stringstream ss;
+        ss<<std::hex<<this;
+        return ss.str();
+    }
+    static void nassert(const std::string &a, const std::string &b) {
+        CPPUNIT_ASSERT(!a.empty());
+        CPPUNIT_ASSERT(!b.empty());
+        CPPUNIT_ASSERT(a!=b);
+    }
+};
+struct GetClassId_Tag {
+	typedef boost::function<std::string()> Function;
+	static const char * name() { return "id"; }
+};
+struct TwoStrAssert_Tag {
+	typedef boost::function<void(std::string, std::string)> Function;
+	static const char * name() { return "nassert"; }
+};
+void TestLuaScript::testClassesObjectRelatedCallback() {
+	using namespace sambag::lua;
+	LuaClass luaClass;
+    LuaClass luaClass2;
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
+	typedef LOKI_TYPELIST_2(GetClassId_Tag, TwoStrAssert_Tag) Fs;
+    createClass<Fs, TupleAccessor>(L,
+        boost::make_tuple(
+            boost::bind(&LuaClass::id, &luaClass),
+            boost::bind(&LuaClass::nassert, _1, _2)
+        ),
+        "lc1"
+    );
+    lua_setglobal(L, "lc1");
+    
+    createClass<Fs, TupleAccessor>(L,
+        boost::make_tuple(
+            boost::bind(&LuaClass::id, &luaClass2),
+            boost::bind(&LuaClass::nassert, _1, _2)
+        ),
+        "lc2"
+    );
+    lua_setglobal(L, "lc2");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
+    // the id() functions returns the c++ object this pointer as string
+    // both have to be unique aka not equal. thats why I found
+    // a conceptional bug with lua::register function
+    // so it was not possible to register one function tag and one lua_state
+    // to several objects.
+    executeLuaString(L, "lc1:nassert(lc1:id(), lc2:id() )");
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct Invert_Tag {

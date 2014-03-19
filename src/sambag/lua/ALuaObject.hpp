@@ -31,6 +31,8 @@ class ALuaObject :
 {
 //=============================================================================
 public:
+    //-------------------------------------------------------------------------
+    static const std::string FIELDNAME_UID;
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ALuaObject> Ptr;
     typedef boost::weak_ptr<ALuaObject> WPtr;

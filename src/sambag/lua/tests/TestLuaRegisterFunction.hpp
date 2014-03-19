@@ -23,6 +23,7 @@ private:
 	CPPUNIT_TEST( testRegisterFunction05 );
     CPPUNIT_TEST( testRegisterModuleFunction );
     CPPUNIT_TEST( testRegisterClass );
+    CPPUNIT_TEST( testClassesObjectRelatedCallback );
     CPPUNIT_TEST( testBooleanIssue );
 	CPPUNIT_TEST( testReturnTuple01 );
 	CPPUNIT_TEST_SUITE_END();
@@ -37,6 +38,7 @@ public:
 	void testRegisterFunction05();
     void testRegisterModuleFunction();
     void testRegisterClass();
+    void testClassesObjectRelatedCallback();
     void testBooleanIssue();
 	void testReturnTuple01();
 };
