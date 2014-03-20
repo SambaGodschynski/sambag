@@ -38,7 +38,6 @@ namespace sambag { namespace lua {
  * @brief special values for lua func. register, use its reg. system
  * but ignore arguments/return values
  */
-typedef void IgnoreArgs;
 typedef Loki::NullType IgnoreReturn;
 typedef boost::tuple<IgnoreReturn, IgnoreReturn> IgnoreReturn2;
 typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn3;

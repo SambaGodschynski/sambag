@@ -10,6 +10,7 @@
 #include <sambag/lua/LuaRegisterFunction.hpp>
 #include <sambag/com/Common.hpp>
 #include <boost/unordered_set.hpp>
+#include <sambag/com/exceptions/IllegalStateException.hpp>
 
 namespace sambag { namespace lua {
 namespace {
@@ -42,7 +43,6 @@ void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
 }
 //-----------------------------------------------------------------------------
 void ALuaObject::__gc(lua_State *lua) {
-    SAMBAG_LOG_TRACE<<toString(lua)<<" __gc()";
 }
 //-----------------------------------------------------------------------------
 std::string ALuaObject::__tostring(lua_State *lua) {
@@ -69,6 +69,16 @@ void ALuaObject::createLuaObject(lua_State * lua, const std::string &name)
         ),
         name
     );
+    
+    lua_getfield(lua, index, FIELDNAME_UID.c_str());
+    if (!lua_isstring(lua, -1)) {
+        SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
+        "failed to access sambag.lua.ALuaObject.UID");
+    }
+    boost::tuple<std::string> _uid;
+    pop(lua, _uid);
+    this->uid = boost::get<0>(_uid);
+    
     addLuaFields(lua, index);
 }
 //-----------------------------------------------------------------------------

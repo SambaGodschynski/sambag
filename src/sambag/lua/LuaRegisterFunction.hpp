@@ -17,6 +17,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <boost/unordered_map.hpp>
 
 #ifndef LUASCRIPT_HPP_
 #define LUASCRIPT_HPP_
@@ -377,7 +378,7 @@ struct RegisterHelperClass {
 //=============================================================================
 	typedef typename FunctionTag::Function Function;
     typedef MappingKeyType Key;
-	typedef std::map<Key, Function> FMap;
+	typedef boost::unordered_map<Key, Function> FMap;
 	static FMap fMap;
 	static int luaCallback(lua_State *L) {
 		typename FMap::iterator it = fMap.find(L);
@@ -396,7 +397,7 @@ struct RegisterHelperClass {
 	}
 	static int luaClassCallback(lua_State *L) {
         // get uid value
-        lua_getfield(L, -1-Function::arity, SLUA_FIELDNAME_UID);
+        lua_getfield(L, 1, SLUA_FIELDNAME_UID);
         if (!lua_isstring(L, -1)) {
             throw ExecutionFailed(
 					std::string("class function callback failed with: ") + FunctionTag::name()
@@ -418,11 +419,12 @@ struct RegisterHelperClass {
 			com::Int2Type<Function::arity>(), // num args
 			com::Int2Type<IsVoidValue>() // isVoid
 		);
+        
 		return NumReturnValues<typename Function::result_type>::Value;
 	}
 };
 template <class FunctionTag, class MappingKeyType>
-std::map<MappingKeyType, typename FunctionTag::Function>
+boost::unordered_map<MappingKeyType, typename FunctionTag::Function>
 RegisterHelperClass<FunctionTag, MappingKeyType>::fMap;
 } // namespace
 
@@ -494,6 +496,17 @@ namespace {
             reg[Index].func = &Helper::luaClassCallback;
             __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::addClassFunctions(L, functions, reg, classMappingKey);
         }
+        static void addClassFunctions(lua_State *L, const Functions &functions, int top, const std::string &classMappingKey) {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            typedef RegisterHelperClass<T, std::string> Helper;
+            enum { Index = Loki::TL::IndexOf<FunctionTagList, T>::value };
+            FunctionsAccessor::template get<Index>(functions, Helper::fMap[classMappingKey]);
+            lua_pushstring(L, T::name());
+            lua_pushcfunction(L, &Helper::luaClassCallback);
+            lua_settable(L, top);
+            __AddFunc<Next, Functions, FunctionsAccessor, FunctionTagList>::addClassFunctions(L, functions, top, classMappingKey);
+        }
     };
     template<class Functions,
         class FunctionsAccessor,
@@ -507,6 +520,7 @@ namespace {
         static void add(lua_State*, const Functions &) {}
         static void add(lua_State*, const Functions &, luaL_Reg*){}
         static void addClassFunctions(lua_State*, const Functions&, luaL_Reg*, const std::string &){}
+        static void addClassFunctions(lua_State*, const Functions&, int top, const std::string&){}
     };
     
 }
@@ -542,6 +556,26 @@ void registerFunctions(lua_State *L, const Functions &f, int index) {
         "registerFunctions: index not a table");
     }
     __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f, index);
+}
+
+/**
+ * @brief add functions to table on stack index
+ * @note this function mapping uses the lua state and the Function tag
+ * as key, which means one tag can only be registered per lua state.
+ * if you try to register one function tag on several objects via boost bind
+ * it will not work. consider using @see for createClass() this purpose
+ * (here we can use lua a uid table fields for mapping)
+ */
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerClassFunctions(lua_State *L, const Functions &f, int index, const std::string &classUID) {
+    if (lua_istable(L, -1) != 1) {
+        SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+        "registerFunctions: index not a table");
+    }
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::addClassFunctions(L, f, index, classUID);
 }
 
 /**
