@@ -71,6 +71,9 @@ sambag::com::BoostTimerImpl2::Timer *timerImpl)
         if (i>=tm->getNumRepetitions() && tm->getNumRepetitions()>=0) {
             return;
         }
+        if (tm->unconnected() && i>0) {
+            return; // no listeners anymore
+        }
         sambag::com::ITimer::Milliseconds ms = tm->getDelay();
         timerImpl->expires_from_now(boost::posix_time::milliseconds(ms));
         timerImpl->async_wait( boost::bind(&timerExpired, _1, tm, timerImpl) );

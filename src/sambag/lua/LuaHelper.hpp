@@ -44,6 +44,7 @@ typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn3;
 typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn4;
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 typedef boost::shared_ptr<lua_State> LuaStateRef;
+typedef boost::weak_ptr<lua_State> LuaStateWRef;
 inline LuaStateRef createLuaStateRef(bool openLibs = true) {
 	LuaStateRef lRef(luaL_newstate(), &lua_close);
 	if (!openLibs)
@@ -184,7 +185,9 @@ namespace {
 //-----------------------------------------------------------------------------
 inline bool hasFunction(lua_State *L, const std::string &fName) {
 	lua_getglobal(L, fName.c_str());
-	return lua_isfunction(L, -1)==1;
+	bool res = lua_isfunction(L, -1)==1;
+    lua_pop(L, 1);
+    return res;
 }
 inline void executeString(lua_State *L, const std::string &str) {
 	luaL_loadstring (L, str.c_str());
