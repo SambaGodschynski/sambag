@@ -31,7 +31,7 @@ void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
     if (!obj) {
         return;
     }
-    obj->__gc(lua);
+    obj->__lua_gc(lua);
     Holder::iterator it = holder.find(obj);
     if (it==holder.end()) {
         SAMBAG_LOG_WARN<<"failed to unregister ALuaObject";
@@ -42,7 +42,7 @@ void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
     //obj will be killed after leaving scope
 }
 //-----------------------------------------------------------------------------
-void ALuaObject::__gc(lua_State *lua) {
+void ALuaObject::__lua_gc(lua_State *lua) {
 }
 //-----------------------------------------------------------------------------
 std::string ALuaObject::__tostring(lua_State *lua) {
