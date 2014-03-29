@@ -17,6 +17,7 @@
 #include <boost/filesystem.hpp>
 #include <sambag/disco/components/events/MouseEventCreator.hpp>
 #include "TestComponents.hpp"
+#include <sambag/disco/components/WindowToolkit.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestConcreteComponents );
@@ -29,17 +30,24 @@ namespace tests {
 void TestConcreteComponents::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	IDiscoFactory *fac = getDiscoFactory();
-	surf = fac->createImageSurface(320, 80);
-	root = RootPane::create(surf);
-	ui::UIManager::instance().installLookAndFeel(
-			root,
-			ui::basic::BasicLookAndFeel::create()
-	);
-	cont = root->getContentPane();
+	namespace sd = sambag::disco;
+	if (!wfac) {
+		wfac = WindowTestToolkit<>::create();
+	}
+	sambag::disco::components::setWindowToolkit(wfac.get());
+
+	win = Window::create();
+
+	win->setWindowBounds(Rectangle(0,0, 320, 80));
+
+	surf = getDiscoFactory()->createImageSurface(320, 80);
+	root = win->getRootPane();
+	root->setSurface(surf);
+	cont = win->getContentPane();
 	cont->setLayout(FlowLayout::create());
-	cont->setSize(320, 80);
-	cont->validate();
+	cont->setPreferredSize(Dimension(320, 80));
+	win->revalidate();
+	win->open();
 }
 //-----------------------------------------------------------------------------
 void TestConcreteComponents::testButton() {
@@ -57,13 +65,13 @@ void TestConcreteComponents::testButton() {
 		boost::bind(&tests::TestButtonAction::execute, &action)
 	);
 	cont->add(btn);
-	cont->validate();
+	root->revalidate();
 	
 	std::stringstream ss;
-	root->printComponentTree(std::cout);
+	root->printComponentTree(ss);
 
 	/*CPPUNIT_ASSERT_EQUAL(std::string("[RootPane,0,0,320x80,alignmentX=0.5,alignmentY=0.5]\
- [RootPane conetent pane,135,17,1.2732e-313x2.28736e-268,invalid,alignmentX=0.5\
+ [RootPane conetent pane,135,17,320x280,invalid,alignmentX=0.5\
 ,alignmentY=0.5]\
  [do it!, Button01,140,5,44.9626x24,invalid]"), ss.str());*/
 

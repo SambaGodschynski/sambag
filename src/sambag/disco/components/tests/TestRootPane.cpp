@@ -31,43 +31,33 @@ namespace tests {
 void TestRootPane::setUp() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	namespace sd = sambag::disco; // conflict with window.h Rectangle (why?)
+	namespace sd = sambag::disco;
 	if (!wfac) {
 		wfac = WindowTestToolkit<>::create();
 	}
 	sambag::disco::components::setWindowToolkit(wfac.get());
 
 	win = Window::create();
-	win->setBounds(0,0, 640, 480);
-	win->open();
+	win->setWindowBounds(Rectangle(0,0, 640, 480));
 
 	surf = getDiscoFactory()->createImageSurface(640, 480);
-
 	root = win->getRootPane();
-
-	int i = 0;
-	for (; i < NUM_COMPOS / 2; ++i) {
+	root->setSurface(surf);
+	AContainer::Ptr con = win->getContentPane();
+	con->setLayout(FlowLayout::create());
+	con->setPreferredSize(Dimension(640, 480));
+	for (int i=0; i < NUM_COMPOS; ++i) {
 		std::stringstream ss;
 		ss << "TestComponent" << i;
 		comps[i] = TestComponent::create();
 		comps[i]->setName(ss.str());
 		comps[i]->setBounds(sd::Rectangle(0,0,50 + i*10, 55 + i*10));
 		comps[i]->setBackground(ColorRGBA(0,0,0,1));
-		root->add(comps[i]);
-	}
-	AContainer::Ptr con = win->getContentPane();
-	//con->setLayout(FlowLayout::create());
-	//con->setPreferredSize(Dimension(640, 480));
-	for (; i < NUM_COMPOS; ++i) {
-		std::stringstream ss;
-		ss << "TestComponent" << i;
-		comps[i] = TestComponent::create();
-		comps[i]->setName(ss.str());
-		comps[i]->setBounds(sd::Rectangle(0,0,30, 30));
-		comps[i]->setBackground(ColorRGBA(0,0,0,1));
 		con->add(comps[i]);
 	}
-	win->validate();
+	win->revalidate();
+	win->open();
+	//con->printComponentTree(std::cout);	
 }
 //-----------------------------------------------------------------------------
 void TestRootPane::testRepaint() {
@@ -79,25 +69,22 @@ void TestRootPane::testRepaint() {
 	comps[2]->redraw();
 	root->redraw();
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)14, TestComponent::numDrawCalled);
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)14, TestComponent::numDrawCalled);
 	comps[0]->redraw();
-	CPPUNIT_ASSERT_EQUAL((int)7, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)14, TestComponent::numDrawCalled);
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)8, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)15, TestComponent::numDrawCalled);
 	comps[2]->redraw();
 	RedrawManager::currentManager(root)->drawDirtyRegions();
-	CPPUNIT_ASSERT_EQUAL((int)9, TestComponent::numDrawCalled);
+	CPPUNIT_ASSERT_EQUAL((int)16, TestComponent::numDrawCalled);
 	root->validate();
 }
 //-----------------------------------------------------------------------------
 void TestRootPane::testRootPane() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-
-	root->printComponentTree(std::cout);	
-
 	root->draw( root->getDrawContext() );
 	surf->writeToFile(OUTPUT_FOLDER + "/testRootPane.png");
 	boost::filesystem::exists(OUTPUT_FOLDER + "/testRootPane.png");
@@ -132,17 +119,17 @@ void TestRootPane::testMouseEvent() {
     evc->setRootPane(root);
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	evc->createPressEvent(50, 50, 1);
-	CPPUNIT_ASSERT_EQUAL((size_t)2, tl.lastEvents.size());
+	CPPUNIT_ASSERT_EQUAL((size_t)1, tl.lastEvents.size());
 	CPPUNIT_ASSERT_EQUAL(
-			std::string("MouseEvent(TestComponent1, Point2D(50, 50), DISCO_MOUSE_PRESSED, 1, 0)"),
+			std::string("MouseEvent(TestComponent0, Point2D(50, 50), DISCO_MOUSE_PRESSED, 1, 0)"),
 			tl.lastEvents.top().toString()
 	);
 	tl.lastEvents.pop();
-	CPPUNIT_ASSERT_EQUAL(
+	/*CPPUNIT_ASSERT_EQUAL(
 			std::string("MouseEvent(TestComponent1, Point2D(50, 50), DISCO_MOUSE_ENTERED, 1, 0)"),
 			tl.lastEvents.top().toString()
 	);
-	tl.lastEvents.pop();
+	tl.lastEvents.pop();*/
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	evc->createMoveEvent(10, 10);
 	CPPUNIT_ASSERT_EQUAL((size_t)1, tl.lastEvents.size());

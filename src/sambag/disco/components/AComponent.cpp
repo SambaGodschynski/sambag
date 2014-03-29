@@ -195,10 +195,14 @@ Dimension AComponent::getMaximumSize() {
 		if (dim!=NULL_DIMENSION)
 			return dim;
 	}
-	if (isMaximumSizeSet()) {
-		return maxSize;
+	dim = maxSize;
+	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
+		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+			maxSize = getSize();
+			dim = maxSize;
+		SAMBAG_END_SYNCHRONIZED
 	}
-	return Dimension(9999.,9999.);
+	return dim;
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMinimumSize() {
@@ -353,6 +357,10 @@ AComponent::getComponentDrawContext(IDrawContext::Ptr cn) const
 	//              componentGraphics = new DebugGraphics(g,this);
 	//          }
 	//      }
+	if (!cn) {
+		SAMBAG_LOG_WARN<<"AComponent::getComponentDrawContext() context == NULL";
+		return IDrawContext::Ptr();	
+	}
 	cn->setStrokeColor(getForeground());
 	cn->setFillColor(getForeground());
 	cn->setFont(getFont());

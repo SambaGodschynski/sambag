@@ -11,6 +11,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/com/UnitEx.hpp>
+#include <sambag/disco/components/windowImpl/WindowTestToolkit.hpp>
+#include <sambag/disco/components/Window.hpp>
 
 namespace tests {
 //=============================================================================
@@ -23,6 +25,8 @@ private:
 	sambag::disco::components::RootPane::Ptr root;
 	sambag::disco::components::AContainer::Ptr cont;
 	sambag::disco::IImageSurface::Ptr surf;
+	sambag::disco::components::Window::Ptr win;
+	sambag::disco::components::WindowTestToolkit<>::Ptr wfac;
 public:
 	void setUp();
 	void testButton();
