@@ -26,6 +26,10 @@ const std::string ALuaObject::FIELDNAME_UID = SLUA_FIELDNAME_UID;
 ALuaObject::ALuaObject() {
 }
 //-----------------------------------------------------------------------------
+ALuaObject::~ALuaObject() {
+    
+}
+//-----------------------------------------------------------------------------
 void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
     ALuaObject::Ptr obj = _obj.lock();
     if (!obj) {
@@ -38,6 +42,8 @@ void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
         return;
     }
     holder.erase(it);
+    unregisterClassFunctions<Functions>(obj->getUId());
+    unregisterClassFunctions<MetaFunctions>(obj->getUId());
     
     //obj will be killed after leaving scope
 }

@@ -15,6 +15,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
 #include <loki/NullType.h>
+#include <exception>
 
 // in lua < 502 lua_len doesn't exists.
 #if LUA_VERSION_NUM < 502
@@ -53,9 +54,11 @@ inline LuaStateRef createLuaStateRef(bool openLibs = true) {
 	return lRef;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-struct LuaException {
+struct LuaException : public std::exception {
 	std::string errMsg;
 	LuaException(const std::string &errMsg) : errMsg(errMsg) {}
+    virtual ~LuaException() throw() {}
+    virtual const char* what() const throw() { return errMsg.c_str(); }
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**

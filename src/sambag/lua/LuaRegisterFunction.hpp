@@ -414,12 +414,13 @@ struct RegisterHelperClass {
 			);
 		}
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
-		callF<Function>( it->second,
+        typename FMap::mapped_type f = it->second; // copying here because objects callback
+                                                   // may affect the map
+		callF<Function>(f,
 			L,
 			com::Int2Type<Function::arity>(), // num args
 			com::Int2Type<IsVoidValue>() // isVoid
 		);
-        
 		return NumReturnValues<typename Function::result_type>::Value;
 	}
 };
@@ -523,6 +524,30 @@ namespace {
         static void addClassFunctions(lua_State*, const Functions&, int top, const std::string&){}
     };
     
+    template<class It, class FunctionTagList=It>
+    struct __FuncIt {
+            static void removeClassFunctions(const std::string &classMappingKey) {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            typedef RegisterHelperClass<T, std::string> Helper;
+            Helper::fMap.erase(classMappingKey);
+            __FuncIt<Next, FunctionTagList>::removeClassFunctions(classMappingKey);
+        }
+        static size_t getNumRegistered(const std::string &classMappingKey) {
+            typedef typename It::Head T;
+            typedef typename It::Tail Next;
+            typedef RegisterHelperClass<T, std::string> Helper;
+            return Helper::fMap.count(classMappingKey) +
+                __FuncIt<Next, FunctionTagList>::getNumRegistered(classMappingKey);
+        }
+    };
+    template<class FunctionTagList>
+    struct __FuncIt<Loki::NullType, FunctionTagList>
+    {
+        static void removeClassFunctions(const std::string&){}
+        static size_t getNumRegistered(const std::string&) {return 0;}
+    };
+    
 }
 
 /**
@@ -558,25 +583,6 @@ void registerFunctions(lua_State *L, const Functions &f, int index) {
     __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::add(L, f, index);
 }
 
-/**
- * @brief add functions to table on stack index
- * @note this function mapping uses the lua state and the Function tag
- * as key, which means one tag can only be registered per lua state.
- * if you try to register one function tag on several objects via boost bind
- * it will not work. consider using @see for createClass() this purpose
- * (here we can use lua a uid table fields for mapping)
- */
-template <class FunctionTagList,
-    template <class> class FunctionsAccessor,
-    class Functions
->
-void registerClassFunctions(lua_State *L, const Functions &f, int index, const std::string &classUID) {
-    if (lua_istable(L, -1) != 1) {
-        SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
-        "registerFunctions: index not a table");
-    }
-    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::addClassFunctions(L, f, index, classUID);
-}
 
 /**
  * @brief finds or creates table and add functions to it
@@ -751,6 +757,44 @@ inline int createClass(lua_State *L, const std::string &name) {
     
     return lib_id;
 }
+
+/**
+ * @brief add functions to table on stack index
+ * @note this function mapping uses the lua state and the Function tag
+ * as key, which means one tag can only be registered per lua state.
+ * if you try to register one function tag on several objects via boost bind
+ * it will not work. consider using @see for createClass() this purpose
+ * (here we can use lua a uid table fields for mapping)
+ */
+template <class FunctionTagList,
+    template <class> class FunctionsAccessor,
+    class Functions
+>
+void registerClassFunctions(lua_State *L, const Functions &f, int index, const std::string &classUID) {
+    if (lua_istable(L, -1) != 1) {
+        SAMBAG_THROW(sambag::com::exceptions::IllegalArgumentException,
+        "registerFunctions: index not a table");
+    }
+    __AddFunc<FunctionTagList, Functions, FunctionsAccessor<Functions> >::addClassFunctions(L, f, index, classUID);
+}
+
+/**
+ * @brief removes registered functions from map
+ * @note it dosen't affect the lua state
+ */
+template <class FunctionTagList>
+void unregisterClassFunctions(const std::string &classUID) {
+    __FuncIt<FunctionTagList>::removeClassFunctions(classUID);
+}
+
+/**
+ * @return the number of registered functions on tag/uuid
+ */
+template <class FunctionTagList>
+size_t countRegistered(const std::string &classUID) {
+    return __FuncIt<FunctionTagList>::getNumRegistered(classUID);
+}
+
 
 }} // namespace
 #endif /* LUASCRIPT_HPP_ */

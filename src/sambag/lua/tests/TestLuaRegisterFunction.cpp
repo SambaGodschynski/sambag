@@ -384,13 +384,17 @@ void TestLuaScript::testClassesObjectRelatedCallback() {
     LuaClass luaClass2;
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<register Fs
 	typedef LOKI_TYPELIST_2(GetClassId_Tag, TwoStrAssert_Tag) Fs;
-    createClass<Fs, TupleAccessor>(L,
+    int lua_index = createClass<Fs, TupleAccessor>(L,
         boost::make_tuple(
             boost::bind(&LuaClass::id, &luaClass),
             boost::bind(&LuaClass::nassert, _1, _2)
         ),
         "lc1"
     );
+    lua_getfield(L, lua_index, SLUA_FIELDNAME_UID);
+    std::string uid1(lua_tostring(L, -1));
+    lua_pop(L, 1);
+    CPPUNIT_ASSERT(!uid1.empty());
     lua_setglobal(L, "lc1");
     
     createClass<Fs, TupleAccessor>(L,
@@ -400,6 +404,10 @@ void TestLuaScript::testClassesObjectRelatedCallback() {
         ),
         "lc2"
     );
+    lua_getfield(L, lua_index, SLUA_FIELDNAME_UID);
+    std::string uid2(lua_tostring(L, -1));
+    lua_pop(L, 1);
+    CPPUNIT_ASSERT(!uid2.empty());
     lua_setglobal(L, "lc2");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<execute
     // the id() functions returns the c++ object this pointer as string
@@ -408,6 +416,14 @@ void TestLuaScript::testClassesObjectRelatedCallback() {
     // so it was not possible to register one function tag and one lua_state
     // to several objects.
     executeLuaString(L, "lc1:nassert(lc1:id(), lc2:id() )");
+    CPPUNIT_ASSERT_EQUAL( (size_t)2, countRegistered<Fs>(uid1));
+    unregisterClassFunctions<Fs>(uid1);
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, countRegistered<Fs>(uid1));
+    
+    CPPUNIT_ASSERT_EQUAL( (size_t)2, countRegistered<Fs>(uid2));
+    unregisterClassFunctions<Fs>(uid2);
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, countRegistered<Fs>(uid2));
+  
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 struct Invert_Tag {

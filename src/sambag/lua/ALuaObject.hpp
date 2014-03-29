@@ -100,7 +100,7 @@ public:
         return uid;
     }
     //-------------------------------------------------------------------------
-    virtual ~ALuaObject() {}
+    virtual ~ALuaObject();
     //-------------------------------------------------------------------------
     std::string getLuaName() const { return luaName; }
 }; // ALuaObject
