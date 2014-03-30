@@ -28,6 +28,7 @@
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/ColumnBrowser.hpp>
 #include <sambag/disco/components/TitledBorder.hpp>
+#include <sambag/disco/components/SvgComponent.hpp>
 #include <sambag/disco/components/ui/basic/BasicButtonUI.hpp>
 #include <sambag/com/ICommand.hpp>
 #include <sambag/disco/FileResourceManager.hpp>
@@ -47,6 +48,7 @@ enum { /*Views*/
 	SCROLLERCOASTER,
 	LIST,
 	MILLER,
+    SVG,
 	NUM_VIEWS
 };
 
@@ -532,6 +534,19 @@ void createWindow<ACME>() {
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
+template <>
+void createWindow<SVG>() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[SVG] = sdc::FramedWindow::create(win[0]);
+	win[SVG]->setTitle("SVG Component");
+	win[SVG]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+    
+    SvgComponent::Ptr svg = SvgComponent::create();
+    svg->setSvgFilename("testimages/gradient01.svg");
+    win[SVG]->getContentPane()->add(svg);
+}
+
 
 void stopTimer(void *src, const sdc::events::ActionEvent &ev) {
 	if (timerInf)
@@ -751,6 +766,12 @@ int main() {
 		btn->setTooltipText("open new Miller panel");
 		btn->setIcon(getResourceManager().getImage("IconA"));
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<MILLER>);
+		win[0]->getContentPane()->add(btn);
+        
+        btn = Button::create();
+		btn->setText("SAV UGGER");
+		btn->setTooltipText("open SVG component TestWindow");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<SVG>);
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();

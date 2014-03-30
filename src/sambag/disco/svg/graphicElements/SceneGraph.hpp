@@ -270,7 +270,7 @@ private:
 	//-------------------------------------------------------------------------
 	ProcessList processList;
 	//-------------------------------------------------------------------------
-	template <typename Container, typename Filter>
+	template <typename _Container, typename Filter>
 	class BFSVisitor : public boost::bfs_visitor<> {
 	private:
 		//---------------------------------------------------------------------
@@ -278,12 +278,12 @@ private:
 		//---------------------------------------------------------------------
 		const SceneGraph &sg;
 		//---------------------------------------------------------------------
-		Container &container;
+		_Container &container;
 		//---------------------------------------------------------------------
 		bool firstDiscover;
 	public:
 		//---------------------------------------------------------------------
-		BFSVisitor(const SceneGraph &sg, Container &container, const Filter &filter)
+		BFSVisitor(const SceneGraph &sg, _Container &container, const Filter &filter)
 		: filter(filter), sg(sg), container(container), firstDiscover(true) {}
 		//---------------------------------------------------------------------
 		template <class Vertex, class Graph>
@@ -475,8 +475,8 @@ public:
 	 * return a "list" of all graph contained elements sorted topological.
 	 * @param out container
 	 */
-	template<typename Container>
-	void createProcessList(Container &out) const;
+	template<typename _Container>
+	void createProcessList(_Container &out) const;
 	//-------------------------------------------------------------------------
 	/**
 	 * for testing and debugging
@@ -485,12 +485,12 @@ public:
 	std::string processListAsString() const;
 	//-------------------------------------------------------------------------
 	/**
-	 * fills Container with all parent vertices which matches to VertexType.
+	 * fills _Container with all parent vertices which matches to VertexType.
 	 * @param v
 	 * @param out
 	 */
-	template<typename Container>
-	void findParentsByType(const Vertex& v, VertexType type, Container &out) const;
+	template<typename _Container>
+	void findParentsByType(const Vertex& v, VertexType type, _Container &out) const;
 	//-------------------------------------------------------------------------
 	size_t inDegreeOf(const Vertex& v, VertexType type) const;
 	//-------------------------------------------------------------------------
@@ -561,16 +561,16 @@ public:
 		}
 	};
 	//-------------------------------------------------------------------------
-	template <typename Container, typename Filter>
+	template <typename _Container, typename Filter>
 	void getChildren(SceneGraphElement el,
-			Container &c,
+			_Container &c,
 			const Filter &filter, bool deep = true ) const
 	{
 		Vertex v = getRelatedVertex(el);
 		if (v==NULL_VERTEX)
 			return;
 		if (deep) {
-			BFSVisitor<Container, Filter> bfsVis(*this, c, filter);
+			BFSVisitor<_Container, Filter> bfsVis(*this, c, filter);
 			boost::breadth_first_search(g, v, boost::visitor(bfsVis));
 			return;
 		}
@@ -583,39 +583,39 @@ public:
 		}
 	}
 	//-------------------------------------------------------------------------
-	template <typename Container>
+	template <typename _Container>
 	void getChildren(SceneGraphElement el,
-			Container &c,
+			_Container &c,
 			bool deep = true) const
 	{
 		AllElements filter;
 		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
-	template <typename Container>
+	template <typename _Container>
 	void getChildrenByTag(SceneGraphElement el,
 			const Tag &tagName,
-			Container &c,
+			_Container &c,
 			bool deep = true) const
 	{
 		TagFilter filter(tagName, *this);
 		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
-	template <typename Container>
+	template <typename _Container>
 	void getChildrenByClass(SceneGraphElement el,
 			const Class &className,
-			Container &c,
+			_Container &c,
 			bool deep = true) const
 	{
 		ClassFilter filter(className, *this);
 		getChildren(el, c, filter, deep);
 	}
 	//-------------------------------------------------------------------------
-	template <typename Container>
+	template <typename _Container>
 	void getChildrenById(SceneGraphElement el,
 			const Id &id,
-			Container &c,
+			_Container &c,
 			bool deep = true) const
 	{
 		IdFilter filter(id, *this);
@@ -629,8 +629,8 @@ public:
 		return vertexName2Map[v];
 	}
 	//-------------------------------------------------------------------------
-	template <typename Container>
-	void getClassNames(SceneGraphElement el, Container &c) const {
+	template <typename _Container>
+	void getClassNames(SceneGraphElement el, _Container &c) const {
 		Vertex v = getRelatedVertex(el);
 		if (v == NULL_VERTEX)
 			return;
@@ -650,11 +650,11 @@ public:
 	//-------------------------------------------------------------------------
 	IDrawable::Ptr getElementById(const Id &id) const;
 	//-------------------------------------------------------------------------
-	template <typename Container>
-	void getElementsByClass(const Class & className, Container &c);
+	template <typename _Container>
+	void getElementsByClass(const Class & className, _Container &c);
 	//-------------------------------------------------------------------------
-	template <typename Container>
-	void getElementsByTag(const Tag & tagName, Container &c);
+	template <typename _Container>
+	void getElementsByTag(const Tag & tagName, _Container &c);
 	//-------------------------------------------------------------------------
 	/**
 	 * appends edge from src's style node to dst
@@ -709,11 +709,11 @@ public:
  *  http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph&#building_process_list
  */
 //=============================================================================
-template <typename Container>
+template <typename _Container>
 class DFSVisitor : public boost::dfs_visitor<> {
 private:
 	//-------------------------------------------------------------------------
-	Container &container;
+	_Container &container;
 	//-------------------------------------------------------------------------
 	const SceneGraph &sceneGraph;
 	//-------------------------------------------------------------------------
@@ -749,7 +749,7 @@ private:
 	}
 public:
 	//-------------------------------------------------------------------------
-	DFSVisitor(const SceneGraph &sc, Container &container, Vertex startVertex) :
+	DFSVisitor(const SceneGraph &sc, _Container &container, Vertex startVertex) :
 		container(container),
 		sceneGraph(sc),
 		startVertex(startVertex),
@@ -844,20 +844,20 @@ template <class T> struct CompareNodeOrder {
 	}
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-template<typename Container>
-void SceneGraph::createProcessList (Container &out) const
+template<typename _Container>
+void SceneGraph::createProcessList (_Container &out) const
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 {
 	/**
 	 * @brief copies org. graph into a "delegate as graph" graph.
-	 * where the edge container is a set<vertex> to affect in which order
+	 * where the edge _Container is a set<vertex> to affect in which order
 	 * the depth_first_search alg. selects the out_edges.
 	 * see: http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph#building_process_list
 	 */
 	if (boost::num_vertices(g)==0)
 		return;
 	Vertex startVertex =  *(boost::vertices(g).first);
-	DFSVisitor<Container> vis(*this, out, startVertex);
+	DFSVisitor<_Container> vis(*this, out, startVertex);
 	typedef CompareNodeOrder<Vertex> Comparator;
 	typedef std::set<Vertex, Comparator > Set;
 	typedef std::vector<Set> G2;
@@ -871,8 +871,8 @@ void SceneGraph::createProcessList (Container &out) const
 	);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-template<typename Container>
-void SceneGraph::findParentsByType(const Vertex& v, VertexType type, Container &out) const
+template<typename _Container>
+void SceneGraph::findParentsByType(const Vertex& v, VertexType type, _Container &out) const
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 {
 	InvAdjacencyIterator it, end;
@@ -883,8 +883,8 @@ void SceneGraph::findParentsByType(const Vertex& v, VertexType type, Container &
 	}
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-template <typename Container>
-void SceneGraph::getElementsByClass(const Class & className, Container &c) {
+template <typename _Container>
+void SceneGraph::getElementsByClass(const Class & className, _Container &c) {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	Class2Vertex::iterator clVIt = class2Vertex.find(className);
 	if (clVIt==class2Vertex.end())
@@ -896,8 +896,8 @@ void SceneGraph::getElementsByClass(const Class & className, Container &c) {
 	}
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-template <typename Container>
-void SceneGraph::getElementsByTag(const Tag & tagName, Container &c) {
+template <typename _Container>
+void SceneGraph::getElementsByTag(const Tag & tagName, _Container &c) {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	Tag2Vertex::const_iterator it, end;
 	boost::tie(it, end) = tag2Vertex.equal_range(tagName);

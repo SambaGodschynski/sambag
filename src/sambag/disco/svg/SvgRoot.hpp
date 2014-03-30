@@ -12,6 +12,7 @@
 #include "SvgCompound.hpp"
 #include "sambag/com/Common.hpp"
 #include <boost/function.hpp>
+#include <sambag/disco/svg/units/Units.hpp>
 #include "AttributeParser.hpp"
 #include <map>
 #include <string>
@@ -34,9 +35,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::function<void(SvgObject::Ptr)> ObjectRequestFunction;
 	//-------------------------------------------------------------------------
-	struct Width_tag { typedef Number Type; };
+	struct Width_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
-	struct Height_tag { typedef Number Type; };
+	struct Height_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
 	struct Viewbox_tag { typedef std::string Type; };
 	//-------------------------------------------------------------------------
@@ -153,11 +154,11 @@ public:
 	void subObjectCreated( SvgObject::Ptr newObject, const std::string& );
 	//-------------------------------------------------------------------------
 	virtual void set(const Width_tag::Type &v, const Width_tag &) {
-		size.setWidth(v);
+		size.setWidth(v.solve(0));
 	}
 	//-------------------------------------------------------------------------
 	virtual void set(const Height_tag::Type &v, const Height_tag &) {
-		size.setHeight(v);
+		size.setHeight(v.solve(0));
 	}
 	//-------------------------------------------------------------------------
 	virtual void set(const Viewbox_tag::Type &v, const Viewbox_tag &) {
