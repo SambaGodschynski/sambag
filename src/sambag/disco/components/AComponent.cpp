@@ -189,20 +189,18 @@ const Point2D & AComponent::getLocation() const {
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMaximumSize() {
+    // tried to use the same approach as in getMinimumSize(),
+    // result: VSTForx menu no entries where shown
 	Dimension dim;
 	if (ui) {
 		dim = ui->getMaximumSize(getPtr());
 		if (dim!=NULL_DIMENSION)
 			return dim;
 	}
-	dim = maxSize;
-	if (dim == NULL_DIMENSION || !(isMinimumSizeSet() || isValid())) {
-		SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-			maxSize = getSize();
-			dim = maxSize;
-		SAMBAG_END_SYNCHRONIZED
+	if (isMaximumSizeSet()) {
+		return maxSize;
 	}
-	return dim;
+	return Dimension(9999.,9999.);
 }
 //-----------------------------------------------------------------------------
 Dimension AComponent::getMinimumSize() {
