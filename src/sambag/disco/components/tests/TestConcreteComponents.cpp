@@ -38,7 +38,7 @@ void TestConcreteComponents::setUp() {
 
 	win = Window::create();
 
-	win->setWindowBounds(Rectangle(0,0, 320, 80));
+	win->setWindowBounds(sd::Rectangle(0,0, 320, 80));
 
 	surf = getDiscoFactory()->createImageSurface(320, 80);
 	root = win->getRootPane();

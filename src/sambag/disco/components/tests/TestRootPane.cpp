@@ -38,7 +38,7 @@ void TestRootPane::setUp() {
 	sambag::disco::components::setWindowToolkit(wfac.get());
 
 	win = Window::create();
-	win->setWindowBounds(Rectangle(0,0, 640, 480));
+	win->setWindowBounds(sd::Rectangle(0,0, 640, 480));
 
 	surf = getDiscoFactory()->createImageSurface(640, 480);
 	root = win->getRootPane();

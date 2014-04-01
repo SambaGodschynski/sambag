@@ -75,11 +75,13 @@ void BasicMenuItemListener<ComponentModell>::
 				b->getButtonFunction();
 		if (c)
 			c();
+		// first close menu
+		MenuSelectionManager::defaultManager().clearSelectedPath();
+		// then execute
 		b->EventSender<events::ActionEvent>::notifyListeners(
 				b.get(),
 				events::ActionEvent(b)
 		);
-		MenuSelectionManager::defaultManager().clearSelectedPath();
 		break;
 	}
 	default:

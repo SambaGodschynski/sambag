@@ -52,7 +52,7 @@ VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 		return;
 	}
 	Timer::Ptr tm = it->second;
-	tm->timerExpired();
+	// first handle further treatment
 	int &numCalled = tm->__getNumCalled_();
 	++numCalled;
 	if (tm->getNumRepetitions() != -1 &&
@@ -60,12 +60,12 @@ VOID CALLBACK timerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) {
 	{
 		KillTimer(hwnd, idEvent);
 		timers.left.erase(it);
-		return;
-	}
-	if (tm->getDelay() != dwTime) { // initial delay
+	} else if (tm->getDelay() != dwTime) { // initial delay
 		// reset timer with new delay
 		SetTimer(NULL, idEvent, tm->getDelay(), &timerProc);
 	}
+	// finally
+	tm->timerExpired();
 }
 } // namespace
 //=============================================================================
