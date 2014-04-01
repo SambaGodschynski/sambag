@@ -23,8 +23,6 @@ public:
 	typedef boost::shared_ptr<Path> Ptr;
 private:
 	//-------------------------------------------------------------------------
-	sambag::disco::Path::Ptr storedPath;
-	//-------------------------------------------------------------------------
 	virtual void drawPath( IDrawContext::Ptr context );
 	//-------------------------------------------------------------------------
 	virtual void drawInstructions( IDrawContext::Ptr context ) const;
@@ -54,7 +52,6 @@ public:
 	//-------------------------------------------------------------------------
 	void setPathInstructions( const pathInstruction::PathInstructions &pI ) {
 		pathInstructions = pI;
-		storedPath.reset();
 	}
 	//-------------------------------------------------------------------------
 	const pathInstruction::PathInstructions & getPathInstructions() const {

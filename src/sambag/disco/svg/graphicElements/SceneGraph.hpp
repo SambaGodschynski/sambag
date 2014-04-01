@@ -96,6 +96,10 @@ private:
 		style(style),
 		transformation(transformation){}
 public:
+    //-------------------------------------------------------------------------
+    IDrawable::Ptr getDrawable() const {
+        return drawable;
+    }
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return (resetContextState ? "DrawAndRestoreContextState(" : "Draw(")
@@ -116,6 +120,8 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void perform(IDrawContext::Ptr context);
+	//-------------------------------------------------------------------------
+	virtual Rectangle getBounds(IDrawContext::Ptr context) const;
 };
 //=============================================================================
 /**
@@ -259,6 +265,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<SceneGraphElement, Vertex> Element2Vertex;
 	//-------------------------------------------------------------------------
+	typedef boost::unordered_map<SceneGraphElement, Rectangle> Element2Bounds;
+	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<Id, Vertex> Id2Vertex;
 	//-------------------------------------------------------------------------
 	typedef boost::unordered_map<Class, Vertex> Class2Vertex;
@@ -267,6 +275,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef std::list<IProcessListObject::Ptr> ProcessList;
 private:
+    //-------------------------------------------------------------------------
+    template <class _Container>
+    void computeBoundingBoxes(const _Container&);
 	//-------------------------------------------------------------------------
 	ProcessList processList;
 	//-------------------------------------------------------------------------
@@ -311,6 +322,8 @@ private:
 	VertexName2Map vertexName2Map;
 	//-------------------------------------------------------------------------
 	Element2Vertex element2Vertex;
+    //-------------------------------------------------------------------------
+    Element2Bounds element2Bounds;
 	//-------------------------------------------------------------------------
 	VertexOrderMap vertexOrderMap;
 	//-------------------------------------------------------------------------
@@ -340,9 +353,17 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	/**
-	 * forces process list recalculation
+	 * @brief forces process list recalculation
+     * @deprecated use invalidate() instead
 	 */
 	void update() {
+		processList.clear();
+	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @brief forces process list recalculation
+	 */
+	void invalidate() {
 		processList.clear();
 	}
 	//-------------------------------------------------------------------------
@@ -476,13 +497,13 @@ public:
 	 * @param out container
 	 */
 	template<typename _Container>
-	void createProcessList(_Container &out) const;
+	void createProcessList(_Container &out);
 	//-------------------------------------------------------------------------
 	/**
 	 * for testing and debugging
 	 * @return
 	 */
-	std::string processListAsString() const;
+	std::string processListAsString();
 	//-------------------------------------------------------------------------
 	/**
 	 * fills _Container with all parent vertices which matches to VertexType.
@@ -695,9 +716,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 *
-	 * @param obj
-	 * @return a union rectangle of objects bounding box and it's sub objects.
+	 * @return bounds or NULL_RECTANGLE if obj not found
 	 */
 	Rectangle getBoundingBox(SceneGraphElement obj,
 			IDrawContext::Ptr context) const;
@@ -845,7 +864,7 @@ template <class T> struct CompareNodeOrder {
 };
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename _Container>
-void SceneGraph::createProcessList (_Container &out) const
+void SceneGraph::createProcessList (_Container &out)
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 {
 	/**
@@ -869,6 +888,23 @@ void SceneGraph::createProcessList (_Container &out) const
 		g2,
 		boost::visitor(vis)
 	);
+    
+    computeBoundingBoxes(out);
+}
+//-----------------------------------------------------------------------------
+template<typename _Container>
+void SceneGraph::computeBoundingBoxes(const _Container &pList) {
+    IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	boost_reverse_for_each( IProcessListObject::Ptr o, pList ) {
+        ProcessDrawable::Ptr pr =
+            boost::dynamic_pointer_cast<ProcessDrawable>(o);
+		if (pr) {
+            element2Bounds[pr->getDrawable()] = pr->getBounds(cn);
+            SAMBAG_LOG_TRACE<<std::hex<<pr->getDrawable()<<"  --  "<<element2Bounds[pr->getDrawable()];
+            continue;
+        }
+        o->perform(cn);
+	}
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename _Container>

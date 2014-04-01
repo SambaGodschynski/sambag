@@ -19,19 +19,9 @@ Text::Text() {
 Text::~Text() {
 }
 //-----------------------------------------------------------------------------
-void Text::drawPath(IDrawContext::Ptr cn) {
-	if (storedPath) {
-		cn->appendPath(storedPath);
-		return;
-	}
-	cn->textPath(text);
-	storedPath = cn->copyPath();
-
-}
-//-----------------------------------------------------------------------------
 void Text::shape( IDrawContext::Ptr cn ) {
 	cn->moveTo(pos.solve(cn));
-    drawPath(cn);
+    cn->textPath(text);
 }
 
 }}}}

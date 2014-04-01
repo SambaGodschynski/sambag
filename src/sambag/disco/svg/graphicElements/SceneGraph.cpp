@@ -13,6 +13,7 @@
 #include <limits>
 #include <sambag/disco/Shape.hpp>
 #include <sambag/math/Matrix.hpp>
+#include <sambag/disco/IDiscoFactory.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -86,6 +87,36 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 		context->restore();
 	}
 };
+//-----------------------------------------------------------------------------
+Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
+	namespace ublas=boost::numeric::ublas;
+	using namespace sambag::math;
+    context->save();
+	if (transformation) {
+		context->transform( *(transformation.get()) );
+	}
+    IPattern::Ptr fpat, spat;
+	if (style) {
+		style->intoContext(context);
+	}
+    
+    Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
+	if (!shape) {
+        Rectangle b = drawable->getBoundingBox(context);
+        context->setStrokeColor(ColorRGBA(0,0,0));
+        context->setStrokeWidth(1.0);
+        context->rect(b);
+    } else {
+        shape->shape(context);
+    }
+    Rectangle res = context->pathExtends();
+    // only need to restore state if no children in scenegraph.
+	// otherwise state will be restored later with RestoreContextState.
+	if (resetContextState==true) {
+		context->restore();
+	}
+    return res;
+};
 //=============================================================================
 // class RestoreContextState
 //=============================================================================
@@ -99,7 +130,7 @@ const SceneGraph::Vertex SceneGraph::NULL_VERTEX = UINT_MAX;
 // class SceneGraph
 //=============================================================================
 //-----------------------------------------------------------------------------
-std::string SceneGraph::processListAsString() const {
+std::string SceneGraph::processListAsString() {
 	ProcessList l;
 	createProcessList(l);
 	if (l.empty())
@@ -308,56 +339,10 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
 	IDrawContext::Ptr cn) const
 {
-	MatrixPtr m = getTransformationRef(obj);
-	StylePtr s =  getStyleRef(obj);
-	if (m||s) {
-		cn->save();
-	}
-	if (m) {
-		cn->transform(*m);
-	}
-	if (s) {
-		s->intoContext(cn);
-	}
-	Rectangle res = obj->getBoundingBox(cn);
-	if (m||s) {
-		cn->restore();
-	}
-	if (res==NULL_RECTANGLE) {
-		typedef std::numeric_limits<Number> L;
-		res = Rectangle(
-			Point2D(L::max(), L::max()),
-			Point2D(-L::max(), -L::max()),
-			false
-		);
-	}
-	std::list<SceneGraphElement> l;
-	getChildren(obj, l, true);
-	boost_for_each(SceneGraphElement o, l) {
-		MatrixPtr m = getTransformationRef(o);
-		StylePtr s =  getStyleRef(o);
-		if (m||s) {
-			cn->save();
-		}	
-		if (m) {
-			cn->transform(*m);
-		}
-		if (s) {
-			s->intoContext(cn);
-		}
-		Rectangle r = o->getBoundingBox(cn);		
-		if (m||s) {
-			cn->restore();
-		}
-		if (r==NULL_RECTANGLE) {
-			continue;
-		}
-		res = Rectangle(
-			minimize(res.x0(), r.x0()),
-			maximize(res.x1(), r.x1()),
-			false
-		);
-	}
-	return res;
+    Element2Bounds::const_iterator it = element2Bounds.find(obj);
+    if (it==element2Bounds.end()) {
+        return NULL_RECTANGLE;
+    }
+    return it->second;
 }
 }}}} // namespaces

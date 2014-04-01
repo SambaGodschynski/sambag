@@ -489,12 +489,7 @@ Path::~Path() {
 }
 //-----------------------------------------------------------------------------
 void Path::drawPath( IDrawContext::Ptr cn ) {
-	if (storedPath) {
-		cn->appendPath(storedPath);
-		return;
-	}
 	drawInstructions(cn);
-	storedPath = cn->copyPath();
 }
 //-----------------------------------------------------------------------------
 void Path::shape( IDrawContext::Ptr cn ) {
