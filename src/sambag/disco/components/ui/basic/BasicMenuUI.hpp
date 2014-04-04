@@ -96,10 +96,16 @@ void BasicMenuUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	cn->setFillColor(c->getForeground());
 	std::string str = b->getText();
 	Rectangle txt = cn->textExtends(str);
-	cn->translate( Point2D( 10,
-			c->getHeight() / 2.0 + txt.getHeight() / 2.0
-	));
-	cn->textPath(str + "  >");
+    Coordinate h=c->getHeight() / 2.0 + txt.getHeight() / 2.0;
+	cn->translate(Point2D(10, h));
+	cn->textPath(str);
+    cn->fill();
+    //translate to end of line
+    // draw arrow
+    txt = cn->textExtends(">");
+    cn->moveTo(Point2D(c->getWidth()-txt.width()-20, txt.height()/2.0 - txt.height()/2.0));
+    cn->setFillColor(svg::HtmlColors::getColor("grey"));
+    cn->textPath(">");
 	cn->fill();
 }
 //-----------------------------------------------------------------------------
