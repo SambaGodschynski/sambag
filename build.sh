@@ -37,6 +37,10 @@ while [ "$1" != "" ]; do
 	-f | --flag )		shift
 				flags="$flags $1"
 				;;
+	-l | --use-log)         shift
+                                export SAMBA_USELOG=1
+				;;
+
 	 * )                     usage
                                 exit 1
     esac

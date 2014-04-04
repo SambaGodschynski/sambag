@@ -10,7 +10,11 @@ execute_process(COMMAND git --work-tree=${PROJECT_SOURCE_DIR} log --pretty=forma
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
 add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
-add_definitions(-DSAMBAG_USE_LOG)
+
+IF($ENV{SAMBA_USELOG})
+  add_definitions(-DSAMBAG_USE_LOG)
+ENDIF($ENV{SAMBA_USELOG})
+
 add_definitions(-D_SCL_SECURE_NO_WARNINGS) #disable warning C4996: 'std::uninitialized_copy' caused by boost::ublas
 add_definitions(-D_CRT_SECURE_NO_WARNINGS) #disable strcpy warning in audioeffect.h
 

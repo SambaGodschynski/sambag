@@ -20,8 +20,10 @@ ELSEIF(UNIX)
 
 ENDIF(WIN32)
 
-find_package(Boost 1.49.0 REQUIRED
-	${xboost_libs}
+
+IF($ENV{SAMBA_USELOG})
+  find_package(Boost 1.49.0 REQUIRED
+  	${xboost_libs}
         filesystem
         system
         thread
@@ -34,5 +36,19 @@ find_package(Boost 1.49.0 REQUIRED
 	program_options        
 	log
         log_setup
-)
-
+  )
+ELSE($ENV{SAMBA_USELOG})
+  find_package(Boost 1.49.0 REQUIRED
+        ${xboost_libs}
+        filesystem
+        system
+        thread
+        regex
+        signals
+        serialization
+        date_time
+        timer
+        chrono
+        program_options
+  )
+ENDIF($ENV{SAMBA_USELOG})
