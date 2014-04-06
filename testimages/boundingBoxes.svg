@@ -7,6 +7,7 @@
     <text y="10">Bounding boxes has to be drawn by the test method.</text>
     <g id="scene" class="bBox" stroke="blue" stroke-width="15" fill="none">    	
     	<line class="bBox" x1="100" y1="300" x2="300" y2="100"/>
+        <line transform="translate(19,19)" class="bBox" x1="100" y1="300" x2="300" y2="100"/>	
     	<line class="bBox" x1="550" y1="300" x2="350" y2="100"/>
         <rect class="bBox" x="600" y="100" width="200" height="200" rx="15" ry="15" stroke-width="35"/>
         <circle class="bBox" cx="950" cy="200" r="100"/>
@@ -14,9 +15,9 @@
         <ellipse class="bBox" cx="450" cy="500" rx="50" ry="100"/>
         <path class="bBox" d="M550,500 c0,100 150,100 150,0 s150,-100 150,0"/>
         <g class="bBox" transform="translate(930, 500)">
-	    <circle cx="0" cy="0" r="10"/>
-            <line x1="10" y1="0" x2="70" y2="0"/>
-            <circle cx="90" cy="0" r="20"/>
+	    <circle cx="0" cy="0" r="10" class="bBox"/>
+            <line x1="10" y1="0" x2="70" y2="0" clas="bBox"/>
+            <circle cx="90" cy="0" r="20" class="bBox"/>
    	</g>
     </g>
     <!--use xlink:href="#scene" transform="translate(100,700)scale(0.2)" />

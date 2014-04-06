@@ -276,8 +276,8 @@ public:
 	typedef std::list<IProcessListObject::Ptr> ProcessList;
 private:
     //-------------------------------------------------------------------------
-    template <class _Container>
-    void computeBoundingBoxes(const _Container&);
+    void computeBoundingBoxes();
+    Rectangle computeBoundingBox(IDrawable::Ptr parent);
 	//-------------------------------------------------------------------------
 	ProcessList processList;
 	//-------------------------------------------------------------------------
@@ -358,6 +358,7 @@ public:
 	 */
 	void update() {
 		processList.clear();
+		element2Bounds.clear();
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -365,6 +366,7 @@ public:
 	 */
 	void invalidate() {
 		processList.clear();
+		element2Bounds.clear();
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -487,8 +489,10 @@ public:
 	 * @return process list
 	 */
 	const ProcessList & getProcessList() {
-		if ( boost::num_vertices(g) > 0 && processList.empty() )
-			createProcessList(processList);
+		if ( boost::num_vertices(g) > 0 && processList.empty() ) {
+			createProcessList(processList);	
+			computeBoundingBoxes();	
+		}
 		return processList;
 	}
 	//-------------------------------------------------------------------------
@@ -888,23 +892,6 @@ void SceneGraph::createProcessList (_Container &out)
 		g2,
 		boost::visitor(vis)
 	);
-    
-    computeBoundingBoxes(out);
-}
-//-----------------------------------------------------------------------------
-template<typename _Container>
-void SceneGraph::computeBoundingBoxes(const _Container &pList) {
-    IDrawContext::Ptr cn = getDiscoFactory()->createContext();
-	boost_reverse_for_each( IProcessListObject::Ptr o, pList ) {
-        ProcessDrawable::Ptr pr =
-            boost::dynamic_pointer_cast<ProcessDrawable>(o);
-		if (pr) {
-            element2Bounds[pr->getDrawable()] = pr->getBounds(cn);
-            SAMBAG_LOG_TRACE<<std::hex<<pr->getDrawable()<<"  --  "<<element2Bounds[pr->getDrawable()];
-            continue;
-        }
-        o->perform(cn);
-	}
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template<typename _Container>

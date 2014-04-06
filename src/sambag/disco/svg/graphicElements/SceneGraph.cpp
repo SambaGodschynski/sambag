@@ -14,6 +14,7 @@
 #include <sambag/disco/Shape.hpp>
 #include <sambag/math/Matrix.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
+#include "Compound.hpp"
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -108,8 +109,9 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
         context->rect(b);
     } else {
         shape->shape(context);
-    }
+	}
     Rectangle res = context->pathExtends();
+	context->stroke();
     // only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
 	if (resetContextState==true) {
@@ -344,5 +346,50 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
         return NULL_RECTANGLE;
     }
     return it->second;
+}
+//-----------------------------------------------------------------------------
+Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
+
+	typedef std::numeric_limits<Number> L;
+	Rectangle res = Rectangle(
+		Point2D(L::max(), L::max()),
+		Point2D(-L::max(), -L::max()),
+		false
+	);
+	
+	std::vector<SceneGraphElement> l;
+	getChildren(parent, l, true);
+	boost_reverse_for_each(SceneGraphElement x, l) {
+		Rectangle r = element2Bounds[x];
+		res = Rectangle(
+			minimize(res.x0(), r.x0()),
+			maximize(res.x1(), r.x1()),
+			false
+		);
+	}
+	return res;
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::computeBoundingBoxes() {
+	std::vector<IDrawable::Ptr> parents;
+    IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+	boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
+        ProcessDrawable::Ptr pr =
+            boost::dynamic_pointer_cast<ProcessDrawable>(o);
+		if (pr) {
+			IDrawable::Ptr x=pr->getDrawable();
+			SAMBAG_ASSERT(x);
+			if(boost::out_degree(getRelatedVertex(x), g)>0) {
+				// we have children, so we come back later
+				parents.push_back(x);
+			}
+            element2Bounds[x] = pr->getBounds(cn);
+            continue;
+        }
+        o->perform(cn);
+	}
+	boost_for_each(IDrawable::Ptr x, parents) {
+		element2Bounds[x] = computeBoundingBox(x);
+	}
 }
 }}}} // namespaces
