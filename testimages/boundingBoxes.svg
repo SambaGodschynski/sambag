@@ -14,14 +14,14 @@
         <ellipse class="bBox" cx="200" cy="500" rx="100" ry="50"/>
         <ellipse class="bBox" cx="450" cy="500" rx="50" ry="100"/>
         <path class="bBox" d="M550,500 c0,100 150,100 150,0 s150,-100 150,0"/>
-        <g class="bBox" transform="translate(930, 500)">
+        <g class="bBox" transform="translate(930, 500)rotate(-45)">
 	    <circle cx="0" cy="0" r="10" class="bBox"/>
             <line x1="10" y1="0" x2="70" y2="0" clas="bBox"/>
             <circle cx="90" cy="0" r="20" class="bBox"/>
    	</g>
     </g>
-    <!--use xlink:href="#scene" transform="translate(100,700)scale(0.2)" />
+    <use xlink:href="#scene" transform="translate(100,700)scale(0.2)" />
     <use xlink:href="#scene" transform="translate(460,660)rotate(45)scale(0.2)" />
     <use xlink:href="#scene" transform="translate(580,760)scale(0.2)rotate(-45)" />
-    <use xlink:href="#scene" transform="translate(800,760)scale(0.2)rotate(-15)" /-->
+    <use xlink:href="#scene" transform="translate(800,760)scale(0.2)rotate(-15)" />
 </svg>

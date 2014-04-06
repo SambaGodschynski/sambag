@@ -92,10 +92,7 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
 	namespace ublas=boost::numeric::ublas;
 	using namespace sambag::math;
-    context->save();
-	if (transformation) {
-		context->transform( *(transformation.get()) );
-	}
+
     IPattern::Ptr fpat, spat;
 	if (style) {
 		style->intoContext(context);
@@ -111,10 +108,31 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
         shape->shape(context);
 	}
     Rectangle res = context->pathExtends();
-	context->stroke();
+    context->stroke();
+    context->save();
+	if (transformation) {
+		context->transform( *(transformation.get()) );
+	}
+    
     // only need to restore state if no children in scenegraph.
 	// otherwise state will be restored later with RestoreContextState.
-	if (resetContextState==true) {
+    Point2D lt = res.x0();
+    Point2D lb(res.x0().x(), res.x1().y());
+    Point2D rb=res.x1();
+    Point2D rt(res.x1().x(), res.x0().y());
+    context->userToDevice(lt);
+    context->userToDevice(lb);
+    context->userToDevice(rb);
+    context->userToDevice(rt);
+    Point2D p0 = minimize(lt, lb);
+    p0 = minimize(p0, rb);
+    p0 = minimize(p0, rt);
+    Point2D p1 = maximize(lt, lb);
+    p1 = maximize(p1, rb);
+    p1 = maximize(p1, rt);
+    res=Rectangle(p0,p1);
+    
+    if (resetContextState==true) {
 		context->restore();
 	}
     return res;
@@ -359,7 +377,7 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 	
 	std::vector<SceneGraphElement> l;
 	getChildren(parent, l, true);
-	boost_reverse_for_each(SceneGraphElement x, l) {
+	boost_for_each(SceneGraphElement x, l) {
 		Rectangle r = element2Bounds[x];
 		res = Rectangle(
 			minimize(res.x0(), r.x0()),
@@ -379,11 +397,16 @@ void SceneGraph::computeBoundingBoxes() {
 		if (pr) {
 			IDrawable::Ptr x=pr->getDrawable();
 			SAMBAG_ASSERT(x);
+            Rectangle r = pr->getBounds(cn);
 			if(boost::out_degree(getRelatedVertex(x), g)>0) {
 				// we have children, so we come back later
 				parents.push_back(x);
+                typedef std::numeric_limits<Number> L;
+                r=Rectangle(Point2D(L::max(), L::max()),
+                            Point2D(-L::max(), -L::max()),
+                            false);
 			}
-            element2Bounds[x] = pr->getBounds(cn);
+            element2Bounds[x] = r;
             continue;
         }
         o->perform(cn);

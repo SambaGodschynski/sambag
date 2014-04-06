@@ -520,7 +520,7 @@ Rectangle CairoDrawContext::clipExtends() const {
 	double x0, y0, x1, y1;
 	x0 = y0 = x1 = y1 = NULL_NUMBER;
 	cairo_clip_extents(context, &x0, &y0, &x1, &y1);
-	return Rectangle(Point2D(x0,y0), Point2D(x1, y1));
+	return Rectangle(Point2D(x0,y0), Point2D(x1, y1), false);
 }
 //-----------------------------------------------------------------------------
 Path::Ptr CairoDrawContext::copyPath() const {
@@ -553,7 +553,7 @@ ISurface::Ptr CairoDrawContext::getSurface() const {
 Rectangle CairoDrawContext::pathExtends() const {
 	Number x,y,x1,y1;
 	cairo_path_extents(context, &x, &y, &x1, &y1);
-	return Rectangle(Point2D(x,y), Point2D(x1, y1));
+	return Rectangle(Point2D(x,y), Point2D(x1, y1), false);
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::translate( const Point2D &p0 ) {
@@ -584,5 +584,37 @@ void CairoDrawContext::getMatrix( Matrix &m ) {
 	cairo_matrix_t cm;
 	cairo_get_matrix(context, &cm);
 	cairoMatrixToDiscoMatrix(cm, m);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::deviceToUser(Point2D &inOut) {
+    double x=inOut.x();
+    double y=inOut.y();
+    cairo_device_to_user(context, &x, &y);
+    inOut.x(x);
+    inOut.y(y);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::userToDevice(Point2D &inOut) {
+    double x=inOut.x();
+    double y=inOut.y();
+    cairo_user_to_device(context, &x, &y);
+    inOut.x(x);
+    inOut.y(y);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::deviceToUserDistance(Point2D &inOut) {
+    double x=inOut.x();
+    double y=inOut.y();
+    cairo_device_to_user_distance(context, &x, &y);
+    inOut.x(x);
+    inOut.y(y);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::userToDeviceDistance(Point2D &inOut) {
+    double x=inOut.x();
+    double y=inOut.y();
+    cairo_user_to_device_distance(context, &x, &y);
+    inOut.x(x);
+    inOut.y(y);
 }
 }} // namespaces

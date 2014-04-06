@@ -248,6 +248,14 @@ public:
 	virtual void transform ( const Matrix &m ) = 0;
 	//-------------------------------------------------------------------------
 	virtual void getMatrix( Matrix &m ) = 0;
+    //-------------------------------------------------------------------------
+    virtual void deviceToUser(Point2D &inOut) = 0;
+    //-------------------------------------------------------------------------
+    virtual void userToDevice(Point2D &inOut) = 0;
+    //-------------------------------------------------------------------------
+    virtual void deviceToUserDistance(Point2D &inOut) = 0;
+    //-------------------------------------------------------------------------
+    virtual void userToDeviceDistance(Point2D &inOut) = 0;
 };
 }} // namespaces
 

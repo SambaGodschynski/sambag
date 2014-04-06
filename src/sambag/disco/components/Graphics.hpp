@@ -155,6 +155,10 @@ public: /*Interface impl.*/
 	virtual void identityMatrix() { cn->identityMatrix(); }
 	virtual void transform(const Matrix &m) { cn->transform(m); }
 	virtual void getMatrix(Matrix &m) { cn->getMatrix(m); }
+    virtual void userToDevice(Point2D &io) { cn->userToDevice(io); }
+    virtual void deviceToUser(Point2D &io) { cn->deviceToUser(io); }
+    virtual void deviceToUserDistance(Point2D &io) { cn->deviceToUserDistance(io); }
+    virtual void userToDeviceDistance(Point2D &io) { cn->userToDeviceDistance(io); }
 public:
 	//-------------------------------------------------------------------------
 	IDrawContext::Ptr getPtr() const {
