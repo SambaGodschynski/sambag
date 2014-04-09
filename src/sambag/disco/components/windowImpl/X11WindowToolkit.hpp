@@ -82,10 +82,11 @@ public:
 		return mainLoopRunning;
 	}
 	//-------------------------------------------------------------------------
-        /**
-	 * @note delay not supported.
+    /**
+	 * @note delay and tracking not supported.
 	 */
-        virtual void invokeLater(const InvokeFunction &f, int delay=50);
+        virtual void invokeLater(const InvokeFunction &f, int delay=50,
+        boost::shared_ptr<void> toTrack=boost::shared_ptr<void>());
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

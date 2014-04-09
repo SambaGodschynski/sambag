@@ -102,12 +102,20 @@ namespace {
 	}
 } // namespace(s)
 //----------------------------------------------------------------------------
-void Win32WindowToolkit::invokeLater(const InvokeFunction &f, int ms) {
+void Win32WindowToolkit::invokeLater(const InvokeFunction &f, int ms,
+    boost::shared_ptr<void> toTrack)
+{
 	Timer::Ptr tm = Timer::create(ms);
 	tm->setNumRepetitions(0);
-	tm->EventSender<TimerEvent>::addEventListener(
-		boost::bind(&_invokeLater, f)
-	);
+    if (toTrack) {
+        tm->EventSender<TimerEvent>::addTrackedEventListener(
+            boost::bind(&_invokeLater, f), toTrack
+        );
+    } else  {
+        tm->EventSender<TimerEvent>::addEventListener(
+            boost::bind(&_invokeLater, f)
+        );
+    }
 	tm->start();
 }
 //-----------------------------------------------------------------------------

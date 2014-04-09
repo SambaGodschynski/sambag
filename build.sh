@@ -12,7 +12,7 @@ fi
 #usage
 usage() 
 {
-	echo $0 "-i clib_location [-g generator(cmmake generator default=Unix Makefiles) -d(debug mode)]"
+	echo $0 "-i clib_location [-g generator(cmmake generator default=Unix Makefiles) -d(debug mode) -l(uses log)]"
 }
 
 mode=""

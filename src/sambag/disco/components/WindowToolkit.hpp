@@ -71,12 +71,16 @@ public:
 	typedef boost::function<void()> InvokeFunction;
 	//-------------------------------------------------------------------------
 	/**
-     * calls f after delay in ms.
+     * @brief calls f after delay in ms.
      * @param the function to call
      * @param the minimum of time in ms which has to pass. 
      *        (not all impl. support this)
+     * @param a shared pointer for tracking purpose, if null no tracking will be
+     * used otherwise a weak pointer will be crated and used for tracking
+     * @see boost::signals2 tracking
      */
-    virtual void invokeLater(const InvokeFunction &f, int delay=50) = 0;
+    virtual void invokeLater(const InvokeFunction &f,
+        int delay=50, boost::shared_ptr<void> toTrack=boost::shared_ptr<void>()) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * aborts mainloop.

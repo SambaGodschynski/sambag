@@ -15,6 +15,7 @@
 #include <loki/Singleton.h>
 #include "NullTimerImpl.hpp"
 #include "CocoaTimer.hpp"
+#include <boost/enable_shared_from_this.hpp>
 
 namespace sambag { namespace disco { namespace components {
 typedef CocoaTimerImpl TimerImpl;
@@ -60,7 +61,8 @@ public:
 		return mainLoopRunning;
 	}
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f, int ms = 50);
+	virtual void invokeLater(const InvokeFunction &f,
+        int ms = 50, boost::shared_ptr<void> toTrack=boost::shared_ptr<void>());
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

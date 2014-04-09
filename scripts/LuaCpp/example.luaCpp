@@ -1,0 +1,27 @@
+the example:
+
+luaClass MyClass {
+	 /**
+  	  * javadoc 'esk comments
+	  */
+	 void aFunction();
+	 int aField;
+}
+
+will generate:
+
+ALuaMyClass.hpp:
+
+class ALuaMyClass : public ALuaObject {
+      SAMBAG_LUA_FTAG(aFunction, void());
+      typedef LOKI_TYPELIST_1(Lua_aFunction_Tag) Functions1;
+      int aField() const;
+      void aField(int val);
+      virtual void aFunction(lua_State *l) = 0;
+      addLuaFields(lua_State *lua, int index);
+};
+
+and a doc file
+
+
+

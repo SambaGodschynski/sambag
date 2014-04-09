@@ -104,7 +104,8 @@ void X11WindowToolkit::quit() {
 	mainLoopRunning = false;
 }
 //-----------------------------------------------------------------------------
-void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f, int ms)
+void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f, int ms,
+    boost::shared_ptr<void> toTrack)
 {
 	if (!isMainLoopRunning()) {
 		f();

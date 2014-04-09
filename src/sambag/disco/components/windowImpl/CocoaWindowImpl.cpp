@@ -84,7 +84,9 @@ void CocoaWindowImpl::__onCreated() {
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::open(AWindowImplPtr parent) {
 	getWindowToolkit()->invokeLater(
-		boost::bind(&CocoaWindowImpl::_open, this, parent)
+		boost::bind(&CocoaWindowImpl::_open, this, parent),
+        50,
+        shared_from_this()
 	);
 }
 //-----------------------------------------------------------------------------

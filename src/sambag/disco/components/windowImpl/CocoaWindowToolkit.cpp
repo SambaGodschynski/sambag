@@ -82,13 +82,21 @@ namespace {
 	}
 } // namespace(s)
 //----------------------------------------------------------------------------
-void CocoaWindowToolkit::invokeLater(const InvokeFunction &f, int ms) {
+void CocoaWindowToolkit::invokeLater(const InvokeFunction &f,
+    int ms, boost::shared_ptr<void> toTrack)
+{
 	sambag::disco::components::Timer::Ptr tm =
         sambag::disco::components::Timer::create(ms);
 	tm->setNumRepetitions(0);
-	tm->EventSender<TimerEvent>::addEventListener(
-		boost::bind(&_invokeLater, f)
-	);
+	if (toTrack) {
+        tm->EventSender<TimerEvent>::addTrackedEventListener(
+            boost::bind(&_invokeLater, f), toTrack
+        );
+    } else {
+        tm->EventSender<TimerEvent>::addEventListener(
+            boost::bind(&_invokeLater, f)
+        );
+    }
 	tm->start();
 }
 //-----------------------------------------------------------------------------

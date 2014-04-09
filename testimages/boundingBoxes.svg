@@ -9,7 +9,8 @@
     	<line class="bBox" x1="100" y1="300" x2="300" y2="100"/>
         <line transform="translate(19,19)" class="bBox" x1="100" y1="300" x2="300" y2="100"/>	
     	<line class="bBox" x1="550" y1="300" x2="350" y2="100"/>
-        <rect class="bBox" x="600" y="100" width="200" height="200" rx="15" ry="15" stroke-width="35"/>
+        <rect class="bBox" x="600" y="100" width="200" 
+	      height="200" rx="15" ry="15" stroke-width="35"/>
         <circle class="bBox" cx="950" cy="200" r="100"/>
         <ellipse class="bBox" cx="200" cy="500" rx="100" ry="50"/>
         <ellipse class="bBox" cx="450" cy="500" rx="50" ry="100"/>

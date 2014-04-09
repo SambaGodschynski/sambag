@@ -39,7 +39,9 @@ private:
 	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
-	virtual void invokeLater(const InvokeFunction &f, int ms=50) {
+	virtual void invokeLater(const InvokeFunction &f, int ms=50,
+        boost::shared_ptr<void> toTrack=boost::shared_ptr<void>())
+    {
 		f(); // call immediately
 	}
 	//-------------------------------------------------------------------------

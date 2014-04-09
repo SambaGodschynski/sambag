@@ -73,9 +73,6 @@ void BasicMenuListener<ComponentModell>::
 				b.get(),
 				events::ActionEvent(b)
 		);
-		Window::Ptr w = boost::dynamic_pointer_cast<Window>(b->getRootContainer());
-		if (w)
-			w->close();
 		break;
 	}
 	default:
@@ -115,7 +112,11 @@ namespace {
 	}
 }
 //-----------------------------------------------------------------------------
-inline void popupTimerExpired(void *src, const TimerEvent &ev, Menu::Ptr item) {
+inline void popupTimerExpired(void *src, const TimerEvent &ev, Menu::WPtr _item) {
+    Menu::Ptr item = _item.lock();
+    if (!item) {
+        return;
+    }
 	executePopup(item);
 }
 //-----------------------------------------------------------------------------
@@ -129,7 +130,7 @@ setupPostTimer(Menu::Ptr item)
 	}
 	Timer::Ptr timer = Timer::create(item->getDelay());
 	timer->EventSender<TimerEvent>::addEventListener(
-			boost::bind(&popupTimerExpired, _1, _2, item)
+			boost::bind(&popupTimerExpired, _1, _2, Menu::WPtr(item))
 	);
 	timer->start();
 }

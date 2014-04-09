@@ -27,7 +27,8 @@ namespace sambag { namespace disco { namespace components {
   * @class CocoaWindowImpl.
   */
 class CocoaWindowImpl :
-	public _CocoaWindowImpl // encapsulated objective-c impl.
+	public _CocoaWindowImpl, // encapsulated objective-c impl.
+    public boost::enable_shared_from_this<CocoaWindowImpl>
 {
 //=============================================================================
 friend class CocoaWindowToolkit;
