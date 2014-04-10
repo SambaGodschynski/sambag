@@ -1,27 +1,22 @@
-the example:
-
-luaClass MyClass {
+class MyClass extends ASuperClass {
 	 /**
   	  * javadoc 'esk comments
+	  * @param the value
+          * @return the other value
 	  */
-	 void aFunction();
-	 int aField;
+	 void aFunction(int bla, float mah, string bah);
+	/**
+ 	 * @brief whatever
+  	 */ 
+	ManuallyReturn<1> f();
+	 /*acomment*/
+	 int aField=10;
+	
+	/**
+ 	 * @brief metafunction
+	 */
+	string __tostring();
 }
-
-will generate:
-
-ALuaMyClass.hpp:
-
-class ALuaMyClass : public ALuaObject {
-      SAMBAG_LUA_FTAG(aFunction, void());
-      typedef LOKI_TYPELIST_1(Lua_aFunction_Tag) Functions1;
-      int aField() const;
-      void aField(int val);
-      virtual void aFunction(lua_State *l) = 0;
-      addLuaFields(lua_State *lua, int index);
-};
-
-and a doc file
 
 
 
