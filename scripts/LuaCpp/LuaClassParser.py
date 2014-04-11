@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.100.20.41.43'
+__version__ = '14.101.19.26.31'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -72,6 +72,11 @@ class LuaClassParser(Parser):
         self._token('*/')
 
     @rule_def
+    def _singleComment_(self):
+        self._token('//')
+        self._pattern(r'.*')
+
+    @rule_def
     def _comment_(self):
         with self._group():
             with self._choice():
@@ -79,6 +84,8 @@ class LuaClassParser(Parser):
                     self._docComment_()
                 with self._option():
                     self._defaultComment_()
+                with self._option():
+                    self._singleComment_()
                 self._error('no available options')
 
     @rule_def
@@ -105,7 +112,9 @@ class LuaClassParser(Parser):
                     self._token('string')
                 with self._option():
                     self._manuallyReturn_()
-                self._error('expecting one of: string int float double')
+                with self._option():
+                    self._token('bool')
+                self._error('expecting one of: string int float double bool')
 
     @rule_def
     def _def_(self):
@@ -150,11 +159,11 @@ class LuaClassParser(Parser):
         self._token('(')
         with self._optional():
             self._arg_()
-            self.ast['args'] = self.last_node
+            self.ast.add_list('args', self.last_node)
             def block6():
                 self._token(',')
                 self._arg_()
-                self.ast['args'] = self.last_node
+                self.ast.add_list('args', self.last_node)
             self._closure(block6)
         self._token(')')
         self._token(';')
@@ -180,17 +189,21 @@ class LuaClassParser(Parser):
         self._token('(')
         with self._optional():
             self._arg_()
-            self.ast['args'] = self.last_node
+            self.ast.add_list('args', self.last_node)
             def block6():
                 self._token(',')
                 self._arg_()
-                self.ast['args'] = self.last_node
+                self.ast.add_list('args', self.last_node)
             self._closure(block6)
         self._token(')')
         self._token(';')
 
     @rule_def
     def _class_(self):
+        def block1():
+            self._comment_()
+        self._closure(block1)
+        self.ast['comment'] = self.last_node
         self._token('class')
         self._name_()
         self.ast['name'] = self.last_node
@@ -199,19 +212,21 @@ class LuaClassParser(Parser):
             self._name_()
             self.ast['extends'] = self.last_node
         self._token('{')
-        def block2():
+        def block4():
             with self._choice():
                 with self._option():
+                    self._comment_()
+                with self._option():
                     self._def_()
-                    self.ast['fields'] = self.last_node
+                    self.ast.add_list('fields', self.last_node)
                 with self._option():
                     self._mfDef_()
-                    self.ast['metaFunctions'] = self.last_node
+                    self.ast.add_list('metaFunctions', self.last_node)
                 with self._option():
                     self._fDef_()
-                    self.ast['functions'] = self.last_node
+                    self.ast.add_list('functions', self.last_node)
                 self._error('no available options')
-        self._closure(block2)
+        self._closure(block4)
         self._token('}')
         self._check_eof()
 
@@ -247,6 +262,9 @@ class LuaClassSemantics(object):
         return ast
 
     def docComment(self, ast):
+        return ast
+
+    def singleComment(self, ast):
         return ast
 
     def comment(self, ast):

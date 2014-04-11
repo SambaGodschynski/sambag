@@ -1,3 +1,6 @@
+/**
+ * @brief Bla
+ */
 class MyClass extends ASuperClass {
 	 /**
   	  * javadoc 'esk comments
@@ -16,6 +19,17 @@ class MyClass extends ASuperClass {
  	 * @brief metafunction
 	 */
 	string __tostring();
+
+	void fistA(int a, float b);
+	void fistB(string messie);
+	void fistC(double x);
+	void fistD();
+	void fistE(bool f);
+	float fistF(bool f);
+	void fistG(bool f);
+	void fistH(int a, int b);
+	int fistI(int a, int b);
+	void fistJ(int a);
 }
 
 

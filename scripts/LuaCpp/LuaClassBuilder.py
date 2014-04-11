@@ -23,10 +23,13 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceHeader("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
 
-    def __processFunctions(self):
+    def __preFunct(self, name):
         tags=""
         tList=[]
-        for x in self.ast['functions']:
+        ast = self.ast[name]
+        if ast==None:
+            return "", []
+        for x in self.ast[name]:
             ret = x['return_']
             if not isinstance(ret, basestring):
                 ret = "sambag::lua::IgnoreReturn%s" % ret['value']
@@ -38,15 +41,40 @@ class LuaClassBuilder(LuaClassParser):
                 for i in range(1,len(args)):
                     tag+= "," + args[i]['type']
             tags+="\t"+tag+"));\n"
+        return tags, tList
+    
+    def __preTListRange(self, l, s, lgt):
+        if len(l)==0:
+            return "Loki::NullType"
+        tl="LOKI_TYPELIST%i(" % lgt
+        tl+="Frx_"+l[0]+"_Tag"
+        for i in range(s, s+lgt-1):
+            tl+=", \n\t"+"Frx_"+l[i]+"_Tag"
+        tl+=")"
+        return tl
+
+    def __preTlist(self,l, name):
+        i=0
+        tl=""
+        while (True):
+            r=len(l)-i
+            if r<=0:
+                break
+            lgt=min(10, r)
+            tl+="typedef " + self.__preTListRange(l,i,lgt) + " %s%i;" % (name,(i/10+1))
+            tl+="\n\n\t"
+            i+=lgt
+        return tl
+  
+    def __processFunctions(self):
+        tags, tList = self.__preFunct('functions')
+        mTags, mtList = self.__preFunct('metaFunctions')
+        tags+=mTags
         self.__replaceHeader("$$F_TAGS$$", tags)
-        if len(tList)==0:
-            return
-        
-        tl="LOKI_TYPELIST%i(" % len(tList)
-        tl+=tList[0]
-        for i in range(1, len(tList)):
-            tl+=", \n\t"+"Frx_"+tList[i]+"_Tag"
-        tl+=");"
+        tl=self.__preTlist(tList, "Functions")
+        if len(mtList)>10:
+            raise Exception("MetaFunctions>10 not supported")
+        tl+=self.__preTlist(mtList, "MetaFunctions")
         self.__replaceHeader("$$F_LISTS$$", tl)
         
 
