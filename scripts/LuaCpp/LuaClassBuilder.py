@@ -15,7 +15,7 @@ class LuaClassBuilder(LuaClassParser):
         self.__loadTemplates()
         self.__processClass()
         self.__processFunctions()
-        print self.header
+        return self.header
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
 
@@ -23,25 +23,33 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceHeader("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
 
-    def __preFunct(self, name):
-        tags=""
-        tList=[]
+    def __preFunct(self, name, form, argform):
+        res=[]
         ast = self.ast[name]
         if ast==None:
-            return "", []
+            return []
         for x in self.ast[name]:
             ret = x['return_']
             if not isinstance(ret, basestring):
                 ret = "sambag::lua::IgnoreReturn%s" % ret['value']
-            tag="SAMBAG_LUA_FTAG(" + x['name'] + ", " + ret + "("
-            tList.append(x['name'])
+            entry=form
+            entry=entry.replace("%name",x['name'])
+            entry=entry.replace("%type", ret)
             args=x['args']
-            if args != None:
-                tag+=args[0]['type']
+            if args == None:
+                entry=entry.replace("%args","")
+            else:
+                arglist=argform
+                arglist=arglist.replace("%type", args[0]['type'])
+                arglist=arglist.replace("%i", "1")
                 for i in range(1,len(args)):
-                    tag+= "," + args[i]['type']
-            tags+="\t"+tag+"));\n"
-        return tags, tList
+                    tmp = "," + argform.replace ("%type", args[i]['type'])
+                    tmp = tmp.replace ("%name", args[i]['name'])
+                    tmp = tmp.replace ("%i", str(i+1))
+                    arglist+=tmp
+                entry=entry.replace("%args",arglist)
+            res.append(entry)
+        return res
     
     def __preTListRange(self, l, s, lgt):
         if len(l)==0:
@@ -67,15 +75,18 @@ class LuaClassBuilder(LuaClassParser):
         return tl
   
     def __processFunctions(self):
-        tags, tList = self.__preFunct('functions')
-        mTags, mtList = self.__preFunct('metaFunctions')
-        tags+=mTags
-        self.__replaceHeader("$$F_TAGS$$", tags)
-        tl=self.__preTlist(tList, "Functions")
-        if len(mtList)>10:
-            raise Exception("MetaFunctions>10 not supported")
-        tl+=self.__preTlist(mtList, "MetaFunctions")
-        self.__replaceHeader("$$F_LISTS$$", tl)
+        fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
+        fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
+        self.__replaceHeader("$$F_TAGS$$", fs)
+#tags, tList = self.__preFunct('functions')
+        #mTags, mtList = self.__preFunct('metaFunctions')
+        #tags+=mTags
+        #self.__replaceHeader("$$F_TAGS$$", tags)
+        #tl=self.__preTlist(tList, "Functions")
+        #if len(mtList)>10:
+        #    raise Exception("MetaFunctions>10 not supported")
+        #tl+=self.__preTlist(mtList, "MetaFunctions")
+        #self.__replaceHeader("$$F_LISTS$$", tl)
         
 
 
@@ -84,5 +95,5 @@ f=open("example.luaCpp","r")
 txt=f.read();
 f.close()
 builder=LuaClassBuilder()
-builder.build(txt)
+print builder.build(txt)
 
