@@ -10,8 +10,19 @@
 #include <sambag/disco/svg/SvgBuilder.hpp>
 #include <sambag/disco/svg/SvgRoot.hpp>
 #include <sambag/disco/svg/graphicElements/SceneGraph.hpp>
+#include <sambag/disco/svg/graphicElements/SceneGraphHelper.hpp>
 
 namespace sambag { namespace disco { namespace components {
+//=============================================================================
+//  Class Dummy
+//=============================================================================
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
+    Rectangle bounds = context->clipExtends();
+    context->rect(bounds);
+    context->setStrokeColor(ColorRGBA(0,0,0));
+    context->stroke();
+}
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================
@@ -47,6 +58,48 @@ void SvgComponent::setSvgFilename(const std::string &name) {
     setupSvgObject(rootObject);
 }
 //-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::getDummy(IDrawable::Ptr x) {
+    ElementMap::iterator it = elMap.find(x);
+    if (it==elMap.end()) {
+        DummyPtr dummy = createDummy(x);
+        add(dummy);
+        elMap[x]=dummy;
+        return dummy;
+    }
+    DummyPtr res = it->second.lock();
+    return res;
+}
+//-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    DummyPtr res = Dummy::create();
+    std::stringstream ss;
+    ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";
+//    ss<<"class='";
+//    std::vector<std::string> classes;
+//    g->getClassNames(x, classes)
+//    BOOST_FOREACH(const std::string &x, classes) {
+//        ss<<x<<" ";
+//    }
+//    ss<<"'/>";
+    res->setName(ss.str());
+    return res;
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::updateDummies() {
+    std::vector<IDrawable::Ptr> elements;
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    getGraphElementsBySelector(".Disco", g, elements);
+    BOOST_FOREACH(IDrawable::Ptr x, elements) {
+        SvgComponent::DummyPtr dummy = getDummy(x);
+        dummy->setBounds(g->getBoundingBox(x));
+    }
+}
+//----------------------------------------------------------------------------
+void SvgComponent::setStretchToFit(bool stretch) {
+    stretchToFit = stretch;
+}
+//-----------------------------------------------------------------------------
 void SvgComponent::doLayout() {
     svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
     Dimension s = rootObject->getSize().getDimension();
@@ -54,6 +107,11 @@ void SvgComponent::doLayout() {
         return;
     }
     math::Matrix m = math::scale2D(getWidth()/s.width(), getHeight()/s.height());
-    g->setTransfomationTo(g->getRootElement(), m);
+    if (stretchToFit) {
+        g->setTransfomationTo(g->getRootElement(), m);
+    }
+    g->invalidateBounds();
+    g->validate(getSize());
+    updateDummies();
 }
 }}} // namespace(s)

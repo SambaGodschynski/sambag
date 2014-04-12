@@ -6,6 +6,8 @@
  */
 
 #include "DiscoView.hpp"
+#include <sambag/disco/svg/SvgRoot.hpp>
+
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
@@ -38,6 +40,7 @@
 #include <boost/filesystem.hpp>
 #include <assert.h>
 #include <sambag/disco/components/events/MouseEventRecorder.hpp>
+
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
 
@@ -534,6 +537,10 @@ void createWindow<ACME>() {
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
+void onSvgMouse(const sdc::events::MouseEvent &ev) {
+    std::cout<<ev.toString();
+}
+
 template <>
 void createWindow<SVG>() {
 	using namespace sambag::disco;
@@ -543,8 +550,32 @@ void createWindow<SVG>() {
 	win[SVG]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
     
     SvgComponent::Ptr svg = SvgComponent::create();
-    svg->setSvgFilename("testimages/gradient01.svg");
+    svg->setSvgFilename("testimages/ComponentTestfield.svg");
     win[SVG]->getContentPane()->add(svg);
+    {
+        IDrawable::Ptr dancer = svg->getSvgObject()->getRelatedSceneGraph()->getElementById("#Dancer");
+        if (!dancer) {
+            std::cout<<"D'OOOOOOH"<<std::endl;
+            return;
+        }
+        AComponent::Ptr cDancer = svg->getDummy(dancer);
+        cDancer->EventSender<sdc::events::MouseEvent>::addEventListener(
+           &trackMouse
+        );
+    }
+    {
+        IDrawable::Ptr dancer = svg->getSvgObject()->getRelatedSceneGraph()->getElementById("#DanceFloor");
+        if (!dancer) {
+            std::cout<<"D'OOOOOOH"<<std::endl;
+            return;
+        }
+        AComponent::Ptr cDancer = svg->getDummy(dancer);
+        std::cout<<cDancer->toString()<<std::endl;
+        cDancer->EventSender<sdc::events::MouseEvent>::addEventListener(
+            &trackMouse
+        );
+    }
+    
 }
 
 
@@ -574,7 +605,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	//std::cout<<ev.toString()<<std::endl;
+	std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {

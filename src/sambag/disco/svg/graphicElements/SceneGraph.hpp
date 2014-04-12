@@ -276,7 +276,7 @@ public:
 	typedef std::list<IProcessListObject::Ptr> ProcessList;
 private:
     //-------------------------------------------------------------------------
-    void computeBoundingBoxes();
+    void computeBoundingBoxes(IDrawContext::Ptr);
     Rectangle computeBoundingBox(IDrawable::Ptr parent);
 	//-------------------------------------------------------------------------
 	ProcessList processList;
@@ -362,12 +362,34 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	/**
-	 * @brief forces process list recalculation
+	 * @brief invalidates bounds and scene
 	 */
 	void invalidate() {
 		processList.clear();
 		element2Bounds.clear();
 	}
+	//-------------------------------------------------------------------------
+	/**
+	 * @brief invalidates bounds only
+	 */
+	void invalidateBounds() {
+		element2Bounds.clear();
+	}
+	//-------------------------------------------------------------------------
+    /**
+     * @brief validates bounds and scene
+     * @param size is used to solve relative svg coordinates
+     */
+	void validate(const Dimension &size) {
+        getProcessList();
+        validateBounds(size);
+	}
+	//-------------------------------------------------------------------------
+    /**
+     * @brief validates bounds only
+     * @param size is used to solve relative svg coordinates
+     */
+	void validateBounds(const Dimension &size);
 	//-------------------------------------------------------------------------
 	/**
 	 * @return the graph implementation. ( the bgl object )
@@ -490,8 +512,7 @@ public:
 	 */
 	const ProcessList & getProcessList() {
 		if ( boost::num_vertices(g) > 0 && processList.empty() ) {
-			createProcessList(processList);	
-			computeBoundingBoxes();	
+            createProcessList(processList);
 		}
 		return processList;
 	}
@@ -721,9 +742,14 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * @return bounds or NULL_RECTANGLE if obj not found
+	 * @deprecated context isn't used anymore
+     */
+	Rectangle getBoundingBox(SceneGraphElement obj, IDrawContext::Ptr) const;
+	//-------------------------------------------------------------------------
+	/**
+	 * @return bounds or NULL_RECTANGLE if obj not found
 	 */
-	Rectangle getBoundingBox(SceneGraphElement obj,
-			IDrawContext::Ptr context) const;
+	Rectangle getBoundingBox(SceneGraphElement obj) const;
 };
 //=============================================================================
 /**

@@ -359,6 +359,10 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
 	IDrawContext::Ptr cn) const
 {
+    return getBoundingBox(obj);
+}
+//-----------------------------------------------------------------------------
+Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
     Element2Bounds::const_iterator it = element2Bounds.find(obj);
     if (it==element2Bounds.end()) {
         return NULL_RECTANGLE;
@@ -388,9 +392,18 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 	return res;
 }
 //-----------------------------------------------------------------------------
-void SceneGraph::computeBoundingBoxes() {
-	std::vector<IDrawable::Ptr> parents;
+void SceneGraph::validateBounds(const Dimension &size) {
+    if (!element2Bounds.empty() && boost::num_vertices(g) > 0) {
+        return;
+    }
     IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+    cn->rect(Rectangle(0,0,size.width(), size.height()));
+    cn->clip();
+    computeBoundingBoxes(cn);
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
+	std::vector<IDrawable::Ptr> parents;
 	boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
         ProcessDrawable::Ptr pr =
             boost::dynamic_pointer_cast<ProcessDrawable>(o);
