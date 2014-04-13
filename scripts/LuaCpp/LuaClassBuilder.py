@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from LuaClassParser import *
-
+import re
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -38,16 +38,20 @@ class LuaClassBuilder(LuaClassParser):
             args=x['args']
             if args == None:
                 entry=entry.replace("%args","")
+                #entry=entry.replace("%,", "")
+                entry = re.sub("%, *", "", entry)
             else:
-                arglist=argform
+                arglist=argform.strip()
                 arglist=arglist.replace("%type", args[0]['type'])
+                arglist=arglist.replace("%name", args[0]['name'])
                 arglist=arglist.replace("%i", "1")
                 for i in range(1,len(args)):
-                    tmp = "," + argform.replace ("%type", args[i]['type'])
+                    tmp = ", " + argform.replace ("%type", args[i]['type'])
                     tmp = tmp.replace ("%name", args[i]['name'])
                     tmp = tmp.replace ("%i", str(i+1))
                     arglist+=tmp
                 entry=entry.replace("%args",arglist)
+                entry=entry.replace("%,",",")
             res.append(entry)
         return res
     
@@ -75,19 +79,24 @@ class LuaClassBuilder(LuaClassParser):
         return tl
   
     def __processFunctions(self):
+        #ftags
         fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
+        fs+=self.__preFunct('metaFunctions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
         fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_TAGS$$", fs)
-#tags, tList = self.__preFunct('functions')
-        #mTags, mtList = self.__preFunct('metaFunctions')
-        #tags+=mTags
-        #self.__replaceHeader("$$F_TAGS$$", tags)
-        #tl=self.__preTlist(tList, "Functions")
-        #if len(mtList)>10:
-        #    raise Exception("MetaFunctions>10 not supported")
-        #tl+=self.__preTlist(mtList, "MetaFunctions")
-        #self.__replaceHeader("$$F_LISTS$$", tl)
-        
+        #type lists
+        tags=self.__preFunct('functions', "%name", "")
+        mTags=self.__preFunct('metaFunctions',"%name", "")
+        if len(mTags)>10:
+            raise Exception("MetaFunctions>10 not supported")
+        tl=self.__preTlist(tags, "Functions")  
+        tl+=self.__preTlist(mTags, "MetaFunctions")  
+        self.__replaceHeader("$$F_LISTS$$", tl)
+        #fdefs
+        fs=self.__preFunct('functions', "%type %name(lua_State *lua%, %args);", "%type %name")
+        fs+=self.__preFunct('MetaFunctions', "%type %name(lua_State *lua%, %args);", "%type %name")
+        fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
+        self.__replaceHeader("$$F_IMPL$$", fs)
 
 
 
