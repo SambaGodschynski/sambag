@@ -15,4 +15,5 @@ def = comment:{comment}type:type name:name "=" value:number ";";
 arg = type:type name:name;
 fDef = comment:{comment} return:(type|manuallyReturn|"void") name:name "(" [args+:arg {"," args+:arg}]  ")" ";" ;
 mfDef = comment:{comment} return:(type|manuallyReturn|"void") name:metaName "(" [args+:arg {"," args+:arg}]  ")" ";" ;
-class = comment:{comment} "class" name:name ["extends" extends:name ]  "{" {comment|fields+:def|metaFunctions+:mfDef|functions+:fDef}* "}" $ ; 
+ns = ns+:name { "." ns+:name } ;
+class = [namespace:ns] comment:{comment} "class" name:name ["extends" extends:name ]  "{" {comment|fields+:def|metaFunctions+:mfDef|functions+:fDef}* "}" $ ; 

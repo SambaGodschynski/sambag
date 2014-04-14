@@ -15,6 +15,8 @@ class LuaClassBuilder(LuaClassParser):
         self.__loadTemplates()
         self.__processClass()
         self.__processFunctions()
+        self.__processFields()
+        self.__processNS()
         return self.header
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
@@ -54,6 +56,36 @@ class LuaClassBuilder(LuaClassParser):
                 entry=entry.replace("%,",",")
             res.append(entry)
         return res
+
+    def __processNS(self):
+        ast = self.ast['namespace']
+        if ast==None:
+            return
+        ast=ast['ns']
+        if ast==None:
+            return
+        ns=""
+        c=0
+        for x in ast:
+            ns+="namespace " + x + " { "
+            c+=1
+        self.__replaceHeader("$$NS$$", ns)
+        self.__replaceHeader("$$NS_END$$", "}"*c + " // namespace(s)")
+
+    def __preFields(self, name, form):
+        res=[]
+        ast = self.ast[name]
+        if ast==None:
+            return []
+        for x in self.ast[name]:
+            res=[]
+            entry=form
+            entry=entry.replace("%name",x['name'])
+            entry=entry.replace("%type", x['type'])
+            entry=entry.replace("%value", x['value'])
+            res.append(entry)
+        return res
+
     
     def __preTListRange(self, l, s, lgt):
         if len(l)==0:
@@ -98,7 +130,11 @@ class LuaClassBuilder(LuaClassParser):
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
 
-
+    def __processFields(self):
+        fields=self.__preFields('fields', "%type %name;")
+        fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
+        self.__replaceHeader("$$FIELDS$$", fields)
+                                
 
 f=open("example.luaCpp","r")
 txt=f.read();

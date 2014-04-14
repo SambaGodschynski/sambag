@@ -12,9 +12,7 @@
 #include <boost/weak_ptr.hpp>
 #include <sambag/lua/ALuaObject.hpp>
 
-namespace frx { namespace scripts {
-namespace slua = sambag::lua;
-
+$$NS$$
 //=============================================================================
 class $$CLASS_NAME$$ : public $$EXTENDS$$ {
 //=============================================================================
@@ -32,6 +30,13 @@ protected:
     $$F_LISTS$$
     ///////////////////////////////////////////////////////////////////////////
     $$F_IMPL$$
+	//-------------------------------------------------------------------------
+	$$FIELDS$$
+	//-------------------------------------------------------------------------
+	/**
+	 * @override 
+	 */	
+	virtual void addLuaFields(lua_State *lua, int index);
 public:
     //-------------------------------------------------------------------------
     $$CLASS_NAME$$();
@@ -46,6 +51,6 @@ public:
 private:
 public:
 }; // $$CLASS_NAME$$
-}} // namespace(s)
+$$NS_END$$
 
 #endif /* SAMBAG_$$CLASS_NAME$$_H */

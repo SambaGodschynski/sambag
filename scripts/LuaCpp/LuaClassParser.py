@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.101.19.26.31'
+__version__ = '14.104.07.40.38'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -199,10 +199,23 @@ class LuaClassParser(Parser):
         self._token(';')
 
     @rule_def
-    def _class_(self):
+    def _ns_(self):
+        self._name_()
+        self.ast.add_list('ns', self.last_node)
         def block1():
-            self._comment_()
+            self._token('.')
+            self._name_()
+            self.ast.add_list('ns', self.last_node)
         self._closure(block1)
+
+    @rule_def
+    def _class_(self):
+        with self._optional():
+            self._ns_()
+            self.ast['namespace'] = self.last_node
+        def block2():
+            self._comment_()
+        self._closure(block2)
         self.ast['comment'] = self.last_node
         self._token('class')
         self._name_()
@@ -212,7 +225,7 @@ class LuaClassParser(Parser):
             self._name_()
             self.ast['extends'] = self.last_node
         self._token('{')
-        def block4():
+        def block5():
             with self._choice():
                 with self._option():
                     self._comment_()
@@ -226,7 +239,7 @@ class LuaClassParser(Parser):
                     self._fDef_()
                     self.ast.add_list('functions', self.last_node)
                 self._error('no available options')
-        self._closure(block4)
+        self._closure(block5)
         self._token('}')
         self._check_eof()
 
@@ -286,6 +299,9 @@ class LuaClassSemantics(object):
         return ast
 
     def mfDef(self, ast):
+        return ast
+
+    def ns(self, ast):
         return ast
 
     def class_(self, ast):
