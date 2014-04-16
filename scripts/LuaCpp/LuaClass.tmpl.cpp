@@ -24,17 +24,14 @@ void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) :
     //slua::push(lua, getTypeId());
     //lua_setfield(lua, index, "__frxtype");
 	// register functions
-/*    int index = createClass<Functions, MetaFunctions, TupleAccessor>
+    using namespace sambag::lua;
+    int index = createClass<Functions1, MetaFunctions, TupleAccessor>
     (
         lua,
-        boost::make_tuple(),
-        boost::make_tuple(
-            boost::bind(&ALuaObject::__destroy, lua, ALuaObject::WPtr(shared_from_this())),
-            boost::bind(&ALuaObject::__tostring, this, lua),
-            boost::bind(&ALuaObject::isequal, this, lua)
-        ),
-        name
-    );*/
+        $$FBIND$$,
+	$$FBIND_META$$,
+        $$CLASS_NAME$$
+    );	
 }
 //-----------------------------------------------------------------------------
 void LuaModelObject::__lua_gc(lua_State *lua) {

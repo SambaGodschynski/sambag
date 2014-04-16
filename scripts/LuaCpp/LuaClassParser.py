@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.104.07.40.38'
+__version__ = '14.106.13.00.00'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -48,6 +48,12 @@ class LuaClassParser(Parser):
     @rule_def
     def _metaName_(self):
         self._pattern(r'__[a-zA-Z][a-zA-Z0-9]*')
+
+    @rule_def
+    def _lcName_(self):
+        self._token('?')
+        self._pattern(r'[a-zA-Z][a-zA-Z0-9]*')
+        self.ast['@'] = self.last_node
 
     @rule_def
     def _commentText_(self):
@@ -111,8 +117,6 @@ class LuaClassParser(Parser):
                 with self._option():
                     self._token('string')
                 with self._option():
-                    self._manuallyReturn_()
-                with self._option():
                     self._token('bool')
                 self._error('expecting one of: string int float double bool')
 
@@ -139,20 +143,23 @@ class LuaClassParser(Parser):
         self.ast['name'] = self.last_node
 
     @rule_def
+    def _return_(self):
+        with self._choice():
+            with self._option():
+                self._type_()
+            with self._option():
+                self._manuallyReturn_()
+            with self._option():
+                self._token('void')
+            self._error('expecting one of: void')
+
+    @rule_def
     def _fDef_(self):
         def block1():
             self._comment_()
         self._closure(block1)
         self.ast['comment'] = self.last_node
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._type_()
-                with self._option():
-                    self._manuallyReturn_()
-                with self._option():
-                    self._token('void')
-                self._error('expecting one of: void')
+        self._return_()
         self.ast['return_'] = self.last_node
         self._name_()
         self.ast['name'] = self.last_node
@@ -160,11 +167,11 @@ class LuaClassParser(Parser):
         with self._optional():
             self._arg_()
             self.ast.add_list('args', self.last_node)
-            def block6():
+            def block5():
                 self._token(',')
                 self._arg_()
                 self.ast.add_list('args', self.last_node)
-            self._closure(block6)
+            self._closure(block5)
         self._token(')')
         self._token(';')
 
@@ -174,15 +181,7 @@ class LuaClassParser(Parser):
             self._comment_()
         self._closure(block1)
         self.ast['comment'] = self.last_node
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._type_()
-                with self._option():
-                    self._manuallyReturn_()
-                with self._option():
-                    self._token('void')
-                self._error('expecting one of: void')
+        self._return_()
         self.ast['return_'] = self.last_node
         self._metaName_()
         self.ast['name'] = self.last_node
@@ -190,11 +189,33 @@ class LuaClassParser(Parser):
         with self._optional():
             self._arg_()
             self.ast.add_list('args', self.last_node)
-            def block6():
+            def block5():
                 self._token(',')
                 self._arg_()
                 self.ast.add_list('args', self.last_node)
-            self._closure(block6)
+            self._closure(block5)
+        self._token(')')
+        self._token(';')
+
+    @rule_def
+    def _lcfDef_(self):
+        def block1():
+            self._comment_()
+        self._closure(block1)
+        self.ast['comment'] = self.last_node
+        self._return_()
+        self.ast['return_'] = self.last_node
+        self._lcName_()
+        self.ast['name'] = self.last_node
+        self._token('(')
+        with self._optional():
+            self._arg_()
+            self.ast.add_list('args', self.last_node)
+            def block5():
+                self._token(',')
+                self._arg_()
+                self.ast.add_list('args', self.last_node)
+            self._closure(block5)
         self._token(')')
         self._token(';')
 
@@ -238,6 +259,9 @@ class LuaClassParser(Parser):
                 with self._option():
                     self._fDef_()
                     self.ast.add_list('functions', self.last_node)
+                with self._option():
+                    self._lcfDef_()
+                    self.ast.add_list('lcFDefs', self.last_node)
                 self._error('no available options')
         self._closure(block5)
         self._token('}')
@@ -268,6 +292,9 @@ class LuaClassSemantics(object):
     def metaName(self, ast):
         return ast
 
+    def lcName(self, ast):
+        return ast
+
     def commentText(self, ast):
         return ast
 
@@ -295,10 +322,16 @@ class LuaClassSemantics(object):
     def arg(self, ast):
         return ast
 
+    def return_(self, ast):
+        return ast
+
     def fDef(self, ast):
         return ast
 
     def mfDef(self, ast):
+        return ast
+
+    def lcfDef(self, ast):
         return ast
 
     def ns(self, ast):

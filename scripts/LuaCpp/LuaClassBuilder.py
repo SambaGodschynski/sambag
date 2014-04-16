@@ -14,12 +14,16 @@ class LuaClassBuilder(LuaClassParser):
         self.ast = self.parse(str, "class")
         self.__loadTemplates()
         self.__processClass()
-        self.__processFunctions()
+        self.__processFunctionsHeader()
         self.__processFields()
         self.__processNS()
-        return self.header
+        self.__processFunctionsImpl()
+        return self.header, self.impl
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
+
+    def __replaceImpl(self, a, b):
+        self.impl = self.impl.replace(a, b)
 
     def __processClass(self):
         self.__replaceHeader("$$CLASS_NAME$$", self.ast['name'])
@@ -110,7 +114,7 @@ class LuaClassBuilder(LuaClassParser):
             i+=lgt
         return tl
   
-    def __processFunctions(self):
+    def __processFunctionsHeader(self):
         #ftags
         fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
         fs+=self.__preFunct('metaFunctions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
@@ -125,8 +129,8 @@ class LuaClassBuilder(LuaClassParser):
         tl+=self.__preTlist(mTags, "MetaFunctions")  
         self.__replaceHeader("$$F_LISTS$$", tl)
         #fdefs
-        fs=self.__preFunct('functions', "%type %name(lua_State *lua%, %args);", "%type %name")
-        fs+=self.__preFunct('MetaFunctions', "%type %name(lua_State *lua%, %args);", "%type %name")
+        fs=self.__preFunct('functions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
+        fs+=self.__preFunct('MetaFunctions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
 
@@ -134,11 +138,20 @@ class LuaClassBuilder(LuaClassParser):
         fields=self.__preFields('fields', "%type %name;")
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
+
+    def __processFunctionsImpl(self):
+        cname = self.ast['name']
+        print cname
+        fs=self.__preFunct('functions', "&"+cname+"::%name, self%, %args", "_%i")
+        fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
+        self.__replaceImpl("$$FBIND$$", fs)
+
                                 
 
 f=open("example.luaCpp","r")
 txt=f.read();
 f.close()
 builder=LuaClassBuilder()
-print builder.build(txt)
-
+header, impl = builder.build(txt)
+print header
+print impl
