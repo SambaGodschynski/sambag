@@ -227,7 +227,7 @@ public:
         endEdit(index);
 	}
 	//-------------------------------------------------------------------------
-	virtual HostTimeInfo * getHostTimeInfo (int filter);
+	HostTimeInfo * getHostTimeInfoImpl (int filter);
 	//-------------------------------------------------------------------------
 	virtual bool requestEditorResize(int width, int height) {
 		if (!AudioEffectX::canHostDo ("sizeWindow")) {
@@ -276,7 +276,7 @@ public:
 //-----------------------------------------------------------------------------
 template <class P, int U, class T , class E , class C, class CD> 
 HostTimeInfo * 
-VST2xPluginWrapper<P,U,T,E,C,CD>::getHostTimeInfo (int filter) 
+VST2xPluginWrapper<P,U,T,E,C,CD>::getHostTimeInfoImpl (int filter)
 {
 	// convert filter
 	VstTimeInfoFlags f =

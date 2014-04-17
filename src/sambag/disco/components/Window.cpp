@@ -82,8 +82,11 @@ void Window::onParentClose(void *src, const OnCloseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void Window::onWindowImplClose(void *src, const OnCloseEvent &ev) {
-	ui::UIManager &m = ui::getUIManager();
-	m.uninstallLookAndFeel(getRootPane());
+	try {
+        ui::UIManager &m = ui::getUIManager();
+        m.uninstallLookAndFeel(getRootPane());
+    } catch(...) {
+    }
 }
 //-----------------------------------------------------------------------------
 void Window::onWindowImplOpen(void *src, const OnOpenEvent &ev) {
@@ -179,6 +182,10 @@ void Window::close() {
 	if (!isVisible())
 		return;
 	windowImpl->close();
+    
+    getWindowImpl()->EventSender<OnCloseEvent>::
+        notifyListeners(windowImpl.get(), OnCloseEvent());
+    
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		openWindows.erase(getPtr());
 	SAMBAG_END_SYNCHRONIZED

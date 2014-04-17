@@ -15,46 +15,6 @@
 
 namespace sambag { namespace disco { namespace components {
 
-namespace private_ {
-///////////////////////////////////////////////////////////////////////////////
-struct DFSVisitor : public boost::dfs_visitor<> {
-    //-------------------------------------------------------------------------
-    typedef svg::graphicElements::SceneGraph SceneGraph;
-    //-------------------------------------------------------------------------
-    SceneGraph::Ptr sg;
-    //-------------------------------------------------------------------------
-    SvgComponent *master;
-    //-------------------------------------------------------------------------
-    DFSVisitor(const SceneGraph::Ptr sg, SvgComponent *master) :
-        sg(sg), master(master) {}
-    //-------------------------------------------------------------------------
-    template <class Vertex, class Graph>
-    void discover_vertex(const Vertex &u, Graph &g) {
-        IDrawable::Ptr drw = sg->getSceneGraphElement(u);
-        if (!drw) {
-            return;
-        }
-        SvgComponent::DummyPtr dummy = master->getDummy(drw);
-        if (!dummy) {
-            return;
-        }
-        std::cout<<"D "<<dummy->toString()<<std::endl;
-    }
-    //-------------------------------------------------------------------------
-    template <class Vertex, class Graph>
-    void finish_vertex(const Vertex &u, Graph &g) {
-        IDrawable::Ptr drw = sg->getSceneGraphElement(u);
-        if (!drw) {
-            return;
-        }
-        SvgComponent::DummyPtr dummy = master->getDummy(drw);
-        if (!dummy) {
-            return;
-        }
-        std::cout<<"F "<<dummy->toString()<<std::endl;
-    }
-};
-} // namespace
 //=============================================================================
 //  Class Dummy
 //=============================================================================
@@ -136,15 +96,8 @@ void SvgComponent::updateDummies() {
         SvgComponent::DummyPtr dummy = getDummy(x);
         dummy->setBounds(g->getBoundingBox(x));
     }
-    
-    private_::DFSVisitor vis(g, this);
-    
-    boost::depth_first_search(
-		g->getGraphImpl(),
-		boost::visitor(vis)
-	);
 }
-//----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void SvgComponent::setStretchToFit(bool stretch) {
     stretchToFit = stretch;
 }
