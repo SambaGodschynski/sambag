@@ -1,3 +1,4 @@
+frx.lua.example
 /**
  * @brief Bla
  */
@@ -30,6 +31,11 @@ class MyClass extends ASuperClass {
 	void fistH(int a, int b);
 	int fistI(int a, int b);
 	void fistJ(int a);
+
+	/**
+   	 * lc (lua call) functions
+	 */
+	void ?whoAreYou(int x);
 }
 
 

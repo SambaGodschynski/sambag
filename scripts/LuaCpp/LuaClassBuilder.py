@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from LuaClassParser import *
-
+import re
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -14,10 +14,16 @@ class LuaClassBuilder(LuaClassParser):
         self.ast = self.parse(str, "class")
         self.__loadTemplates()
         self.__processClass()
-        self.__processFunctions()
-        return self.header
+        self.__processFunctionsHeader()
+        self.__processFields()
+        self.__processNS()
+        self.__processFunctionsImpl()
+        return self.header, self.impl
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
+
+    def __replaceImpl(self, a, b):
+        self.impl = self.impl.replace(a, b)
 
     def __processClass(self):
         self.__replaceHeader("$$CLASS_NAME$$", self.ast['name'])
@@ -38,18 +44,52 @@ class LuaClassBuilder(LuaClassParser):
             args=x['args']
             if args == None:
                 entry=entry.replace("%args","")
+                #entry=entry.replace("%,", "")
+                entry = re.sub("%, *", "", entry)
             else:
-                arglist=argform
+                arglist=argform.strip()
                 arglist=arglist.replace("%type", args[0]['type'])
+                arglist=arglist.replace("%name", args[0]['name'])
                 arglist=arglist.replace("%i", "1")
                 for i in range(1,len(args)):
-                    tmp = "," + argform.replace ("%type", args[i]['type'])
+                    tmp = ", " + argform.replace ("%type", args[i]['type'])
                     tmp = tmp.replace ("%name", args[i]['name'])
                     tmp = tmp.replace ("%i", str(i+1))
                     arglist+=tmp
                 entry=entry.replace("%args",arglist)
+                entry=entry.replace("%,",",")
             res.append(entry)
         return res
+
+    def __processNS(self):
+        ast = self.ast['namespace']
+        if ast==None:
+            return
+        ast=ast['ns']
+        if ast==None:
+            return
+        ns=""
+        c=0
+        for x in ast:
+            ns+="namespace " + x + " { "
+            c+=1
+        self.__replaceHeader("$$NS$$", ns)
+        self.__replaceHeader("$$NS_END$$", "}"*c + " // namespace(s)")
+
+    def __preFields(self, name, form):
+        res=[]
+        ast = self.ast[name]
+        if ast==None:
+            return []
+        for x in self.ast[name]:
+            res=[]
+            entry=form
+            entry=entry.replace("%name",x['name'])
+            entry=entry.replace("%type", x['type'])
+            entry=entry.replace("%value", x['value'])
+            res.append(entry)
+        return res
+
     
     def __preTListRange(self, l, s, lgt):
         if len(l)==0:
@@ -74,26 +114,50 @@ class LuaClassBuilder(LuaClassParser):
             i+=lgt
         return tl
   
-    def __processFunctions(self):
+    def __processFunctionsHeader(self):
+        #ftags
         fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
+        fs+=self.__preFunct('metaFunctions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
         fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_TAGS$$", fs)
-#tags, tList = self.__preFunct('functions')
-        #mTags, mtList = self.__preFunct('metaFunctions')
-        #tags+=mTags
-        #self.__replaceHeader("$$F_TAGS$$", tags)
-        #tl=self.__preTlist(tList, "Functions")
-        #if len(mtList)>10:
-        #    raise Exception("MetaFunctions>10 not supported")
-        #tl+=self.__preTlist(mtList, "MetaFunctions")
-        #self.__replaceHeader("$$F_LISTS$$", tl)
+        #type lists
+        tags=self.__preFunct('functions', "%name", "")
+        mTags=self.__preFunct('metaFunctions',"%name", "")
+        if len(mTags)>10:
+            raise Exception("MetaFunctions>10 not supported")
+        tl=self.__preTlist(tags, "Functions")  
+        tl+=self.__preTlist(mTags, "MetaFunctions")  
+        self.__replaceHeader("$$F_LISTS$$", tl)
+        #fdefs
+        fs=self.__preFunct('functions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
+        fs+=self.__preFunct('MetaFunctions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
+        fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
+        self.__replaceHeader("$$F_IMPL$$", fs)
+
+    def __processFields(self):
+        fields=self.__preFields('fields', "%type %name;")
+        fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
+        self.__replaceHeader("$$FIELDS$$", fields)
+
         
+    def __processBinds(self, fs, s, e):
+        if e<=s:
+            return ""
+        strFs="boost::make_tuple(" + fs[s]
+        for i in range(s+1,e+1):
+            strFs+=",\n\t\t" + fs[i]
+        return strFs+")"
 
-
+    def __processFunctionsImpl(self):                            
+        cname = self.ast['name']
+        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, self%, %args)", "_%i")
+        binds = self.__processBinds(fs, 0,9)
+        self.__replaceImpl("$$FBIND$$", binds)        
 
 f=open("example.luaCpp","r")
 txt=f.read();
 f.close()
 builder=LuaClassBuilder()
-print builder.build(txt)
-
+header, impl = builder.build(txt)
+print header
+print impl
