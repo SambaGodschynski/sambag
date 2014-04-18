@@ -139,14 +139,20 @@ class LuaClassBuilder(LuaClassParser):
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
 
-    def __processFunctionsImpl(self):
-        cname = self.ast['name']
-        print cname
-        fs=self.__preFunct('functions', "&"+cname+"::%name, self%, %args", "_%i")
-        fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
-        self.__replaceImpl("$$FBIND$$", fs)
+        
+    def __processBinds(self, fs, s, e):
+        if e<=s:
+            return ""
+        strFs="boost::make_tuple(" + fs[s]
+        for i in range(s+1,e+1):
+            strFs+=",\n\t\t" + fs[i]
+        return strFs+")"
 
-                                
+    def __processFunctionsImpl(self):                            
+        cname = self.ast['name']
+        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, self%, %args)", "_%i")
+        binds = self.__processBinds(fs, 0,9)
+        self.__replaceImpl("$$FBIND$$", binds)        
 
 f=open("example.luaCpp","r")
 txt=f.read();
