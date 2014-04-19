@@ -205,7 +205,6 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 bool SceneGraph::registerElementClass(SceneGraphElement el,
 		const SceneGraph::Class &className )
 {
-
 	Vertex classVertex = NULL_VERTEX;
 	Vertex elV = getRelatedVertex(el);
 	if (elV == NULL_VERTEX)

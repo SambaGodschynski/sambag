@@ -23,12 +23,12 @@ void TestSVGComponent::testComponentTree() {
 
     SvgComponent::Ptr svg = SvgComponent::create();
     svg->setSvgString("<svg>                                                \
-        <g class='Disco' id='A'>                                            \
-            <g class='Disco' id='B'>                                        \
-                <g class='Disco' id='C'>                                    \
+        <g class='disco' id='A'>                                            \
+            <g class='disco' id='B'>                                        \
+                <g class='disco' id='C'>                                    \
                 </g>                                                        \
             </g>                                                            \
-            <g class='Disco' id='D'>                                        \
+            <g class='disco' id='D'>                                        \
             </g>                                                            \
         </g>                                                                \
     </svg>");
@@ -38,10 +38,10 @@ void TestSVGComponent::testComponentTree() {
     svg->printComponentTree(ss);
     CPPUNIT_ASSERT_EQUAL(std::string("[SvgComponent,0,0,800x600,invalid,alignmentX=0.5,alignmentY=0.5,max\
 imumSize=Rectangle(Point2D(0, 0), Point2D(0, 0))]\n\
- [<g id='#C' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#B' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#D' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#A' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n"), ss.str());
+ [<g id='#C' class='.disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#B' class='.disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#D' class='.disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#A' class='.disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n"), ss.str());
     
 }
 } //namespace

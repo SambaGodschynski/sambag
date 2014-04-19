@@ -552,27 +552,11 @@ void createWindow<SVG>() {
     SvgComponent::Ptr svg = SvgComponent::create();
     svg->setSvgFilename("testimages/ComponentTestfield.svg");
     win[SVG]->getContentPane()->add(svg);
-    {
-        IDrawable::Ptr dancer = svg->getSvgObject()->getRelatedSceneGraph()->getElementById("#Dancer");
-        if (!dancer) {
-            std::cout<<"D'OOOOOOH"<<std::endl;
-            return;
-        }
-        AComponent::Ptr cDancer = svg->getDummy(dancer);
-        cDancer->EventSender<sdc::events::MouseEvent>::addEventListener(
+    std::vector<SvgComponent::Dummy::Ptr> dummies;
+    svg->getDummiesByClass(".dancer", dummies);
+    BOOST_FOREACH(AComponent::Ptr x, dummies) {
+        x->EventSender<sdc::events::MouseEvent>::addEventListener(
            &trackMouse
-        );
-    }
-    {
-        IDrawable::Ptr dancer = svg->getSvgObject()->getRelatedSceneGraph()->getElementById("#DanceFloor");
-        if (!dancer) {
-            std::cout<<"D'OOOOOOH"<<std::endl;
-            return;
-        }
-        AComponent::Ptr cDancer = svg->getDummy(dancer);
-        std::cout<<cDancer->toString()<<std::endl;
-        cDancer->EventSender<sdc::events::MouseEvent>::addEventListener(
-            &trackMouse
         );
     }
     

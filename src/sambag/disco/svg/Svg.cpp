@@ -12,6 +12,7 @@
 #include "SvgPattern.hpp"
 #include "sambag/com/Exception.hpp"
 #include <boost/bind.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -23,6 +24,15 @@ void SvgObject::createBase(SvgRoot* root) {
 		return;
 	svgRootObject = root->getPtr();
 	setRelatedSceneGraph(root->getRelatedSceneGraph());
+}
+//-----------------------------------------------------------------------------
+void SvgObject::setClassName(const std::string & str) {
+    using namespace boost::algorithm;
+    std::vector<std::string> classes;
+    split(classes, str, is_any_of(" "), token_compress_on);
+    BOOST_FOREACH(const std::string &x, classes) {
+        sceneGraph->registerElementClass(getGraphicElement(), "." + x);
+    }
 }
 //-----------------------------------------------------------------------------
 void SvgObject::add(Ptr obj) {

@@ -60,7 +60,29 @@ void SvgComponent::setSvgFilename(const std::string &name) {
     setupSvgObject(rootObject);
 }
 //-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::getDummyById(const std::string &id) {
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    IDrawable::Ptr x = g->getElementById(id);
+    return getDummy(x);
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out)
+{
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    std::vector<IDrawable::Ptr> objects;
+    g->getElementsByClass(_class, objects);
+    BOOST_FOREACH(IDrawable::Ptr x, objects) {
+        if (!x) {
+            continue;
+        }
+        out.push_back(getDummy(x));
+    }
+}
+//-----------------------------------------------------------------------------
 SvgComponent::DummyPtr SvgComponent::getDummy(IDrawable::Ptr x) {
+    if (!x) {
+        return SvgComponent::DummyPtr();
+    }
     ElementMap::iterator it = elMap.find(x);
     if (it==elMap.end()) {
         DummyPtr dummy = createDummy(x);
@@ -91,7 +113,7 @@ SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
 void SvgComponent::updateDummies() {
     std::vector<IDrawable::Ptr> elements;
     svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
-    getGraphElementsBySelector(".Disco", g, elements);
+    getGraphElementsBySelector(".disco", g, elements);
     BOOST_FOREACH(IDrawable::Ptr x, elements) {
         SvgComponent::DummyPtr dummy = getDummy(x);
         dummy->setBounds(g->getBoundingBox(x));

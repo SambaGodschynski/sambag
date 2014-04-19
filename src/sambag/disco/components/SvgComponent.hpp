@@ -89,6 +89,18 @@ public:
      */
     DummyPtr getDummy(IDrawable::Ptr x);
     //-------------------------------------------------------------------------
+    /**
+     * @return dummy for svg id
+     * @note the id including pre '#' char -> "#objectID"
+     */
+    DummyPtr getDummyById(const std::string &id);
+    //-------------------------------------------------------------------------
+    /**
+     * @return dummies for svg class
+     * @note the id including pre '.' char -> ".classID"
+     */
+    void getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out);
+    //-------------------------------------------------------------------------
     void setStretchToFit(bool stretch);
     //-------------------------------------------------------------------------
     bool isStretchToFit() const {return stretchToFit;}
