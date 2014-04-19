@@ -3,14 +3,14 @@
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="800" height="600" 
      xmlns="http://www.w3.org/2000/svg" version="1.1">
-  <g stroke="lightblue" class="disco">
+  <g stroke="lightblue" class="disco" id="WHOLESHIT" fill="hotpink">
     <rect x="1" y="1" width="100%" height="100%"
-	  stroke-width="10" fill="hotpink"/>
+	  stroke-width="10"/>
     <g class="disco">
       <rect x="50%" y="10%" width="420px" height="420px" stroke-width="4px"
 	    fill="palegreen" class="disco dancer" id="DanceFloor" transform="translate(-210,0)"/>
       <rect x="50%" y="10%" width="120px" height="120px" stroke-width="4px"
-	    fill="yellow" class="disco dancer" id="pussy" transform="translate(-210,0)"/>
+	    fill="yellow" class="disco dancer" id="Pussy" transform="translate(-210,0)"/>
     </g>
     
   </g>  
