@@ -28,12 +28,20 @@ void TestSVGComponent::testComponentTree() {
                 <g class='Disco' id='C'>                                    \
                 </g>                                                        \
             </g>                                                            \
-            <g class='DISCO' id='D'>                                        \
+            <g class='Disco' id='D'>                                        \
             </g>                                                            \
         </g>                                                                \
     </svg>");
     svg->setSize(Dimension(800,600));
     svg->doLayout();
-    svg->printComponentTree(std::cout);
+    std::stringstream ss;
+    svg->printComponentTree(ss);
+    CPPUNIT_ASSERT_EQUAL(std::string("[SvgComponent,0,0,800x600,invalid,alignmentX=0.5,alignmentY=0.5,max\
+imumSize=Rectangle(Point2D(0, 0), Point2D(0, 0))]\n\
+ [<g id='#C' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#B' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#D' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#A' class='.Disco '/>,0,0,0x0,invalid,alignmentX=0.5,alignmentY=0.5]\n"), ss.str());
+    
 }
 } //namespace

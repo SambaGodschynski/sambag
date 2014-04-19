@@ -24,6 +24,7 @@ private:
 	CPPUNIT_TEST( testGetChildrenOf );
 	CPPUNIT_TEST( testGetChildrenOfFiltered );
 	CPPUNIT_TEST( testCopySubGraph );
+    CPPUNIT_TEST( testCalculateStyle );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testConstructor();
@@ -34,6 +35,7 @@ public:
 	void testGetChildrenOf();
 	void testGetChildrenOfFiltered();
 	void testCopySubGraph();
+    void testCalculateStyle();
 };
 
 } // namespace

@@ -77,13 +77,13 @@ SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
     DummyPtr res = Dummy::create();
     std::stringstream ss;
     ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";
-//    ss<<"class='";
-//    std::vector<std::string> classes;
-//    g->getClassNames(x, classes)
-//    BOOST_FOREACH(const std::string &x, classes) {
-//        ss<<x<<" ";
-//    }
-//    ss<<"'/>";
+    ss<<"class='";
+    std::vector<std::string> classes;
+    g->getClassNames(x, classes);
+    BOOST_FOREACH(const std::string &x, classes) {
+        ss<<x<<" ";
+    }
+    ss<<"'/>";
     res->setName(ss.str());
     return res;
 }

@@ -15,6 +15,8 @@
 #include <sambag/math/Matrix.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include "Compound.hpp"
+#include <boost/graph/breadth_first_search.hpp>
+#include <boost/graph/visitors.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -236,6 +238,42 @@ SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 	return vertexElementMap[v];
 }
 //-----------------------------------------------------------------------------
+graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
+    Vertex v = getRelatedVertex(el);
+    if (v==NULL_VERTEX) {
+        return graphicElements::Style();
+    }
+    // perform breadth search
+    std::vector<Vertex> p(boost::num_vertices(g));
+    Vertex s = *(boost::vertices(g).first);
+    Vertex end = INT_MAX;
+    p[s] = end;
+    boost::breadth_first_search(g, s,
+        boost::visitor(
+            boost::make_bfs_visitor(
+                boost::record_predecessors(&p[0], boost::on_tree_edge())
+            )
+        )
+    );
+    // collect styles
+    std::list<StylePtr> styles;
+    Vertex it = v;
+    while(it!=end) {
+        StylePtr style = getStyleRef(it);
+        if (style) {
+            styles.push_back(style);
+        }
+        it = p.at(it); // get predecessor
+    };
+    // add styles
+    graphicElements::Style res;
+    while(!styles.empty()) {
+        res.add(*(styles.front()));
+        styles.pop_front();
+    }
+    return res;
+}
+//-----------------------------------------------------------------------------
 size_t SceneGraph::inDegreeOf(const Vertex& v, VertexType type) const {
 	size_t result = 0;
 	InvAdjacencyIterator it, end;
@@ -323,6 +361,12 @@ SceneGraph::getTransformationRef(SceneGraphElement el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return MatrixPtr();
+    return getTransformationRef(rv);
+}
+//----------------------------------------------------------------------------
+SceneGraph::MatrixPtr
+SceneGraph::getTransformationRef(Vertex rv) const
+{
 	// find parent transformation node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
@@ -339,6 +383,12 @@ SceneGraph::getStyleRef(SceneGraphElement el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return StylePtr();
+    return getStyleRef(rv);
+}
+//----------------------------------------------------------------------------
+SceneGraph::StylePtr
+SceneGraph::getStyleRef(Vertex rv) const
+{
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;

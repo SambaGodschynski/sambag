@@ -20,6 +20,7 @@ private:
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testComponentTree();
+    
 };
 
 } // namespace

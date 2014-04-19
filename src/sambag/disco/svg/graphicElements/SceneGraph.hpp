@@ -17,7 +17,6 @@
 #include <boost/unordered_map.hpp>
 #include <boost/graph/vector_as_graph.hpp>
 #include <boost/graph/depth_first_search.hpp>
-#include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/copy.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -26,9 +25,8 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 /**
  * @class interface for ProcessListProcessors.
  */
-class IProcessListObject {
+struct IProcessListObject {
 //=============================================================================
-public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IProcessListObject> Ptr;
 	//-------------------------------------------------------------------------
@@ -44,15 +42,10 @@ public:
 /**
  * @class restores context state such as transformations
  */
-class DoNothing : public IProcessListObject {
+struct DoNothing : public IProcessListObject {
 //=============================================================================
-public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<DoNothing> Ptr;
-private:
-	//-------------------------------------------------------------------------
-	DoNothing(){};
-public:
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return "DoNothing";
@@ -70,12 +63,10 @@ public:
 /**
  * @class performs a iDrawObject->draw()
  */
-class ProcessDrawable : public IProcessListObject {
+struct ProcessDrawable : public IProcessListObject {
 //=============================================================================
-public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<ProcessDrawable> Ptr;
-private:
 	//-------------------------------------------------------------------------
 	IDrawable::Ptr drawable;
 	//-------------------------------------------------------------------------
@@ -95,7 +86,6 @@ private:
 		resetContextState(resetContextState),
 		style(style),
 		transformation(transformation){}
-public:
     //-------------------------------------------------------------------------
     IDrawable::Ptr getDrawable() const {
         return drawable;
@@ -127,15 +117,12 @@ public:
 /**
  * @class restores context state such as transformations
  */
-class RestoreContextState : public IProcessListObject {
+struct RestoreContextState : public IProcessListObject {
 //=============================================================================
-public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<RestoreContextState> Ptr;
-private:
 	//-------------------------------------------------------------------------
 	RestoreContextState(){};
-public:
 	//-------------------------------------------------------------------------
 	virtual std::string toString() const {
 		return "RestoreContextState";
@@ -478,6 +465,8 @@ public:
 	 */
 	bool registerElementClass(SceneGraphElement el, const Class &className );
 	//-------------------------------------------------------------------------
+	MatrixPtr getTransformationRef(Vertex v) const;
+	//-------------------------------------------------------------------------
 	MatrixPtr getTransformationRef(SceneGraphElement el) const;
 	//-------------------------------------------------------------------------
 	Matrix getTransformationOf(SceneGraphElement el) const {
@@ -487,12 +476,27 @@ public:
 		return *(res.get());
 	}
 	//-------------------------------------------------------------------------
-	graphicElements::Style getStyleOf(SceneGraphElement el) const {
+	/**
+     * @return the style related to an element
+     * @note this style does not considering the scene tree, which means
+     * if a parent element is filled red and the target element isn't filled,
+     * the resulting style has no fill attribute. 
+     * Use @see calculateStyle() instead.
+     */
+    graphicElements::Style getStyleOf(SceneGraphElement el) const {
 		StylePtr res = getStyleRef(el);
 		if (!res)
 			return graphicElements::Style::getNullStyle();
 		return *(res.get());
 	}
+    //-------------------------------------------------------------------------
+    /**
+     * @brief calculates the style of an element considering the scene
+     * tree.
+     */
+    graphicElements::Style calculateStyle(SceneGraphElement el);
+	//-------------------------------------------------------------------------
+	StylePtr getStyleRef(Vertex v) const;
 	//-------------------------------------------------------------------------
 	StylePtr getStyleRef(SceneGraphElement el) const;
 	//-------------------------------------------------------------------------
