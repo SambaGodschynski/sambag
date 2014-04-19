@@ -10,7 +10,7 @@
       <rect x="50%" y="10%" width="420px" height="420px" stroke-width="4px"
 	    fill="palegreen" class="disco dancer" id="DanceFloor" transform="translate(-210,0)"/>
       <rect x="50%" y="10%" width="120px" height="120px" stroke-width="4px"
-	    fill="yellow" class="disco dancer" transform="translate(-210,0)"/>
+	    fill="yellow" class="disco dancer" id="pussy" transform="translate(-210,0)"/>
     </g>
     
   </g>  

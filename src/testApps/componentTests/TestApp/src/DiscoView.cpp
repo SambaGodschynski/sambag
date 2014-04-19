@@ -537,8 +537,19 @@ void createWindow<ACME>() {
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
-void onSvgMouse(const sdc::events::MouseEvent &ev) {
-    std::cout<<ev.toString();
+void onSvgMouse(void *, const sdc::events::MouseEvent &ev) {
+   	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+    using namespace sambag::disco::components::events;
+    AComponent::Ptr c = ev.getSource();
+    std::cout<<c->toString()<<std::endl;
+    if (ev.getType() == MouseEvent::DISCO_MOUSE_ENTERED) {
+        c->setBackground(ColorRGBA(0));
+    }
+    if (ev.getType() == MouseEvent::DISCO_MOUSE_EXITED) {
+    
+    }
+    
 }
 
 template <>
@@ -553,10 +564,10 @@ void createWindow<SVG>() {
     svg->setSvgFilename("testimages/ComponentTestfield.svg");
     win[SVG]->getContentPane()->add(svg);
     std::vector<SvgComponent::Dummy::Ptr> dummies;
-    svg->getDummiesByClass(".dancer", dummies);
+    svg->getDummiesByClass(".disco", dummies);
     BOOST_FOREACH(AComponent::Ptr x, dummies) {
         x->EventSender<sdc::events::MouseEvent>::addEventListener(
-           &trackMouse
+           &onSvgMouse
         );
     }
     
@@ -589,7 +600,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 void trackMouse(void *src, const sdc::events::MouseEvent &ev) {
 	using namespace sambag::disco::components;
 	using namespace sambag::disco;
-	std::cout<<ev.toString()<<std::endl;
+	//std::cout<<ev.toString()<<std::endl;
 }
 
 void handlePopupMouse(sdc::PopupMenuPtr popup, const sdc::events::MouseEvent &ev) {

@@ -48,7 +48,31 @@ public:
         Dummy() {
             setName("SvgComponent::Dummy");
         }
+    private:
+        //---------------------------------------------------------------------
+        friend class SvgComponent;
+        boost::weak_ptr<IDrawable> drawable;
     public:
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the stroke color on related object in scene graph
+         */
+        virtual void setForeground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the fill color on related object in scene graph
+         */
+        virtual void setBackground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @return the stroke color on related object in scene graph
+         */
+        virtual IPattern::Ptr getForegroundPattern() const;
+        //---------------------------------------------------------------------
+        /**
+         * @return the fill color on related object in scene graph
+         */
+        virtual IPattern::Ptr getBackgroundPattern() const;
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
         //---------------------------------------------------------------------

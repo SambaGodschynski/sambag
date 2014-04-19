@@ -320,7 +320,9 @@ bool SceneGraph::setTransfomationRefTo(SceneGraphElement el, MatrixPtr m) {
 	vertexTypeMap[tv] = TRANSFORM;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
-	return succeed;
+    // scene tree is invalid now
+	invalidate();
+    return succeed;
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setStyleTo(
@@ -351,6 +353,8 @@ bool SceneGraph::setStyleRefTo(
 	vertexTypeMap[tv] = STYLE;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
+    // scene tree is invalid now
+    invalidate();
 	return succeed;
 }
 //----------------------------------------------------------------------------

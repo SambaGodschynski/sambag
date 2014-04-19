@@ -25,6 +25,70 @@ void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
     context->setStrokeColor(ColorRGBA(0,0,0));
     context->stroke();
 }
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
+    if (!pat) {
+        return;
+    }
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->getStyleOf(d);
+    style.strokePattern(pat);
+    g->setStyleTo(d, style);
+    svg->redraw();
+    Super::setForeground(pat);
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setBackground(IPattern::Ptr pat) {
+    if (!pat) {
+        return;
+    }
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->getStyleOf(d);
+    style.fillPattern(pat);
+    g->setStyleTo(d, style);
+    svg->redraw();
+    Super::setBackground(pat);
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->calculateStyle(d);
+    return style.strokePattern();
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->calculateStyle(d);
+    return style.fillPattern();
+}
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================
@@ -97,6 +161,7 @@ SvgComponent::DummyPtr SvgComponent::getDummy(IDrawable::Ptr x) {
 SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
     svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
     DummyPtr res = Dummy::create();
+    res->drawable = x;
     std::stringstream ss;
     ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";
     ss<<"class='";
