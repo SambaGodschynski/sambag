@@ -78,9 +78,17 @@ namespace {
 	{
 		RECT r = {0};
 		GetClientRect(hWnd, &r);
+		//GetWindowRect(hWnd, &r);
 		POINT pos = {0};
 		ClientToScreen(hWnd, &pos);
-		return Rectangle (Point2D(pos.x, pos.y), r.right, r.bottom);
+		Rectangle res(Point2D(pos.x, pos.y), r.right, r.bottom);
+		//fix position
+		GetWindowRect(hWnd, &r);
+		res.x(r.left);
+		res.y(r.top);
+		return res;
+
+		//return Rectangle (Point2D(r.left, r.top), Point2D(r.right, r.bottom));
 	}
 	Rectangle _getWin32RelBounds(HWND hWnd) 
 	{
