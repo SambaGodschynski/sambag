@@ -20,6 +20,34 @@
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestSceneGraph );
 
+namespace {
+
+    std::ostream & operator<<(std::ostream &os,
+        const sambag::disco::ColorRGBA &c)
+    {
+        os<<c.getR()<<", "<<c.getG()<<", "<<c.getB()<<", "<<c.getA();
+        return os;
+    }
+
+    std::string __toString(
+        const sambag::disco::svg::graphicElements::Style &s)
+    {
+        std::stringstream os;
+        if (!s.fillPattern()) {
+            os<<"fill(NONE) ";
+        } else {
+            os<<"fill( " << s.fillPattern()->getColor() << ") ";
+        }
+        if (!s.strokePattern()) {
+            os<<"stroke(NONE)";
+        } else {
+            os<<"stroke( " << s.strokePattern()->getColor() << ")";
+        }
+        return os.str();
+    }
+
+}
+
 namespace tests {
 //=============================================================================
 // TestSceneGraph
@@ -136,6 +164,79 @@ void TestSceneGraph::testStyleNode() {
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<compare
 	CPPUNIT_ASSERT( g->getStyleOf(i1) == s );
 	CPPUNIT_ASSERT( g->getStyleOf(i2) != s );
+}
+//-----------------------------------------------------------------------------
+/*
+ *			i1 (f=1, s=1,1,1)
+ *			/ \
+ *(s=0,1) i2   i3 (f=0)
+ *		 /  \
+ *		i4  i5 (s=0,0,1)
+ */
+void TestSceneGraph::testCalculateStyle() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::svg::graphicElements;
+	using namespace sambag::com;
+	SceneGraph::Ptr g = SceneGraph::create();
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
+	Image::Ptr i1 = Image::create();
+	i1->setUri("i1.img");
+	Image::Ptr i2 = Image::create();
+	i2->setUri("i2.img");
+	Image::Ptr i3 = Image::create();
+	i3->setUri("i3.img");
+	Image::Ptr i4 = Image::create();
+	i4->setUri("i4.img");
+	Image::Ptr i5 = Image::create();
+	i5->setUri("i5.img");
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<add and connect
+	g->addElement(i1); g->addElement(i2); g->addElement(i3);
+	g->addElement(i4); g->addElement(i5);
+	g->connectElements(i1, i2);
+	g->connectElements(i1, i3);
+	g->connectElements(i2, i4);
+	g->connectElements(i2, i5);
+	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<assign styles
+    {
+        Style s;
+        s.fillColor(ColorRGBA(1)).strokeColor(ColorRGBA(1,1,1));
+        g->setStyleTo(i1, s);
+    }
+    {
+        Style s;
+        s.strokeColor(ColorRGBA(0,1));
+        g->setStyleTo(i2, s);
+    }
+    {
+        Style s;
+        s.strokeColor(ColorRGBA(0,0,1));
+        g->setStyleTo(i5, s);
+    }
+    {
+        Style s;
+        s.fillColor(ColorRGBA(0));
+        g->setStyleTo(i3, s);
+    }
+    CPPUNIT_ASSERT_EQUAL(__toString(Style().fillColor(ColorRGBA(1)).
+                                 strokeColor(ColorRGBA(1,1,1))),
+        __toString(g->calculateStyle(i1))
+    );
+    CPPUNIT_ASSERT_EQUAL(__toString(Style().fillColor(ColorRGBA(1)).
+                                 strokeColor(ColorRGBA(0,1,0))),
+        __toString(g->calculateStyle(i2))
+    );
+    CPPUNIT_ASSERT_EQUAL(__toString(Style().fillColor(ColorRGBA(0)).
+                                 strokeColor(ColorRGBA(1,1,1))),
+        __toString(g->calculateStyle(i3))
+    );
+    CPPUNIT_ASSERT_EQUAL(__toString(Style().fillColor(ColorRGBA(1)).
+                                 strokeColor(ColorRGBA(0,1,0))),
+        __toString(g->calculateStyle(i4))
+    );
+    CPPUNIT_ASSERT_EQUAL(__toString(Style().fillColor(ColorRGBA(1)).
+                                 strokeColor(ColorRGBA(0,0,1))),
+        __toString(g->calculateStyle(i5))
+    );
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testIdAndClassRelations() {

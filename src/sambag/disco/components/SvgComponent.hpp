@@ -48,7 +48,31 @@ public:
         Dummy() {
             setName("SvgComponent::Dummy");
         }
+    private:
+        //---------------------------------------------------------------------
+        friend class SvgComponent;
+        boost::weak_ptr<IDrawable> drawable;
     public:
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the stroke color on related object in scene graph
+         */
+        virtual void setForeground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the fill color on related object in scene graph
+         */
+        virtual void setBackground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @return the stroke color on related object in scene graph
+         */
+        virtual IPattern::Ptr getForegroundPattern() const;
+        //---------------------------------------------------------------------
+        /**
+         * @return the fill color on related object in scene graph
+         */
+        virtual IPattern::Ptr getBackgroundPattern() const;
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
         //---------------------------------------------------------------------
@@ -88,6 +112,18 @@ public:
      * @return the related dummy component for a svg drawable
      */
     DummyPtr getDummy(IDrawable::Ptr x);
+    //-------------------------------------------------------------------------
+    /**
+     * @return dummy for svg id
+     * @note the id including pre '#' char -> "#objectID"
+     */
+    DummyPtr getDummyById(const std::string &id);
+    //-------------------------------------------------------------------------
+    /**
+     * @return dummies for svg class
+     * @note the id including pre '.' char -> ".classID"
+     */
+    void getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out);
     //-------------------------------------------------------------------------
     void setStretchToFit(bool stretch);
     //-------------------------------------------------------------------------

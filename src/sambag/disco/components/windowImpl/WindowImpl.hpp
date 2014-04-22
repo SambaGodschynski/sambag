@@ -93,26 +93,30 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseButtonPressEvent(int x, int y, int buttons) {
-		if (!mec)
+		if (!isEnabled() || !mec) {
 			return;
+		}
 		mec->createPressEvent(x,y,buttons);
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseButtonReleaseEvent(int x, int y, int buttons) {
-		if (!mec)
+		if (!isEnabled() || !mec) {
 			return;
+		}
 		mec->createReleaseEvent(x,y,buttons);
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseMotionEvent(int x, int y) {
-		if (!mec)
+		if (!isEnabled() || !mec) {
 			return;
+		}
 		mec->createMoveEvent(x,y);
 	}
 	//-------------------------------------------------------------------------
 	void handleMouseWheelEvent(int x, int y, float rot) {
-		if (!mec)
+		if (!isEnabled() || !mec) {
 			return;
+		}
 		mec->createWheelEvent(x,y,rot);
 	}
 	//-------------------------------------------------------------------------
@@ -221,8 +225,9 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::initRootPane() {
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>
 void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onCreated() {
-    if (rootPane)
+	if (rootPane) {
 		initRootPane();
+	}
 	EventSender<OnOpenEvent>::notifyListeners (
 		this,
 		OnOpenEvent()

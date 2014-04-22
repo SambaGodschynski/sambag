@@ -606,12 +606,13 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
     }
     
     if (window) {
-        [window setFrame:frame display:YES animate:NO];
-        [window setContentSize: frame.size];        
+        NSRect winFrame = [window frameRectForContentRect:frame];
+        [window setFrame:winFrame display:YES animate:NO];
+        [window setContentSize: frame.size];
     }
 	// view
     if (view) {
-      	frame = [window contentRectForFrameRect:[window frame]];
+        frame = [window contentRectForFrameRect:[window frame]];
         [view setFrameSize: frame.size];
 
     }

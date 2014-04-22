@@ -73,13 +73,17 @@ void BasicMenuItemListener<ComponentModell>::
 		}
 		const sambag::com::ICommand::Function &c =
 				b->getButtonFunction();
-		if (c)
+		if (c) {
 			c();
-		
+		}
+		Window::Ptr menuWin = b->getFirstContainer<Window>();
+		SAMBAG_ASSERT(menuWin);
+		menuWin->setEnabled(false);
 		b->EventSender<events::ActionEvent>::notifyListeners(
 				b.get(),
 				events::ActionEvent(b)
 		);
+		menuWin->setEnabled(true);
 		MenuSelectionManager::defaultManager().clearSelectedPath();
 		break;
 	}
