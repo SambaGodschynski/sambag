@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.106.13.00.00'
+__version__ = '14.112.18.12.20'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -131,7 +131,13 @@ class LuaClassParser(Parser):
         self._name_()
         self.ast['name'] = self.last_node
         self._token('=')
-        self._number_()
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._number_()
+                with self._option():
+                    self._pattern(r'\".*\"')
+                self._error('expecting one of: ".*"')
         self.ast['value'] = self.last_node
         self._token(';')
 

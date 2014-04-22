@@ -17,27 +17,21 @@ $$NS$$
 LuaModelObject::LuaModelObject() {
 }
 //-----------------------------------------------------------------------------
-void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) :
-	$$INIT_FIELDS$$
+void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) 
 {
+    using namespace sambag::lua;
     Super::addLuaFields(lua, index);
     //slua::push(lua, getTypeId());
     //lua_setfield(lua, index, "__frxtype");
-	// register functions
-    using namespace sambag::lua;
-    int index = createClass<Functions1, MetaFunctions, TupleAccessor>
-    (
-        lua,
-        $$FBIND$$,
-	$$FBIND_META$$,
-        $$CLASS_NAME$$
-    );	
+    // register functions
+    $$LUA_REGISTER$$
+    $$LUA_INIT_FIELDS$$
+    
 }
 //-----------------------------------------------------------------------------
 void LuaModelObject::__lua_gc(lua_State *lua) {
+    $$LUA_UNREGISTER$$
     Super::__lua_gc(lua);
-	// unregister functions
-	// unregisterClassFunctions<Functions>(obj->getUId());
-    // unregisterClassFunctions<MetaFunctions>(obj->getUId());
 }
+$$FIELD_SETTER_GETTER$$
 $$NS_END$$ // namespace(s)

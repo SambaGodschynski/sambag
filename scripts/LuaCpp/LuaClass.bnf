@@ -12,7 +12,7 @@ singleComment = "//" ?/.*/? ;
 comment = (docComment|defaultComment|singleComment) ;
 manuallyReturn = (type:"ManuallyReturn" "<" value:int ">") ;
 type = ( "int" | "float" | "double" | "string" | "bool" ) ;
-def = comment:{comment}type:type name:name "=" value:number ";";
+def = comment:{comment}type:type name:name "=" value:(number|?/\".*\"/?) ";";
 arg = type:type name:name;
 return = type|manuallyReturn|"void";
 fDef = comment:{comment} return:return name:name "(" [args+:arg {"," args+:arg}]  ")" ";" ;
