@@ -17,15 +17,10 @@ class MyClass extends ASuperClass {
 	 int aField=10;
 	 string name="peter";	
 	
-	/**
- 	 * @brief metafunction
-	 */
-//	string __tostring();
-
 	void fistA(int a, float b);
 	void fistB(string messie);
 	void fistC(double x);
-	void fistD();
+	string fistD();
 	void fistE(bool f);
 	float fistF(bool f);
 	void fistG(bool f);

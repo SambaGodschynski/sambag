@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.112.18.12.20'
+__version__ = '14.112.19.53.07'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -182,28 +182,6 @@ class LuaClassParser(Parser):
         self._token(';')
 
     @rule_def
-    def _mfDef_(self):
-        def block1():
-            self._comment_()
-        self._closure(block1)
-        self.ast['comment'] = self.last_node
-        self._return_()
-        self.ast['return_'] = self.last_node
-        self._metaName_()
-        self.ast['name'] = self.last_node
-        self._token('(')
-        with self._optional():
-            self._arg_()
-            self.ast.add_list('args', self.last_node)
-            def block5():
-                self._token(',')
-                self._arg_()
-                self.ast.add_list('args', self.last_node)
-            self._closure(block5)
-        self._token(')')
-        self._token(';')
-
-    @rule_def
     def _lcfDef_(self):
         def block1():
             self._comment_()
@@ -259,9 +237,6 @@ class LuaClassParser(Parser):
                 with self._option():
                     self._def_()
                     self.ast.add_list('fields', self.last_node)
-                with self._option():
-                    self._mfDef_()
-                    self.ast.add_list('metaFunctions', self.last_node)
                 with self._option():
                     self._fDef_()
                     self.ast.add_list('functions', self.last_node)
@@ -332,9 +307,6 @@ class LuaClassSemantics(object):
         return ast
 
     def fDef(self, ast):
-        return ast
-
-    def mfDef(self, ast):
         return ast
 
     def lcfDef(self, ast):

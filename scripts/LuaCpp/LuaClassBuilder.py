@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from LuaClassParser import *
 import re
+import time
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -31,7 +32,7 @@ class LuaClassBuilder(LuaClassParser):
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
-
+        self.__replace("$$DATE$$", time.asctime())
     def __preFunct(self, name, form, argform):
         res=[]
         ast = self.ast[name]
@@ -51,11 +52,14 @@ class LuaClassBuilder(LuaClassParser):
                 entry = re.sub("%, *", "", entry)
             else:
                 arglist=argform.strip()
-                arglist=arglist.replace("%type", args[0]['type'])
+                arglist=arglist.replace("%typeref", self.__getRefType(self.__getType(args[0]['type'])))
+                arglist=arglist.replace("%type", self.__getType(args[0]['type']))
                 arglist=arglist.replace("%name", args[0]['name'])
                 arglist=arglist.replace("%i", "1")
                 for i in range(1,len(args)):
-                    tmp = ", " + argform.replace ("%type", args[i]['type'])
+                    type=self.__getType(args[i]['type'])
+                    tmp = ", " + argform.replace ("%typeref", self.__getRefType(type))
+                    tmp = tmp.replace ("%type", type)
                     tmp = tmp.replace ("%name", args[i]['name'])
                     tmp = tmp.replace ("%i", str(i+1))
                     arglist+=tmp
@@ -79,6 +83,16 @@ class LuaClassBuilder(LuaClassParser):
         self.__replace("$$NS$$", ns)
         self.__replace("$$NS_END$$", "}"*c + " // namespace(s)")
         
+    def __getRefType(self, type):
+        if type=="std::string":
+            return "const %s &" % type
+        return type
+        
+    def __getType(self, type):
+        if type=="string":
+            return "std::string"
+        return type
+
     def __preFields(self, name, form):
         res=[]
         ast = self.ast[name]
@@ -88,7 +102,9 @@ class LuaClassBuilder(LuaClassParser):
         for x in self.ast[name]:
             entry=form
             entry=entry.replace("%name",x['name'])
-            entry=entry.replace("%type", x['type'])
+            type=self.__getType(x['type'])
+            entry=entry.replace("%typeref", self.__getRefType(type))
+            entry=entry.replace("%type", type)
             entry=entry.replace("%value", x['value'])
             res.append(entry)
         return res
@@ -127,42 +143,42 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceHeader("$$F_TAGS$$", fs)
         #type lists
         tags=self.__preFunct('functions', "%name", "")
-        mTags=self.__preFunct('metaFunctions',"%name", "")
-        if len(mTags)>10:
-            raise Exception("MetaFunctions>10 not supported")
         tl=self.__preTlist(tags, "Functions")
-        if len(mTags)==0:
-            tl+="typedef Loki::NullType MetaFunctions;\n\t"
-        else:
-            tl+=self.__preTlist(mTags, "MetaFunctions")  
         self.__replaceHeader("$$F_LISTS$$", tl)
         #fdefs
-        fs=self.__preFunct('functions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
-        fs+=self.__preFunct('MetaFunctions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%type %name")
+        fs=self.__preFunct('functions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%typeref %name")
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
 
     def __processFields(self):
         cname = self.ast['name']
         fields=self.__preFields('fields', "virtual %type get_%name(lua_State *lua);")
-        fields+=self.__preFields('fields', "virtual set_%name(lua_State *lua, %type value);")
+        fields+=self.__preFields('fields', "virtual set_%name(lua_State *lua, %typeref value);")
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
         #setter impl
-        lsetter=self.__preFields('fields', "%type " + cname + "::get_%name(lua_State *lua)")
-        setter=""
-        for x in lsetter:
-            setter+="\n//" + "-"*78+"\n"
-            setter+= x+"\n{"
-            setter+= "\n}"
+        f="""void %s::set_%s(lua_State *lua, %s value) {
+        using namespace sambag::lua;
+        push(lua, value);
+        lua_setfield(lua, -1, "%s");
+}
+        """ % (cname, "%name", "%typeref", "%name")
+        setter=self.__preFields('fields', f)
+        setter=reduce(lambda x,y:"%s\n%s"%(x,y), setter)
+        
         #getter impl
-        lgetter=self.__preFields('fields', "void " + cname + "::set_%name(lua_State *lua, %type value)")
-        getter=""
-        for x in lgetter:
-            getter+="\n//" + "-"*78+"\n"
-            getter+= x+"\n{"
-            getter+= "\n}"
-        getsetter=setter+getter
+        f="""%s %s::get_%s(lua_State *lua) {
+        using namespace sambag::lua;
+        lua_getfield(lua, -1, "%s");
+        boost::tuple<%s> res;
+        pop(lua, res);
+        return boost::get<0>(res);
+}
+        """ % ("%type", cname, "%name", "%name", "%type")
+        getter=self.__preFields('fields', f)
+        getter=reduce(lambda x,y:"%s\n%s"%(x,y), getter)
+        
+        getsetter=setter+"\n"+getter
         self.__replaceImpl("$$FIELD_SETTER_GETTER$$", getsetter)
         #field init
         fields=self.__preFields('fields', "set_%name(lua, %value);")
@@ -182,28 +198,17 @@ class LuaClassBuilder(LuaClassParser):
     def __processFunctionsImpl(self):                            
         cname = self.ast['name']
         fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, self%, %args)", "_%i")
-        mfs=self.__preFunct('metaFunctions', "boost::bind(&"+cname+"::%name, self%, %args)", "_%i")
-        binds = self.__processBinds(fs, 0,9)
-        mBinds = self.__processBinds(mfs, 0,9)
-        regs="""int index = createClass<Functions1, MetaFunctions, TupleAccessor>(
-        lua,
-        """
-        regs+=binds + ",\n\t"
-        regs+=mBinds + ", \n\t"
-        regs+="getUId() \n\t"
-        regs+="); \n\n\t"
-
-        #remain functions
         num=len(fs)/10
-        unregs = "unregisterClassFunctions<Functions1>(obj->getUId());\n\t"
-        for i in range(0,num):
-            binds = self.__processBinds(fs, (i+1)*10,(i+1)*10+9)
-            regs+="registerClassFunctions<Functions%i, TupleAcessor>(\n\tlua,\n\t" % (i+2)
+        regs=""
+        unregs=""
+        for i in range(0,num+1):
+            binds = self.__processBinds(fs, i*10,i*10+9)
+            regs+="registerClassFunctions<Functions%i, TupleAcessor>(\n\tlua,\n\t" % (i+1)
             regs+=binds + ",\n\t"
             regs+="index, \n\t"
             regs+="getUId() \n\t"
             regs+="); \n\n\t"
-            unregs+="unregisterClassFunctions<Functions%i>(obj->getUId());\n\t" % (i+2)
+            unregs+="unregisterClassFunctions<Functions%i>(obj->getUId());\n\t" % (i+1)
         unregs+="unregisterClassFunctions<MetaFunctions>(obj->getUId());\n\t"
         self.__replaceImpl("$$LUA_REGISTER$$", regs)
         self.__replaceImpl("$$LUA_UNREGISTER$$", unregs)

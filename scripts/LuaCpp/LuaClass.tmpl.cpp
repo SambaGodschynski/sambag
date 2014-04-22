@@ -1,8 +1,8 @@
 /*
- * LuaModelObject.cpp
+ * $$CLASS_NAME$$.cpp
  *
- *  Created on: Fri Mar 14 11:47:35 2014
- *      Author: Johannes Unger
+ *  Created on: $$DATE$$
+ *      Author: Samba Godschysnki
  */
 
 #include "$$CLASS_NAME$$.hpp"
@@ -21,8 +21,6 @@ void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index)
 {
     using namespace sambag::lua;
     Super::addLuaFields(lua, index);
-    //slua::push(lua, getTypeId());
-    //lua_setfield(lua, index, "__frxtype");
     // register functions
     $$LUA_REGISTER$$
     $$LUA_INIT_FIELDS$$

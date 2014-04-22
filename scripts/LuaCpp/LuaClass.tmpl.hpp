@@ -1,8 +1,8 @@
 /*
- * LuaModelObject.hpp
+ * $$CLASS_NAME$$.hpp
  *
- *  Created on: Fri Mar 14 11:47:35 2014
- *      Author: Johannes Unger
+ *  Created on: $$DATE$$
+ *      Author: Samba Godschysnki
  */
 
 #ifndef SAMBAG_$$CLASS_NAME$$_H
