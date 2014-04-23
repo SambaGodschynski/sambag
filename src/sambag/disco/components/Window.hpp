@@ -73,6 +73,7 @@ protected:
 private:
 	//-------------------------------------------------------------------------
 	void onWindowImplClose(void *src, const OnCloseEvent &ev);
+	void onWindowImplOpen(void *src, const OnOpenEvent &ev);
 	//-------------------------------------------------------------------------
 	void onParentClose(void *src, const OnCloseEvent &ev);
 	//-------------------------------------------------------------------------
@@ -222,11 +223,6 @@ public:
 	 * @override
 	 */
 	virtual void setEnabled(bool b);
-	//-------------------------------------------------------------------------
-	/**
-	 * @override
-	 */
-	virtual bool isEnabled() const;
 	//-------------------------------------------------------------------------
 	/**
 	 * determines the optimal location of the window related to the given window.

@@ -66,6 +66,10 @@ void Window::initWindow() {
 		boost::bind(&Window::onWindowImplClose, this, _1, _2),
 		getPtr()
 	);
+	addTrackedOnOpenEventListener(
+		boost::bind(&Window::onWindowImplOpen, this, _1, _2),
+		getPtr()
+	);
 	windowImpl->EventSender<OnBoundsChanged>::addTrackedEventListener(
 			boost::bind(&Window::onBoundsChanged, this, _1, _2),
 			getPtr()
@@ -78,8 +82,15 @@ void Window::onParentClose(void *src, const OnCloseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void Window::onWindowImplClose(void *src, const OnCloseEvent &ev) {
-	ui::UIManager &m = ui::getUIManager();
-	m.uninstallLookAndFeel(getRootPane());
+	try {
+        ui::UIManager &m = ui::getUIManager();
+        m.uninstallLookAndFeel(getRootPane());
+    } catch(...) {
+    }
+}
+//-----------------------------------------------------------------------------
+void Window::onWindowImplOpen(void *src, const OnOpenEvent &ev) {
+	setEnabled(Super::isEnabled()); 
 }
 //-----------------------------------------------------------------------------
 void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {
@@ -171,6 +182,10 @@ void Window::close() {
 	if (!isVisible())
 		return;
 	windowImpl->close();
+    
+    getWindowImpl()->EventSender<OnCloseEvent>::
+        notifyListeners(windowImpl.get(), OnCloseEvent());
+    
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		openWindows.erase(getPtr());
 	SAMBAG_END_SYNCHRONIZED
@@ -274,10 +289,6 @@ Window::CloseOperation Window::getDefaultCloseOperation() const {
 void Window::setEnabled(bool b) {
 	windowImpl->setEnabled(b);
 	Super::setEnabled(b);
-}
-//-----------------------------------------------------------------------------
-bool Window::isEnabled() const {
-	return windowImpl->isEnabled();
 }
 //-----------------------------------------------------------------------------
 void Window::positionWindow(Window::Ptr win) {

@@ -23,7 +23,7 @@ struct IHost {
 	virtual void delayChanged(int delaySamples) = 0;
 	virtual void ioConfigurationChanged(int numInputs, int numOutputs) = 0;
 	virtual void parameterChanged(int index) = 0;
-	virtual HostTimeInfo * getHostTimeInfo (int filter) = 0;
+	virtual HostTimeInfo * getHostTimeInfoImpl (int filter) = 0;
 	/**
 	 * @return true if succeed.
 	 */

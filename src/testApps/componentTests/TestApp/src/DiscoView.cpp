@@ -6,6 +6,9 @@
  */
 
 #include "DiscoView.hpp"
+#include <sambag/disco/svg/SvgRoot.hpp>
+#include <sambag/disco/svg/HtmlColors.hpp>
+
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
@@ -38,6 +41,7 @@
 #include <boost/filesystem.hpp>
 #include <assert.h>
 #include <sambag/disco/components/events/MouseEventRecorder.hpp>
+
 
 #pragma comment(linker, "\"/manifestdependency:type='Win32' name='Microsoft.VC90.CRT' version='9.0.21022.8' processorArchitecture='X86' publicKeyToken='1fc8b3b9a1e18e3b' language='*'\"")
 
@@ -534,17 +538,42 @@ void createWindow<ACME>() {
 	win[ACME]->getRootPane()->addTag(label, INPUT_LABEL);
 }
 
+void onSvgMouse(void *, const sdc::events::MouseEvent &ev) {
+   	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+    using namespace sambag::disco::components::events;
+    AComponent::Ptr c = ev.getSource();
+    if (ev.getType() == MouseEvent::DISCO_MOUSE_CLICKED) {
+        std::cout<<c->toString()<<std::endl;
+        const svg::HtmlColors::ColorMap &colors = svg::HtmlColors::getColorMap();
+        int counter = rand() % colors.size();
+        svg::HtmlColors::ColorMap::const_iterator it = colors.begin();
+        while (--counter>0) {
+            ++it;
+        }
+        c->setBackground(it->second);
+    }
+}
+
 template <>
 void createWindow<SVG>() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
 	win[SVG] = sdc::FramedWindow::create(win[0]);
 	win[SVG]->setTitle("SVG Component");
-	win[SVG]->setWindowBounds(sambag::disco::Rectangle(110,100,430,280));
+	win[SVG]->setWindowBounds(sambag::disco::Rectangle(110,100,800,600));
     
     SvgComponent::Ptr svg = SvgComponent::create();
-    svg->setSvgFilename("testimages/gradient01.svg");
+    svg->setSvgFilename("testimages/ComponentTestfield.svg");
     win[SVG]->getContentPane()->add(svg);
+    std::vector<SvgComponent::Dummy::Ptr> dummies;
+    svg->getDummiesByClass(".disco", dummies);
+    BOOST_FOREACH(AComponent::Ptr x, dummies) {
+        x->EventSender<sdc::events::MouseEvent>::addEventListener(
+           &onSvgMouse
+        );
+    }
+    
 }
 
 
@@ -640,6 +669,7 @@ void onBtnCreate(void *src, const sdc::events::ActionEvent &ac) {
 		createWindow<View>();
 	}
 	win[View]->getContentPane()->validate();
+    win[View]->setEnabled(false);
 	win[View]->open();
 
 }

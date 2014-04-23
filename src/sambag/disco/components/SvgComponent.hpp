@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include "AContainer.hpp"
+#include <boost/unordered_map.hpp>
 
 namespace sambag { namespace disco {
 namespace svg {
@@ -28,6 +29,57 @@ namespace components {
 class SvgComponent : public AContainer {
 //=============================================================================
 public:
+    //-------------------------------------------------------------------------
+    /**
+     * @brief A Dummy will be created for every "Disco" class element
+     * in the svg tree. The SvgComponent and its containing Dummy components
+     * are the Component representation of the Svg document. 
+     */
+    //=========================================================================
+    //  Class Dummy
+    //=========================================================================
+    class Dummy : public AContainer {
+    public:
+        //---------------------------------------------------------------------
+        typedef boost::shared_ptr<Dummy> Ptr;
+        typedef boost::weak_ptr<Dummy> WPtr;
+    protected:
+        //---------------------------------------------------------------------
+        Dummy() {
+            setName("SvgComponent::Dummy");
+        }
+    private:
+        //---------------------------------------------------------------------
+        friend class SvgComponent;
+        boost::weak_ptr<IDrawable> drawable;
+    public:
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the stroke color on related object in scene graph
+         */
+        virtual void setForeground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @brief set the fill color on related object in scene graph
+         */
+        virtual void setBackground(IPattern::Ptr pat);
+        //---------------------------------------------------------------------
+        /**
+         * @return the stroke color on related object in scene graph
+         */
+        virtual IPattern::Ptr getForegroundPattern() const;
+        //---------------------------------------------------------------------
+        /**
+         * @return the fill color on related object in scene graph
+         */
+        virtual IPattern::Ptr getBackgroundPattern() const;
+        //---------------------------------------------------------------------
+        SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
+        //---------------------------------------------------------------------
+        void drawComponent (IDrawContext::Ptr context);
+    };
+    typedef boost::shared_ptr<Dummy> DummyPtr;
+    typedef boost::weak_ptr<Dummy> DummyWPtr;
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
@@ -44,8 +96,45 @@ protected:
     void setupSvgObject(svg::SvgRootPtr obj);
 private:
     //-------------------------------------------------------------------------
+    com::ArithmeticWrapper<bool, false> stretchToFit;
+    //-------------------------------------------------------------------------
+    typedef boost::unordered_map<IDrawable::Ptr, DummyWPtr> ElementMap;
+    ElementMap elMap;
+    //-------------------------------------------------------------------------
     svg::SvgRootPtr rootObject;
+    //-------------------------------------------------------------------------
+    void updateDummies();
+    //-------------------------------------------------------------------------
+    DummyPtr createDummy(IDrawable::Ptr x);
 public:
+    //-------------------------------------------------------------------------
+    /**
+     * @return the related dummy component for a svg drawable
+     */
+    DummyPtr getDummy(IDrawable::Ptr x);
+    //-------------------------------------------------------------------------
+    /**
+     * @return dummy for svg id
+     * @note the id including pre '#' char -> "#objectID"
+     */
+    DummyPtr getDummyById(const std::string &id);
+    //-------------------------------------------------------------------------
+    /**
+     * @return dummies for svg class
+     * @note the id including pre '.' char -> ".classID"
+     */
+    void getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out);
+    //-------------------------------------------------------------------------
+    void setStretchToFit(bool stretch);
+    //-------------------------------------------------------------------------
+    bool isStretchToFit() const {return stretchToFit;}
+    //-------------------------------------------------------------------------
+    /**
+     * @return the svg root object
+     */
+    svg::SvgRootPtr getSvgObject() const {
+        return rootObject;
+    }
     //-------------------------------------------------------------------------
     virtual void doLayout();
 	//-------------------------------------------------------------------------

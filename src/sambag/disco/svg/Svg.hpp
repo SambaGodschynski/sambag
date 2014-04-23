@@ -180,9 +180,7 @@ public:
 		sceneGraph->setTagName(getGraphicElement(), str);
 	}
 	//-------------------------------------------------------------------------
-	virtual void setClassName(const std::string & str) {
-		sceneGraph->registerElementClass(getGraphicElement(), "." + str);
-	}
+	virtual void setClassName(const std::string & str);
 	//-------------------------------------------------------------------------
 	virtual void setIdName(const std::string & str) {
 		sceneGraph->registerElementId(getGraphicElement(), "#" + str);

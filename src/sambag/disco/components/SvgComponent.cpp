@@ -10,8 +10,85 @@
 #include <sambag/disco/svg/SvgBuilder.hpp>
 #include <sambag/disco/svg/SvgRoot.hpp>
 #include <sambag/disco/svg/graphicElements/SceneGraph.hpp>
+#include <sambag/disco/svg/graphicElements/SceneGraphHelper.hpp>
+#include <boost/graph/depth_first_search.hpp>
 
 namespace sambag { namespace disco { namespace components {
+
+//=============================================================================
+//  Class Dummy
+//=============================================================================
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
+    Rectangle bounds = context->clipExtends();
+    context->rect(bounds);
+    context->setStrokeColor(ColorRGBA(0,0,0));
+    context->stroke();
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
+    if (!pat) {
+        return;
+    }
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->getStyleOf(d);
+    style.strokePattern(pat);
+    g->setStyleTo(d, style);
+    svg->redraw();
+    Super::setForeground(pat);
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setBackground(IPattern::Ptr pat) {
+    if (!pat) {
+        return;
+    }
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->getStyleOf(d);
+    style.fillPattern(pat);
+    g->setStyleTo(d, style);
+    svg->redraw();
+    Super::setBackground(pat);
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->calculateStyle(d);
+    return style.strokePattern();
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    svg::graphicElements::Style style = g->calculateStyle(d);
+    return style.fillPattern();
+}
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================
@@ -47,6 +124,71 @@ void SvgComponent::setSvgFilename(const std::string &name) {
     setupSvgObject(rootObject);
 }
 //-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::getDummyById(const std::string &id) {
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    IDrawable::Ptr x = g->getElementById(id);
+    return getDummy(x);
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out)
+{
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    std::vector<IDrawable::Ptr> objects;
+    g->getElementsByClass(_class, objects);
+    BOOST_FOREACH(IDrawable::Ptr x, objects) {
+        if (!x) {
+            continue;
+        }
+        out.push_back(getDummy(x));
+    }
+}
+//-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::getDummy(IDrawable::Ptr x) {
+    if (!x) {
+        return SvgComponent::DummyPtr();
+    }
+    ElementMap::iterator it = elMap.find(x);
+    if (it==elMap.end()) {
+        DummyPtr dummy = createDummy(x);
+        add(dummy);
+        elMap[x]=dummy;
+        return dummy;
+    }
+    DummyPtr res = it->second.lock();
+    return res;
+}
+//-----------------------------------------------------------------------------
+SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    DummyPtr res = Dummy::create();
+    res->drawable = x;
+    std::stringstream ss;
+    ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";
+    ss<<"class='";
+    std::vector<std::string> classes;
+    g->getClassNames(x, classes);
+    BOOST_FOREACH(const std::string &x, classes) {
+        ss<<x<<" ";
+    }
+    ss<<"'/>";
+    res->setName(ss.str());
+    return res;
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::updateDummies() {
+    std::vector<IDrawable::Ptr> elements;
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    getGraphElementsBySelector(".disco", g, elements);
+    BOOST_FOREACH(IDrawable::Ptr x, elements) {
+        SvgComponent::DummyPtr dummy = getDummy(x);
+        dummy->setBounds(g->getBoundingBox(x));
+    }
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::setStretchToFit(bool stretch) {
+    stretchToFit = stretch;
+}
+//-----------------------------------------------------------------------------
 void SvgComponent::doLayout() {
     svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
     Dimension s = rootObject->getSize().getDimension();
@@ -54,6 +196,11 @@ void SvgComponent::doLayout() {
         return;
     }
     math::Matrix m = math::scale2D(getWidth()/s.width(), getHeight()/s.height());
-    g->setTransfomationTo(g->getRootElement(), m);
+    if (stretchToFit) {
+        g->setTransfomationTo(g->getRootElement(), m);
+    }
+    g->invalidateBounds();
+    g->validate(getSize());
+    updateDummies();
 }
 }}} // namespace(s)

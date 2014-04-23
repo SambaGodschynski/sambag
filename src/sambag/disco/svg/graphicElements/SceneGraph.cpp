@@ -15,6 +15,8 @@
 #include <sambag/math/Matrix.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include "Compound.hpp"
+#include <boost/graph/breadth_first_search.hpp>
+#include <boost/graph/visitors.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -203,7 +205,6 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
 bool SceneGraph::registerElementClass(SceneGraphElement el,
 		const SceneGraph::Class &className )
 {
-
 	Vertex classVertex = NULL_VERTEX;
 	Vertex elV = getRelatedVertex(el);
 	if (elV == NULL_VERTEX)
@@ -234,6 +235,42 @@ SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 	if (getVertexType(v)!=IDRAWABLE)
 		return SceneGraphElement();
 	return vertexElementMap[v];
+}
+//-----------------------------------------------------------------------------
+graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
+    Vertex v = getRelatedVertex(el);
+    if (v==NULL_VERTEX) {
+        return graphicElements::Style();
+    }
+    // perform breadth search
+    std::vector<Vertex> p(boost::num_vertices(g));
+    Vertex s = *(boost::vertices(g).first);
+    Vertex end = INT_MAX;
+    p[s] = end;
+    boost::breadth_first_search(g, s,
+        boost::visitor(
+            boost::make_bfs_visitor(
+                boost::record_predecessors(&p[0], boost::on_tree_edge())
+            )
+        )
+    );
+    // collect styles
+    std::list<StylePtr> styles;
+    Vertex it = v;
+    while(it!=end) {
+        StylePtr style = getStyleRef(it);
+        if (style) {
+            styles.push_back(style);
+        }
+        it = p.at(it); // get predecessor
+    };
+    // add styles
+    graphicElements::Style res;
+    while(!styles.empty()) {
+        res.add(*(styles.front()));
+        styles.pop_front();
+    }
+    return res;
 }
 //-----------------------------------------------------------------------------
 size_t SceneGraph::inDegreeOf(const Vertex& v, VertexType type) const {
@@ -283,7 +320,9 @@ bool SceneGraph::setTransfomationRefTo(SceneGraphElement el, MatrixPtr m) {
 	vertexTypeMap[tv] = TRANSFORM;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
-	return succeed;
+    // scene tree is invalid now
+	invalidate();
+    return succeed;
 }
 //----------------------------------------------------------------------------
 bool SceneGraph::setStyleTo(
@@ -314,6 +353,8 @@ bool SceneGraph::setStyleRefTo(
 	vertexTypeMap[tv] = STYLE;
 	Edge e; bool succeed;
 	boost::tie(e, succeed) = boost::add_edge(tv, rv,g);
+    // scene tree is invalid now
+    invalidate();
 	return succeed;
 }
 //----------------------------------------------------------------------------
@@ -323,6 +364,12 @@ SceneGraph::getTransformationRef(SceneGraphElement el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return MatrixPtr();
+    return getTransformationRef(rv);
+}
+//----------------------------------------------------------------------------
+SceneGraph::MatrixPtr
+SceneGraph::getTransformationRef(Vertex rv) const
+{
 	// find parent transformation node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
@@ -339,6 +386,12 @@ SceneGraph::getStyleRef(SceneGraphElement el) const
 	Vertex rv = getRelatedVertex(el);
 	if (rv==NULL_VERTEX)
 		return StylePtr();
+    return getStyleRef(rv);
+}
+//----------------------------------------------------------------------------
+SceneGraph::StylePtr
+SceneGraph::getStyleRef(Vertex rv) const
+{
 	// find parent style node(s)
 	typedef std::list<Vertex> Vertices;
 	Vertices vertices;
@@ -359,6 +412,10 @@ void SceneGraph::draw(IDrawContext::Ptr context) {
 Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj,
 	IDrawContext::Ptr cn) const
 {
+    return getBoundingBox(obj);
+}
+//-----------------------------------------------------------------------------
+Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
     Element2Bounds::const_iterator it = element2Bounds.find(obj);
     if (it==element2Bounds.end()) {
         return NULL_RECTANGLE;
@@ -388,9 +445,18 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 	return res;
 }
 //-----------------------------------------------------------------------------
-void SceneGraph::computeBoundingBoxes() {
-	std::vector<IDrawable::Ptr> parents;
+void SceneGraph::validateBounds(const Dimension &size) {
+    if (!element2Bounds.empty() && boost::num_vertices(g) > 0) {
+        return;
+    }
     IDrawContext::Ptr cn = getDiscoFactory()->createContext();
+    cn->rect(Rectangle(0,0,size.width(), size.height()));
+    cn->clip();
+    computeBoundingBoxes(cn);
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
+	std::vector<IDrawable::Ptr> parents;
 	boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
         ProcessDrawable::Ptr pr =
             boost::dynamic_pointer_cast<ProcessDrawable>(o);
