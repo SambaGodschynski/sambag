@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.112.19.53.07'
+__version__ = '14.112.20.19.29'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -221,7 +221,7 @@ class LuaClassParser(Parser):
         def block2():
             self._comment_()
         self._closure(block2)
-        self.ast['comment'] = self.last_node
+        self.ast.add_list('comment', self.last_node)
         self._token('class')
         self._name_()
         self.ast['name'] = self.last_node
@@ -232,8 +232,6 @@ class LuaClassParser(Parser):
         self._token('{')
         def block5():
             with self._choice():
-                with self._option():
-                    self._comment_()
                 with self._option():
                     self._def_()
                     self.ast.add_list('fields', self.last_node)

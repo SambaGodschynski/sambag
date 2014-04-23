@@ -29,10 +29,22 @@ class LuaClassBuilder(LuaClassParser):
     def __replace(self, a, b):
         self.__replaceHeader(a,b)
         self.__replaceImpl(a,b)
+
+    def __getComment(self, l):
+        res=""
+        for x in l:
+            try:
+                com=x['docComment']
+            except:
+                pass
+            res+="\n\t"+reduce(lambda x,y: "%s\n\t%s" % (x,y), com)
+        return res
+
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
         self.__replace("$$DATE$$", time.asctime())
+
     def __preFunct(self, name, form, argform):
         res=[]
         ast = self.ast[name]
@@ -43,6 +55,7 @@ class LuaClassBuilder(LuaClassParser):
             if not isinstance(ret, basestring):
                 ret = "sambag::lua::IgnoreReturn%s" % ret['value']
             entry=form
+            #entry=entry.replace("%comment", self.__getComment(x['comment']))
             entry=entry.replace("%name",x['name'])
             entry=entry.replace("%type", ret)
             args=x['args']
@@ -146,7 +159,7 @@ class LuaClassBuilder(LuaClassParser):
         tl=self.__preTlist(tags, "Functions")
         self.__replaceHeader("$$F_LISTS$$", tl)
         #fdefs
-        fs=self.__preFunct('functions', "virtual %type %name(lua_State *lua%, %args) = 0;", "%typeref %name")
+        fs=self.__preFunct('functions', "%comment\n\tvirtual %type %name(lua_State *lua%, %args) = 0;", "%typeref %name")
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
 
@@ -219,4 +232,4 @@ f.close()
 builder=LuaClassBuilder()
 header, impl = builder.build(txt)
 print header
-print impl
+#print impl
