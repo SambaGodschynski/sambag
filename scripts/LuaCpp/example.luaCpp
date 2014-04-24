@@ -18,10 +18,8 @@ class MyClass extends ASuperClass {
 	 string name="peter";	
 	
 	/**
- 	 * @brief metafunction
+  	 * @a sophisticated function
 	 */
-//	string __tostring();
-
 	void fistA(int a, float b);
 	void fistB(string messie);
 	void fistC(double x);

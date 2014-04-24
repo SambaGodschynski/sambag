@@ -383,9 +383,7 @@ struct RegisterHelperClass {
 	static int luaCallback(lua_State *L) {
 		typename FMap::iterator it = fMap.find(L);
 		if (it == fMap.end()) {
-			throw ExecutionFailed(
-					std::string("function callback failed with: ") + FunctionTag::name()
-			);
+            pushLuaError(L, "callback failed. luastate invalid");
 		}
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
 		callF<Function>( it->second,
@@ -399,19 +397,14 @@ struct RegisterHelperClass {
         // get uid value
         lua_getfield(L, 1, SLUA_FIELDNAME_UID);
         if (!lua_isstring(L, -1)) {
-            throw ExecutionFailed(
-					std::string("class function callback failed with: ") + FunctionTag::name()
-                    + " uid not found"
-			); 
+            pushLuaError(L, "callback failed, invalid table.");
         }
         boost::tuple<std::string> uid;
         pop(L, uid);
         
 		typename FMap::iterator it = fMap.find(boost::get<0>(uid));
 		if (it == fMap.end()) {
-			throw ExecutionFailed(
-					std::string("class function callback failed with: ") + FunctionTag::name()
-			);
+			pushLuaError(L, "callback failed. UUID not found");
 		}
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
         typename FMap::mapped_type f = it->second; // copying here because objects callback

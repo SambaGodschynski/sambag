@@ -7,7 +7,7 @@ metaName = ?/__[a-zA-Z][a-zA-Z0-9]*/? ;
 lcName = "?" @:?/[a-zA-Z][a-zA-Z0-9]*/? ;
 commentText = ?/.*?(?=\*/|$)/? ;
 defaultComment= "/*" comment:{commentText} "*/" ;
-docComment = "/**" docComment:{commentText} "*/" ;
+docComment = "/**" {"*"} docComment:{commentText} "*/" ;
 singleComment = "//" ?/.*/? ;
 comment = (docComment|defaultComment|singleComment) ;
 manuallyReturn = (type:"ManuallyReturn" "<" value:int ">") ;

@@ -55,7 +55,7 @@ class LuaClassBuilder(LuaClassParser):
             if not isinstance(ret, basestring):
                 ret = "sambag::lua::IgnoreReturn%s" % ret['value']
             entry=form
-            #entry=entry.replace("%comment", self.__getComment(x['comment']))
+            entry=entry.replace("%comment", self.__getComment(x['comment']))
             entry=entry.replace("%name",x['name'])
             entry=entry.replace("%type", ret)
             args=x['args']
@@ -151,7 +151,6 @@ class LuaClassBuilder(LuaClassParser):
     def __processFunctionsHeader(self):
         #ftags
         fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
-        fs+=self.__preFunct('metaFunctions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
         fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_TAGS$$", fs)
         #type lists
