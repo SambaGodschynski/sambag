@@ -4,9 +4,9 @@ frx.lua.example
  */
 class MyClass extends ASuperClass {
 	 /**
-  	  * javadoc esk comments
-	  * param the value
-          * return the other value
+  	  * javadoc 'esk comments
+	  * @param the value
+          * @return the other value
 	  */
 	 void aFunction(int bla, float mah, string bah);
 	/**
@@ -35,6 +35,8 @@ class MyClass extends ASuperClass {
    	 * lc (lua call) functions
 	 */
 	void ?whoAreYou(int x);
+	void ?yesMam();
+	int ?popelAusDemMund(string name);
 }
 
 

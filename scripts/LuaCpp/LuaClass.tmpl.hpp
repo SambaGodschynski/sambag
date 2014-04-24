@@ -41,6 +41,16 @@ protected:
      * @override 
      */	
     virtual void addLuaFields(lua_State *lua, int index);
+    ///////////////////////////////////////////////////////////////////////////
+    // Lua call implements request, return true if a script implements
+    // the xxx function
+    $$LUA_CALL_IMPL$$
+    ///////////////////////////////////////////////////////////////////////////
+    // there are two ways to call a LC functions: you can use the regular
+    // xxx() call where the argument and return treatment is handled
+    // by LuaHelper. Or you use raw_xxx(narg, nret) where you have to handle return and
+    // args for your self (e.g. when using unsupported LuaHelper types).
+    $$LUA_CALL_FS$$
 public:
     //-------------------------------------------------------------------------
     $$CLASS_NAME$$();

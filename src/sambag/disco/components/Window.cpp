@@ -90,7 +90,7 @@ void Window::onWindowImplClose(void *src, const OnCloseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void Window::onWindowImplOpen(void *src, const OnOpenEvent &ev) {
-	setEnabled(Super::isEnabled()); 
+	setEnabled(Super::isEnabled());
 }
 //-----------------------------------------------------------------------------
 void Window::onBoundsChanged(void *src, const OnBoundsChanged &ev) {
