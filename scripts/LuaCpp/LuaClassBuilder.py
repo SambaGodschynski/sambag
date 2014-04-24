@@ -49,7 +49,30 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
         self.__replace("$$DATE$$", time.asctime())
 
-    def __preFunct(self, name, form, argform):
+
+    def __processArgs(self, toReplace, entry, args, argform):
+        if args == None:
+            entry=entry.replace(toReplace,"")
+            #entry=entry.replace("%,", "")
+            entry = re.sub("%, *", "", entry)
+        else:
+            arglist=argform.strip()
+            arglist=arglist.replace("%typeref", self.__getRefType(self.__getType(args[0]['type'])))
+            arglist=arglist.replace("%type", self.__getType(args[0]['type']))
+            arglist=arglist.replace("%name", args[0]['name'])
+            arglist=arglist.replace("%i", "1")
+            for i in range(1,len(args)):
+                type=self.__getType(args[i]['type'])
+                tmp = ", " + argform.replace ("%typeref", self.__getRefType(type))
+                tmp = tmp.replace ("%type", type)
+                tmp = tmp.replace ("%name", args[i]['name'])
+                tmp = tmp.replace ("%i", str(i+1))
+                arglist+=tmp
+            entry=entry.replace(toReplace, arglist)
+            entry=entry.replace("%,",",")
+        return entry
+
+    def __preFunct(self, name, form, argform, argforms=[]):
         res=[]
         ast = self.ast[name]
         if ast==None:
@@ -62,26 +85,16 @@ class LuaClassBuilder(LuaClassParser):
             entry=entry.replace("%comment", "/**\n\t" + self.__getCommentStr(x['comment']) + "\n\t*/")
             entry=entry.replace("%name",x['name'])
             entry=entry.replace("%type", ret)
-            args=x['args']
-            if args == None:
-                entry=entry.replace("%args","")
-                #entry=entry.replace("%,", "")
-                entry = re.sub("%, *", "", entry)
+            if ret=="void":
+                entry=entry.replace("%return", "")
             else:
-                arglist=argform.strip()
-                arglist=arglist.replace("%typeref", self.__getRefType(self.__getType(args[0]['type'])))
-                arglist=arglist.replace("%type", self.__getType(args[0]['type']))
-                arglist=arglist.replace("%name", args[0]['name'])
-                arglist=arglist.replace("%i", "1")
-                for i in range(1,len(args)):
-                    type=self.__getType(args[i]['type'])
-                    tmp = ", " + argform.replace ("%typeref", self.__getRefType(type))
-                    tmp = tmp.replace ("%type", type)
-                    tmp = tmp.replace ("%name", args[i]['name'])
-                    tmp = tmp.replace ("%i", str(i+1))
-                    arglist+=tmp
-                entry=entry.replace("%args",arglist)
-                entry=entry.replace("%,",",")
+                entry=entry.replace("%return", "return")
+            args=x['args']
+            i=2
+            for x in argforms:
+                entry=self.__processArgs("%args"+str(i), entry, args, x)
+                i+=1
+            entry=self.__processArgs("%args", entry, args, argform)
             res.append(entry)
         return res
 
@@ -251,12 +264,23 @@ class LuaClassBuilder(LuaClassParser):
         #lc call
         impl="""
 {
-        
+        %return __CallImpl<%type>::hauRein(lua, "%name", boost::tuple<%args2>(%args3));
 }
 """
         auto="%type " + cname +  "::%name(lua_State *lua%, %args)" + impl
+        impl="""
+{
+        lua_getglobal(lua, "%name");
+        if (!lua_isfunction(lua, -1)==1) {
+            throw sambag::lua::NoFunction();
+        }
+        if (lua_pcall(lua, narg, nret, 0)!=0) {
+            throw sambag::lua::ExecutionFailed(std::string(lua_tostring(lua, -1)));
+        }    
+}
+"""
         man="void " + cname + "::raw_%name(lua_State *lua, int narg, int nret)" + impl
-        fs=self.__preFunct('lcFDefs', auto+"\n"+man, "%typeref %name")
+        fs=self.__preFunct('lcFDefs', auto+"\n"+man, "%typeref %name", ["%type", "%name"])
         fs=reduce(lambda x,y:"%s\n%s"%(x,y), fs)
         self.__replaceImpl("$$LUA_CALL_FS$$", fs)
         

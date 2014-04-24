@@ -8,6 +8,27 @@
 #include "$$CLASS_NAME$$.hpp"
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 
+namespace {
+  
+  template <typename RetType>
+  struct __CallImpl {
+    template <class Tuple>
+    static RetType hauRein(lua_State *lua, const std::string &fName, const Tuple &args) 
+    {
+      boost::tuple<RetType> res;
+      sambag::lua::callLuaFunc(lua, fName, args, res);
+      return boost::get<0>(res);
+    }
+  };
+  template <>
+  struct __CallImpl<void> {
+    template <class Tuple>
+    static void hauRein(lua_State *lua, const std::string &fName, const Tuple &args) 
+    {
+      sambag::lua::callLuaFunc(lua, fName, args);
+    }
+  };
+} // namespace
 
 $$NS$$
 //=============================================================================
@@ -28,6 +49,7 @@ void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index)
 }
 //-----------------------------------------------------------------------------
 void LuaModelObject::__lua_gc(lua_State *lua) {
+    using namespace sambag::lua;
     $$LUA_UNREGISTER$$
     Super::__lua_gc(lua);
 }

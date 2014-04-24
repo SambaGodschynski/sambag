@@ -34,7 +34,7 @@ class MyClass extends ASuperClass {
 	/**
    	 * lc (lua call) functions
 	 */
-	void ?whoAreYou(int x);
+	void ?whoAreYou(int x, int y);
 	void ?yesMam();
 	int ?popelAusDemMund(string name);
 }
