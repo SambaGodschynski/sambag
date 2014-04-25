@@ -16,10 +16,10 @@ class TestLuaCpp : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestLuaCpp );
-	// CPPUNIT_TEST( XXX );
+	CPPUNIT_TEST( testLuaCpp );
 	CPPUNIT_TEST_SUITE_END();
 public:
-	//void XXX();
+	void testLuaCpp();
 };
 
 } // namespace
