@@ -2,6 +2,7 @@
 from LuaClassParser import *
 import re
 import time
+import argparse
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -285,12 +286,18 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceImpl("$$LUA_CALL_FS$$", fs)
         
         
-
-
-f=open("example.luaCpp","r")
-txt=f.read();
-f.close()
-builder=LuaClassBuilder()
-header, impl = builder.build(txt)
-print header
-print impl
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='LuaCpp class builder')
+    parser.add_argument("input", help="the input file")
+    parser.add_argument("--otype", choices=['header', 'impl', 'doc'], nargs="*")
+    args = parser.parse_args()
+    f=open(args.input,"r")
+    txt=f.read();
+    f.close()
+    builder=LuaClassBuilder()
+    header, impl = builder.build(txt)
+    for x in args.otype:
+        if x=="header":
+            print header
+        if x=="impl":
+            print impl
