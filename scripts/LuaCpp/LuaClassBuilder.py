@@ -36,8 +36,10 @@ class LuaClassBuilder(LuaClassParser):
     def __getComments(self, l):
         res=[]
         for x in l:
-            if len(x['docComment'])>0:
+            try:
                 res+=x['docComment']
+            except:
+                pass
         res = filter(lambda x: len(x)>0, res)
         return res
 
@@ -51,8 +53,11 @@ class LuaClassBuilder(LuaClassParser):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", reduce(lambda x,y: "%s::%s" % (x,y), self.ast['extends']))
         includes = self.ast['includes']
-        includes = map(lambda x: "#include <%s>" % x, includes)
-        self.__replaceHeader("$$INCLUDE$$", reduce(lambda x,y: "%s\n%s" % (x,y), includes))
+        if includes != None:
+            includes = map(lambda x: "#include <%s>" % x, includes)
+            self.__replaceHeader("$$INCLUDE$$", reduce(lambda x,y: "%s\n%s" % (x,y), includes))
+        else:
+            self.__replaceHeader("$$INCLUDE$$", "")
         self.__replace("$$DATE$$", time.asctime())
 
 
@@ -85,12 +90,14 @@ class LuaClassBuilder(LuaClassParser):
             return []
         for x in self.ast[name]:
             ret = x['return_']
+            ret=self.__getType(ret)
             if not isinstance(ret, basestring):
                 ret = "sambag::lua::IgnoreReturn%s" % ret['value']
             entry=form
             entry=entry.replace("%comment", "/**\n\t" + self.__getCommentStr(x['comment']) + "\n\t*/")
             entry=entry.replace("%name",x['name'])
             entry=entry.replace("%type", ret)
+            entry=entry.replace("%typeref", self.__getRefType(ret))
             if ret=="void":
                 entry=entry.replace("%return", "")
             else:
@@ -151,7 +158,7 @@ class LuaClassBuilder(LuaClassParser):
         if e<=s:
             return "Loki::NullType()"
 
-        tl="LOKI_TYPELIST%i(" % lgt
+        tl="LOKI_TYPELIST_%i(" % lgt
         tl+="Frx_"+l[s]+"_Tag"
         for i in range(s+1, e):
             tl+=", \n\t"+"Frx_"+l[i]+"_Tag"
@@ -185,7 +192,7 @@ class LuaClassBuilder(LuaClassParser):
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
         #lc impl
-        fs=self.__preFunct('lcFDefs', "bool script_impl_%name();", "")
+        fs=self.__preFunct('lcFDefs', "bool script_impl_%name(lua_State *lua);", "")
         fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$LUA_CALL_IMPL$$", fs)
         #lc call
@@ -198,14 +205,14 @@ class LuaClassBuilder(LuaClassParser):
     def __processFields(self):
         cname = self.ast['name']
         fields=self.__preFields('fields', "virtual %type get_%name(lua_State *lua);")
-        fields+=self.__preFields('fields', "virtual set_%name(lua_State *lua, %typeref value);")
+        fields+=self.__preFields('fields', "virtual void set_%name(lua_State *lua, %typeref value);")
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
         #setter impl
         f="""void %s::set_%s(lua_State *lua, %s value) {
-        using namespace sambag::lua;
-        push(lua, value);
-        lua_setfield(lua, -1, "%s");
+    using namespace sambag::lua;
+    push(lua, value);
+    lua_setfield(lua, -1, "%s");
 }
         """ % (cname, "%name", "%typeref", "%name")
         setter=self.__preFields('fields', f)
@@ -213,11 +220,11 @@ class LuaClassBuilder(LuaClassParser):
         
         #getter impl
         f="""%s %s::get_%s(lua_State *lua) {
-        using namespace sambag::lua;
-        lua_getfield(lua, -1, "%s");
-        boost::tuple<%s> res;
-        pop(lua, res);
-        return boost::get<0>(res);
+    using namespace sambag::lua;
+    lua_getfield(lua, -1, "%s");
+    boost::tuple<%s> res;
+    pop(lua, res);
+    return boost::get<0>(res);
 }
         """ % ("%type", cname, "%name", "%name", "%type")
         getter=self.__preFields('fields', f)
@@ -243,46 +250,46 @@ class LuaClassBuilder(LuaClassParser):
     def __processFunctionsImpl(self):                            
         #binding
         cname = self.ast['name']
-        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, self%, %args)", "_%i")
+        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, this%, lua%, %args)", "_%i")
         num=len(fs)/10
         regs=""
         unregs=""
         for i in range(0,num+1):
             binds = self.__processBinds(fs, i*10,i*10+9)
-            regs+="registerClassFunctions<Functions%i, TupleAcessor>(\n\tlua,\n\t" % (i+1)
+            regs+="registerClassFunctions<Functions%i, TupleAccessor>(\n\tlua,\n\t" % (i+1)
             regs+=binds + ",\n\t"
             regs+="index, \n\t"
             regs+="getUId() \n\t"
             regs+="); \n\n\t"
-            unregs+="unregisterClassFunctions<Functions%i>(obj->getUId());\n\t" % (i+1)
-        unregs+="unregisterClassFunctions<MetaFunctions>(obj->getUId());\n\t"
+            unregs+="unregisterClassFunctions<Functions%i>(getUId());\n\t" % (i+1)
+        unregs+="unregisterClassFunctions<MetaFunctions>(getUId());\n\t"
         self.__replaceImpl("$$LUA_REGISTER$$", regs)
         self.__replaceImpl("$$LUA_UNREGISTER$$", unregs)
         #lc impl
         impl="""
 {
-        return sambag::lua::hasFunction(lua, "%name");
+    return sambag::lua::hasFunction(lua, "%name");
 }
 """
-        fs=self.__preFunct('lcFDefs', "bool "+cname+"::script_impl_%name()" + impl, "")
+        fs=self.__preFunct('lcFDefs', "bool "+cname+"::script_impl_%name(lua_State *lua)" + impl, "")
         fs=reduce(lambda x,y:"%s\n%s"%(x,y), fs)
         self.__replaceImpl("$$LUA_CALL_IMPL$$", fs)
         #lc call
         impl="""
 {
-        %return __CallImpl<%type>::hauRein(lua, "%name", boost::tuple<%args2>(%args3));
+    %return __CallImpl<%type>::hauRein(lua, "%name", boost::tuple<%args2>(%args3));
 }
 """
         auto="%type " + cname +  "::%name(lua_State *lua%, %args)" + impl
         impl="""
 {
-        lua_getglobal(lua, "%name");
-        if (!lua_isfunction(lua, -1)==1) {
-            throw sambag::lua::NoFunction();
-        }
-        if (lua_pcall(lua, narg, nret, 0)!=0) {
-            throw sambag::lua::ExecutionFailed(std::string(lua_tostring(lua, -1)));
-        }    
+    lua_getglobal(lua, "%name");
+    if (!lua_isfunction(lua, -1)==1) {
+        throw sambag::lua::NoFunction();
+    }
+    if (lua_pcall(lua, narg, nret, 0)!=0) {
+        throw sambag::lua::ExecutionFailed(std::string(lua_tostring(lua, -1)));
+    }    
 }
 """
         man="void " + cname + "::raw_%name(lua_State *lua, int narg, int nret)" + impl

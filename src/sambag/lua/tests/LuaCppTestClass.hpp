@@ -3,14 +3,14 @@
  * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
  * THE THIS FILE IS GENERATED  
  *
- * $$CLASS_NAME$$.hpp
+ * LuaCppTestClass.hpp
  *
- *  Created on: $$DATE$$
+ *  Created on: Fri Apr 25 11:42:53 2014
  *      Author: Samba Godschysnki
  */
 
-#ifndef SAMBAG_$$CLASS_NAME$$_H
-#define SAMBAG_$$CLASS_NAME$$_H
+#ifndef SAMBAG_LuaCppTestClass_H
+#define SAMBAG_LuaCppTestClass_H
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -18,32 +18,38 @@
 #include <loki/TypeList.h>
 #include <sambag/lua/ALuaObject.hpp>
 
-$$INCLUDE$$
 
-$$NS$$
+
+namespace tests { 
 //=============================================================================
-class $$CLASS_NAME$$ : public $$EXTENDS$$ {
+class LuaCppTestClass : public sambag::lua::ALuaObject {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef $$EXTENDS$$ Super;
+    typedef sambag::lua::ALuaObject Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<$$CLASS_NAME$$> Ptr;
+    typedef boost::shared_ptr<LuaCppTestClass> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<$$CLASS_NAME$$> WPtr;
+    typedef boost::weak_ptr<LuaCppTestClass> WPtr;
 private:
 protected:
     //-------------------------------------------------------------------------
-    $$F_TAGS$$
-    $$F_LISTS$$
+    SAMBAG_LUA_FTAG(add, void (int, int));
+    typedef LOKI_TYPELIST_1(Frx_add_Tag) Functions1;
+
+	
     ///////////////////////////////////////////////////////////////////////////
-    $$F_IMPL$$
+    /**
+	* @brief TODO
+	*/
+	virtual void add(lua_State *lua, int a, int b) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter
      * @note works only when lua class table is on stack
      */
-    $$FIELDS$$
+    virtual std::string get_name(lua_State *lua);
+	virtual void set_name(lua_State *lua, const std::string & value);
     //-------------------------------------------------------------------------
     /**
      * @override 
@@ -52,16 +58,17 @@ protected:
     ///////////////////////////////////////////////////////////////////////////
     // Lua call implements request, return true if a script implements
     // the xxx function
-    $$LUA_CALL_IMPL$$
+    bool script_impl_whoAreYou(lua_State *lua);
     ///////////////////////////////////////////////////////////////////////////
     // there are two ways to call a LC functions: you can use the regular
     // xxx() call where the argument and return treatment is handled
     // by LuaHelper. Or you use raw_xxx(narg, nret) where you have to handle return and
     // args for your self (e.g. when using unsupported LuaHelper types).
-    $$LUA_CALL_FS$$
+    std::string whoAreYou(lua_State *lua);
+	void raw_whoAreYou(lua_State *lua, int narg, int nret);
 public:
     //-------------------------------------------------------------------------
-    $$CLASS_NAME$$();
+    LuaCppTestClass();
     //-------------------------------------------------------------------------
     /**
      * @brief called when lua object will be removed.
@@ -69,10 +76,11 @@ public:
     virtual void __lua_gc(lua_State *lua);
 public:
     //-------------------------------------------------------------------------
-    virtual ~$$CLASS_NAME$$() {}
+    virtual ~LuaCppTestClass() {}
 private:
 public:
-}; // $$CLASS_NAME$$
-$$NS_END$$
+}; // LuaCppTestClass
+}
 
-#endif /* SAMBAG_$$CLASS_NAME$$_H */
+#endif /* SAMBAG_LuaCppTestClass_H */
+

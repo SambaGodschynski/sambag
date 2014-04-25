@@ -1,4 +1,8 @@
 /*
+ * THIS FILE IS AUTO CREATED BY THE LUACPP BUILD PROGRAM
+ * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
+ * THE THIS FILE IS GENERATED  
+ *
  * $$CLASS_NAME$$.cpp
  *
  *  Created on: $$DATE$$
@@ -9,7 +13,6 @@
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 
 namespace {
-  
   template <typename RetType>
   struct __CallImpl {
     template <class Tuple>
@@ -35,9 +38,6 @@ $$NS$$
 //  Class $$CLASS_NAME$$
 //=============================================================================
 //-----------------------------------------------------------------------------
-LuaModelObject::LuaModelObject() {
-}
-//-----------------------------------------------------------------------------
 void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) 
 {
     using namespace sambag::lua;
@@ -48,7 +48,7 @@ void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index)
     
 }
 //-----------------------------------------------------------------------------
-void LuaModelObject::__lua_gc(lua_State *lua) {
+void $$CLASS_NAME$$::__lua_gc(lua_State *lua) {
     using namespace sambag::lua;
     $$LUA_UNREGISTER$$
     Super::__lua_gc(lua);

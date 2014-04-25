@@ -19,6 +19,6 @@ fDef = comment:{comment} return:return name:name "(" [args+:arg {"," args+:arg}]
 lcfDef = comment:{comment} return:return name:lcName "(" [args+:arg {"," args+:arg}]  ")" ";" ;
 ns = ns+:name { "." ns+:name } ;
 include = "#include" "<" @:?/.*?(?=>)/? ">";
-super = @:name {"." @:name} ;
+super = @+:name {"." @+:name} ;
 class = [namespace:ns] {includes+:include} comment:{comment} "class" name:name ["extends" extends:super ] 
       	"{" { fields+:def|functions+:fDef|lcFDefs+:lcfDef}* "}" $ ; 
