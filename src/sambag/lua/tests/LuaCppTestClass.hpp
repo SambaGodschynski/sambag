@@ -5,7 +5,7 @@
  *
  * LuaCppTestClass.hpp
  *
- *  Created on: Fri Apr 25 11:42:53 2014
+ *  Created on: Fri Apr 25 13:13:05 2014
  *      Author: Samba Godschysnki
  */
 
@@ -34,7 +34,9 @@ public:
 private:
 protected:
     //-------------------------------------------------------------------------
-    SAMBAG_LUA_FTAG(add, void (int, int));
+    LuaCppTestClass() {}
+    //-------------------------------------------------------------------------
+    SAMBAG_LUA_FTAG(add, int (int, int));
     typedef LOKI_TYPELIST_1(Frx_add_Tag) Functions1;
 
 	
@@ -42,33 +44,19 @@ protected:
     /**
 	* @brief TODO
 	*/
-	virtual void add(lua_State *lua, int a, int b) = 0;
+	virtual int add(lua_State *lua, int a, int b) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter
-     * @note works only when lua class table is on stack
      */
-    virtual std::string get_name(lua_State *lua);
-	virtual void set_name(lua_State *lua, const std::string & value);
+    virtual std::string get_name(lua_State *lua, int index);
+	virtual void set_name(lua_State *lua, const std::string & value, int index);
     //-------------------------------------------------------------------------
     /**
      * @override 
      */	
     virtual void addLuaFields(lua_State *lua, int index);
-    ///////////////////////////////////////////////////////////////////////////
-    // Lua call implements request, return true if a script implements
-    // the xxx function
-    bool script_impl_whoAreYou(lua_State *lua);
-    ///////////////////////////////////////////////////////////////////////////
-    // there are two ways to call a LC functions: you can use the regular
-    // xxx() call where the argument and return treatment is handled
-    // by LuaHelper. Or you use raw_xxx(narg, nret) where you have to handle return and
-    // args for your self (e.g. when using unsupported LuaHelper types).
-    std::string whoAreYou(lua_State *lua);
-	void raw_whoAreYou(lua_State *lua, int narg, int nret);
 public:
-    //-------------------------------------------------------------------------
-    LuaCppTestClass();
     //-------------------------------------------------------------------------
     /**
      * @brief called when lua object will be removed.

@@ -5,7 +5,7 @@
  *
  * LuaCppTestClass.cpp
  *
- *  Created on: Fri Apr 25 11:42:53 2014
+ *  Created on: Fri Apr 25 13:13:05 2014
  *      Author: Samba Godschysnki
  */
 
@@ -51,7 +51,7 @@ void LuaCppTestClass::addLuaFields(lua_State *lua, int index)
 	); 
 
 	
-    set_name(lua, "peter");
+    set_name(lua, "peter", index);
     
 }
 //-----------------------------------------------------------------------------
@@ -62,40 +62,19 @@ void LuaCppTestClass::__lua_gc(lua_State *lua) {
 	
     Super::__lua_gc(lua);
 }
-void LuaCppTestClass::set_name(lua_State *lua, const std::string & value) {
+void LuaCppTestClass::set_name(lua_State *lua, const std::string & value, int index) {
     using namespace sambag::lua;
     push(lua, value);
-    lua_setfield(lua, -1, "name");
+    lua_setfield(lua, index, "name");
 }
         
-std::string LuaCppTestClass::get_name(lua_State *lua) {
+std::string LuaCppTestClass::get_name(lua_State *lua, int index) {
     using namespace sambag::lua;
-    lua_getfield(lua, -1, "name");
+    lua_getfield(lua, index, "name");
     boost::tuple<std::string> res;
     pop(lua, res);
     return boost::get<0>(res);
 }
         
-bool LuaCppTestClass::script_impl_whoAreYou(lua_State *lua)
-{
-    return sambag::lua::hasFunction(lua, "whoAreYou");
-}
-
-std::string LuaCppTestClass::whoAreYou(lua_State *lua)
-{
-    return __CallImpl<std::string>::hauRein(lua, "whoAreYou", boost::tuple<>());
-}
-
-void LuaCppTestClass::raw_whoAreYou(lua_State *lua, int narg, int nret)
-{
-    lua_getglobal(lua, "whoAreYou");
-    if (!lua_isfunction(lua, -1)==1) {
-        throw sambag::lua::NoFunction();
-    }
-    if (lua_pcall(lua, narg, nret, 0)!=0) {
-        throw sambag::lua::ExecutionFailed(std::string(lua_tostring(lua, -1)));
-    }    
-}
-
 } // namespace(s)
 

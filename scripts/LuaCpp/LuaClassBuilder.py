@@ -191,37 +191,27 @@ class LuaClassBuilder(LuaClassParser):
         fs=self.__preFunct('functions', "%comment\n\tvirtual %type %name(lua_State *lua%, %args) = 0;", "%typeref %name")
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
-        #lc impl
-        fs=self.__preFunct('lcFDefs', "bool script_impl_%name(lua_State *lua);", "")
-        fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
-        self.__replaceHeader("$$LUA_CALL_IMPL$$", fs)
-        #lc call
-        auto="%type %name(lua_State *lua%, %args);"
-        man="void raw_%name(lua_State *lua, int narg, int nret);"
-        fs=self.__preFunct('lcFDefs', auto+"\n\t"+man, "%typeref %name")
-        fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
-        self.__replaceHeader("$$LUA_CALL_FS$$", fs)
 
     def __processFields(self):
         cname = self.ast['name']
-        fields=self.__preFields('fields', "virtual %type get_%name(lua_State *lua);")
-        fields+=self.__preFields('fields', "virtual void set_%name(lua_State *lua, %typeref value);")
+        fields=self.__preFields('fields', "virtual %type get_%name(lua_State *lua, int index);")
+        fields+=self.__preFields('fields', "virtual void set_%name(lua_State *lua, %typeref value, int index);")
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
         #setter impl
-        f="""void %s::set_%s(lua_State *lua, %s value) {
+        f="""void %s::set_%s(lua_State *lua, %s value, int index) {
     using namespace sambag::lua;
     push(lua, value);
-    lua_setfield(lua, -1, "%s");
+    lua_setfield(lua, index, "%s");
 }
         """ % (cname, "%name", "%typeref", "%name")
         setter=self.__preFields('fields', f)
         setter=reduce(lambda x,y:"%s\n%s"%(x,y), setter)
         
         #getter impl
-        f="""%s %s::get_%s(lua_State *lua) {
+        f="""%s %s::get_%s(lua_State *lua, int index) {
     using namespace sambag::lua;
-    lua_getfield(lua, -1, "%s");
+    lua_getfield(lua, index, "%s");
     boost::tuple<%s> res;
     pop(lua, res);
     return boost::get<0>(res);
@@ -233,7 +223,7 @@ class LuaClassBuilder(LuaClassParser):
         getsetter=setter+"\n"+getter
         self.__replaceImpl("$$FIELD_SETTER_GETTER$$", getsetter)
         #field init
-        fields=self.__preFields('fields', "set_%name(lua, %value);")
+        fields=self.__preFields('fields', "set_%name(lua, %value, index);")
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceImpl("$$LUA_INIT_FIELDS$$", fields)
         
@@ -265,37 +255,6 @@ class LuaClassBuilder(LuaClassParser):
         unregs+="unregisterClassFunctions<MetaFunctions>(getUId());\n\t"
         self.__replaceImpl("$$LUA_REGISTER$$", regs)
         self.__replaceImpl("$$LUA_UNREGISTER$$", unregs)
-        #lc impl
-        impl="""
-{
-    return sambag::lua::hasFunction(lua, "%name");
-}
-"""
-        fs=self.__preFunct('lcFDefs', "bool "+cname+"::script_impl_%name(lua_State *lua)" + impl, "")
-        fs=reduce(lambda x,y:"%s\n%s"%(x,y), fs)
-        self.__replaceImpl("$$LUA_CALL_IMPL$$", fs)
-        #lc call
-        impl="""
-{
-    %return __CallImpl<%type>::hauRein(lua, "%name", boost::tuple<%args2>(%args3));
-}
-"""
-        auto="%type " + cname +  "::%name(lua_State *lua%, %args)" + impl
-        impl="""
-{
-    lua_getglobal(lua, "%name");
-    if (!lua_isfunction(lua, -1)==1) {
-        throw sambag::lua::NoFunction();
-    }
-    if (lua_pcall(lua, narg, nret, 0)!=0) {
-        throw sambag::lua::ExecutionFailed(std::string(lua_tostring(lua, -1)));
-    }    
-}
-"""
-        man="void " + cname + "::raw_%name(lua_State *lua, int narg, int nret)" + impl
-        fs=self.__preFunct('lcFDefs', auto+"\n"+man, "%typeref %name", ["%type", "%name"])
-        fs=reduce(lambda x,y:"%s\n%s"%(x,y), fs)
-        self.__replaceImpl("$$LUA_CALL_FS$$", fs)
         
         
 if __name__ == '__main__':

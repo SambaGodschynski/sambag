@@ -15,11 +15,9 @@ namespace tests {
 
 struct TestClass : public LuaCppTestClass {
     typedef boost::shared_ptr<TestClass> Ptr;
-    sambag::lua::LuaStateRef lua;
-    static Ptr create() {
+    static Ptr create(lua_State *lua) {
         Ptr res(new TestClass());
-        res->lua = sambag::lua::createLuaStateRef();
-        res->createLuaObject(res->lua.get(), "testClass");
+        res->createLuaObject(lua, "testClass");
         return res;
     }
     int add(lua_State *lua, int a, int b) {
@@ -32,5 +30,10 @@ struct TestClass : public LuaCppTestClass {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void TestLuaCpp::testLuaCpp() {
+    sambag::lua::LuaStateRef lua = sambag::lua::createLuaStateRef();
+    TestClass::Ptr tc = TestClass::create(lua.get());
+    lua_setglobal(lua.get(), "tObj");
+    sambag::lua::executeString(lua.get(), "assert(tObj:add(1,2)==3)");
+    sambag::lua::executeString(lua.get(), "assert(tObj.name=='peter')");
 }
 } //namespace

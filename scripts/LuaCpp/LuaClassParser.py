@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.115.09.01.54'
+__version__ = '14.115.11.11.53'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -48,12 +48,6 @@ class LuaClassParser(Parser):
     @rule_def
     def _metaName_(self):
         self._pattern(r'__[a-zA-Z][a-zA-Z0-9]*')
-
-    @rule_def
-    def _lcName_(self):
-        self._token('?')
-        self._pattern(r'[a-zA-Z][a-zA-Z0-9]*')
-        self.ast['@'] = self.last_node
 
     @rule_def
     def _commentText_(self):
@@ -182,28 +176,6 @@ class LuaClassParser(Parser):
         self._token(';')
 
     @rule_def
-    def _lcfDef_(self):
-        def block1():
-            self._comment_()
-        self._closure(block1)
-        self.ast['comment'] = self.last_node
-        self._return_()
-        self.ast['return_'] = self.last_node
-        self._lcName_()
-        self.ast['name'] = self.last_node
-        self._token('(')
-        with self._optional():
-            self._arg_()
-            self.ast.add_list('args', self.last_node)
-            def block5():
-                self._token(',')
-                self._arg_()
-                self.ast.add_list('args', self.last_node)
-            self._closure(block5)
-        self._token(')')
-        self._token(';')
-
-    @rule_def
     def _ns_(self):
         self._name_()
         self.ast.add_list('ns', self.last_node)
@@ -260,9 +232,6 @@ class LuaClassParser(Parser):
                 with self._option():
                     self._fDef_()
                     self.ast.add_list('functions', self.last_node)
-                with self._option():
-                    self._lcfDef_()
-                    self.ast.add_list('lcFDefs', self.last_node)
                 self._error('no available options')
         self._closure(block7)
         self._token('}')
@@ -291,9 +260,6 @@ class LuaClassSemantics(object):
         return ast
 
     def metaName(self, ast):
-        return ast
-
-    def lcName(self, ast):
         return ast
 
     def commentText(self, ast):
@@ -327,9 +293,6 @@ class LuaClassSemantics(object):
         return ast
 
     def fDef(self, ast):
-        return ast
-
-    def lcfDef(self, ast):
         return ast
 
     def ns(self, ast):

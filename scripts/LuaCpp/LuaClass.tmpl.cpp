@@ -54,6 +54,4 @@ void $$CLASS_NAME$$::__lua_gc(lua_State *lua) {
     Super::__lua_gc(lua);
 }
 $$FIELD_SETTER_GETTER$$
-$$LUA_CALL_IMPL$$
-$$LUA_CALL_FS$$
 $$NS_END$$ // namespace(s)
