@@ -1,8 +1,12 @@
 frx.lua.example
+
+#include <sambag/lua/ASuperClass.hpp>
+#include <boost/unicorn.hpp>
+
 /**
  * @brief Bla
  */
-class MyClass extends ASuperClass {
+class MyClass extends sambag.lua.ASuperClass {
 	 /**
   	  * javadoc 'esk comments
 	  * @param the value

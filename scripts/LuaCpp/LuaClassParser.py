@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.114.11.53.41'
+__version__ = '14.115.08.46.35'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -214,23 +214,45 @@ class LuaClassParser(Parser):
         self._closure(block1)
 
     @rule_def
+    def _include_(self):
+        self._token('#include')
+        self._token('<')
+        self._pattern(r'.*?(?=>)')
+        self.ast['@'] = self.last_node
+        self._token('>')
+
+    @rule_def
+    def _super_(self):
+        self._name_()
+        self.ast['@'] = self.last_node
+        def block1():
+            self._token('.')
+            self._name_()
+            self.ast['@'] = self.last_node
+        self._closure(block1)
+
+    @rule_def
     def _class_(self):
         with self._optional():
             self._ns_()
             self.ast['namespace'] = self.last_node
-        def block2():
+        def block1():
+            self._include_()
+            self.ast.add_list('includes', self.last_node)
+        self._closure(block1)
+        def block4():
             self._comment_()
-        self._closure(block2)
+        self._closure(block4)
         self.ast['comment'] = self.last_node
         self._token('class')
         self._name_()
         self.ast['name'] = self.last_node
         with self._optional():
             self._token('extends')
-            self._name_()
+            self._super_()
             self.ast['extends'] = self.last_node
         self._token('{')
-        def block5():
+        def block7():
             with self._choice():
                 with self._option():
                     self._def_()
@@ -242,7 +264,7 @@ class LuaClassParser(Parser):
                     self._lcfDef_()
                     self.ast.add_list('lcFDefs', self.last_node)
                 self._error('no available options')
-        self._closure(block5)
+        self._closure(block7)
         self._token('}')
         self._check_eof()
 
@@ -311,6 +333,12 @@ class LuaClassSemantics(object):
         return ast
 
     def ns(self, ast):
+        return ast
+
+    def include(self, ast):
+        return ast
+
+    def super(self, ast):
         return ast
 
     def class_(self, ast):

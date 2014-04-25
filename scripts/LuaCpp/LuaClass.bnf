@@ -18,5 +18,7 @@ return = type|manuallyReturn|"void";
 fDef = comment:{comment} return:return name:name "(" [args+:arg {"," args+:arg}]  ")" ";" ;
 lcfDef = comment:{comment} return:return name:lcName "(" [args+:arg {"," args+:arg}]  ")" ";" ;
 ns = ns+:name { "." ns+:name } ;
-class = [namespace:ns] comment:{comment} "class" name:name ["extends" extends:name ] 
+include = "#include" "<" @:?/.*?(?=>)/? ">";
+super = @:name {"." @:name} ;
+class = [namespace:ns] {includes+:include} comment:{comment} "class" name:name ["extends" extends:super ] 
       	"{" { fields+:def|functions+:fDef|lcFDefs+:lcfDef}* "}" $ ; 

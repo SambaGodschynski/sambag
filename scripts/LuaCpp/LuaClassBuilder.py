@@ -3,13 +3,15 @@ from LuaClassParser import *
 import re
 import time
 import argparse
+import sys
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
-        f=open("LuaClass.tmpl.hpp","r")
+        p=sys.path[0]
+        f=open(p+"/LuaClass.tmpl.hpp","r")
         self.header=f.read()
         f.close()
-        f=open("LuaClass.tmpl.cpp","r")
+        f=open(p+"/LuaClass.tmpl.cpp","r")
         self.impl=f.read()
         f.close()
     def build(self, str):
@@ -47,7 +49,10 @@ class LuaClassBuilder(LuaClassParser):
 
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
-        self.__replaceHeader("$$EXTENDS$$", self.ast['extends'])
+        self.__replaceHeader("$$EXTENDS$$", reduce(lambda x,y: "%s::%s" % (x,y), self.ast['extends']))
+        includes = self.ast['includes']
+        includes = map(lambda x: "#include <%s>" % x, includes)
+        self.__replaceHeader("$$INCLUDE$$", reduce(lambda x,y: "%s\n%s" % (x,y), includes))
         self.__replace("$$DATE$$", time.asctime())
 
 
