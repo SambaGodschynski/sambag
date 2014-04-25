@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.115.11.11.53'
+__version__ = '14.115.11.54.05'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -99,6 +99,15 @@ class LuaClassParser(Parser):
             self._token('>')
 
     @rule_def
+    def _userType_(self):
+        self._token('User')
+        self.ast['type'] = self.last_node
+        self._token('<')
+        self._pattern(r'.*?(?=>)')
+        self.ast['value'] = self.last_node
+        self._token('>')
+
+    @rule_def
     def _type_(self):
         with self._group():
             with self._choice():
@@ -112,6 +121,8 @@ class LuaClassParser(Parser):
                     self._token('string')
                 with self._option():
                     self._token('bool')
+                with self._option():
+                    self._userType_()
                 self._error('expecting one of: string int float double bool')
 
     @rule_def
@@ -278,6 +289,9 @@ class LuaClassSemantics(object):
         return ast
 
     def manuallyReturn(self, ast):
+        return ast
+
+    def userType(self, ast):
         return ast
 
     def type(self, ast):

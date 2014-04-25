@@ -26,9 +26,9 @@ class MyClass extends sambag.lua.ASuperClass {
 	 */
 	void fistA(int a, float b);
 	void fistB(string messie);
-	void fistC(double x);
+	User<sambag::TestClass> fistC(double x);
 	void fistD();
-	//void fistE(bool f);
+	void fistE(bool f);
 	float fistF(bool f);
 	void fistG(bool f);
 	void fistH(int a, int b);

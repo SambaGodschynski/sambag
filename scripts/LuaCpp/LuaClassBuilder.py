@@ -83,6 +83,16 @@ class LuaClassBuilder(LuaClassParser):
             entry=entry.replace("%,",",")
         return entry
 
+    def __getRetType(self, x):
+        ret=x
+        if not isinstance(ret, basestring):
+            if ret['type'] == "ManuallyReturn":
+                ret = "sambag::lua::IgnoreReturn%s" % ret['value']
+            elif ret['type'] == "User":
+                ret = ret['value']
+        ret=self.__getType(ret)
+        return ret
+
     def __preFunct(self, name, form, argform, argforms=[]):
         res=[]
         ast = self.ast[name]
@@ -90,9 +100,7 @@ class LuaClassBuilder(LuaClassParser):
             return []
         for x in self.ast[name]:
             ret = x['return_']
-            ret=self.__getType(ret)
-            if not isinstance(ret, basestring):
-                ret = "sambag::lua::IgnoreReturn%s" % ret['value']
+            ret = self.__getRetType(ret)
             entry=form
             entry=entry.replace("%comment", "/**\n\t" + self.__getCommentStr(x['comment']) + "\n\t*/")
             entry=entry.replace("%name",x['name'])
@@ -194,8 +202,14 @@ class LuaClassBuilder(LuaClassParser):
 
     def __processFields(self):
         cname = self.ast['name']
-        fields=self.__preFields('fields', "virtual %type get_%name(lua_State *lua, int index);")
+        fields=[]
+        fields+=self.__preFields('fields', "virtual %type get_%name(lua_State *lua, int index);")
         fields+=self.__preFields('fields', "virtual void set_%name(lua_State *lua, %typeref value, int index);")
+        if len(fields)==0:
+             self.__replaceHeader("$$FIELDS$$", "")
+             self.__replaceImpl("$$FIELD_SETTER_GETTER$$", "")
+             self.__replaceImpl("$$LUA_INIT_FIELDS$$", "")
+             return
         fields=reduce(lambda x,y:"%s\n\t%s"%(x,y), fields)
         self.__replaceHeader("$$FIELDS$$", fields)
         #setter impl
