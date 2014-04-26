@@ -80,17 +80,19 @@ public:
     };
     typedef boost::shared_ptr<Dummy> DummyPtr;
     typedef boost::weak_ptr<Dummy> DummyWPtr;
-	//-------------------------------------------------------------------------
-	typedef AContainer Super;
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgComponent> Ptr;
-	typedef boost::weak_ptr<SvgComponent> WPtr;
+    //-------------------------------------------------------------------------
+    typedef AContainer Super;
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<SvgComponent> Ptr;
+    typedef boost::weak_ptr<SvgComponent> WPtr;
 protected:
+    //-------------------------------------------------------------------------
+    void createComponentTree();
     //-------------------------------------------------------------------------
     virtual void drawComponent (IDrawContext::Ptr context);
     //-------------------------------------------------------------------------
     virtual void postConstructor();
-	//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
 	SvgComponent();
     //-------------------------------------------------------------------------
     void setupSvgObject(svg::SvgRootPtr obj);
@@ -103,7 +105,9 @@ private:
     //-------------------------------------------------------------------------
     svg::SvgRootPtr rootObject;
     //-------------------------------------------------------------------------
-    void updateDummies();
+    void updateDummyBounds(AContainer::Ptr x);
+    //-------------------------------------------------------------------------
+    void updateDummyBounds();
     //-------------------------------------------------------------------------
     DummyPtr createDummy(IDrawable::Ptr x);
 public:
@@ -112,6 +116,11 @@ public:
      * @return the related dummy component for a svg drawable
      */
     DummyPtr getDummy(IDrawable::Ptr x);
+    //-------------------------------------------------------------------------
+    /**
+     * @return the related svg drawable for a dummy object
+     */
+    IDrawable::Ptr getDrawable(DummyPtr x);
     //-------------------------------------------------------------------------
     /**
      * @return dummy for svg id
@@ -137,8 +146,8 @@ public:
     }
     //-------------------------------------------------------------------------
     virtual void doLayout();
-	//-------------------------------------------------------------------------
-	SAMBAG_STD_STATIC_COMPONENT_CREATOR(SvgComponent)
+    //-------------------------------------------------------------------------
+    SAMBAG_STD_STATIC_COMPONENT_CREATOR(SvgComponent)
     //-------------------------------------------------------------------------
     /**
      * @brief set the svg content as svg stringfile
