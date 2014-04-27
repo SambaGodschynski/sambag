@@ -273,6 +273,42 @@ graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
     return res;
 }
 //-----------------------------------------------------------------------------
+Matrix SceneGraph::calculateTransformation(SceneGraphElement el) {
+    Vertex v = getRelatedVertex(el);
+    if (v==NULL_VERTEX) {
+        return NULL_MATRIX;
+    }
+    // perform breadth search
+    std::vector<Vertex> p(boost::num_vertices(g));
+    Vertex s = *(boost::vertices(g).first);
+    Vertex end = INT_MAX;
+    p[s] = end;
+    boost::breadth_first_search(g, s,
+        boost::visitor(
+            boost::make_bfs_visitor(
+                boost::record_predecessors(&p[0], boost::on_tree_edge())
+            )
+        )
+    );
+    // collect matrices
+    std::list<MatrixPtr> matrices;
+    Vertex it = v;
+    while(it!=end) {
+        MatrixPtr matrix = getTransformationRef(it);
+        if (matrix) {
+            matrices.push_back(matrix);
+        }
+        it = p.at(it); // get predecessor
+    };
+    // compute matrices
+    Matrix res = IDENTITY_MATRIX;
+    while(!matrices.empty()) {
+	res = boost::numeric::ublas::prod(res, *(matrices.front()));
+        matrices.pop_front();
+    }
+    return res;
+}
+//-----------------------------------------------------------------------------
 size_t SceneGraph::inDegreeOf(const Vertex& v, VertexType type) const {
 	size_t result = 0;
 	InvAdjacencyIterator it, end;

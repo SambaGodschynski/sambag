@@ -202,13 +202,13 @@ public:
     struct node_order_t { typedef boost::vertex_property_tag kind; };
     //-------------------------------------------------------------------------
     typedef boost::property<node_object_t, SceneGraphElement,
-			    boost::property<node_style_t, StylePtr,
-					    boost::property<node_transformation_t, MatrixPtr,
-							    boost::property<node_vtype_t, VertexType,
-									    boost::property<node_order_t, OrderNumber,
-											    boost::property<node_vname_t, std::string,
-													    boost::property<node_vname2_t, std::string
-															    > > > > > > > vertexProperties;
+       boost::property<node_style_t, StylePtr,
+       boost::property<node_transformation_t, MatrixPtr,
+       boost::property<node_vtype_t, VertexType,
+       boost::property<node_order_t, OrderNumber,
+       boost::property<node_vname_t, std::string,
+       boost::property<node_vname2_t, std::string
+    > > > > > > > vertexProperties;
     //-------------------------------------------------------------------------
     /**
      * Graph type
@@ -469,6 +469,11 @@ public:
     //-------------------------------------------------------------------------
     MatrixPtr getTransformationRef(SceneGraphElement el) const;
     //-------------------------------------------------------------------------
+    /**
+     * @return the transformation matrix of an element
+     * @note this does not considering the scene tree
+     * Use @see calculateTransformation() for this purpose.
+     */
     Matrix getTransformationOf(SceneGraphElement el) const {
 	MatrixPtr res = getTransformationRef(el);
 	if (!res)
@@ -495,6 +500,12 @@ public:
      * tree.
      */
     graphicElements::Style calculateStyle(SceneGraphElement el);
+    //-------------------------------------------------------------------------
+    /**
+     * @brief calculates the transformatin of an element considering the scene
+     * tree.
+     */
+    Matrix calculateTransformation(SceneGraphElement el); 
     //-------------------------------------------------------------------------
     StylePtr getStyleRef(Vertex v) const;
     //-------------------------------------------------------------------------

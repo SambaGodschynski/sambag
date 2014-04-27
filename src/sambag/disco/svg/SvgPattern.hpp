@@ -16,18 +16,18 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 /**
  * @class SvgPattern
- * base class for svg pattern objects.
+ * @brief base class for svg pattern objects.
  */
-class SvgPattern : public SvgObject {
+class SvgPatternBase : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPattern> Ptr;
+	typedef boost::shared_ptr<SvgPatternBase> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
 protected:
 	//-------------------------------------------------------------------------
-	SvgPattern(){}
+	SvgPatternBase(){}
 public:
 	/**
 	 * creates pattern with rect's bounds.
@@ -36,14 +36,14 @@ public:
 	 */
 	virtual IPattern::Ptr createPattern() const = 0;
 	//-------------------------------------------------------------------------
-	virtual ~SvgPattern(){}
+	virtual ~SvgPatternBase(){}
 };
 //=============================================================================
 /**
  * @class SvgGradient
  * base class for svg pattern objects with gradients.
  */
-class SvgGradient : public SvgPattern {
+class SvgGradient : public SvgPatternBase {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
