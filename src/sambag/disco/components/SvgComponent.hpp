@@ -87,13 +87,11 @@ public:
     typedef boost::weak_ptr<SvgComponent> WPtr;
 protected:
     //-------------------------------------------------------------------------
-    void createComponentTree();
-    //-------------------------------------------------------------------------
     virtual void drawComponent (IDrawContext::Ptr context);
     //-------------------------------------------------------------------------
     virtual void postConstructor();
     //-------------------------------------------------------------------------
-	SvgComponent();
+    SvgComponent();
     //-------------------------------------------------------------------------
     void setupSvgObject(svg::SvgRootPtr obj);
 private:
@@ -105,12 +103,17 @@ private:
     //-------------------------------------------------------------------------
     svg::SvgRootPtr rootObject;
     //-------------------------------------------------------------------------
-    void updateDummyBounds(AContainer::Ptr x);
-    //-------------------------------------------------------------------------
-    void updateDummyBounds();
+    void updateDummies();
     //-------------------------------------------------------------------------
     DummyPtr createDummy(IDrawable::Ptr x);
+    //-------------------------------------------------------------------------
+    void updateDrawOrder();
+    //-------------------------------------------------------------------------
+    DummyPtr getDummyOrCreateNew(IDrawable::Ptr x);
+
 public:
+    //-------------------------------------------------------------------------
+    virtual AComponentPtr findComponentAt (const Point2D &p, bool includeSelf=true);
     //-------------------------------------------------------------------------
     /**
      * @return the related dummy component for a svg drawable
