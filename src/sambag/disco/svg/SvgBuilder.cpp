@@ -57,6 +57,7 @@ void SvgBuilder::registerSvgClasses() {
 	 xml2Obj.registerObject<SvgStyle>("style");
 	 xml2Obj.registerObject<SvgLinearGradient>("linearGradient");
 	 xml2Obj.registerObject<SvgRadialGradient>("radialGradient");
+	 xml2Obj.registerObject<SvgPattern>("pattern");
 	 xml2Obj.registerObject<SvgColorStop>("stop");
 }
 //-----------------------------------------------------------------------------

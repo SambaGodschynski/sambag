@@ -168,38 +168,51 @@ std::string SceneGraph::processListAsString() {
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
-	bool inserted;
-	Element2Vertex::iterator it;
-	boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
-	if (!inserted)
-		return false;
-	const Vertex &u = add_vertex(g);
-	vertexElementMap[u] = ptr;
-	vertexTypeMap[u] = IDRAWABLE;
-	vertexOrderMap[u] = NO_ORDER_NUMBER;
-	it->second = u;
-	return true;
+    if (!ptr) {
+	return false;
+    }
+    bool inserted;
+    Element2Vertex::iterator it;
+    boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
+    if (!inserted) {
+	return false;
+    }
+    const Vertex &u = add_vertex(g);
+    vertexElementMap[u] = ptr;
+    vertexTypeMap[u] = IDRAWABLE;
+    vertexOrderMap[u] = NO_ORDER_NUMBER;
+    it->second = u;
+    return true;
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
-	Element2Vertex::iterator it;
-	it = element2Vertex.find(from);
-	// find "from" vertex
-	if (it==element2Vertex.end())
-		return false;
-	Vertex vFrom = it->second;
-	// find "to" vertex
-	it = element2Vertex.find(to);
-	if (it==element2Vertex.end())
-		return false;
-	Vertex vTo = it->second;
-	Edge e;
-	// set order number
-	vertexOrderMap[vTo] = boost::out_degree(vFrom,g);
+    if (!from || !to) {
+	return false;
+    }
+    std::cout<<from->toString()<<", "<<to->toString();
+    Element2Vertex::iterator it;
+    it = element2Vertex.find(from);
+    // find "from" vertex
+    if (it==element2Vertex.end()) {
+	std::cout<<from->toString()<<" NOT FOUND"<<std::endl;
+	return false;
+    }
+    Vertex vFrom = it->second;
+    // find "to" vertex
+    it = element2Vertex.find(to);
+    if (it==element2Vertex.end()) {
+	std::cout<<to->toString()<<" NOT FOUND"<<std::endl;
+	return false;
+    }
+    Vertex vTo = it->second;
+    Edge e;
+    // set order number
+    vertexOrderMap[vTo] = boost::out_degree(vFrom,g);
 
-	bool connected;
-	tie(e, connected) = add_edge(vFrom, vTo, g);
-	return connected;
+    bool connected;
+    tie(e, connected) = add_edge(vFrom, vTo, g);
+    std::cout<<" "<<connected<<std::endl;
+    return connected;
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::registerElementClass(SceneGraphElement el,

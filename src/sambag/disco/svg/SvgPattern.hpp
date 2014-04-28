@@ -11,66 +11,131 @@
 #include "Svg.hpp"
 #include "sambag/disco/IPattern.hpp"
 #include "SvgColorStop.hpp"
+#include "SvgRoot.hpp"
+#include "units/Units.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 /**
- * @class SvgPattern
+ * @class SvgPatternBase
  * @brief base class for svg pattern objects.
  */
 class SvgPatternBase : public SvgObject {
 //=============================================================================
 public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPatternBase> Ptr;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<SvgPatternBase> Ptr;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
 protected:
-	//-------------------------------------------------------------------------
-	SvgPatternBase(){}
+    //-------------------------------------------------------------------------
+    SvgPatternBase(){}
 public:
-	/**
-	 * creates pattern with rect's bounds.
-	 * @param rect
-	 * @return
-	 */
-	virtual IPattern::Ptr createPattern() const = 0;
-	//-------------------------------------------------------------------------
-	virtual ~SvgPatternBase(){}
+    /**
+     * creates pattern with rect's bounds.
+     * @param rect
+     * @return
+     */
+    virtual IPattern::Ptr createPattern() const = 0;
+    //-------------------------------------------------------------------------
+    virtual ~SvgPatternBase(){}
 };
 //=============================================================================
 /**
  * @class SvgGradient
- * base class for svg pattern objects with gradients.
  */
 class SvgGradient : public SvgPatternBase {
 //=============================================================================
 public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgGradient> Ptr;
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<SvgGradient> Ptr;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
-	//-------------------------------------------------------------------------
-	IGradient::ColorStops stops;
+    //-------------------------------------------------------------------------
+    IGradient::ColorStops stops;
 protected:
-	//-------------------------------------------------------------------------
-	SvgGradient(){}
+    //-------------------------------------------------------------------------
+    SvgGradient(){}
 public:
-	//-------------------------------------------------------------------------
-	const IGradient::ColorStops & getColorStops() const {
-		return stops;
-	}
-	//-------------------------------------------------------------------------
-	void addColorStop(SvgColorStop::Ptr stop) {
-		stops.push_back(stop->getStop());
-	}
-	//-------------------------------------------------------------------------
-	void addColorStop(const ColorRGBA &col, const Number &offset) {
-		stops.push_back(IGradient::ColorStop(col, offset));
-	}
-	//-------------------------------------------------------------------------
-	virtual ~SvgGradient(){}
-	//-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    const IGradient::ColorStops & getColorStops() const {
+	return stops;
+    }
+    //-------------------------------------------------------------------------
+    void addColorStop(SvgColorStop::Ptr stop) {
+	stops.push_back(stop->getStop());
+    }
+    //-------------------------------------------------------------------------
+    void addColorStop(const ColorRGBA &col, const Number &offset) {
+	stops.push_back(IGradient::ColorStop(col, offset));
+    }
+    //-------------------------------------------------------------------------
+    virtual ~SvgGradient(){}
+    //-------------------------------------------------------------------------
+};
+//=============================================================================
+/**
+ * @class SvgPattern
+ */
+class SvgPattern : public SvgPatternBase {
+//=============================================================================
+public:
+    //-------------------------------------------------------------------------
+    typedef SvgPatternBase Super;
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<SvgPattern> Ptr;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
+    struct X_tag { typedef units::Unit Type; };
+    struct Y_tag { typedef units::Unit Type; };
+    struct Width_tag { typedef units::Unit Type; };
+    struct Height_tag { typedef units::Unit Type; };
+private:
+    //-------------------------------------------------------------------------
+    units::Point p;
+    units::Dimension size;
+protected:
+    //-------------------------------------------------------------------------
+    SvgPattern(){
+	combo = sambag::disco::svg::graphicElements::Compound::create();
+    }
+    //-------------------------------------------------------------------------
+    sambag::disco::svg::graphicElements::Compound::Ptr combo;
+public:
+    //-------------------------------------------------------------------------
+    virtual void add(SvgObject::Ptr obj);
+    //-------------------------------------------------------------------------
+    virtual ~SvgPattern(){}
+    //-------------------------------------------------------------------------
+    static void registerAttributes(SvgObject::BuilderType &binder);
+    //-------------------------------------------------------------------------
+    /**
+     * creates pattern with rect's bounds.
+     * @param rect
+     * @return
+     */
+    IPattern::Ptr createPattern() const;
+    //-------------------------------------------------------------------------
+    static Ptr create( SvgRoot *root = NULL );
+    //-------------------------------------------------------------------------
+    GraphicElement::Ptr getGraphicElement() const {
+	return combo;
+    }
+    //-------------------------------------------------------------------------
+    virtual void set( const X_tag::Type &coord, X_tag ) {
+	p.x(coord);
+    }
+    //-------------------------------------------------------------------------
+    virtual void set( const Y_tag::Type &coord, Y_tag ) {
+	p.y(coord);
+    }
+    //-------------------------------------------------------------------------
+    virtual void set( const Width_tag::Type &coord, Width_tag ) {
+	size.width(coord);
+    }
+    //-------------------------------------------------------------------------
+    virtual void set( const Height_tag::Type &coord, Height_tag ) {
+	size.height(coord);
+    }
 };
 }}}
 

@@ -50,6 +50,7 @@ private:
 	CPPUNIT_TEST( testLineCapStyle );
 	CPPUNIT_TEST( testLineJoinStyle );
 	CPPUNIT_TEST( testIssue146 );
+        CPPUNIT_TEST( testPattern );
 	CPPUNIT_TEST_KNOWN_ISSUE( testUnits );
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -89,6 +90,7 @@ public:
 	void testStyleAdd();
 	void testIssue146();
 	void testUnits();
+        void testPattern();
 };
 
 } // namespace

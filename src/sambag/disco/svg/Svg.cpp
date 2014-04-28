@@ -36,7 +36,7 @@ void SvgObject::setClassName(const std::string & str) {
 }
 //-----------------------------------------------------------------------------
 void SvgObject::add(Ptr obj) {
-	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
+   	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
 	if (!g)
 		return;
 	if(dynamic_cast<SvgDefs*>(obj.get())) // a def is invisible so we doesn't hook it in.
