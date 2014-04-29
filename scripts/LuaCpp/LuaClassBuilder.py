@@ -87,7 +87,12 @@ class LuaClassBuilder(LuaClassParser):
         ret=x
         if not isinstance(ret, basestring):
             if ret['type'] == "ManuallyReturn":
-                ret = "sambag::lua::IgnoreReturn%s" % ret['value']
+                val = int(ret['value'])
+                if val==1:
+                    val=""
+                else:
+                    val=str(val)
+                ret = "sambag::lua::IgnoreReturn%s" % val
             elif ret['type'] == "User":
                 ret = ret['value']
         ret=self.__getType(ret)
@@ -162,7 +167,7 @@ class LuaClassBuilder(LuaClassParser):
 
     
     def __preTListRange(self, l, s, lgt):
-        e=min(len(l), s+lgt+1)
+        e=min(len(l), s+lgt)
         if e<=s:
             return "Loki::NullType()"
 
@@ -254,7 +259,7 @@ class LuaClassBuilder(LuaClassParser):
     def __processFunctionsImpl(self):                            
         #binding
         cname = self.ast['name']
-        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, this%, lua%, %args)", "_%i")
+        fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, this, lua%, %args)", "_%i")
         num=len(fs)/10
         regs=""
         unregs=""

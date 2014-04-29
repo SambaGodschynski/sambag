@@ -10,7 +10,7 @@ docComment = "/**" docComment:{commentText} "*/" ;
 singleComment = "//" ?/.*/? ;
 comment = (docComment|defaultComment|singleComment) ;
 manuallyReturn = (type:"ManuallyReturn" "<" value:int ">") ;
-userType = type:"User" "<" value:?/.*?(?=>)/? ">";
+userType = type:"User" "<" value:?/.*(?=>)/? ">";
 type = ( "int" | "float" | "double" | "string" | "bool" | userType ) ;
 def = comment:{comment}type:type name:name "=" value:(number|?/\".*\"/?) ";";
 arg = type:type name:name;
