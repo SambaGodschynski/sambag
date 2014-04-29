@@ -180,6 +180,8 @@ class LuaClassBuilder(LuaClassParser):
         return tl
 
     def __preTlist(self,l, name):
+        if len(l)==0:
+            return "typedef Loki::NullType Functions1;"
         i=0
         tl=""
         while (True):
@@ -195,6 +197,8 @@ class LuaClassBuilder(LuaClassParser):
     def __processFunctionsHeader(self):
         #ftags
         fs=self.__preFunct('functions', "SAMBAG_LUA_FTAG(%name, %type (%args));", "%type")
+        if len(fs)==0:
+            fs.append("")
         fs=reduce(lambda x,y:"%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_TAGS$$", fs)
         #type lists
@@ -203,6 +207,8 @@ class LuaClassBuilder(LuaClassParser):
         self.__replaceHeader("$$F_LISTS$$", tl)
         #fdefs
         fs=self.__preFunct('functions', "%comment\n\tvirtual %type %name(lua_State *lua%, %args) = 0;", "%typeref %name")
+        if len(fs)==0:
+            fs.append("")
         fs=reduce(lambda x,y: "%s\n\t%s"%(x,y), fs)
         self.__replaceHeader("$$F_IMPL$$", fs)
 

@@ -89,10 +89,12 @@ public:
     struct Y_tag { typedef units::Unit Type; };
     struct Width_tag { typedef units::Unit Type; };
     struct Height_tag { typedef units::Unit Type; };
+    struct Transform_tag { typedef math::Matrix Type; };
 private:
     //-------------------------------------------------------------------------
     units::Point p;
     units::Dimension size;
+    math::Matrix transform;
 protected:
     //-------------------------------------------------------------------------
     SvgPattern(){
@@ -118,23 +120,27 @@ public:
     static Ptr create( SvgRoot *root = NULL );
     //-------------------------------------------------------------------------
     GraphicElement::Ptr getGraphicElement() const {
-	return combo;
+        return combo;
     }
     //-------------------------------------------------------------------------
     virtual void set( const X_tag::Type &coord, X_tag ) {
-	p.x(coord);
+        p.x(coord);
     }
     //-------------------------------------------------------------------------
     virtual void set( const Y_tag::Type &coord, Y_tag ) {
-	p.y(coord);
+        p.y(coord);
     }
     //-------------------------------------------------------------------------
     virtual void set( const Width_tag::Type &coord, Width_tag ) {
-	size.width(coord);
+        size.width(coord);
     }
     //-------------------------------------------------------------------------
     virtual void set( const Height_tag::Type &coord, Height_tag ) {
-	size.height(coord);
+        size.height(coord);
+    }
+    //-------------------------------------------------------------------------
+    virtual void set( const Transform_tag::Type &m, Transform_tag ) {
+        transform = m;
     }
 };
 }}}
