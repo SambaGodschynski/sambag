@@ -4,16 +4,19 @@
 <svg width="420px" height="200px" viewBox="0 0 420 200"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
   <defs>
-    <pattern id="tile" x="0" y="0" width="20%" height="20%"
-	     patternUnits="objectBoundingBox">
-      <rect x="0" y="0" width="100px" height="100px" fill="yellow"/>
+    <pattern id="circles" x="0" y="0" width="15px" height="15px"
+	     patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="5px" fill="yellow"/>
+    
+    </pattern>
+    <pattern id="tile" x="0" y="0" width="30px" height="30px"
+	     patternUnits="userSpaceOnUse">
+      <path id="pb" d="M 0 0 h 20 v 20 h -20 z" stroke="red" fill="url(#circles)"/>
       <path id="pa" d="M 0 0 Q 5 20 10 10 T 20 20"
-	    style="stroke: black; fill: none;"/>
-      <path id="pb" d="M 0 0 h 20 v 20 h -20 z"
-	    style="stroke: gray; fill: none;"/>
+	    stroke="red" fill="none"/>
     </pattern>
   </defs>
-  
+  <rect width="100%" height="100%" fill="pink"/>  
   <rect x="20" y="20" width="100px" height="100px"
 	fill="url(#tile)" stroke="black"/>
   <rect x="135" y="20" width="70" height="80"

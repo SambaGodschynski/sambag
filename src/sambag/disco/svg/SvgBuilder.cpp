@@ -21,6 +21,7 @@
 #include "sambag/disco/svg/SvgPolygon.hpp"
 #include "sambag/disco/svg/SvgImage.hpp"
 #include "sambag/disco/svg/SvgStyle.hpp"
+#include "sambag/disco/svg/SvgPattern.hpp"
 #include "sambag/disco/svg/SvgLinearGradient.hpp"
 #include "sambag/disco/svg/SvgRadialGradient.hpp"
 #include "sambag/disco/svg/SvgColorStop.hpp"
@@ -77,6 +78,7 @@ void SvgBuilder::registerSvgAttributes() {
 	SvgLinearGradient::registerAttributes(xml2Obj);
 	SvgRadialGradient::registerAttributes(xml2Obj);
 	SvgColorStop::registerAttributes(xml2Obj);
+	SvgPattern::registerAttributes(xml2Obj);
 }
 //-----------------------------------------------------------------------------
 SvgObject::Ptr SvgBuilder::buildSvgFromString(const std::string & str)
