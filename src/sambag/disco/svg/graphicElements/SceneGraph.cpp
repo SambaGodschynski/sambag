@@ -24,100 +24,100 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
-	namespace ublas=boost::numeric::ublas;
-	using namespace sambag::math;
-	context->save();
-	if (transformation) {
-		context->transform( *(transformation.get()) );
-	}
+    namespace ublas=boost::numeric::ublas;
+    using namespace sambag::math;
+    context->save();
+    if (transformation) {
+	context->transform( *(transformation.get()) );
+    }
     IPattern::Ptr fpat, spat;
-	if (style) {
-		style->intoContext(context);
+    if (style) {
+	style->intoContext(context);
         fpat = style->fillPattern();
-		spat = style->strokePattern();
-	}
+	spat = style->strokePattern();
+    }
     
     
     Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
-	if (!shape) {
+    if (!shape) {
         drawable->draw(context);
-	} else {
-		if (context->isFilled()) {
-			shape->shape(context);
-		    if (fpat) {
-		        Rectangle b = context->pathExtends();
-				// pattern matrices: inverse values, inverse mul order!!
-				math::Matrix matr = IDENTITY_MATRIX;
-		        Rectangle patBox = fpat->getBounds();
-		      	if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
-											  patBox.height()!=0) 
-				{
-		  			Number w = patBox.width();
-		            Number h = patBox.height();
-					matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-		        }
-				matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-				fpat->setMatrix(matr);
-				context->setFillPattern(fpat);
-			}
-        	context->fill();
+    } else {
+	if (context->isFilled()) {
+	    shape->shape(context);
+	    if (fpat) {
+		Rectangle b = context->pathExtends();
+		// pattern matrices: inverse values, inverse mul order!!
+		math::Matrix matr = IDENTITY_MATRIX;
+		Rectangle patBox = fpat->getBounds();
+		if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
+		    patBox.height()!=0) 
+		{
+		    Number w = patBox.width();
+		    Number h = patBox.height();
+		    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+		}
+		matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+		fpat->setMatrix(matr);
+		context->setFillPattern(fpat);
+	    }
+	    context->fill();
         }
-		if (context->isStroked()) {
-			shape->shape(context);
-			if (spat) {
-		        Rectangle b = context->pathExtends();
-				// pattern matrices: inverse values, inverse mul order!!
-				math::Matrix matr = IDENTITY_MATRIX;
-		        Rectangle patBox = spat->getBounds();
-		        if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
-											  patBox.height()!=0) 
-				{
-		  			Number w = patBox.width();
-		            Number h = patBox.height();
-					matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-		        }
-				matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-				spat->setMatrix(matr);
-				context->setStrokePattern(spat);
-			}
-        	context->stroke();
+	if (context->isStroked()) {
+	    shape->shape(context);
+	    if (spat) {
+		Rectangle b = context->pathExtends();
+		// pattern matrices: inverse values, inverse mul order!!
+		math::Matrix matr = IDENTITY_MATRIX;
+		Rectangle patBox = spat->getBounds();
+		if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
+		    patBox.height()!=0) 
+		{
+		    Number w = patBox.width();
+		    Number h = patBox.height();
+		    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+		}
+		matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+		spat->setMatrix(matr);
+		context->setStrokePattern(spat);
+	    }
+	    context->stroke();
         }
     }
     
     // only need to restore state if no children in scenegraph.
-	// otherwise state will be restored later with RestoreContextState.
-	if (resetContextState==true) {
-		context->restore();
-	}
+    // otherwise state will be restored later with RestoreContextState.
+    if (resetContextState==true) {
+	context->restore();
+    }
 };
 //-----------------------------------------------------------------------------
 Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
-	namespace ublas=boost::numeric::ublas;
-	using namespace sambag::math;
-
+    namespace ublas=boost::numeric::ublas;
+    using namespace sambag::math;
+    
     IPattern::Ptr fpat, spat;
-	if (style) {
-		style->intoContext(context);
-	}
+    if (style) {
+	style->intoContext(context);
+    }
     
     Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
-	if (!shape) {
+    if (!shape) {
         Rectangle b = drawable->getBoundingBox(context);
         context->setStrokeColor(ColorRGBA(0,0,0));
         context->setStrokeWidth(1.0);
         context->rect(b);
     } else {
         shape->shape(context);
-	}
+    }
     Rectangle res = context->pathExtends();
     context->stroke();
     context->save();
-	if (transformation) {
-		context->transform( *(transformation.get()) );
-	}
+    if (transformation) {
+	context->transform( *(transformation.get()) );
+    }
     
     // only need to restore state if no children in scenegraph.
-	// otherwise state will be restored later with RestoreContextState.
+    // otherwise state will be restored later with RestoreContextState.
     Point2D lt = res.x0();
     Point2D lb(res.x0().x(), res.x1().y());
     Point2D rb=res.x1();
@@ -168,38 +168,41 @@ std::string SceneGraph::processListAsString() {
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
-	bool inserted;
-	Element2Vertex::iterator it;
-	boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
-	if (!inserted)
-		return false;
-	const Vertex &u = add_vertex(g);
-	vertexElementMap[u] = ptr;
-	vertexTypeMap[u] = IDRAWABLE;
-	vertexOrderMap[u] = NO_ORDER_NUMBER;
-	it->second = u;
-	return true;
+    bool inserted;
+    Element2Vertex::iterator it;
+    boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
+    if (!inserted) {
+	return false;
+    }
+    const Vertex &u = add_vertex(g);
+    vertexElementMap[u] = ptr;
+    vertexTypeMap[u] = IDRAWABLE;
+    vertexOrderMap[u] = NO_ORDER_NUMBER;
+    it->second = u;
+    return true;
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
-	Element2Vertex::iterator it;
-	it = element2Vertex.find(from);
-	// find "from" vertex
-	if (it==element2Vertex.end())
-		return false;
-	Vertex vFrom = it->second;
-	// find "to" vertex
-	it = element2Vertex.find(to);
-	if (it==element2Vertex.end())
-		return false;
-	Vertex vTo = it->second;
-	Edge e;
-	// set order number
-	vertexOrderMap[vTo] = boost::out_degree(vFrom,g);
+    Element2Vertex::iterator it;
+    it = element2Vertex.find(from);
+    // find "from" vertex
+    if (it==element2Vertex.end()) {
+	return false;
+    }
+    Vertex vFrom = it->second;
+    // find "to" vertex
+    it = element2Vertex.find(to);
+    if (it==element2Vertex.end()) {
+	return false;
+    }
+    Vertex vTo = it->second;
+    Edge e;
+    // set order number
+    vertexOrderMap[vTo] = boost::out_degree(vFrom,g);
 
-	bool connected;
-	tie(e, connected) = add_edge(vFrom, vTo, g);
-	return connected;
+    bool connected;
+    tie(e, connected) = add_edge(vFrom, vTo, g);
+    return connected;
 }
 //-----------------------------------------------------------------------------
 bool SceneGraph::registerElementClass(SceneGraphElement el,
@@ -269,6 +272,42 @@ graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
     while(!styles.empty()) {
         res.add(*(styles.front()));
         styles.pop_front();
+    }
+    return res;
+}
+//-----------------------------------------------------------------------------
+Matrix SceneGraph::calculateTransformation(SceneGraphElement el) {
+    Vertex v = getRelatedVertex(el);
+    if (v==NULL_VERTEX) {
+        return NULL_MATRIX;
+    }
+    // perform breadth search
+    std::vector<Vertex> p(boost::num_vertices(g));
+    Vertex s = *(boost::vertices(g).first);
+    Vertex end = INT_MAX;
+    p[s] = end;
+    boost::breadth_first_search(g, s,
+        boost::visitor(
+            boost::make_bfs_visitor(
+                boost::record_predecessors(&p[0], boost::on_tree_edge())
+            )
+        )
+    );
+    // collect matrices
+    std::list<MatrixPtr> matrices;
+    Vertex it = v;
+    while(it!=end) {
+        MatrixPtr matrix = getTransformationRef(it);
+        if (matrix) {
+            matrices.push_back(matrix);
+        }
+        it = p.at(it); // get predecessor
+    };
+    // compute matrices
+    Matrix res = IDENTITY_MATRIX;
+    while(!matrices.empty()) {
+	res = boost::numeric::ublas::prod(res, *(matrices.front()));
+        matrices.pop_front();
     }
     return res;
 }
@@ -425,24 +464,24 @@ Rectangle SceneGraph::getBoundingBox(SceneGraphElement obj) const {
 //-----------------------------------------------------------------------------
 Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 
-	typedef std::numeric_limits<Number> L;
-	Rectangle res = Rectangle(
-		Point2D(L::max(), L::max()),
-		Point2D(-L::max(), -L::max()),
-		false
+    typedef std::numeric_limits<Number> L;
+    Rectangle res = Rectangle(
+	Point2D(L::max(), L::max()),
+	Point2D(-L::max(), -L::max()),
+	false
 	);
 	
-	std::vector<SceneGraphElement> l;
-	getChildren(parent, l, true);
-	boost_for_each(SceneGraphElement x, l) {
-		Rectangle r = element2Bounds[x];
-		res = Rectangle(
-			minimize(res.x0(), r.x0()),
-			maximize(res.x1(), r.x1()),
-			false
-		);
-	}
-	return res;
+    std::vector<SceneGraphElement> l;
+    getChildren(parent, l, true);
+    boost_for_each(SceneGraphElement x, l) {
+	Rectangle r = element2Bounds[x];
+	res = Rectangle(
+	    minimize(res.x0(), r.x0()),
+	    maximize(res.x1(), r.x1()),
+	    false
+	    );
+    }
+    return res;
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::validateBounds(const Dimension &size) {
@@ -456,29 +495,29 @@ void SceneGraph::validateBounds(const Dimension &size) {
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
-	std::vector<IDrawable::Ptr> parents;
-	boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
+    std::vector<IDrawable::Ptr> parents;
+    boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
         ProcessDrawable::Ptr pr =
             boost::dynamic_pointer_cast<ProcessDrawable>(o);
-		if (pr) {
-			IDrawable::Ptr x=pr->getDrawable();
-			SAMBAG_ASSERT(x);
-            Rectangle r = pr->getBounds(cn);
-			if(boost::out_degree(getRelatedVertex(x), g)>0) {
-				// we have children, so we come back later
-				parents.push_back(x);
-                typedef std::numeric_limits<Number> L;
+	if (pr) {
+	    IDrawable::Ptr x=pr->getDrawable();
+	    SAMBAG_ASSERT(x);
+	    Rectangle r = pr->getBounds(cn);
+	    if(boost::out_degree(getRelatedVertex(x), g)>0) {
+		// we have children, so we come back later
+		parents.push_back(x);
+		typedef std::numeric_limits<Number> L;
                 r=Rectangle(Point2D(L::max(), L::max()),
                             Point2D(-L::max(), -L::max()),
                             false);
-			}
+	    }
             element2Bounds[x] = r;
             continue;
         }
         o->perform(cn);
-	}
-	boost_for_each(IDrawable::Ptr x, parents) {
-		element2Bounds[x] = computeBoundingBox(x);
-	}
+    }
+    boost_for_each(IDrawable::Ptr x, parents) {
+	element2Bounds[x] = computeBoundingBox(x);
+    }
 }
 }}}} // namespaces

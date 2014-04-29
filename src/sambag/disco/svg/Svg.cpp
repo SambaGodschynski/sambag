@@ -36,7 +36,7 @@ void SvgObject::setClassName(const std::string & str) {
 }
 //-----------------------------------------------------------------------------
 void SvgObject::add(Ptr obj) {
-	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
+   	graphicElements::SceneGraph::Ptr g = getRelatedSceneGraph();
 	if (!g)
 		return;
 	if(dynamic_cast<SvgDefs*>(obj.get())) // a def is invisible so we doesn't hook it in.
@@ -46,7 +46,7 @@ void SvgObject::add(Ptr obj) {
 }
 //-----------------------------------------------------------------------------
 void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
-	SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(fillObj);
+	SvgPatternBase::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPatternBase>(fillObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
@@ -58,7 +58,7 @@ void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
 //-----------------------------------------------------------------------------
 void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj)
 {
-	SvgPattern::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPattern>(strokeObj);
+	SvgPatternBase::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPatternBase>(strokeObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();

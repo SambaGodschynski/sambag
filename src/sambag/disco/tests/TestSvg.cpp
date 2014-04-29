@@ -755,4 +755,24 @@ void TestSvg::testUnits() {
 	g->draw(context);
 	testSvg("testUnits", TEST_SVG, surface, html);
 }
+//-----------------------------------------------------------------------------
+void TestSvg::testPattern() {
+    using namespace sambag::disco;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assume test file
+    static const std::string TEST_SVG = IN_FOLDER + "pattern.svg";
+    CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
+    svg::SvgBuilder builder;
+    svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	( builder.buildSvgFromFilename(TEST_SVG) );
+    CPPUNIT_ASSERT(rootObject);
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
+    IDiscoFactory *fac = getDiscoFactory();
+    IImageSurface::Ptr surface = fac->createImageSurface(420, 200);
+    IDrawContext::Ptr context = fac->createContext(surface);
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
+    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    g->draw(context);
+    testSvg("testPattern", TEST_SVG, surface, html);
+}
 } //namespaces
