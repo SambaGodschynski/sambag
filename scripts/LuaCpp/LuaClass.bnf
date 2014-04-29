@@ -11,6 +11,7 @@ singleComment = "//" ?/.*/? ;
 comment = (docComment|defaultComment|singleComment) ;
 manuallyReturn = (type:"ManuallyReturn" "<" value:int ">") ;
 userType = type:"User" "<" value:?/.*(?=>)/? ">";
+userDefs = "User" "<" type:?/.*(?=>)/? ">" name:name ";" ;
 type = ( "int" | "float" | "double" | "string" | "bool" | userType ) ;
 def = comment:{comment}type:type name:name "=" value:(number|?/\".*\"/?) ";";
 arg = type:type name:name;
@@ -20,4 +21,4 @@ ns = ns+:name { "." ns+:name } ;
 include = "#include" "<" @:?/.*?(?=>)/? ">";
 super = @+:name {"." @+:name} ;
 class = [namespace:ns] {includes+:include} comment:{comment} "class" name:name ["extends" extends:super ] 
-      	"{" { fields+:def|functions+:fDef}* "}" $ ; 
+      	"{" {userDefs+:userDefs|fields+:def|functions+:fDef}* "}" $ ; 

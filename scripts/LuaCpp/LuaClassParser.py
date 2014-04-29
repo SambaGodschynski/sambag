@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.119.14.56.27'
+__version__ = '14.119.15.32.27'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -106,6 +106,17 @@ class LuaClassParser(Parser):
         self._pattern(r'.*(?=>)')
         self.ast['value'] = self.last_node
         self._token('>')
+
+    @rule_def
+    def _userDefs_(self):
+        self._token('User')
+        self._token('<')
+        self._pattern(r'.*(?=>)')
+        self.ast['type'] = self.last_node
+        self._token('>')
+        self._name_()
+        self.ast['name'] = self.last_node
+        self._token(';')
 
     @rule_def
     def _type_(self):
@@ -238,6 +249,9 @@ class LuaClassParser(Parser):
         def block7():
             with self._choice():
                 with self._option():
+                    self._userDefs_()
+                    self.ast.add_list('userDefs', self.last_node)
+                with self._option():
                     self._def_()
                     self.ast.add_list('fields', self.last_node)
                 with self._option():
@@ -292,6 +306,9 @@ class LuaClassSemantics(object):
         return ast
 
     def userType(self, ast):
+        return ast
+
+    def userDefs(self, ast):
         return ast
 
     def type(self, ast):

@@ -7,6 +7,7 @@ frx.lua.example
  * @brief Bla
  */
 class MyClass extends sambag.lua.ASuperClass {
+	User<tuple<float, bloat>> Mettwurst;
 	 /**
   	  * javadoc 'esk comments
 	  * @param the value
@@ -19,8 +20,7 @@ class MyClass extends sambag.lua.ASuperClass {
 	ManuallyReturn<1> f();
 	 /*acomment*/
 	 int aField=10;
-	 string name="peter";	
-	
+	 string name="peter";		
 	/**
   	 * @a sophisticated function
 	 */

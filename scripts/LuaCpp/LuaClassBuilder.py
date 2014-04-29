@@ -22,6 +22,7 @@ class LuaClassBuilder(LuaClassParser):
         self.__processFields()
         self.__processNS()
         self.__processFunctionsImpl()
+        self.__processUserDefs()
         return self.header, self.impl
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
@@ -255,6 +256,14 @@ class LuaClassBuilder(LuaClassParser):
         for i in range(s+1,e):
             strFs+=",\n\t\t" + fs[i]
         return strFs+")"
+
+    def __processUserDefs(self):
+        defs = self.ast['userDefs']
+        res=""
+        if defs != None:
+            for x in defs:
+                res+="typedef %s %s;\n\t" % (x['type'], x['name'])
+        self.__replaceHeader("$$USER_DEFS$$", res)
 
     def __processFunctionsImpl(self):                            
         #binding
