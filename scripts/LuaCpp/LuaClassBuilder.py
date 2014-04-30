@@ -101,10 +101,12 @@ class LuaClassBuilder(LuaClassParser):
         #functions
         fs=""
         argform="%type %name"
-        argdocform="%name %doc"
-        form="""%name %args
-        %fdoc
-        %argdoc
+        argdocform="parameter %name %doc"
+        form="""<function>%name %args</function>
+        <doc>
+            <fdoc>%fdoc</fdoc>
+            <argdoc>%argdoc</argdoc>
+        </doc>
         """
         for x in self.ast['functions']:
             f=form
