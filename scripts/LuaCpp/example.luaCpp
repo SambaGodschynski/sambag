@@ -4,22 +4,29 @@ frx.lua.example
 #include <boost/unicorn.hpp>
 
 /**
- * @brief Bla
+ * @brief this is a test class
+ * for @see luaCpp or @see peter
  */
+// steffen6
 class MyClass extends sambag.lua.ASuperClass {
 	User<tuple<float, bloat>> Mettwurst;
 	 /**
-  	  * javadoc 'esk comments
-	  * @param the value
+  	  * @brief javadoc 'esk comments
+	  * @param a: the value * the mah
+	  * @param b: the mahi mahi
+	  * @param c: bahso
           * @return the other value
 	  */
-	 void aFunction(int bla, float mah, string bah);
+	 void aFunction(int a, float b, string c);
 	/**
  	 * @brief whatever
   	 */ 
 	ManuallyReturn<1> f();
 	 /*acomment*/
 	 int aField=10;
+	/**
+	 * @brief your name
+	 */
 	 string name="peter";		
 	/**
   	 * @a sophisticated function

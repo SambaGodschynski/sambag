@@ -14,6 +14,9 @@ class LuaClassBuilder(LuaClassParser):
         f=open(p+"/LuaClass.tmpl.cpp","r")
         self.impl=f.read()
         f.close()
+        f=open(p+"/LuaClass.tmpl.doc","r")
+        self.doc=f.read()
+        f.close()
     def build(self, str):
         self.ast = self.parse(str, "class")
         self.__loadTemplates()
@@ -23,12 +26,16 @@ class LuaClassBuilder(LuaClassParser):
         self.__processNS()
         self.__processFunctionsImpl()
         self.__processUserDefs()
-        return self.header, self.impl
+        self.__processDoc()
+        
     def __replaceHeader(self, a, b):
         self.header = self.header.replace(a, b)
 
     def __replaceImpl(self, a, b):
         self.impl = self.impl.replace(a, b)
+
+    def __replaceDoc(self, a, b):
+        self.doc = self.doc.replace(a, b)
 
     def __replace(self, a, b):
         self.__replaceHeader(a,b)
@@ -49,6 +56,94 @@ class LuaClassBuilder(LuaClassParser):
         if len(c)==0:
             return "* @brief TODO"
         return reduce(lambda x,y: "%s\n\t%s" % (x,y), c)
+
+    def __processDocLinks(self, str, form):
+        it=re.finditer("@see ([^ ]*)", str)
+        res=str
+        for m in it:
+            s=form.replace("%link", m.group(1))
+            res=res.replace(m.group(0), s)
+        return res
+
+    def __extractTags(self, l, linkform):
+        #return tagmap
+        l=self.__getComments(l)
+        if len(l)==0:
+            return {}
+        #preprocess lines
+        nl=[]
+        for x in l:
+            m=re.match("\\**(.*)", x)
+            x=m.group(1)
+            if x == None:
+                continue
+            x=self.__processDocLinks(x, linkform)
+            nl.append(x)
+        l=nl
+        res={}
+        l=reduce(lambda x,y: "%s %s" %(x,y), l)
+        it=re.finditer("@(\w+)(.*?)(?=@|$)", l)
+        for m in it:
+            k=m.group(1)
+            if not res.has_key(k):
+                res[k]=[]
+            res[k].append(m.group(2))
+        return res
+
+    def __processDoc(self):
+        self.__replaceDoc("$$CLASS_NAME$$", self.ast['name'])
+        linkform="[%link]"
+        l=self.__extractTags(self.ast['comment'], linkform)
+        brief=""
+        if l['brief']!=None:
+            brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
+        self.__replaceDoc("$$CLASS_DOC$$", brief)
+        #functions
+        fs=""
+        argform="%type %name"
+        argdocform="%name %doc"
+        form="""%name %args
+        %fdoc
+        %argdoc
+        """
+        for x in self.ast['functions']:
+            f=form
+            f=f.replace("%name", x['name'])
+            l=self.__extractTags(x['comment'], linkform)
+            brief=""
+            if l.has_key("brief"):
+                brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
+            f=f.replace("%fdoc", brief)
+            if x['args'] !=None:
+                if (l.has_key("param")):
+                    adlist=l['param']
+                else:
+                    adlist=[]
+                arg=""
+                darg=""
+                for y in x['args']:
+                    tmp_arg=argform
+                    tmp_darg=argdocform
+                    tmp_arg=tmp_arg.replace("%name", y['name'])
+                    tmp_darg=tmp_darg.replace("%name", y['name'])
+                    tmp_arg=tmp_arg.replace("%type", y['type'])
+                    if len(adlist)>0:
+                        tmp_darg=tmp_darg.replace("%doc", adlist[0])
+                        adlist.pop(0)
+                    else:
+                        tmp_darg=tmp_darg.replace("%doc","")
+                    arg+=tmp_arg+" "
+                    darg+=tmp_darg+" \n\t"
+                f=f.replace("%args", arg)
+                f=f.replace("%argdoc", darg)
+            else:
+                f=f.replace("%args", "")
+                f=f.replace("%argdoc", "")
+            fs+=f
+        self.__replaceDoc("$$FUNCTIONS$$", fs)
+        #fields
+        for x in self.ast['fields']:
+            l=self.__extractTags(x['comment'], linkform)
 
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
@@ -300,9 +395,12 @@ if __name__ == '__main__':
     txt=f.read();
     f.close()
     builder=LuaClassBuilder()
-    header, impl = builder.build(txt)
+    builder.build(txt)
     for x in args.otype:
         if x=="header":
-            print header
+            print builder.header
         if x=="impl":
-            print impl
+            print builder.impl
+        if x=="doc":
+            print builder.doc
+        
