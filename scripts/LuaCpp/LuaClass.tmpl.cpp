@@ -1,43 +1,34 @@
 /*
- * LuaModelObject.cpp
+ * THIS FILE IS AUTO CREATED BY THE LUACPP BUILD PROGRAM
+ * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
+ * THE THIS FILE IS GENERATED  
  *
- *  Created on: Fri Mar 14 11:47:35 2014
- *      Author: Johannes Unger
+ * $$CLASS_NAME$$.cpp
+ *
+ *  Created on: $$DATE$$
+ *      Author: Samba Godschysnki
  */
 
 #include "$$CLASS_NAME$$.hpp"
-#include <sambag/com/exceptions/IllegalStateException.hpp>
-
 
 $$NS$$
 //=============================================================================
 //  Class $$CLASS_NAME$$
 //=============================================================================
 //-----------------------------------------------------------------------------
-LuaModelObject::LuaModelObject() {
-}
-//-----------------------------------------------------------------------------
-void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) :
-	$$INIT_FIELDS$$
+void $$CLASS_NAME$$::addLuaFields(lua_State *lua, int index) 
 {
-    Super::addLuaFields(lua, index);
-    //slua::push(lua, getTypeId());
-    //lua_setfield(lua, index, "__frxtype");
-	// register functions
     using namespace sambag::lua;
-    int index = createClass<Functions1, MetaFunctions, TupleAccessor>
-    (
-        lua,
-        $$FBIND$$,
-	$$FBIND_META$$,
-        $$CLASS_NAME$$
-    );	
+    Super::addLuaFields(lua, index);
+    // register functions
+    $$LUA_REGISTER$$
+    $$LUA_INIT_FIELDS$$
 }
 //-----------------------------------------------------------------------------
-void LuaModelObject::__lua_gc(lua_State *lua) {
+void $$CLASS_NAME$$::__lua_gc(lua_State *lua) {
+    using namespace sambag::lua;
+    $$LUA_UNREGISTER$$
     Super::__lua_gc(lua);
-	// unregister functions
-	// unregisterClassFunctions<Functions>(obj->getUId());
-    // unregisterClassFunctions<MetaFunctions>(obj->getUId());
 }
+$$FIELD_SETTER_GETTER$$
 $$NS_END$$ // namespace(s)

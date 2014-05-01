@@ -3,14 +3,14 @@
  * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
  * THE THIS FILE IS GENERATED  
  *
- * $$CLASS_NAME$$.hpp
+ * LuaCppTestClass.hpp
  *
- *  Created on: $$DATE$$
+ *  Created on: Fri Apr 25 13:13:05 2014
  *      Author: Samba Godschysnki
  */
 
-#ifndef SAMBAG_$$CLASS_NAME$$_H
-#define SAMBAG_$$CLASS_NAME$$_H
+#ifndef SAMBAG_LuaCppTestClass_H
+#define SAMBAG_LuaCppTestClass_H
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -18,35 +18,39 @@
 #include <loki/TypeList.h>
 #include <sambag/lua/ALuaObject.hpp>
 
-$$INCLUDE$$
 
-$$NS$$
+
+namespace tests { 
 //=============================================================================
-class $$CLASS_NAME$$ : public $$EXTENDS$$ {
+class LuaCppTestClass : public sambag::lua::ALuaObject {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef $$EXTENDS$$ Super;
+    typedef sambag::lua::ALuaObject Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<$$CLASS_NAME$$> Ptr;
+    typedef boost::shared_ptr<LuaCppTestClass> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<$$CLASS_NAME$$> WPtr;
-    //-------------------------------------------------------------------------
-    $$USER_DEFS$$
+    typedef boost::weak_ptr<LuaCppTestClass> WPtr;
 private:
 protected:
     //-------------------------------------------------------------------------
-    $$CLASS_NAME$$() {}
+    LuaCppTestClass() {}
     //-------------------------------------------------------------------------
-    $$F_TAGS$$
-    $$F_LISTS$$
+    SAMBAG_LUA_FTAG(add, int (int, int));
+    typedef LOKI_TYPELIST_1(Frx_add_Tag) Functions1;
+
+	
     ///////////////////////////////////////////////////////////////////////////
-    $$F_IMPL$$
+    /**
+	* @brief TODO
+	*/
+	virtual int add(lua_State *lua, int a, int b) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter
      */
-    $$FIELDS$$
+    virtual std::string get_name(lua_State *lua, int index);
+	virtual void set_name(lua_State *lua, const std::string & value, int index);
     //-------------------------------------------------------------------------
     /**
      * @override 
@@ -60,10 +64,11 @@ public:
     virtual void __lua_gc(lua_State *lua);
 public:
     //-------------------------------------------------------------------------
-    virtual ~$$CLASS_NAME$$() {}
+    virtual ~LuaCppTestClass() {}
 private:
 public:
-}; // $$CLASS_NAME$$
-$$NS_END$$
+}; // LuaCppTestClass
+}
 
-#endif /* SAMBAG_$$CLASS_NAME$$_H */
+#endif /* SAMBAG_LuaCppTestClass_H */
+

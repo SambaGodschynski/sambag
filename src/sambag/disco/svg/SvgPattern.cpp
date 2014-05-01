@@ -22,8 +22,9 @@ IPattern::Ptr SvgPattern::createPattern() const {
     copySubGraph(g, g2, g->getRelatedVertex(ref));
     // create surface, context, pattern
     ISurface::Ptr sf = getDiscoFactory()->
-	createImageSurface(size.width().solve(100), size.height().solve(100));
+        createImageSurface(size.width().solve(100), size.height().solve(100));
     IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
+    cn->transform(transform);
     g2->draw(cn);
     IPattern::Ptr res = getDiscoFactory()->createSurfacePattern(sf);
     res->setExtendType(IPattern::DISCO_EXTEND_REPEAT);
@@ -46,6 +47,7 @@ void SvgPattern::registerAttributes(SvgObject::BuilderType &binder) {
     binder.registerAttribute<X_tag::Type, X_tag, SvgPattern>("x");
     binder.registerAttribute<Y_tag::Type, Y_tag, SvgPattern>("y");
     binder.registerAttribute<Width_tag::Type, Width_tag, SvgPattern>("width");
-    binder.registerAttribute<Height_tag::Type, Height_tag, SvgPattern>("height");		
+    binder.registerAttribute<Height_tag::Type, Height_tag, SvgPattern>("height");
+    binder.registerAttribute<Transform_tag::Type, Transform_tag, SvgPattern>("patternTransform");
 }
 }}}

@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.106.13.00.00'
+__version__ = '14.119.15.32.27'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
@@ -48,12 +48,6 @@ class LuaClassParser(Parser):
     @rule_def
     def _metaName_(self):
         self._pattern(r'__[a-zA-Z][a-zA-Z0-9]*')
-
-    @rule_def
-    def _lcName_(self):
-        self._token('?')
-        self._pattern(r'[a-zA-Z][a-zA-Z0-9]*')
-        self.ast['@'] = self.last_node
 
     @rule_def
     def _commentText_(self):
@@ -105,6 +99,26 @@ class LuaClassParser(Parser):
             self._token('>')
 
     @rule_def
+    def _userType_(self):
+        self._token('User')
+        self.ast['type'] = self.last_node
+        self._token('<')
+        self._pattern(r'.*(?=>)')
+        self.ast['value'] = self.last_node
+        self._token('>')
+
+    @rule_def
+    def _userDefs_(self):
+        self._token('User')
+        self._token('<')
+        self._pattern(r'.*(?=>)')
+        self.ast['type'] = self.last_node
+        self._token('>')
+        self._name_()
+        self.ast['name'] = self.last_node
+        self._token(';')
+
+    @rule_def
     def _type_(self):
         with self._group():
             with self._choice():
@@ -118,6 +132,8 @@ class LuaClassParser(Parser):
                     self._token('string')
                 with self._option():
                     self._token('bool')
+                with self._option():
+                    self._userType_()
                 self._error('expecting one of: string int float double bool')
 
     @rule_def
@@ -131,7 +147,13 @@ class LuaClassParser(Parser):
         self._name_()
         self.ast['name'] = self.last_node
         self._token('=')
-        self._number_()
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._number_()
+                with self._option():
+                    self._pattern(r'\".*\"')
+                self._error('expecting one of: ".*"')
         self.ast['value'] = self.last_node
         self._token(';')
 
@@ -176,50 +198,6 @@ class LuaClassParser(Parser):
         self._token(';')
 
     @rule_def
-    def _mfDef_(self):
-        def block1():
-            self._comment_()
-        self._closure(block1)
-        self.ast['comment'] = self.last_node
-        self._return_()
-        self.ast['return_'] = self.last_node
-        self._metaName_()
-        self.ast['name'] = self.last_node
-        self._token('(')
-        with self._optional():
-            self._arg_()
-            self.ast.add_list('args', self.last_node)
-            def block5():
-                self._token(',')
-                self._arg_()
-                self.ast.add_list('args', self.last_node)
-            self._closure(block5)
-        self._token(')')
-        self._token(';')
-
-    @rule_def
-    def _lcfDef_(self):
-        def block1():
-            self._comment_()
-        self._closure(block1)
-        self.ast['comment'] = self.last_node
-        self._return_()
-        self.ast['return_'] = self.last_node
-        self._lcName_()
-        self.ast['name'] = self.last_node
-        self._token('(')
-        with self._optional():
-            self._arg_()
-            self.ast.add_list('args', self.last_node)
-            def block5():
-                self._token(',')
-                self._arg_()
-                self.ast.add_list('args', self.last_node)
-            self._closure(block5)
-        self._token(')')
-        self._token(';')
-
-    @rule_def
     def _ns_(self):
         self._name_()
         self.ast.add_list('ns', self.last_node)
@@ -230,40 +208,57 @@ class LuaClassParser(Parser):
         self._closure(block1)
 
     @rule_def
+    def _include_(self):
+        self._token('#include')
+        self._token('<')
+        self._pattern(r'.*?(?=>)')
+        self.ast['@'] = self.last_node
+        self._token('>')
+
+    @rule_def
+    def _super_(self):
+        self._name_()
+        self.ast.add_list('@', self.last_node)
+        def block1():
+            self._token('.')
+            self._name_()
+            self.ast.add_list('@', self.last_node)
+        self._closure(block1)
+
+    @rule_def
     def _class_(self):
         with self._optional():
             self._ns_()
             self.ast['namespace'] = self.last_node
-        def block2():
+        def block1():
+            self._include_()
+            self.ast.add_list('includes', self.last_node)
+        self._closure(block1)
+        def block4():
             self._comment_()
-        self._closure(block2)
+        self._closure(block4)
         self.ast['comment'] = self.last_node
         self._token('class')
         self._name_()
         self.ast['name'] = self.last_node
         with self._optional():
             self._token('extends')
-            self._name_()
+            self._super_()
             self.ast['extends'] = self.last_node
         self._token('{')
-        def block5():
+        def block7():
             with self._choice():
                 with self._option():
-                    self._comment_()
+                    self._userDefs_()
+                    self.ast.add_list('userDefs', self.last_node)
                 with self._option():
                     self._def_()
                     self.ast.add_list('fields', self.last_node)
                 with self._option():
-                    self._mfDef_()
-                    self.ast.add_list('metaFunctions', self.last_node)
-                with self._option():
                     self._fDef_()
                     self.ast.add_list('functions', self.last_node)
-                with self._option():
-                    self._lcfDef_()
-                    self.ast.add_list('lcFDefs', self.last_node)
                 self._error('no available options')
-        self._closure(block5)
+        self._closure(block7)
         self._token('}')
         self._check_eof()
 
@@ -292,9 +287,6 @@ class LuaClassSemantics(object):
     def metaName(self, ast):
         return ast
 
-    def lcName(self, ast):
-        return ast
-
     def commentText(self, ast):
         return ast
 
@@ -313,6 +305,12 @@ class LuaClassSemantics(object):
     def manuallyReturn(self, ast):
         return ast
 
+    def userType(self, ast):
+        return ast
+
+    def userDefs(self, ast):
+        return ast
+
     def type(self, ast):
         return ast
 
@@ -328,13 +326,13 @@ class LuaClassSemantics(object):
     def fDef(self, ast):
         return ast
 
-    def mfDef(self, ast):
-        return ast
-
-    def lcfDef(self, ast):
-        return ast
-
     def ns(self, ast):
+        return ast
+
+    def include(self, ast):
+        return ast
+
+    def super(self, ast):
         return ast
 
     def class_(self, ast):

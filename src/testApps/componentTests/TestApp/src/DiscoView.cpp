@@ -53,6 +53,7 @@ enum { /*Views*/
 	LIST,
 	MILLER,
     SVG,
+    FRX,
 	NUM_VIEWS
 };
 
@@ -576,6 +577,27 @@ void createWindow<SVG>() {
     
 }
 
+template <>
+void createWindow<FRX>() {
+	using namespace sambag::disco;
+	using namespace sambag::disco::components;
+	win[FRX] = sdc::FramedWindow::create(win[0]);
+	win[FRX]->setTitle("SVG Component");
+	win[FRX]->setWindowBounds(sambag::disco::Rectangle(110,100,800,600));
+    
+    SvgComponent::Ptr svg = SvgComponent::create();
+    svg->setSvgFilename("testimages/frx.svg");
+    win[FRX]->getContentPane()->add(svg);
+    std::vector<SvgComponent::Dummy::Ptr> dummies;
+    svg->getDummiesByClass(".disco", dummies);
+    BOOST_FOREACH(AComponent::Ptr x, dummies) {
+        x->EventSender<sdc::events::MouseEvent>::addEventListener(
+           &onSvgMouse
+        );
+    }
+    
+}
+
 
 void stopTimer(void *src, const sdc::events::ActionEvent &ev) {
 	if (timerInf)
@@ -747,7 +769,7 @@ int main() {
 	{ // extra scope (bye message should occur after releasing all objs)
 		win[0] = sdc::FramedWindow::create();
 		win[0]->setDefaultCloseOperation(Window::EXIT_ON_CLOSE);
-		win[0]->setWindowBounds(sambag::disco::Rectangle(0,0,230,200));
+		win[0]->setWindowBounds(sambag::disco::Rectangle(0,0,230,300));
 		win[0]->setTitle("Messerschmitz 1.0");
 		win[0]->getContentPane()->setLayout(FlowLayout::create());
 		win[0]->getContentPane()->EventSender<sdc::events::MouseEvent>::addEventListener(
@@ -802,6 +824,11 @@ int main() {
 		btn->setText("SAV UGGER");
 		btn->setTooltipText("open SVG component TestWindow");
 		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<SVG>);
+		win[0]->getContentPane()->add(btn);
+    
+        btn = Button::create();
+		btn->setText("Fix Und Forxi");
+		btn->EventSender<sdc::events::ActionEvent>::addEventListener(&onBtnCreate<FRX>);
 		win[0]->getContentPane()->add(btn);
 
 		btn = Button::create();

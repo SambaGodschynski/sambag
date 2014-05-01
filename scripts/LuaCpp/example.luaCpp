@@ -1,8 +1,13 @@
 frx.lua.example
+
+#include <sambag/lua/ASuperClass.hpp>
+#include <boost/unicorn.hpp>
+
 /**
  * @brief Bla
  */
-class MyClass extends ASuperClass {
+class MyClass extends sambag.lua.ASuperClass {
+	User<tuple<float, bloat>> Mettwurst;
 	 /**
   	  * javadoc 'esk comments
 	  * @param the value
@@ -15,15 +20,13 @@ class MyClass extends ASuperClass {
 	ManuallyReturn<1> f();
 	 /*acomment*/
 	 int aField=10;
-	
+	 string name="peter";		
 	/**
- 	 * @brief metafunction
+  	 * @a sophisticated function
 	 */
-	string __tostring();
-
 	void fistA(int a, float b);
 	void fistB(string messie);
-	void fistC(double x);
+	User< sambag::TestClass<int> > fistC(double x);
 	void fistD();
 	void fistE(bool f);
 	float fistF(bool f);
@@ -31,11 +34,6 @@ class MyClass extends ASuperClass {
 	void fistH(int a, int b);
 	int fistI(int a, int b);
 	void fistJ(int a);
-
-	/**
-   	 * lc (lua call) functions
-	 */
-	void ?whoAreYou(int x);
 }
 
 

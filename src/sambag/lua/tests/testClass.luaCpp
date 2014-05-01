@@ -1,0 +1,12 @@
+tests
+
+/**
+ * @brief The LuaCPP TestClass
+ */
+class LuaCppTestClass extends sambag.lua.ALuaObject {
+	 int add(int a, int b);
+	 string name="peter";
+}
+
+
+

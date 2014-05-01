@@ -93,6 +93,8 @@ inline BufferedDrawPolicy::BufferedDrawPolicy() {
 }
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::redrawRoot(sambag::disco::ISurface::Ptr sf) {
+    RootPane::Ptr root = this->root; // hold root
+    sambag::disco::ISurface::Ptr bff = this->bff; // hold bff
 	if (!bff || !root)
 		return;
 	try {
@@ -116,13 +118,20 @@ inline void BufferedDrawPolicy::processDraw(ISurface::Ptr surface)
 {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	redrawRoot(surface);
-	IDrawContext::Ptr cn =
+    RootPane::Ptr root = this->root; // hold root
+    sambag::disco::ISurface::Ptr bff = this->bff; // hold bff
+	if (!bff || !root || !surface) {
+		return;
+    }
+    SAMBAG_BEGIN_SYNCHRONIZED( root->getTreeLock() )
+        redrawRoot(surface);
+        IDrawContext::Ptr cn =
 			getDiscoFactory()->createContext(surface);
-	IDrawContext::Ptr bffcn =
+        IDrawContext::Ptr bffcn =
 			getDiscoFactory()->createContext(bff);
-	Rectangle clip = surface->getClipRect();
-	bffcn->copyAreaTo( cn, clip, clip.x0());
+        Rectangle clip = surface->getClipRect();
+        bffcn->copyAreaTo( cn, clip, clip.x0());
+    SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 inline void BufferedDrawPolicy::init(components::RootPane::Ptr root)
