@@ -49,11 +49,10 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 		// pattern matrices: inverse values, inverse mul order!!
 		math::Matrix matr = IDENTITY_MATRIX;
 		Rectangle patBox = fpat->getBounds();
-		if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
-		    patBox.height()!=0) 
+		if (patBox!=NULL_RECTANGLE) 
 		{
-		    Number w = patBox.width();
-		    Number h = patBox.height();
+		    Number w = patBox.width()>0 ? (Number)patBox.width()  : 1.;
+		    Number h = patBox.height()>0? (Number)patBox.height() : 1.;
 		    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
 		}
 		matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
