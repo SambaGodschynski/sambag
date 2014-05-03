@@ -155,7 +155,7 @@ public:
 	{
 		typedef typename AttributeMap::iterator It;
 		std::pair<It, It> range = 
-			attrMap.equal_range(boost::to_lower_copy(attrName));
+			attrMap.equal_range(attrName);
 		// try every possible entries (stupid)
 		for ( It it=range.first; it!=range.second; ++it) {
 			it->second->set(obj, val);
