@@ -18,6 +18,7 @@
 #include <map>
 #include "sambag/math/Matrix.hpp"
 #include "units/Units.hpp"
+#include "SvgPatternMatrix.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -61,7 +62,7 @@ public:
 	 */
 	static void parseColor(const std::string &str, ColorRGBA&);
 	//-------------------------------------------------------------------------
-	static void parseTransform(const std::string &str, sambag::math::Matrix&);
+        static void parseTransform(const std::string &str, sambag::math::Matrix&, bool inverse=false);
 	//-------------------------------------------------------------------------
 	static void parseCoordinate(const std::string &str, Coordinate&);
 	//-------------------------------------------------------------------------
@@ -135,6 +136,7 @@ extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
 extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
 extern std::istream & operator>>(std::istream&, sambag::math::Matrix&);
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::SvgPatternMatrix&);
 extern std::istream & operator>>(
 		std::istream&,
 		sambag::disco::svg::graphicElements::pathInstruction::PathInstructions &

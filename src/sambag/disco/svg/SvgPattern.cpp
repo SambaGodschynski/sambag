@@ -15,6 +15,11 @@ namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 // class SvgPattern
 //=============================================================================
+//-------------------------------------------------------------------------
+SvgPattern::SvgPattern() {
+    combo = sambag::disco::svg::graphicElements::Compound::create();
+    transform = IDENTITY_MATRIX;
+}
 //-----------------------------------------------------------------------------
 namespace {
     Dimension _calcSize(const Dimension &d, const math::Matrix &m)
@@ -53,15 +58,16 @@ IPattern::Ptr SvgPattern::createPattern() const {
     copySubGraph(g, g2, g->getRelatedVertex(ref));
     // create surface, context, pattern
     Dimension _size(size.width().solve(100), size.height().solve(100));
-    _size=_calcSize(_size, transform);
+    //_size=_calcSize(_size, transform);
     ISurface::Ptr sf = getDiscoFactory()->createImageSurface(
 	_size.width(), _size.height());
     IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
-    cn->transform(transform);
-    cn->translate(Point2D(p.x().solve(100), p.y().solve(100)));
+    //cn->transform(transform);
+    //cn->translate(Point2D(p.x().solve(100), p.y().solve(100)));
     g2->draw(cn);
     IPattern::Ptr res = getDiscoFactory()->createSurfacePattern(sf);
     res->setExtendType(IPattern::DISCO_EXTEND_REPEAT);
+    res->setMatrix(transform);
     return res;
 }
 //-----------------------------------------------------------------------------

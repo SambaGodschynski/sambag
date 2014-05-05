@@ -76,6 +76,8 @@ struct ProcessDrawable : public IProcessListObject {
     //-------------------------------------------------------------------------
     boost::shared_ptr<Style> style;
     //-------------------------------------------------------------------------
+    IPattern::Ptr fill, stroke;
+    //-------------------------------------------------------------------------
     boost::shared_ptr<Matrix> transformation;
     //-------------------------------------------------------------------------
     ProcessDrawable(IDrawable::Ptr drawable,

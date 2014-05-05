@@ -69,8 +69,7 @@ public:
 		return cairoPatternRef;
 	}
 	//-------------------------------------------------------------------------
-	CairoPatternBase(CairoPatternRef ref) : 
-		opacity(1.0), cairoPatternRef(ref) {}
+        CairoPatternBase(CairoPatternRef ref);
 	//-------------------------------------------------------------------------
 	virtual void setOpacityValue(const Number &v) {
 		opacity = v;
@@ -92,7 +91,7 @@ public:
 		cairo_matrix_t cm;
 		math::Matrix res(3,3);
 		cairo_pattern_get_matrix(cairoPatternRef.get(), &cm);
-		discoMatrixToCairoMatrix(res, cm);
+		cairoMatrixToDiscoMatrix(cm, res);
 		return res;
 	}
 	//-------------------------------------------------------------------------
