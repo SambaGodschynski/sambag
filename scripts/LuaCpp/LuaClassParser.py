@@ -12,7 +12,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from grako.parsing import * # @UnusedWildImport
 from grako.exceptions import * # @UnusedWildImport
 
-__version__ = '14.119.15.32.27'
+__version__ = '14.120.08.01.29'
 
 class LuaClassParser(Parser):
     def __init__(self, whitespace=None, nameguard=True, **kwargs):
