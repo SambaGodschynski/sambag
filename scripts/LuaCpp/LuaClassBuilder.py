@@ -91,22 +91,34 @@ class LuaClassBuilder(LuaClassParser):
         return res
 
     def __processDoc(self):
-        self.__replaceDoc("$$CLASS_NAME$$", self.ast['name'])
+        form="""<h3 class="class">%s</h3>""" % self.ast['name'] 
+        self.__replaceDoc("$$CLASS_NAME$$", form)
         linkform="[%link]"
         l=self.__extractTags(self.ast['comment'], linkform)
         brief=""
         if l['brief']!=None:
             brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
-        self.__replaceDoc("$$CLASS_DOC$$", brief)
+        form="""<p class="brief">%s</p>""" % brief
+        self.__replaceDoc("$$CLASS_DOC$$", form)
         #functions
         fs=""
         argform="%type %name"
         argdocform="parameter %name %doc"
-        form="""<function>%name %args</function>
-        <doc>
-            <fdoc>%fdoc</fdoc>
-            <argdoc>%argdoc</argdoc>
-        </doc>
+        form="""
+<p class="doc">
+    <span class="function">
+        %name 
+            <span class="args">
+                %args
+            </span>
+    </span>
+    <p class="fdoc">
+        %fdoc
+    </p>
+    <p class="argdoc">
+        %argdoc
+    </p>
+</p>
         """
         for x in self.ast['functions']:
             f=form
@@ -144,9 +156,25 @@ class LuaClassBuilder(LuaClassParser):
             fs+=f
         self.__replaceDoc("$$FUNCTIONS$$", fs)
         #fields
+        form="""
+<span class="field">%type %name</span>
+<p class="brief">
+    %brief
+</p>
+"""
+        fields=""
         for x in self.ast['fields']:
+            f=form
             l=self.__extractTags(x['comment'], linkform)
-
+            bf=""
+            if l.has_key("brief"):
+                bf=reduce(lambda x,y: "%s %s"%(x,y), l['brief'])
+            f=f.replace("%brief", bf)
+            f=f.replace("%name", x['name'])
+            f=f.replace("%type", x['type'])
+            fields+=f
+        self.__replaceDoc("$$FIELDS$$", fields)
+            
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", reduce(lambda x,y: "%s::%s" % (x,y), self.ast['extends']))

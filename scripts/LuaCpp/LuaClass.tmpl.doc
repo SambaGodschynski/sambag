@@ -1,15 +1,5 @@
-/*
- * THIS FILE IS AUTO CREATED BY THE LUACPP BUILD PROGRAM
- * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
- * THE THIS FILE IS GENERATED  
- *
- * $$CLASS_NAME$$.hpp
- *
- *  Created on: $$DATE$$
- *      Author: Samba Godschysnki
- */
 
-$$CLASS_NAME$$ $$EXTENDS$$
+$$CLASS_NAME$$
 $$CLASS_DOC$$
     $$FUNCTIONS$$
     $$FIELDS$$
