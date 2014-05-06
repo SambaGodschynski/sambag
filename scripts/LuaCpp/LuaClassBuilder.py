@@ -127,7 +127,9 @@ class LuaClassBuilder(LuaClassParser):
                     arg['name']=y['name']
                     arg['type']=y['type']
                     fmap['args'].append(arg)
-            #fmap.update(l)
+            if l.has_key('return'):
+                l['doc_return']=l.pop('return')
+            fmap.update(l)
             res['methods'].append(fmap)
         #fields
         res['fields']=[]
