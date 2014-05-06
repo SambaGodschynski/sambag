@@ -127,7 +127,7 @@ class LuaClassBuilder(LuaClassParser):
                     arg['name']=y['name']
                     arg['type']=y['type']
                     fmap['args'].append(arg)
-            fmap.update(l)
+            #fmap.update(l)
             res['methods'].append(fmap)
         #fields
         res['fields']=[]
