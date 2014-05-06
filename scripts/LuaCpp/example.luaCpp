@@ -6,6 +6,7 @@ frx.lua.example
 /**
  * @brief this is a test class
  * for @see luaCpp or @see peter at home
+ * @version 1.0.5
  */
 // steffen6
 class MyClass extends sambag.lua.ASuperClass {

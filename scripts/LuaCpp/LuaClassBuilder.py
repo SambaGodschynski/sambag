@@ -4,6 +4,7 @@ import re
 import time
 import argparse
 import sys
+import json
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -65,7 +66,7 @@ class LuaClassBuilder(LuaClassParser):
             res=res.replace(m.group(0), s)
         return res
 
-    def __extractTags(self, l, linkform):
+    def __extractTags(self, l, linkform, **opt):
         #return tagmap
         l=self.__getComments(l)
         if len(l)==0:
@@ -85,95 +86,59 @@ class LuaClassBuilder(LuaClassParser):
         it=re.finditer("@(\w+)(.*?)(?=@|$)", l)
         for m in it:
             k=m.group(1)
-            if not res.has_key(k):
-                res[k]=[]
-            res[k].append(m.group(2))
+            if opt.has_key('doNotReduce'):
+                if opt['doNotReduce'].count(k)>0:
+                    if not res.has_key(k):
+                        res[k]=[]
+                    res[k].append(m.group(2).strip())
+                    continue
+            res[k]=""
+            res[k]+=" " + m.group(2)
+            res[k]=res[k].strip()
         return res
 
     def __processDoc(self):
-        form="""<h3 class="class">%s</h3>""" % self.ast['name'] 
-        self.__replaceDoc("$$CLASS_NAME$$", form)
+        res = {}
+        res['name'] = self.ast['name'] 
         linkform="[%link]"
         l=self.__extractTags(self.ast['comment'], linkform)
-        brief=""
-        if l['brief']!=None:
-            brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
-        form="""<p class="brief">%s</p>""" % brief
-        self.__replaceDoc("$$CLASS_DOC$$", form)
+        if not l.has_key("version"):
+            raise StandardError("class version tag missing")
+        res.update(l)
         #functions
-        fs=""
-        argform="%type %name"
-        argdocform="parameter %name %doc"
-        form="""
-<p class="doc">
-    <span class="function">
-        %name 
-            <span class="args">
-                %args
-            </span>
-    </span>
-    <p class="fdoc">
-        %fdoc
-    </p>
-    <p class="argdoc">
-        %argdoc
-    </p>
-</p>
-        """
+        res['methods'] = []
         for x in self.ast['functions']:
-            f=form
-            f=f.replace("%name", x['name'])
-            l=self.__extractTags(x['comment'], linkform)
-            brief=""
-            if l.has_key("brief"):
-                brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
-            f=f.replace("%fdoc", brief)
+            fmap = {}
+            fmap['name'] = x['name']
+            fmap['return'] = x['return_']
+            l=self.__extractTags(x['comment'], linkform, doNotReduce=["param"])
+            fmap['args']=[]
             if x['args'] !=None:
                 if (l.has_key("param")):
                     adlist=l['param']
+                    l.pop('param')
                 else:
                     adlist=[]
-                arg=""
-                darg=""
                 for y in x['args']:
-                    tmp_arg=argform
-                    tmp_darg=argdocform
-                    tmp_arg=tmp_arg.replace("%name", y['name'])
-                    tmp_darg=tmp_darg.replace("%name", y['name'])
-                    tmp_arg=tmp_arg.replace("%type", y['type'])
+                    arg={}
                     if len(adlist)>0:
-                        tmp_darg=tmp_darg.replace("%doc", adlist[0])
+                        arg['doc']=adlist[0]
                         adlist.pop(0)
-                    else:
-                        tmp_darg=tmp_darg.replace("%doc","")
-                    arg+=tmp_arg+" "
-                    darg+=tmp_darg+" \n\t"
-                f=f.replace("%args", arg)
-                f=f.replace("%argdoc", darg)
-            else:
-                f=f.replace("%args", "")
-                f=f.replace("%argdoc", "")
-            fs+=f
-        self.__replaceDoc("$$FUNCTIONS$$", fs)
+                    arg['name']=y['name']
+                    arg['type']=y['type']
+                    fmap['args'].append(arg)
+            fmap.update(l)
+            res['methods'].append(fmap)
         #fields
-        form="""
-<span class="field">%type %name</span>
-<p class="brief">
-    %brief
-</p>
-"""
-        fields=""
+        res['fields']=[]
         for x in self.ast['fields']:
-            f=form
+            field={}
+            field['name']=x['name']
+            field['type']=x['type']
             l=self.__extractTags(x['comment'], linkform)
-            bf=""
-            if l.has_key("brief"):
-                bf=reduce(lambda x,y: "%s %s"%(x,y), l['brief'])
-            f=f.replace("%brief", bf)
-            f=f.replace("%name", x['name'])
-            f=f.replace("%type", x['type'])
-            fields+=f
-        self.__replaceDoc("$$FIELDS$$", fields)
+            field.update(l)
+            res['fields'].append(field)
+        self.doc=json.dumps(res)
             
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
