@@ -100,26 +100,47 @@ class LuaClassBuilder(LuaClassParser):
     def __processDoc(self):
         res = {}
         res['name'] = self.ast['name'] 
-        linkform="[%link]"
+        linkform='<a href="gttp://www.vstforx.de/%link">%link</a>'
         l=self.__extractTags(self.ast['comment'], linkform)
         if not l.has_key("version"):
             raise StandardError("class version tag missing")
+        if l.has_key('alias'):
+            res['name']=l['alias']
+            l.pop('alias')
         res.update(l)
         #functions
         res['methods'] = []
-        for x in self.ast['functions']:
+        functions=self.ast['functions']
+        if functions==None:
+            functions=[]
+        for x in functions:
             fmap = {}
             fmap['name'] = x['name']
             fmap['return'] = x['return_']
-            l=self.__extractTags(x['comment'], linkform, doNotReduce=["param"])
+            l=self.__extractTags(x['comment'], linkform, doNotReduce=["param", "hiddenParam"])
+            if l.has_key("returnType"):
+                fmap['return']=l['returnType']
+                l.pop('returnType')
+            astArgs=x['args'] #we cant modify the ast itself so we use this
+            if l.has_key("hiddenParam"):
+                p=l['hiddenParam']
+                args=[]
+                if astArgs!=None:
+                    for xa in astArgs:
+                        args.append(xa)
+                for hp in p:
+                    s=hp.split(" ")
+                    args.append({'name':s[1], 'type':s[0]})
+                astArgs=args
+                l.pop("hiddenParam")
             fmap['args']=[]
-            if x['args'] !=None:
+            if astArgs !=None:
                 if (l.has_key("param")):
                     adlist=l['param']
                     l.pop('param')
                 else:
                     adlist=[]
-                for y in x['args']:
+                for y in astArgs:
                     arg={}
                     if len(adlist)>0:
                         arg['doc']=adlist[0]
@@ -133,7 +154,10 @@ class LuaClassBuilder(LuaClassParser):
             res['methods'].append(fmap)
         #fields
         res['fields']=[]
-        for x in self.ast['fields']:
+        fields =self.ast['fields']
+        if fields==None:
+            fields=[]
+        for x in fields:
             field={}
             field['name']=x['name']
             field['type']=x['type']
