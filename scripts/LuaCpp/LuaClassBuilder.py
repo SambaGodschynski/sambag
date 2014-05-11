@@ -58,7 +58,8 @@ class LuaClassBuilder(LuaClassParser):
             return "* @brief TODO"
         return reduce(lambda x,y: "%s\n\t%s" % (x,y), c)
 
-    def __processDocLinks(self, str, form):
+    def __processDocLinks(self, str):
+        form='$$%link$$'
         it=re.finditer("@see ([^ ]*)", str)
         res=str
         for m in it:
@@ -66,7 +67,7 @@ class LuaClassBuilder(LuaClassParser):
             res=res.replace(m.group(0), s)
         return res
 
-    def __extractTags(self, l, linkform, **opt):
+    def __extractTags(self, l, **opt):
         #return tagmap
         l=self.__getComments(l)
         if len(l)==0:
@@ -78,7 +79,7 @@ class LuaClassBuilder(LuaClassParser):
             x=m.group(1)
             if x == None:
                 continue
-            x=self.__processDocLinks(x, linkform)
+            x=self.__processDocLinks(x)
             nl.append(x)
         l=nl
         res={}
@@ -100,8 +101,7 @@ class LuaClassBuilder(LuaClassParser):
     def __processDoc(self):
         res = {}
         res['name'] = self.ast['name'] 
-        linkform='<a href="gttp://www.vstforx.de/%link">%link</a>'
-        l=self.__extractTags(self.ast['comment'], linkform)
+        l=self.__extractTags(self.ast['comment'])
         if not l.has_key("version"):
             raise StandardError("class version tag missing")
         if l.has_key('alias'):
@@ -117,7 +117,7 @@ class LuaClassBuilder(LuaClassParser):
             fmap = {}
             fmap['name'] = x['name']
             fmap['return'] = x['return_']
-            l=self.__extractTags(x['comment'], linkform, doNotReduce=["param", "hiddenParam"])
+            l=self.__extractTags(x['comment'], doNotReduce=["param", "hiddenParam"])
             if l.has_key("returnType"):
                 fmap['return']=l['returnType']
                 l.pop('returnType')
@@ -161,7 +161,7 @@ class LuaClassBuilder(LuaClassParser):
             field={}
             field['name']=x['name']
             field['type']=x['type']
-            l=self.__extractTags(x['comment'], linkform)
+            l=self.__extractTags(x['comment'])
             field.update(l)
             res['fields'].append(field)
         self.doc=json.dumps(res)
