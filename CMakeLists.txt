@@ -97,6 +97,7 @@ ELSEIF(UNIX) #this has to be at least (since gcc4.6?)
         set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
              rt
 	     pthread
+	     dl
         )
 ENDIF(APPLE)
 

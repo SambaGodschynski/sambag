@@ -8,6 +8,7 @@
 #ifndef SCENEGRAPH_HPP_
 #define SCENEGRAPH_HPP_
 
+#include <boost/graph/vector_as_graph.hpp>
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/IDrawable.hpp"
 #include "Style.hpp"
@@ -15,7 +16,6 @@
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/graph/vector_as_graph.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/copy.hpp>
 #include <boost/algorithm/string.hpp>
@@ -37,6 +37,8 @@ struct IProcessListObject {
      * @return
      */
     virtual std::string toString() const = 0;
+    //-------------------------------------------------------------------------
+    virtual ~IProcessListObject() {}
 };
 //=============================================================================
 /**
@@ -58,6 +60,8 @@ struct DoNothing : public IProcessListObject {
     }
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context) {}
+    //-------------------------------------------------------------------------
+    virtual ~DoNothing(){}
 };
 //=============================================================================
 /**
@@ -65,6 +69,8 @@ struct DoNothing : public IProcessListObject {
  */
 struct ProcessDrawable : public IProcessListObject {
 //=============================================================================
+	//-------------------------------------------------------------------------
+	virtual ~ProcessDrawable() {}
     //-------------------------------------------------------------------------
     typedef boost::shared_ptr<ProcessDrawable> Ptr;
     //-------------------------------------------------------------------------
@@ -119,6 +125,8 @@ struct ProcessDrawable : public IProcessListObject {
  */
 struct RestoreContextState : public IProcessListObject {
 //=============================================================================
+	//-------------------------------------------------------------------------
+	virtual ~RestoreContextState() {}
     //-------------------------------------------------------------------------
     typedef boost::shared_ptr<RestoreContextState> Ptr;
     //-------------------------------------------------------------------------
@@ -923,15 +931,15 @@ void SceneGraph::createProcessList (_Container &out)
 	Vertex startVertex =  *(boost::vertices(g).first);
 	DFSVisitor<_Container> vis(*this, out, startVertex);
 	typedef CompareNodeOrder<Vertex> Comparator;
-	typedef std::set<Vertex, Comparator > Set;
+	typedef std::set<Vertex, Comparator> Set;
 	typedef std::vector<Set> G2;
 	G2 g2;
 	Comparator cmp(this);
 	copyGraph<G, G2, Set, Comparator>(g,g2,cmp); // O(n)
 
 	boost::depth_first_search(
-		g2,
-		boost::visitor(vis)
+		g2
+		, boost::visitor(vis)
 	);
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

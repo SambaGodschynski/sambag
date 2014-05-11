@@ -74,9 +74,9 @@ public:
 		if (!value.parent)
 			return getPtr();
 		if (value.parent->isFolder(value.node)) {
-			setText("[" + sambag::com::toString(value.data) + "]");
+			Super::setText("[" + sambag::com::toString(value.data) + "]");
 		} else {
-			setText(sambag::com::toString(value.data));
+			Super::setText(sambag::com::toString(value.data));
 		}
 		Super::setEnabled(list->isEnabled());
 		Super::setFont(list->getFont());
@@ -605,7 +605,7 @@ setSelectionPath(const std::string &path, char separator) {
         Model::getChildren(selectionPath.back(), nodes);
         size_t index = 0;
         BOOST_FOREACH(const Node &x, nodes) {
-            if (com::toString(getNodeData(x)) == strNodes[i]) {
+            if (com::toString(Model::getNodeData(x)) == strNodes[i]) {
                 // found some match
                 selectionPath.push_back(x);
                 found = true;
