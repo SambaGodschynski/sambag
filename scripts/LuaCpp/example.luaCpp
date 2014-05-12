@@ -5,19 +5,26 @@ frx.lua.example
 
 /**
  * @brief this is a test class
- * for @see luaCpp or @see peter
+ * for @see luaCpp or @see peter at home
+ * @version 1.0.5
+ * @deprecated since 1.0.5 use something else
  */
 // steffen6
 class MyClass extends sambag.lua.ASuperClass {
 	User<tuple<float, bloat>> Mettwurst;
 	 /**
   	  * @brief javadoc 'esk comments
-	  * @param a: the value * the mah
-	  * @param b: the mahi mahi
-	  * @param c: bahso
+	  * @note use it like this 
+	   <pre>
+ 	    aFunction(1,2,"3")<br/>
+            int res=1+2<br/>
+	   </pre>
+	  * @param the a value * the mah
+	  * @param the b mahi mahi
+	  * @param bahso the c's
           * @return the other value
 	  */
-	 void aFunction(int a, float b, string c);
+	 float aFunction(int a, float b, string c);
 	/**
  	 * @brief whatever
   	 */ 

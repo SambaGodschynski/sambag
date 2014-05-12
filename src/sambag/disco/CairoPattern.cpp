@@ -79,6 +79,12 @@ IGradient::ColorStop getColorStop ( CairoPatternRef ref,
 //=============================================================================
 // class CairoPatternBase
 //=============================================================================
+//-------------------------------------------------------------------------
+CairoPatternBase::CairoPatternBase(CairoPatternRef ref) : 
+    opacity(1.0), cairoPatternRef(ref) 
+{
+    setMatrixValue(IDENTITY_MATRIX);
+}
 //-----------------------------------------------------------------------------
 void CairoPatternBase::setExtendType(Extend type) {
 	cairo_extend_t t = CAIRO_EXTEND_NONE;

@@ -19,65 +19,88 @@ using namespace sambag::disco::svg;
 using namespace sambag::math;
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>transfomation
 //-----------------------------------------------------------------------------
-void transformTransl(const std::vector<Number> &values, Matrix& m) {
-	if (values.size()<1) return;
-	m(0,2) = values[0];
-	if (values.size()<2) {
-		m(1,2) = 0;
-		return;
-	}
-	m(1,2) = values[1];
+void transformTransl(const std::vector<Number> &values, Matrix& m, bool inv=false) 
+{
+    if (values.size()<1) return;
+    m(0,2) = values[0];
+    if (values.size()<2) {
+	m(1,2) = 0;
+	return;
+    }
+    m(1,2) = values[1];
 }
 //-----------------------------------------------------------------------------
-void transformRot(const std::vector<Number> &values, Matrix& m) {
-	using namespace sambag::math;
-	if (values.size()<1) return;
-	Number angle = values[0];
-	if (values.size()<2) {
-		m = rotate2D(angle);
-		return;
-	}
-	// rotation around a specific point
-	Number x = values[1], y = 0.;
-	if (values.size() < 3) {
-		m = rotate2D(angle, x, y);
-		return;
-	}
-	y = values[2];
+void transformRot(const std::vector<Number> &values, Matrix& m, bool inv=false) 
+{
+    using namespace sambag::math;
+    if (values.size()<1) return;
+    Number angle = values[0];
+    if(inv) {
+	angle*=-1;
+    }
+    if (values.size()<2) {
+	m = rotate2D(angle);
+	return;
+    }
+    // rotation around a specific point
+    Number x = values[1], y = 0.;
+    if (values.size() < 3) {
 	m = rotate2D(angle, x, y);
+	return;
+    }
+    y = values[2];
+    m = rotate2D(angle, x, y);
 }
 //-----------------------------------------------------------------------------
-void transformScal(const std::vector<Number> &values, Matrix& m) {
-	if (values.size()<1) return;
-	m(0,0) = values[0];
-	if (values.size()<2) {
-		m(1,1) = values[0];
-		return;
-	}
-	m(1,1) = values[1];
+void transformScal(const std::vector<Number> &values, Matrix& m, bool inv=false) {
+    if (values.size()<1) return;
+    Number v=values[0];
+    if(inv&&v>0) {
+	v=1/v;
+    }
+    m(0,0) = v;
+    if (values.size()<2) {
+	m(1,1) = v;
+	return;
+    }
+    v=values[1];
+    if (inv&&v>0) {
+	v=1/v;
+    }
+    m(1,1) = v;
 }
 //-----------------------------------------------------------------------------
-void transformSkewX(const std::vector<Number> &values, Matrix& m) {
-	if (values.size()!=1) return;
-	Number _tan = tan(values[0] * M_PI / 180.0);
-	m(0,1) = _tan;
+void transformSkewX(const std::vector<Number> &values, Matrix& m, bool inv=false) {
+    if (values.size()!=1) return;
+    Number val=values[0];
+    if (inv) {
+	val*=-1;
+    }
+    Number _tan = tan(val * M_PI / 180.0);
+    m(0,1) = _tan;
 }
 //-----------------------------------------------------------------------------
-void transformSkewY(const std::vector<Number> &values, Matrix& m) {
-	if (values.size()!=1) return;
-	Number _tan = tan(values[0] * M_PI / 180.0);
-	m(1,0) = _tan;
-
+void transformSkewY(const std::vector<Number> &values, Matrix& m, bool inv=false) {
+    if (values.size()!=1) return;
+    Number val=values[0];
+    if (inv) {
+	val*=-1;
+    }
+    Number _tan = tan(val * M_PI / 180.0);
+    m(1,0) = _tan;
 }
 //-----------------------------------------------------------------------------
-void transformMatr(const std::vector<Number> &values, Matrix& m) {
-	if (values.size()!=6) return;
-	m(0,0) = values[0];
-	m(1,0) = values[1];
-	m(0,1) = values[2];
-	m(1,1) = values[3];
-	m(0,2) = values[4];
-	m(1,2) = values[5];
+void transformMatr(const std::vector<Number> &values, Matrix& m, bool inv=false) {
+    if(inv) {
+	SAMBAG_LOG_WARN<<"transformMatr does not support inverted values";
+    }
+    if (values.size()!=6) return;
+    m(0,0) = values[0];
+    m(1,0) = values[1];
+    m(0,1) = values[2];
+    m(1,1) = values[3];
+    m(0,2) = values[4];
+    m(1,2) = values[5];
 }
 //-----------------------------------------------------------------------------
 /**
@@ -86,24 +109,28 @@ void transformMatr(const std::vector<Number> &values, Matrix& m) {
  * @param values: a list of numbers: x,y,...
  * @param m: out matrix
  */
-void processTransformStrings( const std::string &cmd, const std::string &values, Matrix& matrix ) {
-	// split components of value string
-	std::vector<Number> v;
-	AttributeParser::getValuesFromString< std::vector<Number> >(values, v);
-	if (v.empty()) return;
-	// select fitting transformation
-	if (cmd=="translate")
-		transformTransl(v, matrix);
-	if (cmd=="rotate")
-		transformRot(v, matrix);
-	if (cmd=="scale")
-		transformScal(v, matrix);
-	if (cmd=="skewx")
-		transformSkewX(v, matrix);
-	if (cmd=="skewy")
-		transformSkewY(v, matrix);
-	if (cmd=="matrix")
-		transformMatr(v, matrix);
+void processTransformStrings( const std::string &cmd, 
+			      const std::string &values, 
+			      Matrix& matrix, 
+			      bool inv=false ) 
+{
+    // split components of value string
+    std::vector<Number> v;
+    AttributeParser::getValuesFromString< std::vector<Number> >(values, v);
+    if (v.empty()) return;
+    // select fitting transformation
+    if (cmd=="translate")
+	transformTransl(v, matrix, inv);
+    if (cmd=="rotate")
+	transformRot(v, matrix, inv);
+    if (cmd=="scale")
+	transformScal(v, matrix, inv);
+    if (cmd=="skewx")
+	transformSkewX(v, matrix, inv);
+    if (cmd=="skewy")
+	transformSkewY(v, matrix, inv);
+    if (cmd=="matrix")
+	transformMatr(v, matrix, inv);
 }
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>path
 void processPathStrings(
@@ -130,25 +157,29 @@ namespace sambag { namespace disco { namespace svg {
 //-----------------------------------------------------------------------------
 AttributeParser::PathInstrMap AttributeParser::pathInstrMap;
 //-----------------------------------------------------------------------------
-void AttributeParser::parseTransform(const std::string &str, Matrix &matrix) {
-	if (str.length()==0) return;
-	std::string inStr = str;
-	prepareString(inStr);
-	// extract all matches
-	std::string::const_iterator begin = inStr.begin();
-	std::string::const_iterator end = inStr.end();
-	boost::match_results<std::string::const_iterator> what;
-	boost::regex re("([a-zA-Z]+?)\\s*\\(([ 0-9e.,-]+)\\)");
-	for ( ;
-		regex_search(begin, end, what, re);
-		begin = what[0].second
+ void AttributeParser::parseTransform(const std::string &str, 
+				      Matrix &matrix, bool inverse) 
+{
+    if (str.length()==0) {
+	return;
+    }
+    std::string inStr = str;
+    prepareString(inStr);
+    // extract all matches
+    std::string::const_iterator begin = inStr.begin();
+    std::string::const_iterator end = inStr.end();
+    boost::match_results<std::string::const_iterator> what;
+    boost::regex re("([a-zA-Z]+?)\\s*\\(([ 0-9e.,-]+)\\)");
+    for ( ;
+	  regex_search(begin, end, what, re);
+	  begin = what[0].second
 	) {
-	    std::string cmd = what[1];
-	    std::string values = what[2];
-	    Matrix m = IDENTITY_MATRIX;
-	    processTransformStrings(cmd, values, m);
-	    matrix = prod(matrix, m);
-	}
+	std::string cmd = what[1];
+	std::string values = what[2];
+	Matrix m = IDENTITY_MATRIX;
+	processTransformStrings(cmd, values, m, inverse);
+	matrix = prod(matrix, m);
+    }
 }
 //-----------------------------------------------------------------------------
 void AttributeParser::parsePathInstructions(const std::string &str, PathInstructions& pi) {
@@ -419,34 +450,44 @@ std::istream & operator>>(std::istream& istr, sambag::disco::ColorRGBA& color) {
 }
 //-----------------------------------------------------------------------------
 std::istream & operator>>(std::istream& istr, sambag::disco::Font::Weight &weight) {
-	using namespace sambag::disco;
-	std::string in;
-	AttributeParser::getWholeString(istr, in);
-	AttributeParser::prepareString(in);
-	if (in=="bold") weight = Font::WEIGHT_BOLD;
-	else weight = Font::WEIGHT_NORMAL;
-	return istr;
+    using namespace sambag::disco;
+    std::string in;
+    AttributeParser::getWholeString(istr, in);
+    AttributeParser::prepareString(in);
+    if (in=="bold") weight = Font::WEIGHT_BOLD;
+    else weight = Font::WEIGHT_NORMAL;
+    return istr;
 
 }
 //-----------------------------------------------------------------------------
 std::istream & operator>>(std::istream& istr, sambag::disco::Font::Slant &slant) {
-	using namespace sambag::disco;
-	std::string in;
-	AttributeParser::getWholeString(istr, in);
-	AttributeParser::prepareString(in);
-	if (in=="italic") slant = Font::SLANT_ITALIC; return istr;
-	if (in=="oblique") slant = Font::SLANT_OBLIQUE; return istr;
-	slant = Font::SLANT_NORMAL;
-	return istr;
+    using namespace sambag::disco;
+    std::string in;
+    AttributeParser::getWholeString(istr, in);
+    AttributeParser::prepareString(in);
+    if (in=="italic") slant = Font::SLANT_ITALIC; return istr;
+    if (in=="oblique") slant = Font::SLANT_OBLIQUE; return istr;
+    slant = Font::SLANT_NORMAL;
+    return istr;
 }
 //-----------------------------------------------------------------------------
 std::istream & operator>>(std::istream& istr, sambag::math::Matrix &m) {
-	using namespace sambag::disco::svg;
-	std::string str;
-	AttributeParser::getWholeString(istr, str);
-	m = IDENTITY_MATRIX;
-	AttributeParser::parseTransform(str, m);
-	return istr;
+    using namespace sambag::disco::svg;
+    std::string str;
+    AttributeParser::getWholeString(istr, str);
+    m = IDENTITY_MATRIX;
+    AttributeParser::parseTransform(str, m);
+    return istr;
+}
+//-----------------------------------------------------------------------------
+std::istream & operator>>(std::istream &istr, sambag::disco::svg::SvgPatternMatrix &m) 
+{
+    using namespace sambag::disco::svg;
+    std::string str;
+    AttributeParser::getWholeString(istr, str);
+    m = IDENTITY_MATRIX;
+    AttributeParser::parseTransform(str, m, true);
+    return istr;
 }
 //-----------------------------------------------------------------------------
 std::istream & operator>>(

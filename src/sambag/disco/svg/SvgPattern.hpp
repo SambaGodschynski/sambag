@@ -13,6 +13,7 @@
 #include "SvgColorStop.hpp"
 #include "SvgRoot.hpp"
 #include "units/Units.hpp"
+#include "SvgPatternMatrix.hpp"
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -89,7 +90,7 @@ public:
     struct Y_tag { typedef units::Unit Type; };
     struct Width_tag { typedef units::Unit Type; };
     struct Height_tag { typedef units::Unit Type; };
-    struct Transform_tag { typedef math::Matrix Type; };
+    struct Transform_tag { typedef SvgPatternMatrix Type; };
 private:
     //-------------------------------------------------------------------------
     units::Point p;
@@ -97,9 +98,7 @@ private:
     math::Matrix transform;
 protected:
     //-------------------------------------------------------------------------
-    SvgPattern(){
-	combo = sambag::disco::svg::graphicElements::Compound::create();
-    }
+    SvgPattern();
     //-------------------------------------------------------------------------
     sambag::disco::svg::graphicElements::Compound::Ptr combo;
 public:
@@ -142,7 +141,7 @@ public:
     virtual void set( const Transform_tag::Type &m, Transform_tag ) {
         transform = m;
     }
-};
+ };
 }}}
 
 #endif /* SVGPATTERN_HPP_ */

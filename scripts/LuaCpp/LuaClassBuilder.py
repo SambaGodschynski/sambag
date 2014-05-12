@@ -4,6 +4,7 @@ import re
 import time
 import argparse
 import sys
+import json
 
 class LuaClassBuilder(LuaClassParser):
     def __loadTemplates(self):
@@ -57,7 +58,8 @@ class LuaClassBuilder(LuaClassParser):
             return "* @brief TODO"
         return reduce(lambda x,y: "%s\n\t%s" % (x,y), c)
 
-    def __processDocLinks(self, str, form):
+    def __processDocLinks(self, str):
+        form='$$%link$$'
         it=re.finditer("@see ([^ ]*)", str)
         res=str
         for m in it:
@@ -65,7 +67,7 @@ class LuaClassBuilder(LuaClassParser):
             res=res.replace(m.group(0), s)
         return res
 
-    def __extractTags(self, l, linkform):
+    def __extractTags(self, l, **opt):
         #return tagmap
         l=self.__getComments(l)
         if len(l)==0:
@@ -77,7 +79,7 @@ class LuaClassBuilder(LuaClassParser):
             x=m.group(1)
             if x == None:
                 continue
-            x=self.__processDocLinks(x, linkform)
+            x=self.__processDocLinks(x)
             nl.append(x)
         l=nl
         res={}
@@ -85,68 +87,85 @@ class LuaClassBuilder(LuaClassParser):
         it=re.finditer("@(\w+)(.*?)(?=@|$)", l)
         for m in it:
             k=m.group(1)
-            if not res.has_key(k):
-                res[k]=[]
-            res[k].append(m.group(2))
+            if opt.has_key('doNotReduce'):
+                if opt['doNotReduce'].count(k)>0:
+                    if not res.has_key(k):
+                        res[k]=[]
+                    res[k].append(m.group(2).strip())
+                    continue
+            res[k]=""
+            res[k]+=" " + m.group(2)
+            res[k]=res[k].strip()
         return res
 
     def __processDoc(self):
-        self.__replaceDoc("$$CLASS_NAME$$", self.ast['name'])
-        linkform="[%link]"
-        l=self.__extractTags(self.ast['comment'], linkform)
-        brief=""
-        if l['brief']!=None:
-            brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
-        self.__replaceDoc("$$CLASS_DOC$$", brief)
+        res = {}
+        res['name'] = self.ast['name'] 
+        l=self.__extractTags(self.ast['comment'])
+        if not l.has_key("version"):
+            raise StandardError("class version tag missing")
+        if l.has_key('alias'):
+            res['name']=l['alias']
+            l.pop('alias')
+        res.update(l)
         #functions
-        fs=""
-        argform="%type %name"
-        argdocform="parameter %name %doc"
-        form="""<function>%name %args</function>
-        <doc>
-            <fdoc>%fdoc</fdoc>
-            <argdoc>%argdoc</argdoc>
-        </doc>
-        """
-        for x in self.ast['functions']:
-            f=form
-            f=f.replace("%name", x['name'])
-            l=self.__extractTags(x['comment'], linkform)
-            brief=""
-            if l.has_key("brief"):
-                brief = reduce(lambda x,y:"%s %s"%(x,y), l['brief'])
-            f=f.replace("%fdoc", brief)
-            if x['args'] !=None:
+        res['methods'] = []
+        functions=self.ast['functions']
+        if functions==None:
+            functions=[]
+        for x in functions:
+            fmap = {}
+            fmap['name'] = x['name']
+            fmap['return'] = x['return_']
+            l=self.__extractTags(x['comment'], doNotReduce=["param", "hiddenParam"])
+            if l.has_key("returnType"):
+                fmap['return']=l['returnType']
+                l.pop('returnType')
+            astArgs=x['args'] #we cant modify the ast itself so we use this
+            if l.has_key("hiddenParam"):
+                p=l['hiddenParam']
+                args=[]
+                if astArgs!=None:
+                    for xa in astArgs:
+                        args.append(xa)
+                for hp in p:
+                    s=hp.split(" ")
+                    args.append({'name':s[1], 'type':s[0]})
+                astArgs=args
+                l.pop("hiddenParam")
+            fmap['args']=[]
+            if astArgs !=None:
                 if (l.has_key("param")):
                     adlist=l['param']
+                    l.pop('param')
                 else:
                     adlist=[]
-                arg=""
-                darg=""
-                for y in x['args']:
-                    tmp_arg=argform
-                    tmp_darg=argdocform
-                    tmp_arg=tmp_arg.replace("%name", y['name'])
-                    tmp_darg=tmp_darg.replace("%name", y['name'])
-                    tmp_arg=tmp_arg.replace("%type", y['type'])
+                for y in astArgs:
+                    arg={}
                     if len(adlist)>0:
-                        tmp_darg=tmp_darg.replace("%doc", adlist[0])
+                        arg['doc']=adlist[0]
                         adlist.pop(0)
-                    else:
-                        tmp_darg=tmp_darg.replace("%doc","")
-                    arg+=tmp_arg+" "
-                    darg+=tmp_darg+" \n\t"
-                f=f.replace("%args", arg)
-                f=f.replace("%argdoc", darg)
-            else:
-                f=f.replace("%args", "")
-                f=f.replace("%argdoc", "")
-            fs+=f
-        self.__replaceDoc("$$FUNCTIONS$$", fs)
+                    arg['name']=y['name']
+                    arg['type']=y['type']
+                    fmap['args'].append(arg)
+            if l.has_key('return'):
+                l['doc_return']=l.pop('return')
+            fmap.update(l)
+            res['methods'].append(fmap)
         #fields
-        for x in self.ast['fields']:
-            l=self.__extractTags(x['comment'], linkform)
-
+        res['fields']=[]
+        fields =self.ast['fields']
+        if fields==None:
+            fields=[]
+        for x in fields:
+            field={}
+            field['name']=x['name']
+            field['type']=x['type']
+            l=self.__extractTags(x['comment'])
+            field.update(l)
+            res['fields'].append(field)
+        self.doc=json.dumps(res)
+            
     def __processClass(self):
         self.__replace("$$CLASS_NAME$$", self.ast['name'])
         self.__replaceHeader("$$EXTENDS$$", reduce(lambda x,y: "%s::%s" % (x,y), self.ast['extends']))
