@@ -60,11 +60,12 @@ class LuaClassBuilder(LuaClassParser):
 
     def __processDocLinks(self, str):
         form='$$%link$$'
-        it=re.finditer("@see ([^ ]*)", str)
+        it=re.finditer("@see ([a-zA-Z0-9_.:]+(\(\)){0,1})", str)
         res=str
         for m in it:
+            print m.group(0), m.endpos
             s=form.replace("%link", m.group(1))
-            res=res.replace(m.group(0), s)
+            res=res.replace(m.group(0), s, 1)
         return res
 
     def __extractTags(self, l, **opt):
