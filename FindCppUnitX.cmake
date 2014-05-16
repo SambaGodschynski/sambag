@@ -26,6 +26,8 @@ FIND_PATH(CPPUNIT_LIBRARY_DIRS ${LIBCPPUNIT}
 	$ENV{CLIBS}/cppunit/lib
 	/opt/local/lib
 	/usr/lib
+	/usr/lib/i386-linux-gnu
+	/usr/lib/x86_64-linux-gnu
 )
 
 SET(CPPUNIT_FOUND "NO")

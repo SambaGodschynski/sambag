@@ -23,6 +23,8 @@ FIND_PATH(LUA52_LIBRARY_DIRS ${LIBLUA52}
 	/opt/local/lib/
 	/usr/lib
 	/usr/lib/powerpc-linux-gnu/
+	/usr/lib/i386-linux-gnu
+	/usr/lib/x86_64-linux-gnu
 )
 
 SET(LUA52_FOUND "NO")

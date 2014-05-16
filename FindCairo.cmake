@@ -44,6 +44,7 @@ FIND_PATH(CAIRO_LIBRARY_DIRS ${LIBCAIRO}
 	/usr/local/lib
 	/usr/lib
 	/usr/lib/i386-linux-gnu
+	/usr/lib/x86_64-linux-gnu
 	/sw/lib
 	/opt/local/lib
 	/opt/csw/lib
