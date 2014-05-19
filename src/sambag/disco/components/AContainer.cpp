@@ -293,6 +293,9 @@ AComponentPtr AContainer::findComponentAt(const Point2D &p,
 {
 	SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
+            if (!comp) {
+                continue;
+            }
 			Point2D trP = p;
 			boost::geometry::subtract_point(trP, comp->getLocation());
 			if (comp && comp->isVisible() && comp->contains(trP))
@@ -427,6 +430,9 @@ AContainer::ObscuredState AContainer::getObscuredState(int compIndex,
 //-----------------------------------------------------------------------------
 bool AContainer::rectangleIsObscured(const Rectangle &r) {
 	BOOST_FOREACH(AComponent::Ptr child, components) {
+        if (!child) {
+            continue;
+        }
 		const Rectangle &cr = child->getBounds();
 		bool within =
 				boost::geometry::within<Rectangle::Base, Rectangle::Base>
@@ -609,6 +615,9 @@ void AContainer::validateTree() {
 			doLayout();
 		}
 		BOOST_FOREACH(AComponent::Ptr comp, components) {
+            if (!comp) {
+                continue;
+            }
 			AContainer::Ptr con = boost::dynamic_pointer_cast<AContainer>(comp);
 			if (con && (!comp->isValid() || descendUnconditionallyWhenValidating))
 			{

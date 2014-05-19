@@ -570,11 +570,18 @@ void createWindow<SVG>() {
     std::vector<SvgComponent::Dummy::Ptr> dummies;
     svg->getDummiesByClass(".disco", dummies);
     BOOST_FOREACH(AComponent::Ptr x, dummies) {
-        x->EventSender<sdc::events::MouseEvent>::addEventListener(
-           &onSvgMouse
-        );
+        //x->EventSender<sdc::events::MouseEvent>::addEventListener(
+        //  &onSvgMouse
+        //);
     }
-    
+    AContainer::Ptr floor = svg->getDummyById("#BTN");
+    if (!floor) {
+        throw std::runtime_error("dancefloor not found");
+    }
+    floor->setLayout(FlowLayout::create());
+    Button::Ptr btn = Button::create();
+    btn->setText("push me");
+    floor->add(btn);
 }
 
 template <>

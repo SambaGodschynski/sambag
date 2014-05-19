@@ -22,10 +22,10 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
-/*    Rectangle bounds = context->clipExtends();
-    context->rect(bounds);
-    context->setStrokeColor(ColorRGBA(0,0,0));
-    context->stroke();*/
+//    Rectangle bounds = context->clipExtends();
+//    context->rect(bounds);
+//    context->setStrokeColor(ColorRGBA(0,0,0));
+//    context->stroke();
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {

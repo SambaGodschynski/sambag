@@ -11,7 +11,7 @@
 	    fill="palegreen" class="disco dancer" id="DanceFloor" transform="translate(-210,0)"/>
       <rect x="60%" y="15%" width="140px" height="140px" stroke-width="4px"
 	    fill="yellow" class="disco dancer" id="Pussy" transform="translate(-210,0)"/>
-      <circle cx="35%" cy="30%" r="30px" fill="red" class="disco dancer"/>
+      <circle cx="35%" cy="30%" r="30px" id="BTN" fill="red" class="disco dancer"/>
     </g>
     
   </g>  
