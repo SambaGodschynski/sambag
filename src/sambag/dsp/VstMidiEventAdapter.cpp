@@ -78,10 +78,10 @@ void VstMidiEventAdapter::set(IMidiEvents *ev) {
 		events->events[i]->deltaFrames = boost::get<1>(tmp);
 		events->events[i]->flags = 0;
 		DataPtr bytes = boost::get<2>(tmp);
-		/*for (Int j=0; j<events->events[i]->byteSize; ++j) {
+		for (Int j=0; j<events->events[i]->byteSize; ++j) {
 			events->events[i]->data[j] = bytes[j];
-		}*/
-		memcpy(events->events[i]->data, bytes, events->events[i]->byteSize);
+		}
+		//memcpy(events->events[i]->data, bytes, events->events[i]->byteSize);
 	}
 }
 //-----------------------------------------------------------------------------

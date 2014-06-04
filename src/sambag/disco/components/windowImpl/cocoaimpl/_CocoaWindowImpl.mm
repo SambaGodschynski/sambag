@@ -309,17 +309,18 @@ viewPtr(NULL)
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::invalidateWindow(Number x, Number y, Number w, Number h)
 {
-	AutoReleasePool ap;
-	DiscoView *view = getDiscoView(*this);
-	if (!view) {
-		return; // happens sometimes (maybe while creating)
-	}
-	[view setNeedsDisplay:YES];
-    /*NSRect r = NSMakeRect(x,y,w,h); see #346
-    std::cout<<r<<std::endl;
-    [view setNeedsDisplayInRect: r];*/
+    SAMBAG_SYNC( getMutex() )
+        AutoReleasePool ap;
+        DiscoView *view = getDiscoView(*this);
+        if (!view) {
+            return; // happens sometimes (maybe while creating)
+        }
+        [view setNeedsDisplay:YES];
+        /*NSRect r = NSMakeRect(x,y,w,h); see #346
+        std::cout<<r<<std::endl;
+        [view setNeedsDisplayInRect: r];*/
+    SAMBAG_SYNC_END
 }
-
 //-----------------------------------------------------------------------------
 namespace {
 DiscoView * _initView(_CocoaWindowImpl *caller, const NSRect &frame) {
@@ -572,12 +573,15 @@ void _CocoaWindowImpl::closeWindow() {
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::onClose() {
-    boost::shared_ptr<void> hold = __getPtr();
-    __windowWillCose();
-    if (getFlag(WindowFlags::EXIT_ON_CLOSE) && !getFlag(WindowFlags::WND_NESTED))
-    {
-        _CocoaToolkitImpl::quit();
-    }
+    SAMBAG_SYNC( getMutex() )
+        boost::shared_ptr<void> hold = __getPtr();
+        __windowWillCose();
+        this->viewPtr = NULL;
+        if (getFlag(WindowFlags::EXIT_ON_CLOSE) && !getFlag(WindowFlags::WND_NESTED))
+        {
+            _CocoaToolkitImpl::quit();
+        }
+    SAMBAG_SYNC_END
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {

@@ -56,6 +56,8 @@ private:
 	void updateWindowToBounds(const Rectangle &r);
 	//-------------------------------------------------------------------------
 	void updateTitle();
+    //-------------------------------------------------------------------------
+    sambag::com::RecursiveMutex mutex;
 protected:
 	//-------------------------------------------------------------------------
 	void initAsNestedWindow(ArbitraryType::Ptr osParent, const Rectangle &area);
@@ -85,6 +87,10 @@ protected:
 	//-------------------------------------------------------------------------
 	void _close();
 public:
+    //-------------------------------------------------------------------------
+    sambag::com::RecursiveMutex & getTreeLock() {
+        return mutex;
+    }
 	//-------------------------------------------------------------------------
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
