@@ -48,6 +48,7 @@ class MyClass extends sambag.lua.ASuperClass {
 	void fistH(int a, int b);
 	int fistI(int a, int b);
 	void fistJ(int a);
+	User<View> view=0;
 }
 
 

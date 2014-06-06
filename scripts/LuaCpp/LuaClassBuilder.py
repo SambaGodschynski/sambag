@@ -160,7 +160,11 @@ class LuaClassBuilder(LuaClassParser):
         for x in fields:
             field={}
             field['name']=x['name']
-            field['type']=x['type']
+            if not isinstance(x['type'], basestring):
+                if x['type']['type']=="User":
+                    field['type']=x['type']['value']
+            else:
+                field['type']=x['type']
             l=self.__extractTags(x['comment'])
             field.update(l)
             res['fields'].append(field)
@@ -275,7 +279,11 @@ class LuaClassBuilder(LuaClassParser):
         for x in self.ast[name]:
             entry=form
             entry=entry.replace("%name",x['name'])
-            type=self.__getType(x['type'])
+            if not isinstance(x['type'], basestring):
+               if  x['type']['type']=="User":
+                   type=x['type']['value']
+            else:
+                type=self.__getType(x['type'])
             entry=entry.replace("%typeref", self.__getRefType(type))
             entry=entry.replace("%type", type)
             entry=entry.replace("%value", x['value'])
