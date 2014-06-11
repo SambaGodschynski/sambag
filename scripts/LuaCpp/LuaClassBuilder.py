@@ -400,9 +400,11 @@ class LuaClassBuilder(LuaClassParser):
         cname = self.ast['name']
         fs=self.__preFunct('functions', "boost::bind(&"+cname+"::%name, this, lua%, %args)", "_%i")
         num=len(fs)/10
+        if len(fs)%10>0:
+            num=num+1
         regs=""
         unregs=""
-        for i in range(0,num+1):
+        for i in range(0, num):
             binds = self.__processBinds(fs, i*10,i*10+9)
             regs+="registerClassFunctions<Functions%i, TupleAccessor>(\n\tlua,\n\t" % (i+1)
             regs+=binds + ",\n\t"
