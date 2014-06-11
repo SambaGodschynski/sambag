@@ -24,7 +24,7 @@ class MyClass extends sambag.lua.ASuperClass {
 	  * @param bahso the c's
           * @return the other value
 	  */
-	 float aFunction(int a, float b, string c);
+	float aFunction(int a, float b, string c);
 	/**
  	 * @brief whatever
   	 */ 
