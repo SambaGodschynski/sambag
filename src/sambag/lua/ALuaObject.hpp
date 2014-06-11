@@ -15,6 +15,8 @@
 #include <loki/Typelist.h>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <sambag/com/Thread.hpp>
+#include <boost/unordered_map.hpp>
 
 #define SAMBAG_LUA_FTAG(_name, fsig) struct Frx_ ## _name ## _Tag { \
     typedef boost::function<fsig> Function;                     \
@@ -91,10 +93,19 @@ protected:
 protected:
 private:
     //-------------------------------------------------------------------------
+    typedef com::RecursiveMutex Mutex;
+    typedef boost::shared_ptr<Mutex> MutexPtr;
+    typedef boost::unordered_map<lua_State*, MutexPtr> MutexMap;
+    static MutexMap mutexMap;
+    //-------------------------------------------------------------------------
     std::string uid;
     //-------------------------------------------------------------------------
     std::string luaName;
+    //-------------------------------------------------------------------------
+    void createLock(lua_State *lua);
 public:
+    //-------------------------------------------------------------------------
+    static Mutex & getLock(lua_State *lua);
     //-------------------------------------------------------------------------
     const UId & getUId() const {
         return uid;

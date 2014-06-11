@@ -23,11 +23,28 @@ namespace {
 //-----------------------------------------------------------------------------
 const std::string ALuaObject::FIELDNAME_UID = SLUA_FIELDNAME_UID;
 //-----------------------------------------------------------------------------
+ALuaObject::MutexMap ALuaObject::mutexMap;
+//-----------------------------------------------------------------------------
+ALuaObject::Mutex & ALuaObject::getLock(lua_State *lua) {
+    MutexMap::iterator it = mutexMap.find(lua);
+    if (it==mutexMap.end()) {
+        throw std::runtime_error("no registered mutex found");
+    }
+    return *(it->second.get());
+}
+//-----------------------------------------------------------------------------
+void ALuaObject::createLock(lua_State *lua) {
+    MutexMap::iterator it = mutexMap.find(lua);
+    if (it!=mutexMap.end()) {
+        return;
+    }
+    mutexMap[lua] = MutexPtr( new Mutex() );
+}
+//-----------------------------------------------------------------------------
 ALuaObject::ALuaObject() {
 }
 //-----------------------------------------------------------------------------
 ALuaObject::~ALuaObject() {
-    
 }
 //-----------------------------------------------------------------------------
 void ALuaObject::__destroy(lua_State *lua, ALuaObject::WPtr _obj) {
@@ -61,6 +78,7 @@ bool ALuaObject::isequal(lua_State *lua) const {
 //-----------------------------------------------------------------------------
 void ALuaObject::createLuaObject(lua_State * lua, const std::string &name)
 {
+    createLock(lua);
     ALuaObject::Ptr self = shared_from_this();
     holder.insert(self);
     luaName = name;

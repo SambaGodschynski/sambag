@@ -588,6 +588,9 @@ void _CocoaWindowImpl::setBounds(Number x, Number y, Number w, Number h) {
 	AutoReleasePool ap;
     NSWindow *window = getDiscoWindow(*this);
 	DiscoView *view = getDiscoView(*this);
+    if (!window || !view) {
+        return;
+    }
     Number sw=0, sh=0;
     _CocoaToolkitImpl::getScreenDimension(sw, sh);
     NSRect frame = NSMakeRect(x, sh - y - h, w, h);

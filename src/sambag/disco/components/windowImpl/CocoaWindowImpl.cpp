@@ -151,9 +151,7 @@ void CocoaWindowImpl::setBounds(const Rectangle &r) {
 		bounds.setWidth(1.);
 	if (bounds.getHeight() < 1.)
 		bounds.setHeight(1.);
-    if (isVisible()) {
-        updateBoundsToWindow();
-    }
+    updateBoundsToWindow();
 }
 //-----------------------------------------------------------------------------
 void CocoaWindowImpl::updateTitle() {
