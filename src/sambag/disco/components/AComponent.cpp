@@ -45,6 +45,8 @@ const std::string AComponent::PROPERTY_BORDER = "border";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_ENABLED = "enabled";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_VISIBILITY = "visibility";
+//-----------------------------------------------------------------------------
 const std::string  AComponent::PROPERTY_CLIENTPROPERTY = "client_property";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_BOUNDS = "size";
@@ -754,12 +756,14 @@ void AComponent::setSize(const Dimension &d) {
 }
 //-----------------------------------------------------------------------------
 void AComponent::setVisible(bool b) {
-	if (b==isVisible())
+	if (b==isVisible()) {
 		return;
-	if (b)
+    }
+	if (b) {
 		show();
-	else
+    } else {
 		hide();
+    }
 	AContainerPtr parent = getParent();
 	if (parent) {
 		parent->redraw(getBounds());
@@ -768,6 +772,8 @@ void AComponent::setVisible(bool b) {
 	// that are not visible. As such we need to revalidate when the
 	// visible bit changes.
 	revalidate();
+    // notify listeners
+    firePropertyChanged(PROPERTY_VISIBILITY, !b, b);
 }
 //-----------------------------------------------------------------------------
 void AComponent::setForeground(const ColorRGBA &c) {

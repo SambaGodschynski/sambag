@@ -240,11 +240,11 @@ void WindowImpl<ConcreteWindowImpl, DrawPolicy>::onDestroy() {
 	using namespace sambag::com::events;
     DrawPolicy::close();
 	rootPane->setSurface(ISurface::Ptr());
+    EventSender<OnCloseEvent>::notifyListeners (
+        this,
+        OnCloseEvent()
+    );
 	mec.reset();
-	EventSender<OnCloseEvent>::notifyListeners (
-		this,
-		OnCloseEvent()
-	);
 }
 //-----------------------------------------------------------------------------
 template <class ConcreteWindowImpl, class DrawPolicy>

@@ -108,6 +108,8 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_ENABLED;
 	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_VISIBILITY;
+	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_CLIENTPROPERTY;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_BOUNDS;
