@@ -22,10 +22,11 @@ namespace sambag { namespace disco { namespace components {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
-//    Rectangle bounds = context->clipExtends();
-//    context->rect(bounds);
-//    context->setStrokeColor(ColorRGBA(0,0,0));
-//    context->stroke();
+    Rectangle bounds = context->clipExtends();
+    context->rect(bounds);
+    context->setStrokeColor(ColorRGBA(1,0,0));
+    context->setStrokeWidth(2);
+    context->stroke();
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
@@ -216,7 +217,10 @@ void SvgComponent::updateDummies() {
     getGraphElementsBySelector(".disco", g, elements);
     BOOST_FOREACH(IDrawable::Ptr x, elements) {
         SvgComponent::DummyPtr dummy = getDummyOrCreateNew(x);
-        dummy->setBounds(g->getBoundingBox(x));
+        Rectangle r = g->getBoundingBox(x);
+        if (r!=NULL_RECTANGLE) {
+            dummy->setBounds(r);
+        }
     }
 }
 //-----------------------------------------------------------------------------
