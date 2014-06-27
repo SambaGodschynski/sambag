@@ -12,6 +12,7 @@
 #include <boost/weak_ptr.hpp>
 #include "AContainer.hpp"
 #include <boost/unordered_map.hpp>
+#include <sambag/disco/svg/Image.hpp>
 
 namespace sambag { namespace disco {
 namespace svg {
@@ -101,7 +102,7 @@ private:
     typedef boost::unordered_map<IDrawable::Ptr, DummyWPtr> ElementMap;
     ElementMap elMap;
     //-------------------------------------------------------------------------
-    svg::SvgRootPtr rootObject;
+    svg::Image::Ptr svgImage;
     //-------------------------------------------------------------------------
     void updateDummies();
     //-------------------------------------------------------------------------
@@ -144,9 +145,7 @@ public:
     /**
      * @return the svg root object
      */
-    svg::SvgRootPtr getSvgObject() const {
-        return rootObject;
-    }
+    svg::SvgRootPtr getSvgObject() const;
     //-------------------------------------------------------------------------
     virtual void doLayout();
     //-------------------------------------------------------------------------

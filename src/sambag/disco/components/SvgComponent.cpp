@@ -99,13 +99,20 @@ SvgComponent::SvgComponent() {
     setName("SvgComponent");
 }
 //-----------------------------------------------------------------------------
+svg::SvgRootPtr SvgComponent::getSvgObject() const {
+    svg::SvgRootPtr root = svgImage->getSvgObject();
+    if (!root) {
+        throw std::runtime_error("SvgComponent::getSvgObject NULL_PTR");
+    }
+    return root;
+}
+//-----------------------------------------------------------------------------
 void SvgComponent::postConstructor() {
     setLayout(ALayoutManager::Ptr());
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::drawComponent (IDrawContext::Ptr context) {
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
-	g->draw(context);
+    svgImage->draw(context);
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::setupSvgObject(svg::SvgRoot::Ptr obj) {
@@ -116,28 +123,26 @@ void SvgComponent::setupSvgObject(svg::SvgRoot::Ptr obj) {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::setSvgString(const std::string &str) {
-    svg::SvgBuilder builder;
-    rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
-                (builder.buildSvgFromString(str));
-    setupSvgObject(rootObject);
+    svgImage = svg::Image::create();
+    svgImage->setSvgString(str);
+    setupSvgObject(getSvgObject());
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::setSvgFilename(const std::string &name) {
-    svg::SvgBuilder builder;
-    rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
-                (builder.buildSvgFromFilename(name));
-    setupSvgObject(rootObject);
+    svgImage = svg::Image::create();
+    svgImage->setSvgPath(name);
+    setupSvgObject(getSvgObject());
 }
 //-----------------------------------------------------------------------------
 SvgComponent::DummyPtr SvgComponent::getDummyById(const std::string &id) {
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     IDrawable::Ptr x = g->getElementById(id);
     return getDummy(x);
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::getDummiesByClass(const std::string &_class, std::vector<DummyPtr> &out)
 {
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     std::vector<IDrawable::Ptr> objects;
     g->getElementsByClass(_class, objects);
     BOOST_FOREACH(IDrawable::Ptr x, objects) {
@@ -188,7 +193,7 @@ IDrawable::Ptr SvgComponent::getDrawable(DummyPtr x) {
 }
 //-----------------------------------------------------------------------------
 SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     DummyPtr res = Dummy::create();
     res->putClientProperty("svg.element", boost::weak_ptr<IDrawable>(x));
     res->drawable = x;
@@ -207,7 +212,7 @@ SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
 //-----------------------------------------------------------------------------
 void SvgComponent::updateDummies() {
     std::vector<IDrawable::Ptr> elements;
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+    svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     getGraphElementsBySelector(".disco", g, elements);
     BOOST_FOREACH(IDrawable::Ptr x, elements) {
         SvgComponent::DummyPtr dummy = getDummyOrCreateNew(x);
@@ -220,17 +225,7 @@ void SvgComponent::setStretchToFit(bool stretch) {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::doLayout() {
-    svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
-    Dimension s = rootObject->getSize().getDimension();
-    if (getHeight()==0 || getWidth() == 0) {
-        return;
-    }
-    math::Matrix m = math::scale2D(getWidth()/s.width(), getHeight()/s.height());
-    if (stretchToFit) {
-        g->setTransfomationTo(g->getRootElement(), m);
-    }
-    g->invalidateBounds();
-    g->validate(getSize());
+    svgImage->setSize(getSize(), stretchToFit);
     updateDummies();
     updateDrawOrder();
 }
@@ -238,18 +233,18 @@ void SvgComponent::doLayout() {
 void SvgComponent::updateDrawOrder() {
     // update z-order
     using namespace sambag::disco::svg::graphicElements;
-    SceneGraph::Ptr sg = rootObject->getRelatedSceneGraph();
+    SceneGraph::Ptr sg = getSvgObject()->getRelatedSceneGraph();
     int c=0;
     BOOST_FOREACH(IProcessListObject::Ptr x, sg->getProcessList()) {
-	ProcessDrawable::Ptr pd = boost::dynamic_pointer_cast<ProcessDrawable>(x);
-	if (!pd) {
-	    continue;
-	}
-	IDrawable::Ptr d = pd->drawable;
-	DummyPtr dummy = getDummy(d);
-	if (dummy) {
-	    dummy->putClientProperty("svg.z", c++);
-	}
+        ProcessDrawable::Ptr pd = boost::dynamic_pointer_cast<ProcessDrawable>(x);
+        if (!pd) {
+            continue;
+        }
+        IDrawable::Ptr d = pd->drawable;
+        DummyPtr dummy = getDummy(d);
+        if (dummy) {
+            dummy->putClientProperty("svg.z", c++);
+        }
     }
 }
 //------------------------------------------------------------------------------
