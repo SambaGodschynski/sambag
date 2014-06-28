@@ -54,7 +54,7 @@ public:
         friend class SvgComponent;
         boost::weak_ptr<IDrawable> drawable;
     public:
-  	//---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         /**
          * @brief set the stroke color on related object in scene graph
          */

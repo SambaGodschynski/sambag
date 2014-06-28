@@ -32,12 +32,10 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
     }
     IPattern::Ptr fpat, spat;
     if (style) {
-	style->intoContext(context);
+        style->intoContext(context);
         fpat = style->fillPattern();
-	spat = style->strokePattern();
+        spat = style->strokePattern();
     }
-    
-    
     
     Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
     if (!shape) {
@@ -46,54 +44,54 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	if (context->isFilled()) {
 	    shape->shape(context);
 	    if (fpat) {
-		if (!fill) { //prepare pattern (once) 
-		    Rectangle b = context->pathExtends();
-		    // pattern matrices: inverse values, inverse mul order!
-		    math::Matrix matr = fpat->getMatrix();
-		    Rectangle patBox = fpat->getBounds();
-		    if (patBox!=NULL_RECTANGLE) 
-		    {
-			Number w = patBox.width()>0 ? (Number)patBox.width()  : 1.;
-			Number h = patBox.height()>0? (Number)patBox.height() : 1.;
-			matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-		    }
-		    matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-		    fpat->setMatrix(matr);
-		    fill=fpat;
-		}
-		context->setFillPattern(fill);
+            if (!fill) { //prepare pattern (once) 
+                Rectangle b = context->pathExtends();
+                // pattern matrices: inverse values, inverse mul order!
+                math::Matrix matr = fpat->getMatrix();
+                Rectangle patBox = fpat->getBounds();
+                if (patBox!=NULL_RECTANGLE) 
+                {
+                    Number w = patBox.width()>0 ? (Number)patBox.width()  : 1.;
+                    Number h = patBox.height()>0? (Number)patBox.height() : 1.;
+                    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+                }
+                matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+                fpat->setMatrix(matr);
+                fill=fpat;
+            }
+            context->setFillPattern(fill);
 	    }
 	    context->fill();
         }
 	if (context->isStroked()) {
 	    shape->shape(context);
 	    if (spat) {
-		if(!stroke) { // prepare stroke pattern (once)
-		    Rectangle b = context->pathExtends();
-		    // pattern matrices: inverse values, inverse mul order!!
-		    math::Matrix matr = spat->getMatrix();
-		    Rectangle patBox = spat->getBounds();
-		    if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
-			patBox.height()!=0) 
-		    {
-			Number w = patBox.width();
-			Number h = patBox.height();
-			matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-		    }
-		    matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-		    spat->setMatrix(matr);
-		    stroke = spat;
-		}
-		context->setStrokePattern(stroke);
-	    }
-	    context->stroke();
+            if(!stroke) { // prepare stroke pattern (once)
+                Rectangle b = context->pathExtends();
+                // pattern matrices: inverse values, inverse mul order!!
+                math::Matrix matr = spat->getMatrix();
+                Rectangle patBox = spat->getBounds();
+                if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
+                    patBox.height()!=0) 
+                    {
+                        Number w = patBox.width();
+                        Number h = patBox.height();
+                        matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+                    }
+                    matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+                    spat->setMatrix(matr);
+                stroke = spat;
+                }
+                context->setStrokePattern(stroke);
+            }
+            context->stroke();
         }
     }
     
     // only need to restore state if no children in scenegraph.
     // otherwise state will be restored later with RestoreContextState.
     if (resetContextState==true) {
-	context->restore();
+        context->restore();
     }
 };
 //-----------------------------------------------------------------------------
@@ -103,7 +101,7 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
     
     IPattern::Ptr fpat, spat;
     if (style) {
-	style->intoContext(context);
+        style->intoContext(context);
     }
     
     Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
@@ -119,7 +117,7 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
     context->stroke();
     context->save();
     if (transformation) {
-	context->transform( *(transformation.get()) );
+        context->transform( *(transformation.get()) );
     }
     
     // only need to restore state if no children in scenegraph.
@@ -178,7 +176,7 @@ bool SceneGraph::addElement( IDrawable::Ptr ptr ) {
     Element2Vertex::iterator it;
     boost::tie(it, inserted) = element2Vertex.insert(std::make_pair(ptr, Vertex()));
     if (!inserted) {
-	return false;
+        return false;
     }
     const Vertex &u = add_vertex(g);
     vertexElementMap[u] = ptr;
@@ -193,13 +191,13 @@ bool SceneGraph::connectElements(IDrawable::Ptr from, IDrawable::Ptr to) {
     it = element2Vertex.find(from);
     // find "from" vertex
     if (it==element2Vertex.end()) {
-	return false;
+        return false;
     }
     Vertex vFrom = it->second;
     // find "to" vertex
     it = element2Vertex.find(to);
     if (it==element2Vertex.end()) {
-	return false;
+        return false;
     }
     Vertex vTo = it->second;
     Edge e;
@@ -472,9 +470,9 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 
     typedef std::numeric_limits<Number> L;
     Rectangle res = Rectangle(
-	Point2D(L::max(), L::max()),
-	Point2D(-L::max(), -L::max()),
-	false
+        Point2D(L::max(), L::max()),
+        Point2D(-L::max(), -L::max()),
+        false
 	);
 	
     std::vector<SceneGraphElement> l;
@@ -523,7 +521,7 @@ void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
         o->perform(cn);
     }
     boost_for_each(IDrawable::Ptr x, parents) {
-	element2Bounds[x] = computeBoundingBox(x);
+        element2Bounds[x] = computeBoundingBox(x);
     }
 }
 }}}} // namespaces
