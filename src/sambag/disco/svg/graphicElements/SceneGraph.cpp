@@ -44,7 +44,7 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 	if (context->isFilled()) {
 	    shape->shape(context);
 	    if (fpat) {
-            if (!fill) { //prepare pattern (once) 
+            if (fill!=fpat) { //prepare pattern (once)
                 Rectangle b = context->pathExtends();
                 // pattern matrices: inverse values, inverse mul order!
                 math::Matrix matr = fpat->getMatrix();
@@ -62,11 +62,11 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
             context->setFillPattern(fill);
 	    }
 	    context->fill();
-        }
+    }
 	if (context->isStroked()) {
 	    shape->shape(context);
 	    if (spat) {
-            if(!stroke) { // prepare stroke pattern (once)
+            if(stroke!=spat) { // prepare stroke pattern (once)
                 Rectangle b = context->pathExtends();
                 // pattern matrices: inverse values, inverse mul order!!
                 math::Matrix matr = spat->getMatrix();
