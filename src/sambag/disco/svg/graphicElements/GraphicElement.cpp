@@ -13,7 +13,7 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 // class GraphicElement
 //=============================================================================
 //-----------------------------------------------------------------------------
-GraphicElement::GraphicElement() {
+GraphicElement::GraphicElement() : visible(true) {
 }
 //-----------------------------------------------------------------------------
 GraphicElement::~GraphicElement() {

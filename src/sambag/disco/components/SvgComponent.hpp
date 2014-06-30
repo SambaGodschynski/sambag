@@ -13,6 +13,7 @@
 #include "AContainer.hpp"
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/svg/Image.hpp>
+#include <sambag/disco/svg/graphicElements/Style.hpp>
 
 namespace sambag { namespace disco {
 namespace svg {
@@ -74,6 +75,10 @@ public:
          * @return the fill color on related object in scene graph
          */
         virtual IPattern::Ptr getBackgroundPattern() const;
+        //---------------------------------------------------------------------
+        svg::graphicElements::Style getStyle() const;
+        //---------------------------------------------------------------------
+        void setStyle(const svg::graphicElements::Style &x);
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
         //---------------------------------------------------------------------

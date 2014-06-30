@@ -30,44 +30,18 @@ void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
-    if (!pat) {
-        return;
-    }
-    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
-    SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
-    IDrawable::Ptr d = drawable.lock();
-    if (!d) {
-        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
-    }
-    svg::graphicElements::Style style = g->getStyleOf(d);
+    svg::graphicElements::Style style = getStyle();
     style.strokePattern(pat);
-    g->setStyleTo(d, style);
-    svg->redraw();
-    Super::setForeground(pat);
+    setStyle(style);
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setBackground(IPattern::Ptr pat) {
-    if (!pat) {
-        return;
-    }
-    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
-    SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
-    IDrawable::Ptr d = drawable.lock();
-    if (!d) {
-        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
-    }
-    svg::graphicElements::Style style = g->getStyleOf(d);
+    svg::graphicElements::Style style = getStyle();
     style.fillPattern(pat);
-    g->setStyleTo(d, style);
-    svg->redraw();
-    Super::setBackground(pat);
+    setStyle(style);
 }
 //-----------------------------------------------------------------------------
-IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
+svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
     svg::graphicElements::SceneGraph::Ptr g =
@@ -77,19 +51,37 @@ IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
     }
     svg::graphicElements::Style style = g->calculateStyle(d);
+    return style;
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    g->setStyleTo(d, x);
+    IPattern::Ptr fill = x.fillPattern();
+    if (Super::getBackgroundPattern()!=fill) {
+        Super::setBackground(fill);
+    }
+    IPattern::Ptr stroke = x.strokePattern();
+    if (Super::getForegroundPattern()!=stroke) {
+        Super::setForeground(stroke);
+    }
+    svg->redraw();
+}
+//-----------------------------------------------------------------------------
+IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
+    svg::graphicElements::Style style = getStyle();
     return style.strokePattern();
 }
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
-    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
-    SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
-    IDrawable::Ptr d = drawable.lock();
-    if (!d) {
-        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
-    }
-    svg::graphicElements::Style style = g->calculateStyle(d);
+    svg::graphicElements::Style style = getStyle();
     return style.fillPattern();
 }
 //=============================================================================
@@ -150,10 +142,10 @@ void SvgComponent::getDummiesByClass(const std::string &_class, std::vector<Dumm
         if (!x) {
             continue;
         }
-	DummyPtr d = getDummy(x);
-	if (d) {
-	    out.push_back(d);
-	}
+        DummyPtr d = getDummy(x);
+        if (d) {
+            out.push_back(d);
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -256,24 +248,27 @@ AComponentPtr SvgComponent::findComponentAt (const Point2D &p, bool includeSelf)
 {
     AComponent::Ptr res;
     BOOST_FOREACH(AComponent::Ptr x, getComponents()) {
-	const Rectangle &a = x->getBounds();
-	if (a.contains(p)) {
-	    if (!res) {
-		res=x;
-		continue;
-	    }
-	    int zCurr=INT_MAX, z=INT_MAX;
-	    res->getClientProperty("svg.z", zCurr);
-	    x->getClientProperty("svg.z", z);
-	    if (z<zCurr) {
-		res=x;
-	    }
-	}
+        if (!x->isVisible() || !x->isEnabled()) {
+            continue;
+        }
+        const Rectangle &a = x->getBounds();
+        if (a.contains(p)) {
+            if (!res) {
+                res=x;
+                continue;
+            }
+            int zCurr=INT_MAX, z=INT_MAX;
+            res->getClientProperty("svg.z", zCurr);
+            x->getClientProperty("svg.z", z);
+            if (z<zCurr) {
+                res=x;
+            }
+        }
     }
     if(!res) {
-	if (includeSelf) {
-	    return getPtr();
-	}
+        if (includeSelf) {
+            return getPtr();
+        }
     }
     return res;
 }

@@ -50,13 +50,13 @@ struct DoNothing : public IProcessListObject {
     typedef boost::shared_ptr<DoNothing> Ptr;
     //-------------------------------------------------------------------------
     virtual std::string toString() const {
-	return "DoNothing";
+        return "DoNothing";
     }
     std::string name;
     //-------------------------------------------------------------------------
     static Ptr create() {
-	Ptr neu(new DoNothing());
-	return neu;
+        Ptr neu(new DoNothing());
+        return neu;
     }
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context) {}
@@ -135,13 +135,13 @@ struct RestoreContextState : public IProcessListObject {
     RestoreContextState(){};
     //-------------------------------------------------------------------------
     virtual std::string toString() const {
-	return "RestoreContextState";
+        return "RestoreContextState";
     }
     std::string name;
     //-------------------------------------------------------------------------
     static Ptr create() {
-	Ptr neu(new RestoreContextState());
-	return neu;
+        Ptr neu(new RestoreContextState());
+        return neu;
     }
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context);
@@ -184,10 +184,10 @@ public:
     static const int NO_ORDER_NUMBER = -1;
     //-------------------------------------------------------------------------
     enum VertexType {
-	IDRAWABLE,
-	TRANSFORM,
-	STYLE,
-	CLASS
+        IDRAWABLE,
+        TRANSFORM,
+        STYLE,
+        CLASS
     };
     //-------------------------------------------------------------------------
     struct node_object_t { typedef boost::vertex_property_tag kind; };
@@ -224,10 +224,10 @@ public:
      * Graph type
      */
     typedef boost::adjacency_list<
-	EdgeContainerType,
-	VertexContainerType, 			// has to be vecS. Otherwise the processlist
-	// creation and other things getting more complex.
-	boost::bidirectionalS,
+        EdgeContainerType,
+        VertexContainerType, 			// has to be vecS. Otherwise the processlist
+        // creation and other things getting more complex.
+        boost::bidirectionalS,
 	vertexProperties > G;
     //-------------------------------------------------------------------------
     typedef boost::graph_traits<G>::vertex_descriptor Vertex;
@@ -280,30 +280,31 @@ private:
     //-------------------------------------------------------------------------
     template <typename _Container, typename Filter>
     class BFSVisitor : public boost::bfs_visitor<> {
-    private:
-	//---------------------------------------------------------------------
-	const Filter &filter;
-	//---------------------------------------------------------------------
-	const SceneGraph &sg;
-	//---------------------------------------------------------------------
-	_Container &container;
-	//---------------------------------------------------------------------
-	bool firstDiscover;
-    public:
-	//---------------------------------------------------------------------
-	BFSVisitor(const SceneGraph &sg, _Container &container, const Filter &filter)
+        private:
+        //---------------------------------------------------------------------
+        const Filter &filter;
+        //---------------------------------------------------------------------
+        const SceneGraph &sg;
+        //---------------------------------------------------------------------
+        _Container &container;
+        //---------------------------------------------------------------------
+        bool firstDiscover;
+        public:
+        //---------------------------------------------------------------------
+        BFSVisitor(const SceneGraph &sg, _Container &container, const Filter &filter)
 	    : filter(filter), sg(sg), container(container), firstDiscover(true) {}
-	//---------------------------------------------------------------------
-	template <class Vertex, class Graph>
-	void discover_vertex(const Vertex &u, Graph &g) {
-	    if (firstDiscover) { // ignore start vertex
-		firstDiscover = false;
-		return;
-	    }
-	    SceneGraph::SceneGraphElement el = sg.getSceneGraphElement(u);
-	    if (filter.filter(el))
-		container.push_back(el);
-	}
+        //---------------------------------------------------------------------
+        template <class Vertex, class Graph>
+        void discover_vertex(const Vertex &u, Graph &g) {
+            if (firstDiscover) { // ignore start vertex
+                firstDiscover = false;
+                return;
+            }
+            SceneGraph::SceneGraphElement el = sg.getSceneGraphElement(u);
+            if (filter.filter(el)) {
+                container.push_back(el);
+            }
+        }
     };
     //-------------------------------------------------------------------------
     WPtr self;
@@ -335,17 +336,17 @@ private:
     Tag2Vertex tag2Vertex;
     //-------------------------------------------------------------------------
     void initMaps() {
-	vertexElementMap = get( node_object_t(), g );
-	vertexTypeMap = get( node_vtype_t(), g );
-	vertexOrderMap  = get( node_order_t(), g );
-	vertexTransformationMap = get( node_transformation_t(), g );
-	vertexStyleMap = get( node_style_t(), g );
-	vertexNameMap = get( node_vname_t(), g );
-	vertexName2Map = get( node_vname2_t(), g );
+        vertexElementMap = get( node_object_t(), g );
+        vertexTypeMap = get( node_vtype_t(), g );
+        vertexOrderMap  = get( node_order_t(), g );
+        vertexTransformationMap = get( node_transformation_t(), g );
+        vertexStyleMap = get( node_style_t(), g );
+        vertexNameMap = get( node_vname_t(), g );
+        vertexName2Map = get( node_vname2_t(), g );
     }
     //-------------------------------------------------------------------------
     SceneGraph(){
-	initMaps();
+        initMaps();
     }
 public:
     //-------------------------------------------------------------------------
@@ -354,23 +355,23 @@ public:
      * @deprecated use invalidate() instead
      */
     void update() {
-	processList.clear();
-	element2Bounds.clear();
+        processList.clear();
+        element2Bounds.clear();
     }
     //-------------------------------------------------------------------------
     /**
      * @brief invalidates bounds and scene
      */
     void invalidate() {
-	processList.clear();
-	element2Bounds.clear();
+        processList.clear();
+        element2Bounds.clear();
     }
     //-------------------------------------------------------------------------
     /**
      * @brief invalidates bounds only
      */
     void invalidateBounds() {
-	element2Bounds.clear();
+        element2Bounds.clear();
     }
     //-------------------------------------------------------------------------
     /**
@@ -401,7 +402,7 @@ public:
      * @return the order number
      */
     VertexType getVertexType(const Vertex &v) const {
-	return vertexTypeMap[v];
+        return vertexTypeMap[v];
     }
     //-------------------------------------------------------------------------
     /**
@@ -411,11 +412,11 @@ public:
      * @return
      */
     OrderNumber getVertexOrderNumber(const Vertex &v) const {
-	return vertexOrderMap[v];
+        return vertexOrderMap[v];
     }
     //-------------------------------------------------------------------------
     void setVertexOrderNumber(const Vertex &v, const OrderNumber &ord) {
-	vertexOrderMap[v] = ord;
+        vertexOrderMap[v] = ord;
     }
     //-------------------------------------------------------------------------
     /**
@@ -425,10 +426,10 @@ public:
     Vertex getRelatedVertex(SceneGraphElement el) const;
     //-------------------------------------------------------------------------
     SceneGraphElement getRootElement() {
-	if (boost::num_vertices(g) == 0) {
-	    return SceneGraphElement();
-	}
-	return getSceneGraphElement(*(boost::vertices(g).first));
+        if (boost::num_vertices(g) == 0) {
+            return SceneGraphElement();
+        }
+        return getSceneGraphElement(*(boost::vertices(g).first));
     }
     //-------------------------------------------------------------------------
     /**
@@ -485,10 +486,11 @@ public:
      * Use @see calculateTransformation() for this purpose.
      */
     Matrix getTransformationOf(SceneGraphElement el) const {
-	MatrixPtr res = getTransformationRef(el);
-	if (!res)
-	    return NULL_MATRIX;
-	return *(res.get());
+        MatrixPtr res = getTransformationRef(el);
+        if (!res) {
+            return NULL_MATRIX;
+        }
+        return *(res.get());
     }
     //-------------------------------------------------------------------------
     /**
@@ -499,10 +501,11 @@ public:
      * Use @see calculateStyle() instead.
      */
     graphicElements::Style getStyleOf(SceneGraphElement el) const {
-	StylePtr res = getStyleRef(el);
-	if (!res)
-	    return graphicElements::Style::getNullStyle();
-	return *(res.get());
+        StylePtr res = getStyleRef(el);
+        if (!res) {
+            return graphicElements::Style::getNullStyle();
+        }
+        return *(res.get());
     }
     //-------------------------------------------------------------------------
     /**
@@ -522,13 +525,13 @@ public:
     StylePtr getStyleRef(SceneGraphElement el) const;
     //-------------------------------------------------------------------------
     Ptr getPtr() const {
-	return self.lock();
+        return self.lock();
     }
     //-------------------------------------------------------------------------
     static Ptr create() {
-	Ptr neu(new SceneGraph());
-	neu->self=neu;
-	return neu;
+        Ptr neu(new SceneGraph());
+        neu->self=neu;
+        return neu;
     }
     //-------------------------------------------------------------------------
     /**
@@ -536,10 +539,10 @@ public:
      * @return process list
      */
     const ProcessList & getProcessList() {
-	if ( boost::num_vertices(g) > 0 && processList.empty() ) {
+        if ( boost::num_vertices(g) > 0 && processList.empty() ) {
             createProcessList(processList);
-	}
-	return processList;
+        }
+        return processList;
     }
     //-------------------------------------------------------------------------
     /**
@@ -570,66 +573,67 @@ public:
     bool connectElements(SceneGraphElement from, SceneGraphElement to);
     //-------------------------------------------------------------------------
     bool registerElementId(SceneGraphElement el, const Id &id) {
-	Vertex v = getRelatedVertex(el);
-	if (v==NULL_VERTEX)
-	    return false;
-	vertexNameMap[v] = id;
-	return (id2Vertex.insert( std::make_pair(id, v) )).second;
-
+        Vertex v = getRelatedVertex(el);
+        if (v==NULL_VERTEX)
+            return false;
+        vertexNameMap[v] = id;
+        return (id2Vertex.insert( std::make_pair(id, v) )).second;
     }
     //-------------------------------------------------------------------------
     void setTagName(SceneGraphElement el, const Tag &tagName) {
-	Vertex v = getRelatedVertex(el);
-	if (v==NULL_VERTEX)
-	    return;
-	vertexName2Map[v] = tagName;
-	tag2Vertex.insert(std::make_pair(tagName, v));
+        Vertex v = getRelatedVertex(el);
+        if (v==NULL_VERTEX)
+            return;
+        vertexName2Map[v] = tagName;
+        tag2Vertex.insert(std::make_pair(tagName, v));
     }
     //-------------------------------------------------------------------------
     struct AllElements {
-	bool filter(SceneGraphElement el) const { return true; }
+        bool filter(SceneGraphElement el) const { return true; }
     };
     //-------------------------------------------------------------------------
     struct TagFilter {
-	Tag tag;
-	const SceneGraph &g;
-	TagFilter(const Tag &tag, const SceneGraph &g) : tag(tag), g(g) {}
-	bool filter(SceneGraphElement el) const {
-	    using namespace boost::algorithm;
-	    if (to_lower_copy(tag) == to_lower_copy(g.getTagName(el)))
-		return true;
-	    return false;
-	}
+        Tag tag;
+        const SceneGraph &g;
+        TagFilter(const Tag &tag, const SceneGraph &g) : tag(tag), g(g) {}
+        bool filter(SceneGraphElement el) const {
+            using namespace boost::algorithm;
+            if (to_lower_copy(tag) == to_lower_copy(g.getTagName(el))) {
+                return true;
+            }
+            return false;
+        }
     };
     //-------------------------------------------------------------------------
     struct ClassFilter {
-	Class _class;
-	const SceneGraph &g;
-	ClassFilter(const Class &_class, const SceneGraph &g) :
-	    _class(_class), g(g) {}
-	bool filter(SceneGraphElement el) const {
-	    using namespace boost::algorithm;
-	    std::list<Class> classes;
-	    g.getClassNames(el, classes);
-	    boost_for_each(const Class &cn, classes) {
-		if (to_lower_copy(_class) == to_lower_copy(cn))
-		    return true;
-	    }
-	    return false;
-	}
+        Class _class;
+        const SceneGraph &g;
+        ClassFilter(const Class &_class, const SceneGraph &g) :
+            _class(_class), g(g) {}
+        bool filter(SceneGraphElement el) const {
+            using namespace boost::algorithm;
+            std::list<Class> classes;
+            g.getClassNames(el, classes);
+            boost_for_each(const Class &cn, classes) {
+            if (to_lower_copy(_class) == to_lower_copy(cn))
+                return true;
+            }
+            return false;
+        }
     };
     //-------------------------------------------------------------------------
     struct IdFilter {
-	Id id;
-	const SceneGraph &g;
-	IdFilter(const Id &id, const SceneGraph &g) :
-	    id(id), g(g) {}
-	bool filter(SceneGraphElement el) const {
-	    using namespace boost::algorithm;
-	    if (to_lower_copy(id) == to_lower_copy(g.getIdName(el)))
-		return true;
-	    return false;
-	}
+        Id id;
+        const SceneGraph &g;
+        IdFilter(const Id &id, const SceneGraph &g) :
+            id(id), g(g) {}
+        bool filter(SceneGraphElement el) const {
+            using namespace boost::algorithm;
+            if (to_lower_copy(id) == to_lower_copy(g.getIdName(el))) {
+                return true;
+            }
+            return false;
+        }
     };
     //-------------------------------------------------------------------------
     template <typename _Container, typename Filter>
@@ -639,19 +643,19 @@ public:
 	{
 	    Vertex v = getRelatedVertex(el);
 	    if (v==NULL_VERTEX)
-		return;
+            return;
 	    if (deep) {
-		BFSVisitor<_Container, Filter> bfsVis(*this, c, filter);
-		boost::breadth_first_search(g, v, boost::visitor(bfsVis));
-		return;
+            BFSVisitor<_Container, Filter> bfsVis(*this, c, filter);
+            boost::breadth_first_search(g, v, boost::visitor(bfsVis));
+            return;
 	    }
 	    AdjacencyIterator it, end;
 	    boost::tie(it, end) = boost::adjacent_vertices(v, g);
 	    for (; it!=end; ++it) {
-		SceneGraphElement el = getSceneGraphElement(*it);
-		if (filter.filter(el))
-		    c.push_back(el);
-	    }
+            SceneGraphElement el = getSceneGraphElement(*it);
+            if (filter.filter(el))
+                c.push_back(el);
+            }
 	}
     //-------------------------------------------------------------------------
     template <typename _Container>
@@ -694,29 +698,29 @@ public:
 	}
     //-------------------------------------------------------------------------
     Tag getTagName(SceneGraphElement el) const {
-	Vertex v = getRelatedVertex(el);
-	if (v == NULL_VERTEX)
-	    return "";
-	return vertexName2Map[v];
+        Vertex v = getRelatedVertex(el);
+        if (v == NULL_VERTEX)
+            return "";
+        return vertexName2Map[v];
     }
     //-------------------------------------------------------------------------
     template <typename _Container>
     void getClassNames(SceneGraphElement el, _Container &c) const {
-	Vertex v = getRelatedVertex(el);
-	if (v == NULL_VERTEX)
-	    return;
-	std::list<Vertex> l;
-	findParentsByType(v, CLASS, l);
-	boost_for_each(const Vertex &it, l) {
-	    c.push_back(vertexNameMap[it]);
-	}
+        Vertex v = getRelatedVertex(el);
+        if (v == NULL_VERTEX)
+            return;
+        std::list<Vertex> l;
+        findParentsByType(v, CLASS, l);
+        boost_for_each(const Vertex &it, l) {
+            c.push_back(vertexNameMap[it]);
+        }
     }
     //-------------------------------------------------------------------------
     Id getIdName(SceneGraphElement el) const {
-	Vertex v = getRelatedVertex(el);
-	if (v == NULL_VERTEX)
-	    return "";
-	return vertexNameMap[v];
+        Vertex v = getRelatedVertex(el);
+        if (v == NULL_VERTEX)
+            return "";
+        return vertexNameMap[v];
     }
     //-------------------------------------------------------------------------
     IDrawable::Ptr getElementById(const Id &id) const;
@@ -738,11 +742,11 @@ public:
 	    Vertex srcV = getRelatedVertex(src);
 	    Vertex dstV = getRelatedVertex(dst);
 	    if (srcV==NULL_VERTEX || dstV==NULL_VERTEX )
-		return;
+            return;
 	    std::list<Vertex> vertices;
 	    findParentsByType(srcV, SceneGraph::STYLE, vertices);
 	    boost_for_each(Vertex v, vertices) {
-		boost::add_edge(v, dstV, g);
+            boost::add_edge(v, dstV, g);
 	    }
 	}
     //-------------------------------------------------------------------------
@@ -757,11 +761,11 @@ public:
 	    Vertex srcV = getRelatedVertex(src);
 	    Vertex dstV = getRelatedVertex(dst);
 	    if (srcV==NULL_VERTEX || dstV==NULL_VERTEX )
-		return;
+            return;
 	    std::list<Vertex> vertices;
 	    findParentsByType(srcV, SceneGraph::TRANSFORM, vertices);
 	    boost_for_each(const Vertex &v, vertices) {
-		boost::add_edge(v, dstV, g);
+            boost::add_edge(v, dstV, g);
 	    }
 	}
     //-------------------------------------------------------------------------
@@ -798,28 +802,27 @@ private:
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void finish_drawable(const Vertex &v, Graph& g) {
-	typename SceneGraph::SceneGraphElement obj =
-	    sceneGraph.getSceneGraphElement(v);
-	if (!obj)
-	    return;
-	size_t numOutEdges = boost::out_degree(v, g);
-	ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
-							   numOutEdges==0,
-							   sceneGraph.getStyleRef(obj),
-							   sceneGraph.getTransformationRef(obj)
+        typename SceneGraph::SceneGraphElement obj =
+            sceneGraph.getSceneGraphElement(v);
+        if (!obj) {
+            return;
+        }
+        size_t numOutEdges = boost::out_degree(v, g);
+        ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
+                                numOutEdges==0,
+                                sceneGraph.getStyleRef(obj),
+                                sceneGraph.getTransformationRef(obj)
 	    );
-	container.push_back(cmd);
+        container.push_back(cmd);
     }
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void discover_drawable(const Vertex &v, Graph &g) {
-	typename SceneGraph::SceneGraphElement obj =
-	    sceneGraph.getSceneGraphElement(v);
-	// only need to restore if has child objects in graph
-	if ( boost::out_degree(v, g) > 0 ) {
-	    RestoreContextState::Ptr re = RestoreContextState::create();
-	    container.push_back(re);
-	}
+        // only need to restore if has child objects in graph
+        if ( boost::out_degree(v, g) > 0 ) {
+            RestoreContextState::Ptr re = RestoreContextState::create();
+            container.push_back(re);
+        }
     }
 public:
     //-------------------------------------------------------------------------
@@ -835,36 +838,36 @@ public:
     void back_edge(Edge, Graph&) const {}
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
-    void discover_vertex(const Vertex &v, Graph &g) {
-	if (startVertexFinished)
-	    return;
-	SceneGraph::VertexType type = sceneGraph.getVertexType(v);
-	switch (type) {
-	case SceneGraph::IDRAWABLE :
-	    discover_drawable(v, g); break;
-	case SceneGraph::TRANSFORM :
-	case SceneGraph::STYLE :
-	case SceneGraph::CLASS :
-	    break;
-	}
+        void discover_vertex(const Vertex &v, Graph &g) {
+        if (startVertexFinished)
+            return;
+        SceneGraph::VertexType type = sceneGraph.getVertexType(v);
+        switch (type) {
+            case SceneGraph::IDRAWABLE :
+                discover_drawable(v, g); break;
+            case SceneGraph::TRANSFORM :
+            case SceneGraph::STYLE :
+            case SceneGraph::CLASS :
+                break;
+        }
     }
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void finish_vertex(const Vertex &v, Graph &g) {
-	if (startVertexFinished)
-	    return;
-	if (v==startVertex) {
-	    startVertexFinished = true;
-	}
-	SceneGraph::VertexType type = sceneGraph.getVertexType(v);
-	switch (type) {
-	case SceneGraph::IDRAWABLE :
-	    finish_drawable(v, g); break;
-	case SceneGraph::TRANSFORM :
-	case SceneGraph::STYLE :
-	case SceneGraph::CLASS :
-	    break;
-	}
+        if (startVertexFinished)
+            return;
+        if (v==startVertex) {
+            startVertexFinished = true;
+        }
+        SceneGraph::VertexType type = sceneGraph.getVertexType(v);
+        switch (type) {
+            case SceneGraph::IDRAWABLE :
+                finish_drawable(v, g); break;
+            case SceneGraph::TRANSFORM :
+            case SceneGraph::STYLE :
+            case SceneGraph::CLASS :
+                break;
+        }
     }
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
