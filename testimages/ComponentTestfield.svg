@@ -1,8 +1,18 @@
 <?xml version="1.0" standalone="no"?>
+<?xml-stylesheet href="styles/components.css" type="text/css"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="800" height="600" 
      xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <pattern id="bg" x="0" y="0" width="8" height="8" 
+             patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#002050" 
+            stroke="white" 
+            stroke-opacity="1"
+            stroke-width="1"/>
+    </pattern>
+  </defs>
   <g stroke="lightblue" class="disco" id="WHOLESHIT" fill="hotpink">
     <rect x="1" y="1" width="100%" height="100%"
 	  stroke-width="10" />
@@ -11,8 +21,19 @@
 	    fill="palegreen" class="disco dancer" id="DanceFloor" transform="translate(-210,0)"/>
       <rect x="60%" y="15%" width="140px" height="140px" stroke-width="4px"
 	    fill="yellow" class="disco dancer" id="Pussy" transform="translate(-210,0)"/>
-      <circle cx="35%" cy="30%" r="30px" id="BTN" fill="red" class="disco dancer"/>
+      <circle cx="35%" cy="30%" r="70px" id="BTN" fill="red" class="disco dancer"/>
+    </g>    
+  </g>
+  <!--g transform="translate(250, 400)"-->
+  <g transform="translate(320,300)"
+      fill="none" stroke="none" 
+      stroke-opacity="0" 
+      class="disco disco-knob">
+    <g class="disco disco-knob-handle">
+      <circle cx="0" cy="0" r="30px" class="corona"/>
+      <circle cx="0" cy="0" r="20px" fill="url(#bg)"/>
+      <line x0="0" y0="10" x1="0" y1="0"/>
+      <circle cx="-18px" cy="0" r="7" transform="rotate(-45)" fill="blue"/>
     </g>
-    
-  </g>  
+  </g>
 </svg>

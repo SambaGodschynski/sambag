@@ -114,6 +114,7 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
         shape->shape(context);
     }
     Rectangle res = context->pathExtends();
+    res.inset(context->getStrokeWidth(), context->getStrokeWidth());
     context->stroke();
     context->save();
     if (transformation) {
@@ -503,18 +504,18 @@ void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
     boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
         ProcessDrawable::Ptr pr =
             boost::dynamic_pointer_cast<ProcessDrawable>(o);
-	if (pr) {
-	    IDrawable::Ptr x=pr->getDrawable();
-	    SAMBAG_ASSERT(x);
-	    Rectangle r = pr->getBounds(cn);
-	    if(boost::out_degree(getRelatedVertex(x), g)>0) {
-		// we have children, so we come back later
-		parents.push_back(x);
-		typedef std::numeric_limits<Number> L;
+        if (pr) {
+            IDrawable::Ptr x=pr->getDrawable();
+            SAMBAG_ASSERT(x);
+            Rectangle r = pr->getBounds(cn);
+            if(boost::out_degree(getRelatedVertex(x), g)>0) {
+                // we have children, so we come back later
+                parents.push_back(x);
+                typedef std::numeric_limits<Number> L;
                 r=Rectangle(Point2D(L::max(), L::max()),
                             Point2D(-L::max(), -L::max()),
                             false);
-	    }
+            }
             element2Bounds[x] = r;
             continue;
         }

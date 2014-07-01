@@ -517,10 +517,22 @@ public:
 	//-------------------------------------------------------------------------
 	/**
 	 * removes component ui.
+	 * @deprecated actually it removes the ui whether it's setted by user
+     * or not. And this is what we need because we wan't sometimes
+     * remove the ui by hand to release uneeded resources. So use @see removeUI
+	 * instead.
+     * @param c
+	 */
+	virtual void removeUserUI ();
+	//-------------------------------------------------------------------------
+	/**
+	 * removes component ui.
 	 *
 	 * @param c
 	 */
-	virtual void removeUserUI ();
+	virtual void removeUI () {
+        removeUserUI();
+    }
 	//-------------------------------------------------------------------------
 	/**
 	 * Ease-of-use constant for <code>getAlignmentY()</code>.

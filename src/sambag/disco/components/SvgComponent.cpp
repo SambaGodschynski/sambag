@@ -14,12 +14,20 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/visitors.hpp>
+#include <boost/assign/list_of.hpp>
 #include <algorithm>
 
 namespace sambag { namespace disco { namespace components {
+
+namespace svgExtensions {
+    extern void installSvgKnobExtension(SvgComponent::Dummy::Ptr);
+}
+
 //=============================================================================
 //  Class Dummy
 //=============================================================================
+//-----------------------------------------------------------------------------
+const std::string SvgComponent::Dummy::PROPERTY_MODEL = "property model";
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
 //    Rectangle bounds = context->clipExtends();
@@ -52,6 +60,18 @@ svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
     }
     svg::graphicElements::Style style = g->calculateStyle(d);
     return style;
+}
+//-----------------------------------------------------------------------------
+SvgComponent::Dummy::StylePtr SvgComponent::Dummy::getStyleRef() {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    if (!d) {
+        throw std::runtime_error("SvgComponent::Dummy related object == NULL");
+    }
+    return g->getStyleRef(d);
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
@@ -88,8 +108,25 @@ IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
 //  Class SvgComponent
 //=============================================================================
 //-----------------------------------------------------------------------------
+const SvgComponent::ExtensionRegister &
+SvgComponent::getExtensionRegister() const
+{
+    return exReg;
+}
+//-----------------------------------------------------------------------------
+SvgComponent::ExtensionRegister &
+SvgComponent::getExtensionRegister()
+{
+    return exReg;
+}
+//-----------------------------------------------------------------------------
 SvgComponent::SvgComponent() {
     setName("SvgComponent");
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::initExtendRegister() {
+    using namespace boost::assign;
+    exReg = map_list_of(".disco-knob", &svgExtensions::installSvgKnobExtension);
 }
 //-----------------------------------------------------------------------------
 svg::SvgRootPtr SvgComponent::getSvgObject() const {
@@ -102,6 +139,7 @@ svg::SvgRootPtr SvgComponent::getSvgObject() const {
 //-----------------------------------------------------------------------------
 void SvgComponent::postConstructor() {
     setLayout(ALayoutManager::Ptr());
+    initExtendRegister();
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::drawComponent (IDrawContext::Ptr context) {
@@ -158,6 +196,11 @@ SvgComponent::DummyPtr SvgComponent::getDummyOrCreateNew(IDrawable::Ptr x) {
         DummyPtr dummy = createDummy(x);
         add(dummy);
         elMap[x]=dummy;
+        svg::graphicElements::SceneGraph::Ptr g =
+            getSvgObject()->getRelatedSceneGraph();
+        std::list<SvgClass> classes;
+        g->getClassNames(x, classes);
+        installExtension(dummy, classes);
         return dummy;
     }
     DummyPtr res = it->second.lock();
@@ -185,6 +228,18 @@ IDrawable::Ptr SvgComponent::getDrawable(DummyPtr x) {
     return res.lock();
 }
 //-----------------------------------------------------------------------------
+void SvgComponent::installExtension(DummyPtr dummy,
+    const std::list<SvgClass> &classes)
+{
+    BOOST_FOREACH(const std::string &x, classes) {
+        ExtensionRegister::const_iterator it = exReg.find(x);
+        if (it==exReg.end()) {
+            continue;
+        }
+        it->second(dummy);
+    }
+}
+//-----------------------------------------------------------------------------
 SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
     svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     DummyPtr res = Dummy::create();
@@ -193,7 +248,7 @@ SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
     std::stringstream ss;
     ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";
     ss<<"class='";
-    std::vector<std::string> classes;
+    std::list<SvgClass> classes;
     g->getClassNames(x, classes);
     BOOST_FOREACH(const std::string &x, classes) {
         ss<<x<<" ";

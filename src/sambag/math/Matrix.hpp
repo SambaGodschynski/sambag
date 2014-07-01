@@ -24,8 +24,8 @@ typedef boost::numeric::ublas::matrix<sambag::com::Number> Matrix;
 using namespace boost::numeric::ublas;
 //=============================================================================
 // Missing comparator in Matrix.hpp
-template<typename T>
-bool operator==(const matrix<T>& m, const matrix<T>& n) {
+template<typename T, typename U>
+bool isEqual(const matrix<T>& m, const matrix<U>& n) {
 //=============================================================================
 	bool returnValue = (m.size1() == n.size1()) && (m.size2() == n.size2());
 	if (returnValue) {
@@ -37,9 +37,14 @@ bool operator==(const matrix<T>& m, const matrix<T>& n) {
 	}
 	return returnValue;
 }
+template<typename T, typename U>
+bool operator==(const matrix<T>& m, const matrix<U>& n) {
 //=============================================================================
-template<typename T>
-bool operator!=(const matrix<T>& m, const matrix<T>& n) {
+    return isEqual(m, n);
+}
+//=============================================================================
+template<typename T, typename U>
+bool operator!=(const matrix<T>& m, const matrix<U>& n) {
 //=============================================================================
 	return !(m == n);
 }

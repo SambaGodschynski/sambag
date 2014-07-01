@@ -19,6 +19,37 @@ void SvgRoot::init() {
 
 }
 //-----------------------------------------------------------------------------
+SvgRoot::Ptr SvgRoot::create(SvgRoot *root, bool firstElement) {
+    Ptr neu(new SvgRoot());
+    neu->__setSelf(neu);
+    if (!root || root == neu.get())
+        return neu;
+    neu->createBase(root);
+    // set default style if first element
+    if (firstElement) {
+        graphicElements::Style style = graphicElements::Style::DEFAULT_STYLE;
+        style.strokePattern(IPattern::Ptr());
+        root->getRelatedSceneGraph()->setStyleTo(neu->getGraphicElement(), style);
+    }
+    return neu;
+}
+//-----------------------------------------------------------------------------
+SvgRoot::Ptr SvgRoot::create(graphicElements::SceneGraph *g, bool firstElement)
+{
+    Ptr neu(new SvgRoot());
+    neu->__setSelf(neu);
+    if (!g)
+        return neu;
+    neu->setRelatedSceneGraph(g->getPtr());
+    // set default style if first element
+    if (firstElement) {
+        graphicElements::Style style = graphicElements::Style::DEFAULT_STYLE;
+        style.strokePattern(IPattern::Ptr());
+        g->setStyleTo(neu->getGraphicElement(), style);
+    }
+    return neu;
+}
+//-----------------------------------------------------------------------------
 void SvgRoot::initCreatedObjects() {
 	boost_for_each(SvgObject::Ptr o, svgs) {
 		o->init();

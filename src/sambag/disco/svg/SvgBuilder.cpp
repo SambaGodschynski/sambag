@@ -27,6 +27,55 @@
 #include "sambag/disco/svg/SvgColorStop.hpp"
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/xpressive/xpressive.hpp>
+#include <boost/xpressive/regex_primitives.hpp>
+#include <boost/xpressive/regex_actions.hpp>
+#include <boost/filesystem/path.hpp>
+
+namespace {
+    /**
+     * ticpp fucks up getting the stylesheet href.
+     * (iterating siblings of declaration element crashes)
+     * so we do it by hand.
+     */
+    std::string __getStyleSheetHRef(const std::string &path) {
+        std::ifstream f(path.c_str());
+        if (f.fail()) {
+            return "";
+        }
+        std::stringstream ss;
+        std::string tmp;
+        while(f >> tmp) {
+            ss<<tmp;
+        }
+        using namespace boost::xpressive;
+        mark_tag res(1);
+        // <?xml-stylesheet href="test.css" type="text/css"?>
+        cregex pat = "<?xml-stylesheet" >> -*_ >>
+            (("href" >> *_s >> "=" >> *_s >> (as_xpr('\'')|'"') >>
+            (res=-*_) >> (as_xpr('\'')|'"')) | (">"));
+        cmatch what;
+        if(regex_search(ss.str().c_str(), what, pat)) {
+            return what[res];
+        }
+        return "";
+    }
+    std::string __loadCss(const std::string &svgPath, const std::string &cssPath)
+    {
+        boost::filesystem::path path(svgPath);
+        std::string dst = path.parent_path().string() + "/" + cssPath;
+        std::ifstream f(dst.c_str());
+        if (f.fail()) {
+            throw std::runtime_error("loading " + dst + " failed.");
+        }
+        std::stringstream ss;
+        std::string tmp;
+        while(f >> tmp) {
+            ss<<tmp;
+        }
+        return ss.str();
+    }
+}
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -106,6 +155,14 @@ SvgObject::Ptr SvgBuilder::buildSvgFromFilename(const std::string & name)
 	xml2Obj.addObjectCreatedSlot(f);
 	SvgObject::Ptr neu = xml2Obj.buildWithXmlFile(name, root);
 	root->initCreatedObjects();
+    // post css process
+    std::string cssfile = __getStyleSheetHRef(name);
+    if (!cssfile.empty()) {
+        std::string css = __loadCss(name, cssfile);
+        if (!css.empty()) {
+            SvgStyle::applyCssText(css, g);
+        }
+    }
 	return neu;
 }
 

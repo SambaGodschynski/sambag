@@ -14,6 +14,9 @@
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/svg/Image.hpp>
 #include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/com/ArbitraryType.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/function.hpp>
 
 namespace sambag { namespace disco {
 namespace svg {
@@ -45,6 +48,8 @@ public:
         //---------------------------------------------------------------------
         typedef boost::shared_ptr<Dummy> Ptr;
         typedef boost::weak_ptr<Dummy> WPtr;
+        //---------------------------------------------------------------------
+        static const std::string PROPERTY_MODEL;
     protected:
         //---------------------------------------------------------------------
         Dummy() {
@@ -54,7 +59,35 @@ public:
         //---------------------------------------------------------------------
         friend class SvgComponent;
         boost::weak_ptr<IDrawable> drawable;
+        //---------------------------------------------------------------------
+        /**
+        * the model object which is possibly used by an extension.
+        */
+        typedef com::ArbitraryType ModelObject;
+        ModelObject::Ptr model;
     public:
+        //---------------------------------------------------------------------
+        ModelObject::Ptr getRawModel() const {
+            return model;
+        }
+        //---------------------------------------------------------------------
+        template<class Model>
+        void setModel(boost::shared_ptr<Model> model) {
+            com::ArbitraryType::Ptr old = this->model;
+            this->model = com::createObject(model);
+            firePropertyChanged(PROPERTY_MODEL, old, this->model);
+        }
+        //---------------------------------------------------------------------
+        /**
+        * @return the model object of the extension, can be null if
+        * no extension is used or the concrete type doesn't match.
+        */
+        template <class ConcreteModel>
+        boost::shared_ptr<ConcreteModel> getModel() const {
+            boost::shared_ptr<ConcreteModel> res;
+            com::get(model, res);
+            return res;
+        }
         //---------------------------------------------------------------------
         /**
          * @brief set the stroke color on related object in scene graph
@@ -76,9 +109,21 @@ public:
          */
         virtual IPattern::Ptr getBackgroundPattern() const;
         //---------------------------------------------------------------------
+        /**
+         * @return calculated style
+         */
         svg::graphicElements::Style getStyle() const;
         //---------------------------------------------------------------------
         void setStyle(const svg::graphicElements::Style &x);
+        //---------------------------------------------------------------------
+        /**
+         * @return style ref of object.
+         * @note can be null even if object has style in result. 
+         * please consider the differences between a style ref. and a calculated
+         * style
+         */
+        typedef boost::shared_ptr<svg::graphicElements::Style> StylePtr;
+        StylePtr getStyleRef();
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
         //---------------------------------------------------------------------
@@ -93,6 +138,16 @@ public:
     typedef boost::weak_ptr<SvgComponent> WPtr;
 protected:
     //-------------------------------------------------------------------------
+    /**
+     * @brief if you want to create a component with interaction
+     * such as a knob or a button you need to 'extend' the component.
+     * This is done by an "Extend" function, which is usually triggered
+     * by a registered svg class keyword.
+     */
+    typedef boost::function<void(Dummy::Ptr)> ExtendFunction;
+    typedef std::string SvgClass;
+    typedef boost::unordered_map<SvgClass, ExtendFunction> ExtensionRegister;
+    //-------------------------------------------------------------------------
     virtual void drawComponent (IDrawContext::Ptr context);
     //-------------------------------------------------------------------------
     virtual void postConstructor();
@@ -101,6 +156,10 @@ protected:
     //-------------------------------------------------------------------------
     void setupSvgObject(svg::SvgRootPtr obj);
 private:
+    //-------------------------------------------------------------------------
+    void initExtendRegister();
+    //-------------------------------------------------------------------------
+    ExtensionRegister exReg;
     //-------------------------------------------------------------------------
     com::ArithmeticWrapper<bool, false> stretchToFit;
     //-------------------------------------------------------------------------
@@ -116,8 +175,13 @@ private:
     void updateDrawOrder();
     //-------------------------------------------------------------------------
     DummyPtr getDummyOrCreateNew(IDrawable::Ptr x);
-
+    //-------------------------------------------------------------------------
+    void installExtension(DummyPtr dummy, const std::list<SvgClass> &classes);
 public:
+    //-------------------------------------------------------------------------
+    const ExtensionRegister & getExtensionRegister() const;
+    //-------------------------------------------------------------------------
+    ExtensionRegister & getExtensionRegister();
     //-------------------------------------------------------------------------
     virtual AComponentPtr findComponentAt (const Point2D &p, bool includeSelf=true);
     //-------------------------------------------------------------------------

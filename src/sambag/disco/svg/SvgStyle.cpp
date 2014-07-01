@@ -93,10 +93,15 @@ void processRulesList(const Rules& rules, graphicElements::SceneGraph::Ptr g) {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void SvgStyle::init() {
-	Rules rules;
-	parseStyleRules(styleText, rules);
-	processRulesList(rules, getRelatedSceneGraph());
+	applyCssText(styleText, getRelatedSceneGraph());
 }
-
+//-----------------------------------------------------------------------------
+void SvgStyle::applyCssText(const std::string &txt,
+        graphicElements::SceneGraph::Ptr g)
+{
+    Rules rules;
+	parseStyleRules(txt, rules);
+	processRulesList(rules, g);
+}
 }}}
 

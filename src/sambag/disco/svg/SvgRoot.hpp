@@ -108,20 +108,7 @@ public:
 	 */
 	static Ptr create(
 			SvgRoot *root = NULL,
-			bool firstElement = false)
-	{
-		Ptr neu(new SvgRoot());
-		neu->__setSelf(neu);
-		if (!root || root == neu.get())
-			return neu;
-		neu->createBase(root);
-		// set default style if first element
-		if (firstElement) {
-			root->getRelatedSceneGraph()->setStyleTo(neu->getGraphicElement(),
-			graphicElements::Style::DEFAULT_STYLE);
-		}
-		return neu;
-	}
+			bool firstElement = false);
 	//-------------------------------------------------------------------------
 	/**
 	 *
@@ -131,20 +118,7 @@ public:
 	 */
 	static Ptr create(
 			graphicElements::SceneGraph *g = NULL,
-			bool firstElement = false)
-	{
-		Ptr neu(new SvgRoot());
-		neu->__setSelf(neu);
-		if (!g)
-			return neu;
-		neu->setRelatedSceneGraph(g->getPtr());
-		// set default style if first element
-		if (firstElement) {
-			g->setStyleTo(neu->getGraphicElement(),
-					graphicElements::Style::DEFAULT_STYLE);
-		}
-		return neu;
-	}
+			bool firstElement = false);
 	//-------------------------------------------------------------------------
 	/**
 	 * Funtion for @see XML2Object::CreatedSignal slot.

@@ -52,6 +52,9 @@ public:
 		neu->createBase(root);
 		return neu;
 	}
+    //-------------------------------------------------------------------------
+    static void applyCssText(const std::string &txt,
+        graphicElements::SceneGraph::Ptr g);
 };
 
 }}} // namespaces

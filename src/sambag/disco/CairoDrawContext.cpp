@@ -255,8 +255,6 @@ void CairoDrawContext::rect( const Rectangle &rect ) {
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::stroke() {
-	if (!isStroked())
-		return;
 	if (patternInUse != STROKE) {
 		setStrokePattern();
 		patternInUse = STROKE;
@@ -266,8 +264,6 @@ void CairoDrawContext::stroke() {
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::fill() {
-	if (!isFilled())
-		return;
 	if (patternInUse != FILL) {
 		setFillPattern();
 		patternInUse = FILL;
