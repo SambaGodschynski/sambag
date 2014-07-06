@@ -15,12 +15,16 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 namespace {
     ISurface::Ptr _loadSvg(const std::string &path) {
-        svg::Image::Ptr image = svg::Image::create();
-        image->setSvgPath(path);
-        ISurface::Ptr sf = getDiscoFactory()->createRecordingSurface();
-        IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
-        image->draw(cn);
-        return sf;
+        try {
+            svg::Image::Ptr image = svg::Image::create();
+            image->setSvgPath(path);
+            ISurface::Ptr sf = getDiscoFactory()->createRecordingSurface();
+            IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
+            image->draw(cn);
+            return sf;
+        } catch(...) {
+            return ISurface::Ptr();
+        }
     }
 }
 

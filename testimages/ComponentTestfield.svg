@@ -36,4 +36,44 @@
       <circle cx="-18px" cy="0" r="7" transform="rotate(-45)" fill="blue"/>
     </g>
   </g>
+
+
+  <!--g transform="translate(250, 400)"-->
+  <g transform="translate(420,300)"
+      fill="none" stroke="none" 
+      stroke-opacity="0" 
+      class="disco disco-knob">
+    <g class="disco disco-knob-handle">
+      <circle cx="0" cy="0" r="30px" class="corona"/>
+      <circle cx="0" cy="0" r="20px" fill="url(#bg)"/>
+      <line x0="0" y0="10" x1="0" y1="0"/>
+      <circle cx="-18px" cy="0" r="7" transform="rotate(-45)" fill="blue"/>
+    </g>
+  </g>
+
+  <g class="disco disco-button" 
+     transform="translate(170,300)"
+     fill="white" stroke="blue" stroke-width="3">
+    <g class="disco disco-button-handle">
+      <rect x="0" y="0" width="70" height="30" rx="4" ry="4"/>
+      <text x="15" y="20"
+	    style="font-family:monospace; stroke:black; stroke-width:1;">
+	O.K.
+      </text>
+    </g>
+  </g>
+
+
+  <g class="disco" id="invisible" 
+     transform="translate(370,290)"
+     fill="white" stroke="blue" stroke-width="3">
+    <g class="disco disco-button-handle">
+      <rect x="0" y="0" width="90" height="30" rx="4" ry="4"/>
+      <text x="8" y="20"
+	    style="font-family:monospace; stroke:black; stroke-width:1;">
+	INVISIBLE
+      </text>
+    </g>
+  </g>
+
 </svg>

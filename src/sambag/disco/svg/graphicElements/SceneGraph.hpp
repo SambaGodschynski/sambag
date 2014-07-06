@@ -271,6 +271,9 @@ public:
     typedef boost::unordered_multimap<Tag, Vertex> Tag2Vertex;
     //-------------------------------------------------------------------------
     typedef std::list<IProcessListObject::Ptr> ProcessList;
+    //-------------------------------------------------------------------------
+    enum Flags {Invisible=1};
+    typedef boost::unordered_map<Vertex, unsigned int> FlagMap;
 private:
     //-------------------------------------------------------------------------
     void computeBoundingBoxes(IDrawContext::Ptr);
@@ -334,6 +337,8 @@ private:
     Class2Vertex class2Vertex;
     //-------------------------------------------------------------------------
     Tag2Vertex tag2Vertex;
+    //-------------------------------------------------------------------------
+    FlagMap flagMap;
     //-------------------------------------------------------------------------
     void initMaps() {
         vertexElementMap = get( node_object_t(), g );
@@ -779,6 +784,20 @@ public:
      * @return bounds or NULL_RECTANGLE if obj not found
      */
     Rectangle getBoundingBox(SceneGraphElement obj) const;
+    //-------------------------------------------------------------------------
+    void setFlag(const Vertex &v, Flags flag, bool val);
+    //-------------------------------------------------------------------------
+    /**
+     * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
+     */
+    int getFlag(const Vertex &v, Flags flag) const;
+    //-------------------------------------------------------------------------
+    void setFlag(SceneGraphElement el, Flags flag, bool val);
+    //-------------------------------------------------------------------------
+    /**
+     * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
+     */
+    int getFlag(SceneGraphElement el, Flags flag) const;
 };
 //=============================================================================
 /**
@@ -796,12 +815,20 @@ private:
     const SceneGraph &sceneGraph;
     //-------------------------------------------------------------------------
     typedef SceneGraph::Vertex Vertex;
-    Vertex startVertex;
+    Vertex startVertex, invisible;
     //-------------------------------------------------------------------------
     bool startVertexFinished;
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void finish_drawable(const Vertex &v, Graph& g) {
+        if (invisible!=SceneGraph::NULL_VERTEX) {
+            // we are in an invisible path
+            if (invisible==v) {
+                // the invisible origin, we're done now
+                invisible = SceneGraph::NULL_VERTEX;
+            }
+            return;
+        }
         typename SceneGraph::SceneGraphElement obj =
             sceneGraph.getSceneGraphElement(v);
         if (!obj) {
@@ -818,6 +845,13 @@ private:
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void discover_drawable(const Vertex &v, Graph &g) {
+        if (invisible!=SceneGraph::NULL_VERTEX) {
+            return;
+        }
+        if (sceneGraph.getFlag(v, SceneGraph::Invisible)==1) {
+            invisible=v;
+            return;
+        }
         // only need to restore if has child objects in graph
         if ( boost::out_degree(v, g) > 0 ) {
             RestoreContextState::Ptr re = RestoreContextState::create();
@@ -830,6 +864,7 @@ public:
 	container(container),
 	sceneGraph(sc),
 	startVertex(startVertex),
+    invisible(SceneGraph::NULL_VERTEX),
 	startVertexFinished(false)
 	{
 	}

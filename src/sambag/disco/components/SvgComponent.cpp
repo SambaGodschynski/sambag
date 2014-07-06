@@ -14,13 +14,13 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/visitors.hpp>
-#include <boost/assign/list_of.hpp>
 #include <algorithm>
 
 namespace sambag { namespace disco { namespace components {
 
 namespace svgExtensions {
     extern void installSvgKnobExtension(SvgComponent::Dummy::Ptr);
+    extern void installSvgButtonExtension(SvgComponent::Dummy::Ptr);
 }
 
 //=============================================================================
@@ -104,6 +104,18 @@ IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
     svg::graphicElements::Style style = getStyle();
     return style.fillPattern();
 }
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::setVisible(bool b) {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    g->setFlag(d, svg::graphicElements::SceneGraph::Invisible, !b);
+    g->invalidate();
+    svg->revalidate();
+    Super::setVisible(b);
+}
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================
@@ -126,7 +138,8 @@ SvgComponent::SvgComponent() {
 //-----------------------------------------------------------------------------
 void SvgComponent::initExtendRegister() {
     using namespace boost::assign;
-    exReg = map_list_of(".disco-knob", &svgExtensions::installSvgKnobExtension);
+    exReg[".disco-knob"] = &svgExtensions::installSvgKnobExtension;
+    exReg[".disco-button"] = &svgExtensions::installSvgButtonExtension;
 }
 //-----------------------------------------------------------------------------
 svg::SvgRootPtr SvgComponent::getSvgObject() const {

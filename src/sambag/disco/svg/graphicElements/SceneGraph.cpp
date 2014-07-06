@@ -525,4 +525,31 @@ void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
         element2Bounds[x] = computeBoundingBox(x);
     }
 }
+//-----------------------------------------------------------------------------
+void SceneGraph::setFlag(const Vertex &v, Flags aFlag, bool val) {
+    FlagMap::mapped_type &flags = flagMap[v];
+    if (val) {
+        flags |= (1 << aFlag);
+    } else {
+        flags &= ~(1 << aFlag);
+    }
+}
+//-----------------------------------------------------------------------------
+int SceneGraph::getFlag(const Vertex &v, Flags aFlag) const {
+    FlagMap::const_iterator it = flagMap.find(v);
+    if (it==flagMap.end()) {
+        return -1;
+    }
+    const FlagMap::mapped_type &flags = it->second;
+    FlagMap::mapped_type mask = (1 << aFlag);
+    return ((flags & mask) == mask);
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::setFlag(SceneGraphElement el, Flags flag, bool val) {
+    setFlag(getRelatedVertex(el), flag, val);
+}
+//-----------------------------------------------------------------------------
+int SceneGraph::getFlag(SceneGraphElement el, Flags flag) const {
+    return getFlag(getRelatedVertex(el), flag);
+}
 }}}} // namespaces

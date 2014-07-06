@@ -13,6 +13,8 @@
 #include <sambag/com/events/ChangedEvent.hpp>
 #include <sambag/com/events/Events.hpp>
 #include "events/ActionEvent.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 namespace sambag { namespace disco { namespace components {
 namespace ev = sambag::com::events;
@@ -29,6 +31,8 @@ class DefaultButtonModell :
 //=============================================================================
 public:
 	typedef ev::ChangedEvent<DefaultButtonModell> StateChangedEvent;
+    typedef boost::shared_ptr<DefaultButtonModell> Ptr;
+    typedef boost::weak_ptr<DefaultButtonModell> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	/** The bitmask used to store the state of the button. */

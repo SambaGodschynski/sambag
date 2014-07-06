@@ -582,6 +582,11 @@ void createWindow<SVG>() {
     Button::Ptr btn = Button::create();
     btn->setText("push me");
     floor->add(btn);
+    
+    AContainer::Ptr invisible = svg->getDummyById("#invisible");
+    if (invisible) {
+        invisible->setVisible(false);
+    }
 }
 
 template <>

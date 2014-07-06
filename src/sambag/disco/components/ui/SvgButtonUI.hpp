@@ -1,17 +1,17 @@
 /*
- * SvgKnobUI.hpp
+ * SvgButtonUI.hpp
  *
  *  Created on: Thu Jul  3 09:59:43 2014
  *      Author: Johannes Unger
  */
 
-#ifndef SAMBAG_SVGKNOBUI_H
-#define SAMBAG_SVGKNOBUI_H
+#ifndef SAMBAG_SvgButtonUI_H
+#define SAMBAG_SvgButtonUI_H
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
-#include <sambag/disco/components/DefaultBoundedRangeModel.hpp>
+#include <sambag/disco/components/DefaultButtonModell.hpp>
 #include <sambag/disco/components/SvgComponent.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -19,20 +19,20 @@ namespace sambag { namespace disco {
 namespace components { namespace ui {
 //=============================================================================
 /** 
-  * @class SvgKnobUI.
+  * @class SvgButtonUI.
   */
-class SvgKnobUI : public AComponentUI,
-                  public boost::enable_shared_from_this<SvgKnobUI>
+class SvgButtonUI : public AComponentUI,
+                    public boost::enable_shared_from_this<SvgButtonUI>
 {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgKnobUI> Ptr;
+	typedef boost::shared_ptr<SvgButtonUI> Ptr;
     //-------------------------------------------------------------------------
-    typedef DefaultBoundedRangeModel::StateChangedEvent StateChanged;
+    typedef DefaultButtonModell::StateChangedEvent StateChanged;
 protected:
 	//-------------------------------------------------------------------------
-	SvgKnobUI(){}
+	SvgButtonUI(){}
     //-------------------------------------------------------------------------
     virtual void installListeners(AComponent::Ptr c);
     //-------------------------------------------------------------------------
@@ -42,29 +42,15 @@ protected:
     //-------------------------------------------------------------------------
     virtual void installPropertyListeners();
 private:
-	//-------------------------------------------------------------------------
-	Point2D firstPoint;
-	Point2D lastPoint;
-	Coordinate startValue;
-	Coordinate oldValue;
-	Coordinate entryState;
-	Coordinate range;
-	Coordinate coef;
-	Coordinate radius;
-	Coordinate startAngle;
-	Coordinate rangeAngle;
-	Coordinate halfAngle;
-	Coordinate aCoef;
-	Coordinate bCoef;
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::WPtr main, handle;
-    boost::weak_ptr<DefaultBoundedRangeModel> model;
+    boost::weak_ptr<DefaultButtonModell> model;
     //-------------------------------------------------------------------------
     template <class T>
     boost::shared_ptr<T> getPtr(boost::weak_ptr<T> _x) const {
         boost::shared_ptr<T> res = _x.lock();
         if (!res) {
-            throw std::runtime_error("SvgKnobUI null_pointer");
+            throw std::runtime_error("SvgButtonUI null_pointer");
         }
         return res;
     }
@@ -74,7 +60,7 @@ public:
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getHandle() const { return getPtr(handle); }
     //-------------------------------------------------------------------------
-    boost::shared_ptr<DefaultBoundedRangeModel> getModel() const { return getPtr(model); }
+    boost::shared_ptr<DefaultButtonModell> getModel() const { return getPtr(model); }
 	//-------------------------------------------------------------------------
 	/**
 	 * Configures the specified component appropriately for the look and feel.
@@ -83,7 +69,7 @@ public:
 	virtual void installUI(AComponentPtr c);
 	//-------------------------------------------------------------------------
 	static Ptr create() {
-		return Ptr(new SvgKnobUI());
+		return Ptr(new SvgButtonUI());
 	}
     //-------------------------------------------------------------------------
     void onPropertyChanged(const com::events::PropertyChanged &ev);
@@ -92,20 +78,18 @@ public:
 	//-------------------------------------------------------------------------
 	void mousePressed(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
-	void mouseDragged(const events::MouseEvent &ev);
-	//-------------------------------------------------------------------------
-	void mouseWheelRotated(const events::MouseEvent &ev);
+	void mouseReleased(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------
 	void mouseEntered(const events::MouseEvent &ev);
     //-------------------------------------------------------------------------
 	void mouseExited(const events::MouseEvent &ev);
     //-------------------------------------------------------------------------
-    void onKnobStateChanged(const StateChanged &ev);
-}; // SvgKnobUI
+    void onStateChanged(const StateChanged &ev);
+}; // SvgButtonUI
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 }}}} // namespace(s)
 
-#endif /* SAMBAG_SvgKnobUI_H */
+#endif /* SAMBAG_SvgButtonUI_H */
 

@@ -128,6 +128,8 @@ public:
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
         //---------------------------------------------------------------------
         void drawComponent (IDrawContext::Ptr context);
+        //---------------------------------------------------------------------
+        virtual void setVisible(bool b);
     };
     typedef boost::shared_ptr<Dummy> DummyPtr;
     typedef boost::weak_ptr<Dummy> DummyWPtr;
