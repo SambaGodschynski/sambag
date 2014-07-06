@@ -8,13 +8,31 @@
 #include "Image.hpp"
 #include "sambag/com/FileHandler.hpp"
 #include "sambag/disco/IDiscoFactory.hpp"
+#include <boost/filesystem.hpp>
+#include <sambag/disco/svg/Image.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
+
+namespace {
+    ISurface::Ptr _loadSvg(const std::string &path) {
+        svg::Image::Ptr image = svg::Image::create();
+        image->setSvgPath(path);
+        ISurface::Ptr sf = getDiscoFactory()->createRecordingSurface();
+        IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
+        image->draw(cn);
+        return sf;
+    }
+}
+
 //=============================================================================
 // class Image
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Image::loadImage() {
+    if (boost::filesystem::path(uri).extension().string()==".svg") {
+        image = _loadSvg(uri);
+        return;
+    }
 	com::FileHandler::Ptr fh = com::FileHandler::create(uri);
 	image = getDiscoFactory()->createImageSurface(fh);
 }
