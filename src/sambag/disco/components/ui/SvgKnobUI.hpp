@@ -14,6 +14,7 @@
 #include <sambag/disco/components/DefaultBoundedRangeModel.hpp>
 #include <sambag/disco/components/SvgComponent.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include "SvgComponentUI.hpp"
 
 namespace sambag { namespace disco {
 namespace components { namespace ui {
@@ -21,8 +22,7 @@ namespace components { namespace ui {
 /** 
   * @class SvgKnobUI.
   */
-class SvgKnobUI : public AComponentUI,
-                  public boost::enable_shared_from_this<SvgKnobUI>
+class SvgKnobUI : public SvgComponentUI<DefaultBoundedRangeModel>
 {
 //=============================================================================
 public:
@@ -30,6 +30,8 @@ public:
 	typedef boost::shared_ptr<SvgKnobUI> Ptr;
     //-------------------------------------------------------------------------
     typedef DefaultBoundedRangeModel::StateChangedEvent StateChanged;
+    //-------------------------------------------------------------------------
+    typedef SvgComponentUI<DefaultBoundedRangeModel> Super;
 protected:
 	//-------------------------------------------------------------------------
 	SvgKnobUI(){}
@@ -39,8 +41,6 @@ protected:
     virtual void installHandleListeners();
     //-------------------------------------------------------------------------
     virtual void installModelListeners();
-    //-------------------------------------------------------------------------
-    virtual void installPropertyListeners();
 private:
 	//-------------------------------------------------------------------------
 	Point2D firstPoint;
@@ -58,23 +58,11 @@ private:
 	Coordinate bCoef;
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::WPtr main, handle;
-    boost::weak_ptr<DefaultBoundedRangeModel> model;
-    //-------------------------------------------------------------------------
-    template <class T>
-    boost::shared_ptr<T> getPtr(boost::weak_ptr<T> _x) const {
-        boost::shared_ptr<T> res = _x.lock();
-        if (!res) {
-            throw std::runtime_error("SvgKnobUI null_pointer");
-        }
-        return res;
-    }
 public:
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getMain() const { return getPtr(main); }
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getHandle() const { return getPtr(handle); }
-    //-------------------------------------------------------------------------
-    boost::shared_ptr<DefaultBoundedRangeModel> getModel() const { return getPtr(model); }
 	//-------------------------------------------------------------------------
 	/**
 	 * Configures the specified component appropriately for the look and feel.

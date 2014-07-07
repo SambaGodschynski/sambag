@@ -11,38 +11,6 @@ namespace components { namespace ui {
 // class SvgKnobUI : public AComponentUI
 //=============================================================================
 //-----------------------------------------------------------------------------
-namespace {
-    SvgComponent::Ptr _getSvgComponent(AComponent::Ptr c) {
-        SvgComponent::Ptr svg = c->getFirstContainer<SvgComponent>();
-        SAMBAG_ASSERT(svg);
-        return svg;
-    }
-    svg::graphicElements::SceneGraph::Ptr _getSceneGraph(SvgComponent::Ptr svg) {
-        SAMBAG_ASSERT(svg->getSvgObject());
-        svg::graphicElements::SceneGraph::Ptr g =
-            svg->getSvgObject()->getRelatedSceneGraph();
-        SAMBAG_ASSERT(g);
-        return g;
-    }
-    SvgComponent::Dummy::Ptr __getHandle(SvgComponent::Ptr svg,
-        svg::graphicElements::SceneGraph::Ptr g,
-        SvgComponent::Dummy::Ptr c)
-    {
-        IDrawable::Ptr x = svg->getDrawable(c);
-        SAMBAG_ASSERT(x);
-        std::list<IDrawable::Ptr> l;
-        g->getChildrenByClass(x, ".disco-knob-handle", l);
-        if (l.empty()) {
-            throw std::runtime_error("SvgKnobUI: no disco-knob-handle class element found.");
-        }
-        x = *(l.begin());
-        SvgComponent::Dummy::Ptr res = svg->getDummy(x);
-        SAMBAG_ASSERT(res);
-        return res;
-    }
-    
-}
-//-----------------------------------------------------------------------------
 void SvgKnobUI::installHandleListeners() {
     getHandle()->com::events::EventSender<events::MouseEvent>::addTrackedEventListener(
 		boost::bind(&SvgKnobUI::onMouse, this, _2),
@@ -57,39 +25,24 @@ void SvgKnobUI::installModelListeners() {
 	);
 }
 //-----------------------------------------------------------------------------
-void SvgKnobUI::installPropertyListeners() {
-    using namespace com::events;
-    getMain()->EventSender<PropertyChanged>::addTrackedEventListener(
-        boost::bind(&SvgKnobUI::onPropertyChanged, this, _2),
-        shared_from_this()
-    );
-}
-//-----------------------------------------------------------------------------
 void SvgKnobUI::installListeners(AComponent::Ptr c) {
-    installModelListeners();
     installHandleListeners();
-    installPropertyListeners();
 }
 //-----------------------------------------------------------------------------
 void SvgKnobUI::installUI(AComponentPtr c) {
+    Super::installUI(c);
    	SvgComponent::Dummy::Ptr main =
         boost::dynamic_pointer_cast<SvgComponent::Dummy>(c);
     if (!main) {
         throw std::runtime_error("SvgKnobUI: wrong component");
     }
     this->main = main;
-    SvgComponent::Ptr svg = _getSvgComponent(main);
-    svg::graphicElements::SceneGraph::Ptr g = _getSceneGraph(svg);
-   	SvgComponent::Dummy::Ptr handle = __getHandle(svg, g, main);
+    installModel(main);
+   	SvgComponent::Dummy::Ptr handle =
+        getFirstChildOfClass(".disco-knob-handle", main);
     this->handle = handle;
-    DefaultBoundedRangeModel::Ptr model =
-        main->getModel<DefaultBoundedRangeModel>();
-    if (!model) {
-        throw std::runtime_error("SvgKnobUI: wrong model");
-    }
-    this->model = model;
-    model->setMaximum(1);
-    model->setMinimum(0);
+    getModel()->setMaximum(1);
+    getModel()->setMinimum(0);
 	main->setMouseWheelEventsEnabled(true);
     installListeners(c);
 }
@@ -152,8 +105,8 @@ void SvgKnobUI::mouseWheelRotated(const events::MouseEvent &ev) {
 //-----------------------------------------------------------------------------
 void SvgKnobUI::onKnobStateChanged(const StateChanged &ev) {
     SvgComponent::Dummy::Ptr handle = getHandle();
-    SvgComponent::Ptr svg = _getSvgComponent(handle);
-    svg::graphicElements::SceneGraph::Ptr g = _getSceneGraph(svg);
+    SvgComponent::Ptr svg = getSvgComponent(handle);
+    svg::graphicElements::SceneGraph::Ptr g = getSceneGraph(svg);
     Coordinate max = getUIPropertyCached<DegreePropertyTag>(270.);
     g->setTransfomationTo(svg->getDrawable(handle),rotate2D(getModel()->getValue()*max));
     svg->redraw();
@@ -163,22 +116,5 @@ void SvgKnobUI::mouseEntered(const events::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void SvgKnobUI::mouseExited(const events::MouseEvent &ev) {
-}
-//-----------------------------------------------------------------------------
-void SvgKnobUI::onPropertyChanged(const com::events::PropertyChanged &ev) {
-    if (ev.getPropertyName() == SvgComponent::Dummy::PROPERTY_MODEL) {
-        ArbitraryType::Ptr _new;
-        ev.getNewValue(_new);
-        if (!_new) {
-            throw std::runtime_error("SvgKnobUI model property null");
-        }
-        DefaultBoundedRangeModel::Ptr newModel;
-        com::get(_new, newModel);
-        if (!newModel) {
-            return;
-        }
-        this->model = newModel;
-        installModelListeners();
-    }
 }
 }}}}

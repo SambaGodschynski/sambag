@@ -9,11 +9,9 @@
 #define SAMBAG_SvgButtonUI_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/components/ui/AComponentUI.hpp>
+#include "SvgComponentUI.hpp"
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/DefaultButtonModell.hpp>
-#include <sambag/disco/components/SvgComponent.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui {
@@ -21,8 +19,7 @@ namespace components { namespace ui {
 /** 
   * @class SvgButtonUI.
   */
-class SvgButtonUI : public AComponentUI,
-                    public boost::enable_shared_from_this<SvgButtonUI>
+class SvgButtonUI : public SvgComponentUI<DefaultButtonModell>
 {
 //=============================================================================
 public:
@@ -30,35 +27,31 @@ public:
 	typedef boost::shared_ptr<SvgButtonUI> Ptr;
     //-------------------------------------------------------------------------
     typedef DefaultButtonModell::StateChangedEvent StateChanged;
+    //-------------------------------------------------------------------------
+    typedef SvgComponentUI<DefaultButtonModell> Super;
 protected:
 	//-------------------------------------------------------------------------
 	SvgButtonUI(){}
     //-------------------------------------------------------------------------
     virtual void installListeners(AComponent::Ptr c);
     //-------------------------------------------------------------------------
-    virtual void installHandleListeners();
+    virtual void installButtonListeners();
     //-------------------------------------------------------------------------
     virtual void installModelListeners();
-    //-------------------------------------------------------------------------
-    virtual void installPropertyListeners();
 private:
     //-------------------------------------------------------------------------
-    SvgComponent::Dummy::WPtr main, handle;
-    boost::weak_ptr<DefaultButtonModell> model;
-    //-------------------------------------------------------------------------
-    template <class T>
-    boost::shared_ptr<T> getPtr(boost::weak_ptr<T> _x) const {
-        boost::shared_ptr<T> res = _x.lock();
-        if (!res) {
-            throw std::runtime_error("SvgButtonUI null_pointer");
-        }
-        return res;
-    }
+    SvgComponent::Dummy::WPtr main, handle, idle, rollover, pressed;
 public:
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getMain() const { return getPtr(main); }
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getHandle() const { return getPtr(handle); }
+    //-------------------------------------------------------------------------
+    SvgComponent::Dummy::Ptr getIdle() const { return getPtr(idle); }
+    //-------------------------------------------------------------------------
+    SvgComponent::Dummy::Ptr getRollover() const { return getPtr(rollover); }
+    //-------------------------------------------------------------------------
+    SvgComponent::Dummy::Ptr getPressed() const { return getPtr(pressed); }
     //-------------------------------------------------------------------------
     boost::shared_ptr<DefaultButtonModell> getModel() const { return getPtr(model); }
 	//-------------------------------------------------------------------------
@@ -71,8 +64,6 @@ public:
 	static Ptr create() {
 		return Ptr(new SvgButtonUI());
 	}
-    //-------------------------------------------------------------------------
-    void onPropertyChanged(const com::events::PropertyChanged &ev);
 	//-------------------------------------------------------------------------
 	void onMouse(const events::MouseEvent &ev);
 	//-------------------------------------------------------------------------

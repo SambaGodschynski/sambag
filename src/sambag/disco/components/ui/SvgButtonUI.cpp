@@ -11,40 +11,21 @@ namespace components { namespace ui {
 // class SvgButtonUI : public AComponentUI
 //=============================================================================
 //-----------------------------------------------------------------------------
-namespace {
-    SvgComponent::Ptr _getSvgComponent(AComponent::Ptr c) {
-        SvgComponent::Ptr svg = c->getFirstContainer<SvgComponent>();
-        SAMBAG_ASSERT(svg);
-        return svg;
-    }
-    svg::graphicElements::SceneGraph::Ptr _getSceneGraph(SvgComponent::Ptr svg) {
-        SAMBAG_ASSERT(svg->getSvgObject());
-        svg::graphicElements::SceneGraph::Ptr g =
-            svg->getSvgObject()->getRelatedSceneGraph();
-        SAMBAG_ASSERT(g);
-        return g;
-    }
-    SvgComponent::Dummy::Ptr __getHandle(SvgComponent::Ptr svg,
-        svg::graphicElements::SceneGraph::Ptr g,
-        SvgComponent::Dummy::Ptr c)
-    {
-        IDrawable::Ptr x = svg->getDrawable(c);
-        SAMBAG_ASSERT(x);
-        std::list<IDrawable::Ptr> l;
-        g->getChildrenByClass(x, ".disco-button-handle", l);
-        if (l.empty()) {
-            throw std::runtime_error("SvgButtonUI: no disco-button-handle class element found.");
-        }
-        x = *(l.begin());
-        SvgComponent::Dummy::Ptr res = svg->getDummy(x);
-        SAMBAG_ASSERT(res);
-        return res;
-    }
-    
-}
 //-----------------------------------------------------------------------------
-void SvgButtonUI::installHandleListeners() {
+void SvgButtonUI::installButtonListeners() {
     getHandle()->com::events::EventSender<events::MouseEvent>::addTrackedEventListener(
+		boost::bind(&SvgButtonUI::onMouse, this, _2),
+		shared_from_this()
+	);
+    getIdle()->com::events::EventSender<events::MouseEvent>::addTrackedEventListener(
+		boost::bind(&SvgButtonUI::onMouse, this, _2),
+		shared_from_this()
+	);
+    getRollover()->com::events::EventSender<events::MouseEvent>::addTrackedEventListener(
+		boost::bind(&SvgButtonUI::onMouse, this, _2),
+		shared_from_this()
+	);
+    getPressed()->com::events::EventSender<events::MouseEvent>::addTrackedEventListener(
 		boost::bind(&SvgButtonUI::onMouse, this, _2),
 		shared_from_this()
 	);
@@ -57,37 +38,28 @@ void SvgButtonUI::installModelListeners() {
 	);
 }
 //-----------------------------------------------------------------------------
-void SvgButtonUI::installPropertyListeners() {
-    using namespace com::events;
-    getMain()->EventSender<PropertyChanged>::addTrackedEventListener(
-        boost::bind(&SvgButtonUI::onPropertyChanged, this, _2),
-        shared_from_this()
-    );
-}
-//-----------------------------------------------------------------------------
 void SvgButtonUI::installListeners(AComponent::Ptr c) {
-    installModelListeners();
-    installHandleListeners();
-    installPropertyListeners();
+    installButtonListeners();
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::installUI(AComponentPtr c) {
+    Super::installUI(c);
    	SvgComponent::Dummy::Ptr main =
         boost::dynamic_pointer_cast<SvgComponent::Dummy>(c);
     if (!main) {
         throw std::runtime_error("SvgButtonUI: wrong component");
     }
     this->main = main;
-    SvgComponent::Ptr svg = _getSvgComponent(main);
-    svg::graphicElements::SceneGraph::Ptr g = _getSceneGraph(svg);
-   	SvgComponent::Dummy::Ptr handle = __getHandle(svg, g, main);
-    this->handle = handle;
-    DefaultButtonModell::Ptr model =
-        main->getModel<DefaultButtonModell>();
-    if (!model) {
-        throw std::runtime_error("SvgButtonUI: wrong model");
-    }
-    this->model = model;
+    installModel(main);
+   	
+    handle = getFirstChildOfClass(".disco-button-handle", main);
+    idle = getFirstChildOfClass(".disco-button-handle-idle", getHandle());
+    rollover = getFirstChildOfClass(".disco-button-handle-rollover", getHandle());
+    pressed = getFirstChildOfClass(".disco-button-handle-pressed", getHandle());
+    
+    getRollover()->setVisible(false);
+    getPressed()->setVisible(false);
+    
     installListeners(c);
 }
 //-----------------------------------------------------------------------------
@@ -102,38 +74,68 @@ void SvgButtonUI::onMouse(const events::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::mousePressed(const events::MouseEvent &ev) {
-    std::cout<<ev.toString()<<std::endl;
+    ModelPtr model = getModel();
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
+		return;
+	model->setButtonPressed(true);
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::mouseReleased(const events::MouseEvent &ev) {
-    std::cout<<ev.toString()<<std::endl;
+	ModelPtr b = getModel();
+	if (ev.getButtons() != events::MouseEvent::DISCO_BTN1)
+			return;
+	bool oldState = b->isButtonPressed();
+	b->setButtonPressed(false);
+	if (!oldState)
+		return;
+	if (!getHandle()->contains(ev.getLocation())) {// mouse moved out
+		b->setButtonRollover(false);
+		return;
+	}
+	const sambag::com::ICommand::Function &c =
+			b->getButtonFunction();
+	if (c) {
+		c();
+	}
+	b->EventSender<events::ActionEvent>::notifyListeners(
+			b.get(),
+			events::ActionEvent(getHandle())
+	);
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::onStateChanged(const StateChanged &ev) {
+    AComponent::Ptr idle = getIdle(), pressed = getPressed(),
+                    rollover = getRollover();
+    
+    
+    ModelPtr model = getModel();
+    if (model->isButtonPressed()) {
+        pressed->setVisible(true);
+        rollover->setVisible(false);
+        idle->setVisible(false);
+        return;
+    }
+    if (model->isButtonRollover()) {
+        rollover->setVisible(true);
+        idle->setVisible(false);
+        pressed->setVisible(false);
+        return;
+
+    }
+    idle->setVisible(true);
+    pressed->setVisible(false);
+    rollover->setVisible(false);
+
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::mouseEntered(const events::MouseEvent &ev) {
-    std::cout<<ev.toString()<<std::endl;
+    ModelPtr model = getModel();
+    model->setButtonRollover(true);
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::mouseExited(const events::MouseEvent &ev) {
-    std::cout<<ev.toString()<<std::endl;
-}
-//-----------------------------------------------------------------------------
-void SvgButtonUI::onPropertyChanged(const com::events::PropertyChanged &ev) {
-    if (ev.getPropertyName() == SvgComponent::Dummy::PROPERTY_MODEL) {
-        ArbitraryType::Ptr _new;
-        ev.getNewValue(_new);
-        if (!_new) {
-            throw std::runtime_error("SvgButtonUI model property null");
-        }
-        DefaultButtonModell::Ptr newModel;
-        com::get(_new, newModel);
-        if (!newModel) {
-            return;
-        }
-        this->model = newModel;
-        installModelListeners();
-    }
+    ModelPtr model = getModel();
+	model->setButtonRollover(false);
+	model->setButtonPressed(false);
 }
 }}}}

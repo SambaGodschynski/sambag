@@ -479,11 +479,15 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
     std::vector<SceneGraphElement> l;
     getChildren(parent, l, true);
     boost_for_each(SceneGraphElement x, l) {
-	Rectangle r = element2Bounds[x];
-	res = Rectangle(
-	    minimize(res.x0(), r.x0()),
-	    maximize(res.x1(), r.x1()),
-	    false
+        Element2Bounds::const_iterator it = element2Bounds.find(x);
+        if (it==element2Bounds.end()) {
+            continue;
+        }
+        Rectangle r = it->second;
+        res = Rectangle(
+            minimize(res.x0(), r.x0()),
+            maximize(res.x1(), r.x1()),
+            false
 	    );
     }
     return res;

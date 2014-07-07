@@ -106,6 +106,9 @@ IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setVisible(bool b) {
+    if (isVisible()==b) {
+        return;
+    }
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
     svg::graphicElements::SceneGraph::Ptr g =
@@ -114,6 +117,7 @@ void SvgComponent::Dummy::setVisible(bool b) {
     g->setFlag(d, svg::graphicElements::SceneGraph::Invisible, !b);
     g->invalidate();
     svg->revalidate();
+    svg->redraw();
     Super::setVisible(b);
 }
 //=============================================================================
