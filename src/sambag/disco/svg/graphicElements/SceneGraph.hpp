@@ -19,6 +19,7 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/copy.hpp>
 #include <boost/algorithm/string.hpp>
+#include "ISceneGraph.hpp"
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
@@ -154,7 +155,7 @@ typedef boost::shared_ptr<GraphicElement> GraphicElementPtr;
  * @class SceneGraph.
  * see http://www.4divisions.com/forx/wiki/doku.php?id=wiki:scenegraph
  */
-class SceneGraph {
+class SceneGraph : public ISceneGraph {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
@@ -272,7 +273,6 @@ public:
     //-------------------------------------------------------------------------
     typedef std::list<IProcessListObject::Ptr> ProcessList;
     //-------------------------------------------------------------------------
-    enum Flags {Invisible=1};
     typedef boost::unordered_map<Vertex, unsigned int> FlagMap;
 private:
     //-------------------------------------------------------------------------
@@ -798,6 +798,47 @@ public:
      * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
      */
     int getFlag(SceneGraphElement el, Flags flag) const;
+    ///////////////////////////////////////////////////////////////////////////
+    // ISceneGraph adjustments
+    //-------------------------------------------------------------------------
+    virtual void getChildrenX(SceneGraphElement el,
+        Elements &c, bool deep = true ) const
+    {
+        getChildren(el, c, deep);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getChildrenByTagX(SceneGraphElement el, const Tag &tagName,
+        Elements &c, bool deep = true) const
+    {
+        getChildrenByTag(el, tagName, c, deep);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getChildrenByClassX(SceneGraphElement el, const Class &className,
+            Elements &c, bool deep = true) const
+    {
+        getChildrenByClass(el, className, c, deep);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getChildrenByIdX(SceneGraphElement el, const Id &id,
+        Elements &c, bool deep = true) const
+    {
+        getChildrenById(el, id, c, deep);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getClassNamesX(SceneGraphElement el, Classes &c) const
+    {
+        getClassNames(el, c);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getElementsByClassX(const Class & className, Elements &c)
+    {
+        getElementsByClass(className, c);
+    }
+    //-------------------------------------------------------------------------
+    virtual void getElementsByTagX(const Tag & tagName, Elements &c)
+    {
+        getElementsByTag(tagName, c);
+    }
 };
 //=============================================================================
 /**

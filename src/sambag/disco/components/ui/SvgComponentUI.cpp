@@ -19,14 +19,11 @@ SvgComponent::Ptr SvgComponentUIBase::getSvgComponent(AComponent::Ptr c) {
     return svg;
 }
 //-----------------------------------------------------------------------------
-svg::graphicElements::SceneGraph::Ptr
+svg::graphicElements::ISceneGraph::Ptr
 SvgComponentUIBase::getSceneGraph(SvgComponent::Ptr svg)
 {
-    if (!svg->getSvgObject()) {
-        throw std::runtime_error("no svg main object");
-    };
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     if (!g) {
         throw std::runtime_error("no related scenegraph");
     };
@@ -37,7 +34,7 @@ SvgComponent::Dummy::Ptr
 SvgComponentUIBase::getFirstChildOfClass(const std::string &className,
     SvgComponent::Dummy::Ptr c,
     SvgComponent::Ptr svg,
-    svg::graphicElements::SceneGraphPtr g)
+    svg::graphicElements::ISceneGraph::Ptr g)
 {
     if (!svg) {
         svg = getSvgComponent(c);
@@ -49,8 +46,8 @@ SvgComponentUIBase::getFirstChildOfClass(const std::string &className,
     if (!x) {
         throw std::runtime_error("no related drawable for '" + c->getName() + "'");
     };
-    std::list<IDrawable::Ptr> l;
-    g->getChildrenByClass(x, className, l);
+    svg::graphicElements::ISceneGraph::Elements l;
+    g->getChildrenByClassX(x, className, l);
     if (l.empty()) {
         throw std::runtime_error("SvgComponentUI: '" + className + "' not found");
     }

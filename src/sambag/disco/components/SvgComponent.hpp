@@ -17,6 +17,7 @@
 #include <sambag/com/ArbitraryType.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/function.hpp>
+#include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
 
 namespace sambag { namespace disco {
 namespace svg {
@@ -157,6 +158,11 @@ protected:
     SvgComponent();
     //-------------------------------------------------------------------------
     void setupSvgObject(svg::SvgRootPtr obj);
+    //-------------------------------------------------------------------------
+    /**
+     * @return the svg root object
+     */
+    svg::SvgRootPtr getSvgObject() const;
 private:
     //-------------------------------------------------------------------------
     void initExtendRegister();
@@ -180,6 +186,8 @@ private:
     //-------------------------------------------------------------------------
     void installExtension(DummyPtr dummy, const std::list<SvgClass> &classes);
 public:
+    //-------------------------------------------------------------------------
+    svg::graphicElements::ISceneGraph::Ptr getSceneGraph() const;
     //-------------------------------------------------------------------------
     const ExtensionRegister & getExtensionRegister() const;
     //-------------------------------------------------------------------------
@@ -212,11 +220,6 @@ public:
     void setStretchToFit(bool stretch);
     //-------------------------------------------------------------------------
     bool isStretchToFit() const {return stretchToFit;}
-    //-------------------------------------------------------------------------
-    /**
-     * @return the svg root object
-     */
-    svg::SvgRootPtr getSvgObject() const;
     //-------------------------------------------------------------------------
     virtual void doLayout();
     //-------------------------------------------------------------------------

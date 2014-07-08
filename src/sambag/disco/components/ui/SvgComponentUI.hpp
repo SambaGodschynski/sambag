@@ -15,12 +15,6 @@
 #include <sambag/disco/components/SvgComponent.hpp>
 
 namespace sambag { namespace disco {
-
-namespace svg { namespace graphicElements {
-    class SceneGraph;
-    typedef boost::shared_ptr<SceneGraph> SceneGraphPtr;
-}} // namespace(s)
-
 namespace components { namespace ui {
 //=============================================================================
 /** 
@@ -49,12 +43,12 @@ protected:
     //-------------------------------------------------------------------------
     SvgComponent::Ptr getSvgComponent(AComponent::Ptr c);
     //-------------------------------------------------------------------------
-    svg::graphicElements::SceneGraphPtr getSceneGraph(SvgComponent::Ptr svg);
+    svg::graphicElements::ISceneGraph::Ptr getSceneGraph(SvgComponent::Ptr svg);
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getFirstChildOfClass(const std::string &className,
         SvgComponent::Dummy::Ptr c,
         SvgComponent::Ptr svg = SvgComponent::Ptr(),
-        svg::graphicElements::SceneGraphPtr g = svg::graphicElements::SceneGraphPtr()
+        svg::graphicElements::ISceneGraph::Ptr g = svg::graphicElements::ISceneGraph::Ptr()
     );
 public:
 }; // SvgComponentUIBase

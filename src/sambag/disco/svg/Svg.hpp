@@ -87,6 +87,8 @@ public:
 	struct StrokeLineJoin_tag { typedef IDrawContext::LineJoin Type; };
 	//-------------------------------------------------------------------------
 	struct StrokeMiterLimit { typedef Number Type; };
+	//-------------------------------------------------------------------------
+	struct UserData_tag { typedef std::string Type; };
 private:
 	//-------------------------------------------------------------------------
 	/**
@@ -275,6 +277,14 @@ public:
 		GraphicElement::Ptr obj = getGraphicElement();
 		if (!obj) return;
 		copyStyleToGraphicElement(style);
+	}
+	//-------------------------------------------------------------------------
+	virtual void set( const UserData_tag::Type &data, const UserData_tag&)
+	{
+		using sambag::disco::svg::graphicElements::Style;
+		GraphicElement::Ptr obj = getGraphicElement();
+		if (!obj) return;
+		obj->setUserData(data);
 	}
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Font-Style
 	//-------------------------------------------------------------------------

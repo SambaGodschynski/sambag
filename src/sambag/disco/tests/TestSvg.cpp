@@ -113,11 +113,14 @@ void TestSvg::testSvgFirstElements() {
 	IImageSurface::Ptr surface = fac->createImageSurface(1200, 400);
 	IDrawContext::Ptr context = fac->createContext(surface);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> draw
-	svg::svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+	svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
 	g->draw(context);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> manipulate object
-	IDrawable::Ptr text = g->getElementById("#text");
+    using svg::graphicElements::GraphicElement;
+	GraphicElement::Ptr text =
+        boost::dynamic_pointer_cast<GraphicElement>(g->getElementById("#text"));
 	CPPUNIT_ASSERT(text);
+    CPPUNIT_ASSERT_EQUAL(std::string("HELLO"), text->getUserData());
 	svg::graphicElements::SceneGraph::StylePtr textStyle = g->getStyleRef(text);
 	textStyle->fillColor(ColorRGBA(0,1,0));
 	g->draw(context);

@@ -83,7 +83,9 @@ void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
     if (!d) {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
     }
-    g->setStyleTo(d, x);
+    SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+        g->setStyleTo(d, x);
+    SAMBAG_END_SYNCHRONIZED
     IPattern::Ptr fill = x.fillPattern();
     if (Super::getBackgroundPattern()!=fill) {
         Super::setBackground(fill);
@@ -114,15 +116,21 @@ void SvgComponent::Dummy::setVisible(bool b) {
     svg::graphicElements::SceneGraph::Ptr g =
         svg->getSvgObject()->getRelatedSceneGraph();
     IDrawable::Ptr d = drawable.lock();
-    g->setFlag(d, svg::graphicElements::SceneGraph::Invisible, !b);
-    g->invalidate();
-    svg->revalidate();
-    svg->redraw();
-    Super::setVisible(b);
+    SAMBAG_BEGIN_SYNCHRONIZED(svg->getTreeLock())
+        g->setFlag(d, svg::graphicElements::SceneGraph::Invisible, !b);
+        g->invalidate();
+        svg->revalidate();
+        svg->redraw();
+        Super::setVisible(b);
+    SAMBAG_END_SYNCHRONIZED
 }
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================
+//-----------------------------------------------------------------------------
+svg::graphicElements::ISceneGraph::Ptr SvgComponent::getSceneGraph() const {
+    return getSvgObject()->getRelatedSceneGraph();
+}
 //-----------------------------------------------------------------------------
 const SvgComponent::ExtensionRegister &
 SvgComponent::getExtensionRegister() const
@@ -160,7 +168,9 @@ void SvgComponent::postConstructor() {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::drawComponent (IDrawContext::Ptr context) {
-    svgImage->draw(context);
+    SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+        svgImage->draw(context);
+    SAMBAG_END_SYNCHRONIZED
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::setupSvgObject(svg::SvgRoot::Ptr obj) {
@@ -293,9 +303,11 @@ void SvgComponent::setStretchToFit(bool stretch) {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::doLayout() {
-    svgImage->setSize(getSize(), stretchToFit);
-    updateDummies();
-    updateDrawOrder();
+    SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+        svgImage->setSize(getSize(), stretchToFit);
+        updateDummies();
+        updateDrawOrder();
+    SAMBAG_END_SYNCHRONIZED
 }
 //------------------------------------------------------------------------------
 void SvgComponent::updateDrawOrder() {

@@ -86,12 +86,17 @@ void SvgButtonUI::mouseReleased(const events::MouseEvent &ev) {
 			return;
 	bool oldState = b->isButtonPressed();
 	b->setButtonPressed(false);
-	if (!oldState)
+	if (!oldState) {
 		return;
-	if (!getHandle()->contains(ev.getLocation())) {// mouse moved out
-		b->setButtonRollover(false);
-		return;
-	}
+    }
+// TODO: does not work properly because ev point
+// is wrong.
+//    Point2D p = ev.getSource()->getLocation();
+//    boost::geometry::add_point(p, ev.getLocation());
+//	if (!getHandle()->contains(p)) {// mouse moved out
+//		b->setButtonRollover(false);
+//		return;
+//	}
 	const sambag::com::ICommand::Function &c =
 			b->getButtonFunction();
 	if (c) {
@@ -99,7 +104,7 @@ void SvgButtonUI::mouseReleased(const events::MouseEvent &ev) {
 	}
 	b->EventSender<events::ActionEvent>::notifyListeners(
 			b.get(),
-			events::ActionEvent(getHandle())
+			events::ActionEvent(getMain())
 	);
 }
 //-----------------------------------------------------------------------------

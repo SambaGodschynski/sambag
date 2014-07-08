@@ -160,6 +160,8 @@ void SvgObject::registerAttributes( SvgObject::BuilderType &binder ) {
 	<StrokeLineJoin_tag::Type, StrokeLineJoin_tag, SvgObject>("stroke-linejoin");
 	binder.registerAttribute
 	<StrokeMiterLimit::Type, StrokeMiterLimit, SvgObject>("stroke-miterlimit");
+	binder.registerAttribute
+	<UserData_tag::Type, UserData_tag, SvgObject>("user-data");
 }
 
 }}} // namespaces

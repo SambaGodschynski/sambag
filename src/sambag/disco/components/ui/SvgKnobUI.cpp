@@ -106,7 +106,7 @@ void SvgKnobUI::mouseWheelRotated(const events::MouseEvent &ev) {
 void SvgKnobUI::onKnobStateChanged(const StateChanged &ev) {
     SvgComponent::Dummy::Ptr handle = getHandle();
     SvgComponent::Ptr svg = getSvgComponent(handle);
-    svg::graphicElements::SceneGraph::Ptr g = getSceneGraph(svg);
+    svg::graphicElements::ISceneGraph::Ptr g = getSceneGraph(svg);
     Coordinate max = getUIPropertyCached<DegreePropertyTag>(270.);
     g->setTransfomationTo(svg->getDrawable(handle),rotate2D(getModel()->getValue()*max));
     svg->redraw();

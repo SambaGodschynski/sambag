@@ -15,13 +15,18 @@
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-// Abstract base class for all graphic elements.
+/**
+ * @class GraphicElement
+ * @brief Abstract base class for all graphic elements.
+ */
 class GraphicElement : public virtual IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<GraphicElement> Ptr;
 private:
+    //-------------------------------------------------------------------------
+    std::string userData;
 protected:
 	//-------------------------------------------------------------------------
 	GraphicElement();
@@ -40,6 +45,15 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBoundingBox(IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    void setUserData(const std::string &x) {
+        userData = x;
+    }
+    //-------------------------------------------------------------------------
+    std::string getUserData() const {
+        return userData;
+    }
+    
 };
 
 }}}} // namespace
