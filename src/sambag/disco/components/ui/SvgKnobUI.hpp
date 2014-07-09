@@ -41,6 +41,8 @@ protected:
     virtual void installHandleListeners();
     //-------------------------------------------------------------------------
     virtual void installModelListeners();
+    //-------------------------------------------------------------------------
+    void rotateKnob(double value);
 private:
 	//-------------------------------------------------------------------------
 	Point2D firstPoint;

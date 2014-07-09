@@ -11,6 +11,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <sambag/disco/IDrawable.hpp>
+#include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
+
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
 typedef boost::shared_ptr<SvgRoot> SvgRootPtr;
@@ -37,6 +39,8 @@ public:
     svg::SvgRootPtr getSvgObject() const {
         return rootObject;
     }
+    //-------------------------------------------------------------------------
+    svg::graphicElements::ISceneGraph::Ptr getSceneGraph() const;
     //-------------------------------------------------------------------------
     static Ptr create();
     //-------------------------------------------------------------------------

@@ -19,10 +19,12 @@ void SvgKnobUI::installHandleListeners() {
 }
 //-----------------------------------------------------------------------------
 void SvgKnobUI::installModelListeners() {
-    getModel()->com::events::EventSender<StateChanged>::addTrackedEventListener(
+    Model::Ptr model = getModel();
+    model->com::events::EventSender<StateChanged>::addTrackedEventListener(
 		boost::bind(&SvgKnobUI::onKnobStateChanged, this, _2),
 		shared_from_this()
 	);
+    rotateKnob(getModel()->getValue());
 }
 //-----------------------------------------------------------------------------
 void SvgKnobUI::installListeners(AComponent::Ptr c) {
@@ -103,13 +105,20 @@ void SvgKnobUI::mouseWheelRotated(const events::MouseEvent &ev) {
 	getModel()->setValue( getModel()->getValue() + incr );
 }
 //-----------------------------------------------------------------------------
+void SvgKnobUI::rotateKnob(double value) {
+    try {
+        SvgComponent::Dummy::Ptr handle = getHandle();
+        SvgComponent::Ptr svg = getSvgComponent(handle);
+        svg::graphicElements::ISceneGraph::Ptr g = getSceneGraph(svg);
+        Coordinate max = getUIPropertyCached<DegreePropertyTag>(270.);
+        g->setTransfomationTo(svg->getDrawable(handle),rotate2D(value*max));
+        svg->redraw();
+    } catch(...) {
+    }
+}
+//-----------------------------------------------------------------------------
 void SvgKnobUI::onKnobStateChanged(const StateChanged &ev) {
-    SvgComponent::Dummy::Ptr handle = getHandle();
-    SvgComponent::Ptr svg = getSvgComponent(handle);
-    svg::graphicElements::ISceneGraph::Ptr g = getSceneGraph(svg);
-    Coordinate max = getUIPropertyCached<DegreePropertyTag>(270.);
-    g->setTransfomationTo(svg->getDrawable(handle),rotate2D(getModel()->getValue()*max));
-    svg->redraw();
+    rotateKnob(getModel()->getValue());
 }
 //-----------------------------------------------------------------------------
 void SvgKnobUI::mouseEntered(const events::MouseEvent &ev) {

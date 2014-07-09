@@ -17,12 +17,195 @@
 #include <algorithm>
 
 namespace sambag { namespace disco { namespace components {
+struct SvgComponent::SyncedSceneGraph :
+    public sambag::disco::svg::graphicElements::ISceneGraph
+{
+    typedef boost::shared_ptr<SyncedSceneGraph> Ptr;
+    typedef sambag::disco::svg::graphicElements::ISceneGraph Super;
+    Super::Ptr g;
+    mutable com::RecursiveMutex lock;
+    virtual void invalidate()
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->invalidate();
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void invalidateBounds()
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->invalidateBounds();
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void validate(const Dimension &size)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->validate(size);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void validateBounds(const Dimension &size)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->validateBounds(size);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual SceneGraphElement getRootElement()
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getRootElement();
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void draw(IDrawContext::Ptr cn)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->draw(cn);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual bool setTransfomationTo(SceneGraphElement el, const Matrix &m)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->setTransfomationTo(el, m);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual bool setStyleTo(SceneGraphElement el, const svg::graphicElements::Style &s)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->setStyleTo(el, s);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual bool setTransfomationRefTo(SceneGraphElement el, MatrixPtr m)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->setTransfomationRefTo(el, m);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual bool setStyleRefTo(SceneGraphElement el, StylePtr s)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->setStyleRefTo(el, s);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual MatrixPtr getTransformationRef(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getTransformationRef(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual Matrix getTransformationOf(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getTransformationOf(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual svg::graphicElements::Style getStyleOf(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getStyleOf(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual svg::graphicElements::Style calculateStyle(SceneGraphElement el)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->calculateStyle(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual Matrix calculateTransformation(SceneGraphElement el)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->calculateTransformation(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual StylePtr getStyleRef(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getStyleRef(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getChildrenX(SceneGraphElement el, Elements &c, bool deep = true ) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getChildrenX(el,c,deep);
+        SAMBAG_END_SYNCHRONIZED
+    }
+
+    virtual void getChildrenByTagX(SceneGraphElement el,
+        const Tag &tagName, Elements &c, bool deep = true) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getChildrenByTagX(el, tagName, c, deep);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getChildrenByClassX(SceneGraphElement el,
+        const Class &className,Elements &c, bool deep = true) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getChildrenByClassX(el, className, c, deep);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getChildrenByIdX(SceneGraphElement el, const Id &id,
+        Elements &c, bool deep = true) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getChildrenByIdX(el, id, c, deep);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getClassNamesX(SceneGraphElement el, Classes &c) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getClassNamesX(el, c);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getElementsByClassX(const Class & className, Elements &c)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getElementsByClassX(className, c);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void getElementsByTagX(const Tag & tagName, Elements &c)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->getElementsByTagX(tagName, c);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual Tag getTagName(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getTagName(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual Id getIdName(SceneGraphElement el) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getIdName(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual SceneGraphElement getElementById(const Id &id) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getElementById(id);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual Rectangle getBoundingBox(SceneGraphElement obj) const
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->getBoundingBox(obj);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void setFlag(SceneGraphElement el, Flags flag, bool val)
+    {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->setFlag(el, flag, val);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual int getFlag(SceneGraphElement el, Flags flag) const
+    {
+        return g->getFlag(el, flag);
+    }
+}; // SceneGraphAdapter
 
 namespace svgExtensions {
     extern void installSvgKnobExtension(SvgComponent::Dummy::Ptr);
     extern void installSvgButtonExtension(SvgComponent::Dummy::Ptr);
 }
-
 //=============================================================================
 //  Class Dummy
 //=============================================================================
@@ -128,8 +311,16 @@ void SvgComponent::Dummy::setVisible(bool b) {
 //  Class SvgComponent
 //=============================================================================
 //-----------------------------------------------------------------------------
+Dimension SvgComponent::getSvgSize() const {
+    return getSvgObject()->getSize().size();
+}
+//-----------------------------------------------------------------------------
 svg::graphicElements::ISceneGraph::Ptr SvgComponent::getSceneGraph() const {
-    return getSvgObject()->getRelatedSceneGraph();
+    if (!sceneGraph) {
+        sceneGraph = SyncedSceneGraph::Ptr(new SyncedSceneGraph());
+        sceneGraph->g = getSvgObject()->getRelatedSceneGraph();
+    }
+    return sceneGraph;
 }
 //-----------------------------------------------------------------------------
 const SvgComponent::ExtensionRegister &

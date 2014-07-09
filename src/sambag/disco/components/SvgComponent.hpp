@@ -19,12 +19,7 @@
 #include <boost/function.hpp>
 #include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
 
-namespace sambag { namespace disco {
-namespace svg {
-    class SvgRoot;
-    typedef boost::shared_ptr<SvgRoot> SvgRootPtr;
-}
-namespace components {
+namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
   * @class SvgComponent.
@@ -165,6 +160,9 @@ protected:
     svg::SvgRootPtr getSvgObject() const;
 private:
     //-------------------------------------------------------------------------
+    struct SyncedSceneGraph;
+    mutable boost::shared_ptr<SyncedSceneGraph> sceneGraph;
+    //-------------------------------------------------------------------------
     void initExtendRegister();
     //-------------------------------------------------------------------------
     ExtensionRegister exReg;
@@ -186,6 +184,8 @@ private:
     //-------------------------------------------------------------------------
     void installExtension(DummyPtr dummy, const std::list<SvgClass> &classes);
 public:
+    //-------------------------------------------------------------------------
+    Dimension getSvgSize() const;
     //-------------------------------------------------------------------------
     svg::graphicElements::ISceneGraph::Ptr getSceneGraph() const;
     //-------------------------------------------------------------------------

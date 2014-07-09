@@ -25,6 +25,10 @@ Image::Ptr Image::create() {
     return res;
 }
 //-----------------------------------------------------------------------------
+svg::graphicElements::ISceneGraph::Ptr Image::getSceneGraph() const {
+    return getSvgObject()->getRelatedSceneGraph();
+}
+//-----------------------------------------------------------------------------
 void Image::setSvgPath(const std::string &path) {
     svg::SvgBuilder builder;
     rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
