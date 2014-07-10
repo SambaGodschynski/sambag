@@ -12,6 +12,24 @@
 #include <sambag/disco/svg/graphicElements/SceneGraphHelper.hpp>
 #include <algorithm>
 
+
+namespace {
+
+const std::string SVG_FALLBACK="                                        \
+<?xml version=\"1.0\" standalone=\"no\"?>                               \
+<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"                        \
+\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">                   \
+<svg width=\"50\" height=\"50\"                                         \
+     xmlns=\"http://www.w3.org/2000/svg\"                               \
+     xmlns:xlink=\"http://www.w3.org/1999/xlink\"                       \
+     version=\"1.1\">                                                   \
+    <rect x='0' y='0' width='100%' height='100%'                        \
+	  stroke='none' fill='black'/>                                      \
+</svg>                                                                  \
+";
+
+} // namespace
+
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
 //  Class Image
@@ -31,8 +49,13 @@ svg::graphicElements::ISceneGraph::Ptr Image::getSceneGraph() const {
 //-----------------------------------------------------------------------------
 void Image::setSvgPath(const std::string &path) {
     svg::SvgBuilder builder;
-    rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
-                (builder.buildSvgFromFilename(path));
+    try {
+        rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
+                    (builder.buildSvgFromFilename(path));
+    } catch (...) {
+        setSvgString(SVG_FALLBACK);
+        throw;
+    }
 }
 //-----------------------------------------------------------------------------
 void Image::setSvgString(const std::string &str) {
@@ -57,6 +80,8 @@ void Image::setSize(const Dimension &r, bool stretchToFit) {
 //-----------------------------------------------------------------------------
 void Image::draw(IDrawContext::Ptr context) {
     svg::graphicElements::SceneGraph::Ptr g = rootObject->getRelatedSceneGraph();
+//    context->rect(Rectangle(rootObject->getSize().getDimension()));
+//    context->clip();
 	g->draw(context);
 }
 //-----------------------------------------------------------------------------

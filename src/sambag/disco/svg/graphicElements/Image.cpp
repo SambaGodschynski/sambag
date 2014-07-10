@@ -14,17 +14,20 @@
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
 namespace {
-    ISurface::Ptr _loadSvg(const std::string &path) {
+    ISurface::Ptr _loadSvg(const std::string &path, const Dimension &r) {
         try {
             svg::Image::Ptr image = svg::Image::create();
             image->setSvgPath(path);
+            image->setSize(r, true);
             ISurface::Ptr sf = getDiscoFactory()->createRecordingSurface();
             IDrawContext::Ptr cn = getDiscoFactory()->createContext(sf);
+            cn->rect(r);
+            cn->clip();
             image->draw(cn);
             return sf;
         } catch(...) {
-            return ISurface::Ptr();
         }
+        return ISurface::Ptr();
     }
 }
 
@@ -32,9 +35,9 @@ namespace {
 // class Image
 //=============================================================================
 //-----------------------------------------------------------------------------
-void Image::loadImage() {
+void Image::loadImage(const Dimension &r) {
     if (boost::filesystem::path(uri).extension().string()==".svg") {
-        image = _loadSvg(uri);
+        image = _loadSvg(uri, r);
         return;
     }
 	com::FileHandler::Ptr fh = com::FileHandler::create(uri);
@@ -52,14 +55,14 @@ void Image::setSurface(ISurface::Ptr sf) {
 }
 //-----------------------------------------------------------------------------
 void Image::draw( IDrawContext::Ptr cn ) {
+    Rectangle outline = this->outline.solve(cn);
 	if (!image) {
-		loadImage();
+		loadImage(outline.size());
 		if (!image) { // loading failed
 			drawPlaceholder(cn);
 			return;
 		}
 	}
-	Rectangle outline = this->outline.solve(cn);
 	cn->translate(outline.x0());
 	Rectangle orgSz = image->getSize();
 	cn->scale( Point2D(

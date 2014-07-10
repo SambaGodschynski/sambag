@@ -6,6 +6,7 @@
   <desc>This graphic links to an external image
   </desc>
   <rect width="1200" height="400" fill="white"/>
+  <image xlink:href="frx.svg" x="0" y="0" width="1200" height="400"/>
   <image x="200" y="200" width="100px" height="100px"
          xlink:href="disco-floor.png">
     <title>My image</title>
