@@ -57,6 +57,20 @@ public:
 	// special case color none: its not the same like NO_COLOR.
 	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
 	static const ColorRGBA NONE_COLOR;
+    struct NonePattern : public IPattern {
+        typedef boost::shared_ptr<NonePattern> Ptr;
+        virtual void setOpacity(const Number &v) {}
+        virtual Number getOpacity() const { return 0; }
+        virtual void setMatrix (const sambag::math::Matrix &m) {}
+        virtual sambag::math::Matrix getMatrix() const { return NULL_MATRIX; }
+        virtual void setExtendType(Extend type) {}
+        virtual Extend getExtendType() const { return DISCO_EXTEND_NONE; }
+        virtual ColorRGBA getColor() const { return NONE_COLOR; }
+        virtual Rectangle getBounds() const { return NULL_RECTANGLE; }
+        static Ptr create() {
+            return Ptr( new NonePattern() );
+        }
+    };
 private:
 	//-------------------------------------------------------------------------
 	FLYWEIGHT(Coordinate, _strokeWidth);
@@ -211,11 +225,19 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Style & fillColor(const ColorRGBA &col) {
+        if (col==NONE_COLOR) {
+            _fillPattern = NonePattern::create();
+            return *this;
+        }
 		_fillPattern = getDiscoFactory()->createSolidPattern(col);
 		return *this;
 	}
 	//-------------------------------------------------------------------------
 	Style & strokeColor(const ColorRGBA &col) {
+        if (col==NONE_COLOR) {
+            _fillPattern = NonePattern::create();
+            return *this;
+        }
 		_strokePattern = getDiscoFactory()->createSolidPattern(col);
 		return *this;
 	}
