@@ -26,6 +26,7 @@
 #include <sambag/com/ArbitraryType.hpp>
 #include <sstream>
 #include <sambag/com/Thread.hpp>
+#include "HitStrategy.hpp"
 
 /**
  *  +++
@@ -125,6 +126,8 @@ public:
 	static const std::string PROPERTY_ICON;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_ENABLEDEVENTS;
+	//-------------------------------------------------------------------------
+	static const std::string PROPERTY_HIT_STRATEGY;
 	//-------------------------------------------------------------------------
 	enum Flag {
 		IS_DOUBLE_BUFFERED = 0,
@@ -573,12 +576,20 @@ public:
 private:
 	//-------------------------------------------------------------------------
 	float xalignment, yalignment;
+    //-------------------------------------------------------------------------
+    HitStrategy::Ptr hits;
 public:
-	//-----------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    void setHitStrategy(HitStrategy::Ptr x);
+    //-------------------------------------------------------------------------
+    HitStrategy::Ptr getHitStrategy() const {
+        return hits;
+    }
+	//-------------------------------------------------------------------------
 	virtual bool isDrawing() const;
-	//-----------------------------------------------------------------------------
-	virtual bool contains(Point2D p) const;
-	//-----------------------------------------------------------------------------
+	//-------------------------------------------------------------------------
+	virtual bool contains(const Point2D &p) const;
+	//-------------------------------------------------------------------------
 	/**
 	 * Checks whether this component "contains" the specified point,
 	 * where the point's <i>x</i> and <i>y</i> coordinates are defined

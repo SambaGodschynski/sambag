@@ -50,6 +50,10 @@
       <circle cx="-18px" cy="0" r="7" transform="rotate(-45)" fill="blue"/>
     </g>
   </g>
+  <rect transform="translate(390,270)rotate(45,30,30)"
+	fill="none" stroke="blue" stroke-width="4"
+	width="60px" height="60px"
+	/>
 
   <g class="disco disco-button" 
      transform="translate(170,300)"
@@ -73,7 +77,7 @@
 	</text>
       </g>
       <g class="disco disco-button-handle-pressed"
-	 transform="rotate(10, 35, 15)">
+	 transform="rotate(45, 35, 15)">
 	<rect x="0" y="0" 
 	      width="70" height="30" 
 	      rx="4" ry="4"
@@ -84,6 +88,15 @@
       </g>
     </g>
   </g>
+
+
+
+	<rect x="0" y="0" class="disco" transform="translate(120, 450)rotate(45, 35, 15)"
+	      width="70" height="30" 
+	      rx="4" ry="4"
+	      fill="darkgrey"/>
+
+
 
 
   <g class="disco" id="invisible" 

@@ -213,11 +213,12 @@ namespace svgExtensions {
 const std::string SvgComponent::Dummy::PROPERTY_MODEL = "property model";
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
-//    Rectangle bounds = context->clipExtends();
-//    context->rect(bounds);
-//    context->setStrokeColor(ColorRGBA(1,0,0));
-//    context->setStrokeWidth(2);
-//    context->stroke();
+    Rectangle bounds = context->clipExtends();
+    bounds.inset(-2,-2);
+    context->rect(bounds);
+    context->setStrokeColor(ColorRGBA(1,0,0));
+    context->setStrokeWidth(2);
+    context->stroke();
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
@@ -518,16 +519,17 @@ void SvgComponent::updateDrawOrder() {
         }
     }
 }
-//------------------------------------------------------------------------------
-AComponentPtr SvgComponent::findComponentAt (const Point2D &p, bool includeSelf) 
+//-----------------------------------------------------------------------------
+AComponentPtr SvgComponent::findComponentAt (const Point2D &_p, bool includeSelf)
 {
     AComponent::Ptr res;
     BOOST_FOREACH(AComponent::Ptr x, getComponents()) {
         if (!x->isVisible() || !x->isEnabled()) {
             continue;
         }
-        const Rectangle &a = x->getBounds();
-        if (a.contains(p)) {
+        Point2D p = _p;
+        boost::geometry::subtract_point(p, x->getLocation());
+        if (x->contains(p)) {
             if (!res) {
                 res=x;
                 continue;

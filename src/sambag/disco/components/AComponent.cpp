@@ -77,6 +77,8 @@ const std::string AComponent::PROPERTY_ICON = "icon";
 //-----------------------------------------------------------------------------
 const std::string AComponent::PROPERTY_ENABLEDEVENTS = "enabled events";
 //-----------------------------------------------------------------------------
+const std::string AComponent::PROPERTY_HIT_STRATEGY = "hit strategy";
+//-----------------------------------------------------------------------------
 AComponent::AComponent() : flags(0), 
 	enabledEvents(0), 
 	xalignment(CENTER_ALIGNMENT), 
@@ -101,7 +103,10 @@ void AComponent::checkTreeLock() {
 				"This function should be called while holding treeLock");
 }
 //-----------------------------------------------------------------------------
-bool AComponent::contains(Point2D p) const {
+bool AComponent::contains(const Point2D &p) const {
+    if (hits) {
+        return (*hits)(self.lock(), p);
+    }
 	if (ui)
 		return ui->contains(getPtr(), p);
 	const Coordinate &width = bounds.getWidth();
@@ -1285,5 +1290,13 @@ com::ThreadId AComponent::getWindowThreadId() const {
         return com::ThreadId();
     }
     return win->getThreadId();
+}
+//-----------------------------------------------------------------------------
+void AComponent::setHitStrategy(HitStrategy::Ptr x) {
+    SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
+        HitStrategy::Ptr old = hits;
+        hits = x;
+        firePropertyChanged(PROPERTY_HIT_STRATEGY, old, hits);
+    SAMBAG_END_SYNCHRONIZED
 }
 }}} // namespace(s)

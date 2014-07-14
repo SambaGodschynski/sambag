@@ -18,7 +18,6 @@
 #include <boost/unordered_map.hpp>
 #include <boost/function.hpp>
 #include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
-
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
 /** 
@@ -46,6 +45,7 @@ public:
         typedef boost::weak_ptr<Dummy> WPtr;
         //---------------------------------------------------------------------
         static const std::string PROPERTY_MODEL;
+        static const std::string PROPERTY_HIT_STRATEGY;
     protected:
         //---------------------------------------------------------------------
         Dummy() {

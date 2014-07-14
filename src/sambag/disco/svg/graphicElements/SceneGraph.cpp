@@ -28,7 +28,7 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
     using namespace sambag::math;
     context->save();
     if (transformation) {
-	context->transform( *(transformation.get()) );
+        context->transform( *(transformation.get()) );
     }
     IPattern::Ptr fpat, spat;
     if (style) {
@@ -98,31 +98,45 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
 Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
     namespace ublas=boost::numeric::ublas;
     using namespace sambag::math;
-    
-    IPattern::Ptr fpat, spat;
+    Rectangle res = context->clipExtends();
     if (style) {
         style->intoContext(context);
     }
+    {
+        /*
+            cairo's path_extends returns user space values.
+            so when we append all the transformation the resulting
+            bounds will not fit (especially when rotation is involved).
+            A workaround would be to draw the path without any
+            transformation and convert the resulting rect
+            via userToDevice(). One problem still exists:
+            When rotating a circle the resulting rect will be roatated
+            which increases the actual bounding area.
+        */
+        IDrawContext::Ptr context = getDiscoFactory()->createContext();
+        context->rect(res);
+        context->clip();
+        if (style) {
+            style->intoContext(context);
+        }
+        Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
+        if (!shape) {
+            Rectangle b = drawable->getBoundingBox(context);
+            context->setStrokeColor(ColorRGBA(0,0,0));
+            context->setStrokeWidth(1.0);
+            context->rect(b);
+        } else {
+            shape->shape(context);
+        }
+        res = context->pathExtends();
     
-    Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
-    if (!shape) {
-        Rectangle b = drawable->getBoundingBox(context);
-        context->setStrokeColor(ColorRGBA(0,0,0));
-        context->setStrokeWidth(1.0);
-        context->rect(b);
-    } else {
-        shape->shape(context);
+        context->stroke();
     }
-    Rectangle res = context->pathExtends();
     res.inset(context->getStrokeWidth(), context->getStrokeWidth());
-    context->stroke();
     context->save();
     if (transformation) {
         context->transform( *(transformation.get()) );
     }
-    
-    // only need to restore state if no children in scenegraph.
-    // otherwise state will be restored later with RestoreContextState.
     Point2D lt = res.x0();
     Point2D lb(res.x0().x(), res.x1().y());
     Point2D rb=res.x1();

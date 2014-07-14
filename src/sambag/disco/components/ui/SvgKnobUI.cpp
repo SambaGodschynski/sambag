@@ -4,9 +4,27 @@
 #include <sambag/disco/svg/SvgRoot.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <exception>
+#include <sambag/disco/components/HitStrategy.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui {
+namespace {
+    struct KnobHitStrategy : public HitStrategy {
+        typedef boost::shared_ptr<KnobHitStrategy> Ptr;
+        virtual bool operator()(AComponentPtr c, const Point2D &p);
+        static Ptr create() {
+            return Ptr(new KnobHitStrategy());
+        }
+    };
+    bool KnobHitStrategy::operator()(AComponentPtr c, const Point2D &p)
+    {
+        Point2D center(c->getWidth()/2., c->getHeight()/2.);
+        Coordinate x = p.x() - center.x();
+        Coordinate y = p.y() - center.y();
+        Coordinate radius = c->getHeight()/2;
+        return x*x + y*y <= radius*radius;
+    }
+} // namespace
 //=============================================================================
 // class SvgKnobUI : public AComponentUI
 //=============================================================================
@@ -42,6 +60,7 @@ void SvgKnobUI::installUI(AComponentPtr c) {
     installModel(main);
    	SvgComponent::Dummy::Ptr handle =
         getFirstChildOfClass(".disco-knob-handle", main);
+    handle->setHitStrategy(KnobHitStrategy::create());
     this->handle = handle;
     getModel()->setMaximum(1);
     getModel()->setMinimum(0);
