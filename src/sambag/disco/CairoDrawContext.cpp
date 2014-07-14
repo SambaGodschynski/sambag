@@ -263,6 +263,15 @@ void CairoDrawContext::stroke() {
 	SAMBAG_CHECK_CONTEXT_STATE(context);
 }
 //-----------------------------------------------------------------------------
+void CairoDrawContext::strokePreserve() {
+	if (patternInUse != STROKE) {
+		setStrokePattern();
+		patternInUse = STROKE;
+	}
+	cairo_stroke_preserve(context);
+	SAMBAG_CHECK_CONTEXT_STATE(context);
+}
+//-----------------------------------------------------------------------------
 void CairoDrawContext::fill() {
 	if (patternInUse != FILL) {
 		setFillPattern();
@@ -612,5 +621,13 @@ void CairoDrawContext::userToDeviceDistance(Point2D &inOut) {
     cairo_user_to_device_distance(context, &x, &y);
     inOut.x(x);
     inOut.y(y);
+}
+//-----------------------------------------------------------------------------
+bool CairoDrawContext::inStroke(const Point2D &p) const {
+    return cairo_in_stroke(context, p.x(), p.y());
+}
+//-----------------------------------------------------------------------------
+bool CairoDrawContext::inFill(const Point2D &p) const {
+    return cairo_in_fill(context, p.x(), p.y());
 }
 }} // namespaces

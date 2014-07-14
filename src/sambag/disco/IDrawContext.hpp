@@ -98,6 +98,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void stroke() = 0;
 	//-------------------------------------------------------------------------
+	virtual void strokePreserve() = 0;
+	//-------------------------------------------------------------------------
 	virtual void drawSurface(ISurface::Ptr, Number opacity = 1.0) = 0;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Text
 	struct TextExtends {
@@ -226,6 +228,10 @@ public:
 	virtual Rectangle pathExtends() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void copyTo(IDrawContext::Ptr cn) const = 0;
+    //-------------------------------------------------------------------------
+    virtual bool inStroke(const Point2D &p) const = 0;
+    //-------------------------------------------------------------------------
+    virtual bool inFill(const Point2D &p) const = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * copy specific area of context into given context.

@@ -65,6 +65,7 @@ public: /*Interface impl.*/
 	virtual void fill() { cn->fill(); }
 	virtual void fillPreserve() { cn->fillPreserve(); }
 	virtual void stroke() { cn->stroke(); }
+	virtual void strokePreserve() { cn->strokePreserve(); }
 	virtual void drawSurface(ISurface::Ptr s, Number opacity = 1.0) {
 		cn->drawSurface(s, opacity);
 	}
@@ -159,6 +160,12 @@ public: /*Interface impl.*/
     virtual void deviceToUser(Point2D &io) { cn->deviceToUser(io); }
     virtual void deviceToUserDistance(Point2D &io) { cn->deviceToUserDistance(io); }
     virtual void userToDeviceDistance(Point2D &io) { cn->userToDeviceDistance(io); }
+    virtual bool inStroke(const Point2D &p) const {
+        return cn->inStroke(p);
+    }
+    virtual bool inFill(const Point2D &p) const {
+        return cn->inFill(p);
+    }
 public:
 	//-------------------------------------------------------------------------
 	IDrawContext::Ptr getPtr() const {
