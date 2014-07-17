@@ -64,6 +64,7 @@ struct DoNothing : public IProcessListObject {
     //-------------------------------------------------------------------------
     virtual ~DoNothing(){}
 };
+class SceneGraph;
 //=============================================================================
 /**
  * @class performs a iDrawObject->draw()
@@ -87,14 +88,20 @@ struct ProcessDrawable : public IProcessListObject {
     //-------------------------------------------------------------------------
     boost::shared_ptr<Matrix> transformation;
     //-------------------------------------------------------------------------
+    const SceneGraph *sceneGraph;
+    //-------------------------------------------------------------------------
     ProcessDrawable(IDrawable::Ptr drawable,
 		    bool resetContextState,
 		    boost::shared_ptr<Style> style,
-		    boost::shared_ptr<Matrix> transformation ) :
-	drawable(drawable),
-	resetContextState(resetContextState),
-	style(style),
-	transformation(transformation){}
+		    boost::shared_ptr<Matrix> transformation,
+            const SceneGraph *sceneGraph ) :
+        drawable(drawable),
+        resetContextState(resetContextState),
+        style(style),
+        transformation(transformation),
+        sceneGraph(sceneGraph)
+    {
+    }
     //-------------------------------------------------------------------------
     IDrawable::Ptr getDrawable() const {
         return drawable;
@@ -106,15 +113,17 @@ struct ProcessDrawable : public IProcessListObject {
     }
     //-------------------------------------------------------------------------
     static Ptr create(
-	IDrawable::Ptr drawable,
-	bool resetContextState,
-	boost::shared_ptr<Style> style,
-	boost::shared_ptr<Matrix> transformation )
+        IDrawable::Ptr drawable,
+        bool resetContextState,
+        boost::shared_ptr<Style> style,
+        boost::shared_ptr<Matrix> transformation,
+        const SceneGraph *sceneGraph )
 	{
 	    Ptr neu( new ProcessDrawable(drawable,
 					 resetContextState,
 					 style,
-					 transformation));
+					 transformation,
+                     sceneGraph));
 	    return neu;
 	}
     //-------------------------------------------------------------------------
@@ -190,6 +199,8 @@ public:
         STYLE,
         CLASS
     };
+    //-------------------------------------------------------------------------
+    enum Flags {Invisible=1};
     //-------------------------------------------------------------------------
     struct node_object_t { typedef boost::vertex_property_tag kind; };
     //-------------------------------------------------------------------------
@@ -788,7 +799,7 @@ public:
     void setFlag(const Vertex &v, Flags flag, bool val);
     //-------------------------------------------------------------------------
     /**
-     * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
+     * @return 1 if flag is set to true, 0 if set to false, -1 if not set.
      */
     int getFlag(const Vertex &v, Flags flag) const;
     //-------------------------------------------------------------------------
@@ -798,6 +809,17 @@ public:
      * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
      */
     int getFlag(SceneGraphElement el, Flags flag) const;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief Sets a element visible or not. If an element has children then
+     *        they will be affected too.
+     */
+    void setVisible(SceneGraphElement el, bool val);
+    //-------------------------------------------------------------------------
+    /**
+     * @return true if an element is visible.
+     */
+    bool isVisible(SceneGraphElement el) const;
     ///////////////////////////////////////////////////////////////////////////
     // ISceneGraph adjustments
     //-------------------------------------------------------------------------
@@ -856,20 +878,12 @@ private:
     const SceneGraph &sceneGraph;
     //-------------------------------------------------------------------------
     typedef SceneGraph::Vertex Vertex;
-    Vertex startVertex, invisible;
+    Vertex startVertex;
     //-------------------------------------------------------------------------
     bool startVertexFinished;
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void finish_drawable(const Vertex &v, Graph& g) {
-        if (invisible!=SceneGraph::NULL_VERTEX) {
-            // we are in an invisible path
-            if (invisible==v) {
-                // the invisible origin, we're done now
-                invisible = SceneGraph::NULL_VERTEX;
-            }
-            return;
-        }
         typename SceneGraph::SceneGraphElement obj =
             sceneGraph.getSceneGraphElement(v);
         if (!obj) {
@@ -879,20 +893,14 @@ private:
         ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
                                 numOutEdges==0,
                                 sceneGraph.getStyleRef(obj),
-                                sceneGraph.getTransformationRef(obj)
+                                sceneGraph.getTransformationRef(obj),
+                                &sceneGraph
 	    );
         container.push_back(cmd);
     }
     //-------------------------------------------------------------------------
     template <class Vertex, class Graph>
     void discover_drawable(const Vertex &v, Graph &g) {
-        if (invisible!=SceneGraph::NULL_VERTEX) {
-            return;
-        }
-        if (sceneGraph.getFlag(v, SceneGraph::Invisible)==1) {
-            invisible=v;
-            return;
-        }
         // only need to restore if has child objects in graph
         if ( boost::out_degree(v, g) > 0 ) {
             RestoreContextState::Ptr re = RestoreContextState::create();
@@ -905,7 +913,6 @@ public:
 	container(container),
 	sceneGraph(sc),
 	startVertex(startVertex),
-    invisible(SceneGraph::NULL_VERTEX),
 	startVertexFinished(false)
 	{
 	}

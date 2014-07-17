@@ -190,15 +190,16 @@ struct SvgComponent::SyncedSceneGraph :
             return g->getBoundingBox(obj);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual void setFlag(SceneGraphElement el, Flags flag, bool val)
-    {
+    virtual void setVisible(SceneGraphElement el, bool val) {
         SAMBAG_BEGIN_SYNCHRONIZED(lock)
-            g->setFlag(el, flag, val);
+            g->setVisible(el, val);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual int getFlag(SceneGraphElement el, Flags flag) const
-    {
-        return g->getFlag(el, flag);
+
+    virtual bool isVisible(SceneGraphElement el) const {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->isVisible(el);
+        SAMBAG_END_SYNCHRONIZED
     }
 }; // SceneGraphAdapter
 
@@ -213,12 +214,12 @@ namespace svgExtensions {
 const std::string SvgComponent::Dummy::PROPERTY_MODEL = "property model";
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
-    Rectangle bounds = context->clipExtends();
-    bounds.inset(-2,-2);
-    context->rect(bounds);
-    context->setStrokeColor(ColorRGBA(1,0,0));
-    context->setStrokeWidth(2);
-    context->stroke();
+//    Rectangle bounds = context->clipExtends();
+//    bounds.inset(-2,-2);
+//    context->rect(bounds);
+//    context->setStrokeColor(ColorRGBA(1,0,0));
+//    context->setStrokeWidth(2);
+//    context->stroke();
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
@@ -300,13 +301,9 @@ void SvgComponent::Dummy::setVisible(bool b) {
     svg::graphicElements::SceneGraph::Ptr g =
         svg->getSvgObject()->getRelatedSceneGraph();
     IDrawable::Ptr d = drawable.lock();
-    SAMBAG_BEGIN_SYNCHRONIZED(svg->getTreeLock())
-        g->setFlag(d, svg::graphicElements::SceneGraph::Invisible, !b);
-        g->invalidate();
-        svg->revalidate();
-        svg->redraw();
-        Super::setVisible(b);
-    SAMBAG_END_SYNCHRONIZED
+    g->setVisible(d, b);
+    svg->redraw();
+    Super::setVisible(b);
 }
 //=============================================================================
 //  Class SvgComponent

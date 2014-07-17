@@ -26,6 +26,13 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 void ProcessDrawable::perform(IDrawContext::Ptr context) {
     namespace ublas=boost::numeric::ublas;
     using namespace sambag::math;
+    if (!sceneGraph->isVisible(drawable)) {
+        if (!resetContextState) {
+            // we have to keep the save/restore order
+            context->save();
+        }
+        return;
+    }
     context->save();
     if (transformation) {
         context->transform( *(transformation.get()) );
@@ -569,5 +576,21 @@ void SceneGraph::setFlag(SceneGraphElement el, Flags flag, bool val) {
 //-----------------------------------------------------------------------------
 int SceneGraph::getFlag(SceneGraphElement el, Flags flag) const {
     return getFlag(getRelatedVertex(el), flag);
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::setVisible(SceneGraphElement el, bool val) {
+    if (!el) {
+        return;
+    }
+    setFlag(el, Invisible, !val);
+    std::vector<SceneGraphElement> children;
+    getChildren(el, children, true);
+    BOOST_FOREACH(SceneGraphElement x, children) {
+        setFlag(x, Invisible, !val);
+    }
+}
+//-----------------------------------------------------------------------------
+bool SceneGraph::isVisible(SceneGraphElement el) const {
+    return getFlag(el, Invisible) != 1;
 }
 }}}} // namespaces

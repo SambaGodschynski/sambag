@@ -26,8 +26,6 @@ public:
     //-------------------------------------------------------------------------
     virtual ~ISceneGraph() {}
     //-------------------------------------------------------------------------
-    enum Flags {Invisible=1};
-    //-------------------------------------------------------------------------
     typedef boost::shared_ptr<ISceneGraph> Ptr;
     //-------------------------------------------------------------------------
     typedef boost::weak_ptr<ISceneGraph> WPtr;
@@ -159,12 +157,16 @@ public:
      */
     virtual Rectangle getBoundingBox(SceneGraphElement obj) const = 0;
     //-------------------------------------------------------------------------
-    virtual void setFlag(SceneGraphElement el, Flags flag, bool val) = 0;
+    /**
+     * @brief Sets a element visible or not. If an element has children then
+     *        they will be affected too.
+     */
+    virtual void setVisible(SceneGraphElement el, bool val) = 0;
     //-------------------------------------------------------------------------
     /**
-     * @return 1 if flag is set to true, 0 if set to false, -1 if not set. 
+     * @return true if an element is visible.
      */
-    virtual int getFlag(SceneGraphElement el, Flags flag) const = 0;
+    virtual bool isVisible(SceneGraphElement el) const = 0;
 };
 }}}} // namespace
 

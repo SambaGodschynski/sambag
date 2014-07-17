@@ -12,16 +12,24 @@ namespace {
     struct KnobHitStrategy : public HitStrategy {
         typedef boost::shared_ptr<KnobHitStrategy> Ptr;
         virtual bool operator()(AComponentPtr c, const Point2D &p);
-        static Ptr create() {
-            return Ptr(new KnobHitStrategy());
-        }
+        static Ptr get();
+    private:
+        static Ptr _instance;
     };
+    KnobHitStrategy::Ptr KnobHitStrategy::_instance;
+    KnobHitStrategy::Ptr KnobHitStrategy::get()
+    {
+        if (!_instance) {
+            _instance = Ptr(new KnobHitStrategy());
+        }
+        return _instance;
+    }
     bool KnobHitStrategy::operator()(AComponentPtr c, const Point2D &p)
     {
         Point2D center(c->getWidth()/2., c->getHeight()/2.);
         Coordinate x = p.x() - center.x();
         Coordinate y = p.y() - center.y();
-        Coordinate radius = c->getHeight()/2;
+        Coordinate radius = c->getHeight()/2. * 0.7;
         return x*x + y*y <= radius*radius;
     }
 } // namespace
@@ -58,9 +66,10 @@ void SvgKnobUI::installUI(AComponentPtr c) {
     }
     this->main = main;
     installModel(main);
+    main->setHitStrategy(KnobHitStrategy::get());
    	SvgComponent::Dummy::Ptr handle =
         getFirstChildOfClass(".disco-knob-handle", main);
-    handle->setHitStrategy(KnobHitStrategy::create());
+    handle->setHitStrategy(KnobHitStrategy::get());
     this->handle = handle;
     getModel()->setMaximum(1);
     getModel()->setMinimum(0);
