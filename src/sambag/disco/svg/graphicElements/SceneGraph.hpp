@@ -34,12 +34,20 @@ struct IProcessListObject {
     virtual void perform(IDrawContext::Ptr context) = 0;
     //-------------------------------------------------------------------------
     /**
+     * @brief we want to skip a drawable, but we cannot ignore all
+     *        process steps, so we need this skip call.
+     */
+    virtual void skip(IDrawContext::Ptr context) = 0;
+    //-------------------------------------------------------------------------
+    /**
      * for debugging and testing
      * @return
      */
     virtual std::string toString() const = 0;
     //-------------------------------------------------------------------------
     virtual ~IProcessListObject() {}
+    //-------------------------------------------------------------------------
+    virtual IDrawable::Ptr getDrawable() const { return IDrawable::Ptr(); }
 };
 //=============================================================================
 /**
@@ -61,6 +69,8 @@ struct DoNothing : public IProcessListObject {
     }
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context) {}
+    //-------------------------------------------------------------------------
+    virtual void skip(IDrawContext::Ptr context) {}
     //-------------------------------------------------------------------------
     virtual ~DoNothing(){}
 };
@@ -88,18 +98,14 @@ struct ProcessDrawable : public IProcessListObject {
     //-------------------------------------------------------------------------
     boost::shared_ptr<Matrix> transformation;
     //-------------------------------------------------------------------------
-    const SceneGraph *sceneGraph;
-    //-------------------------------------------------------------------------
     ProcessDrawable(IDrawable::Ptr drawable,
 		    bool resetContextState,
 		    boost::shared_ptr<Style> style,
-		    boost::shared_ptr<Matrix> transformation,
-            const SceneGraph *sceneGraph ) :
+		    boost::shared_ptr<Matrix> transformation) :
         drawable(drawable),
         resetContextState(resetContextState),
         style(style),
-        transformation(transformation),
-        sceneGraph(sceneGraph)
+        transformation(transformation)
     {
     }
     //-------------------------------------------------------------------------
@@ -116,18 +122,18 @@ struct ProcessDrawable : public IProcessListObject {
         IDrawable::Ptr drawable,
         bool resetContextState,
         boost::shared_ptr<Style> style,
-        boost::shared_ptr<Matrix> transformation,
-        const SceneGraph *sceneGraph )
+        boost::shared_ptr<Matrix> transformation)
 	{
 	    Ptr neu( new ProcessDrawable(drawable,
 					 resetContextState,
 					 style,
-					 transformation,
-                     sceneGraph));
+					 transformation));
 	    return neu;
 	}
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    virtual void skip(IDrawContext::Ptr context);
     //-------------------------------------------------------------------------
     virtual Rectangle getBounds(IDrawContext::Ptr context) const;
 };
@@ -155,6 +161,10 @@ struct RestoreContextState : public IProcessListObject {
     }
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    virtual void skip(IDrawContext::Ptr context) {
+        perform(context);
+    }
 };
 
 class GraphicElement;
@@ -200,7 +210,10 @@ public:
         CLASS
     };
     //-------------------------------------------------------------------------
-    enum Flags {Invisible=1};
+    enum Flags {
+        Invisible=1,
+        Dirty
+    };
     //-------------------------------------------------------------------------
     struct node_object_t { typedef boost::vertex_property_tag kind; };
     //-------------------------------------------------------------------------
@@ -811,7 +824,7 @@ public:
     int getFlag(SceneGraphElement el, Flags flag) const;
     //-------------------------------------------------------------------------
     /**
-     * @brief Sets a element visible or not. If an element has children then
+     * @brief Set an element visible or not. If an element has children then
      *        they will be affected too.
      */
     void setVisible(SceneGraphElement el, bool val);
@@ -820,6 +833,17 @@ public:
      * @return true if an element is visible.
      */
     bool isVisible(SceneGraphElement el) const;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief Marks an element for redraw
+     */
+    void setDirty(SceneGraphElement el, bool val);
+    //-------------------------------------------------------------------------
+    /**
+     * @brief Marks an element for redraw
+     * @return true if an element is marked for redraw
+     */
+    bool isDirty(SceneGraphElement el) const;
     ///////////////////////////////////////////////////////////////////////////
     // ISceneGraph adjustments
     //-------------------------------------------------------------------------
@@ -893,8 +917,7 @@ private:
         ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
                                 numOutEdges==0,
                                 sceneGraph.getStyleRef(obj),
-                                sceneGraph.getTransformationRef(obj),
-                                &sceneGraph
+                                sceneGraph.getTransformationRef(obj)
 	    );
         container.push_back(cmd);
     }

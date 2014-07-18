@@ -13,12 +13,20 @@ namespace sambag { namespace disco {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Shape::draw(IDrawContext::Ptr context) {
-    if ( context->isFilled() ) {
-        shape(context);
-		context->fill();
+    bool filled = context->isFilled();
+    bool stroked = context->isStroked();
+    if (!filled && !stroked) {
+        return;
+    }
+    shape(context);
+    if (filled) {
+        if (stroked) {
+            context->fillPreserve();
+        } else {
+            context->fill();
+        }
 	}
-	if ( context->isStroked() ) {
-		shape(context);
+	if (stroked) {
 		context->stroke();
 	}
 }

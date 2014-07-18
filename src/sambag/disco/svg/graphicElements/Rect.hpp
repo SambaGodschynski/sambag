@@ -11,10 +11,14 @@
 #include "GraphicElement.hpp"
 #include <sambag/disco/svg/units/Units.hpp>
 #include <sambag/disco/Shape.hpp>
+#include "CachedPath.hpp"
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 //=============================================================================
-class Rect : public virtual GraphicElement, public virtual Shape {
+class Rect : public virtual GraphicElement,
+             public virtual Shape,
+             public CachedPath
+{
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
@@ -52,11 +56,17 @@ public:
 	//-------------------------------------------------------------------------
 	units::Rectangle & getRectangle() { return rect; }
 	//-------------------------------------------------------------------------
-	void setRectangle(const units::Rectangle &r)  { rect = r; }
+	void setRectangle(const units::Rectangle &r)  {
+        resetPath();
+        rect = r;
+    }
 	//-------------------------------------------------------------------------
 	const Point2D & getRadius() const { return r; }
 	//-------------------------------------------------------------------------
-	void setRadius(const Point2D &_r)  { r = _r; }
+	void setRadius(const Point2D &_r)  {
+        resetPath();
+        r = _r;
+    }
 	//-------------------------------------------------------------------------
 	virtual ~Rect();
 	//-------------------------------------------------------------------------

@@ -82,13 +82,17 @@ void Rect::_rect(IDrawContext::Ptr cn) {
 	pC = list_of(rx)(ry)(0)(0)(1)(x+rx)(y);
 	pI.push_back( std::make_pair(pC, ARC_ABS));
 	// draw path
-	// TODO: avoid frequently recreating of path!
 	graphicElements::Path::Ptr path = graphicElements::Path::create();
 	path->setPathInstructions(pI);
 	path->appendPathToContext(cn);
+    CachedPath::copyPath(cn);
 }
 //-----------------------------------------------------------------------------
 void Rect::shape( IDrawContext::Ptr cn ) {
+    if (CachedPath::hasPath()) {
+        CachedPath::appendPath(cn);
+        return;
+    }
     _rect(cn);
 }
 

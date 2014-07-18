@@ -158,7 +158,7 @@ public:
     virtual Rectangle getBoundingBox(SceneGraphElement obj) const = 0;
     //-------------------------------------------------------------------------
     /**
-     * @brief Sets a element visible or not. If an element has children then
+     * @brief Set an element visible or not. If an element has children then
      *        they will be affected too.
      */
     virtual void setVisible(SceneGraphElement el, bool val) = 0;
@@ -167,6 +167,17 @@ public:
      * @return true if an element is visible.
      */
     virtual bool isVisible(SceneGraphElement el) const = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief Marks an element for redraw
+     */
+    virtual void setDirty(SceneGraphElement el, bool val) = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief Marks an element for redraw
+     * @return true if an element is marked for redraw
+     */
+    virtual bool isDirty(SceneGraphElement el) const = 0;
 };
 }}}} // namespace
 

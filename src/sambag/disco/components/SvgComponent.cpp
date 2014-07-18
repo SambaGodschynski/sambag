@@ -201,6 +201,16 @@ struct SvgComponent::SyncedSceneGraph :
             return g->isVisible(el);
         SAMBAG_END_SYNCHRONIZED
     }
+    virtual void setDirty(SceneGraphElement el, bool val) {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            g->setDirty(el, val);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual bool isDirty(SceneGraphElement el) const {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->isDirty(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
 }; // SceneGraphAdapter
 
 namespace svgExtensions {
