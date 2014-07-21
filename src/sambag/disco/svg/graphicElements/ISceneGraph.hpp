@@ -167,17 +167,6 @@ public:
      * @return true if an element is visible.
      */
     virtual bool isVisible(SceneGraphElement el) const = 0;
-    //-------------------------------------------------------------------------
-    /**
-     * @brief Marks an element for redraw
-     */
-    virtual void setDirty(SceneGraphElement el, bool val) = 0;
-    //-------------------------------------------------------------------------
-    /**
-     * @brief Marks an element for redraw
-     * @return true if an element is marked for redraw
-     */
-    virtual bool isDirty(SceneGraphElement el) const = 0;
 };
 }}}} // namespace
 

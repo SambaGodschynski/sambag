@@ -201,16 +201,6 @@ struct SvgComponent::SyncedSceneGraph :
             return g->isVisible(el);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual void setDirty(SceneGraphElement el, bool val) {
-        SAMBAG_BEGIN_SYNCHRONIZED(lock)
-            g->setDirty(el, val);
-        SAMBAG_END_SYNCHRONIZED
-    }
-    virtual bool isDirty(SceneGraphElement el) const {
-        SAMBAG_BEGIN_SYNCHRONIZED(lock)
-            return g->isDirty(el);
-        SAMBAG_END_SYNCHRONIZED
-    }
 }; // SceneGraphAdapter
 
 namespace svgExtensions {
@@ -284,22 +274,30 @@ void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
     IPattern::Ptr fill = x.fillPattern();
     if (Super::getBackgroundPattern()!=fill) {
         Super::setBackground(fill);
+        tmpBg = fill;
     }
     IPattern::Ptr stroke = x.strokePattern();
     if (Super::getForegroundPattern()!=stroke) {
         Super::setForeground(stroke);
+        tmpFg = stroke;
     }
     svg->redraw();
 }
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
-    svg::graphicElements::Style style = getStyle();
-    return style.strokePattern();
+    if (!tmpFg) {
+        svg::graphicElements::Style style = getStyle();
+        tmpFg = style.strokePattern();
+    }
+    return tmpFg;
 }
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
-    svg::graphicElements::Style style = getStyle();
-    return style.fillPattern();
+    if (!tmpBg) {
+        svg::graphicElements::Style style = getStyle();
+        tmpBg = style.fillPattern();
+    }
+    return tmpBg;
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setVisible(bool b) {
@@ -515,11 +513,7 @@ void SvgComponent::updateDrawOrder() {
     SceneGraph::Ptr sg = getSvgObject()->getRelatedSceneGraph();
     int c=0;
     BOOST_FOREACH(IProcessListObject::Ptr x, sg->getProcessList()) {
-        ProcessDrawable::Ptr pd = boost::dynamic_pointer_cast<ProcessDrawable>(x);
-        if (!pd) {
-            continue;
-        }
-        IDrawable::Ptr d = pd->drawable;
+        IDrawable::Ptr d = x->getDrawable();
         DummyPtr dummy = getDummy(d);
         if (dummy) {
             dummy->putClientProperty("svg.z", c++);

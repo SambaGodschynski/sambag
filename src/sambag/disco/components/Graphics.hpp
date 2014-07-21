@@ -155,7 +155,7 @@ public: /*Interface impl.*/
 	virtual void rotate(const Number &angle) { cn->rotate(angle); }
 	virtual void identityMatrix() { cn->identityMatrix(); }
 	virtual void transform(const Matrix &m) { cn->transform(m); }
-	virtual void getMatrix(Matrix &m) { cn->getMatrix(m); }
+	virtual void getMatrix(Matrix &m) const { cn->getMatrix(m); }
     virtual void userToDevice(Point2D &io) { cn->userToDevice(io); }
     virtual void deviceToUser(Point2D &io) { cn->deviceToUser(io); }
     virtual void deviceToUserDistance(Point2D &io) { cn->deviceToUserDistance(io); }
@@ -165,6 +165,13 @@ public: /*Interface impl.*/
     }
     virtual bool inFill(const Point2D &p) const {
         return cn->inFill(p);
+    }
+    virtual void clone(IDrawContext::Ptr dst) const {
+        cn->clone(dst);
+    }
+	//-------------------------------------------------------------------------
+	virtual void setMatrix( const Matrix &m ) {
+        cn->setMatrix(m);
     }
 public:
 	//-------------------------------------------------------------------------

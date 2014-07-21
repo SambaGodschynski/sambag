@@ -19,80 +19,153 @@
 #include <boost/graph/visitors.hpp>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
+
+namespace {
+//=============================================================================
+/**
+ * @class performs a iDrawObject->draw()
+ */
+struct ProcessDrawable : public IProcessListObject {
+//=============================================================================
+	//-------------------------------------------------------------------------
+	virtual ~ProcessDrawable() {}
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<ProcessDrawable> Ptr;
+    //-------------------------------------------------------------------------
+    IDrawable::Ptr drawable;
+    //-------------------------------------------------------------------------
+    // reset context state after draw. otherwise a RestoreContextState
+    // will do it later.
+    const bool resetContextState;
+    //-------------------------------------------------------------------------
+    boost::shared_ptr<Style> style;
+    //-------------------------------------------------------------------------
+    IPattern::Ptr fill, stroke;
+    //-------------------------------------------------------------------------
+    boost::shared_ptr<Matrix> transformation;
+    //-------------------------------------------------------------------------
+    ProcessDrawable(IDrawable::Ptr drawable,
+		    bool resetContextState,
+		    boost::shared_ptr<Style> style,
+		    boost::shared_ptr<Matrix> transformation) :
+        drawable(drawable),
+        resetContextState(resetContextState),
+        style(style),
+        transformation(transformation)
+    {
+    }
+    //-------------------------------------------------------------------------
+    IDrawable::Ptr getDrawable() const {
+        return drawable;
+    }
+    //-------------------------------------------------------------------------
+    virtual std::string toString() const {
+	return (resetContextState ? "DrawAndRestoreContextState(" : "Draw(")
+	    + drawable->toString() + ")";
+    }
+    //-------------------------------------------------------------------------
+    void drawShape(Shape::Ptr shape, IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    void drawShapeImpl(Shape::Ptr shape, IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    virtual void perform(IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    virtual void skip(IDrawContext::Ptr context);
+    //-------------------------------------------------------------------------
+    virtual Rectangle getBounds(IDrawContext::Ptr context) const;
+};
+} // namespace
+///////////////////////////////////////////////////////////////////////////////
+IProcessListObject::Ptr createProcessDrawable( IDrawable::Ptr drawable,
+    bool resetContextState, boost::shared_ptr<Style> style,
+        boost::shared_ptr<Matrix> transformation)
+{
+    ProcessDrawable::Ptr neu( new ProcessDrawable(drawable,
+        resetContextState, style, transformation)
+    );
+    return neu;
+}
+
 //=============================================================================
 // class ProcessDrawable
 //=============================================================================
 //-----------------------------------------------------------------------------
-void ProcessDrawable::perform(IDrawContext::Ptr context) {
+void ProcessDrawable::drawShape(Shape::Ptr shape, IDrawContext::Ptr context) {
     namespace ublas=boost::numeric::ublas;
     using namespace sambag::math;
+    bool isFilled = context->isFilled();
+    bool isStroked = context->isStroked();
+    IPattern::Ptr fpat, spat;
+    if (style) {
+        fpat = style->fillPattern();
+        spat = style->strokePattern();
+    }
+    if (isFilled || isStroked) {
+        shape->shape(context);
+    }
+    if (isFilled) {
+        if (fpat) {
+            if (fill!=fpat) { //prepare pattern (once)
+                Rectangle b = context->pathExtends();
+                // pattern matrices: inverse values, inverse mul order!
+                math::Matrix matr = fpat->getMatrix();
+                Rectangle patBox = fpat->getBounds();
+                if (patBox!=NULL_RECTANGLE) 
+                {
+                    Number w = patBox.width()>0 ? (Number)patBox.width()  : 1.;
+                    Number h = patBox.height()>0? (Number)patBox.height() : 1.;
+                    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+                }
+                matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+                fpat->setMatrix(matr);
+                fill=fpat;
+            }
+            context->setFillPattern(fill);
+        }
+        if (isStroked) {
+            context->fillPreserve();
+        } else {
+            context->fill();
+        }
+    }
+    if (isStroked) {
+        if (spat) {
+            if(stroke!=spat) { // prepare stroke pattern (once)
+                Rectangle b = context->pathExtends();
+                // pattern matrices: inverse values, inverse mul order!!
+                math::Matrix matr = spat->getMatrix();
+                Rectangle patBox = spat->getBounds();
+            if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
+                patBox.height()!=0) 
+                {
+                    Number w = patBox.width();
+                    Number h = patBox.height();
+                    matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
+                }
+                matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
+                spat->setMatrix(matr);
+                stroke = spat;
+            }
+            context->setStrokePattern(stroke);
+        }
+        context->stroke();
+    }
+}
+//-----------------------------------------------------------------------------
+void ProcessDrawable::perform(IDrawContext::Ptr context) {
     context->save();
     if (transformation) {
         context->transform( *(transformation.get()) );
     }
-    IPattern::Ptr fpat, spat;
     if (style) {
         style->intoContext(context);
-        fpat = style->fillPattern();
-        spat = style->strokePattern();
     }
     
     Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
     if (!shape) {
         drawable->draw(context);
     } else {
-        bool isFilled = context->isFilled();
-        bool isStroked = context->isStroked();
-        if (isFilled || isStroked) {
-            shape->shape(context);
-        }
-        if (isFilled) {
-            if (fpat) {
-                if (fill!=fpat) { //prepare pattern (once)
-                    Rectangle b = context->pathExtends();
-                    // pattern matrices: inverse values, inverse mul order!
-                    math::Matrix matr = fpat->getMatrix();
-                    Rectangle patBox = fpat->getBounds();
-                    if (patBox!=NULL_RECTANGLE) 
-                    {
-                        Number w = patBox.width()>0 ? (Number)patBox.width()  : 1.;
-                        Number h = patBox.height()>0? (Number)patBox.height() : 1.;
-                        matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-                    }
-                    matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-                    fpat->setMatrix(matr);
-                    fill=fpat;
-                }
-                context->setFillPattern(fill);
-            }
-            if (isStroked) {
-                context->fillPreserve();
-            } else {
-                context->fill();
-            }
-        }
-        if (isStroked) {
-            if (spat) {
-                if(stroke!=spat) { // prepare stroke pattern (once)
-                    Rectangle b = context->pathExtends();
-                    // pattern matrices: inverse values, inverse mul order!!
-                    math::Matrix matr = spat->getMatrix();
-                    Rectangle patBox = spat->getBounds();
-                if (patBox!=NULL_RECTANGLE && patBox.width()!=0 &&
-                    patBox.height()!=0) 
-                    {
-                        Number w = patBox.width();
-                        Number h = patBox.height();
-                        matr = ublas::prod(matr, scale2D(w/b.width(), h/b.height()));
-                    }
-                    matr = ublas::prod(matr, translate2D(-b.x(), -b.y()));
-                    spat->setMatrix(matr);
-                    stroke = spat;
-                }
-                context->setStrokePattern(stroke);
-            }
-            context->stroke();
-        }
+        drawShape(shape, context);
     }
     
     // only need to restore state if no children in scenegraph.
@@ -607,21 +680,5 @@ void SceneGraph::setVisible(SceneGraphElement el, bool val) {
 //-----------------------------------------------------------------------------
 bool SceneGraph::isVisible(SceneGraphElement el) const {
     return getFlag(el, Invisible) != 1;
-}
-//-----------------------------------------------------------------------------
-void SceneGraph::setDirty(SceneGraphElement el, bool val) {
-    if (!el) {
-        return;
-    }
-    setFlag(el, Dirty, val);
-    std::vector<SceneGraphElement> children;
-    getChildren(el, children, true);
-    BOOST_FOREACH(SceneGraphElement x, children) {
-        setFlag(x, Dirty, val);
-    }
-}
-//-----------------------------------------------------------------------------
-bool SceneGraph::isDirty(SceneGraphElement el) const {
-    return getFlag(el, Dirty) != 0;
 }
 }}}} // namespaces

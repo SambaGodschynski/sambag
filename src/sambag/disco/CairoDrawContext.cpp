@@ -584,7 +584,14 @@ void CairoDrawContext::transform ( const Matrix &m ) {
 	cairo_transform(context, &cm);
 }
 //-----------------------------------------------------------------------------
-void CairoDrawContext::getMatrix( Matrix &m ) {
+void CairoDrawContext::setMatrix( const Matrix &m ) {
+	if ( m.size1() != 3 || m.size2() != 3 ) return;
+	cairo_matrix_t cm;
+	discoMatrixToCairoMatrix( m, cm );
+    cairo_set_matrix(context, &cm);
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::getMatrix( Matrix &m ) const {
 	if ( m.size1() != 3 || m.size2() != 3 ) return;
 	cairo_matrix_t cm;
 	cairo_get_matrix(context, &cm);
@@ -629,5 +636,31 @@ bool CairoDrawContext::inStroke(const Point2D &p) const {
 //-----------------------------------------------------------------------------
 bool CairoDrawContext::inFill(const Point2D &p) const {
     return cairo_in_fill(context, p.x(), p.y());
+}
+//-----------------------------------------------------------------------------
+void CairoDrawContext::clone(IDrawContext::Ptr _dst) const {
+    CairoDrawContext::Ptr dst =
+        boost::dynamic_pointer_cast<CairoDrawContext>(_dst);
+   
+    if (!dst) {
+        throw std::runtime_error("CairoDrawContext::clone wrong DST type");
+    }
+//    Matrix m = IDENTITY_MATRIX;
+//    getMatrix(m);
+//    dst->setMatrix(m);
+    dst->setClip(clipExtends());
+    
+    dst->fillPattern = fillPattern;
+    dst->strokePattern = strokePattern;
+    dst->patternInUse = INVALID;
+    dst->setStrokeWidth(getStrokeWidth());
+    dst->setDash(getDash());
+    dst->setLineCap(getLineCap());
+    dst->setLineJoin(getLineJoin());
+    dst->setFillRule(getFillRule());
+    dst->setMiterLimit(getMiterLimit());
+    
+    dst->setFont(getCurrentFont());
+    
 }
 }} // namespaces

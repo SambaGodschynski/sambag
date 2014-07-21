@@ -232,6 +232,14 @@ public:
     virtual bool inStroke(const Point2D &p) const = 0;
     //-------------------------------------------------------------------------
     virtual bool inFill(const Point2D &p) const = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief copies all settings (patterns, cliprect, ...) into the
+     *        given context.
+     * @param the destination context
+     * @throws if cloning context fails
+     */
+    virtual void clone(IDrawContext::Ptr dst) const = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * copy specific area of context into given context.
@@ -253,7 +261,9 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void transform ( const Matrix &m ) = 0;
 	//-------------------------------------------------------------------------
-	virtual void getMatrix( Matrix &m ) = 0;
+	virtual void getMatrix( Matrix &m ) const = 0;
+	//-------------------------------------------------------------------------
+	virtual void setMatrix( const Matrix &m ) = 0;
     //-------------------------------------------------------------------------
     virtual void deviceToUser(Point2D &inOut) = 0;
     //-------------------------------------------------------------------------

@@ -49,6 +49,11 @@ struct IProcessListObject {
     //-------------------------------------------------------------------------
     virtual IDrawable::Ptr getDrawable() const { return IDrawable::Ptr(); }
 };
+
+extern IProcessListObject::Ptr createProcessDrawable( IDrawable::Ptr drawable,
+    bool resetContextState, boost::shared_ptr<Style> style,
+    boost::shared_ptr<Matrix> transformation);
+
 //=============================================================================
 /**
  * @class restores context state such as transformations
@@ -73,69 +78,6 @@ struct DoNothing : public IProcessListObject {
     virtual void skip(IDrawContext::Ptr context) {}
     //-------------------------------------------------------------------------
     virtual ~DoNothing(){}
-};
-class SceneGraph;
-//=============================================================================
-/**
- * @class performs a iDrawObject->draw()
- */
-struct ProcessDrawable : public IProcessListObject {
-//=============================================================================
-	//-------------------------------------------------------------------------
-	virtual ~ProcessDrawable() {}
-    //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<ProcessDrawable> Ptr;
-    //-------------------------------------------------------------------------
-    IDrawable::Ptr drawable;
-    //-------------------------------------------------------------------------
-    // reset context state after draw. otherwise a RestoreContextState
-    // will do it later.
-    const bool resetContextState;
-    //-------------------------------------------------------------------------
-    boost::shared_ptr<Style> style;
-    //-------------------------------------------------------------------------
-    IPattern::Ptr fill, stroke;
-    //-------------------------------------------------------------------------
-    boost::shared_ptr<Matrix> transformation;
-    //-------------------------------------------------------------------------
-    ProcessDrawable(IDrawable::Ptr drawable,
-		    bool resetContextState,
-		    boost::shared_ptr<Style> style,
-		    boost::shared_ptr<Matrix> transformation) :
-        drawable(drawable),
-        resetContextState(resetContextState),
-        style(style),
-        transformation(transformation)
-    {
-    }
-    //-------------------------------------------------------------------------
-    IDrawable::Ptr getDrawable() const {
-        return drawable;
-    }
-    //-------------------------------------------------------------------------
-    virtual std::string toString() const {
-	return (resetContextState ? "DrawAndRestoreContextState(" : "Draw(")
-	    + drawable->toString() + ")";
-    }
-    //-------------------------------------------------------------------------
-    static Ptr create(
-        IDrawable::Ptr drawable,
-        bool resetContextState,
-        boost::shared_ptr<Style> style,
-        boost::shared_ptr<Matrix> transformation)
-	{
-	    Ptr neu( new ProcessDrawable(drawable,
-					 resetContextState,
-					 style,
-					 transformation));
-	    return neu;
-	}
-    //-------------------------------------------------------------------------
-    virtual void perform(IDrawContext::Ptr context);
-    //-------------------------------------------------------------------------
-    virtual void skip(IDrawContext::Ptr context);
-    //-------------------------------------------------------------------------
-    virtual Rectangle getBounds(IDrawContext::Ptr context) const;
 };
 //=============================================================================
 /**
@@ -833,17 +775,6 @@ public:
      * @return true if an element is visible.
      */
     bool isVisible(SceneGraphElement el) const;
-    //-------------------------------------------------------------------------
-    /**
-     * @brief Marks an element for redraw
-     */
-    void setDirty(SceneGraphElement el, bool val);
-    //-------------------------------------------------------------------------
-    /**
-     * @brief Marks an element for redraw
-     * @return true if an element is marked for redraw
-     */
-    bool isDirty(SceneGraphElement el) const;
     ///////////////////////////////////////////////////////////////////////////
     // ISceneGraph adjustments
     //-------------------------------------------------------------------------
@@ -914,7 +845,7 @@ private:
             return;
         }
         size_t numOutEdges = boost::out_degree(v, g);
-        ProcessDrawable::Ptr cmd = ProcessDrawable::create(obj,
+        IProcessListObject::Ptr cmd = createProcessDrawable(obj,
                                 numOutEdges==0,
                                 sceneGraph.getStyleRef(obj),
                                 sceneGraph.getTransformationRef(obj)
