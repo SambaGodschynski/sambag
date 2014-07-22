@@ -74,6 +74,7 @@ void SvgKnobUI::installUI(AComponentPtr c) {
     getModel()->setMaximum(1);
     getModel()->setMinimum(0);
 	main->setMouseWheelEventsEnabled(true);
+    handle->setMouseWheelEventsEnabled(true);
     installListeners(c);
 }
 //-----------------------------------------------------------------------------
