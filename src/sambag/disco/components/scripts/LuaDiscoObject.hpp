@@ -17,6 +17,7 @@
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/components/SvgComponent.hpp>
 #include <loki/Singleton.h>
+#include <sambag/disco/components/events/MouseEvent.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -60,6 +61,12 @@ public:
     SvgComponent::Ptr getSvgComponent() const;
     //-------------------------------------------------------------------------
     virtual ~LuaDiscoObject() {}
+    ///////////////////////////////////////////////////////////////////////////
+    // impl.
+	virtual std::string getId(lua_State *lua);
+	virtual sambag::lua::IgnoreReturn getClasses(lua_State *lua);
+    virtual void addOnEnterListener(lua_State *lua, const std::string & expr);
+    virtual void addOnExitListener(lua_State *lua, const std::string & expr);
 private:
 public:
 }; // LuaDiscoObject

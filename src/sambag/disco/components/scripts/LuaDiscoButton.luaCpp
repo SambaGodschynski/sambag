@@ -16,9 +16,9 @@ class LuaDiscoButtonBase extends LuaDiscoObject {
        */
        void setText(string text);
        /**
-        * @brief adds a listener for the
- 	* 	 button action.
+        * @brief adds a listener for the onClicked event.
 	* @param the callback lua expression
 	*/
-       void addListener(string expr);
+       void addOnClickedListener(string expr);
+  
 }

@@ -9,6 +9,7 @@
 #include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
 #include <sambag/disco/svg/graphicElements/Text.hpp>
 #include <sambag/disco/components/DefaultButtonModell.hpp>
+#include <sambag/disco/components/events/ActionEvent.hpp>
 
 namespace sambag { namespace disco { namespace components { 
 //=============================================================================
@@ -56,7 +57,8 @@ void LuaDiscoButton::setText(lua_State *lua, const std::string & text) {
     svg->redraw();
 }
 //-----------------------------------------------------------------------------
-void LuaDiscoButton::onButton(lua_State *lua, const std::string &expr) {
+void LuaDiscoButton::onAction(lua_State *lua, const std::string &expr)
+{
     try {
         lua::executeString(lua, expr);
     } catch(const std::exception &ex) {
@@ -65,14 +67,16 @@ void LuaDiscoButton::onButton(lua_State *lua, const std::string &expr) {
         SAMBAG_LOG_ERR<<"LuaDiscoButton::onButton failed: unkown error";
     }
 }
+
 //-----------------------------------------------------------------------------
-void LuaDiscoButton::addListener(lua_State *lua, const std::string & expr) {
+void LuaDiscoButton::addOnClickedListener(lua_State *lua, const std::string & expr)
+{
     Component::Ptr comp = getComponent();
     boost::shared_ptr<DefaultButtonModell> model =
         comp->getModel<DefaultButtonModell>();
     SAMBAG_ASSERT(model);
-    model->EventSender<DefaultButtonModell::StateChangedEvent>::addTrackedEventListener(
-        boost::bind(&LuaDiscoButton::onButton, this, lua, expr),
+    model->EventSender<events::ActionEvent>::addTrackedEventListener(
+        boost::bind(&LuaDiscoButton::onAction, this, lua, expr),
         shared_from_this()
     );
 }

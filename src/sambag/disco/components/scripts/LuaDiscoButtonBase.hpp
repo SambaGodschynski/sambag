@@ -5,7 +5,7 @@
  *
  * LuaDiscoButtonBase.hpp
  *
- *  Created on: Mon Jul 28 10:07:26 2014
+ *  Created on: Mon Jul 28 11:09:54 2014
  *      Author: Samba Godschysnki
  */
 
@@ -40,10 +40,10 @@ protected:
     //-------------------------------------------------------------------------
     SAMBAG_LUA_FTAG(getText, std::string ());
 	SAMBAG_LUA_FTAG(setText, void (std::string));
-	SAMBAG_LUA_FTAG(addListener, void (std::string));
+	SAMBAG_LUA_FTAG(addOnClickedListener, void (std::string));
     typedef LOKI_TYPELIST_3(Frx_getText_Tag, 
 	Frx_setText_Tag, 
-	Frx_addListener_Tag) Functions1;
+	Frx_addOnClickedListener_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -56,11 +56,10 @@ protected:
 	*/
 	virtual void setText(lua_State *lua, const std::string & text) = 0;
 	/**
-	* @brief adds a listener for the
-	* 	 button action.
+	* @brief adds a listener for the onClicked event.
 	* @param the callback lua expression
 	*/
-	virtual void addListener(lua_State *lua, const std::string & expr) = 0;
+	virtual void addOnClickedListener(lua_State *lua, const std::string & expr) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

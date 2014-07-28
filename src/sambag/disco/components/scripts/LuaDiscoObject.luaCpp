@@ -12,4 +12,14 @@ class LuaDiscoObjectBase extends sambag.lua.ALuaObject {
         * @return a sequence of svg class names
 	*/
 	ManuallyReturn<1> getClasses();
+       /**
+        * @brief adds a listener for the onEnter event.
+	* @param the callback lua expression
+	*/
+       void addOnEnterListener(string expr);
+       /**
+        * @brief adds a listener for the onExit event.
+	* @param the callback lua expression
+	*/
+       void addOnExitListener(string expr);
 }

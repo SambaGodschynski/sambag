@@ -15,7 +15,7 @@
 #include <loki/Typelist.h>
 #include <sambag/lua/ALuaObject.hpp>
 #include "LuaDiscoButtonBase.hpp"
-
+#include <sambag/com/ArithmeticWrapper.hpp>
 
 namespace sambag { namespace disco { namespace components { 
 //=============================================================================
@@ -34,7 +34,7 @@ protected:
     //-------------------------------------------------------------------------
     LuaDiscoButton() {}
     //-------------------------------------------------------------------------
-    void onButton(lua_State *lua, const std::string &expr);
+    void onAction(lua_State *lua, const std::string &expr);
 public:
     //-------------------------------------------------------------------------
     IDrawable::Ptr getTextElement() const;
@@ -45,7 +45,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     virtual std::string getText(lua_State *lua);
 	virtual void setText(lua_State *lua, const std::string & text);
-    virtual void addListener(lua_State *lua, const std::string & expr);
+    virtual void addOnClickedListener(lua_State *lua, const std::string & expr);
 private:
 public:
 }; // LuaDiscoButton

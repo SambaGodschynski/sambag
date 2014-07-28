@@ -5,7 +5,7 @@
  *
  * LuaDiscoObjectBase.hpp
  *
- *  Created on: Mon Jul 28 10:25:19 2014
+ *  Created on: Mon Jul 28 11:10:01 2014
  *      Author: Samba Godschysnki
  */
 
@@ -40,8 +40,12 @@ protected:
     //-------------------------------------------------------------------------
     SAMBAG_LUA_FTAG(getId, std::string ());
 	SAMBAG_LUA_FTAG(getClasses, sambag::lua::IgnoreReturn ());
-    typedef LOKI_TYPELIST_2(Frx_getId_Tag, 
-	Frx_getClasses_Tag) Functions1;
+	SAMBAG_LUA_FTAG(addOnEnterListener, void (std::string));
+	SAMBAG_LUA_FTAG(addOnExitListener, void (std::string));
+    typedef LOKI_TYPELIST_4(Frx_getId_Tag, 
+	Frx_getClasses_Tag, 
+	Frx_addOnEnterListener_Tag, 
+	Frx_addOnExitListener_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -53,6 +57,16 @@ protected:
 	* @return a sequence of svg class names
 	*/
 	virtual sambag::lua::IgnoreReturn getClasses(lua_State *lua) = 0;
+	/**
+	* @brief adds a listener for the onEnter event.
+	* @param the callback lua expression
+	*/
+	virtual void addOnEnterListener(lua_State *lua, const std::string & expr) = 0;
+	/**
+	* @brief adds a listener for the onExit event.
+	* @param the callback lua expression
+	*/
+	virtual void addOnExitListener(lua_State *lua, const std::string & expr) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

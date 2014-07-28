@@ -237,8 +237,7 @@ void SvgComponent::Dummy::setBackground(IPattern::Ptr pat) {
 svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
     if (!d) {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
@@ -250,8 +249,7 @@ svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
 SvgComponent::Dummy::StylePtr SvgComponent::Dummy::getStyleRef() {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
     if (!d) {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
@@ -262,8 +260,7 @@ SvgComponent::Dummy::StylePtr SvgComponent::Dummy::getStyleRef() {
 void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
     if (!d) {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
@@ -306,8 +303,7 @@ void SvgComponent::Dummy::setVisible(bool b) {
     }
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
     g->setVisible(d, b);
     svg->redraw();
@@ -317,8 +313,7 @@ void SvgComponent::Dummy::setVisible(bool b) {
 std::string SvgComponent::Dummy::getSvgId() const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
     return g->getIdName(d);
 }
@@ -326,10 +321,9 @@ std::string SvgComponent::Dummy::getSvgId() const {
 void SvgComponent::Dummy::getSvgClasses(std::vector<std::string> &out) const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
-    svg::graphicElements::SceneGraph::Ptr g =
-        svg->getSvgObject()->getRelatedSceneGraph();
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
     IDrawable::Ptr d = drawable.lock();
-    g->getClassNames(d, out);
+    g->getClassNamesX(d, out);
 }
 //=============================================================================
 //  Class SvgComponent
