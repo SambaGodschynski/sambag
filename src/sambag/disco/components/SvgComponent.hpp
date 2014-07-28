@@ -65,6 +65,16 @@ public:
         ModelObject::Ptr model;
     public:
         //---------------------------------------------------------------------
+        /**
+         * @return the id of the related svg element
+         */
+        std::string getSvgId() const;
+        //---------------------------------------------------------------------
+        /**
+         * @return the class names of the related svg element
+         */
+        void getSvgClasses(std::vector<std::string> &out) const;
+        //---------------------------------------------------------------------
         ModelObject::Ptr getRawModel() const {
             return model;
         }

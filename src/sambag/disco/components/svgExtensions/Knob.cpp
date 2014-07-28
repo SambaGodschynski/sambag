@@ -14,6 +14,7 @@ void installSvgKnobExtension(SvgComponent::Dummy::Ptr dummy) {
         dummy->setModel(model);
     }
     dummy->setUserUI(ui::SvgKnobUI::create());
+    dummy->setName("SvgComponent::Dummy(#disco-knob)");
 }
 
 

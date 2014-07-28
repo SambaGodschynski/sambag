@@ -386,11 +386,17 @@ struct RegisterHelperClass {
             pushLuaError(L, "callback failed. luastate invalid");
 		}
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
-		callF<Function>( it->second,
-			L,
-			com::Int2Type<Function::arity>(), // num args
-			com::Int2Type<IsVoidValue>() // isVoid
-		);
+        try {
+            callF<Function>( it->second,
+                L,
+                com::Int2Type<Function::arity>(), // num args
+                com::Int2Type<IsVoidValue>() // isVoid
+            );
+        } catch(const std::exception &ex) {
+            pushLuaError(L, ex.what());
+        } catch(...) {
+            pushLuaError(L, "unknown error");
+        }
 		return NumReturnValues<typename Function::result_type>::Value;
 	}
 	static int luaClassCallback(lua_State *L) {
@@ -408,12 +414,18 @@ struct RegisterHelperClass {
 		}
 		enum {IsVoidValue = IsVoid<typename Function::result_type>::Value };
         typename FMap::mapped_type f = it->second; // copying here because objects callback
-                                                   // may affect the map
-		callF<Function>(f,
-			L,
-			com::Int2Type<Function::arity>(), // num args
-			com::Int2Type<IsVoidValue>() // isVoid
-		);
+                                                // may affect the map
+        try {
+            callF<Function>(f,
+                L,
+                com::Int2Type<Function::arity>(), // num args
+                com::Int2Type<IsVoidValue>() // isVoid
+            );
+        } catch(const std::exception &ex) {
+            pushLuaError(L, ex.what());
+        } catch(...) {
+            pushLuaError(L, "unknown error");
+        }
 		return NumReturnValues<typename Function::result_type>::Value;
 	}
 };

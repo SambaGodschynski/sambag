@@ -1,0 +1,24 @@
+sambag.disco.components
+
+#include <sambag/disco/components/scripts/LuaDiscoObject.hpp>
+
+/**
+ * @brief a lua representation of a svg disco-button
+ * @version 1.0
+ */
+class LuaDiscoButtonBase extends LuaDiscoObject {
+      /**
+       * @return button text
+       */
+      string getText();
+      /**
+       * @brief set button text
+       */
+       void setText(string text);
+       /**
+        * @brief adds a listener for the
+ 	* 	 button action.
+	* @param the callback lua expression
+	*/
+       void addListener(string expr);
+}

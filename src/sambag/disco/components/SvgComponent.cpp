@@ -313,6 +313,24 @@ void SvgComponent::Dummy::setVisible(bool b) {
     svg->redraw();
     Super::setVisible(b);
 }
+//-----------------------------------------------------------------------------
+std::string SvgComponent::Dummy::getSvgId() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    return g->getIdName(d);
+}
+//-----------------------------------------------------------------------------
+void SvgComponent::Dummy::getSvgClasses(std::vector<std::string> &out) const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::SceneGraph::Ptr g =
+        svg->getSvgObject()->getRelatedSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    g->getClassNames(d, out);
+}
 //=============================================================================
 //  Class SvgComponent
 //=============================================================================

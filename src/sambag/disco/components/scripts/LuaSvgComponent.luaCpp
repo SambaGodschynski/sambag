@@ -1,0 +1,15 @@
+sambag.disco.components
+/**
+ * @brief a lua representation for a SvgComponent object.
+ * @version 1.0
+ */
+class LuaSvgBase extends sambag.lua.ALuaObject {
+      /**
+       * @return a @see DiscoObject by svg id or nil 
+       */
+      ManuallyReturn<1> getObjectById(string id);
+      /**
+       * @return a sequence of @see DiscoObjects by svg class 
+       */
+      ManuallyReturn<1> getObjectsByClass(string _class); 
+}

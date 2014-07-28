@@ -14,6 +14,7 @@ void installSvgButtonExtension(SvgComponent::Dummy::Ptr dummy) {
         dummy->setModel(model);
     }
     dummy->setUserUI(ui::SvgButtonUI::create());
+    dummy->setName("SvgComponent::Dummy(#disco-button)");
 }
 
 

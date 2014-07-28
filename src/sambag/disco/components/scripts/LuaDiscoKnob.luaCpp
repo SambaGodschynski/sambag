@@ -1,0 +1,10 @@
+sambag.disco.components
+
+#include <sambag/disco/components/scripts/LuaDiscoObject.hpp>
+
+/**
+ * @brief a lua representation of a svg disco-knob
+ * @version 1.0
+ */
+class LuaDiscoKnobBase extends LuaDiscoObject {
+}

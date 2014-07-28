@@ -1,0 +1,15 @@
+sambag.disco.components
+/**
+ * @brief the base class for all (svg) disco objects.
+ * @version 1.0 
+ */
+class LuaDiscoObjectBase extends sambag.lua.ALuaObject {
+      /**
+       * @return the object svg id
+       */
+       string getId();
+       /**
+        * @return a sequence of svg class names
+	*/
+	ManuallyReturn<1> getClasses();
+}
