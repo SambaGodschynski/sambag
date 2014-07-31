@@ -125,5 +125,13 @@ void LuaDiscoObject::addOnExitListener(lua_State *lua, const std::string & expr)
         shared_from_this()
     );
 }
+//-----------------------------------------------------------------------------
+void LuaDiscoObject::setVisible(lua_State *lua, bool x) {
+    getComponent()->setVisible(x);
+}
+//-----------------------------------------------------------------------------
+bool LuaDiscoObject::isVisible(lua_State *lua) {
+    return getComponent()->isVisible();
+}
 }}} // namespace(s)
 

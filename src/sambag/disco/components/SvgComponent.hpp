@@ -138,6 +138,8 @@ public:
         void drawComponent (IDrawContext::Ptr context);
         //---------------------------------------------------------------------
         virtual void setVisible(bool b);
+        //---------------------------------------------------------------------
+        virtual bool isVisible() const;
     };
     typedef boost::shared_ptr<Dummy> DummyPtr;
     typedef boost::weak_ptr<Dummy> DummyWPtr;

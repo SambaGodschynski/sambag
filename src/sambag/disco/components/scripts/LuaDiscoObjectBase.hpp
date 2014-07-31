@@ -5,7 +5,7 @@
  *
  * LuaDiscoObjectBase.hpp
  *
- *  Created on: Mon Jul 28 11:10:01 2014
+ *  Created on: Thu Jul 31 18:05:17 2014
  *      Author: Samba Godschysnki
  */
 
@@ -42,10 +42,14 @@ protected:
 	SAMBAG_LUA_FTAG(getClasses, sambag::lua::IgnoreReturn ());
 	SAMBAG_LUA_FTAG(addOnEnterListener, void (std::string));
 	SAMBAG_LUA_FTAG(addOnExitListener, void (std::string));
-    typedef LOKI_TYPELIST_4(Frx_getId_Tag, 
+	SAMBAG_LUA_FTAG(setVisible, void (bool));
+	SAMBAG_LUA_FTAG(isVisible, bool ());
+    typedef LOKI_TYPELIST_6(Frx_getId_Tag, 
 	Frx_getClasses_Tag, 
 	Frx_addOnEnterListener_Tag, 
-	Frx_addOnExitListener_Tag) Functions1;
+	Frx_addOnExitListener_Tag, 
+	Frx_setVisible_Tag, 
+	Frx_isVisible_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -67,6 +71,14 @@ protected:
 	* @param the callback lua expression
 	*/
 	virtual void addOnExitListener(lua_State *lua, const std::string & expr) = 0;
+	/**
+	* @brief set objects visibility
+	*/
+	virtual void setVisible(lua_State *lua, bool x) = 0;
+	/**
+	* @return true if object visible
+	*/
+	virtual bool isVisible(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

@@ -310,6 +310,14 @@ void SvgComponent::Dummy::setVisible(bool b) {
     Super::setVisible(b);
 }
 //-----------------------------------------------------------------------------
+bool SvgComponent::Dummy::isVisible() const {
+    SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
+    SAMBAG_ASSERT(svg);
+    svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
+    IDrawable::Ptr d = drawable.lock();
+    return g->isVisible(d);
+}
+//-----------------------------------------------------------------------------
 std::string SvgComponent::Dummy::getSvgId() const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);

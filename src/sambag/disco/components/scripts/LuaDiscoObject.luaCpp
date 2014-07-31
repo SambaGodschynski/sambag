@@ -22,4 +22,12 @@ class LuaDiscoObjectBase extends sambag.lua.ALuaObject {
 	* @param the callback lua expression
 	*/
        void addOnExitListener(string expr);
+       /**
+        * @brief set objects visibility
+	*/
+       void setVisible(bool x);
+       /**
+        * @return true if object visible
+	*/
+       bool isVisible(); 
 }
