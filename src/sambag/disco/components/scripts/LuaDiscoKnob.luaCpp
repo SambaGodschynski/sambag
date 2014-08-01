@@ -7,4 +7,19 @@ sambag.disco.components
  * @version 1.0
  */
 class LuaDiscoKnobBase extends LuaDiscoObject {
+      /**
+       * @return the knob value
+       */
+       float getValue();
+      /**
+       * @brief set the knob value
+       * @param the new value
+       */
+       void setValue(float x);
+      /**
+       * @brief adds a listener to the knob
+       * @param a valid lua expression which will be
+       *  	executed when knob value was changed
+       */
+       void addListener(string expr);
 }

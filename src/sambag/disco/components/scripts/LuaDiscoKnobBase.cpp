@@ -5,7 +5,7 @@
  *
  * LuaDiscoKnobBase.cpp
  *
- *  Created on: Sun Jul 27 17:22:06 2014
+ *  Created on: Fri Aug  1 13:37:08 2014
  *      Author: Samba Godschysnki
  */
 
@@ -21,13 +21,23 @@ void LuaDiscoKnobBase::addLuaFields(lua_State *lua, int index)
     using namespace sambag::lua;
     Super::addLuaFields(lua, index);
     // register functions
-    
+    registerClassFunctions<Functions1, TupleAccessor>(
+	lua,
+	boost::make_tuple(boost::bind(&LuaDiscoKnobBase::getValue, this, lua),
+		boost::bind(&LuaDiscoKnobBase::setValue, this, lua, _1),
+		boost::bind(&LuaDiscoKnobBase::addListener, this, lua, _1)),
+	index, 
+	getUId() 
+	); 
+
+	
     
 }
 //-----------------------------------------------------------------------------
 void LuaDiscoKnobBase::__lua_gc(lua_State *lua) {
     using namespace sambag::lua;
-    unregisterClassFunctions<MetaFunctions>(getUId());
+    unregisterClassFunctions<Functions1>(getUId());
+	unregisterClassFunctions<MetaFunctions>(getUId());
 	
     Super::__lua_gc(lua);
 }

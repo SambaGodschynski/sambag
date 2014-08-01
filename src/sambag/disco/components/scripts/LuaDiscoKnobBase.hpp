@@ -5,7 +5,7 @@
  *
  * LuaDiscoKnobBase.hpp
  *
- *  Created on: Sun Jul 27 21:27:08 2014
+ *  Created on: Fri Aug  1 13:37:08 2014
  *      Author: Samba Godschysnki
  */
 
@@ -38,10 +38,30 @@ protected:
     //-------------------------------------------------------------------------
     LuaDiscoKnobBase() {}
     //-------------------------------------------------------------------------
-    
-    typedef Loki::NullType Functions1;
+    SAMBAG_LUA_FTAG(getValue, float ());
+	SAMBAG_LUA_FTAG(setValue, void (float));
+	SAMBAG_LUA_FTAG(addListener, void (std::string));
+    typedef LOKI_TYPELIST_3(Frx_getValue_Tag, 
+	Frx_setValue_Tag, 
+	Frx_addListener_Tag) Functions1;
+
+	
     ///////////////////////////////////////////////////////////////////////////
-    
+    /**
+	* @return the knob value
+	*/
+	virtual float getValue(lua_State *lua) = 0;
+	/**
+	* @brief set the knob value
+	* @param the new value
+	*/
+	virtual void setValue(lua_State *lua, float x) = 0;
+	/**
+	* @brief adds a listener to the knob
+	* @param a valid lua expression which will be
+	*  	executed when knob value was changed
+	*/
+	virtual void addListener(lua_State *lua, const std::string & expr) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

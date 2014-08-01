@@ -28,11 +28,19 @@ public:
     //-------------------------------------------------------------------------
     typedef boost::weak_ptr<LuaDiscoKnob> WPtr;
     //-------------------------------------------------------------------------
+protected:
+    //-------------------------------------------------------------------------
+    void onChanged(lua_State *lua, const std::string &expr);
 public:
     //-------------------------------------------------------------------------
     virtual ~LuaDiscoKnob() {}
     //-------------------------------------------------------------------------
     static Ptr createAndPush(lua_State *lua, Component::Ptr comp);
+    ///////////////////////////////////////////////////////////////////////////
+    // impl.
+	virtual float getValue(lua_State *lua);
+	virtual void setValue(lua_State *lua, float x);
+	virtual void addListener(lua_State *lua, const std::string & expr);
 private:
 public:
 }; // LuaDiscoKnob
