@@ -9,48 +9,23 @@
 #define SAMBAG_ABSTRACTTYPE_H
 
 #include <sambag/com/Exception.hpp>
+#include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
 
 namespace sambag { namespace com {
 
-//=============================================================================
-/** 
-  * @class ArbitraryType.
-  * Use this instead of unsafe void* constructions.
-  */
-class ArbitraryType {
-//=============================================================================
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ArbitraryType> Ptr;
-	//-------------------------------------------------------------------------
-	virtual ~ArbitraryType() {}
-}; // ArbitraryType
-//=============================================================================
-/**
-  * @class ArbitraryType.
-  */
-template <typename T>
-class ConcreteType : public ArbitraryType {
-//=============================================================================
-protected:
-	//-------------------------------------------------------------------------
-	ConcreteType() {}
-public:
-	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ConcreteType> Ptr;
-	//-------------------------------------------------------------------------
-	T value;
-	//-------------------------------------------------------------------------
-	operator T() const { return value; }
-	//-------------------------------------------------------------------------
-	static Ptr create(const T &value) {
-		Ptr res(new ConcreteType());
-		res->value = value;
-		return res;
-	}
-}; // ArbitraryType
+// ArbitraryType: now I recognize how clunky
+// this name is. I implemented this class
+// before without the knowledge what
+// boost::any is doing.
+// TODO: for the future, replace all Arbitrary occurrences with any.
+struct ArbitraryType {
+	boost::any value;
+	typdef boost::shared_ptr<ArbitraryType> Ptr;
+};
+
+
 //=============================================================================
 /**
  * Gets value of ArbitraryType.
@@ -58,23 +33,26 @@ public:
  * @param target
  */
 template <typename T>
-void get(ArbitraryType::Ptr src, T &target) {
-	typedef ConcreteType<T> Dst;
-	typedef boost::shared_ptr<Dst> DstPtr;
-	DstPtr dst = boost::dynamic_pointer_cast<Dst>(src);
-	if (!dst)
-		return;
-	target = *dst;
+bool get(ArbitraryType::Ptr src, T &target) {
+	try {
+		target = boost::any_cast<T>(src->value);
+	} catch(...) {
+		return false;
+	}
+	return true;
 }
 //=============================================================================
 template <typename T>
-boost::shared_ptr< ConcreteType<T> > createObject(const T &v) {
-	return ConcreteType<T>::create(v);
+ArbitraryType::Ptr createObject(const T &v) {
+	ArbitraryType::Ptr res( new ArbitraryType() );
+	res->value = v;
+	return res;
 }
 //-----------------------------------------------------------------------------
-inline boost::shared_ptr< ConcreteType< std::string> >
-createObject(const char *v) {
-	return ConcreteType<std::string>::create(std::string(v));
+inline ArbitraryType::Ptr createObject(const char *v) {
+	ArbitraryType::Ptr res( new ArbitraryType() );
+	res->value = std::string(v);
+	return res;
 }
 }} // namespace(s)
 
