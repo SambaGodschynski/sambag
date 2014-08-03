@@ -42,8 +42,7 @@ public:
 			const T &newValue) : name(name)
 	{
 		typedef std::pair<T, T> Content;
-		content =
-			ConcreteType<Content>::create(std::make_pair(oldValue, newValue));
+		content = com::createObject(std::make_pair(oldValue, newValue));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -56,9 +55,8 @@ public:
 			const char *newValue) : name(name)
 	{
 		typedef std::pair<std::string, std::string> Content;
-		content =
-			ConcreteType<Content>::create(
-					std::make_pair(std::string(oldValue), std::string(newValue))
+		content = com::createObject(
+			std::make_pair(std::string(oldValue), std::string(newValue))
 		);
 	}
 	//-------------------------------------------------------------------------

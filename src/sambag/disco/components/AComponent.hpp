@@ -1385,19 +1385,15 @@ inline std::ostream & operator << (std::ostream &os, const AComponent &p) {
 //-----------------------------------------------------------------------------
 template <typename T>
 void AComponent::putClientProperty(const std::string &name, const T &c) {
-	typedef ConcreteType<T> Type;
-	typename Type::Ptr val = Type::create(c);
+	ArbitraryType::Ptr val = com::createObject(c);
 	putClientPropertyImpl(name, val);
 }
 //-----------------------------------------------------------------------------
 template <typename T>
 void AComponent::getClientProperty(const std::string &name, T &out) const {
-	typedef ConcreteType<T> Type;
-	typename Type::Ptr val = boost::dynamic_pointer_cast<Type>(
-			getClientProperty(name)
-	);
-	if (val)
-		out = *val;
+	
+	ArbitraryType::Ptr val = getClientProperty(name);
+	com::get(val, out);
 }
 //-----------------------------------------------------------------------------
 template <class ContainerType>
@@ -1440,3 +1436,4 @@ typename ContainerType::Ptr AComponent::getLastContainer() const {
 }}}
 
 #endif /* COMPONENT_HPP_ */
+

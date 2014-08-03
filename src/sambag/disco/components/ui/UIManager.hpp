@@ -64,19 +64,13 @@ typedef Loki::SingletonHolder<UIManager, Loki::CreateUsingNew> UIManagerHolder;
 //-----------------------------------------------------------------------------
 template <typename T>
 void UIManager::putProperty(const std::string &name, const T &c) {
-	typedef ConcreteType<T> Type;
-	typename Type::Ptr val = Type::create(c);
+	ArbitraryType::Ptr val = com::createObject(c);
 	putPropertyImpl(name, val);
 }
 //-----------------------------------------------------------------------------
 template <typename T>
 void UIManager::getProperty(const std::string &name, T &out) const {
-	typedef ConcreteType<T> Type;
-	typename Type::Ptr val = boost::dynamic_pointer_cast<Type>(
-			getProperty(name)
-	);
-	if (val)
-		out = *val;
+	com::get(getProperty(name), out);
 }
 inline UIManager & getUIManager() {
 	return UIManager::instance();

@@ -22,7 +22,7 @@ namespace sambag { namespace com {
 // TODO: for the future, replace all Arbitrary occurrences with any.
 struct ArbitraryType {
 	boost::any value;
-	typdef boost::shared_ptr<ArbitraryType> Ptr;
+	typedef boost::shared_ptr<ArbitraryType> Ptr;
 };
 
 
