@@ -5,7 +5,7 @@
  *
  * LuaSvgObjectBase.hpp
  *
- *  Created on: Tue Aug 12 09:42:57 2014
+ *  Created on: Tue Aug 12 15:33:14 2014
  *      Author: Samba Godschysnki
  */
 
@@ -42,10 +42,16 @@ protected:
 	SAMBAG_LUA_FTAG(getClasses, sambag::lua::IgnoreReturn ());
 	SAMBAG_LUA_FTAG(setVisible, void (bool));
 	SAMBAG_LUA_FTAG(isVisible, bool ());
-    typedef LOKI_TYPELIST_4(Frx_getId_Tag, 
+	SAMBAG_LUA_FTAG(setStyle, void (std::string));
+	SAMBAG_LUA_FTAG(getStyle, std::string ());
+	SAMBAG_LUA_FTAG(calculateStyle, std::string ());
+    typedef LOKI_TYPELIST_7(Frx_getId_Tag, 
 	Frx_getClasses_Tag, 
 	Frx_setVisible_Tag, 
-	Frx_isVisible_Tag) Functions1;
+	Frx_isVisible_Tag, 
+	Frx_setStyle_Tag, 
+	Frx_getStyle_Tag, 
+	Frx_calculateStyle_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -65,6 +71,18 @@ protected:
 	* @return true if object visible
 	*/
 	virtual bool isVisible(lua_State *lua) = 0;
+	/**
+	* @brief set style string
+	*/
+	virtual void setStyle(lua_State *lua, const std::string & style) = 0;
+	/**
+	* @return style string
+	*/
+	virtual std::string getStyle(lua_State *lua) = 0;
+	/**
+	* @return calculated style string
+	*/
+	virtual std::string calculateStyle(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

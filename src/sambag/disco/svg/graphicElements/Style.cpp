@@ -9,6 +9,7 @@
 #include "sambag/com/Common.hpp"
 #include <float.h>
 #include <boost/static_assert.hpp>
+#include <sambag/disco/svg/HtmlColors.hpp>
 
 //=============================================================================
 // hash functions
@@ -136,6 +137,62 @@ const Style & Style::getNullStyle() {
 	}
 	return *(NULL_STYLE_SINGLETON.get());
 }
-
+//-----------------------------------------------------------------------------
+namespace {
+    std::ostream & operator<<(std::ostream &s, Dash::Ptr dash) {
+        if (!dash || dash->size()==0) {
+            s<<"none";
+            return s;
+        }
+        s<<(*dash)[0];
+        for (size_t i=1; i<dash->size(); ++i) {
+            s<<" "<<(*dash)[i];
+        }
+        s<<"; stroke-dashoffset: "<<dash->offset();
+        return s;
+    }
+    std::ostream & operator<<(std::ostream &s, Font::Weight weight) {
+        if (weight==Style::NO_FONT.weight) {
+            s<<"none";
+            return s;
+        }
+        if (weight==Font::WEIGHT_BOLD) {
+            s<<"bold";
+            return s;
+        }
+        s<<"normal";
+        return s;
+    }
+    std::ostream & operator<<(std::ostream &s, Font::Slant slant) {
+        if (slant==Style::NO_FONT.slant) {
+            s<<"none";
+            return s;
+        }
+        if (slant==Font::SLANT_ITALIC) {
+            s<<"italic";
+            return s;
+        }
+        if (slant==Font::SLANT_OBLIQUE) {
+            s<<"oblique";
+            return s;
+        }
+        s<<"normal";
+        return s;
+    }
+}
+std::string Style::toString() const {
+    std::stringstream ss;
+    ss<<"stroke: "<< (_strokePattern ? HtmlColors::toRGB(_strokePattern->getColor()) : std::string("none")) << "; ";
+    ss<<"stroke-width: "<<(_strokeWidth!=NULL_NUMBER ? com::toString(_strokeWidth) : std::string("none")) << "; ";
+    ss<<"stroke-opacity: "<< (_strokeOpacity != NULL_NUMBER ? com::toString(_strokeOpacity) : std::string("none")) << "; ";
+    ss<<"stroke-dasharray: "<< _dash << "; ";
+    ss<<"fill: "<< (_fillPattern ? HtmlColors::toRGB(_fillPattern->getColor()) : std::string("none")) << "; ";
+    ss<<"fill-opacity: "<< (_fillOpacity != NULL_NUMBER ? com::toString(_fillOpacity) : std::string("none")) << "; ";
+    ss<<"font-family: "<< (_fontFace != NO_FONT.fontFace ? _fontFace : std::string("none")) << "; ";
+    ss<<"font-size: "<< (_fontSize != NULL_NUMBER ? com::toString(_fontSize) : std::string("none")) << "; ";
+    ss<<"font-weight: "<< _fontWeight << "; ";
+    ss<<"font-style: "<< _fontSlant << ";";
+    return ss.str();
+}
 
 }}}} // namespaces

@@ -185,4 +185,11 @@ ColorRGBA HtmlColors::getColor( const std::string &name )
 		return ColorRGBA::NULL_COLOR;
 	return it->second;
 }
+//-----------------------------------------------------------------------------
+std::string HtmlColors::toRGB(const ColorRGBA &col) {
+    unsigned int r=(col.getR()*255.), g=(col.getG()*255.), b=(col.getB()*255.);
+    char bff[]="#000000";
+    sprintf(bff, "#%02x%02x%02x", r, g, b);
+    return std::string(bff);
+}
 }}} // namespaces

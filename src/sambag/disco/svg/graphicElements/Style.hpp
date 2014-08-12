@@ -293,6 +293,12 @@ public:
 	const Font::Weight & fontWeight() const {
 		return _fontWeight;
 	}
+    //-------------------------------------------------------------------------
+    /**
+     * @return style as a "svg stylish" string
+     * @note ignores LineCapStyle, MiterLimit and LineJoin
+     */
+    std::string toString() const;
 
 };
 }}}} // namespace

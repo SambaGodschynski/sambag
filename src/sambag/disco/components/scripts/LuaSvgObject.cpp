@@ -7,7 +7,8 @@
 
 #include "LuaSvgObject.hpp"
 #include <sambag/disco/components/SvgComponent.hpp>
-
+#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/StyleParser.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -86,6 +87,34 @@ LuaSvgObject::createAndPush(lua_State *lua,
     neu->setSceneGraph(scene);
     return neu;
 
+}
+//-----------------------------------------------------------------------------
+void LuaSvgObject::setStyle(lua_State *lua, const std::string & str) {
+    using namespace svg::graphicElements;
+    SceneGraph::Ptr g = getSceneGraph();
+    IDrawable::Ptr obj = getObject();
+    svg::graphicElements::Style style;
+    std::stringstream ss;
+    ss<<str;
+    ss>>style;
+    Style old = g->getStyleOf(obj);
+    style.add(old);
+    getSceneGraph()->setStyleTo(getObject(), style);
+}
+//-----------------------------------------------------------------------------
+std::string LuaSvgObject::getStyle(lua_State *lua) {
+    using namespace svg::graphicElements;
+    ISceneGraph::StylePtr style = getSceneGraph()->getStyleRef(getObject());
+    if (!style) {
+        return "";
+    }
+    return style->toString();
+}
+//-----------------------------------------------------------------------------
+std::string LuaSvgObject::calculateStyle(lua_State *lua) {
+    using namespace svg::graphicElements;
+    Style style = getSceneGraph()->calculateStyle(getObject());
+    return style.toString();
 }
 }}} // namespace(s)
 

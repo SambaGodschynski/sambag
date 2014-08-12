@@ -35,19 +35,19 @@ struct ColorRGBA: public sambag::math::VectorN<sambag::com::Number, 4> {
 		return get<A> ();
 	}
 	ColorRGBA & setR(const sambag::com::Number & val) {
-		set<R> (val);
+		set<R> ( std::max(0., std::min(1., val)) );
 		return *this;
 	}
 	ColorRGBA & setG(const sambag::com::Number & val) {
-		set<G> (val);
+		set<G> ( std::max(0., std::min(1., val)) );
 		return *this;
 	}
 	ColorRGBA & setB(const sambag::com::Number & val) {
-		set<B> (val);
+		set<B> ( std::max(0., std::min(1., val)) );
 		return *this;
 	}
 	ColorRGBA & setA(const sambag::com::Number & val) {
-		set<A> (val);
+		set<A> ( std::max(0., std::min(1., val)) );
 		return *this;
 	}
 	ColorRGBA & setValues(const sambag::com::Number &r,

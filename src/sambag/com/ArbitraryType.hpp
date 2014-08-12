@@ -17,9 +17,8 @@ namespace sambag { namespace com {
 
 // ArbitraryType: now I recognize how clunky
 // this name is. I implemented this class
-// before without the knowledge what
+// before, without the knowledge what
 // boost::any is doing.
-// TODO: for the future, replace all Arbitrary occurrences with any.
 struct ArbitraryType {
 	boost::any value;
 	typedef boost::shared_ptr<ArbitraryType> Ptr;
@@ -34,6 +33,9 @@ struct ArbitraryType {
  */
 template <typename T>
 bool get(ArbitraryType::Ptr src, T &target) {
+    if (!src) {
+        return false;
+    }
 	try {
 		target = boost::any_cast<T>(src->value);
 	} catch(...) {

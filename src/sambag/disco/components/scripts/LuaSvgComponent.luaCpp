@@ -15,7 +15,5 @@ class LuaSvgBase extends sambag.lua.ALuaObject {
      /**
        * @return a sequence of @see DiscoObjects / @see SvgObject by xml selector
        */
-      ManuallyReturn<1> select(string sel); 
-
-      
+      ManuallyReturn<1> select(string sel);     
 }

@@ -21,4 +21,19 @@ class LuaSvgObjectBase extends sambag.lua.ALuaObject {
         * @return true if object visible
 	*/
        bool isVisible(); 
+       /**
+        * @brief set style string
+	* @note supports only solid colors no svg defined gradients or patterns
+	*/
+       void setStyle(string style);
+       /**
+        * @return style string
+	* @note ignores LineCapStyle, MiterLimit and LineJoin
+	*/
+       string getStyle();
+       /**
+        * @return calculated style string
+        * @note ignores LineCapStyle, MiterLimit and LineJoin
+	*/
+       string calculateStyle();
 }
