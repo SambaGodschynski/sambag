@@ -178,7 +178,7 @@ public:
 	 */
 	template <typename T>
 	void add(const AComponentSharedOrWeak &comp, const T &v, int index /*no default!*/) {
-		add (comp, index, com::ConcreteType<T>::create(v));
+		add (comp, index, com::createObject(v));
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -189,7 +189,7 @@ public:
 	 */
 	template <typename T>
 	void addBack(const AComponentSharedOrWeak &comp, const T &v) {
-		add(comp, -1, com::ConcreteType<T>::create(v));
+		add(comp, -1, com::createObject(v));
 	}
 	//-------------------------------------------------------------------------
 	/**
