@@ -5,7 +5,7 @@
  *
  * LuaDiscoObjectBase.hpp
  *
- *  Created on: Thu Jul 31 18:05:17 2014
+ *  Created on: Tue Aug 12 10:03:59 2014
  *      Author: Samba Godschysnki
  */
 
@@ -18,15 +18,15 @@
 #include <loki/Typelist.h>
 #include <sambag/lua/ALuaObject.hpp>
 
-
+#include <sambag/disco/components/scripts/LuaSvgObject.hpp>
 
 namespace sambag { namespace disco { namespace components { 
 //=============================================================================
-class LuaDiscoObjectBase : public sambag::lua::ALuaObject {
+class LuaDiscoObjectBase : public LuaSvgObject {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef sambag::lua::ALuaObject Super;
+    typedef LuaSvgObject Super;
     //-------------------------------------------------------------------------
     typedef boost::shared_ptr<LuaDiscoObjectBase> Ptr;
     //-------------------------------------------------------------------------
@@ -38,30 +38,14 @@ protected:
     //-------------------------------------------------------------------------
     LuaDiscoObjectBase() {}
     //-------------------------------------------------------------------------
-    SAMBAG_LUA_FTAG(getId, std::string ());
-	SAMBAG_LUA_FTAG(getClasses, sambag::lua::IgnoreReturn ());
-	SAMBAG_LUA_FTAG(addOnEnterListener, void (std::string));
+    SAMBAG_LUA_FTAG(addOnEnterListener, void (std::string));
 	SAMBAG_LUA_FTAG(addOnExitListener, void (std::string));
-	SAMBAG_LUA_FTAG(setVisible, void (bool));
-	SAMBAG_LUA_FTAG(isVisible, bool ());
-    typedef LOKI_TYPELIST_6(Frx_getId_Tag, 
-	Frx_getClasses_Tag, 
-	Frx_addOnEnterListener_Tag, 
-	Frx_addOnExitListener_Tag, 
-	Frx_setVisible_Tag, 
-	Frx_isVisible_Tag) Functions1;
+    typedef LOKI_TYPELIST_2(Frx_addOnEnterListener_Tag, 
+	Frx_addOnExitListener_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
     /**
-	* @return the object svg id
-	*/
-	virtual std::string getId(lua_State *lua) = 0;
-	/**
-	* @return a sequence of svg class names
-	*/
-	virtual sambag::lua::IgnoreReturn getClasses(lua_State *lua) = 0;
-	/**
 	* @brief adds a listener for the onEnter event.
 	* @param the callback lua expression
 	*/
@@ -71,14 +55,6 @@ protected:
 	* @param the callback lua expression
 	*/
 	virtual void addOnExitListener(lua_State *lua, const std::string & expr) = 0;
-	/**
-	* @brief set objects visibility
-	*/
-	virtual void setVisible(lua_State *lua, bool x) = 0;
-	/**
-	* @return true if object visible
-	*/
-	virtual bool isVisible(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

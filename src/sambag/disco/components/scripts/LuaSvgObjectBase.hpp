@@ -3,14 +3,14 @@
  * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
  * THE THIS FILE IS GENERATED  
  *
- * LuaSvgBase.hpp
+ * LuaSvgObjectBase.hpp
  *
- *  Created on: Tue Aug 12 13:06:28 2014
+ *  Created on: Tue Aug 12 09:42:57 2014
  *      Author: Samba Godschysnki
  */
 
-#ifndef SAMBAG_LuaSvgBase_H
-#define SAMBAG_LuaSvgBase_H
+#ifndef SAMBAG_LuaSvgObjectBase_H
+#define SAMBAG_LuaSvgObjectBase_H
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -22,43 +22,49 @@
 
 namespace sambag { namespace disco { namespace components { 
 //=============================================================================
-class LuaSvgBase : public sambag::lua::ALuaObject {
+class LuaSvgObjectBase : public sambag::lua::ALuaObject {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
     typedef sambag::lua::ALuaObject Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaSvgBase> Ptr;
+    typedef boost::shared_ptr<LuaSvgObjectBase> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaSvgBase> WPtr;
+    typedef boost::weak_ptr<LuaSvgObjectBase> WPtr;
     //-------------------------------------------------------------------------
     
 private:
 protected:
     //-------------------------------------------------------------------------
-    LuaSvgBase() {}
+    LuaSvgObjectBase() {}
     //-------------------------------------------------------------------------
-    SAMBAG_LUA_FTAG(getObjectById, sambag::lua::IgnoreReturn (std::string));
-	SAMBAG_LUA_FTAG(getObjectsByClass, sambag::lua::IgnoreReturn (std::string));
-	SAMBAG_LUA_FTAG(select, sambag::lua::IgnoreReturn (std::string));
-    typedef LOKI_TYPELIST_3(Frx_getObjectById_Tag, 
-	Frx_getObjectsByClass_Tag, 
-	Frx_select_Tag) Functions1;
+    SAMBAG_LUA_FTAG(getId, std::string ());
+	SAMBAG_LUA_FTAG(getClasses, sambag::lua::IgnoreReturn ());
+	SAMBAG_LUA_FTAG(setVisible, void (bool));
+	SAMBAG_LUA_FTAG(isVisible, bool ());
+    typedef LOKI_TYPELIST_4(Frx_getId_Tag, 
+	Frx_getClasses_Tag, 
+	Frx_setVisible_Tag, 
+	Frx_isVisible_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
     /**
-	* @return a @see DiscoObject / @see SvgObject by svg id or nil 
+	* @return the object svg id
 	*/
-	virtual sambag::lua::IgnoreReturn getObjectById(lua_State *lua, const std::string & id) = 0;
+	virtual std::string getId(lua_State *lua) = 0;
 	/**
-	* @return a sequence of @see DiscoObjects / @see SvgObject by svg class 
+	* @return a sequence of svg class names
 	*/
-	virtual sambag::lua::IgnoreReturn getObjectsByClass(lua_State *lua, const std::string & _class) = 0;
+	virtual sambag::lua::IgnoreReturn getClasses(lua_State *lua) = 0;
 	/**
-	* @return a sequence of @see DiscoObjects / @see SvgObject by xml selector
+	* @brief set objects visibility
 	*/
-	virtual sambag::lua::IgnoreReturn select(lua_State *lua, const std::string & sel) = 0;
+	virtual void setVisible(lua_State *lua, bool x) = 0;
+	/**
+	* @return true if object visible
+	*/
+	virtual bool isVisible(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter
@@ -77,11 +83,11 @@ public:
     virtual void __lua_gc(lua_State *lua);
 public:
     //-------------------------------------------------------------------------
-    virtual ~LuaSvgBase() {}
+    virtual ~LuaSvgObjectBase() {}
 private:
 public:
-}; // LuaSvgBase
+}; // LuaSvgObjectBase
 }}}
 
-#endif /* SAMBAG_LuaSvgBase_H */
+#endif /* SAMBAG_LuaSvgObjectBase_H */
 

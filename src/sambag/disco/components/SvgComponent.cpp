@@ -195,10 +195,14 @@ struct SvgComponent::SyncedSceneGraph :
             g->setVisible(el, val);
         SAMBAG_END_SYNCHRONIZED
     }
-
     virtual bool isVisible(SceneGraphElement el) const {
         SAMBAG_BEGIN_SYNCHRONIZED(lock)
             return g->isVisible(el);
+        SAMBAG_END_SYNCHRONIZED
+    }
+    virtual void select(const std::string & sel, Elements &c) {
+        SAMBAG_BEGIN_SYNCHRONIZED(lock)
+            return g->select(sel, c);
         SAMBAG_END_SYNCHRONIZED
     }
 }; // SceneGraphAdapter

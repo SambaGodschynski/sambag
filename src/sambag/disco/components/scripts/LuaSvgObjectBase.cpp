@@ -3,28 +3,30 @@
  * EVERY CHANGES WILL BE OVERWRITTEN THE NEXT TIME 
  * THE THIS FILE IS GENERATED  
  *
- * LuaDiscoObjectBase.cpp
+ * LuaSvgObjectBase.cpp
  *
- *  Created on: Tue Aug 12 10:03:59 2014
+ *  Created on: Tue Aug 12 09:42:57 2014
  *      Author: Samba Godschysnki
  */
 
-#include "LuaDiscoObjectBase.hpp"
+#include "LuaSvgObjectBase.hpp"
 
 namespace sambag { namespace disco { namespace components { 
 //=============================================================================
-//  Class LuaDiscoObjectBase
+//  Class LuaSvgObjectBase
 //=============================================================================
 //-----------------------------------------------------------------------------
-void LuaDiscoObjectBase::addLuaFields(lua_State *lua, int index) 
+void LuaSvgObjectBase::addLuaFields(lua_State *lua, int index) 
 {
     using namespace sambag::lua;
     Super::addLuaFields(lua, index);
     // register functions
     registerClassFunctions<Functions1, TupleAccessor>(
 	lua,
-	boost::make_tuple(boost::bind(&LuaDiscoObjectBase::addOnEnterListener, this, lua, _1),
-		boost::bind(&LuaDiscoObjectBase::addOnExitListener, this, lua, _1)),
+	boost::make_tuple(boost::bind(&LuaSvgObjectBase::getId, this, lua),
+		boost::bind(&LuaSvgObjectBase::getClasses, this, lua),
+		boost::bind(&LuaSvgObjectBase::setVisible, this, lua, _1),
+		boost::bind(&LuaSvgObjectBase::isVisible, this, lua)),
 	index, 
 	getUId() 
 	); 
@@ -33,7 +35,7 @@ void LuaDiscoObjectBase::addLuaFields(lua_State *lua, int index)
     
 }
 //-----------------------------------------------------------------------------
-void LuaDiscoObjectBase::__lua_gc(lua_State *lua) {
+void LuaSvgObjectBase::__lua_gc(lua_State *lua) {
     using namespace sambag::lua;
     unregisterClassFunctions<Functions1>(getUId());
 	unregisterClassFunctions<MetaFunctions>(getUId());

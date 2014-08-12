@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include "LuaSvgBase.hpp"
-
+#include <sambag/disco/IDrawable.hpp>
 
 namespace sambag { namespace disco { namespace components { 
 class SvgComponent;
@@ -30,21 +30,22 @@ public:
 private:
     //-------------------------------------------------------------------------
     SvgComponentPtr svg;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief tries to create a LuaDiscoObject or, if fails, a LuaSvgObject.
+     * If none of them succeed it pushes nil.
+     */
+    void push(lua_State *lua, IDrawable::Ptr x);
 protected:
     //-------------------------------------------------------------------------
     LuaSvg() {}
-    //-------------------------------------------------------------------------
-    /**
-	* @return a @see DiscoObject by svg id or nil 
-	*/
+    ///////////////////////////////////////////////////////////////////////////
 	virtual sambag::lua::IgnoreReturn
     getObjectById(lua_State *lua, const std::string & id);
-    //-------------------------------------------------------------------------
-	/**
-	* @return a sequence of @see DiscoObjects by svg class 
-	*/
 	virtual sambag::lua::IgnoreReturn
     getObjectsByClass(lua_State *lua, const std::string & _class);
+	virtual sambag::lua::IgnoreReturn
+    select(lua_State *lua, const std::string & sel);
 public:
     //-------------------------------------------------------------------------
     virtual ~LuaSvg() {}

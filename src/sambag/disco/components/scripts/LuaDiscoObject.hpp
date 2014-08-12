@@ -63,8 +63,6 @@ public:
     virtual ~LuaDiscoObject() {}
     ///////////////////////////////////////////////////////////////////////////
     // impl.
-	virtual std::string getId(lua_State *lua);
-	virtual sambag::lua::IgnoreReturn getClasses(lua_State *lua);
     virtual void addOnEnterListener(lua_State *lua, const std::string & expr);
     virtual void addOnExitListener(lua_State *lua, const std::string & expr);
 	virtual void setVisible(lua_State *lua, bool x);

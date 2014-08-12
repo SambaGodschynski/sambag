@@ -52,6 +52,9 @@ LuaDiscoObject::Factory::createAndPush(lua_State *lua, Component::Ptr comp)
         neu->createLuaObject(lua, "sambag.disco.components.LuaDiscoObject");
     }
     neu->component = comp;
+    SvgComponent::Ptr svg = neu->getSvgComponent();
+    neu->setSceneGraph(svg->getSceneGraph());
+    neu->setObject(svg->getDrawable(comp));
     return neu;
 }
 //-----------------------------------------------------------------------------
@@ -88,24 +91,6 @@ SvgComponent::Ptr LuaDiscoObject::getSvgComponent() const {
         throw std::runtime_error("LuaDiscoObject::SvgComponent == NULL");
     }
     return res;
-}
-//-----------------------------------------------------------------------------
-std::string LuaDiscoObject::getId(lua_State *lua) {
-    return getComponent()->getSvgId();
-}
-//-----------------------------------------------------------------------------
-sambag::lua::IgnoreReturn LuaDiscoObject::getClasses(lua_State *lua) {
-    std::vector<std::string> classes;
-    getComponent()->getSvgClasses(classes);
-    lua_createtable(lua, classes.size(), 0);
-    int top = lua_gettop(lua);
-    int luaC = 1;
-    BOOST_FOREACH(const std::string &x, classes) {
-        lua::push(lua, luaC++);
-        lua::push(lua, x);
-        lua_settable(lua, top);
-    }
-    return sambag::lua::IgnoreReturn();
 }
 //-----------------------------------------------------------------------------
 void LuaDiscoObject::addOnEnterListener(lua_State *lua, const std::string & expr)

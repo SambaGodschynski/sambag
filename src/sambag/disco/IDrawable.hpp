@@ -11,6 +11,8 @@
 #include "IDrawContext.hpp"
 #include "sambag/com/Common.hpp"
 #include "string"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -22,19 +24,18 @@ class IDrawable {
 public:
 	//-------------------------------------------------------------------------
 	typedef boost::shared_ptr<IDrawable> Ptr;
+        //-------------------------------------------------------------------------
+        typedef boost::weak_ptr<IDrawable> WPtr;
 	//-------------------------------------------------------------------------
 	virtual void draw(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------
 	/**
-	 * @note: can't be const because the default impl. of 
-	 * GraphicElement::getBoundingBox uses the unconst draw method().
-	 * And making draw() is partially harder to realize than
-	 * having getBoundingBox() unconst.
+	 * @note: not const  
 	 */
 	virtual Rectangle getBoundingBox(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------
 	/**
-	 * for testing and debugging
+	 * @return the drawables name
 	 */
 	virtual std::string toString() const = 0;
 };

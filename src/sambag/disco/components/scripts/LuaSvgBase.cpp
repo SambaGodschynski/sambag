@@ -5,7 +5,7 @@
  *
  * LuaSvgBase.cpp
  *
- *  Created on: Sun Jul 27 16:38:41 2014
+ *  Created on: Tue Aug 12 13:06:28 2014
  *      Author: Samba Godschysnki
  */
 
@@ -24,7 +24,8 @@ void LuaSvgBase::addLuaFields(lua_State *lua, int index)
     registerClassFunctions<Functions1, TupleAccessor>(
 	lua,
 	boost::make_tuple(boost::bind(&LuaSvgBase::getObjectById, this, lua, _1),
-		boost::bind(&LuaSvgBase::getObjectsByClass, this, lua, _1)),
+		boost::bind(&LuaSvgBase::getObjectsByClass, this, lua, _1),
+		boost::bind(&LuaSvgBase::select, this, lua, _1)),
 	index, 
 	getUId() 
 	); 

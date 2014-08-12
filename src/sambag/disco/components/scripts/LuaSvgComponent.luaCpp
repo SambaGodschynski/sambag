@@ -5,11 +5,17 @@ sambag.disco.components
  */
 class LuaSvgBase extends sambag.lua.ALuaObject {
       /**
-       * @return a @see DiscoObject by svg id or nil 
+       * @return a @see DiscoObject / @see SvgObject by svg id or nil 
        */
       ManuallyReturn<1> getObjectById(string id);
       /**
-       * @return a sequence of @see DiscoObjects by svg class 
+       * @return a sequence of @see DiscoObjects / @see SvgObject by svg class 
        */
       ManuallyReturn<1> getObjectsByClass(string _class); 
+     /**
+       * @return a sequence of @see DiscoObjects / @see SvgObject by xml selector
+       */
+      ManuallyReturn<1> select(string sel); 
+
+      
 }

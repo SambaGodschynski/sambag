@@ -1,17 +1,13 @@
 sambag.disco.components
+
+#include <sambag/disco/components/scripts/LuaSvgObject.hpp>
+
 /**
  * @brief the base class for all (svg) disco objects.
  * @version 1.0 
+ * @alias LuaDiscoObject
  */
-class LuaDiscoObjectBase extends sambag.lua.ALuaObject {
-      /**
-       * @return the object svg id
-       */
-       string getId();
-       /**
-        * @return a sequence of svg class names
-	*/
-	ManuallyReturn<1> getClasses();
+class LuaDiscoObjectBase extends LuaSvgObject {
        /**
         * @brief adds a listener for the onEnter event.
 	* @param the callback lua expression
@@ -22,12 +18,4 @@ class LuaDiscoObjectBase extends sambag.lua.ALuaObject {
 	* @param the callback lua expression
 	*/
        void addOnExitListener(string expr);
-       /**
-        * @brief set objects visibility
-	*/
-       void setVisible(bool x);
-       /**
-        * @return true if object visible
-	*/
-       bool isVisible(); 
 }

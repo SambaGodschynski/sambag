@@ -38,10 +38,10 @@ void TestSVGComponent::testComponentTree() {
     svg->printComponentTree(ss);
     CPPUNIT_ASSERT_EQUAL(std::string("[SvgComponent,0,0,800x600,invalid,alignmentX=0.5,alignmentY=0.5,max\
 imumSize=Rectangle(Point2D(0, 0), Point2D(0, 0))]\n\
- [<g id='#C' class='.disco '/>,-0.5,-0.5,1x1,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#B' class='.disco '/>,-0.5,-0.5,1x1,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#D' class='.disco '/>,-0.5,-0.5,1x1,invalid,alignmentX=0.5,alignmentY=0.5]\n\
- [<g id='#A' class='.disco '/>,-0.5,-0.5,1x1,invalid,alignmentX=0.5,alignmentY=0.5]\n"), ss.str());
+ [<g id='#C' class='.disco '/>,-1,-1,2x2,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#B' class='.disco '/>,-1,-1,2x2,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#D' class='.disco '/>,-1,-1,2x2,invalid,alignmentX=0.5,alignmentY=0.5]\n\
+ [<g id='#A' class='.disco '/>,-1,-1,2x2,invalid,alignmentX=0.5,alignmentY=0.5]\n"), ss.str());
     
 }
 } //namespace

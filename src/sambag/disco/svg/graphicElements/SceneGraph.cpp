@@ -7,6 +7,7 @@
 
 #include "GraphicElement.hpp"
 #include "SceneGraph.hpp"
+#include "SceneGraphHelper.hpp"
 #include "sambag/com/Common.hpp"
 #include <sstream>
 #include <limits.h>
@@ -680,5 +681,9 @@ void SceneGraph::setVisible(SceneGraphElement el, bool val) {
 //-----------------------------------------------------------------------------
 bool SceneGraph::isVisible(SceneGraphElement el) const {
     return getFlag(el, Invisible) != 1;
+}
+//-----------------------------------------------------------------------------
+void SceneGraph::select(const std::string & sel, Elements &c) {
+    getGraphElementsBySelector(sel, self.lock(), c);
 }
 }}}} // namespaces

@@ -775,6 +775,8 @@ public:
      * @return true if an element is visible.
      */
     bool isVisible(SceneGraphElement el) const;
+    //-------------------------------------------------------------------------
+    virtual void select(const std::string & sel, Elements &c);
     ///////////////////////////////////////////////////////////////////////////
     // ISceneGraph adjustments
     //-------------------------------------------------------------------------

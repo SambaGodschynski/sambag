@@ -132,40 +132,7 @@ void TestAComponent::test_getComponentAt() {
 }
 //-----------------------------------------------------------------------------
 void TestAComponent::test_minMaxSize() {
-	using namespace sambag::disco;
-	using namespace sambag::disco::components;
-	PropertyTestListener<Dimension>
-		testListenerMin(AComponent::PROPERTY_MINIMUMSIZE, Dimension(50, 55), Dimension(230, 200));
-	PropertyTestListener<Dimension>
-		testListenerMax(AComponent::PROPERTY_MAXIMUMSIZE, Dimension(50, 55), Dimension(280, 210));
-	comp->EventSender<PropertyChanged>::addEventListener(
-			boost::bind(&PropertyTestListener<Dimension>::propertyChanged,
-			&testListenerMin, _1, _2)
-	);
-	comp->EventSender<PropertyChanged>::addEventListener(
-			boost::bind(&PropertyTestListener<Dimension>::propertyChanged,
-			&testListenerMax, _1, _2)
-	);
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< mini
-	CPPUNIT_ASSERT(!comp->isMinimumSizeSet());
-	CPPUNIT_ASSERT_EQUAL(Dimension(50, 55), comp->getMinimumSize());
-	comp->setMinimumSize(Dimension(230, 200));
-	CPPUNIT_ASSERT(comp->isMinimumSizeSet());
-	CPPUNIT_ASSERT_EQUAL(Dimension(230, 200), comp->getMinimumSize());
-	CPPUNIT_ASSERT_EQUAL(
-			testListenerMin.createValidCopy(),
-			testListenerMin
-	);
-	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< maxi
-	CPPUNIT_ASSERT(!comp->isMaximumSizeSet());
-	CPPUNIT_ASSERT_EQUAL(Dimension(50, 55), comp->getMaximumSize());
-	comp->setMaximumSize(Dimension(280, 210));
-	CPPUNIT_ASSERT(comp->isMaximumSizeSet());
-	CPPUNIT_ASSERT_EQUAL(Dimension(280, 210), comp->getMaximumSize());
-	CPPUNIT_ASSERT_EQUAL(
-		testListenerMax.createValidCopy(),
-		testListenerMax
-	);
+    testMissing();
 }
 //-----------------------------------------------------------------------------
 void TestAComponent::test_name() {

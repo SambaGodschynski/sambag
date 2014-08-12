@@ -146,6 +146,8 @@ public:
     //-------------------------------------------------------------------------
     virtual void getElementsByTagX(const Tag & tagName, Elements &c) = 0;
     //-------------------------------------------------------------------------
+    virtual void select(const std::string & sel, Elements &c) = 0;
+    //-------------------------------------------------------------------------
     virtual Tag getTagName(SceneGraphElement el) const = 0;
     //-------------------------------------------------------------------------
     virtual Id getIdName(SceneGraphElement el) const = 0;
