@@ -5,7 +5,7 @@
  *
  * LuaSvgBase.hpp
  *
- *  Created on: Tue Aug 12 13:06:28 2014
+ *  Created on: Tue Aug 12 20:32:33 2014
  *      Author: Samba Godschysnki
  */
 
@@ -41,9 +41,11 @@ protected:
     SAMBAG_LUA_FTAG(getObjectById, sambag::lua::IgnoreReturn (std::string));
 	SAMBAG_LUA_FTAG(getObjectsByClass, sambag::lua::IgnoreReturn (std::string));
 	SAMBAG_LUA_FTAG(select, sambag::lua::IgnoreReturn (std::string));
-    typedef LOKI_TYPELIST_3(Frx_getObjectById_Tag, 
+	SAMBAG_LUA_FTAG(redraw, void ());
+    typedef LOKI_TYPELIST_4(Frx_getObjectById_Tag, 
 	Frx_getObjectsByClass_Tag, 
-	Frx_select_Tag) Functions1;
+	Frx_select_Tag, 
+	Frx_redraw_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,10 @@ protected:
 	* @return a sequence of @see DiscoObjects / @see SvgObject by xml selector
 	*/
 	virtual sambag::lua::IgnoreReturn select(lua_State *lua, const std::string & sel) = 0;
+	/**
+	*@brief redraw the svg image
+	*/
+	virtual void redraw(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

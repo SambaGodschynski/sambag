@@ -46,6 +46,7 @@ protected:
     getObjectsByClass(lua_State *lua, const std::string & _class);
 	virtual sambag::lua::IgnoreReturn
     select(lua_State *lua, const std::string & sel);
+    virtual void redraw(lua_State *lua);
 public:
     //-------------------------------------------------------------------------
     virtual ~LuaSvg() {}

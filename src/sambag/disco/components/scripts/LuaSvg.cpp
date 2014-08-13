@@ -77,5 +77,9 @@ LuaSvg::Ptr LuaSvg::createAndPush(lua_State *lua, SvgComponentPtr svg) {
     neu->createLuaObject(lua, "sambag.disco.components.LuaSvg");
     return neu;
 }
+//-----------------------------------------------------------------------------
+void LuaSvg::redraw(lua_State *lua) {
+    svg->redraw();
+}
 }}} // namespace(s)
 
