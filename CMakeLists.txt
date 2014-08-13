@@ -46,6 +46,7 @@ ELSEIF(UNIX)
 ELSEIF(WIN32)
         add_definitions(-DDISCO_USE_WIN32)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
+	add_definitions(-DNOMINMAX) #prevent collision with std::min/max
 	add_definitions(-DSAMBAG_USE_WINDOWS_SHARED_MEMORY)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /ZI")
         set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
