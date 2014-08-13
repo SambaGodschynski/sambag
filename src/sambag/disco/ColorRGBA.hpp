@@ -10,6 +10,7 @@
 
 #include <sambag/math/VectorN.hpp>
 #include "sambag/com/Common.hpp"
+#include <algorithm>
 
 namespace sambag { namespace disco {
 //=============================================================================
