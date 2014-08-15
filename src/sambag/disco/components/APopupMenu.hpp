@@ -40,13 +40,13 @@ class APopupMenu :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<APopupMenu> Ptr;
-	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<APopupMenu> WPtr;
-	//-------------------------------------------------------------------------
 	typedef SingleSelectionModell Model;
 	//-------------------------------------------------------------------------
     typedef APopupMenu<Model> Class;
+	//-------------------------------------------------------------------------
+	typedef boost::shared_ptr<Class> Ptr;
+	//-------------------------------------------------------------------------
+	typedef boost::weak_ptr<Class> WPtr;
     //-------------------------------------------------------------------------
 	static const std::string PROPERTY_POPUP_LOCATION;
     //-------------------------------------------------------------------------
@@ -57,15 +57,21 @@ private:
 	//-------------------------------------------------------------------------
 	AComponentWPtr _invoker;
 	//-------------------------------------------------------------------------
-	void initWindow();
-	//-------------------------------------------------------------------------
 	WindowPtr window;
     //-------------------------------------------------------------------------
     template <class Event>
     void dispatch(const Event &ev) {
         com::events::EventSender<Event>::notifyListeners(this, ev);
     }
+    //-------------------------------------------------------------------------
+	void initWindow();
 protected:
+	//-------------------------------------------------------------------------
+	/**
+     * @brief creates the menu window
+     * @param the parent window
+     */
+    virtual WindowPtr createWindow(WindowPtr parent);
 	//-------------------------------------------------------------------------
 	Point2D location;
 	//-------------------------------------------------------------------------
@@ -163,6 +169,11 @@ void APopupMenu<SM>::hidePopup() {
 }
 //-----------------------------------------------------------------------------
 template <class SM>
+WindowPtr APopupMenu<SM>::createWindow(WindowPtr parent) {
+    return Window::create(parent);
+}
+//-----------------------------------------------------------------------------
+template <class SM>
 void APopupMenu<SM>::initWindow() {
 	setLayout(
 		ui::DefaultMenuLayout::create(getPtr(), ui::DefaultMenuLayout::Y_AXIS)
@@ -172,7 +183,7 @@ void APopupMenu<SM>::initWindow() {
 	if (invoker) {
 		parentW = invoker->getTopLevelAncestor();
 	}
-	window = Window::create(parentW);
+	window = createWindow(parentW);
 	window->getContentPane()->add(AsWeakPtr<AComponent>(getPtr()));
 	window->setWindowLocation(location);
     window->addTrackedOnOpenEventListener(

@@ -25,7 +25,7 @@ AWindowImpl::Ptr Window::getWindowImpl() const {
 	return windowImpl;
 }
 //-----------------------------------------------------------------------------
-Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
+Window::Window(Window::Ptr parentWindow, unsigned int flags) : parentWindow(parentWindow) {
 	rootPane = components::RootPane::create();
 	WindowPtr parent = getParentWindow();
 	if (parent) {
@@ -36,8 +36,12 @@ Window::Window(Window::Ptr parentWindow) : parentWindow(parentWindow) {
 			getWindowToolkit()->createWindowImpl();
 	}
 	SAMBAG_ASSERT(windowImpl);
-	windowImpl->setFlag(WindowFlags::WND_FRAMED, false);
-	windowImpl->setRootPane(rootPane);
+    if (flags>0) {
+        windowImpl->setFlags(flags);
+    } else {
+        windowImpl->setFlag(WindowFlags::WND_FRAMED, false);
+	}
+    windowImpl->setRootPane(rootPane);
 	//add(rootPane); do not call in constructor! -> getPtr() returns NULL
 }
 //-----------------------------------------------------------------------------

@@ -80,6 +80,10 @@ public:
 		WindowFlags::setFlag(flag, val);
 	}
 	//-------------------------------------------------------------------------
+	virtual void setFlags(unsigned int x) {
+		WindowFlags::setFlags(x);
+	}
+	//-------------------------------------------------------------------------
 	virtual bool getFlag(WindowFlags::Flag flag) const {
 		return WindowFlags::getFlag(flag);
 	}

@@ -440,8 +440,16 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
         [window makeKeyAndOrderFront:nil];
         [window setAcceptsMouseMovedEvents:YES];
         [window setReleasedWhenClosed: YES];
-        [window setLevel: NSFloatingWindowLevel];
         [window setAutodisplay: YES];
+    
+        if (getFlag(sambag::disco::components::WindowFlags::WND_ALWAYS_ON_TOP))
+        {
+            [window makeKeyAndOrderFront:nil];
+            [window setLevel:NSStatusWindowLevel];
+        } else {
+            [window setLevel:NSFloatingWindowLevel];
+        }
+
     
         if (getFlag(WindowFlags::WND_RAW)) {
             NSRect f = getBoundsOnScreen(view);

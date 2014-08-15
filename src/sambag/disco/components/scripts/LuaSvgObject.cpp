@@ -116,5 +116,10 @@ std::string LuaSvgObject::calculateStyle(lua_State *lua) {
     Style style = getSceneGraph()->calculateStyle(getObject());
     return style.toString();
 }
+//-----------------------------------------------------------------------------
+LuaSvgObject::SvgRect LuaSvgObject::getBounds(lua_State *lua) {
+    Rectangle r = getSceneGraph()->getBoundingBox(getObject());
+    return SvgRect(r.x(), r.y(), r.width(), r.height());
+}
 }}} // namespace(s)
 

@@ -60,7 +60,7 @@ protected:
 	//-------------------------------------------------------------------------
 	components::RootPane::Ptr rootPane;
 	//-------------------------------------------------------------------------
-	Window(Window::Ptr parentWindow);
+	Window(Window::Ptr parentWindow, unsigned int flags=0);
 	//-------------------------------------------------------------------------
 	Window(AWindowImpl::Ptr windowImpl, Window::Ptr parentWindow=WindowPtr());
 	//-------------------------------------------------------------------------
@@ -175,8 +175,8 @@ public:
 	 */
 	virtual void pack();
 	//-------------------------------------------------------------------------
-	static Ptr create(Window::Ptr parentWindow=WindowPtr()) {
-		Ptr res(new Window(parentWindow));
+	static Ptr create(Window::Ptr parentWindow=WindowPtr(), unsigned int flags=0) {
+		Ptr res(new Window(parentWindow, flags));
 		res->self = res;
         res->postConstructor();
 		res->initWindow();

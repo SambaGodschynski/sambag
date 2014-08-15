@@ -120,6 +120,8 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void setFlag(WindowFlags::Flag flag, bool val) = 0;
 	//-------------------------------------------------------------------------
+	virtual void setFlags(unsigned int flags) = 0;
+	//-------------------------------------------------------------------------
 	virtual bool getFlag(WindowFlags::Flag flag) const = 0;
 	//-------------------------------------------------------------------------
 	virtual bool isVisible() const = 0;

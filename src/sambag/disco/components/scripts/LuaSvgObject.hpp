@@ -59,7 +59,7 @@ public:
 	virtual void setStyle(lua_State *lua, const std::string & style);
 	virtual std::string getStyle(lua_State *lua);
     virtual std::string calculateStyle(lua_State *lua);
-
+    virtual SvgRect getBounds(lua_State *lua);
     //-------------------------------------------------------------------------
     static Ptr createAndPush(lua_State *lua, IDrawable::Ptr object, SceneGraph::Ptr scene);
 }; // LuaSvgObject

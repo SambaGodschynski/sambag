@@ -36,4 +36,10 @@ class LuaSvgObjectBase extends sambag.lua.ALuaObject {
         * @note ignores LineCapStyle, MiterLimit and LineJoin
 	*/
        string calculateStyle();
+       User< boost::tuple<float, float, float, float> > SvgRect;
+       /**
+        * @return (x, y, width, height) of an element
+	*/
+	User<SvgRect> getBounds();
+	
 }

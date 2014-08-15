@@ -88,6 +88,10 @@ public:
 		return ConcreteWindowImpl::setFlag(flag, val);
 	}
 	//-------------------------------------------------------------------------
+	virtual void setFlags(unsigned int flags) {
+		return ConcreteWindowImpl::setFlags(flags);
+	}
+	//-------------------------------------------------------------------------
 	virtual bool getFlag(WindowFlags::Flag flag) const {
 		return ConcreteWindowImpl::getFlag(flag);
 	}

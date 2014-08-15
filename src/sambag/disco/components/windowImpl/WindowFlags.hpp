@@ -16,7 +16,7 @@ public:
 private:
 	FlagType flags;
 public:
-	enum Flag {			// !there is no bitshifting, thats ok! consider impl. 
+	enum Flag {			// !there is no bitshifting, thats ok! see impl. 
 		WND_FRAMED,
 		WND_RESIZEABLE,
 		WND_NESTED,		    // is true when windowImpl. is nested in a host window. 
@@ -39,6 +39,9 @@ public:
 	}
 	void clearAllFlags() {
 		flags = 0;
+	}
+	void setFlags(unsigned int flags) {
+		this->flags = flags;
 	}
 };
 

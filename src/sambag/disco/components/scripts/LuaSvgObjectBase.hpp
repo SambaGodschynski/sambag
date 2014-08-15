@@ -5,7 +5,7 @@
  *
  * LuaSvgObjectBase.hpp
  *
- *  Created on: Tue Aug 12 15:33:14 2014
+ *  Created on: Fri Aug 15 15:33:41 2014
  *      Author: Samba Godschysnki
  */
 
@@ -32,7 +32,8 @@ public:
     //-------------------------------------------------------------------------
     typedef boost::weak_ptr<LuaSvgObjectBase> WPtr;
     //-------------------------------------------------------------------------
-    
+    typedef  boost::tuple<float, float, float, float>  SvgRect;
+	
 private:
 protected:
     //-------------------------------------------------------------------------
@@ -45,13 +46,15 @@ protected:
 	SAMBAG_LUA_FTAG(setStyle, void (std::string));
 	SAMBAG_LUA_FTAG(getStyle, std::string ());
 	SAMBAG_LUA_FTAG(calculateStyle, std::string ());
-    typedef LOKI_TYPELIST_7(Frx_getId_Tag, 
+	SAMBAG_LUA_FTAG(getBounds, SvgRect ());
+    typedef LOKI_TYPELIST_8(Frx_getId_Tag, 
 	Frx_getClasses_Tag, 
 	Frx_setVisible_Tag, 
 	Frx_isVisible_Tag, 
 	Frx_setStyle_Tag, 
 	Frx_getStyle_Tag, 
-	Frx_calculateStyle_Tag) Functions1;
+	Frx_calculateStyle_Tag, 
+	Frx_getBounds_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -73,16 +76,23 @@ protected:
 	virtual bool isVisible(lua_State *lua) = 0;
 	/**
 	* @brief set style string
+	* @note supports only solid colors no svg defined gradients or patterns
 	*/
 	virtual void setStyle(lua_State *lua, const std::string & style) = 0;
 	/**
 	* @return style string
+	* @note ignores LineCapStyle, MiterLimit and LineJoin
 	*/
 	virtual std::string getStyle(lua_State *lua) = 0;
 	/**
 	* @return calculated style string
+	* @note ignores LineCapStyle, MiterLimit and LineJoin
 	*/
 	virtual std::string calculateStyle(lua_State *lua) = 0;
+	/**
+	* @return (x, y, width, height) of an element
+	*/
+	virtual SvgRect getBounds(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter
