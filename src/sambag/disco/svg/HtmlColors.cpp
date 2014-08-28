@@ -10,6 +10,7 @@
 #include <boost/assign/list_inserter.hpp>
 #include "sambag/com/Common.hpp"
 #include "graphicElements/Style.hpp"
+#include <algorithm>
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================
@@ -187,7 +188,10 @@ ColorRGBA HtmlColors::getColor( const std::string &name )
 }
 //-----------------------------------------------------------------------------
 std::string HtmlColors::toRGB(const ColorRGBA &col) {
-    unsigned int r=(col.getR()*255.), g=(col.getG()*255.), b=(col.getB()*255.);
+    int r=(col.getR()*255.), g=(col.getG()*255.), b=(col.getB()*255.);
+    r = std::min( 255, std::max(0, r));
+    g = std::min( 255, std::max(0, g));
+    b = std::min( 255, std::max(0, b));
     char bff[]="#000000";
     sprintf(bff, "#%02x%02x%02x", r, g, b);
     return std::string(bff);
