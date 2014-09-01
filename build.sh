@@ -28,8 +28,10 @@ while [ "$1" != "" ]; do
 	                        #TODO: flags="-G '$1'" 
 				mode=$1
                                 ;;
+        
         -d )                    build_type="-D CMAKE_BUILD_TYPE=Debug"
 	                        ;;
+        
         -h | --help )           usage
                                 exit
                                 ;;
@@ -37,8 +39,8 @@ while [ "$1" != "" ]; do
 	-f | --flag )		shift
 				flags="$flags $1"
 				;;
-	-l | --use-log)         shift
-                                export SAMBA_USELOG=1
+	
+        -l | --use-log)         export SAMBA_USELOG=1
 				;;
 
 	 * )                     usage
