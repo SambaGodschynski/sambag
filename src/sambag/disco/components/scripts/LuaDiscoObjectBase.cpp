@@ -5,7 +5,7 @@
  *
  * LuaDiscoObjectBase.cpp
  *
- *  Created on: Tue Aug 12 10:03:59 2014
+ *  Created on: Mon Sep 15 20:56:44 2014
  *      Author: Samba Godschysnki
  */
 
@@ -24,7 +24,8 @@ void LuaDiscoObjectBase::addLuaFields(lua_State *lua, int index)
     registerClassFunctions<Functions1, TupleAccessor>(
 	lua,
 	boost::make_tuple(boost::bind(&LuaDiscoObjectBase::addOnEnterListener, this, lua, _1),
-		boost::bind(&LuaDiscoObjectBase::addOnExitListener, this, lua, _1)),
+		boost::bind(&LuaDiscoObjectBase::addOnExitListener, this, lua, _1),
+		boost::bind(&LuaDiscoObjectBase::addOnClickedListener, this, lua, _1)),
 	index, 
 	getUId() 
 	); 

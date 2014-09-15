@@ -22,9 +22,9 @@ namespace {
         try {
             lua::executeString(lua, expr);
         } catch(const std::exception &ex) {
-            SAMBAG_LOG_ERR<<"LuaDiscoObject::onMouseEnter failed: "<<ex.what();
+            SAMBAG_LOG_ERR<<"LuaDiscoObject::__onMouse failed: "<<ex.what();
         } catch (...) {
-            SAMBAG_LOG_ERR<<"LuaDiscoObject::onMouseEnter failed: unkown error";
+            SAMBAG_LOG_ERR<<"LuaDiscoObject::__onMouse failed: unkown error";
         }
     }
 } // namespace(s)
@@ -111,6 +111,15 @@ void LuaDiscoObject::addOnExitListener(lua_State *lua, const std::string & expr)
     );
 }
 //-----------------------------------------------------------------------------
+void LuaDiscoObject::addOnClickedListener(lua_State *lua, const std::string & expr)
+{
+    enum {Ev = events::MouseEvent::DISCO_MOUSE_CLICKED};
+    getComponent()->EventSender<events::MouseEvent>::addTrackedEventListener(
+        boost::bind(&__onMouse<Ev>, lua, _2, expr),
+        shared_from_this()
+    );
+}
+//-----------------------------------------------------------------------------
 void LuaDiscoObject::setVisible(lua_State *lua, bool x) {
     getComponent()->setVisible(x);
 }
@@ -118,5 +127,6 @@ void LuaDiscoObject::setVisible(lua_State *lua, bool x) {
 bool LuaDiscoObject::isVisible(lua_State *lua) {
     return getComponent()->isVisible();
 }
+
 }}} // namespace(s)
 

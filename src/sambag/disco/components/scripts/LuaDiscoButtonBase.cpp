@@ -5,7 +5,7 @@
  *
  * LuaDiscoButtonBase.cpp
  *
- *  Created on: Mon Jul 28 11:09:54 2014
+ *  Created on: Mon Sep 15 20:57:02 2014
  *      Author: Samba Godschysnki
  */
 
@@ -24,8 +24,7 @@ void LuaDiscoButtonBase::addLuaFields(lua_State *lua, int index)
     registerClassFunctions<Functions1, TupleAccessor>(
 	lua,
 	boost::make_tuple(boost::bind(&LuaDiscoButtonBase::getText, this, lua),
-		boost::bind(&LuaDiscoButtonBase::setText, this, lua, _1),
-		boost::bind(&LuaDiscoButtonBase::addOnClickedListener, this, lua, _1)),
+		boost::bind(&LuaDiscoButtonBase::setText, this, lua, _1)),
 	index, 
 	getUId() 
 	); 

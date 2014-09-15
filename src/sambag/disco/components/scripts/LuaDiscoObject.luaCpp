@@ -18,4 +18,9 @@ class LuaDiscoObjectBase extends LuaSvgObject {
 	* @param the callback lua expression
 	*/
        void addOnExitListener(string expr);
+      /**
+        * @brief adds a listener for the onClicked event.
+        * @param the callback lua expression
+        */
+       void addOnClickedListener(string expr);
 }
