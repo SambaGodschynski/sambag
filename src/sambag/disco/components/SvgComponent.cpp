@@ -217,6 +217,13 @@ namespace svgExtensions {
 //-----------------------------------------------------------------------------
 const std::string SvgComponent::Dummy::PROPERTY_MODEL = "property model";
 //-----------------------------------------------------------------------------
+SvgComponent::Dummy::Dummy() {
+    setName("SvgComponent::Dummy");
+}
+//-----------------------------------------------------------------------------
+SvgComponent::Dummy::~Dummy() {
+}
+//-----------------------------------------------------------------------------
 void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
 //    Rectangle bounds = context->clipExtends();
 //    bounds.inset(-2,-2);
@@ -289,6 +296,12 @@ IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
     if (!tmpFg) {
         svg::graphicElements::Style style = getStyle();
         tmpFg = style.strokePattern();
+        if (!tmpFg) {
+            // we have no stroke pattern here
+            // to avoid frequently style calcualting we create
+            // a solid pattern
+            tmpFg = getDiscoFactory()->createSolidPattern(ColorRGBA());
+        }
     }
     return tmpFg;
 }

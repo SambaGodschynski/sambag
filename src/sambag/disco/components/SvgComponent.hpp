@@ -48,9 +48,9 @@ public:
         static const std::string PROPERTY_HIT_STRATEGY;
     protected:
         //---------------------------------------------------------------------
-        Dummy() {
-            setName("SvgComponent::Dummy");
-        }
+        Dummy();
+    public:
+        virtual ~Dummy();
     private:
         //---------------------------------------------------------------------
         mutable IPattern::Ptr tmpBg, tmpFg;
