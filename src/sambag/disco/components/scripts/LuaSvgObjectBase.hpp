@@ -5,7 +5,7 @@
  *
  * LuaSvgObjectBase.hpp
  *
- *  Created on: Fri Aug 15 15:33:41 2014
+ *  Created on: Fri Sep 26 19:23:44 2014
  *      Author: Samba Godschysnki
  */
 
@@ -47,14 +47,18 @@ protected:
 	SAMBAG_LUA_FTAG(getStyle, std::string ());
 	SAMBAG_LUA_FTAG(calculateStyle, std::string ());
 	SAMBAG_LUA_FTAG(getBounds, SvgRect ());
-    typedef LOKI_TYPELIST_8(Frx_getId_Tag, 
+	SAMBAG_LUA_FTAG(setText, void (std::string));
+	SAMBAG_LUA_FTAG(getText, std::string ());
+    typedef LOKI_TYPELIST_10(Frx_getId_Tag, 
 	Frx_getClasses_Tag, 
 	Frx_setVisible_Tag, 
 	Frx_isVisible_Tag, 
 	Frx_setStyle_Tag, 
 	Frx_getStyle_Tag, 
 	Frx_calculateStyle_Tag, 
-	Frx_getBounds_Tag) Functions1;
+	Frx_getBounds_Tag, 
+	Frx_setText_Tag, 
+	Frx_getText_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -93,6 +97,15 @@ protected:
 	* @return (x, y, width, height) of an element
 	*/
 	virtual SvgRect getBounds(lua_State *lua) = 0;
+	/**
+	* @brief set the element text
+	* @note will be ignored if not a text element
+	*/
+	virtual void setText(lua_State *lua, const std::string & txt) = 0;
+	/**
+	* @return the element text or nil if not a text element
+	*/
+	virtual std::string getText(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

@@ -23,4 +23,8 @@ class LuaDiscoObjectBase extends LuaSvgObject {
         * @param the callback lua expression
         */
        void addOnClickedListener(string expr);
+      /**
+       * @brief redraws the object
+       */
+       void redraw();
 }

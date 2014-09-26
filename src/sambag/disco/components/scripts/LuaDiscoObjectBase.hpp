@@ -5,7 +5,7 @@
  *
  * LuaDiscoObjectBase.hpp
  *
- *  Created on: Mon Sep 15 20:56:43 2014
+ *  Created on: Fri Sep 26 22:49:53 2014
  *      Author: Samba Godschysnki
  */
 
@@ -41,9 +41,11 @@ protected:
     SAMBAG_LUA_FTAG(addOnEnterListener, void (std::string));
 	SAMBAG_LUA_FTAG(addOnExitListener, void (std::string));
 	SAMBAG_LUA_FTAG(addOnClickedListener, void (std::string));
-    typedef LOKI_TYPELIST_3(Frx_addOnEnterListener_Tag, 
+	SAMBAG_LUA_FTAG(redraw, void ());
+    typedef LOKI_TYPELIST_4(Frx_addOnEnterListener_Tag, 
 	Frx_addOnExitListener_Tag, 
-	Frx_addOnClickedListener_Tag) Functions1;
+	Frx_addOnClickedListener_Tag, 
+	Frx_redraw_Tag) Functions1;
 
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -62,6 +64,10 @@ protected:
 	* @param the callback lua expression
 	*/
 	virtual void addOnClickedListener(lua_State *lua, const std::string & expr) = 0;
+	/**
+	* @brief redraws the object
+	*/
+	virtual void redraw(lua_State *lua) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief field getter and setter

@@ -68,6 +68,7 @@ public:
     virtual void addOnClickedListener(lua_State *lua, const std::string & expr);
 	virtual void setVisible(lua_State *lua, bool x);
 	virtual bool isVisible(lua_State *lua);
+    virtual void redraw(lua_State *lua);
 private:
 public:
 }; // LuaDiscoObject

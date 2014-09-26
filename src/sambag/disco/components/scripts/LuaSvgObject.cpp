@@ -9,6 +9,7 @@
 #include <sambag/disco/components/SvgComponent.hpp>
 #include <sambag/disco/svg/graphicElements/Style.hpp>
 #include <sambag/disco/svg/StyleParser.hpp>
+#include <sambag/disco/svg/graphicElements/Text.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -120,6 +121,24 @@ std::string LuaSvgObject::calculateStyle(lua_State *lua) {
 LuaSvgObject::SvgRect LuaSvgObject::getBounds(lua_State *lua) {
     Rectangle r = getSceneGraph()->getBoundingBox(getObject());
     return SvgRect(r.x(), r.y(), r.width(), r.height());
+}
+//-----------------------------------------------------------------------------
+void LuaSvgObject::setText(lua_State *lua, const std::string & txt) {
+    using namespace svg::graphicElements;
+    Text::Ptr text = boost::dynamic_pointer_cast<Text>(getObject());
+    if (!text) {
+        throw std::runtime_error("element contains no text");
+    }
+    text->setText(txt);
+}
+//-----------------------------------------------------------------------------
+std::string LuaSvgObject::getText(lua_State *lua) {
+    using namespace svg::graphicElements;
+    Text::Ptr text = boost::dynamic_pointer_cast<Text>(getObject());
+    if (!text) {
+        throw std::runtime_error("element contains no text");
+    }
+    return text->getText();
 }
 }}} // namespace(s)
 

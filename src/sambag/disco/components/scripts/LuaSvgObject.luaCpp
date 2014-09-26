@@ -41,5 +41,14 @@ class LuaSvgObjectBase extends sambag.lua.ALuaObject {
         * @return (x, y, width, height) of an element
 	*/
 	User<SvgRect> getBounds();
+       /**
+        * @brief set the element text
+	* @note will be ignored if not a text element
+ 	*/
+        void setText(string txt);
+	/**
+	 * @return the element text or nil if not a text element
+	 */
+  	string getText();
 	
 }

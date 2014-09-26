@@ -127,6 +127,9 @@ void LuaDiscoObject::setVisible(lua_State *lua, bool x) {
 bool LuaDiscoObject::isVisible(lua_State *lua) {
     return getComponent()->isVisible();
 }
-
+//-----------------------------------------------------------------------------
+void LuaDiscoObject::redraw(lua_State *lua) {
+    getSvgComponent()->redraw();
+}
 }}} // namespace(s)
 

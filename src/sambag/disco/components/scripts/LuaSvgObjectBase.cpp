@@ -5,7 +5,7 @@
  *
  * LuaSvgObjectBase.cpp
  *
- *  Created on: Fri Aug 15 15:33:41 2014
+ *  Created on: Fri Sep 26 19:23:44 2014
  *      Author: Samba Godschysnki
  */
 
@@ -30,7 +30,9 @@ void LuaSvgObjectBase::addLuaFields(lua_State *lua, int index)
 		boost::bind(&LuaSvgObjectBase::setStyle, this, lua, _1),
 		boost::bind(&LuaSvgObjectBase::getStyle, this, lua),
 		boost::bind(&LuaSvgObjectBase::calculateStyle, this, lua),
-		boost::bind(&LuaSvgObjectBase::getBounds, this, lua)),
+		boost::bind(&LuaSvgObjectBase::getBounds, this, lua),
+		boost::bind(&LuaSvgObjectBase::setText, this, lua, _1),
+		boost::bind(&LuaSvgObjectBase::getText, this, lua)),
 	index, 
 	getUId() 
 	); 
