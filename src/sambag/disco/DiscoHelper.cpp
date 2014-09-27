@@ -93,17 +93,16 @@ int __parseGrad(Iterator first,
 	using ascii::space;
 	using ascii::char_;
 	using boost::phoenix::push_back;
-	using boost::phoenix::ref;
 	GradOpcodes opc;
 	int _opc = 0;
 	bool r = phrase_parse(first, last,
 		//  Begin grammar
 		(
-		opc[ref(_opc) = _1] >> // opc
-		'(' >> repeat(2,6)[ double_[push_back(ref(coords), _1)] >>',' ] >> // coords
-		'[' >> *( (hex[push_back(ref(colors), _1)] >> ':' >> // colors
+		opc[boost::phoenix::ref(_opc) = _1] >> // opc
+		'(' >> repeat(2,6)[ double_[push_back(boost::phoenix::ref(coords), _1)] >>',' ] >> // coords
+		'[' >> *( (hex[push_back(boost::phoenix::ref(colors), _1)] >> ':' >> // colors
 		//double_[push_back(ref(alphas), _1)] >> ':' >> 
-		double_[push_back(ref(offsets), _1)] ) % ',') >> ']' >> ')'
+		double_[push_back(boost::phoenix::ref(offsets), _1)] ) % ',') >> ']' >> ')'
 		),
 		//  End grammar
 		space);
