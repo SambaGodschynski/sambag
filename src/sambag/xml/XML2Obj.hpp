@@ -11,7 +11,9 @@
 #include <sstream>
 #include "ticpp/ticpp.h"
 
-namespace sambag { namespace xml {
+namespace sambag {
+namespace io {}
+namespace xml {
 //=============================================================================
 // Default Creator policies:
 template <class T>
@@ -97,6 +99,7 @@ class TaggedAttributeSetterPolicy {
 		virtual void set(BaseType &obj,
 				const std::string &strValue) 
 		{
+            using namespace io; // operators defined here
 			ObjectType *tObj = dynamic_cast<ObjectType*> (&obj);
 			if (!tObj)
 				return;

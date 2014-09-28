@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "IBorder.hpp"
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -28,7 +28,7 @@ protected:
 	//-------------------------------------------------------------------------
 	SolidBorder();
 	//-------------------------------------------------------------------------
-	typedef svg::graphicElements::Style Style;
+	typedef svg::Style Style;
 	Style style;
 	Coordinate cornerRadius;
 public:

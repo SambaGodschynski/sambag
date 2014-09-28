@@ -9,7 +9,7 @@
 #define SAMBAG_TITLEDBORDER_H
 
 #include <boost/shared_ptr.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include "IBorder.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -33,7 +33,7 @@ protected:
 	Rectangle getTextBounds(AComponentPtr c,
         IDrawContext::Ptr g, const Rectangle &r);
 	//-------------------------------------------------------------------------
-	typedef svg::graphicElements::Style Style;
+	typedef svg::Style Style;
 	Style style;
 	Coordinate cornerRadius;
 	//-------------------------------------------------------------------------

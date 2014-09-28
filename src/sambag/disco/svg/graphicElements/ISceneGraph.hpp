@@ -10,7 +10,7 @@
 
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/IDrawable.hpp"
-#include "Style.hpp"
+#include <sambag/disco/svg/Style.hpp>
 #include "sambag/com/Common.hpp"
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
@@ -33,7 +33,7 @@ public:
     // TODO: cleanup SceneGraphElement / IDrawable confusuion
     typedef IDrawable::Ptr SceneGraphElement;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<graphicElements::Style> StylePtr;
+    typedef boost::shared_ptr<Style> StylePtr;
     //-------------------------------------------------------------------------
     typedef boost::shared_ptr<Matrix> MatrixPtr;
     //-------------------------------------------------------------------------
@@ -80,7 +80,7 @@ public:
      * @param el a SceneGraphElement of this graph object
      * @param s a @see Style object
      */
-    virtual bool setStyleTo(SceneGraphElement el, const graphicElements::Style &s) = 0;
+    virtual bool setStyleTo(SceneGraphElement el, const Style &s) = 0;
     //-------------------------------------------------------------------------
     /**
      * creates a transformation node and relates it to el
@@ -112,13 +112,13 @@ public:
      * the resulting style has no fill attribute. 
      * Use @see calculateStyle() instead.
      */
-    virtual graphicElements::Style getStyleOf(SceneGraphElement el) const = 0;
+    virtual Style getStyleOf(SceneGraphElement el) const = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief calculates the style of an element considering the scene
      * tree.
      */
-    virtual graphicElements::Style calculateStyle(SceneGraphElement el) = 0;
+    virtual Style calculateStyle(SceneGraphElement el) = 0;
     //-------------------------------------------------------------------------
     /**
      * @brief calculates the transformatin of an element considering the scene

@@ -66,7 +66,7 @@ struct SvgComponent::SyncedSceneGraph :
             return g->setTransfomationTo(el, m);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual bool setStyleTo(SceneGraphElement el, const svg::graphicElements::Style &s)
+    virtual bool setStyleTo(SceneGraphElement el, const svg::Style &s)
     {
         SAMBAG_BEGIN_SYNCHRONIZED(lock)
             return g->setStyleTo(el, s);
@@ -96,13 +96,13 @@ struct SvgComponent::SyncedSceneGraph :
             return g->getTransformationOf(el);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual svg::graphicElements::Style getStyleOf(SceneGraphElement el) const
+    virtual svg::Style getStyleOf(SceneGraphElement el) const
     {
         SAMBAG_BEGIN_SYNCHRONIZED(lock)
             return g->getStyleOf(el);
         SAMBAG_END_SYNCHRONIZED
     }
-    virtual svg::graphicElements::Style calculateStyle(SceneGraphElement el)
+    virtual svg::Style calculateStyle(SceneGraphElement el)
     {
         SAMBAG_BEGIN_SYNCHRONIZED(lock)
             return g->calculateStyle(el);
@@ -234,18 +234,18 @@ void SvgComponent::Dummy::drawComponent (IDrawContext::Ptr context) {
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setForeground(IPattern::Ptr pat) {
-    svg::graphicElements::Style style = getStyle();
+    svg::Style style = getStyle();
     style.strokePattern(pat);
     setStyle(style);
 }
 //-----------------------------------------------------------------------------
 void SvgComponent::Dummy::setBackground(IPattern::Ptr pat) {
-    svg::graphicElements::Style style = getStyle();
+    svg::Style style = getStyle();
     style.fillPattern(pat);
     setStyle(style);
 }
 //-----------------------------------------------------------------------------
-svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
+svg::Style SvgComponent::Dummy::getStyle() const {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
     svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
@@ -253,7 +253,7 @@ svg::graphicElements::Style SvgComponent::Dummy::getStyle() const {
     if (!d) {
         throw std::runtime_error("SvgComponent::Dummy related object == NULL");
     }
-    svg::graphicElements::Style style = g->calculateStyle(d);
+    svg::Style style = g->calculateStyle(d);
     return style;
 }
 //-----------------------------------------------------------------------------
@@ -268,7 +268,7 @@ SvgComponent::Dummy::StylePtr SvgComponent::Dummy::getStyleRef() {
     return g->getStyleRef(d);
 }
 //-----------------------------------------------------------------------------
-void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
+void SvgComponent::Dummy::setStyle(const svg::Style &x) {
     SvgComponent::Ptr svg = getFirstContainer<SvgComponent>();
     SAMBAG_ASSERT(svg);
     svg::graphicElements::ISceneGraph::Ptr g = svg->getSceneGraph();
@@ -294,7 +294,7 @@ void SvgComponent::Dummy::setStyle(const svg::graphicElements::Style &x) {
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
     if (!tmpFg) {
-        svg::graphicElements::Style style = getStyle();
+        svg::Style style = getStyle();
         tmpFg = style.strokePattern();
         if (!tmpFg) {
             // we have no stroke pattern here
@@ -308,7 +308,7 @@ IPattern::Ptr SvgComponent::Dummy::getForegroundPattern() const {
 //-----------------------------------------------------------------------------
 IPattern::Ptr SvgComponent::Dummy::getBackgroundPattern() const {
     if (!tmpBg) {
-        svg::graphicElements::Style style = getStyle();
+        svg::Style style = getStyle();
         tmpBg = style.fillPattern();
     }
     return tmpBg;

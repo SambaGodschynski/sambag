@@ -428,6 +428,7 @@ std::string AttributeParser::getUrl(const std::string &url) {
 }
 }}} // namespaces
 
+namespace sambag { namespace io {
 //=============================================================================
 // stream operators
 //=============================================================================
@@ -545,3 +546,4 @@ extern std::istream & operator>>(
 		v = sambag::disco::IDrawContext::LINE_JOIN_BEVEL;
 	return istr;
 }
+}} // namespace(s)

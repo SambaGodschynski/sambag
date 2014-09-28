@@ -27,7 +27,7 @@ SvgRoot::Ptr SvgRoot::create(SvgRoot *root, bool firstElement) {
     neu->createBase(root);
     // set default style if first element
     if (firstElement) {
-        graphicElements::Style style = graphicElements::Style::DEFAULT_STYLE;
+        Style style = Style::DEFAULT_STYLE;
         style.strokePattern(IPattern::Ptr());
         root->getRelatedSceneGraph()->setStyleTo(neu->getGraphicElement(), style);
     }
@@ -43,7 +43,7 @@ SvgRoot::Ptr SvgRoot::create(graphicElements::SceneGraph *g, bool firstElement)
     neu->setRelatedSceneGraph(g->getPtr());
     // set default style if first element
     if (firstElement) {
-        graphicElements::Style style = graphicElements::Style::DEFAULT_STYLE;
+        Style style = Style::DEFAULT_STYLE;
         style.strokePattern(IPattern::Ptr());
         g->setStyleTo(neu->getGraphicElement(), style);
     }

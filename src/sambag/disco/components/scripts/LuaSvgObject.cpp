@@ -7,7 +7,7 @@
 
 #include "LuaSvgObject.hpp"
 #include <sambag/disco/components/SvgComponent.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include <sambag/disco/svg/StyleParser.hpp>
 #include <sambag/disco/svg/graphicElements/Text.hpp>
 
@@ -91,10 +91,12 @@ LuaSvgObject::createAndPush(lua_State *lua,
 }
 //-----------------------------------------------------------------------------
 void LuaSvgObject::setStyle(lua_State *lua, const std::string & str) {
+    using namespace svg;
     using namespace svg::graphicElements;
+    using namespace io; // >> operators defined here
     SceneGraph::Ptr g = getSceneGraph();
     IDrawable::Ptr obj = getObject();
-    svg::graphicElements::Style style;
+    svg::Style style;
     std::stringstream ss;
     ss<<str;
     ss>>style;
@@ -113,8 +115,7 @@ std::string LuaSvgObject::getStyle(lua_State *lua) {
 }
 //-----------------------------------------------------------------------------
 std::string LuaSvgObject::calculateStyle(lua_State *lua) {
-    using namespace svg::graphicElements;
-    Style style = getSceneGraph()->calculateStyle(getObject());
+    svg::Style style = getSceneGraph()->calculateStyle(getObject());
     return style.toString();
 }
 //-----------------------------------------------------------------------------

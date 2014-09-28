@@ -10,7 +10,6 @@
 #include <sambag/com/Interprocess.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <ostream>
-#include <sambag/com/Common.hpp>
 #include <cstdlib>
 #include <sambag/com/SharedMemory.hpp>
 #include <sambag/com/PlacementAlloc.hpp>
@@ -33,6 +32,7 @@
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestInterprocess );
 
+namespace CppUnit {
 std::ostream & operator<<(std::ostream &os,
     const sambag::com::interprocess::ManagedSharedMemory &m)
 {
@@ -47,12 +47,21 @@ std::ostream & operator<<(std::ostream &os,
     }
     return os;
 }
-
+std::string __toString(const sambag::com::interprocess::ManagedSharedMemory &m)
+{
+    std::stringstream ss;
+    ss<<m;
+    return ss.str();
+}
 bool operator == (const sambag::com::interprocess::ManagedSharedMemory &a,
                   const sambag::com::interprocess::ManagedSharedMemory &b)
 {
-    return sambag::com::toString(a) == sambag::com::toString(b);
+    return __toString(a) == __toString(b);
 }
+} // namespace(s)
+
+
+
 
 namespace tests {
 //=============================================================================
@@ -61,34 +70,36 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testCreatingSharedMemory() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder m1("M1", 1000);
     CPPUNIT_ASSERT_EQUAL( (size_t)1000, (size_t)m1.get().get_size() );
     String::Class *str = String::findOrCreate("s1", m1.get());
     *str="";
-    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m1.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), __toString(m1.get()) );
     {
         SharedMemoryHolder m2("M1", 500);
         CPPUNIT_ASSERT_EQUAL( (size_t)1000, (size_t)m2.get().get_size() );
-        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m2.get()) );
+        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), __toString(m2.get()) );
         SharedMemoryHolder m3("M2", 500);
         CPPUNIT_ASSERT_EQUAL( (size_t)500, (size_t)m3.get().get_size() );
-        CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(m3.get()) );
+        CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(m3.get()) );
         // releasing m2, m3
     }
     {
         SharedMemoryHolder m2("M1", 1000);
-        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m2.get()) );
+        CPPUNIT_ASSERT_EQUAL(std::string("s1, "), __toString(m2.get()) );
     }
     // assume m1 is still valid
-    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), sambag::com::toString(m1.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string("s1, "), __toString(m1.get()) );
     CPPUNIT_ASSERT( m1.get().check_sanity() );
 }
 //-----------------------------------------------------------------------------
 void TestInterprocess::testVector() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
     Vector<float>::Class *vector =
         Vector<float>::findOrCreate("v1", shmh.get());
     for (int i=0; i<10; ++i) {
@@ -111,9 +122,10 @@ void TestInterprocess::testVector() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testSet() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
     typedef Set<String::Class> StrSet;
     StrSet::Class *set = StrSet::findOrCreate("s1", shmh.get());
    
@@ -129,9 +141,10 @@ void TestInterprocess::testSet() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testMap() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
     typedef Map<int, float> TheMap;
     TheMap::Class *map = TheMap::findOrCreate("map1", shmh.get());
     map->insert( TheMap::ValueType(1, 1.0) );
@@ -147,7 +160,7 @@ void TestInterprocess::testMap() {
     }
     shmh.get().destroy<TheMap::Class>("map2");
     shmh.get().destroy<TheMap::Class>("map1");
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
 }
 //-----------------------------------------------------------------------------
 namespace {
@@ -158,14 +171,15 @@ namespace {
 }
 void TestInterprocess::testSharedPtr() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder shmh("M1", 64000);
     // confirm memory is empty
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
     typedef SharedPtr<TestClass> TestPtr;
     typedef WeakPtr<TestClass> TestWPtr;
     {
         TestPtr::Class pStr = TestPtr::create("pStr1", shmh.get());
-        //CPPUNIT_ASSERT_EQUAL(std::string("pStr1, "), sambag::com::toString(shmh.get()) );
+        //CPPUNIT_ASSERT_EQUAL(std::string("pStr1, "), __toString(shmh.get()) );
         pStr->_int = 101;
         CPPUNIT_ASSERT_EQUAL((long int)1, pStr.use_count());
         {
@@ -179,7 +193,7 @@ void TestInterprocess::testSharedPtr() {
         CPPUNIT_ASSERT_EQUAL((long int)1, pStr.use_count());
     }
     // confirm memory is empty
-    CPPUNIT_ASSERT_EQUAL(std::string(""), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string(""), __toString(shmh.get()) );
 }
 //-----------------------------------------------------------------------------
 void TestInterprocess::testSharedMemoryInterArch() {
@@ -188,6 +202,7 @@ void TestInterprocess::testSharedMemoryInterArch() {
      * is broken, we need to use a "raw and brutal" approach:
      */
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     typedef PlacementAlloc<Integer> Alloc;
     using namespace boost::interprocess;
     static const char * NAME="interarch";
@@ -245,6 +260,7 @@ void TestInterprocess::testSharedMemoryInterArch() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testSharedMemory() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     SharedMemoryHolder shmh("sambag.unit_test", 64000);
     typedef Vector<Integer> IntVector;
     IntVector::Class *v = IntVector::findOrCreate("to_sum", shmh.get());
@@ -257,7 +273,7 @@ void TestInterprocess::testSharedMemory() {
     String::Class *str_res = String::findOrCreate("result", shmh.get());
     CPPUNIT_ASSERT_EQUAL(std::string("result=5050"), std::string(str_res->c_str()));
     
-    CPPUNIT_ASSERT_EQUAL(std::string("opc, result, to_sum, "), sambag::com::toString(shmh.get()) );
+    CPPUNIT_ASSERT_EQUAL(std::string("opc, result, to_sum, "), __toString(shmh.get()) );
     
     typedef Vector<float> FloatVector;
     typedef Vector< FloatVector::Class > ComplexVector;
@@ -293,6 +309,7 @@ void TestInterprocess::testSharedMemory() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testPlacementAllocator1() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     typedef PlacementAlloc<int> Alloc1;
     void * mem = malloc(sizeof(int)*20);
     PointerIterator pIt(mem, sizeof(int)*20);
@@ -319,6 +336,7 @@ void TestInterprocess::testPlacementAllocator1() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testPlacementAllocator2() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     typedef PlacementAlloc<int*> Alloc1;
     void * mem = malloc(sizeof(int)*20+sizeof(int*)*2);
     PointerIterator pIt(mem, sizeof(int)*20+sizeof(int*)*2);
@@ -352,6 +370,7 @@ void TestInterprocess::testPlacementAllocator2() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testPlacementAllocator3() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     typedef PlacementAlloc<int> Alloc1;
     void * mem = malloc(sizeof(int)*20);
     PointerIterator pIt(mem, sizeof(int)*20);
@@ -366,6 +385,7 @@ void TestInterprocess::testPlacementAllocator3() {
 //-----------------------------------------------------------------------------
 void TestInterprocess::testPlacementAllocator4() {
     using namespace sambag::com::interprocess;
+    using namespace CppUnit;
     typedef PlacementAlloc<float> Alloc1;
     void * mem = malloc(64000);
     

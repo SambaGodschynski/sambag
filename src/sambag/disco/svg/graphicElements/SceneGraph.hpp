@@ -11,7 +11,7 @@
 #include <boost/graph/vector_as_graph.hpp>
 #include "sambag/disco/IDrawContext.hpp"
 #include "sambag/disco/IDrawable.hpp"
-#include "Style.hpp"
+#include <sambag/disco/svg/Style.hpp>
 #include "sambag/com/Common.hpp"
 #include <boost/utility.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -131,7 +131,7 @@ public:
     // TODO: cleanup SceneGraphElement / IDrawable confusuion
     typedef IDrawable::Ptr SceneGraphElement;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<graphicElements::Style> StylePtr;
+    typedef boost::shared_ptr<Style> StylePtr;
     //-------------------------------------------------------------------------
     typedef boost::shared_ptr<Matrix> MatrixPtr;
     //-------------------------------------------------------------------------
@@ -424,7 +424,7 @@ public:
      * @param el a SceneGraphElement of this graph object
      * @param s a @see Style object
      */
-    bool setStyleTo(SceneGraphElement el, const graphicElements::Style &s);
+    bool setStyleTo(SceneGraphElement el, const Style &s);
     //-------------------------------------------------------------------------
     /**
      * creates a transformation node and relates it to el
@@ -471,10 +471,10 @@ public:
      * the resulting style has no fill attribute. 
      * Use @see calculateStyle() instead.
      */
-    graphicElements::Style getStyleOf(SceneGraphElement el) const {
+    Style getStyleOf(SceneGraphElement el) const {
         StylePtr res = getStyleRef(el);
         if (!res) {
-            return graphicElements::Style::getNullStyle();
+            return Style::getNullStyle();
         }
         return *(res.get());
     }
@@ -483,7 +483,7 @@ public:
      * @brief calculates the style of an element considering the scene
      * tree.
      */
-    graphicElements::Style calculateStyle(SceneGraphElement el);
+    Style calculateStyle(SceneGraphElement el);
     //-------------------------------------------------------------------------
     /**
      * @brief calculates the transformatin of an element considering the scene

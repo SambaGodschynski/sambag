@@ -14,7 +14,7 @@
 //=============================================================================
 // hash functions
 //=============================================================================
-namespace boost {
+namespace sambag { namespace disco {
 //-----------------------------------------------------------------------------
 size_t hash_value(const sambag::disco::ColorRGBA &o) {
 	std::size_t seed = 0;
@@ -40,9 +40,9 @@ size_t hash_value(const sambag::disco::Font &o) {
 	boost::hash_combine(seed, (int)o.weight);
 	return seed;
 }
-} // namespace boost
+}} // namespace boost
 
-namespace sambag { namespace disco { namespace svg { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg {
 namespace {
 Style createDefaultStyle() {
 	Style neu;
@@ -195,4 +195,4 @@ std::string Style::toString() const {
     return ss.str();
 }
 
-}}}} // namespaces
+}}} // namespaces

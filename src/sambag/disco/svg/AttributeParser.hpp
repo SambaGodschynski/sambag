@@ -128,51 +128,33 @@ public:
 
 }}} // namespaces
 
+namespace sambag { namespace io {
 //=============================================================================
 // stream operators
 //=============================================================================
-namespace sambag { namespace disco { namespace svg { namespace units {
-    extern std::istream & operator>>(std::istream&, Unit&);
-}}}}
-
-namespace sambag { namespace disco {
-    extern std::istream & operator>>(std::istream&, ColorRGBA&);
-}}
-
-namespace sambag { namespace disco {
-    extern std::istream & operator>>(std::istream&, Font::Weight&);
-}}
-
-namespace sambag { namespace disco {
-    extern std::istream & operator>>(std::istream&, Font::Slant&);
-}}
-
-namespace sambag { namespace math {
-    extern std::istream & operator>>(std::istream&, Matrix&);
-}}
-
-namespace sambag { namespace disco { namespace svg {
-    extern std::istream & operator>>(std::istream&, SvgPatternMatrix&);
-}}}
-
-namespace sambag { namespace disco { namespace svg {
-namespace graphicElements { namespace pathInstruction {
-    extern std::istream & operator>>(std::istream&, PathInstructions &);
-}}}}}
-
-
-namespace sambag { namespace disco { namespace svg {
-namespace graphicElements { namespace pathInstruction {
-    extern std::istream & operator>>(std::istream&, PointContainer &);
-}}}}}
-
-namespace sambag { namespace disco {
-    extern std::istream & operator>>(std::istream&, IDrawContext::LineCapStyle &v);
-}}
-
-namespace sambag { namespace disco {
-    extern std::istream & operator>>(std::istream&,IDrawContext::LineJoin &v);
-}}
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::units::Unit&);
+extern std::istream & operator>>(std::istream&, sambag::disco::ColorRGBA&);
+extern std::istream & operator>>(std::istream&, sambag::disco::Font::Weight&);
+extern std::istream & operator>>(std::istream&, sambag::disco::Font::Slant&);
+extern std::istream & operator>>(std::istream&, sambag::math::Matrix&);
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::SvgPatternMatrix&);
+extern std::istream & operator>>(
+		std::istream&,
+		sambag::disco::svg::graphicElements::pathInstruction::PathInstructions &
+);
+extern std::istream & operator>>(
+	std::istream&,
+	sambag::disco::svg::graphicElements::pathInstruction::PointContainer &
+);
+extern std::istream & operator>>(
+	std::istream&,
+	sambag::disco::IDrawContext::LineCapStyle &v
+);
+extern std::istream & operator>>(
+	std::istream&,
+	sambag::disco::IDrawContext::LineJoin &v
+);
+}} // namespaces
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================

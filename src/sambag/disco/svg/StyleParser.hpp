@@ -8,7 +8,7 @@
 #ifndef DISCO_STYLEPARSER_HPP_
 #define DISCO_STYLEPARSER_HPP_
 
-#include "graphicElements/Style.hpp"
+#include "Style.hpp"
 #include <list>
 #include <map>
 namespace sambag { namespace disco { namespace svg {
@@ -25,14 +25,14 @@ public:
 	 * @param styleValue
 	 */
 	typedef void (*SetStyleAttributeFunc) (
-			disco::svg::graphicElements::Style& style,
+			disco::svg::Style& style,
 			const std::string& styleValue
 	);
 private:
 	//-------------------------------------------------------------------------
 	typedef std::map<std::string, SetStyleAttributeFunc> SetterMap;
 	//-------------------------------------------------------------------------
-	static SetterMap attr2Setter;
+	static SetterMap attr2Setter; // impl. -> StyleAttributeSetters.cpp
 	//-------------------------------------------------------------------------
 	static void initSetterMap();
 public:
@@ -41,11 +41,13 @@ public:
 	 * @param style name
 	 * @return style setter method
 	 */
-	static SetStyleAttributeFunc getSetter(const std::string& str);
+	static SetStyleAttributeFunc getSetter(const std::string& str); // impl. -> StyleAttributeSetters.cpp
 };
-
+//-----------------------------------------------------------------------------
+sambag::disco::svg::Style createStyle(const std::string &str);
 }}} // namespaces
 
+namespace sambag { namespace io {
 //=============================================================================
 // stream operators
 //=============================================================================
@@ -56,18 +58,8 @@ public:
  * @param out_Style
  * @return stream
  */
-extern std::istream & operator>>(std::istream&, sambag::disco::svg::graphicElements::Style&);
-//-----------------------------------------------------------------------------
-inline sambag::disco::svg::graphicElements::Style 
-createStyle(const std::string &str) 
-{
-	
-	sambag::disco::svg::graphicElements::Style res;
-	res.font(sambag::disco::Font()); // TODO: why has sytle no std font?
-	std::stringstream ss;
-	ss<<str;
-	ss>>res;
-	return res;
-}
+extern std::istream & operator>>(std::istream&, sambag::disco::svg::Style&);
+}} // namespace(s)
+
 
 #endif /* STYLEPARSER_HPP_ */

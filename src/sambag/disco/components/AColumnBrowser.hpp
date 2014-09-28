@@ -22,7 +22,7 @@
 #include "DefaultListModel.hpp"
 #include "DefaultListSelectionModel.hpp"
 #include "Forward.hpp"
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include "Animation.hpp"
 #include "sambag/disco/Tweens.hpp"
 #include <boost/algorithm/string.hpp>
@@ -331,17 +331,17 @@ template <class TM,
 >
 void AColumnBrowser<TM, CR, LM, LSM>::addList(int listIndex)
 {
-	svg::graphicElements::Style fontStyle;
+	svg::Style fontStyle;
 	ui::getUIManager().getProperty("ColumnBrowser.fontStyle", fontStyle);
 	Font font = fontStyle.font();
-	if (font != svg::graphicElements::Style::NO_FONT) {
+	if (font != svg::Style::NO_FONT) {
 		columnView->setFont(fontStyle.font());
 	}
 	Coordinate fixedColumnWitdh = 120.;
 	ui::getUIManager().getProperty("ColumnBrowser.fixedColumnWidth", fixedColumnWitdh);
 	ListTypePtr list = columnView->addList();
 	list->setFixedCellWidth(fixedColumnWitdh);
-	list->sce::EventSender<ListSelectionEvent>::addTrackedEventListener(
+	list->sce::template EventSender<ListSelectionEvent>::addTrackedEventListener(
 		boost::bind(&AColumnBrowser::onSelectionChanged,this,_1,_2,listIndex),
 		getPtr()
 	);

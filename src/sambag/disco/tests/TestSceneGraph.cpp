@@ -30,7 +30,7 @@ namespace {
     }
 
     std::string __toString(
-        const sambag::disco::svg::graphicElements::Style &s)
+        const sambag::disco::svg::Style &s)
     {
         std::stringstream os;
         if (!s.fillPattern()) {
@@ -123,6 +123,7 @@ void TestSceneGraph::testBuildGraph() {
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testTransformNode() {
 	using namespace sambag::disco::svg::graphicElements;
+    using namespace sambag::disco::svg;
 	using namespace sambag::com;
 	using namespace sambag::math;
 	SceneGraph::Ptr g = SceneGraph::create();
@@ -146,7 +147,8 @@ void TestSceneGraph::testTransformNode() {
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testStyleNode() {
 	using namespace sambag::disco;
-	using namespace sambag::disco::svg::graphicElements;
+	using namespace sambag::disco::svg;
+    using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	SceneGraph::Ptr g = SceneGraph::create();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<build elements
@@ -175,6 +177,7 @@ void TestSceneGraph::testStyleNode() {
  */
 void TestSceneGraph::testCalculateStyle() {
 	using namespace sambag::disco;
+    using namespace sambag::disco::svg;
 	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	SceneGraph::Ptr g = SceneGraph::create();
@@ -240,6 +243,7 @@ void TestSceneGraph::testCalculateStyle() {
 }
 //-----------------------------------------------------------------------------
 void TestSceneGraph::testIdAndClassRelations() {
+    using namespace sambag::disco::svg;
 	using namespace sambag::disco::svg::graphicElements;
 	using namespace sambag::com;
 	using namespace sambag::disco;

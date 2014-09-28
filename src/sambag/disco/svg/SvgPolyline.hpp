@@ -14,8 +14,9 @@
 #include "sambag/com/Common.hpp"
 #include "sambag/com/Helper.hpp"
 #include <boost/tuple/tuple.hpp>
+
 namespace sambag { namespace disco { namespace svg {
-using sambag::disco::svg::graphicElements::pathInstruction::PointContainer;
+
 //=============================================================================
 class SvgPolyline : public SvgObject {
 //=============================================================================
@@ -24,7 +25,7 @@ public:
 	typedef boost::shared_ptr<SvgPolyline> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
-	struct Points_tag { typedef PointContainer Type; };
+	struct Points_tag { typedef graphicElements::pathInstruction::PointContainer Type; };
 private:
 protected:
 	//-------------------------------------------------------------------------
