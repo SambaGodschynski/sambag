@@ -109,10 +109,13 @@ void SvgButtonUI::mouseReleased(const events::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 void SvgButtonUI::onStateChanged(const StateChanged &ev) {
+    SvgComponent::Dummy::Ptr main = this->main.lock();
+    if (!main->isVisible()) {
+        return;
+    }
     AComponent::Ptr idle = getIdle(), pressed = getPressed(),
                     rollover = getRollover();
-    
-    
+
     ModelPtr model = getModel();
     if (model->isButtonPressed()) {
         pressed->setVisible(true);
