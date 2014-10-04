@@ -1,11 +1,15 @@
 #!/bin/sh
 IFS=$'\n'
+# installing cairo library including zlib, libpng, pixman
+# arguments are MT, DEBUG
+# default is MD, RELEASE
+
 
 WHEREAMI=$(pwd)
 
 export ROOTDIR=$WHEREAMI/build
-export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
-export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
+export URL_ZLIB='http://zlib.net/zlib-1.2.8.tar.gz'
+export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.13.tar.gz'
 export URL_PIXMAN='http://cairographics.org/releases/pixman-0.28.2.tar.gz'
 export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.10.tar.xz'
 export _LIBLINK='MD'
