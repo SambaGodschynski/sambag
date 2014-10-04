@@ -18,6 +18,8 @@ namespace {
 // TODO: find a better way (maybe discart friend approach)
 #ifdef _MSC_VER
 #define SAMBAG_FRIEND_OF_T(_class) friend typename _class
+#elif __APPLE_CC__ >= 6000
+#define SAMBAG_FRIEND_OF_T(_class) friend _class
 #else
 #define SAMBAG_FRIEND_OF_T(_class) friend class FriendBuilder<_class>::Type
 #endif
@@ -221,7 +223,7 @@ public:
 	//-------------------------------------------------------------------------
 	virtual void parameterChanged(int index) {
 		typename PluginTraits::ParameterType value;
-		getParameterValue(index, value);
+		this->getParameterValue(index, value);
         beginEdit(index);
 		setParameterAutomated(index, value);
         endEdit(index);
