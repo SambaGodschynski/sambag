@@ -62,9 +62,9 @@ private:
     SvgComponent::Dummy::WPtr main, handle;
 public:
     //-------------------------------------------------------------------------
-    SvgComponent::Dummy::Ptr getMain() const { return getPtr(main); }
+    SvgComponent::Dummy::Ptr getMain(bool _throw=true) const { return getPtr(main, _throw); }
     //-------------------------------------------------------------------------
-    SvgComponent::Dummy::Ptr getHandle() const { return getPtr(handle); }
+	SvgComponent::Dummy::Ptr getHandle(bool _throw = true) const { return getPtr(handle, _throw); }
 	//-------------------------------------------------------------------------
 	/**
 	 * Configures the specified component appropriately for the look and feel.

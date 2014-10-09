@@ -128,11 +128,11 @@ public:
 	void subObjectCreated( SvgObject::Ptr newObject, const std::string& );
 	//-------------------------------------------------------------------------
 	virtual void set(const Width_tag::Type &v, const Width_tag &) {
-		size.setWidth(v.solve(0));
+		size.setWidth(v.solve(0.));
 	}
 	//-------------------------------------------------------------------------
 	virtual void set(const Height_tag::Type &v, const Height_tag &) {
-		size.setHeight(v.solve(0));
+		size.setHeight(v.solve(0.));
 	}
 	//-------------------------------------------------------------------------
 	virtual void set(const Viewbox_tag::Type &v, const Viewbox_tag &) {

@@ -703,7 +703,6 @@ void onBtnCreate(void *src, const sdc::events::ActionEvent &ac) {
 		createWindow<View>();
 	}
 	win[View]->getContentPane()->validate();
-    win[View]->setEnabled(false);
 	win[View]->open();
 
 }

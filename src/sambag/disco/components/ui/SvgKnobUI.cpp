@@ -136,7 +136,10 @@ void SvgKnobUI::mouseWheelRotated(const events::MouseEvent &ev) {
 //-----------------------------------------------------------------------------
 void SvgKnobUI::rotateKnob(double value) {
     try {
-        SvgComponent::Dummy::Ptr handle = getHandle();
+        SvgComponent::Dummy::Ptr handle = getHandle(false);
+		if (!handle) {
+			return;
+		}
         SvgComponent::Ptr svg = getSvgComponent(handle);
         svg::graphicElements::ISceneGraph::Ptr g = getSceneGraph(svg);
         Coordinate max = getUIPropertyCached<DegreePropertyTag>(270.);

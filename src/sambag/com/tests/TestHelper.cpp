@@ -35,12 +35,11 @@ void TestHelper::testTupleForeach() {
 //=============================================================================
 	using namespace boost;
 	using namespace sambag::com;
-	using namespace std;
 	ToString tStr;
-	tuple<int, float, string> tpl(10, 1.1f, "inhaltslosabernichtleer");
+	tuple<int, float, std::string> tpl(10, 1.1f, "inhaltslosabernichtleer");
 	foreach(tpl, tStr);
 	CPPUNIT_ASSERT_EQUAL(
-			string("0: 10; 1: 1.1; 2: inhaltslosabernichtleer; "),
+			std::string("0: 10; 1: 1.1; 2: inhaltslosabernichtleer; "),
 			tStr.ss.str()
 	);
 }
@@ -49,9 +48,8 @@ void TestHelper::testFromContainer() {
 	//=============================================================================
 	using namespace boost;
 	using namespace sambag::com;
-	using namespace std;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>prepare data
-	typedef list<double> Container;
+	typedef std::list<double> Container;
 	Container l;
 	l.push_back(0.5);
 	l.push_back(0.6);
