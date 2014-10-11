@@ -7,7 +7,7 @@
 
 #include "TestStyle.hpp"
 #include <cppunit/config/SourcePrefix.h>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include <sambag/disco/svg/StyleParser.hpp>
 
 // Registers the fixture into the 'registry'
@@ -19,7 +19,8 @@ namespace tests {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void TestStyle::testToString() {
-    using namespace sambag::disco::svg::graphicElements;
+    using namespace sambag::disco::svg;
+    using namespace sambag::io;
     Style style;
     CPPUNIT_ASSERT_EQUAL(std::string("stroke: none; stroke-width: none; stroke-opacity: none; stroke-dasharray: none; \
 fill: none; fill-opacity: none; font-family: none; font-size: none; font-weight\

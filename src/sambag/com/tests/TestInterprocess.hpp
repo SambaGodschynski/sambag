@@ -8,6 +8,15 @@
 #ifndef SAMBAG_TESTINTERPROCESS_H
 #define SAMBAG_TESTINTERPROCESS_H
 
+#include <sambag/com/Interprocess.hpp>
+
+namespace CppUnit {
+std::ostream & operator<<(std::ostream &os,
+    const sambag::com::interprocess::ManagedSharedMemory &m);
+bool operator == (const sambag::com::interprocess::ManagedSharedMemory &a,
+                  const sambag::com::interprocess::ManagedSharedMemory &b);
+}
+
 #include <cppunit/extensions/HelperMacros.h>
 #include <sambag/com/UnitEx.hpp>
 

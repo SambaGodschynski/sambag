@@ -349,10 +349,10 @@ SceneGraph::getSceneGraphElement( const SceneGraph::Vertex &v ) const
 	return vertexElementMap[v];
 }
 //-----------------------------------------------------------------------------
-graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
+Style SceneGraph::calculateStyle(SceneGraphElement el) {
     Vertex v = getRelatedVertex(el);
     if (v==NULL_VERTEX) {
-        return graphicElements::Style();
+        return Style();
     }
     // perform breadth search
     std::vector<Vertex> p(boost::num_vertices(g));
@@ -377,7 +377,7 @@ graphicElements::Style SceneGraph::calculateStyle(SceneGraphElement el) {
         it = p.at(it); // get predecessor
     };
     // add styles
-    graphicElements::Style res;
+    Style res;
     while(!styles.empty()) {
         res.add(*(styles.front()));
         styles.pop_front();
@@ -475,7 +475,7 @@ bool SceneGraph::setTransfomationRefTo(SceneGraphElement el, MatrixPtr m) {
 //----------------------------------------------------------------------------
 bool SceneGraph::setStyleTo(
 	SceneGraphElement el,
-	const graphicElements::Style &s)
+	const Style &s)
 {
 	return setStyleRefTo(el, StylePtr(new Style(s)));
 }

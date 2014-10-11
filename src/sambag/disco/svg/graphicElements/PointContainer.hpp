@@ -48,7 +48,6 @@ typedef std::pair<PointContainer, InstructionOp> PathInstruction;
 typedef std::list<PathInstruction> PathInstructions;
 extern bool isCubic ( InstructionOp op );
 extern bool isQuadratic ( InstructionOp op );
-
 }}}}} // namespace
 
 /**
@@ -59,5 +58,6 @@ extern std::ostream & operator<<(
 		std::ostream &,
 		const sambag::disco::svg::graphicElements::pathInstruction::PathInstructions&
 );
+
 
 #endif /* PATHINSTRUCTION_HPP_ */

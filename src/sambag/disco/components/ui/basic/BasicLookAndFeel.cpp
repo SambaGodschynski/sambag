@@ -84,15 +84,14 @@ void BasicLookAndFeel::installComponents() {
 	registerComponentUI<CBrowser::ListType, BasicListUI<CBrowser::ListType> >();
 }
 //-----------------------------------------------------------------------------
-svg::graphicElements::Style BasicLookAndFeel::createStyle(const std::string &str) 
+svg::Style BasicLookAndFeel::createStyle(const std::string &str) 
 {
-	return ::createStyle(str);
+	return svg::createStyle(str);
 } 
 //-----------------------------------------------------------------------------
 void BasicLookAndFeel::installDefaults() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::svg;
-	using namespace sambag::disco::svg::graphicElements;
 	UIManager &m = getUIManager();
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<install twice guard
 	bool alreadyInstalled = false;

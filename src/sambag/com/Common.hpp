@@ -71,7 +71,9 @@ struct __LogDummy_ {
 // END LOG STUFF
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-namespace sambag { namespace com {
+namespace sambag {
+namespace io {}
+namespace com {
 //#############################################################################
 // metrics
 //#############################################################################
@@ -109,6 +111,7 @@ inline Number getNullNumber() {
 //-----------------------------------------------------------------------------
 template<typename T>
 std::string toString(const T &v) {
+    using namespace sambag::io; // operators defined here
 	std::stringstream ss;
 	ss << v;
 	return ss.str();

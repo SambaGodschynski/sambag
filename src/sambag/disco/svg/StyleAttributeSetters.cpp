@@ -12,12 +12,14 @@
 #include <boost/assign/list_inserter.hpp>
 #include "sambag/com/Common.hpp"
 #include <sstream>
+
 namespace { // setter
 using namespace sambag::disco;
 using namespace sambag::com;
-using sambag::disco::svg::graphicElements::Style;
+using sambag::disco::svg::Style;
 //-----------------------------------------------------------------------------
 void setStrokeColor( Style &style, const std::string &value ) {
+    using namespace sambag::io; // >> operators defined here
 	std::stringstream is;
 	is<<value;
 	ColorRGBA col;
@@ -34,6 +36,7 @@ void setStrokeWitdh( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setFillColor( Style &style, const std::string &value ) {
+    using namespace sambag::io; // >> operators defined here
 	std::stringstream is;
 	is<<value;
 	ColorRGBA col;
@@ -114,6 +117,7 @@ void setFontWeight( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setLineCapStyle( Style &style, const std::string &value ) {
+	using namespace sambag::io; // operators defined here
 	std::stringstream ss(value);
 	IDrawContext::LineCapStyle v = IDrawContext::NO_LINE_CAP;
 	ss>>v;
@@ -121,13 +125,15 @@ void setLineCapStyle( Style &style, const std::string &value ) {
 }
 //-----------------------------------------------------------------------------
 void setLineJoinStyle( Style &style, const std::string &value ) {
-	std::stringstream ss(value);
+	using namespace sambag::io; // operators defined here
+	std::stringstream ss(value); 
 	IDrawContext::LineJoin v = IDrawContext::NO_LINE_JOIN;
 	ss>>v;
 	style.lineJoin(v);
 }
 //-----------------------------------------------------------------------------
 void setMiterLimit( Style &style, const std::string &value ) {
+	using namespace sambag::io; // operators defined here
 	std::stringstream ss(value);
 	Number v = 0.;
 	ss>>v;
@@ -176,3 +182,4 @@ StyleParser::SetStyleAttributeFunc StyleParser::getSetter(const std::string& str
 	return it->second;
 }
 }}} // namespaces
+

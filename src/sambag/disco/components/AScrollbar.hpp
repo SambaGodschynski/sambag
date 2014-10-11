@@ -223,7 +223,7 @@ template <class M>
 const std::string AScrollbar<M>::PROPERTY_BLOCKINCREMENT = "blockIncrement";
 //-----------------------------------------------------------------------------
 template <class M>
-void AScrollbar<M>::setOrientation(typename AScrollbar::Orientation orientation) {
+void AScrollbar<M>::setOrientation(Orientation orientation) {
 	checkOrientation(orientation);
 	Orientation oldValue = this->orientation;
 	this->orientation = orientation;
@@ -235,7 +235,7 @@ void AScrollbar<M>::setOrientation(typename AScrollbar::Orientation orientation)
 }
 //-----------------------------------------------------------------------------
 template <class M>
-void AScrollbar<M>::checkOrientation(typename AScrollbar::Orientation orientation) {
+void AScrollbar<M>::checkOrientation(Orientation orientation) {
 	switch (orientation) {
 	case VERTICAL:
 	case HORIZONTAL:

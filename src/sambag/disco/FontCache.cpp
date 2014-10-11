@@ -11,6 +11,7 @@
 #include "IDiscoFactory.hpp"
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 
+
 namespace sambag { namespace disco {
 typedef Loki::SingletonHolder<FontCache> FontCacheHolder;
 //=============================================================================
@@ -197,9 +198,9 @@ Rectangle FontCache::getTextBounds(IDrawContext::Ptr cn, const std::string &text
 }
 }} // namespace(s)
 
-#include <sambag/disco/svg/graphicElements/Style.hpp> 
+#include <sambag/disco/svg/Style.hpp> 
 
-namespace boost {
+namespace sambag { namespace disco {
 	size_t hash_value(const sambag::disco::FontTraits &o) {
 		using namespace sambag::disco;
 		size_t seed = 0;
@@ -209,4 +210,4 @@ namespace boost {
 		boost::hash_combine(seed, getFont(o));
 		return seed;
 	}
-}
+}}

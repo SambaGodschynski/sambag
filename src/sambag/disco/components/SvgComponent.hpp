@@ -13,7 +13,7 @@
 #include "AContainer.hpp"
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/svg/Image.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include <sambag/com/ArbitraryType.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/function.hpp>
@@ -120,9 +120,9 @@ public:
         /**
          * @return calculated style
          */
-        svg::graphicElements::Style getStyle() const;
+        svg::Style getStyle() const;
         //---------------------------------------------------------------------
-        void setStyle(const svg::graphicElements::Style &x);
+        void setStyle(const svg::Style &x);
         //---------------------------------------------------------------------
         /**
          * @return style ref of object.
@@ -130,7 +130,7 @@ public:
          * please consider the differences between a style ref. and a calculated
          * style
          */
-        typedef boost::shared_ptr<svg::graphicElements::Style> StylePtr;
+        typedef boost::shared_ptr<svg::Style> StylePtr;
         StylePtr getStyleRef();
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)

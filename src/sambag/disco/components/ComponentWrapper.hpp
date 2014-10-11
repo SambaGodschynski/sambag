@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <sambag/disco/svg/graphicElements/GraphicElement.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include <sambag/disco/components/AComponent.hpp>
 #include <sambag/disco/IDrawContext.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
@@ -45,7 +45,7 @@ private:
 	//-------------------------------------------------------------------------
 	typename Drawable::Ptr drawable;
 	//-------------------------------------------------------------------------
-	sdsg::Style style;
+	sds::Style style;
 public:
 	//-------------------------------------------------------------------------
 	/**
@@ -64,15 +64,15 @@ public:
 	 */
 	virtual void invalidate() {}
 	//-------------------------------------------------------------------------
-	virtual void setStyle( const sdsg::Style &style ) { 
+	virtual void setStyle( const sds::Style &style ) { 
 		this->style = style;
 	}
 	//-------------------------------------------------------------------------
-	virtual const sdsg::Style & getStyle() const { 
+	virtual const sds::Style & getStyle() const { 
 		return style;
 	}
 	//-------------------------------------------------------------------------
-	virtual sdsg::Style & getStyle() { 
+	virtual sds::Style & getStyle() { 
 		return style;
 	}
 	//-------------------------------------------------------------------------

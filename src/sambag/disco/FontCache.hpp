@@ -23,11 +23,11 @@ namespace sambag { namespace disco {
 	> FontTraits; 
 }}
 
-namespace boost {
+namespace sambag { namespace disco {
 	extern size_t hash_value(const sambag::disco::ColorRGBA &o);
 	extern size_t hash_value(const sambag::disco::Font &o);
 	extern size_t hash_value(const sambag::disco::FontTraits &o);
-}
+}}
 
 #include <boost/unordered_map.hpp>
 

@@ -77,6 +77,7 @@ void TestSvg::tearDown() {
 //-----------------------------------------------------------------------------
 void TestSvg::testStyleAdd() {
 	using namespace sambag::disco;
+    using namespace sambag::disco::svg;
 	using namespace sambag::disco::svg::graphicElements;
 	Style nullStyle;
 	Style values;

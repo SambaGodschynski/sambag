@@ -22,6 +22,15 @@ namespace sambag { namespace disco { namespace svg {
 // StyleParser
 //=============================================================================
 //-----------------------------------------------------------------------------
+sambag::disco::svg::Style createStyle(const std::string &str) {
+	using namespace io;
+	sambag::disco::svg::Style res;
+	res.font(sambag::disco::Font()); // TODO: why has sytle no std font?
+	std::stringstream ss;
+	ss<<str;
+	ss>>res;
+	return res;
+}
 }}} // namespaces
 namespace {
 using namespace sambag::disco;
@@ -32,7 +41,7 @@ using namespace sambag::disco;
  * @param outStyle
  */
 void parseStyleProperties( const std::string &properties,
-		svg::graphicElements::Style& outStyle)
+		svg::Style& outStyle)
 {
 	using namespace sambag::disco::svg;
 	if (properties.length()==0) return;
@@ -55,13 +64,14 @@ void parseStyleProperties( const std::string &properties,
 		f(outStyle, value);
 	}
 }
-
 } // namespace
+
+namespace sambag { namespace io {
 //=============================================================================
 // stream operators
 //=============================================================================
 //-----------------------------------------------------------------------------
-std::istream & operator>>(std::istream& istr, sambag::disco::svg::graphicElements::Style& style) {
+std::istream & operator>>(std::istream& istr, sambag::disco::svg::Style& style) {
 	using namespace sambag::disco;
 	std::string str;
 	svg::AttributeParser::getWholeString(istr, str);
@@ -69,4 +79,4 @@ std::istream & operator>>(std::istream& istr, sambag::disco::svg::graphicElement
 
 	return istr;
 }
-
+}} // namespace(s)

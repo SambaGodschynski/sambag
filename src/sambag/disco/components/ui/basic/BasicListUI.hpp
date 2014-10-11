@@ -22,7 +22,7 @@
 #include <sambag/disco/components/ui/IListUI.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/com/events/PropertyChanged.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -261,7 +261,7 @@ void BasicListUI<LT>::installDefaults(AComponentPtr c) {
 	list->setLayout(ALayoutManagerPtr());
 
 	UIManager &m = getUIManager();
-	svg::graphicElements::Style style;
+	svg::Style style;
 	m.getProperty("List.style", style);
 	c->setBackground( style.fillPattern() );
 	c->setForeground( style.strokePattern() );
@@ -360,7 +360,7 @@ template <class LT>
 void BasicListUI<LT>::drawImpl(IDrawContext::Ptr cn, AComponentPtr c) {
 	namespace trans = boost::geometry::strategy::transform;
 	ListTypePtr list = getListPtr();
-	typedef trans::translate_transformer<Point2D, Point2D> Translate;
+	typedef trans::translate_transformer<Coordinate, 2, 2> Translate;
 	switch (layoutOrientation) {
 	case ListConstants::VERTICAL_WRAP:
 		if (list->getHeight() != listHeight) {

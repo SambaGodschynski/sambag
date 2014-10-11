@@ -68,10 +68,11 @@ void parseSelectors(const std::string &selectors,
 }
 //-----------------------------------------------------------------------------
 void processRulesList(const Rules& rules, graphicElements::SceneGraph::Ptr g) {
+    using namespace io; // >> operators defined here
 	boost_for_each(const Rule &r, rules) {
 		// create style object
 		std::stringstream is(r.second);
-		graphicElements::Style style;
+		Style style;
 		is >> style;
 		// find related objects
 		std::list<IDrawable::Ptr> objects;

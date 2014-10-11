@@ -128,6 +128,7 @@ public:
 
 }}} // namespaces
 
+namespace sambag { namespace io {
 //=============================================================================
 // stream operators
 //=============================================================================
@@ -153,6 +154,7 @@ extern std::istream & operator>>(
 	std::istream&,
 	sambag::disco::IDrawContext::LineJoin &v
 );
+}} // namespaces
 
 namespace sambag { namespace disco { namespace svg {
 //=============================================================================

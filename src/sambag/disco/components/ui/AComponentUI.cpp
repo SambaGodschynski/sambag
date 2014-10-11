@@ -9,7 +9,7 @@
 #include <sambag/disco/components/AComponent.hpp>
 #include "UIManager.hpp"
 #include <sambag/disco/DiscoHelper.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
 //=============================================================================
@@ -45,7 +45,7 @@ Dimension AComponentUI::getPreferredSize(AComponent::Ptr c) {
 //-----------------------------------------------------------------------------
 void AComponentUI::installUI(AComponent::Ptr c) {
 	UIManager &m = getUIManager();
-	svg::graphicElements::Style style;
+	svg::Style style;
 	m.getProperty("global.style", style);
 	if (!c->isFontSet())
 		c->setFont(style.font());

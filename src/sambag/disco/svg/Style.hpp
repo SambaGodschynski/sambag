@@ -15,11 +15,11 @@
 #include "sambag/disco/IDiscoFactory.hpp"
 
 // hash functions first ...
-namespace boost {
+namespace sambag { namespace disco {
 extern size_t hash_value(const sambag::disco::ColorRGBA &o);
 extern size_t hash_value(const sambag::disco::Dash &o);
 extern size_t hash_value(const sambag::disco::Font &o);
-}
+}}
 // .. then boost flyweight
 #include <boost/flyweight.hpp>
 
@@ -33,7 +33,7 @@ extern size_t hash_value(const sambag::disco::Font &o);
 #define FLYWEIGHT(type, name) type (name)
 #endif
 
-namespace sambag { namespace disco { namespace svg { namespace graphicElements {
+namespace sambag { namespace disco { namespace svg {
 
 //=============================================================================
 /**
@@ -301,6 +301,6 @@ public:
     std::string toString() const;
 
 };
-}}}} // namespace
+}}} // namespace
 
 #endif /* STYLE_H_ */

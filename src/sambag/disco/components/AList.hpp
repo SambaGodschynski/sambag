@@ -191,7 +191,9 @@ public:
 	 *   flowing horizontally then vertically.
 	 * @return
 	 */
-	virtual Orientation getLayoutOrientation() const;
+	virtual Orientation getLayoutOrientation() const {
+        return layoutOrientation;
+    }
 	//-------------------------------------------------------------------------
 	/**
 	 * 	Returns the lead selection index.
@@ -645,17 +647,6 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-typename AList<T, CR, DM, SM>::Orientation
-AList<T, CR, DM, SM>::getLayoutOrientation() const
-{
-	return layoutOrientation;
-}
-//-----------------------------------------------------------------------------
-template < class T,
-	template <class> class CR,
-	template <class> class DM,
-	class SM
->
 int AList<T, CR, DM, SM>::getLeadSelectionIndex() const {
 	return ListSelectionModel::getLeadSelectionIndex();
 }
@@ -1078,8 +1069,7 @@ template < class T,
 	template <class> class DM,
 	class SM
 >
-void AList<T, CR, DM, SM>::setLayoutOrientation(
-	typename AList<T, CR, DM, SM>::Orientation layoutOrientation)
+void AList<T, CR, DM, SM>::setLayoutOrientation(Orientation layoutOrientation)
 {
 	Orientation oldValue = this->layoutOrientation;
 	this->layoutOrientation = layoutOrientation;

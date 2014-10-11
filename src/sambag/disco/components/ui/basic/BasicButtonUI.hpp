@@ -17,7 +17,7 @@
 #include <sambag/disco/ISurface.hpp>
 #include <sambag/disco/IPattern.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
-#include <sambag/disco/svg/graphicElements/Style.hpp>
+#include <sambag/disco/svg/Style.hpp>
 #include "Helper.hpp"
 #include <sambag/disco/DiscoHelper.hpp>
 
@@ -47,11 +47,11 @@ protected:
 	//-------------------------------------------------------------------------
 	virtual void installClientDefaults(AComponentPtr c);
 	//-------------------------------------------------------------------------
-	svg::graphicElements::Style sNormal, sRoll, sPress, sDisabled;
+	svg::Style sNormal, sRoll, sPress, sDisabled;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getBtnRect(IDrawContext::Ptr cn, AComponentPtr c);
 	//-------------------------------------------------------------------------
-	virtual svg::graphicElements::Style getStyle(typename AbstractButton::Ptr b);
+	virtual svg::Style getStyle(typename AbstractButton::Ptr b);
 	//-------------------------------------------------------------------------
 	Insets margin, padding;
 	//-------------------------------------------------------------------------
@@ -64,7 +64,7 @@ private:
 	//-------------------------------------------------------------------------
 	ButtonListener listener;
 	//-------------------------------------------------------------------------
-	svg::graphicElements::Style createDefaultStyle() const;
+	svg::Style createDefaultStyle() const;
 public:
 	//-------------------------------------------------------------------------
 	virtual bool contains(AComponent::Ptr c, const Point2D &p);
@@ -122,10 +122,10 @@ BasicButtonUI<ButtonModell>::BasicButtonUI() {
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-svg::graphicElements::Style 
+svg::Style 
 BasicButtonUI<ButtonModell>::createDefaultStyle() const
 {
-	svg::graphicElements::Style style;
+	svg::Style style;
 	style.fillColor(ColorRGBA(0,0,0,0));
 	style.strokeColor(ColorRGBA(0,0,0,1.));
 	style.strokeWidth(1.);
@@ -149,7 +149,7 @@ BasicButtonUI<ButtonModell>::getBtnRect(IDrawContext::Ptr cn, AComponentPtr c)
 }
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
-svg::graphicElements::Style BasicButtonUI<ButtonModell>::
+svg::Style BasicButtonUI<ButtonModell>::
 getStyle(typename AbstractButton::Ptr b)
 {
 	if (!b->isEnabled()) {
@@ -180,7 +180,7 @@ void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 		return;
 	// draw rect
 	Rectangle bounds = getBtnRect(cn, c);
-	svg::graphicElements::Style style = getStyle(b);
+	svg::Style style = getStyle(b);
 	style.intoContext(cn);
 	if (_drawRect) {
 		IPattern::Ptr pat = style.fillPattern();
