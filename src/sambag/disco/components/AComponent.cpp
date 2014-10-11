@@ -799,7 +799,7 @@ void AComponent::setForeground(IPattern::Ptr pat) {
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
 	firePropertyChanged(PROPERTY_FOREGROUND, old, pat);
-	if (old ? (old != pat) : pat.operator bool())
+	if (old ? (old != pat) : pat.get() != NULL)
 	{
 		redraw();
 	}
@@ -811,7 +811,7 @@ void AComponent::setBackground(IPattern::Ptr pat) {
 	// This is a bound property, so report the change to
 	// any registered listeners.  (Cheap if there are none.)
 	firePropertyChanged(PROPERTY_BACKGROUND, old, pat);
-	if (old ? (old != pat) : pat.operator bool())
+	if (old ? (old != pat) : pat.get() != NULL)
 	{
 		redraw();
 	}
