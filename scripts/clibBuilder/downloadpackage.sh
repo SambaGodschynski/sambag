@@ -36,7 +36,7 @@ _done()
 if ! [ -e $2 ]
 then
     echo Downloading $1:
-    curl $1 -o $2
+    curl -L $1 -o $2
     _done
 fi
 check_file $2
