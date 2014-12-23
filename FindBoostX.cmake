@@ -22,7 +22,7 @@ ENDIF(WIN32)
 
 
 IF($ENV{SAMBA_USELOG})
-  find_package(Boost 1.49.0 REQUIRED
+  find_package(Boost 1.55.0 REQUIRED
   	${xboost_libs}
         filesystem
         system
@@ -38,7 +38,7 @@ IF($ENV{SAMBA_USELOG})
         log_setup
   )
 ELSE($ENV{SAMBA_USELOG})
-  find_package(Boost 1.49.0 REQUIRED
+  find_package(Boost 1.55.0 REQUIRED
         ${xboost_libs}
         filesystem
         system
