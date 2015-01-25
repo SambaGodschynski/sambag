@@ -556,6 +556,11 @@ void * _CocoaWindowImpl::getWindowRef() const {
 #endif // SAMBAG_32
 }
 //-----------------------------------------------------------------------------
+void * _CocoaWindowImpl::getViewRef() const {
+    NSWindow * win = getDiscoWindow(*this);
+    return [win contentView];
+}
+//-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
     boost::shared_ptr<void> hold = __getPtr();
 	AutoReleasePool ap;
