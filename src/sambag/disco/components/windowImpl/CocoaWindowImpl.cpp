@@ -116,10 +116,6 @@ void * CocoaWindowImpl::getSystemHandle() const {
 	return Impl::getWindowRef();
 }
 //-----------------------------------------------------------------------------
-void * CocoaWindowImpl::getNSView() const {
-    return Impl::getViewRef();
-}
-//-----------------------------------------------------------------------------
 CocoaWindowImpl::~CocoaWindowImpl() {
 }
 //-----------------------------------------------------------------------------

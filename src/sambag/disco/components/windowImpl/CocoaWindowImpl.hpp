@@ -95,8 +95,6 @@ public:
 	void invalidateWindow(const Rectangle &area = NULL_RECTANGLE);
 	//-------------------------------------------------------------------------
 	void * getSystemHandle() const;
-    //-------------------------------------------------------------------------
-	void * getNSView() const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
 		return self.lock();

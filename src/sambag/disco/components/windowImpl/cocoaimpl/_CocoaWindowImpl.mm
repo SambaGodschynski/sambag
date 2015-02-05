@@ -397,9 +397,11 @@ void _CocoaWindowImpl::initAsRawWindow(Number x, Number y, Number w, Number h)
     if (!ownerWindow) {
         return;
     }
-    
-    
-    void *wrapperWindow = arch_delegate::initAsRawWindow(ownerWindow, NSMakeRect(x,y,w,h));
+
+    void *wrapperWindow = NULL;
+    if (getFlag(WindowFlags::WND_VST2X_CARBON_COCOA_HACK)) {
+        wrapperWindow = arch_delegate::initAsRawWindow(ownerWindow, NSMakeRect(x,y,w,h));
+    }
    
     if (wrapperWindow) {
         this->carbonWindowRef = createCarbonWindowRefPtr((WindowRef)wrapperWindow);
@@ -442,7 +444,7 @@ void _CocoaWindowImpl::openWindow(_CocoaWindowImpl *parent, Number x, Number y, 
         [window setReleasedWhenClosed: YES];
         [window setAutodisplay: YES];
     
-        if (getFlag(sambag::disco::components::WindowFlags::WND_ALWAYS_ON_TOP))
+        if (getFlag(WindowFlags::WND_ALWAYS_ON_TOP))
         {
             [window makeKeyAndOrderFront:nil];
             [window setLevel:NSStatusWindowLevel];
@@ -541,6 +543,18 @@ void _CocoaWindowImpl::openNested(void *parent,
 //-----------------------------------------------------------------------------
 void * _CocoaWindowImpl::getWindowRef() const {
 #ifdef SAMBAG_32
+    return getHIView();
+#else
+    return getDiscoWindow(*this);
+#endif // SAMBAG_32
+}
+//-----------------------------------------------------------------------------
+void * _CocoaWindowImpl::getNSView() const {
+    NSWindow * win = getDiscoWindow(*this);
+    return [win contentView];
+}
+//-----------------------------------------------------------------------------
+void * _CocoaWindowImpl::getHIView() const {
     AutoReleasePool ap;
 	if (carbonWindowRef) {
         return (WindowRef)carbonWindowRef.get();
@@ -551,14 +565,6 @@ void * _CocoaWindowImpl::getWindowRef() const {
 	}
     WindowRef ref = (WindowRef)[win windowRef];
     return ref;
-#else
-    return getDiscoWindow(*this);
-#endif // SAMBAG_32
-}
-//-----------------------------------------------------------------------------
-void * _CocoaWindowImpl::getViewRef() const {
-    NSWindow * win = getDiscoWindow(*this);
-    return [win contentView];
 }
 //-----------------------------------------------------------------------------
 void _CocoaWindowImpl::closeWindow() {
