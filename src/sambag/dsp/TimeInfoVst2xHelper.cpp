@@ -80,6 +80,7 @@ void convert(VstTimeInfo &dst, const HostTimeInfo &src) {
     if (src.transportCycleIsActive()) { dst.flags |= kVstTransportCycleActive; }
     if (src.automationIsWriting()) { dst.flags |= kVstAutomationWriting; }
     if (src.automationIsReading()) { dst.flags |= kVstAutomationReading; }
+    if (src.transportIsRecording()) { dst.flags |= kVstTransportRecording; }
 }
 //-----------------------------------------------------------------------------
 std::string toString(VstTimeInfoFlags filter) {
@@ -92,24 +93,6 @@ std::string toString(VstTimeInfoFlags filter) {
     if ((kVstTimeSigValid & filter) > 0) {ss<<"TimeSigValid ";}
     if ((kVstSmpteValid & filter) > 0) {ss<<"SmpteValid ";}
     if ((kVstClockValid & filter) > 0) {ss<<"ClockValid ";}
-    std::string res = ss.str();
-    if (res.length() == 0) {
-        return "";
-    }
-    // remove last whitespace
-    return res.erase(res.length()-1);
-}
-//-----------------------------------------------------------------------------
-std::string toString(HostTimeInfo::Filter filter) {
-    std::stringstream ss;
-    if ((HostTimeInfo::FrxTempo & filter) > 0) {ss<<"Tempo ";}
-	if ((HostTimeInfo::FrxPpqPos & filter) > 0) {ss<<"PpqPos ";}
-	if ((HostTimeInfo::FrxNanosValid & filter) > 0) {ss<<"NanosValid ";}
-	if ((HostTimeInfo::FrxBarsValid & filter) > 0) {ss<<"BarsValid ";}
-	if ((HostTimeInfo::FrxCyclePosValid & filter) > 0) {ss<<"CyclePosValid ";}
-	if ((HostTimeInfo::FrxTimeSigValid & filter) > 0) {ss<<"TimeSigValid ";}
-	if ((HostTimeInfo::FrxSmpteValid & filter) > 0) {ss<<"SmpteValid ";}
-	if ((HostTimeInfo::FrxClockValid & filter) > 0) {ss<<"ClockValid ";}
     std::string res = ss.str();
     if (res.length() == 0) {
         return "";
@@ -137,6 +120,7 @@ std::string toString(const VstTimeInfo &dst) {
     if ((dst.flags & kVstTransportChanged) > 0 ){ss<<"TransportChanged ";}
     if ((dst.flags & kVstTransportCycleActive) > 0 ){ss<<"TransportCycleActive ";}
     if ((dst.flags & kVstTransportPlaying) > 0 ){ss<<"TransportPlaying ";}
+    if ((dst.flags & kVstTransportRecording) > 0 ){ss<<"TransportRecording ";}
     if ((dst.flags & kVstAutomationWriting) > 0 ){ss<<"AutomationWriting ";}
     if ((dst.flags & kVstAutomationReading) > 0 ){ss<<"AutomationReading ";}
    
@@ -146,37 +130,6 @@ std::string toString(const VstTimeInfo &dst) {
     }
     // remove last whitespace
     return res.erase(res.length()-1);
-}
-//-----------------------------------------------------------------------------
-std::string toString(const HostTimeInfo &dst) {
-    std::stringstream ss;
-    ss<<"tempo:"<<dst.tempo<<" ";
-	ss<<"sampleRate:"<<dst.sampleRate<<" ";
-	ss<<"ppqPos:"<<dst.ppqPos<<" ";
-	ss<<"samplePos:"<<dst.samplePos<<" ";
-	ss<<"nanoSeconds:"<<dst.nanoSeconds<<" ";
-	ss<<"barStartPos:"<<dst.barStartPos<<" ";
-	ss<<"cycleStartPos:"<<dst.cycleStartPos<<" ";
-	ss<<"cycleEndPos:"<<dst.cycleEndPos<<" ";
-	ss<<"timeSigNumerator:"<<dst.timeSigNumerator<<" ";
-	ss<<"timeSigDenominator:"<<dst.timeSigDenominator<<" ";
-	ss<<"smpteOffset:"<<dst.smpteOffset<<" ";
-	ss<<"smpteFrameRate:"<<dst.smpteFrameRate<<" ";
-	ss<<"samplesToNextClock:"<<dst.samplesToNextClock<<" ";
-    
-    if (dst.transportIsChanged()) {ss<<"TransportChanged ";}
-    if (dst.transportCycleIsActive()) {ss<<"TransportCycleActive ";}
-    if (dst.transportIsPlaying()) {ss<<"TransportPlaying ";}
-    if (dst.automationIsWriting()) {ss<<"AutomationWriting ";}
-    if (dst.automationIsReading()) {ss<<"AutomationReading ";}
-   
-    std::string res = ss.str();
-    if (res.length() == 0) {
-        return "";
-    }
-    // remove last whitespace
-    return res.erase(res.length()-1);
-
 }
 } // timeInfoVst2xHelper
 }} // namespace(s)

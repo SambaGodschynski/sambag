@@ -67,7 +67,7 @@ class Walker():
         self.fHandler.close()
 
     def writeList(self, name, data):
-        self.writeLine("SET ( %s" % (name))
+        self.writeLine("SET ( %s ${%s}" % (name, name))
         for x in data:
             self.writeLine("\t%s" % (x))
         self.writeLine(")")

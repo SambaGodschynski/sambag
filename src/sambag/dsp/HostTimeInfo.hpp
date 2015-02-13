@@ -10,6 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/integer.hpp>
+#include <string>
 
 namespace sambag { namespace dsp {
 //=============================================================================
@@ -102,12 +103,12 @@ struct HostTimeInfo {
 	{
 		return getFlag(kAutomationIsReading);
 	}
-	bool transportIsPlaying() const // set if automation read mode active (play parameter changes) 
+	bool transportIsPlaying() const
 	{
 		return getFlag(kTransportIsPlaying);
 	}
 
-	void transportIsChanged(bool b) 
+	void transportIsChanged(bool b) // indicates that play, cycle or record state has changed
 	{
 		setFlag(kTransportIsChanged, b);
 	}
@@ -132,6 +133,8 @@ struct HostTimeInfo {
 		setFlag(kTransportIsPlaying, b);
 	}
 };
+std::string toString(HostTimeInfo::Filter filter);
+std::string toString(const HostTimeInfo &inf);
 }} // namespace(s)
 
 #endif /* SAMBAG_HOSTTIMEINFO_H */

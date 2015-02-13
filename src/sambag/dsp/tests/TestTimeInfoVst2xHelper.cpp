@@ -9,8 +9,6 @@
 #include <cppunit/config/SourcePrefix.h>
 #include <sambag/dsp/HostTimeInfo.hpp>
 #include <sambag/dsp/TimeInfoVst2xHelper.hpp>
-#include <sambag/dsp/IMidiEvents.hpp>
-#include <sambag/dsp/MidiEventAdapter.hpp>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestTimeInfoVst2xHelper );
@@ -122,7 +120,7 @@ ffset:0 smpteFrameRate:0 samplesToNextClock:0";
 	htime.timeSigNumerator = 3;
 	htime.timeSigDenominator = 4;
 	htime.smpteOffset = 3;
-	htime.smpteFrameRate = 22;
+	htime.smpteFrameRate = 0; // 0 => 24 fps
 	htime.samplesToNextClock = 7;
     htime.transportIsChanged(true);
     htime.transportIsPlaying(true);
@@ -132,7 +130,7 @@ ffset:0 smpteFrameRate:0 samplesToNextClock:0";
     
     exp = "tempo:120.25 sampleRate:44100 ppqPos:10 samplePos:1100 nanoSeconds:\
 110 barStartPos:13 cycleStartPos:11 cycleEndPos:14 timeSigNumerator:3 timeSigDe\
-nominator:4 smpteOffset:3 smpteFrameRate:22 samplesToNextClock:7 TransportChang\
+nominator:4 smpteOffset:3 smpteFrameRate:0 samplesToNextClock:7 TransportChang\
 ed TransportCycleActive TransportPlaying AutomationWriting AutomationReading";
     
     CPPUNIT_ASSERT_EQUAL(exp, toString(htime));

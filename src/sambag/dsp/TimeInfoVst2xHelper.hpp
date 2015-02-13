@@ -20,8 +20,6 @@ namespace timeInfoVst2xHelper {
     void convert(HostTimeInfo &dst, const VstTimeInfo &src);
     void convert(VstTimeInfo &dst, const HostTimeInfo &src);
     std::string toString(VstTimeInfoFlags filter);
-    std::string toString(HostTimeInfo::Filter filter);
-    std::string toString(const HostTimeInfo &inf);
     std::string toString(const VstTimeInfo &inf);
 }; // TimeEventVst2xHelper
 }} // namespace(s)
