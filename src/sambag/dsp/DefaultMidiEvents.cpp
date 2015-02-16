@@ -12,7 +12,7 @@ namespace sambag { namespace dsp {
 //  Class DefaultMidiEvents
 //=============================================================================
 //-----------------------------------------------------------------------------
-void DefaultMidiEvents::copyFlat(IMidiEvents *_events) {
+void DefaultMidiEvents::copyFlat(IMidiEvents::Ptr _events) {
 	events.clear();
 	events.reserve(_events->getNumEvents());
 	int num = _events->getNumEvents();
@@ -23,7 +23,7 @@ void DefaultMidiEvents::copyFlat(IMidiEvents *_events) {
 	}
 }
 //-----------------------------------------------------------------------------
-void DefaultMidiEvents::copyDeep(IMidiEvents *_events) {
+void DefaultMidiEvents::copyDeep(IMidiEvents::Ptr _events) {
 	events.clear();
 	events.reserve(_events->getNumEvents());
 	dataContainer.reserve(_events->getNumEvents());
@@ -79,7 +79,7 @@ namespace {
 	}
 } // namespace(s)
 //-----------------------------------------------------------------------------
-void DefaultMidiEvents::copyDeepFiltered(IMidiEvents *_events, int channel) 
+void DefaultMidiEvents::copyDeepFiltered(IMidiEvents::Ptr _events, int channel) 
 {
 	events.clear();
 	events.reserve(_events->getNumEvents());
@@ -150,10 +150,10 @@ void createFlatRawData(const IMidiEvents &ev, std::vector<IMidiEvents::Data> &ou
     }
 }
 //-----------------------------------------------------------------------------
-IMidiEvents * createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize) {
+IMidiEvents::Ptr createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize) {
     IMidiEvents::DataPtr it = data;
     IMidiEvents::DataPtr end = data+byteSize;
-    DefaultMidiEvents *res = new DefaultMidiEvents();
+    DefaultMidiEvents::Ptr res = DefaultMidiEvents::create();
     while(it<end) {
         size_t eventSize;
         // copy data

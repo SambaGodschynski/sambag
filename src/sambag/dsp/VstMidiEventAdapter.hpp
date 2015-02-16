@@ -18,23 +18,39 @@ namespace sambag { namespace dsp {
 /** 
   * @class VstMidiEventAdapter.
   */
-struct VstMidiEventAdapter : public IMidiEvents {
+class VstMidiEventAdapter : public IMidiEvents {
 //=============================================================================
+protected:
+    VstMidiEventAdapter() {}
+    VstMidiEventAdapter(const VstMidiEventAdapter&) {}
+    VstMidiEventAdapter & operator=(const VstMidiEventAdapter&) {}
+public:
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<VstMidiEventAdapter> Ptr;
+    typedef boost::weak_ptr<VstMidiEventAdapter> WPtr;
 	VstEvents *events;
 	Int maxEvents;
 	bool ownerOfData;
 	//-------------------------------------------------------------------------
-	VstMidiEventAdapter(VstEvents *events) : 
-		events(events), ownerOfData(false) 
+	static Ptr create(VstEvents *events)
 	{
+        Ptr neu(new VstMidiEventAdapter());
+        neu->events=events;
+        neu->ownerOfData = false;
+        return neu;
+	}
+    //-------------------------------------------------------------------------
+    static Ptr create(IMidiEvents::Ptr ev);
+	//-------------------------------------------------------------------------
+	static Ptr create(VstMidiEventAdapter::Ptr b)
+    {
+        Ptr neu(new VstMidiEventAdapter());
+		neu->events = b->events;
+		neu->ownerOfData = false;
+        return neu;
 	}
 	//-------------------------------------------------------------------------
-	VstMidiEventAdapter(const VstMidiEventAdapter &b) {
-		events = b.events;
-		ownerOfData = false;
-	}
-	//-------------------------------------------------------------------------
-	void allocDataIfNecessary(IMidiEvents *ev);
+	void allocDataIfNecessary(IMidiEvents::Ptr ev);
 	//-------------------------------------------------------------------------
 	void freeDataIfNecessary();
 	//-------------------------------------------------------------------------
@@ -58,9 +74,7 @@ struct VstMidiEventAdapter : public IMidiEvents {
 		return res;
 	}
 	//-------------------------------------------------------------------------
-	VstMidiEventAdapter(IMidiEvents *ev);
-	//-------------------------------------------------------------------------
-	void set(IMidiEvents *ev);
+	void set(IMidiEvents::Ptr ev);
 	//-------------------------------------------------------------------------
 	virtual ~VstMidiEventAdapter();
 

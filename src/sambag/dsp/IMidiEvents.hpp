@@ -9,6 +9,7 @@
 #define SAMBAG_IMIDIEVENTS_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/integer.hpp>
 #include <sstream>
@@ -36,6 +37,18 @@ namespace sambag { namespace dsp {
   */
 struct IMidiEvents {
 //=============================================================================
+    //-------------------------------------------------------------------------
+    enum EventType { Unknown,
+                     NoteOn,
+                     NoteOff,
+                     Sysex,
+                     Aftertouch,
+                     Cc,
+                     Pc,
+                     PitchBend};
+    //-------------------------------------------------------------------------
+    typedef boost::shared_ptr<IMidiEvents> Ptr;
+    typedef boost::weak_ptr<IMidiEvents> WPtr;
 	//-------------------------------------------------------------------------
 	typedef boost::int_t<32>::exact Int;
 	//-------------------------------------------------------------------------
@@ -108,7 +121,54 @@ extern void createFlatRawData(const IMidiEvents &ev, std::vector<IMidiEvents::Da
  * @brief unpacks datastream and creates MidiEvent
  * @note uses DefaultMidiEvents as concrete container.
  */
-extern IMidiEvents * createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize);
+extern IMidiEvents::Ptr createMidiEvents(IMidiEvents::DataPtr data, size_t byteSize);
+
+/**
+ * @return the event type of the event
+ */
+extern IMidiEvents::EventType getEventType(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the channel type of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getChannel(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the pitch of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getPitch(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the velocity of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getVelocity(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the controller of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getCc(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the controller value of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getCcValue(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the program of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getPc(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the aftertouch pressure of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getPressure(const IMidiEvents::MidiEvent &ev);
+/**
+ * @return the pitchbend value of the event
+ * @note does not check if result fits to the actual eventtype
+ */
+extern int getPitchBend(const IMidiEvents::MidiEvent &ev);
+
+
 }} // namespace(s)
 
 #endif /* SAMBAG_IMIDIEVENTS_H */

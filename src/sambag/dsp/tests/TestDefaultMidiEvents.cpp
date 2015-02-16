@@ -22,24 +22,24 @@ void TestDefaultMidiEvents::testEventCopy() {
 	using namespace sambag::dsp;
 	typedef boost::shared_array<IMidiEvents::Data> DataArray;
 	DataArray data[1024];
-	DefaultMidiEvents a;
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
 	for (int i=0; i<1024; ++i) {
 		int bytes = (i%15) + 1;
 		data[i] = DataArray(new IMidiEvents::Data[bytes]);
 		for (int j=0; j<bytes; ++j) {
 			data[i][j] = j % 26 + 'a';
 		}
-		a.events.push_back(IMidiEvents::MidiEvent(bytes, i, data[i].get()));
+		a->events.push_back(IMidiEvents::MidiEvent(bytes, i, data[i].get()));
 	}
-	DefaultMidiEvents b(&a); // flat copy
-	CPPUNIT_ASSERT(a==b);
-	DefaultMidiEvents c;
-	c.copyDeep(&a);
-	CPPUNIT_ASSERT(c==a);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create(a); // flat copy
+	CPPUNIT_ASSERT(*a==*b);
+	DefaultMidiEvents::Ptr c = DefaultMidiEvents::create();
+	c->copyDeep(a);
+	CPPUNIT_ASSERT(*c==*a);
 	data[0][0] = '!';
-	CPPUNIT_ASSERT(c!=a);
-	CPPUNIT_ASSERT(c!=b);
-	CPPUNIT_ASSERT(a==b);
+	CPPUNIT_ASSERT(*c!=*a);
+	CPPUNIT_ASSERT(*c!=*b);
+	CPPUNIT_ASSERT(*a==*b);
 }
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testInsertDeep() {
@@ -48,8 +48,8 @@ void TestDefaultMidiEvents::testInsertDeep() {
     typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
 	DataArray statData[1024];
 	DataArray tmp[1024];
-    DefaultMidiEvents deep;
-    DefaultMidiEvents stat;
+    DefaultMidiEvents::Ptr deep = DefaultMidiEvents::create();
+    DefaultMidiEvents::Ptr stat = DefaultMidiEvents::create();
 	for (int i=0; i<1024; ++i) {
 		int bytes = (i%15) + 1;
 		statData[i] = DataArray(new IMidiEvents::Data[bytes]);
@@ -59,16 +59,16 @@ void TestDefaultMidiEvents::testInsertDeep() {
             tmp[i][j] = j % 26 + 'a';
 		}
         // use the static data
-        stat.insertFlat(IMidiEvents::MidiEvent(bytes, i, statData[i].get()));
+        stat->insertFlat(IMidiEvents::MidiEvent(bytes, i, statData[i].get()));
         // use the tmp data
-		deep.insertDeep(IMidiEvents::MidiEvent(bytes, i, tmp[i].get()));
+		deep->insertDeep(IMidiEvents::MidiEvent(bytes, i, tmp[i].get()));
 	}
     // clear tmp
     for (int i=0; i<1024; ++i) {
         int bytes = (i%15) + 1;
         memset(tmp[i].get(), 0, bytes);
     }
-    CPPUNIT_ASSERT(stat==deep);
+    CPPUNIT_ASSERT(*stat==*deep);
 }
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ void TestDefaultMidiEvents::testCreateFlatRawData() {
 	typedef boost::shared_array<IMidiEvents::Data> DataArray;
     typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
 	DataArray data[1024];
-	DefaultMidiEvents orig;
+	DefaultMidiEvents::Ptr orig = DefaultMidiEvents::create();
     size_t sumBytes = 0;
 	for (int i=0; i<1024; ++i) {
 		int bytes = (i%15) + 1;
@@ -86,21 +86,21 @@ void TestDefaultMidiEvents::testCreateFlatRawData() {
 			data[i][j] = j % 26 + 'a';
 		}
         sumBytes+=bytes+sizeof(IMidiEvents::ByteSize)+sizeof(IMidiEvents::DeltaFrames);
-		orig.insertFlat(IMidiEvents::MidiEvent(bytes, i, data[i].get()));
+		orig->insertFlat(IMidiEvents::MidiEvent(bytes, i, data[i].get()));
 	}
 	DataArray bff;
     size_t size = 0;
     {
         std::vector<IMidiEvents::Data> tmp;
         tmp.reserve(size);
-        createFlatRawData(orig, tmp);
+        createFlatRawData(*orig, tmp);
         size = tmp.size();
         CPPUNIT_ASSERT_EQUAL(size, sumBytes);
         bff = DataArray( new IMidiEvents::Data[size] );
         memcpy(bff.get(), &tmp[0], sizeof(IMidiEvents::Data) * size);
     }
     MidiEventsPtr newEvent = MidiEventsPtr( createMidiEvents(bff.get(), size) );
-    CPPUNIT_ASSERT(orig==(*newEvent));
+    CPPUNIT_ASSERT(*orig==(*newEvent));
 }
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopyFiltered() {
@@ -112,21 +112,21 @@ void TestDefaultMidiEvents::testEventCopyFiltered() {
 		0x81, 0x3C, 0x0,
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 0);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 0);
 
 	IMidiEvents::Data _assumeCh00[] = {
 		0x90, 0x3C, 0x87, 
 		0x80, 0x3C, 0x0,
 	};
 	bytes = sizeof(_assumeCh00) / sizeof(_assumeCh00[0]);
-	DefaultMidiEvents assumeCh00;
-	assumeCh00.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
+	DefaultMidiEvents::Ptr assumeCh00 = DefaultMidiEvents::create();
+	assumeCh00->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
 
-	CPPUNIT_ASSERT_EQUAL(assumeCh00, b);
+	CPPUNIT_ASSERT_EQUAL(*assumeCh00, *b);
 
 }
 //-----------------------------------------------------------------------------
@@ -140,11 +140,11 @@ void TestDefaultMidiEvents::testEventCopyFiltered02() {
 		0x81, 0x3C, 0x0,
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 0);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 0);
 
 	IMidiEvents::Data _assumeCh00[] = {
 		0x00, 0x00, 0x00,
@@ -152,10 +152,10 @@ void TestDefaultMidiEvents::testEventCopyFiltered02() {
 		0x80, 0x3C, 0x0,
 	};
 	bytes = sizeof(_assumeCh00) / sizeof(_assumeCh00[0]);
-	DefaultMidiEvents assumeCh00;
-	assumeCh00.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
+	DefaultMidiEvents::Ptr assumeCh00 = DefaultMidiEvents::create();
+	assumeCh00->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
 
-	CPPUNIT_ASSERT_EQUAL(assumeCh00, b);
+	CPPUNIT_ASSERT_EQUAL(*assumeCh00, *b);
 
 }
 //-----------------------------------------------------------------------------
@@ -168,21 +168,21 @@ void TestDefaultMidiEvents::testEventCopyFiltered03() {
 		0x81, 0x3C, 0x90, 0x81 // missing two bytes
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 1);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 1);
 
 	IMidiEvents::Data _assumeCh00[] = {
 		0x91, 0x91, 0x0, 
 		0x81, 0x3C, 0x90,
 	};
 	bytes = sizeof(_assumeCh00) / sizeof(_assumeCh00[0]);
-	DefaultMidiEvents assumeCh00;
-	assumeCh00.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
+	DefaultMidiEvents::Ptr assumeCh00 = DefaultMidiEvents::create();
+	assumeCh00->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
 
-	CPPUNIT_ASSERT_EQUAL(assumeCh00, b);
+	CPPUNIT_ASSERT_EQUAL(*assumeCh00, *b);
 }
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopyFiltered04() {
@@ -194,21 +194,21 @@ void TestDefaultMidiEvents::testEventCopyFiltered04() {
 		0x81, 0x3C, 0x90, 0x81, 0x00 // missing one bytes
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 1);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 1);
 
 	IMidiEvents::Data _assumeCh00[] = {
 		0x91, 0x91, 0x0, 
 		0x81, 0x3C, 0x90,
 	};
 	bytes = sizeof(_assumeCh00) / sizeof(_assumeCh00[0]);
-	DefaultMidiEvents assumeCh00;
-	assumeCh00.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
+	DefaultMidiEvents::Ptr assumeCh00 = DefaultMidiEvents::create();
+	assumeCh00->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
 
-	CPPUNIT_ASSERT_EQUAL(assumeCh00, b);
+	CPPUNIT_ASSERT_EQUAL(*assumeCh00, *b);
 }
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopyFiltered05() {
@@ -222,11 +222,11 @@ void TestDefaultMidiEvents::testEventCopyFiltered05() {
 		0x81, 0x3C, 0x90, 0x81, 0x00 // missing one bytes
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 1);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 1);
 
 	IMidiEvents::Data _assumeCh00[] = {
 		0xf0, 0x00, 0x00,
@@ -235,10 +235,10 @@ void TestDefaultMidiEvents::testEventCopyFiltered05() {
 		0x81, 0x3C, 0x90,
 	};
 	bytes = sizeof(_assumeCh00) / sizeof(_assumeCh00[0]);
-	DefaultMidiEvents assumeCh00;
-	assumeCh00.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
+	DefaultMidiEvents::Ptr assumeCh00 = DefaultMidiEvents::create();
+	assumeCh00->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &_assumeCh00[0]));
 
-	CPPUNIT_ASSERT_EQUAL(assumeCh00, b);
+	CPPUNIT_ASSERT_EQUAL(*assumeCh00, *b);
 }
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopyFiltered06() {
@@ -248,12 +248,37 @@ void TestDefaultMidiEvents::testEventCopyFiltered06() {
 		0x90, 0x00, 0x00  // no sysex endbyte
 	};
 	size_t bytes = sizeof(data) / sizeof(data[0]);
-	DefaultMidiEvents a;
-	a.events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+	a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
 
-	DefaultMidiEvents b;
-	b.copyDeepFiltered(&a, 1);
+	DefaultMidiEvents::Ptr b = DefaultMidiEvents::create();
+	b->copyDeepFiltered(a, 1);
 
-	CPPUNIT_ASSERT_EQUAL(a, b);
+	CPPUNIT_ASSERT_EQUAL(*a, *b);
+}
+//-----------------------------------------------------------------------------
+void TestDefaultMidiEvents::testHelper()
+{
+    using namespace sambag::dsp;
+    {
+        IMidiEvents::Data data[] = { 0x81, 100, 99 };
+        size_t bytes = 3;
+        DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+        a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+        CPPUNIT_ASSERT_EQUAL(IMidiEvents::NoteOff, getEventType(a->getMidiEvent(0)));
+        CPPUNIT_ASSERT_EQUAL(1, getChannel(a->getMidiEvent(0)));
+        CPPUNIT_ASSERT_EQUAL(100, getPitch(a->getMidiEvent(0)));
+        CPPUNIT_ASSERT_EQUAL(99, getVelocity(a->getMidiEvent(0)));
+    }
+    {
+        IMidiEvents::Data data[] = { 0xEA, 10, 99 };
+        size_t bytes = 3;
+        DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+        a->events.push_back(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+        CPPUNIT_ASSERT_EQUAL(IMidiEvents::PitchBend, getEventType(a->getMidiEvent(0)));
+        CPPUNIT_ASSERT_EQUAL(10, getChannel(a->getMidiEvent(0)));
+        CPPUNIT_ASSERT_EQUAL(99*128+10, getPitchBend(a->getMidiEvent(0)));
+    }
+    
 }
 } //namespace

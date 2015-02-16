@@ -18,16 +18,25 @@ namespace sambag { namespace dsp {
 /** 
   * @class DefaultMidiEvents.
   */
-struct DefaultMidiEvents : public IMidiEvents {
+class DefaultMidiEvents : public IMidiEvents {
 //=============================================================================
+protected:
+    DefaultMidiEvents() {}
+    DefaultMidiEvents(const DefaultMidiEvents&) {}
+    DefaultMidiEvents & operator=(const DefaultMidiEvents&) {}
+public:
+    typedef boost::shared_ptr<DefaultMidiEvents> Ptr;
+    typedef boost::weak_ptr<DefaultMidiEvents> WPtr;
 	std::vector<MidiEvent> events;
 	typedef boost::shared_array<Data> DataArray;
 	std::vector<DataArray> dataContainer; // needed for deep copy
 	//-------------------------------------------------------------------------
-	DefaultMidiEvents(IMidiEvents *_events = NULL) {
+	static Ptr create(IMidiEvents::Ptr _events = IMidiEvents::Ptr()) {
+        Ptr neu( new DefaultMidiEvents() );
 		if (_events) {
-			copyFlat(_events);
+			neu->copyFlat(_events);
 		}
+        return neu;
 	}
 	//-------------------------------------------------------------------------
 	virtual Int getNumEvents() const {
@@ -42,13 +51,13 @@ struct DefaultMidiEvents : public IMidiEvents {
 	 * @brief flat copy of midi data. (remember: MidiEvent contains midi data as ptr)
 	 * @note: clears all previous setted data
 	 */
-	void copyFlat(IMidiEvents *_events);
+	void copyFlat(IMidiEvents::Ptr _events);
 	//-------------------------------------------------------------------------
 	/**
      * @brief deep copy of midi data.
 	 * @note: clears all previous setted data
 	 */
-	void copyDeep(IMidiEvents *_events);
+	void copyDeep(IMidiEvents::Ptr _events);
 	//-------------------------------------------------------------------------
 	/**
     * @brief deep copy of midi data using a channel filter.
@@ -56,7 +65,7 @@ struct DefaultMidiEvents : public IMidiEvents {
 	 * ignored.
 	 * @note: clears all previous setted data
 	 */
-	void copyDeepFiltered(IMidiEvents *_events, int filterChannel);
+	void copyDeepFiltered(IMidiEvents::Ptr _events, int filterChannel);
 	//-------------------------------------------------------------------------
 	void reserve(Int size) {
 		events.reserve(size);

@@ -29,7 +29,7 @@ namespace {
 // class VstMidiEventAdapter.
 //=============================================================================
 //-----------------------------------------------------------------------------
-void VstMidiEventAdapter::allocDataIfNecessary(IMidiEvents *ev) {
+void VstMidiEventAdapter::allocDataIfNecessary(IMidiEvents::Ptr ev) {
 	if (!ownerOfData || !events) {
 		events = allocVstEvents(ev->getNumEvents());
 		maxEvents = ev->getNumEvents();
@@ -57,10 +57,10 @@ VstEvent * VstMidiEventAdapter::allocVstEventNecessary(size_t bytes, VstEvent *o
 	return old;
 }
 //-----------------------------------------------------------------------------
-void VstMidiEventAdapter::set(IMidiEvents *ev) {
+void VstMidiEventAdapter::set(IMidiEvents::Ptr ev) {
 	// special case:
-	VstMidiEventAdapter *_ev = 
-		dynamic_cast<VstMidiEventAdapter*>(ev);
+	VstMidiEventAdapter::Ptr _ev =
+		boost::dynamic_pointer_cast<VstMidiEventAdapter>(ev);
 	if (_ev) {
 		freeDataIfNecessary();
 		this->events = _ev->events;
@@ -98,10 +98,13 @@ void VstMidiEventAdapter::freeDataIfNecessary() {
 	events = NULL;
 }
 //-----------------------------------------------------------------------------
-VstMidiEventAdapter::VstMidiEventAdapter(IMidiEvents *ev) : 
-	events(NULL), ownerOfData(false) 
+VstMidiEventAdapter::Ptr VstMidiEventAdapter::create(IMidiEvents::Ptr ev)
 {
-	set(ev);
+    Ptr neu(new VstMidiEventAdapter());
+    neu->events = NULL;
+    neu->ownerOfData = false;
+	neu->set(ev);
+    return neu;
 }
 //-----------------------------------------------------------------------------
 VstMidiEventAdapter::~VstMidiEventAdapter() {
