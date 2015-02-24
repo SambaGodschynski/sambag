@@ -13,16 +13,16 @@ namespace sambag { namespace dsp {
 //  Class Vst3MidiEvents
 //=============================================================================
 //-----------------------------------------------------------------------------
-Vst3Adapter::Ptr Vst3Adapter::create() {
-    Ptr neu (new Vst3Adapter());
+Vst3MidiAdapter::Ptr Vst3MidiAdapter::create() {
+    Ptr neu (new Vst3MidiAdapter());
     return neu;
 }
 //-----------------------------------------------------------------------------
-void Vst3Adapter::set(IMidiEvents::Ptr adaptee) {
+void Vst3MidiAdapter::set(IMidiEvents::Ptr adaptee) {
     this->adaptee = adaptee;
 }
 //-----------------------------------------------------------------------------
-Steinberg::int32 Vst3Adapter::getEventCount() {
+Steinberg::int32 Vst3MidiAdapter::getEventCount() {
     if (!adaptee) {
         return 0;
     }
@@ -30,20 +30,54 @@ Steinberg::int32 Vst3Adapter::getEventCount() {
 }
 //-----------------------------------------------------------------------------
 Steinberg::tresult
-Vst3Adapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
+Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
 {
+    using namespace Steinberg;
     if (!adaptee) {
         return Steinberg::kResultFalse;
     }
-    
+    IMidiEvents::MidiEvent midiEv = adaptee->getMidiEvent(index);
+    e.sampleOffset = boost::get<1>(midiEv);
+    switch (getEventType(midiEv)) {
+        case IMidiEvents::NoteOn:
+            e.type            = Vst::Event::kNoteOnEvent;
+            e.noteOn.channel  = getChannel(midiEv);
+            e.noteOn.pitch    = getPitch(midiEv);
+            e.noteOn.velocity = getVelocity(midiEv);
+            e.noteOn.length   = 0;
+            e.noteOn.tuning   = 0;
+            e.noteOn.noteId   = -1;
+            return Steinberg::kResultOk;
+        case IMidiEvents::NoteOff:
+            e.type = Vst::Event::kNoteOffEvent;
+            e.noteOff.channel  = getChannel(midiEv);
+            e.noteOff.pitch    = getPitch(midiEv);
+            e.noteOff.velocity = getVelocity(midiEv);
+            e.noteOff.tuning   = 0;
+            e.noteOff.noteId   = -1;
+            return Steinberg::kResultOk;
+        case IMidiEvents::Sysex:
+            e.type       = Vst::Event::kDataEvent;
+            e.data.bytes = boost::get<2>(midiEv);
+            e.data.size  = boost::get<0>(midiEv);
+            e.data.type  = Vst::DataEvent::kMidiSysEx;
+            return Steinberg::kResultOk;
+        case IMidiEvents::Aftertouch:
+            e.type                  = Steinberg::Vst::Event::kPolyPressureEvent;
+            e.polyPressure.channel  = getChannel(midiEv);
+            e.polyPressure.pitch    = getPitch(midiEv);
+            e.polyPressure.pressure = getPressure(midiEv);
+            return Steinberg::kResultOk;
+    }
+    return Steinberg::kResultFalse;
 }
 //-----------------------------------------------------------------------------
-Steinberg::tresult Vst3Adapter::addEvent(Steinberg::Vst::Event &e) {
+Steinberg::tresult Vst3MidiAdapter::addEvent(Steinberg::Vst::Event &e) {
     SAMBAG_LOG_ERR<<"Vst3MidiEvents::addEvent not supported";
     return Steinberg::kResultFalse;
 }
 //-----------------------------------------------------------------------------
-Steinberg::tresult Vst3Adapter::queryInterface(const Steinberg::TUID, void** obj)
+Steinberg::tresult Vst3MidiAdapter::queryInterface(const Steinberg::TUID, void** obj)
 {
     *obj = nullptr;
     return Steinberg::kNotImplemented;

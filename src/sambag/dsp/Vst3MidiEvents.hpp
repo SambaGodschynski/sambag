@@ -20,21 +20,22 @@ namespace sambag { namespace dsp {
   * @class Vst3MidiEvents.
   * @brief a Vst3 Event that adatps a sambag::IMidiEvent
   */
-class Vst3Adapter : Steinberg::Vst::IEventList {
+class Vst3MidiAdapter : public Steinberg::Vst::IEventList {
 //=============================================================================
 public:
-    typedef boost::shared_ptr<Vst3Adapter> Ptr;
-    typedef boost::weak_ptr<Vst3Adapter> WPtr;
+    typedef boost::shared_ptr<Vst3MidiAdapter> Ptr;
+    typedef boost::weak_ptr<Vst3MidiAdapter> WPtr;
 
 protected:
-    Vst3Adapter() {}
-    Vst3Adapter(const Vst3Adapter&) {}
-    Vst3Adapter & operator=(const Vst3Adapter&) {return *this;}
+    Vst3MidiAdapter() {}
+    Vst3MidiAdapter(const Vst3MidiAdapter&) {}
+    Vst3MidiAdapter & operator=(const Vst3MidiAdapter&) {return *this;}
 private:
     IMidiEvents::Ptr adaptee;
 public:
     static Ptr create();
     void set(IMidiEvents::Ptr adaptee);
+    IMidiEvents::Ptr get() const { return adaptee; }
     ///////////////////////////////////////////////////////////////////////////
     Steinberg::tresult queryInterface (const Steinberg::TUID, void** obj);
     Steinberg::uint32 addRef() { return 1; }
@@ -42,7 +43,7 @@ public:
     virtual Steinberg::int32 getEventCount ();
     virtual Steinberg::tresult getEvent (Steinberg::int32 index, Steinberg::Vst::Event &e);
     virtual Steinberg::tresult addEvent (Steinberg::Vst::Event &e);
-}; // Vst3Adapter
+}; // Vst3MidiAdapter
 
 
 //=============================================================================

@@ -186,8 +186,8 @@ public:
 		if (events->numEvents == 0) {
 			return 1;
 		}
-		VstMidiEventAdapter midiev(events);
-		PluginProcessor::processEvents(&midiev);
+		VstMidiEventAdapter::Ptr midiev = VstMidiEventAdapter::create(events);
+		PluginProcessor::processEvents(midiev);
 		return 1;
 	}
 	//-------------------------------------------------------------------------
