@@ -37,12 +37,12 @@ public:
     void set(IMidiEvents::Ptr adaptee);
     IMidiEvents::Ptr get() const { return adaptee; }
     ///////////////////////////////////////////////////////////////////////////
-    Steinberg::tresult queryInterface (const Steinberg::TUID, void** obj);
-    Steinberg::uint32 addRef() { return 1; }
-    Steinberg::uint32 release() { return 1; }
-    virtual Steinberg::int32 getEventCount ();
-    virtual Steinberg::tresult getEvent (Steinberg::int32 index, Steinberg::Vst::Event &e);
-    virtual Steinberg::tresult addEvent (Steinberg::Vst::Event &e);
+    Steinberg::tresult PLUGIN_API queryInterface (const Steinberg::TUID, void** obj);
+    Steinberg::uint32 PLUGIN_API addRef() { return 1; }
+    Steinberg::uint32 PLUGIN_API release() { return 1; }
+    virtual Steinberg::int32 PLUGIN_API getEventCount ();
+    virtual Steinberg::tresult PLUGIN_API getEvent (Steinberg::int32 index, Steinberg::Vst::Event &e);
+    virtual Steinberg::tresult PLUGIN_API addEvent (Steinberg::Vst::Event &e);
 }; // Vst3MidiAdapter
 
 
