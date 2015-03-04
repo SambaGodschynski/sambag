@@ -112,6 +112,31 @@ inline std::ostream & operator << (std::ostream& os, const IMidiEvents &b) {
 	return os;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// HELPER
+/**
+ * @brief Iterates through the raw data of a midi event
+ */
+class MidiDataIterator {
+    IMidiEvents::MidiEvent currEvent; // the current event
+    int currEventIdx; // the current event
+    int bytes; // the current events bytesize
+    int currByte; // the current byte
+    IMidiEvents::Ptr src;
+    bool nextEvent();
+public:
+    MidiDataIterator(IMidiEvents::Ptr src);
+    /**
+     * @return the next midi data byte and true, or false if no further data.
+     */
+    bool nextByte(IMidiEvents::Data *outByte);
+    /**
+     * @return the delta frames of the current byte
+     */
+    int deltaFrames() const;
+};
+
 /**
  * @return vector with bytestream representation of MidiEvents
  * @note we use a vector because it's storage has a usefull auto grow up strategy

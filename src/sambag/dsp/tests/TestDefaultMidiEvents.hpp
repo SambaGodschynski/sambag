@@ -26,6 +26,7 @@ private:
     CPPUNIT_TEST( testCreateFlatRawData );
     CPPUNIT_TEST( testInsertDeep );
     CPPUNIT_TEST( testHelper );
+    CPPUNIT_TEST( testMidiDataIterator );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testEventCopy();
@@ -38,6 +39,7 @@ public:
     void testCreateFlatRawData();
     void testInsertDeep();
     void testHelper();
+    void testMidiDataIterator();
 };
 
 } // namespace

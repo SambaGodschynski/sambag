@@ -281,4 +281,44 @@ void TestDefaultMidiEvents::testHelper()
     }
     
 }
+//-----------------------------------------------------------------------------
+namespace {
+    inline void testByte(sambag::dsp::MidiDataIterator &it,
+        unsigned char byte, int delta)
+    {
+        unsigned char ist = 0;
+        CPPUNIT_ASSERT( it.nextByte(&ist) );
+        CPPUNIT_ASSERT_EQUAL(byte, ist);
+        CPPUNIT_ASSERT_EQUAL(delta, it.deltaFrames());
+    }
+}
+void TestDefaultMidiEvents::testMidiDataIterator() {
+    using namespace sambag::dsp;
+    DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
+    MidiDataIterator it(a);
+    IMidiEvents::Data byte;
+    CPPUNIT_ASSERT( !it.nextByte(&byte) );
+    // create data
+    {
+        IMidiEvents::Data data[] = { 0x90, 0x3C, 0x22 };
+        a->events.push_back(IMidiEvents::MidiEvent(3, 1, &data[0]));
+    }
+    {
+        IMidiEvents::Data data[] = { 0x91, 0x3D, 0x23 };
+        a->events.push_back(IMidiEvents::MidiEvent(3, 10, &data[0]));
+    }
+    {
+        IMidiEvents::Data data[] = { 0x0 };
+        a->events.push_back(IMidiEvents::MidiEvent(1, 0, &data[0]));
+    }
+    {
+        IMidiEvents::Data data[] = { 0x92, 0x3E, 0x24 };
+        a->events.push_back(IMidiEvents::MidiEvent(3, 100, &data[0]));
+    }
+    testByte(it, 0x90, 1); testByte(it, 0x3C, 1); testByte(it, 0x22, 1);
+    testByte(it, 0x91, 10); testByte(it, 0x3D, 10); testByte(it, 0x23, 10);
+    testByte(it, 0x0, 0);
+    testByte(it, 0x92, 100); testByte(it, 0x3E, 100); testByte(it, 0x24, 100);
+	
+}
 } //namespace

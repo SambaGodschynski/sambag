@@ -113,4 +113,37 @@ int getPitchBend(const IMidiEvents::MidiEvent &ev)
     DataPtr data = boost::get<2>(ev);
     return (data[2]<<7) + data[1];
 }
+///////////////////////////////////////////////////////////////////////////////
+MidiDataIterator::MidiDataIterator(IMidiEvents::Ptr src) :
+    currEvent(NULL)
+  , currEventIdx(0)
+  , bytes(0)
+  , currByte(0)
+  , src(src)
+{
+}
+//-----------------------------------------------------------------------------
+bool MidiDataIterator::nextEvent() {
+    if ( currEventIdx >= src->getNumEvents() ) {
+        return false;
+    }
+    currEvent = src->getMidiEvent(currEventIdx++);
+    bytes = boost::get<0>(currEvent);
+    currByte = 0;
+    return true;
+}
+//-----------------------------------------------------------------------------
+int MidiDataIterator::deltaFrames() const {
+    return boost::get<1>(currEvent);
+}
+//-----------------------------------------------------------------------------
+bool MidiDataIterator::nextByte(IMidiEvents::Data *outByte) {
+    if (currByte >= bytes) {
+        if (!nextEvent()) {
+            return false;
+        }
+    }
+    *outByte = boost::get<2>(currEvent)[currByte++];
+    return true;
+}
 }}
