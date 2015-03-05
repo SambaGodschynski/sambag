@@ -6,6 +6,10 @@
  */
 
 #include "IMidiEvents.hpp"
+#include "DefaultMidiEvents.hpp"
+#include <boost/foreach.hpp>
+#include <vector>
+
 namespace sambag { namespace dsp {
 namespace {
     typedef IMidiEvents::ByteSize ByteSize;
@@ -145,5 +149,80 @@ bool MidiDataIterator::nextByte(IMidiEvents::Data *outByte) {
     }
     *outByte = boost::get<2>(currEvent)[currByte++];
     return true;
+}
+//-----------------------------------------------------------------------------
+namespace {
+    void copySysex(MidiDataIterator &it, std::vector<IMidiEvents::Data> &dst)
+    {
+        while(true) {
+            IMidiEvents::Data date = 0;
+            if (!it.nextByte(&date)) {
+                throw std::runtime_error("IMidiEvents::copySysex incomplete sysex");
+            }
+            dst.push_back(date);
+            if (date==0xF7) {
+                return;
+            }
+        }
+    }
+}
+IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
+    typedef IMidiEvents::MidiEvent MidiEvent;
+    MidiDataIterator it(ev);
+    DefaultMidiEvents::Ptr newEv = DefaultMidiEvents::create();
+    while(true) {
+        IMidiEvents::Data date = 0;
+        if (!it.nextByte(&date)) {
+            return newEv;
+        }
+        switch (date>>4) {
+            case 0x8: // 3 byte events
+            case 0x9:
+            case 0xA:
+            case 0xB:
+            case 0xE:
+            {
+                int delta = it.deltaFrames();
+                IMidiEvents::Data data[3] = {date, 0, 0};
+                if ( !it.nextByte(&data[1])
+                    || !it.nextByte(&data[2]))
+                {
+                    // incomplete event
+                    return newEv;
+                }
+                newEv->insertDeep(MidiEvent(3, delta, &data[0]));
+                continue;
+            }
+            case 0xC:
+            case 0xD: // 2 byte events
+            {
+                int delta = it.deltaFrames();
+                IMidiEvents::Data data[2] = {date, 0};
+                if (!it.nextByte(&data[1]))
+                {
+                    // incomplete event
+                    throw std::runtime_error("IMidiEvents::trim incomplete midi data");
+                }
+                newEv->insertDeep(MidiEvent(2, delta, &data[0]));
+                continue;
+            }
+            case 0xF: // sysex
+            {
+                int delta = it.deltaFrames();
+                std::vector<IMidiEvents::Data> tmp;
+                tmp.push_back(date);
+                copySysex(it, tmp);
+                IMidiEvents::Data *tmp2 = new IMidiEvents::Data[tmp.size()];
+                int c=0;
+                BOOST_FOREACH(IMidiEvents::Data x, tmp) {
+                    tmp2[c++] = x;
+                }
+                newEv->insertDeep(MidiEvent(tmp.size(), delta, tmp2));
+                delete tmp2;
+                continue;
+            }
+            default: continue;
+        }
+    }
 }
 }}

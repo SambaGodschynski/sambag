@@ -23,13 +23,13 @@ class DefaultMidiEvents : public IMidiEvents {
 protected:
     DefaultMidiEvents() {}
     DefaultMidiEvents(const DefaultMidiEvents&) {}
-    DefaultMidiEvents & operator=(const DefaultMidiEvents&) {}
+    DefaultMidiEvents & operator=(const DefaultMidiEvents&) {return *this;}
 public:
     typedef boost::shared_ptr<DefaultMidiEvents> Ptr;
     typedef boost::weak_ptr<DefaultMidiEvents> WPtr;
 	std::vector<MidiEvent> events;
 	typedef boost::shared_array<Data> DataArray;
-	std::vector<DataArray> dataContainer; // needed for deep copy
+	std::vector<DataArray> dataContainer; // needed for deep copy TODO: may a bit slow
 	//-------------------------------------------------------------------------
 	static Ptr create(IMidiEvents::Ptr _events = IMidiEvents::Ptr()) {
         Ptr neu( new DefaultMidiEvents() );

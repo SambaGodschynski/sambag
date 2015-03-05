@@ -138,6 +138,14 @@ public:
 };
 
 /**
+ * @brief some DAW's (Repaer for instance) sends midi data with a lot of 
+ * zeros in it. Event1: => 0x00 0x00 0x00 0x00 THE ACTUAL EVENT 0x00 0x00 
+ * Since some algorithm assumes that every event has only data of one Midi event
+ * we trim the thata in that way that every event is related to one midi event date.
+ */
+extern IMidiEvents::Ptr trim(IMidiEvents::Ptr ev);
+
+/**
  * @return vector with bytestream representation of MidiEvents
  * @note we use a vector because it's storage has a usefull auto grow up strategy
  */
