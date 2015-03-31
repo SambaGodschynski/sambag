@@ -167,6 +167,9 @@ namespace {
     }
 }
 IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
+    if (!ev) {
+        return ev;
+    }
     typedef IMidiEvents::MidiEvent MidiEvent;
     MidiDataIterator it(ev);
     DefaultMidiEvents::Ptr newEv = DefaultMidiEvents::create();
@@ -175,7 +178,17 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
         if (!it.nextByte(&date)) {
             return newEv;
         }
+        if (date==0xF2) {
+            it.nextByte(&date);
+            it.nextByte(&date);
+            continue;
+        }
+        if (date==0xF3) {
+            it.nextByte(&date);
+            continue;
+        }
         switch (date>>4) {
+            throw std::logic_error("MIDI MESSAGES NOT COMPLETE");
             case 0x8: // 3 byte events
             case 0x9:
             case 0xA:

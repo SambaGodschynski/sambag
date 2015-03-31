@@ -19,7 +19,7 @@ Vst3MidiAdapter::Ptr Vst3MidiAdapter::create() {
 }
 //-----------------------------------------------------------------------------
 void Vst3MidiAdapter::set(IMidiEvents::Ptr adaptee) {
-    this->adaptee = adaptee;
+    this->adaptee = trim(adaptee);
 }
 //-----------------------------------------------------------------------------
 Steinberg::int32 Vst3MidiAdapter::getEventCount() {

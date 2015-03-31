@@ -359,6 +359,7 @@ namespace {
 }
 void TestDefaultMidiEvents::testTrim() {
 	using namespace sambag::dsp;
+    CPPUNIT_ASSERT( !trim(IMidiEvents::Ptr()) );
     DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
     CPPUNIT_ASSERT( trim(a)->getNumEvents() == 0 );
     // create data stream splitted to several events
@@ -378,7 +379,7 @@ void TestDefaultMidiEvents::testTrim() {
         a->insertDeep(IMidiEvents::MidiEvent(bytes, 2, &data[0]));
     }
     {
-        IMidiEvents::Data data[] = { 0x00, 0x80, 0x20, 0x30, 0x00, 0x00, 0xD1, 0x33, 0x00, 0x00 };
+        IMidiEvents::Data data[] = { 0x00, 0x80, 0x20, 0x30, 0xF2, 0xA0, 0x81, 0xF3, 0xE0, 0xD1, 0x33, 0x00, 0x00 };
         size_t bytes = sizeof(data) / sizeof(data[0]);
         a->insertDeep(IMidiEvents::MidiEvent(bytes, 3, &data[0]));
     }
@@ -402,14 +403,20 @@ void TestDefaultMidiEvents::testTrim() {
         size_t bytes = sizeof(data) / sizeof(data[0]);
         a->insertDeep(IMidiEvents::MidiEvent(bytes, 7, &data[0]));
     }
+    {
+        IMidiEvents::Data data[] = { 0xF0, 0xF7 };
+        size_t bytes = sizeof(data) / sizeof(data[0]);
+        a->insertDeep(IMidiEvents::MidiEvent(bytes, 1, &data[0]));
+    }
     IMidiEvents::Ptr b = trim(a);
-    CPPUNIT_ASSERT_EQUAL((int)6, b->getNumEvents());
+    CPPUNIT_ASSERT_EQUAL((int)7, b->getNumEvents());
     testEventData(b, 0, 1, 3, 0x90, 0x10, 0x50);
     testEventData(b, 1, 3, 3, 0x80, 0x20, 0x30);
     testEventData(b, 2, 3, 2, 0xD1, 0x33);
     testEventData(b, 3, 4, 3, 0xB0, 0x01, 0x10);
     testEventData(b, 4, 5, 3, 0xE0, 0x11, 0x22);
     testEventData(b, 5, 6, 7, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF7);
+    testEventData(b, 6, 1, 2, 0xF0, 0xF7);
     
 }
 } //namespace
