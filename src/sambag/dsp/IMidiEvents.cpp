@@ -157,7 +157,7 @@ namespace {
         while(true) {
             IMidiEvents::Data date = 0;
             if (!it.nextByte(&date)) {
-                throw std::runtime_error("IMidiEvents::copySysex incomplete sysex");
+                SAMBAG_THROW(MidiDataError, "IMidiEvents::copySysex incomplete sysex");
             }
             dst.push_back(date);
             if (date==0xF7) {
@@ -185,6 +185,10 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
         }
         if (date==0xF3) {
             it.nextByte(&date);
+            continue;
+        }
+        if (date>=0xF1) {
+            // 0xF1, 0xF4 .. 0xFF -> one byte events
             continue;
         }
         switch (date>>4) {

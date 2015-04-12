@@ -15,8 +15,11 @@
 #include <sstream>
 #include <ostream>
 #include <vector>
+#include <sambag/com/Exception.hpp>
 
 namespace sambag { namespace dsp {
+//-----------------------------------------------------------------------------
+SAMBAG_EXCEPTION_CLASS(MidiDataError);
 //=============================================================================
 /** 
   * @class IMidiEvents.

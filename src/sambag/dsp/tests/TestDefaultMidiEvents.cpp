@@ -394,7 +394,7 @@ void TestDefaultMidiEvents::testTrim() {
         a->insertDeep(IMidiEvents::MidiEvent(bytes, 5, &data[0]));
     }
     {
-        IMidiEvents::Data data[] = { 0xF0, 0x00, 0x00 };
+        IMidiEvents::Data data[] = { 0xF1, 0xF0, 0x00, 0x00 };
         size_t bytes = sizeof(data) / sizeof(data[0]);
         a->insertDeep(IMidiEvents::MidiEvent(bytes, 6, &data[0]));
     }
