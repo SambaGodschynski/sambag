@@ -187,6 +187,7 @@ public:
 			return 1;
 		}
 		VstMidiEventAdapter::Ptr midiev = VstMidiEventAdapter::create(events);
+        SAMBAG_LOG_TRACE << " BEFORE " << *midiev;
 		PluginProcessor::processEvents(midiev);
 		return 1;
 	}

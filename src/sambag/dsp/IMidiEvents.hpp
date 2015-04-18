@@ -70,47 +70,14 @@ struct IMidiEvents {
 	virtual MidiEvent getMidiEvent(Int index) const = 0;
 }; // IMidiEvents
 ///////////////////////////////////////////////////////////////////////////////
-inline bool operator==(const IMidiEvents &a, const IMidiEvents &b) {
-	if (a.getNumEvents() != b.getNumEvents() ) {
-		return false;
-	}
-	int num = a.getNumEvents();
-	for (int i=0; i<num; ++i) {
-		IMidiEvents::MidiEvent eva = a.getMidiEvent(i);
-		IMidiEvents::MidiEvent evb = b.getMidiEvent(i);
-		if   ( boost::get<0>(eva) != boost::get<0>(evb) ||
-			   boost::get<1>(eva) != boost::get<1>(evb)
-			 )
-		{
-			return false;
-		}
-		IMidiEvents::ByteSize bytes = boost::get<0>(eva);
-		for (int j=0; j<bytes; ++j) {
-			if (boost::get<2>(eva)[j] != boost::get<2>(evb)[j]) 
-				return false;
-		}
-	}
-	return true;
-}
-inline bool operator!=(const IMidiEvents &a, const IMidiEvents &b) {
+extern bool operator==(const IMidiEvents &a, const IMidiEvents &b);
+inline bool operator!=(const IMidiEvents &a, const IMidiEvents &b)
+{
 	return !(a==b);
 }
-inline std::string toString(const IMidiEvents &ev) {
-	size_t numEv = ev.getNumEvents();
-	std::stringstream ss;
-	for ( size_t i=0; i<numEv; ++i ) {
-		IMidiEvents::ByteSize size;
-		IMidiEvents::DeltaFrames d;
-		IMidiEvents::DataPtr data;
-		boost::tie(size, d, data) = ev.getMidiEvent(i);
-		for (int j=0; j<size; ++j) {
-			unsigned int val = data[j];
-			ss<<std::hex<<val<<" ";
-		}
-	}
-	return ss.str();
-}
-inline std::ostream & operator << (std::ostream& os, const IMidiEvents &b) {
+extern std::string toString(const IMidiEvents &ev);
+inline std::ostream & operator << (std::ostream& os, const IMidiEvents &b)
+{
 	os<<toString(b);
 	return os;
 }

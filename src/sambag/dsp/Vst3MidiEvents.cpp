@@ -38,8 +38,13 @@ Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
     }
     IMidiEvents::MidiEvent midiEv = adaptee->getMidiEvent(index);
     e.sampleOffset = boost::get<1>(midiEv);
+    e.busIndex = 0;
     switch (getEventType(midiEv)) {
         case IMidiEvents::NoteOn:
+            if (getVelocity(midiEv)==0)
+            {
+                goto NOTEOFF;
+            }
             e.type            = Vst::Event::kNoteOnEvent;
             e.noteOn.channel  = getChannel(midiEv);
             e.noteOn.pitch    = getPitch(midiEv);
@@ -49,6 +54,7 @@ Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
             e.noteOn.noteId   = -1;
             return Steinberg::kResultOk;
         case IMidiEvents::NoteOff:
+            NOTEOFF:
             e.type = Vst::Event::kNoteOffEvent;
             e.noteOff.channel  = getChannel(midiEv);
             e.noteOff.pitch    = getPitch(midiEv);
@@ -79,7 +85,7 @@ Steinberg::tresult Vst3MidiAdapter::addEvent(Steinberg::Vst::Event &e) {
 //-----------------------------------------------------------------------------
 Steinberg::tresult Vst3MidiAdapter::queryInterface(const Steinberg::TUID, void** obj)
 {
-    *obj = nullptr;
+    *obj = NULL;
     return Steinberg::kNotImplemented;
 }
 }} // namespace(s)

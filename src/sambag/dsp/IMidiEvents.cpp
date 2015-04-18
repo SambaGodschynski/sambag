@@ -17,6 +17,45 @@ namespace {
     typedef IMidiEvents::Data Data;
     typedef IMidiEvents::DataPtr DataPtr;
 }
+bool operator==(const IMidiEvents &a, const IMidiEvents &b)
+{
+	if (a.getNumEvents() != b.getNumEvents() ) {
+		return false;
+	}
+	int num = a.getNumEvents();
+	for (int i=0; i<num; ++i) {
+		IMidiEvents::MidiEvent eva = a.getMidiEvent(i);
+		IMidiEvents::MidiEvent evb = b.getMidiEvent(i);
+		if   ( boost::get<0>(eva) != boost::get<0>(evb) ||
+			   boost::get<1>(eva) != boost::get<1>(evb)
+			 )
+		{
+			return false;
+		}
+		IMidiEvents::ByteSize bytes = boost::get<0>(eva);
+		for (int j=0; j<bytes; ++j) {
+			if (boost::get<2>(eva)[j] != boost::get<2>(evb)[j]) 
+				return false;
+		}
+	}
+	return true;
+}
+std::string toString(const IMidiEvents &ev)
+{
+	size_t numEv = ev.getNumEvents();
+	std::stringstream ss;
+	for ( size_t i=0; i<numEv; ++i ) {
+		IMidiEvents::ByteSize size;
+		IMidiEvents::DeltaFrames d;
+		IMidiEvents::DataPtr data;
+		boost::tie(size, d, data) = ev.getMidiEvent(i);
+		for (int j=0; j<size; ++j) {
+			unsigned int val = data[j];
+			ss<<std::dec<<d<<":"<<std::hex<<val<<" ";
+		}
+	}
+	return ss.str();
+}
 //-----------------------------------------------------------------------------
 IMidiEvents::EventType getEventType(const IMidiEvents::MidiEvent &ev)
 {
@@ -172,23 +211,30 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
     }
     typedef IMidiEvents::MidiEvent MidiEvent;
     MidiDataIterator it(ev);
+    int sampleOffset = INT_MAX;
     DefaultMidiEvents::Ptr newEv = DefaultMidiEvents::create();
     while(true) {
         IMidiEvents::Data date = 0;
         if (!it.nextByte(&date)) {
             return newEv;
         }
+        if (sampleOffset==INT_MAX) {
+            sampleOffset = it.deltaFrames();
+        }
         if (date==0xF2) {
             it.nextByte(&date);
             it.nextByte(&date);
+            ++sampleOffset;
             continue;
         }
         if (date==0xF3) {
             it.nextByte(&date);
+            ++sampleOffset;
             continue;
         }
         if (date>=0xF1) {
             // 0xF1, 0xF4 .. 0xFF -> one byte events
+            ++sampleOffset;
             continue;
         }
         switch (date>>4) {
@@ -199,7 +245,6 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
             case 0xB:
             case 0xE:
             {
-                int delta = it.deltaFrames();
                 IMidiEvents::Data data[3] = {date, 0, 0};
                 if ( !it.nextByte(&data[1])
                     || !it.nextByte(&data[2]))
@@ -207,25 +252,25 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
                     // incomplete event
                     return newEv;
                 }
-                newEv->insertDeep(MidiEvent(3, delta, &data[0]));
+                newEv->insertDeep(MidiEvent(3, sampleOffset, &data[0]));
+                ++sampleOffset;
                 continue;
             }
             case 0xC:
             case 0xD: // 2 byte events
             {
-                int delta = it.deltaFrames();
                 IMidiEvents::Data data[2] = {date, 0};
                 if (!it.nextByte(&data[1]))
                 {
                     // incomplete event
                     throw std::runtime_error("IMidiEvents::trim incomplete midi data");
                 }
-                newEv->insertDeep(MidiEvent(2, delta, &data[0]));
+                newEv->insertDeep(MidiEvent(2, sampleOffset, &data[0]));
+                ++sampleOffset;
                 continue;
             }
             case 0xF: // sysex
             {
-                int delta = it.deltaFrames();
                 std::vector<IMidiEvents::Data> tmp;
                 tmp.push_back(date);
                 copySysex(it, tmp);
@@ -234,11 +279,12 @@ IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
                 BOOST_FOREACH(IMidiEvents::Data x, tmp) {
                     tmp2[c++] = x;
                 }
-                newEv->insertDeep(MidiEvent(tmp.size(), delta, tmp2));
+                newEv->insertDeep(MidiEvent(tmp.size(), sampleOffset, tmp2));
                 delete tmp2;
+                ++sampleOffset;
                 continue;
             }
-            default: continue;
+            default: ++sampleOffset; continue;
         }
     }
 }
