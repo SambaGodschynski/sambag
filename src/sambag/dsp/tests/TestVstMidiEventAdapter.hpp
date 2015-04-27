@@ -17,9 +17,11 @@ class TestVstMidiEventAdapter : public CPPUNIT_NS::TestFixture {
 private:
 	CPPUNIT_TEST_SUITE( TestVstMidiEventAdapter );
 	CPPUNIT_TEST( testCreateNCopy );
+    CPPUNIT_TEST( testTrim );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testCreateNCopy();
+    void testTrim();
 };
 
 } // namespace

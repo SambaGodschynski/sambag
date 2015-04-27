@@ -27,7 +27,6 @@ private:
     CPPUNIT_TEST( testInsertDeep );
     CPPUNIT_TEST( testHelper );
     CPPUNIT_TEST( testMidiDataIterator );
-    CPPUNIT_TEST( testTrim );
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testEventCopy();
@@ -41,7 +40,6 @@ public:
     void testInsertDeep();
     void testHelper();
     void testMidiDataIterator();
-    void testTrim();
 };
 
 } // namespace

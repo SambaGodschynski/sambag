@@ -81,7 +81,7 @@ int getChannel(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<1) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[0] & 0x0F;
@@ -91,7 +91,7 @@ int getPitch(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<2) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[1];
@@ -101,7 +101,7 @@ int getVelocity(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<3) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[2];
@@ -111,7 +111,7 @@ int getCc(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<3) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[1];
@@ -121,7 +121,7 @@ int getCcValue(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<3) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[2];
@@ -131,7 +131,7 @@ int getPc(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<2) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[1];
@@ -141,7 +141,7 @@ int getPressure(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<2) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return data[1];
@@ -151,7 +151,7 @@ int getPitchBend(const IMidiEvents::MidiEvent &ev)
 {
     ByteSize size = boost::get<0>(ev);
     if(size<3) {
-        throw std::runtime_error("invalid midi data");
+        throw MidiDataError("invalid midi data");
     }
     DataPtr data = boost::get<2>(ev);
     return (data[2]<<7) + data[1];
@@ -164,6 +164,25 @@ MidiDataIterator::MidiDataIterator(IMidiEvents::Ptr src) :
   , currByte(0)
   , src(src)
 {
+}
+//-----------------------------------------------------------------------------
+/**
+ * @brief seeks to a position in the IMidiEvents object.
+ * @return false position invalid
+ */
+bool MidiDataIterator::seek(int idxEv, int idxByte) {
+    if ( idxEv >= src->getNumEvents() ) {
+        throw MidiDataError("midi iterator out of bounds");
+    }
+    IMidiEvents::MidiEvent ev = src->getMidiEvent(idxEv);
+    bytes = boost::get<0>(ev);
+    if (idxByte >= bytes) {
+        throw MidiDataError("midi iterator out of bounds");
+    }
+    currEvent = ev;
+    currEventIdx = idxEv+1;
+    currByte = idxByte;
+    return true;
 }
 //-----------------------------------------------------------------------------
 bool MidiDataIterator::nextEvent() {
@@ -188,104 +207,5 @@ bool MidiDataIterator::nextByte(IMidiEvents::Data *outByte) {
     }
     *outByte = boost::get<2>(currEvent)[currByte++];
     return true;
-}
-//-----------------------------------------------------------------------------
-namespace {
-    void copySysex(MidiDataIterator &it, std::vector<IMidiEvents::Data> &dst)
-    {
-        while(true) {
-            IMidiEvents::Data date = 0;
-            if (!it.nextByte(&date)) {
-                SAMBAG_THROW(MidiDataError, "IMidiEvents::copySysex incomplete sysex");
-            }
-            dst.push_back(date);
-            if (date==0xF7) {
-                return;
-            }
-        }
-    }
-}
-IMidiEvents::Ptr trim(IMidiEvents::Ptr ev) {
-    if (!ev) {
-        return ev;
-    }
-    typedef IMidiEvents::MidiEvent MidiEvent;
-    MidiDataIterator it(ev);
-    int sampleOffset = INT_MAX;
-    DefaultMidiEvents::Ptr newEv = DefaultMidiEvents::create();
-    while(true) {
-        IMidiEvents::Data date = 0;
-        if (!it.nextByte(&date)) {
-            return newEv;
-        }
-        if (sampleOffset==INT_MAX) {
-            sampleOffset = it.deltaFrames();
-        }
-        if (date==0xF2) {
-            it.nextByte(&date);
-            it.nextByte(&date);
-            ++sampleOffset;
-            continue;
-        }
-        if (date==0xF3) {
-            it.nextByte(&date);
-            ++sampleOffset;
-            continue;
-        }
-        if (date>=0xF1) {
-            // 0xF1, 0xF4 .. 0xFF -> one byte events
-            ++sampleOffset;
-            continue;
-        }
-        switch (date>>4) {
-            throw std::logic_error("MIDI MESSAGES NOT COMPLETE");
-            case 0x8: // 3 byte events
-            case 0x9:
-            case 0xA:
-            case 0xB:
-            case 0xE:
-            {
-                IMidiEvents::Data data[3] = {date, 0, 0};
-                if ( !it.nextByte(&data[1])
-                    || !it.nextByte(&data[2]))
-                {
-                    // incomplete event
-                    return newEv;
-                }
-                newEv->insertDeep(MidiEvent(3, sampleOffset, &data[0]));
-                ++sampleOffset;
-                continue;
-            }
-            case 0xC:
-            case 0xD: // 2 byte events
-            {
-                IMidiEvents::Data data[2] = {date, 0};
-                if (!it.nextByte(&data[1]))
-                {
-                    // incomplete event
-                    throw std::runtime_error("IMidiEvents::trim incomplete midi data");
-                }
-                newEv->insertDeep(MidiEvent(2, sampleOffset, &data[0]));
-                ++sampleOffset;
-                continue;
-            }
-            case 0xF: // sysex
-            {
-                std::vector<IMidiEvents::Data> tmp;
-                tmp.push_back(date);
-                copySysex(it, tmp);
-                IMidiEvents::Data *tmp2 = new IMidiEvents::Data[tmp.size()];
-                int c=0;
-                BOOST_FOREACH(IMidiEvents::Data x, tmp) {
-                    tmp2[c++] = x;
-                }
-                newEv->insertDeep(MidiEvent(tmp.size(), sampleOffset, tmp2));
-                delete tmp2;
-                ++sampleOffset;
-                continue;
-            }
-            default: ++sampleOffset; continue;
-        }
-    }
 }
 }}

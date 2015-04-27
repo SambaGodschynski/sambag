@@ -16,6 +16,7 @@
 #include <ostream>
 #include <vector>
 #include <sambag/com/Exception.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 namespace sambag { namespace dsp {
 //-----------------------------------------------------------------------------
@@ -38,7 +39,7 @@ SAMBAG_EXCEPTION_CLASS(MidiDataError);
   *	      | VstMidiEventAdapter set(independet); // no convertion
   *		  | XXXMidiEventAdapter set(independet); // convertion
   */
-struct IMidiEvents {
+struct IMidiEvents : public boost::enable_shared_from_this<IMidiEvents> {
 //=============================================================================
     //-------------------------------------------------------------------------
     enum EventType { Unknown,
@@ -68,6 +69,16 @@ struct IMidiEvents {
 	virtual Int getNumEvents() const = 0;
 	//-------------------------------------------------------------------------
 	virtual MidiEvent getMidiEvent(Int index) const = 0;
+    //-------------------------------------------------------------------------
+    /**
+     * @brief removes unused midi bytes. implemented by VstMidiEventAdapter
+     * an issue which appears with reaper: two midi events in one event object.
+     * ( a note off without a related note on)
+     * according to other instruments (eg. http://thepiz.org/plugins/?p=midiMonitor) 
+     * we handle only the first event and ignore the rest.
+     * @note when nothing was changed the returned events == the given events
+     */
+    virtual IMidiEvents::Ptr trim() { return shared_from_this(); }
 }; // IMidiEvents
 ///////////////////////////////////////////////////////////////////////////////
 extern bool operator==(const IMidiEvents &a, const IMidiEvents &b);
@@ -96,6 +107,20 @@ class MidiDataIterator {
     IMidiEvents::Ptr src;
     bool nextEvent();
 public:
+    /**
+     * @return the current event index
+     */
+    int getIdxEvent() { return currEventIdx-1; /* idx points to the next ev */ }
+    /**
+     * @return the current byte index
+     */
+    int getIdxByte() { return currByte; }
+    /**
+     * @brief seeks to a position in the IMidiEvents object.
+     * @throws if position invalid
+     */
+    bool seek(int idxEv, int idxByte);
+    
     MidiDataIterator(IMidiEvents::Ptr src);
     /**
      * @return the next midi data byte and true, or false if no further data.
@@ -106,14 +131,6 @@ public:
      */
     int deltaFrames() const;
 };
-
-/**
- * @brief some DAW's (Repaer for instance) sends midi data with a lot of 
- * zeros in it. Event1: => 0x00 0x00 0x00 0x00 THE ACTUAL EVENT 0x00 0x00 
- * Since some algorithm assumes that every event has only data of one Midi event
- * we trim the thata in that way that every event is related to one midi event date.
- */
-extern IMidiEvents::Ptr trim(IMidiEvents::Ptr ev);
 
 /**
  * @return vector with bytestream representation of MidiEvents

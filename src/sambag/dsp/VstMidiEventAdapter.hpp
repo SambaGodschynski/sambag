@@ -12,6 +12,7 @@
 #include "IMidiEvents.hpp"
 #include <aeffectx.h>
 #include <sambag/com/Exception.hpp>
+#include <ostream>
 
 namespace sambag { namespace dsp {
 //=============================================================================
@@ -60,25 +61,21 @@ public:
 		return events->numEvents;
 	}
 	//-------------------------------------------------------------------------
-	virtual MidiEvent getMidiEvent(Int index) const {
-		//boost::tuple<ByteSize, DeltaFrames, DataPtr> 
-		MidiEvent res;
-		VstEvent *ev = events->events[index];
-		if (ev->type != kVstMidiType) {
-			boost::get<0>(res) = 0;
-			return res;
-		}
-		boost::get<0>(res) = ev->byteSize;
-		boost::get<1>(res) = ev->deltaFrames;
-		boost::get<2>(res) = (DataPtr) &(ev->data);
-		return res;
-	}
-	//-------------------------------------------------------------------------
+	virtual MidiEvent getMidiEvent(Int index) const;
+    //-------------------------------------------------------------------------
 	void set(IMidiEvents::Ptr ev);
 	//-------------------------------------------------------------------------
 	virtual ~VstMidiEventAdapter();
-
+    //-------------------------------------------------------------------------
+    /**
+     * @brief removes unused midi bytes. implemented by VstMidiEventAdapter
+     * @note when nothing was changed the returned events == the given events
+     */
+    virtual IMidiEvents::Ptr trim();
 }; // VstMidiEventAdapter
 }} // namespace(s)
+
+///////////////////////////////////////////////////////////////////////////////
+std::ostream & operator<<(std::ostream &os, const VstEvents &events);
 
 #endif /* SAMBAG_VSTMIDIEVENTADAPTER_H */
