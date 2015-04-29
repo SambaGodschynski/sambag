@@ -12,6 +12,7 @@
 #include <boost/weak_ptr.hpp>
 #include "IMidiEvents.hpp"
 #include <ivstevents.h>
+#include <vector>
 
 namespace sambag { namespace dsp {
 
@@ -30,12 +31,12 @@ protected:
     Vst3MidiAdapter() {}
     Vst3MidiAdapter(const Vst3MidiAdapter&) {}
     Vst3MidiAdapter & operator=(const Vst3MidiAdapter&) {return *this;}
+    virtual bool getEvent (IMidiEvents::Ptr adaptee, Steinberg::int32 index, Steinberg::Vst::Event &e);
 private:
-    IMidiEvents::Ptr adaptee;
+    std::vector<Steinberg::Vst::Event> _events;
 public:
     static Ptr create();
     void set(IMidiEvents::Ptr adaptee);
-    IMidiEvents::Ptr get() const { return adaptee; }
     ///////////////////////////////////////////////////////////////////////////
     Steinberg::tresult PLUGIN_API queryInterface (const Steinberg::TUID, void** obj);
     Steinberg::uint32 PLUGIN_API addRef() { return 1; }

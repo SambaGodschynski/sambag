@@ -16,10 +16,12 @@ class TestVst3MidiEvents : public CPPUNIT_NS::TestFixture {
 //=============================================================================
 private:
 	CPPUNIT_TEST_SUITE( TestVst3MidiEvents );
-	// CPPUNIT_TEST( XXX );
+	CPPUNIT_TEST( testNoteOffBug );
+    CPPUNIT_TEST( testHandleNull );
 	CPPUNIT_TEST_SUITE_END();
 public:
-	//void XXX();
+	void testNoteOffBug();
+    void testHandleNull();
 };
 
 } // namespace

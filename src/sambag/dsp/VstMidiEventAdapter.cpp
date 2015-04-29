@@ -223,7 +223,7 @@ std::ostream & operator<<(std::ostream &os, const VstEvents &events)
         int delta = ev->deltaFrames;
         os<<"["<<delta<<"]: ";
         for (int j = 0; j<size; ++j) {
-            os<<std::hex<<(int)data[j]<<" "<<std::dec;
+            os<<std::hex<<"0x"<<(int)data[j]<<", "<<std::dec;
         }
     }
     return os;

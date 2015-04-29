@@ -19,26 +19,34 @@ Vst3MidiAdapter::Ptr Vst3MidiAdapter::create() {
 }
 //-----------------------------------------------------------------------------
 void Vst3MidiAdapter::set(IMidiEvents::Ptr adaptee) {
-    if (adaptee) {
-        this->adaptee = adaptee->trim();
+    if (!adaptee) {
+        _events.clear();
         return;
     }
-    this->adaptee = adaptee;
-}
-//-----------------------------------------------------------------------------
-Steinberg::int32 Vst3MidiAdapter::getEventCount() {
-    if (!adaptee) {
-        return 0;
+    // we have to filter valid midi events
+    IMidiEvents::Ptr ev = adaptee->trim();
+    int num = ev->getNumEvents();
+    _events.reserve(num);
+    for (int i=0; i<num; ++i) {
+        Steinberg::Vst::Event e;
+        if (!getEvent(ev, i, e)) {
+            continue;
+        }
+        _events.push_back(e);
     }
-    return (Steinberg::int32)adaptee->getNumEvents();
 }
 //-----------------------------------------------------------------------------
-Steinberg::tresult
-Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
+Steinberg::int32 PLUGIN_API
+Vst3MidiAdapter::getEventCount() {
+    return _events.size();
+}
+//-----------------------------------------------------------------------------
+bool Vst3MidiAdapter::
+getEvent(IMidiEvents::Ptr adaptee, Steinberg::int32 index, Steinberg::Vst::Event &e)
 {
     using namespace Steinberg;
     if (!adaptee) {
-        return Steinberg::kResultFalse;
+        return false;
     }
     IMidiEvents::MidiEvent midiEv = adaptee->getMidiEvent(index);
     e.sampleOffset = boost::get<1>(midiEv);
@@ -52,42 +60,55 @@ Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
             e.type            = Vst::Event::kNoteOnEvent;
             e.noteOn.channel  = getChannel(midiEv);
             e.noteOn.pitch    = getPitch(midiEv);
-            e.noteOn.velocity = getVelocity(midiEv);
+            e.noteOn.velocity = getVelocity(midiEv) / 127.0f;
             e.noteOn.length   = 0;
             e.noteOn.tuning   = 0;
             e.noteOn.noteId   = -1;
-            return Steinberg::kResultOk;
+            return true;
         case IMidiEvents::NoteOff:
             NOTEOFF:
             e.type = Vst::Event::kNoteOffEvent;
             e.noteOff.channel  = getChannel(midiEv);
             e.noteOff.pitch    = getPitch(midiEv);
-            e.noteOff.velocity = getVelocity(midiEv);
+            e.noteOff.velocity = getVelocity(midiEv) / 127.0f;
             e.noteOff.tuning   = 0;
             e.noteOff.noteId   = -1;
-            return Steinberg::kResultOk;
+            return true;
         case IMidiEvents::Sysex:
             e.type       = Vst::Event::kDataEvent;
             e.data.bytes = boost::get<2>(midiEv);
             e.data.size  = boost::get<0>(midiEv);
             e.data.type  = Vst::DataEvent::kMidiSysEx;
-            return Steinberg::kResultOk;
+            return true;
         case IMidiEvents::Aftertouch:
             e.type                  = Steinberg::Vst::Event::kPolyPressureEvent;
             e.polyPressure.channel  = getChannel(midiEv);
             e.polyPressure.pitch    = getPitch(midiEv);
-            e.polyPressure.pressure = getPressure(midiEv);
-            return Steinberg::kResultOk;
+            e.polyPressure.pressure = getPressure(midiEv) / 127.0f;
+            return true;
     }
-    return Steinberg::kResultFalse;
+    return false;
+}
+
+//-----------------------------------------------------------------------------
+Steinberg::tresult PLUGIN_API
+Vst3MidiAdapter::getEvent(Steinberg::int32 index, Steinberg::Vst::Event &e)
+{
+    if (index < 0 || index > _events.size()) {
+        return Steinberg::kResultFalse;
+    }
+    e = _events[index];
+    return Steinberg::kResultOk;
 }
 //-----------------------------------------------------------------------------
-Steinberg::tresult Vst3MidiAdapter::addEvent(Steinberg::Vst::Event &e) {
+Steinberg::tresult PLUGIN_API
+Vst3MidiAdapter::addEvent(Steinberg::Vst::Event &e) {
     SAMBAG_LOG_ERR<<"Vst3MidiEvents::addEvent not supported";
     return Steinberg::kResultFalse;
 }
 //-----------------------------------------------------------------------------
-Steinberg::tresult Vst3MidiAdapter::queryInterface(const Steinberg::TUID, void** obj)
+Steinberg::tresult PLUGIN_API
+Vst3MidiAdapter::queryInterface(const Steinberg::TUID, void** obj)
 {
     *obj = NULL;
     return Steinberg::kNotImplemented;

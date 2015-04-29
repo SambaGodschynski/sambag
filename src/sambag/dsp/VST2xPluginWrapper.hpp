@@ -186,8 +186,8 @@ public:
 		if (events->numEvents == 0) {
 			return 1;
 		}
+        SAMBAG_LOG_TRACE << " BEFORE " << *events;
 		VstMidiEventAdapter::Ptr midiev = VstMidiEventAdapter::create(events);
-        SAMBAG_LOG_TRACE << " BEFORE " << *midiev;
 		PluginProcessor::processEvents(midiev);
 		return 1;
 	}
