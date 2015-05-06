@@ -33,6 +33,7 @@ IF(APPLE)
         #include_directories(${X11_INCLUDE_DIRS})
 	#find_package(IConvX REQUIRED)
 	add_definitions(-DDISCO_USE_COCOA)
+	add_definitions(-DRELEASE) #VST3 wants RELEASE DEBUG or DEVELOPMENT
 	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
 	FIND_LIBRARY(CARBON_LIBRARY Carbon)
 	#set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
@@ -80,7 +81,6 @@ INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst)
 INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/vst)
 
-add_definitions(-D_DEBUG)
 
 set (SAMBAG_SOURCES ${SAMBAG_SOURCES}
       ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstaudioeffect.cpp
