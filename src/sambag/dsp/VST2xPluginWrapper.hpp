@@ -110,6 +110,28 @@ private:
 	//-------------------------------------------------------------------------
 	HostTimeInfo timeInfo;
 public:
+    //-------------------------------------------------------------------------
+	bool getInputProperties (VstInt32 index, VstPinProperties* properties)
+	{
+		bool returnCode = false;
+		if (index < getNumInputs())
+		{
+			properties->flags = kVstPinIsStereo | kVstPinIsActive;
+			returnCode = true;
+		}
+		return returnCode;
+	}
+    //-------------------------------------------------------------------------
+    bool getOutputProperties (VstInt32 index, VstPinProperties* properties)
+	{
+		bool returnCode = false;
+		if (index < getNumOutputs())
+		{
+			properties->flags = kVstPinIsStereo | kVstPinIsActive;
+			returnCode = true;
+		}
+		return (returnCode);
+	}
 	//-------------------------------------------------------------------------
 	VstInt32 canDo (char *text );
 	//-------------------------------------------------------------------------
