@@ -23,5 +23,6 @@ jobs:
       run: choco install cygwin
     - name: build dependencies
       run: |
-        C:\tools\cygwin\bin\sh build_CairoWin64.sh
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        build_CairoWin64.sh
       working-directory: scripts/clibBuilder
