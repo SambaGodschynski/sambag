@@ -4,10 +4,10 @@ IFS=$'\n'
 WHEREAMI=$(pwd)
 
 export ROOTDIR=$WHEREAMI/build
-export URL_ZLIB='http://zlib.net/zlib-1.2.7.tar.gz'
-export URL_LIBPNG='ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.0.60.tar.gz'
-export URL_PIXMAN='http://cairographics.org/releases/pixman-0.28.2.tar.gz'
-export URL_CAIRO='http://cairographics.org/releases/cairo-1.12.10.tar.xz'
+export URL_ZLIB='http://zlib.net/zlib-1.2.12.tar.gz'
+export URL_LIBPNG='http://prdownloads.sourceforge.net/libpng/libpng-1.6.37.tar.gz?download'
+export URL_PIXMAN='https://cairographics.org/releases/pixman-0.40.0.tar.gz'
+export URL_CAIRO='https://cairographics.org/releases/cairo-1.16.0.tar.xz'
 export _LIBLINK='MD'
 LIBPNG=libpng
 ZLIB=zlib
@@ -103,10 +103,10 @@ arg $@
 mkdir -p $ROOTDIR
 cd $ROOTDIR
 #                     $URL      $DST_FILE   $DST_DIRECTORY
-sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
-sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
-sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
-sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
+# sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
+# sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
+# sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
+# sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
 cd $WHEREAMI
 
