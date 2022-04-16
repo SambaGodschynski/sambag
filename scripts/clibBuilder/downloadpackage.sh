@@ -44,9 +44,9 @@ clean_directory $3
 echo Extract $2:
 if [ $(echo $1 | grep '\.xz$') ]  # tar.xz
 then
-    tar -Jxvf $2
+    tar -Jxf $2
 else
-    tar -xzvf $2
+    tar -xzf $2
 fi
 sleep 1   #permission problems when move starts directly
 mv -f $3-* $3
