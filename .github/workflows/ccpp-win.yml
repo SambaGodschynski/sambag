@@ -26,5 +26,7 @@ jobs:
       run: choco install cygwin
     - name: build dependencies
       run: |
-        C:\tools\cygwin\bin\bash build_CairoWin64.sh
+        set "PATH=%PATH%;C:\tools\cygwin\bin"
+        setx PATH "%PATH%"
+        sh build_CairoWin64.sh
       working-directory: scripts/clibBuilder
