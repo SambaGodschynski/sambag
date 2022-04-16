@@ -28,5 +28,5 @@ jobs:
       run: |
         set "PATH=%PATH%;C:\tools\cygwin\bin"
         setx PATH "%PATH%"
-        sh build_CairoWin64.sh
+        C:\tools\cygwin\bin\sh build_CairoWin64.sh
       working-directory: scripts/clibBuilder
