@@ -103,10 +103,10 @@ arg $@
 mkdir -p $ROOTDIR
 cd $ROOTDIR
 #                     $URL      $DST_FILE   $DST_DIRECTORY
-sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
-sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
-sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
-sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
+#sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
+#sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
+#sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
+#sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
 cd $WHEREAMI
 
