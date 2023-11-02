@@ -9,7 +9,7 @@
 #include <boost/signals2.hpp>
 #include <boost/function.hpp>
 #include <sstream>
-#include "ticpp/ticpp.h"
+#include <ticpp.h>
 
 namespace sambag {
 namespace io {}

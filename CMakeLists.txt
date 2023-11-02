@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./" "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project (sambag)
 
@@ -93,22 +93,22 @@ set (SAMBAG_SOURCES ${SAMBAG_SOURCES}
       ${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/base/conststringtable.cpp
       ${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/base/funknown.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/baseiids.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/classfactory.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fatomic.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fbitset.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/classfactory.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fatomic.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fbitset.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fbuffer.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fcpu.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fcpu.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fdebug.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fdynlib.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/finitializer.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fmemory.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/finitializer.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fmemory.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fobject.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fpoint.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/frect.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fregion.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fpoint.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/frect.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fregion.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fstreamer.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/fstring.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fthread.cpp
+      #${VSTSDK3_INCLUDE_DIRS}/base/source/fthread.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/timer.cpp
       ${VSTSDK3_INCLUDE_DIRS}/base/source/updatehandler.cpp
 )

@@ -1,0 +1,40 @@
+//------------------------------------------------------------------------
+//
+// Project     : base
+// Filename    : base.xcconfig
+// Created by  : Matthias Muchaier, 7/23/08
+// Copyright   : 2008 Steinberg Media Technologies GmbH. All rights reserved.
+// Description : Xcode configuration base file shared by debug and release versions 
+//               using the base module.
+//
+//------------------------------------------------------------------------
+
+// Deployment
+MACOSX_DEPLOYMENT_TARGET = 10.4
+MACOSX_DEPLOYMENT_TARGET[arch=x86_64] = 10.5
+
+// Architecture
+SDKROOT = 
+
+// Packaging
+GENERATE_PKGINFO_FILE = YES
+
+// Compiler Version 
+GCC_VERSION = 4.2
+
+// GCC 4.X - Code Generation
+GCC_ENABLE_FIX_AND_CONTINUE = NO
+GCC_GENERATE_DEBUGGING_SYMBOLS = YES
+GCC_INLINES_ARE_PRIVATE_EXTERN = YES
+GCC_MODEL_TUNING = G5
+GCC_SYMBOLS_PRIVATE_EXTERN = YES
+GCC_OBJC_CALL_CXX_CDTORS = YES
+
+// GCC 4.X - Warnings
+GCC_WARN_ABOUT_RETURN_TYPE = YES
+GCC_WARN_UNUSED_VARIABLE = YES
+GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO
+
+// GCC 4.X - Language
+OTHER_CFLAGS = -fdiagnostics-show-option
+

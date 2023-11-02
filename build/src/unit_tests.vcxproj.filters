@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\testApps\sambag_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\FileSystemTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestArithmeticWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestBoostTimer2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestInterprocess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestPropertyChanged.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestSharedOrWeak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\TestThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\cpsqlite\tests\DBTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestAComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestAContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestColumnBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestComponents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestConcreteComponents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestDefaultSelectionModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestDefaultTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestFlowLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestLookAndFeel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestMouseEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestPopupMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestRootPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\tests\TestWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\HelperForTesting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestAttributeParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestCairoDrawContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestFileResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestFontCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestGenFlowLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestGeometrics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestGeometrySerialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestHtmlColors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestSceneGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestSvg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestSVGComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\tests\TestWin32ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\tests\TestDefaultMidiEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\tests\TestTimeInfoVst2xHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\tests\TestTimeInfoVst3xHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\tests\TestVst3MidiEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\tests\TestVstMidiEventAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\tests\LuaCppTestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\tests\TestLuaCpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\tests\TestLuaHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\tests\TestLuaRegisterFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\math\tests\VectorNTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\tests\TestMarkupBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\tests\XML2ObjTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\Users\samba\workspace\sambag\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="E:\Users\samba\workspace\sambag\src\win32_resources\resources.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D9B62C45-6750-30DB-AF77-7A90408D7187}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

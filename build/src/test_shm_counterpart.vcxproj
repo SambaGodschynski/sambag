@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9DE8D15D-FE00-3A7F-83FA-81429A71F1EF}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>test_shm_counterpart</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Users\samba\workspace\sambag\build\src\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">test_shm_counterpart.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">test_shm_counterpart</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Users\samba\workspace\sambag\build\src\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">test_shm_counterpart.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">test_shm_counterpart</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Users\samba\workspace\sambag\build\src\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">test_shm_counterpart.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">test_shm_counterpart</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Users\samba\workspace\sambag\build\src\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">test_shm_counterpart.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">test_shm_counterpart</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>Debug\sambag.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_locale-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_filesystem-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_system-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_thread-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_regex-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_serialization-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_date_time-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_timer-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_chrono-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_program_options-vc143-mt-sgd-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_atomic-vc143-mt-sgd-x64-1_83.lib;..\..\ext\cppunit\lib\cppunitd.lib;..\..\ext\cairo\cairo-MT-debug.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/Users/samba/workspace/sambag/build/src/Debug/test_shm_counterpart.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/Users/samba/workspace/sambag/build/src/Debug/test_shm_counterpart.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>Release\sambag.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_locale-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_filesystem-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_system-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_thread-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_regex-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_serialization-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_date_time-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_timer-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_chrono-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_program_options-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_atomic-vc143-mt-s-x64-1_83.lib;..\..\ext\cppunit\lib\cppunit.lib;..\..\ext\zlib\zlib-MT-release.lib;..\..\ext\pixman\pixman-1-MT-release.lib;..\..\ext\libpng\libpng-MT-release.lib;..\..\ext\cairo\cairo_static-MT-release.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/Users/samba/workspace/sambag/build/src/Release/test_shm_counterpart.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/Users/samba/workspace/sambag/build/src/Release/test_shm_counterpart.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>MinSizeRel\sambag.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_locale-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_filesystem-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_system-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_thread-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_regex-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_serialization-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_date_time-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_timer-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_chrono-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_program_options-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_atomic-vc143-mt-s-x64-1_83.lib;..\..\ext\cppunit\lib\cppunit.lib;..\..\ext\zlib\zlib-MT-release.lib;..\..\ext\pixman\pixman-1-MT-release.lib;..\..\ext\libpng\libpng-MT-release.lib;..\..\ext\cairo\cairo_static-MT-release.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/Users/samba/workspace/sambag/build/src/MinSizeRel/test_shm_counterpart.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/Users/samba/workspace/sambag/build/src/MinSizeRel/test_shm_counterpart.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>RelWithDebInfo\sambag.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_locale-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_filesystem-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_system-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_thread-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_regex-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_serialization-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_date_time-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_timer-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_chrono-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_program_options-vc143-mt-s-x64-1_83.lib;E:\Users\samba\libs\boost_1_83_0\stage\lib\libboost_atomic-vc143-mt-s-x64-1_83.lib;..\..\ext\cppunit\lib\cppunit.lib;..\..\ext\zlib\zlib-MT-release.lib;..\..\ext\pixman\pixman-1-MT-release.lib;..\..\ext\libpng\libpng-MT-release.lib;..\..\ext\cairo\cairo_static-MT-release.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/Users/samba/workspace/sambag/build/src/RelWithDebInfo/test_shm_counterpart.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/Users/samba/workspace/sambag/build/src/RelWithDebInfo/test_shm_counterpart.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\Users\samba\workspace\sambag\src\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\tests\test_shm_counterpart.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\Users\samba\workspace\sambag\build\ZERO_CHECK.vcxproj">
+      <Project>{814B66EA-E485-3FAA-9FF1-55A7C013ECF2}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\Users\samba\workspace\sambag\build\src\sambag.vcxproj">
+      <Project>{C85A2CFE-69A7-318F-8B06-64369E2A5D15}</Project>
+      <Name>sambag</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

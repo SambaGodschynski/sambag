@@ -283,19 +283,19 @@ void AttributeParser::parseUnit(const std::string &str, units::Unit &c) {
 	boost::regex re("([0-9e.-]+)([a-z%]*)");
 	regex_search(begin, end, what, re);
 	c.setValue(string2Number(what[1], 0.f)); //value
-	c.setType(Unit::PX);
+	c.setType(Unit::UnitPX);
 
 	if (what[2].length() > 0) {
 		std::string m = boost::algorithm::to_lower_copy(std::string(what[2]));
 		// see above // if (m=="px") c.setType(Unit::PX);
-		if (m=="in") c.setType(Unit::IN);
-		if (m=="cm") c.setType(Unit::CM);
-		if (m=="mm") c.setType(Unit::MM);
-		if (m=="pt") c.setType(Unit::PT);
-		if (m=="pc") c.setType(Unit::PC);
-		if (m=="em") c.setType(Unit::EM);
-		if (m=="ex") c.setType(Unit::EX);
-		if (m=="%") c.setType(Unit::PERCENT);
+		if (m=="in") c.setType(Unit::UnitIN);
+		if (m=="cm") c.setType(Unit::UnitCM);
+		if (m=="mm") c.setType(Unit::UnitMM);
+		if (m=="pt") c.setType(Unit::UnitPT);
+		if (m=="pc") c.setType(Unit::UnitPC);
+		if (m=="em") c.setType(Unit::UnitEM);
+		if (m=="ex") c.setType(Unit::UnitEX);
+		if (m=="%") c.setType(Unit::UnitPERCENT);
 	}
 }
 //-----------------------------------------------------------------------------

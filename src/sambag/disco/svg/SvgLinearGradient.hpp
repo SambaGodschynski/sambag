@@ -32,10 +32,10 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	SvgLinearGradient(){
-		x1.x().setType(units::Unit::PERCENT);
-		x1.y().setType(units::Unit::PERCENT);
-		x2.x().setType(units::Unit::PERCENT);
-		x2.y().setType(units::Unit::PERCENT);
+		x1.x().setType(units::Unit::UnitPERCENT);
+		x1.y().setType(units::Unit::UnitPERCENT);
+		x2.x().setType(units::Unit::UnitPERCENT);
+		x2.y().setType(units::Unit::UnitPERCENT);
 
 		x1.x().setValue(0.);
 		x1.y().setValue(0.);

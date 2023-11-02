@@ -23,25 +23,25 @@ Unit::solve(IDrawContext::Ptr cn, Coordinate absolute) const
 	switch (type) {
 	case NONE:
 		return 0;
-	case PX:
+	case UnitPX:
 		return value;
-	case IN: //	"1in" equals "90px"
+	case UnitIN: //	"1in" equals "90px"
 		return value * 90.;
-	case CM: //	"1cm" equals "35.43307px"
+	case UnitCM: //	"1cm" equals "35.43307px"
 		return value * 35.43307;
-	case MM: //	"1mm" would be "3.543307px"
+	case UnitMM: //	"1mm" would be "3.543307px"
 		return value * 3.543307;
-	case PT: //	"1pt" equals "1.25px"
+	case UnitPT: //	"1pt" equals "1.25px"
 		return value * 1.25;
-	case PC: //	"1pc" equals "15px"
+	case UnitPC: //	"1pc" equals "15px"
 		return value * 15.;
-	case EM:
+	case UnitEM:
 		SAMBA_LOG_NOT_YET_IMPL();
 		break;
-	case EX:
+	case UnitEX:
 		SAMBA_LOG_NOT_YET_IMPL();
 		break;
-	case PERCENT: {
+	case UnitPERCENT: {
 		if (absolute == NULL_NUMBER) {
 			// For any other length value expressed as a percentage of the
 			// viewport, the percentage is calculated as the specified

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>E:\Users\samba\workspace\sambag\ext\cppunit\src\cppunit\DebugDll\cppunitd_dll.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>E:\Users\samba\workspace\sambag\ext\cppunit\src\DllPlugInTester\Debug\DllPlugInTesterd.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>E:\Users\samba\workspace\sambag\ext\cppunit\examples\simple\DebugPlugIn\simple_plugin.dll</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

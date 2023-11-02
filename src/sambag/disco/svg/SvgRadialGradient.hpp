@@ -43,11 +43,11 @@ private:
 protected:
 	//-------------------------------------------------------------------------
 	SvgRadialGradient(){
-		c.x().setType(units::Unit::PERCENT);
-		c.y().setType(units::Unit::PERCENT);
-		f.x().setType(units::Unit::PERCENT);
-		f.y().setType(units::Unit::PERCENT);
-		r.setType(units::Unit::PERCENT);
+		c.x().setType(units::Unit::UnitPERCENT);
+		c.y().setType(units::Unit::UnitPERCENT);
+		f.x().setType(units::Unit::UnitPERCENT);
+		f.y().setType(units::Unit::UnitPERCENT);
+		r.setType(units::Unit::UnitPERCENT);
 		c.x().setValue(50.);
 		c.y().setValue(50.);
 		f.x().setValue(50.);

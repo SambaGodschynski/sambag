@@ -166,7 +166,7 @@ void TimerThread::timerThreadClbk() {
 			markAsFree();
 		}
 		while (!timerIsRunning && threadIsRunning) { // wait for exiting by main thread
-			boost::this_thread::sleep(boost::posix_time::millisec(SLEEPING_TIME));
+			boost::this_thread::sleep(boost::posix_time::millisec((int)SLEEPING_TIME));
 			// TODO: close thread after X seconds
 			//SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)
 			//	msgQueue.push(Message(CloseThread, id));
@@ -199,7 +199,7 @@ namespace {
 					msgQueue.pop();
 				}
 			SAMBAG_END_SYNCHRONIZED
-			boost::this_thread::sleep(boost::posix_time::millisec(SLEEPING_TIME));
+			boost::this_thread::sleep(boost::posix_time::millisec((int)SLEEPING_TIME));
 		}
 		// close all timer threads:
 		for (size_t i=0; i<timerThreads.size(); ++i) {

@@ -88,7 +88,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 	int sec = 1;
 	T::startUpTimer();
 	while (true) {
-		boost::this_thread::sleep(boost::posix_time::millisec(Res));
+		boost::this_thread::sleep(boost::posix_time::millisec((int)Res));
 		waited+=Res;
 		if ( waited > 1000 * sec ) {
 			++sec;

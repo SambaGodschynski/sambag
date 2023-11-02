@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C85A2CFE-69A7-318F-8B06-64369E2A5D15}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>sambag</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Users\samba\workspace\sambag\build\src\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">sambag.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">sambag</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Users\samba\workspace\sambag\build\src\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">sambag.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">sambag</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Users\samba\workspace\sambag\build\src\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">sambag.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">sambag</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Users\samba\workspace\sambag\build\src\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">sambag.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">sambag</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CAIRO_WIN32_STATIC_BUILD;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;BOOST_UBLAS_TYPE_CHECK=0;BOOST_FILESYSTEM_VERSION=3;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;DISCO_USE_WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;SAMBAG_USE_WINDOWS_SHARED_MEMORY;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\Users\samba\workspace\sambag\src;E:\Users\samba\workspace\sambag\ext\cairo;E:\Users\samba\workspace\sambag\ext\cppunit\include\cppunit\..;E:\Users\samba\workspace\sambag\ext\tinyxml;E:\Users\samba\libs\boost_1_83_0;E:\Users\samba\workspace\sambag\ext\loki\include;E:\Users\samba\workspace\sambag\ext\lua\src;E:\Users\samba\workspace\sambag\ext\sqlite;E:\Users\samba\workspace\sambag\ext\vstsdk2.4;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\public.sdk\source\vst2.x;E:\Users\samba\workspace\sambag\ext\vstsdk2.4\pluginterfaces\vst2.x;E:\Users\samba\workspace\sambag\ext\VST3;E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst;E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\vst;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\Users\samba\workspace\sambag\src\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/Users/samba/workspace/sambag/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Users/samba/workspace/sambag -BE:/Users/samba/workspace/sambag/build --check-stamp-file E:/Users/samba/workspace/sambag/build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Users\samba\workspace\sambag\build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstaudioeffect.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstbus.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstcomponent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vsteditcontroller.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstinitiids.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstparameters.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\ustring.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\conststringtable.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\funknown.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\baseiids.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fbuffer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fdebug.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fdynlib.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fobject.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fstreamer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fstring.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\timer.cpp">
+      <ObjectFileName>$(IntDir)/__/ext/VST3/base/source/timer.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\updatehandler.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\BoostTimer2.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\BoostTimerImpl2.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Common.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Exception.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\FileHandler.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\FileSystem.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\GenericTimer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Interprocess.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\ITimer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\UnitEx.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Win32ResourceHandler.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\cpsqlite\DataBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\cpsqlite\sambag_sqlite.c" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\cairoCGContextWorkaround.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\cairoCreateImageSurfaceDelegate.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoDiscoFactory.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoDrawContext.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoPattern.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoSurface.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\ColorRGBA.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Coordinate.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\DiscoHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\FileResourceManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\FontCache.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GenericAnimator.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Geometry.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GeometrySerialization.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GlyphHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IDiscoFactory.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IPattern.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IResourceManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\QuartzSurface.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Shape.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\TimedUpdater.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Tweens.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Win32IntResourceManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AButton.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AColumnBrowser.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AComponent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AContainer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ActionMap.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AKnob.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ALayoutManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AList.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Animation.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\BorderLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\BoxLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Button.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/components/Button.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ButtonGroup.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\CellRendererPane.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\CheckBox.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ColumnBrowser.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ColumnView.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultBoundedRangeModel.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultButtonModell.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultListCellRenderer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultListSelectionModel.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultSingleSelectionModell.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultTooltipManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\FlowLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\FramedWindow.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Graphics.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\GridLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\HitStrategy.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\IBorder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ITooltipManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Knob.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/components/Knob.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Label.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\List.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Menu.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MenuItem.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MenuSelectionManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MessageBox.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Panel.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\PopupMenu.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\RedrawManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\RootPane.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Scrollbar.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ScrollPane.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ScrollPaneLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SizeRequirements.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SolidBorder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SvgComponent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Timer.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/components/Timer.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\TitledBorder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Viewport.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ViewportLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Window.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\WindowToolkit.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ContainerEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\DiscoEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\HierarchyEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ListDataEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ListSelectionEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEvent.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEventCreator.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEventRecorder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoButton.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoButtonBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoKnob.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoKnobBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoObject.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoObjectBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvg.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgObject.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgObjectBase.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\svgExtensions\Button.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/components/svgExtensions/Button.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\svgExtensions\Knob.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/components/svgExtensions/Knob.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\AComponentUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\ALookAndFeel.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\DefaultMenuLayout.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgButtonUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgComponentUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgKnobUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\UIManager.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicArrowButton.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicArrowButtonUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicCheckBoxUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicColumnViewUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicKnobUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicLabelUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicLookAndFeel.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicScrollPaneUI.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\Helper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\BoostTimerImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaTimer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaWindowImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaWindowToolkit.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\TestWindowImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32BufferedDraw.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32TimerImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32WindowImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32WindowToolkit.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\WindowTestToolkit.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\X11WindowImpl.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\X11WindowToolkit.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\AttributeParser.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\HtmlColors.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Image.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/svg/Image.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\PathInstructions.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Style.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\StyleAttributeSetters.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\StyleParser.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Svg.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgBuilder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgCircle.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgCompound.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgDefs.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgEllipse.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgGroup.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgLine.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgLinearGradient.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgPath.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgPattern.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgRadialGradient.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgRoot.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgStyle.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgText.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgUse.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Arc.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Compound.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\GraphicElement.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Image.cpp">
+      <ObjectFileName>$(IntDir)/sambag/disco/svg/graphicElements/Image.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Line.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Path.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\PathHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\PointContainer.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Rect.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\RefElement.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\SceneGraph.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\SceneGraphHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Text.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\units\Units.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\DefaultMidiEvents.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\HostTimeInfo.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\IMidiEvents.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\TimeInfoVst2xHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\TimeInfoVst3xHelper.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\Vst3MidiEvents.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\VstMidiEventAdapter.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\ALuaObject.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\math\CantorOrder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\math\Matrix.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\cpAtl\MarkupBuilder.cpp" />
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\cpAtl\SimpleTagCreator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\Users\samba\workspace\sambag\build\ZERO_CHECK.vcxproj">
+      <Project>{814B66EA-E485-3FAA-9FF1-55A7C013ECF2}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

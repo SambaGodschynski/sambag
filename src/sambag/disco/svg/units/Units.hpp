@@ -24,15 +24,15 @@ public:
 	//-------------------------------------------------------------------------
 	enum Type {
 				NONE,
-				PX,
-				IN,
-				CM,
-				MM,
-				PT,
-				PC,
-				EM,
-				EX,
-				PERCENT
+				UnitPX,
+				UnitIN,
+				UnitCM,
+				UnitMM,
+				UnitPT,
+				UnitPC,
+				UnitEM,
+				UnitEX,
+				UnitPERCENT
 			};
 private:
 	//-------------------------------------------------------------------------

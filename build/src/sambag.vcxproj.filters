@@ -1,0 +1,625 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstaudioeffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstbus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstcomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vsteditcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstinitiids.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\public.sdk\source\vst\vstparameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\ustring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\conststringtable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\pluginterfaces\base\funknown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\baseiids.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fbuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fdebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fdynlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fstreamer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\fstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\ext\VST3\base\source\updatehandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\BoostTimer2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\BoostTimerImpl2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\FileHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\FileSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\GenericTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Interprocess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\ITimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\UnitEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\com\Win32ResourceHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\cpsqlite\DataBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\cpsqlite\sambag_sqlite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\cairoCGContextWorkaround.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\cairoCreateImageSurfaceDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoDiscoFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoDrawContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\CairoSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\ColorRGBA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Coordinate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\DiscoHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\FileResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\FontCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GenericAnimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Geometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GeometrySerialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\GlyphHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IDiscoFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\IResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\QuartzSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\TimedUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Tweens.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\Win32IntResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AColumnBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ActionMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AKnob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ALayoutManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\AList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\BorderLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\BoxLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ButtonGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\CellRendererPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\CheckBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ColumnBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ColumnView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultBoundedRangeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultButtonModell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultListCellRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultListSelectionModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultSingleSelectionModell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\DefaultTooltipManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\FlowLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\FramedWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\GridLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\HitStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\IBorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ITooltipManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Knob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Label.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MenuItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MenuSelectionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\MessageBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\PopupMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\RedrawManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\RootPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Scrollbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ScrollPane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ScrollPaneLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SizeRequirements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SolidBorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\SvgComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\TitledBorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Viewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ViewportLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\WindowToolkit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ContainerEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\DiscoEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\HierarchyEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ListDataEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\ListSelectionEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEventCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\events\MouseEventRecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoButtonBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoKnob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoKnobBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaDiscoObjectBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\scripts\LuaSvgObjectBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\svgExtensions\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\svgExtensions\Knob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\AComponentUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\ALookAndFeel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\DefaultMenuLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgButtonUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgComponentUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\SvgKnobUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicArrowButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicArrowButtonUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicCheckBoxUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicColumnViewUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicKnobUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicLabelUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicLookAndFeel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\BasicScrollPaneUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\ui\basic\Helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\BoostTimerImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaWindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\CocoaWindowToolkit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\TestWindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32BufferedDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32TimerImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32WindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\Win32WindowToolkit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\WindowTestToolkit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\X11WindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\components\windowImpl\X11WindowToolkit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\AttributeParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\HtmlColors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\PathInstructions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Style.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\StyleAttributeSetters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\StyleParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\Svg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgCompound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgDefs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgEllipse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgLinearGradient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgRadialGradient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgRoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\SvgUse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Arc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Compound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\GraphicElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\PathHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\PointContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Rect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\RefElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\SceneGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\SceneGraphHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\graphicElements\Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\disco\svg\units\Units.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\DefaultMidiEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\HostTimeInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\IMidiEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\TimeInfoVst2xHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\TimeInfoVst3xHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\Vst3MidiEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\dsp\VstMidiEventAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\lua\ALuaObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\math\CantorOrder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\math\Matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\cpAtl\MarkupBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\Users\samba\workspace\sambag\src\sambag\xml\cpAtl\SimpleTagCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\Users\samba\workspace\sambag\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D9B62C45-6750-30DB-AF77-7A90408D7187}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

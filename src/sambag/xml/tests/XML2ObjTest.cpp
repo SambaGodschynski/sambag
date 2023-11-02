@@ -10,7 +10,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "ticpp/ticpp.h"
+#include "ticpp.h"
 #include <boost/foreach.hpp>
 
 
