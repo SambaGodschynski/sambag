@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\Users\samba\workspace\sambag\build\CMakeFiles\d70f4e52a931e5c45ea062c287a4658f\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{15A0292D-E0D3-371A-BA87-EF14E8154275}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

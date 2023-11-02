@@ -4,7 +4,7 @@ IFS=$'\n'
 WHEREAMI=$(pwd)
 
 export ROOTDIR=$WHEREAMI/build
-export URL_ZLIB='http://zlib.net/zlib-1.2.12.tar.gz'
+export URL_ZLIB='https://github.com/madler/zlib/releases/download/v1.2.13/zlib-1.2.13.tar.gz'
 export URL_LIBPNG='http://prdownloads.sourceforge.net/libpng/libpng-1.6.37.tar.gz?download'
 export URL_PIXMAN='https://cairographics.org/releases/pixman-0.40.0.tar.gz'
 export URL_CAIRO='https://cairographics.org/releases/cairo-1.16.0.tar.xz'
@@ -103,10 +103,10 @@ arg $@
 mkdir -p $ROOTDIR
 cd $ROOTDIR
 #                     $URL      $DST_FILE   $DST_DIRECTORY
-#sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
-#sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
-#sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
-#sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
+sh $WHEREAMI/downloadpackage.sh $URL_ZLIB zlib.tar.gz $ZLIB
+sh $WHEREAMI/downloadpackage.sh $URL_LIBPNG libpng.tar.gz $LIBPNG
+sh $WHEREAMI/downloadpackage.sh $URL_PIXMAN pixman.tar.gz $PIXMAN
+sh $WHEREAMI/downloadpackage.sh $URL_CAIRO cairo.tar.gz $CAIRO
 
 cd $WHEREAMI
 

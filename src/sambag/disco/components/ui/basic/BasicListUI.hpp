@@ -360,7 +360,7 @@ template <class LT>
 void BasicListUI<LT>::drawImpl(IDrawContext::Ptr cn, AComponentPtr c) {
 	namespace trans = boost::geometry::strategy::transform;
 	ListTypePtr list = getListPtr();
-	typedef trans::translate_transformer<Coordinate, 2, 2> Translate;
+	typedef trans::translate_transformer<sambag::com::Number, 2, 2> Translate;
 	switch (layoutOrientation) {
 	case ListConstants::VERTICAL_WRAP:
 		if (list->getHeight() != listHeight) {
@@ -421,7 +421,7 @@ void BasicListUI<LT>::drawImpl(IDrawContext::Ptr cn, AComponentPtr c) {
 			g.clipRect(paintBounds);
 			drawCell(cn, index, rowBounds, list, leadIndex);
 			//rowBounds.y += rowBounds.height;
-			Translate transl(0, rowBounds.height());
+			Translate transl((sambag::com::Number)0, (sambag::com::Number)rowBounds.height());
 			boost::geometry::transform<Rectangle::Base, Rectangle::Base>
 				(rowBounds, rowBounds, transl);
 			index += rowIncrement;

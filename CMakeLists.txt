@@ -55,7 +55,6 @@ ENDIF(APPLE)
 
 find_package(Cairo REQUIRED)
 find_package(CppUnitX REQUIRED)
-find_package(TinyXMLX REQUIRED)
 find_package(LokiX REQUIRED)
 find_package(Lua52X REQUIRED)
 find_package(Sqlite3X REQUIRED)
@@ -63,9 +62,15 @@ find_package(VST23X REQUIRED)
 find_package(VST3X REQUIRED)
 find_package(BoostX REQUIRED)
 
+
+#tinyxml
+add_subdirectory(${PROJECT_SOURCE_DIR}/ext/tinyxml)
+include_directories(${TINYXML_INCLUDE_DIRS})
+set (SAMBAG_CLIBS ${SAMBAG_CLIBS} ticpp_ticpp)
+
+
 include_directories(${CAIRO_INCLUDE_DIRS})
 include_directories(${CPPUNIT_INCLUDE_DIRS})
-include_directories(${TINYXML_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${LOKI_INCLUDE_DIRS})
 include_directories(${LUA52_INCLUDE_DIRS})
