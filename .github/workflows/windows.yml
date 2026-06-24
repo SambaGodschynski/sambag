@@ -29,14 +29,7 @@ jobs:
           restore-keys: vcpkg-x64-windows-static-
 
       - name: Install dependencies via vcpkg
-        run: |
-          vcpkg install --triplet x64-windows-static `
-            cairo `
-            boost-filesystem boost-system boost-thread boost-regex `
-            boost-serialization boost-date-time boost-timer boost-chrono `
-            boost-program-options boost-log `
-            lua `
-            cppunit
+        run: vcpkg install --triplet x64-windows-static
         shell: pwsh
 
       - name: Configure
