@@ -90,9 +90,30 @@ find_package(Boost 1.55.0 REQUIRED COMPONENTS ${_BOOST_COMPONENTS})
 
 # --- Cairo ---
 if(WIN32)
-    # vcpkg port: cairo  →  target: cairo::cairo
-    find_package(cairo CONFIG REQUIRED)
-    set(SAMBAG_CAIRO_TARGET cairo::cairo)
+    # The vcpkg cairo port uses Meson internally and does not always generate
+    # cmake config files. Use find_library/find_path; vcpkg toolchain adds the
+    # installed triplet's include/ and lib/ to the search paths automatically.
+    find_path(CAIRO_INCLUDE_DIR NAMES cairo/cairo.h REQUIRED)
+    find_library(CAIRO_LIBRARY  NAMES cairo        REQUIRED)
+    find_library(PIXMAN_LIBRARY NAMES pixman-1     REQUIRED)
+    find_package(Freetype REQUIRED)
+    find_package(ZLIB     REQUIRED)
+    find_package(PNG      REQUIRED)
+    find_library(BZ2_LIBRARY NAMES bz2 bzip2)
+
+    add_library(_sambag_cairo INTERFACE)
+    target_include_directories(_sambag_cairo INTERFACE "${CAIRO_INCLUDE_DIR}")
+    target_link_libraries(_sambag_cairo INTERFACE
+        "${CAIRO_LIBRARY}"
+        "${PIXMAN_LIBRARY}"
+        Freetype::Freetype
+        ZLIB::ZLIB
+        PNG::PNG
+    )
+    if(BZ2_LIBRARY)
+        target_link_libraries(_sambag_cairo INTERFACE "${BZ2_LIBRARY}")
+    endif()
+    set(SAMBAG_CAIRO_TARGET _sambag_cairo)
 else()
     pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
     set(SAMBAG_CAIRO_TARGET PkgConfig::Cairo)
