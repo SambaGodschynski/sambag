@@ -6,7 +6,6 @@ CMakeFiles
 cmake_install.cmake
 .DS_Store
 cmake_install.cmake
-src/CMakeLists.txt
 src/cmake_install.cmake
 *~
 

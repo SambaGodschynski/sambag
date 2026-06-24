@@ -208,9 +208,20 @@ typedef com::Int2Type<1> Impl;
 template <typename T>
 inline void __pushNumber(const T &value, lua_State *L, NoImpl) {}
 //-----------------------------------------------------------------------------
+// Lua 5.4 distinguishes integers from floats; use lua_pushinteger for
+// integral types so that tostring(11) yields "11" not "11.0".
 template <typename T>
-inline void  __pushNumber(const T &value, lua_State *L, Impl) {
+inline void __pushNumberImpl(const T &value, lua_State *L, com::Int2Type<0>) {
 	lua_pushnumber(L, value);
+}
+template <typename T>
+inline void __pushNumberImpl(const T &value, lua_State *L, com::Int2Type<1>) {
+	lua_pushinteger(L, static_cast<lua_Integer>(value));
+}
+template <typename T>
+inline void __pushNumber(const T &value, lua_State *L, Impl) {
+	enum { isIntegral = boost::is_integral<T>::value };
+	__pushNumberImpl(value, L, com::Int2Type<isIntegral>());
 }
 //-----------------------------------------------------------------------------
 template <typename T> // template needed to be usable for get().

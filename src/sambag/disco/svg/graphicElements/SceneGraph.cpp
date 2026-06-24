@@ -588,6 +588,7 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
 	
     std::vector<SceneGraphElement> l;
     getChildren(parent, l, true);
+    bool found = false;
     boost_for_each(SceneGraphElement x, l) {
         Element2Bounds::const_iterator it = element2Bounds.find(x);
         if (it==element2Bounds.end()) {
@@ -599,6 +600,11 @@ Rectangle SceneGraph::computeBoundingBox(IDrawable::Ptr parent) {
             maximize(res.x1(), r.x1()),
             false
 	    );
+        found = true;
+    }
+    // No children had real bounds — signal "undefined" so the caller skips setBounds
+    if (!found) {
+        return NULL_RECTANGLE;
     }
     return res;
 }

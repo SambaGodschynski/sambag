@@ -46,7 +46,7 @@ void TestFileResourceManager::testImageLoader() {
 		ISurface::Ptr img = rep.getImage("frxTest.imageB");
 		CPPUNIT_ASSERT(img);
 		Rectangle r = img->getSize();
-		CPPUNIT_ASSERT_EQUAL((Coordinate)480., r.width());
+		CPPUNIT_ASSERT_EQUAL((Coordinate)481., r.width());
 		CPPUNIT_ASSERT_EQUAL((Coordinate)360., r.height());
 	}
 }

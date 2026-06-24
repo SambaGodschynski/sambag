@@ -1,158 +1,160 @@
-cmake_minimum_required (VERSION 2.6)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "./" "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+cmake_minimum_required(VERSION 3.15)
+# CMake 4.x removed the legacy FindBoost module; use Boost's own CMake config.
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
+endif()
 
-project (sambag)
+project(sambag VERSION 0.1.0 LANGUAGES C CXX)
 
-execute_process(COMMAND git --work-tree=${PROJECT_SOURCE_DIR} log --pretty=format:%h -n 1
-                OUTPUT_VARIABLE SAMBAG_VERSION_BUILD)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include_directories ("${PROJECT_SOURCE_DIR}/src")
-add_definitions(-DBOOST_UBLAS_TYPE_CHECK=0)
-add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
+# ── Options ───────────────────────────────────────────────────────────────────
+option(SAMBAG_USE_LOG        "Enable boost::log support"              ON)
+option(SAMBAG_VST_SUPPORT    "Build with VST2/VST3 SDK support"       ON)
+option(SAMBAG_BUILD_TESTS    "Build CppUnit unit tests"               ON)
+option(SAMBAG_BUILD_TESTAPP  "Build UI test applications (X11)"       ON)
+# For VST plugins all dependencies should be linked statically so the .so
+# needs no external DLLs / .so files in the plugin folder.
+option(SAMBAG_STATIC_DEPS    "Prefer static linking of dependencies"  ON)
 
-IF($ENV{SAMBA_USELOG})
-  add_definitions(-DSAMBAG_USE_LOG)
-ENDIF($ENV{SAMBA_USELOG})
+# ── Version from git ─────────────────────────────────────────────────────────
+execute_process(
+    COMMAND git --work-tree=${PROJECT_SOURCE_DIR} log --pretty=format:%h -n 1
+    OUTPUT_VARIABLE SAMBAG_VERSION_BUILD
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+)
+if(NOT SAMBAG_VERSION_BUILD)
+    set(SAMBAG_VERSION_BUILD "unknown")
+endif()
 
-add_definitions(-D_SCL_SECURE_NO_WARNINGS) #disable warning C4996: 'std::uninitialized_copy' caused by boost::ublas
-add_definitions(-D_CRT_SECURE_NO_WARNINGS) #disable strcpy warning in audioeffect.h
-
-#add_definitions(-DSAMBA_WARN_MISSING_IMPL) #show xy not impl. warning
-
-#to avoid name conflicts with existing FindSomeLib.cmake scripts
-#every finding script has a "X" postfix: FindSomeLibX.cmake
-#(concerns scriptname only)
-
-#UNIX is TRUE on all UNIX-like OS's, including Apple OS X and Cygwin.
-#WIN32 is TRUE on Windows, including Cygwin.
-#APPLE is TRUE on Apple systems.
-
-IF(APPLE)
-	#find_package(X11 REQUIRED)
-        #include_directories(${X11_INCLUDE_DIRS})
-	#find_package(IConvX REQUIRED)
-	add_definitions(-DDISCO_USE_COCOA)
-	add_definitions(-DRELEASE) #VST3 wants RELEASE DEBUG or DEVELOPMENT
-	FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-	FIND_LIBRARY(CARBON_LIBRARY Carbon)
-	#set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
-ELSEIF(UNIX)
-	find_package(X11 REQUIRED)
-	include_directories(${X11_INCLUDE_DIRS})
-	add_definitions(-DDISCO_USE_X11)
-	add_definitions(-D__cdecl=__attribute__\(\(__cdecl__\)\)) #aeffect.h: unarm __cdecl
-	SET (CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS_INIT} "-Wl,--no-as-needed"
-             CACHE STRING "Flags used by the linker during the creation of modules.")
-ELSEIF(WIN32)
-        add_definitions(-DDISCO_USE_WIN32)
-	add_definitions(-DWIN32_LEAN_AND_MEAN)
-	add_definitions(-DNOMINMAX) #prevent collision with std::min/max
-	add_definitions(-DSAMBAG_USE_WINDOWS_SHARED_MEMORY)
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /ZI")
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-ENDIF(APPLE)
-
-find_package(Cairo REQUIRED)
-find_package(CppUnitX REQUIRED)
-find_package(LokiX REQUIRED)
-find_package(Lua52X REQUIRED)
-find_package(Sqlite3X REQUIRED)
-find_package(VST23X REQUIRED)
-find_package(VST3X REQUIRED)
-find_package(BoostX REQUIRED)
-
-
-#tinyxml
-add_subdirectory(${PROJECT_SOURCE_DIR}/ext/tinyxml)
-include_directories(${TINYXML_INCLUDE_DIRS})
-set (SAMBAG_CLIBS ${SAMBAG_CLIBS} ticpp_ticpp)
-
-
-include_directories(${CAIRO_INCLUDE_DIRS})
-include_directories(${CPPUNIT_INCLUDE_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${LOKI_INCLUDE_DIRS})
-include_directories(${LUA52_INCLUDE_DIRS})
-include_directories(${SQLITE3_INCLUDE_DIRS})
-
-#vst2
-include_directories(${VSTSDK_INCLUDE_DIRS})
-include_directories(${VSTSDK_INCLUDE_DIRS}/public.sdk/source/vst2.x)
-include_directories(${VSTSDK_INCLUDE_DIRS}/pluginterfaces/vst2.x)
-
-#vst3
-INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst)
-INCLUDE_DIRECTORIES(${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/vst)
-
-
-set (SAMBAG_SOURCES ${SAMBAG_SOURCES}
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstaudioeffect.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstbus.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstcomponent.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vsteditcontroller.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstinitiids.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/public.sdk/source/vst/vstparameters.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/base/ustring.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/base/conststringtable.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/pluginterfaces/base/funknown.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/baseiids.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/classfactory.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fatomic.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fbitset.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fbuffer.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fcpu.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fdebug.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fdynlib.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/finitializer.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fmemory.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fobject.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fpoint.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/frect.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fregion.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fstreamer.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/fstring.cpp
-      #${VSTSDK3_INCLUDE_DIRS}/base/source/fthread.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/timer.cpp
-      ${VSTSDK3_INCLUDE_DIRS}/base/source/updatehandler.cpp
+configure_file(
+    "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"
+    "${PROJECT_BINARY_DIR}/src/sambag/com/Config.h"
 )
 
+# ── Platform detection ────────────────────────────────────────────────────────
+if(APPLE)
+    add_compile_definitions(DISCO_USE_COCOA RELEASE)
+    find_library(COCOA_LIBRARY  Cocoa  REQUIRED)
+    find_library(CARBON_LIBRARY Carbon REQUIRED)
+elseif(UNIX)
+    find_package(X11 REQUIRED)
+    add_compile_definitions(DISCO_USE_X11)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
+elseif(WIN32)
+    add_compile_definitions(
+        DISCO_USE_WIN32
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX
+        SAMBAG_USE_WINDOWS_SHARED_MEMORY
+    )
+    if(MSVC)
+        string(APPEND CMAKE_CXX_FLAGS_DEBUG   " /MTd /ZI")
+        string(APPEND CMAKE_CXX_FLAGS_RELEASE " /MT")
+    endif()
+endif()
 
-
-
-IF(APPLE)
-	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-	    	${COCOA_LIBRARY}
-		${CARBON_LIBRARY}
-	)
-ELSEIF(UNIX)
-	set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-	     ${X11_LIBRARIES}
-	)
-ELSEIF(WIN32)
-ENDIF(APPLE)
-
-set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-	${Boost_LIBRARIES}
-	${CPPUNIT_LIBRARIES}
-	${CAIRO_LIBRARIES}
-	${TINYXML_LIBRARIES}
-	${LUA52_LIBRARIES}
+# Global compile definitions (silences MSVC/Boost warnings, harmless on GCC)
+add_compile_definitions(
+    BOOST_UBLAS_TYPE_CHECK=0
+    BOOST_FILESYSTEM_VERSION=3
+    _SCL_SECURE_NO_WARNINGS
+    _CRT_SECURE_NO_WARNINGS
 )
+if(SAMBAG_USE_LOG)
+    add_compile_definitions(SAMBAG_USE_LOG)
+endif()
 
-IF(APPLE)
-ELSEIF(UNIX) #this has to be at least (since gcc4.6?)
-        set (SAMBAG_CLIBS ${SAMBAG_CLIBS}
-             rt
-	     pthread
-	     dl
-        )
-ENDIF(APPLE)
+# ── Dependencies ──────────────────────────────────────────────────────────────
+find_package(PkgConfig REQUIRED)
 
-CONFIGURE_FILE(
-  "${PROJECT_SOURCE_DIR}/src/sambag/com/Config.h.in"
-  "${PROJECT_BINARY_DIR}/src/sambag/com/Config.h"
-)
+# --- Boost (use Boost's own CMake config, compatible with CMake 4.x) ---
+set(_BOOST_COMPONENTS
+    filesystem system thread regex serialization
+    date_time timer chrono program_options)
+if(SAMBAG_USE_LOG)
+    list(APPEND _BOOST_COMPONENTS log log_setup)
+endif()
+# Boost_USE_STATIC_LIBS is honoured by both the legacy FindBoost and the
+# new BoostConfig approach when components are requested via find_package.
+if(SAMBAG_STATIC_DEPS)
+    set(Boost_USE_STATIC_LIBS ON)
+endif()
+find_package(Boost 1.55.0 REQUIRED COMPONENTS ${_BOOST_COMPONENTS})
 
+# --- Cairo (via pkg-config) ---
+if(SAMBAG_STATIC_DEPS)
+    pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
+    # Static cairo pulls in pixman, png, zlib, freetype, fontconfig …
+    # The exact set depends on how cairo was compiled; pkg-config --static handles it.
+    set(_CAIRO_LINK_LIBS ${Cairo_STATIC_LIBRARIES})
+    set(_CAIRO_LINK_DIRS ${Cairo_STATIC_LIBRARY_DIRS})
+else()
+    pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
+    set(_CAIRO_LINK_LIBS ${Cairo_LIBRARIES})
+    set(_CAIRO_LINK_DIRS ${Cairo_LIBRARY_DIRS})
+endif()
+
+# --- Lua (5.4 preferred, 5.2 fallback) ---
+pkg_check_modules(Lua lua5.4 IMPORTED_TARGET)
+if(NOT Lua_FOUND)
+    pkg_check_modules(Lua lua5.2 IMPORTED_TARGET)
+endif()
+if(NOT Lua_FOUND)
+    pkg_check_modules(Lua REQUIRED lua IMPORTED_TARGET)
+endif()
+
+# SQLite3 is bundled as the amalgamation in src/sambag/cpsqlite/sqlite3.c
+# (included by the custom sambag_sqlite.c). No system package needed.
+
+# --- Loki (header-only) ---
+find_path(LOKI_INCLUDE_DIR loki/Typelist.h
+    PATHS /usr/include /usr/local/include
+    DOC "Loki library headers (libloki-dev)")
+if(NOT LOKI_INCLUDE_DIR)
+    message(FATAL_ERROR
+        "Loki headers not found.\n"
+        "Install with:  sudo apt install libloki-dev")
+endif()
+
+# --- CppUnit (only needed for tests) ---
+if(SAMBAG_BUILD_TESTS)
+    pkg_check_modules(CppUnit REQUIRED cppunit IMPORTED_TARGET)
+endif()
+
+# --- VST2 / VST3 SDK (optional, user must set CLIBS env var) ---
+if(SAMBAG_VST_SUPPORT)
+    if(NOT DEFINED ENV{CLIBS})
+        message(FATAL_ERROR
+            "SAMBAG_VST_SUPPORT=ON requires the CLIBS environment variable "
+            "pointing to the directory that contains vstsdk/VST3 subdirs.")
+    endif()
+
+    find_path(VSTSDK_INCLUDE_DIR public.sdk/source/vst2.x/audioeffect.h
+        PATHS $ENV{CLIBS}/vstsdk $ENV{CLIBS}/vstsdk2.4
+        DOC "VST2 SDK root")
+
+    find_path(VSTSDK3_INCLUDE_DIR public.sdk/source/vst/vstaudioeffect.h
+        PATHS $ENV{CLIBS}/VST3
+        DOC "VST3 SDK root")
+
+    if(NOT VSTSDK_INCLUDE_DIR OR NOT VSTSDK3_INCLUDE_DIR)
+        message(FATAL_ERROR
+            "VST2 or VST3 SDK not found under CLIBS=$ENV{CLIBS}\n"
+            "Expected: $ENV{CLIBS}/vstsdk and $ENV{CLIBS}/VST3")
+    endif()
+
+    # __cdecl appears in VST2 public headers; neutralise it on non-MSVC
+    if(NOT MSVC)
+        add_compile_definitions("__cdecl=__attribute__((__cdecl__))")
+    endif()
+endif()
+
+# ── Sub-directories ───────────────────────────────────────────────────────────
+add_subdirectory(ext/tinyxml)
 add_subdirectory(src)

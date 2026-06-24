@@ -16,6 +16,11 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
+// X11/X.h defines Complex as 0 for path fill rules, which breaks C++ template
+// parameter names — undefine it after the X11 headers are done.
+#ifdef Complex
+#  undef Complex
+#endif
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/ISurface.hpp>

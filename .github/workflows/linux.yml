@@ -1,0 +1,58 @@
+name: Linux Build & Tests
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # VST3 submodule is large and not needed for the library build
+          submodules: false
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            cmake \
+            pkg-config \
+            libboost-filesystem-dev \
+            libboost-system-dev \
+            libboost-thread-dev \
+            libboost-regex-dev \
+            libboost-serialization-dev \
+            libboost-date-time-dev \
+            libboost-timer-dev \
+            libboost-chrono-dev \
+            libboost-program-options-dev \
+            libboost-log-dev \
+            libcairo2-dev \
+            liblua5.4-dev \
+            libloki-dev \
+            libcppunit-dev \
+            libx11-dev
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSAMBAG_VST_SUPPORT=OFF \
+            -DSAMBAG_BUILD_TESTS=ON \
+            -DSAMBAG_BUILD_TESTAPP=OFF \
+            -DSAMBAG_USE_LOG=ON \
+            -DSAMBAG_STATIC_DEPS=OFF
+
+      - name: Build
+        run: cmake --build build --parallel $(nproc)
+
+      - name: Run tests
+        # unit_tests uses relative paths to ./testimages/
+        working-directory: ${{ github.workspace }}
+        run: ./build/src/unit_tests
