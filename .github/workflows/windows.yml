@@ -21,16 +21,14 @@ jobs:
         with:
           arch: x64
 
-      - name: Enable vcpkg binary caching via GitHub Actions cache
-        uses: actions/github-script@v7
+      - name: Cache vcpkg binary archives
+        uses: actions/cache@v4
         with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: vcpkg-x64-windows-static-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-x64-windows-static-
 
       - name: Install dependencies via vcpkg
-        env:
-          VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
         run: |
           vcpkg install --classic --triplet x64-windows-static `
             cairo `

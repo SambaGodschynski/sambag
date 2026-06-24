@@ -84,9 +84,6 @@ endif()
 
 # ── Unit tests ────────────────────────────────────────────────────────────────
 if(SAMBAG_BUILD_TESTS)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(CppUnit REQUIRED IMPORTED_TARGET cppunit)
-
     # Collect CppUnit test sources from all modules
     file(GLOB_RECURSE _TEST_SOURCES CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/sambag/*/tests/*.cpp"
