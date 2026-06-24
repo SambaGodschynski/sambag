@@ -44,8 +44,6 @@ target_include_directories(sambag
         "${CMAKE_CURRENT_SOURCE_DIR}"          # so #include <sambag/...> works
         "${PROJECT_BINARY_DIR}/src"            # generated Config.h
         ${Boost_INCLUDE_DIRS}
-        ${Cairo_INCLUDE_DIRS}
-        ${Lua_INCLUDE_DIRS}
         ${LOKI_INCLUDE_DIR}
 )
 
@@ -61,8 +59,8 @@ endif()
 target_link_libraries(sambag
     PUBLIC
         ${_BOOST_TARGETS}
-        PkgConfig::Cairo
-        PkgConfig::Lua
+        ${SAMBAG_CAIRO_TARGET}
+        ${SAMBAG_LUA_TARGET}
         ticpp_ticpp
 )
 
@@ -114,7 +112,7 @@ if(SAMBAG_BUILD_TESTS)
         "${CMAKE_CURRENT_SOURCE_DIR}/testApps/sambag_tests.cpp"
         ${_TEST_SOURCES}
     )
-    target_link_libraries(unit_tests PRIVATE sambag PkgConfig::CppUnit)
+    target_link_libraries(unit_tests PRIVATE sambag ${SAMBAG_CPPUNIT_TARGET})
 
     # test_shm_counterpart (32/64-bit SHM bridge prototype) excluded — unfinished
 

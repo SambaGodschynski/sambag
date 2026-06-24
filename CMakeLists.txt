@@ -71,60 +71,79 @@ if(SAMBAG_USE_LOG)
 endif()
 
 # ── Dependencies ──────────────────────────────────────────────────────────────
-find_package(PkgConfig REQUIRED)
+# On Linux/macOS we use pkg-config; on Windows vcpkg provides CMake config packages
+if(NOT WIN32)
+    find_package(PkgConfig REQUIRED)
+endif()
 
-# --- Boost (use Boost's own CMake config, compatible with CMake 4.x) ---
+# --- Boost ---
 set(_BOOST_COMPONENTS
     filesystem system thread regex serialization
     date_time timer chrono program_options)
 if(SAMBAG_USE_LOG)
     list(APPEND _BOOST_COMPONENTS log log_setup)
 endif()
-# Boost_USE_STATIC_LIBS is honoured by both the legacy FindBoost and the
-# new BoostConfig approach when components are requested via find_package.
 if(SAMBAG_STATIC_DEPS)
     set(Boost_USE_STATIC_LIBS ON)
 endif()
 find_package(Boost 1.55.0 REQUIRED COMPONENTS ${_BOOST_COMPONENTS})
 
-# --- Cairo (via pkg-config) ---
-if(SAMBAG_STATIC_DEPS)
-    pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
-    # Static cairo pulls in pixman, png, zlib, freetype, fontconfig …
-    # The exact set depends on how cairo was compiled; pkg-config --static handles it.
-    set(_CAIRO_LINK_LIBS ${Cairo_STATIC_LIBRARIES})
-    set(_CAIRO_LINK_DIRS ${Cairo_STATIC_LIBRARY_DIRS})
+# --- Cairo ---
+if(WIN32)
+    # vcpkg port: cairo  →  target: unofficial::cairo::cairo
+    find_package(unofficial-cairo CONFIG REQUIRED)
+    set(SAMBAG_CAIRO_TARGET unofficial::cairo::cairo)
 else()
     pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
-    set(_CAIRO_LINK_LIBS ${Cairo_LIBRARIES})
-    set(_CAIRO_LINK_DIRS ${Cairo_LIBRARY_DIRS})
+    set(SAMBAG_CAIRO_TARGET PkgConfig::Cairo)
 endif()
 
-# --- Lua (5.4 preferred, 5.2 fallback) ---
-pkg_check_modules(Lua lua5.4 IMPORTED_TARGET)
-if(NOT Lua_FOUND)
-    pkg_check_modules(Lua lua5.2 IMPORTED_TARGET)
-endif()
-if(NOT Lua_FOUND)
-    pkg_check_modules(Lua REQUIRED lua IMPORTED_TARGET)
+# --- Lua ---
+if(WIN32)
+    # vcpkg port: lua  →  standard CMake FindLua variables
+    find_package(Lua REQUIRED)
+    add_library(_sambag_lua INTERFACE)
+    target_include_directories(_sambag_lua INTERFACE ${LUA_INCLUDE_DIR})
+    target_link_libraries(_sambag_lua INTERFACE ${LUA_LIBRARIES})
+    set(SAMBAG_LUA_TARGET _sambag_lua)
+else()
+    pkg_check_modules(Lua lua5.4 IMPORTED_TARGET)
+    if(NOT Lua_FOUND)
+        pkg_check_modules(Lua lua5.2 IMPORTED_TARGET)
+    endif()
+    if(NOT Lua_FOUND)
+        pkg_check_modules(Lua REQUIRED lua IMPORTED_TARGET)
+    endif()
+    set(SAMBAG_LUA_TARGET PkgConfig::Lua)
 endif()
 
 # SQLite3 is bundled as the amalgamation in src/sambag/cpsqlite/sqlite3.c
 # (included by the custom sambag_sqlite.c). No system package needed.
 
 # --- Loki (header-only) ---
+# ext/loki is bundled for Windows; system package (libloki-dev) used on Linux
 find_path(LOKI_INCLUDE_DIR loki/Typelist.h
-    PATHS /usr/include /usr/local/include
-    DOC "Loki library headers (libloki-dev)")
+    PATHS
+        /usr/include /usr/local/include
+        "${CMAKE_CURRENT_SOURCE_DIR}/ext/loki/include"
+    DOC "Loki library headers")
 if(NOT LOKI_INCLUDE_DIR)
     message(FATAL_ERROR
         "Loki headers not found.\n"
-        "Install with:  sudo apt install libloki-dev")
+        "On Linux: sudo apt install libloki-dev\n"
+        "On Windows: bundled ext/loki/include should be found automatically.")
 endif()
 
 # --- CppUnit (only needed for tests) ---
 if(SAMBAG_BUILD_TESTS)
-    pkg_check_modules(CppUnit REQUIRED cppunit IMPORTED_TARGET)
+    if(WIN32)
+        # vcpkg port: cppunit
+        find_package(CppUnit CONFIG REQUIRED)
+        set(SAMBAG_CPPUNIT_TARGET CppUnit::CppUnit)
+    else()
+        pkg_check_modules(CppUnit REQUIRED cppunit IMPORTED_TARGET)
+        set(SAMBAG_CPPUNIT_TARGET PkgConfig::CppUnit)
+    endif()
 endif()
 
 # --- VST2 / VST3 SDK (optional, user must set CLIBS env var) ---
