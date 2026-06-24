@@ -41,15 +41,6 @@ jobs:
             cppunit
         shell: pwsh
 
-      - name: Debug - show what vcpkg cairo actually installed
-        run: |
-          $shareDir = "C:\vcpkg\installed\x64-windows-static\share"
-          Write-Host "=== share dirs matching 'cairo' ==="
-          Get-ChildItem $shareDir | Where-Object { $_.Name -like "*cairo*" }
-          Write-Host "=== lib files matching 'cairo' ==="
-          Get-ChildItem "C:\vcpkg\installed\x64-windows-static\lib" | Where-Object { $_.Name -like "*cairo*" }
-        shell: pwsh
-
       - name: Configure
         run: |
           cmake -S . -B build `

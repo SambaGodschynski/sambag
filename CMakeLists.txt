@@ -90,9 +90,9 @@ find_package(Boost 1.55.0 REQUIRED COMPONENTS ${_BOOST_COMPONENTS})
 
 # --- Cairo ---
 if(WIN32)
-    # vcpkg port: cairo  →  target: unofficial::cairo::cairo
-    find_package(unofficial-cairo CONFIG REQUIRED)
-    set(SAMBAG_CAIRO_TARGET unofficial::cairo::cairo)
+    # vcpkg port: cairo  →  target: cairo::cairo
+    find_package(cairo CONFIG REQUIRED)
+    set(SAMBAG_CAIRO_TARGET cairo::cairo)
 else()
     pkg_check_modules(Cairo REQUIRED IMPORTED_TARGET cairo)
     set(SAMBAG_CAIRO_TARGET PkgConfig::Cairo)
