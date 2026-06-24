@@ -24,15 +24,11 @@ jobs:
       - name: Cache vcpkg packages
         uses: actions/cache@v4
         with:
-          path: C:\vcpkg\installed
+          path: ${{ github.workspace }}/vcpkg_installed
           key: vcpkg-x64-windows-static-${{ hashFiles('vcpkg.json') }}
           restore-keys: vcpkg-x64-windows-static-
 
-      - name: Install dependencies via vcpkg
-        run: vcpkg install --triplet x64-windows-static
-        shell: pwsh
-
-      - name: Configure
+      - name: Configure (vcpkg installs dependencies automatically in manifest mode)
         run: |
           cmake -S . -B build `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `

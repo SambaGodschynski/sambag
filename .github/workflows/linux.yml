@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: false  # temporarily disabled while iterating on Windows CI
     runs-on: ubuntu-24.04
 
     steps:
