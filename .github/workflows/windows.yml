@@ -21,18 +21,32 @@ jobs:
         with:
           arch: x64
 
-      - name: Cache vcpkg packages
+      - name: Cache vcpkg installed packages
+        id: vcpkg-cache
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/vcpkg_installed
+          path: C:\vcpkg\installed
           key: vcpkg-x64-windows-static-${{ hashFiles('vcpkg.json') }}
           restore-keys: vcpkg-x64-windows-static-
 
-      - name: Configure (vcpkg installs dependencies automatically in manifest mode)
+      - name: Install dependencies via vcpkg
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+        run: |
+          vcpkg install --classic --triplet x64-windows-static `
+            cairo `
+            boost-filesystem boost-system boost-thread boost-regex `
+            boost-serialization boost-date-time boost-timer boost-chrono `
+            boost-program-options boost-log `
+            lua `
+            cppunit
+        shell: pwsh
+
+      - name: Configure
         run: |
           cmake -S . -B build `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+            -DVCPKG_MANIFEST_MODE=OFF `
             -DCMAKE_BUILD_TYPE=Release `
             -DSAMBAG_VST_SUPPORT=OFF `
             -DSAMBAG_BUILD_TESTS=ON `
