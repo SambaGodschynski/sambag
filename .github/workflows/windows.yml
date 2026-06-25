@@ -25,13 +25,13 @@ jobs:
         run: New-Item -ItemType Directory -Force -Path "C:\vcpkg-archives" | Out-Null
         shell: pwsh
 
-      - name: Cache vcpkg binary archives
+      - name: Restore vcpkg binary cache
         id: vcpkg-cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: C:\vcpkg-archives
-          key: vcpkg-cache-test-libpng-v1
-          save-always: true
+          key: vcpkg-cache-test-libpng-v2
+          restore-keys: vcpkg-cache-test-libpng-
 
       - name: Show cache status
         run: |
@@ -49,6 +49,13 @@ jobs:
         run: vcpkg install --classic --triplet x64-windows-static libpng
         shell: pwsh
 
-      - name: Intentional failure to test save-always
+      - name: Intentional failure to test cache-save on failure
         run: exit 1
         shell: pwsh
+
+      - name: Save vcpkg binary cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: C:\vcpkg-archives
+          key: vcpkg-cache-test-libpng-v2
