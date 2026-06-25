@@ -1,7 +1,7 @@
 #ifndef SAMBAG_PARAMETER_H_
 #define SAMBAG_PARAMETER_H_
 
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <string>
 #include <list>
 #include <boost/shared_ptr.hpp>

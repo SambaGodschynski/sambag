@@ -13,7 +13,18 @@
 #include <math.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <boost/foreach.hpp>
+// boost/foreach.hpp was removed in Boost 1.87; provide drop-in replacements
+namespace sambag { namespace com { namespace detail {
+    template<typename T> struct ReverseRange {
+        T& c;
+        explicit ReverseRange(T& c) : c(c) {}
+        auto begin() const { return c.rbegin(); }
+        auto end()   const { return c.rend(); }
+    };
+    template<typename T> ReverseRange<T> make_reverse(T& c) { return ReverseRange<T>(c); }
+}}}
+#define BOOST_FOREACH(VAR, RANGE)         for (VAR : (RANGE))
+#define BOOST_REVERSE_FOREACH(VAR, RANGE) for (VAR : sambag::com::detail::make_reverse(RANGE))
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/numeric/ublas/matrix.hpp>

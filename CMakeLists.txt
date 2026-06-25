@@ -102,7 +102,12 @@ if(WIN32)
     find_library(BZ2_LIBRARY NAMES bz2 bzip2)
 
     add_library(_sambag_cairo INTERFACE)
-    target_include_directories(_sambag_cairo INTERFACE "${CAIRO_INCLUDE_DIR}")
+    # cairo.h lives in include/cairo/cairo.h; add the cairo/ subdir so that
+    # #include <cairo.h> (used throughout sambag) resolves correctly.
+    target_include_directories(_sambag_cairo INTERFACE
+        "${CAIRO_INCLUDE_DIR}"
+        "${CAIRO_INCLUDE_DIR}/cairo"
+    )
     target_link_libraries(_sambag_cairo INTERFACE
         "${CAIRO_LIBRARY}"
         "${PIXMAN_LIBRARY}"

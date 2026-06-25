@@ -35,7 +35,7 @@ jobs:
             cairo `
             boost-filesystem boost-system boost-thread boost-regex `
             boost-serialization boost-date-time boost-timer boost-chrono `
-            boost-program-options boost-log `
+            boost-program-options boost-log boost-signals2 `
             lua `
             cppunit
         shell: pwsh
