@@ -158,9 +158,14 @@ endif()
 # --- CppUnit (only needed for tests) ---
 if(SAMBAG_BUILD_TESTS)
     if(WIN32)
-        # vcpkg port: cppunit
-        find_package(CppUnit CONFIG REQUIRED)
-        set(SAMBAG_CPPUNIT_TARGET CppUnit::CppUnit)
+        # vcpkg cppunit port may export a different target name; use find_library
+        # to avoid cmake config / target-name ambiguity.
+        find_path(CPPUNIT_INCLUDE_DIR NAMES cppunit/TestCase.h REQUIRED)
+        find_library(CPPUNIT_LIBRARY   NAMES cppunit           REQUIRED)
+        add_library(_sambag_cppunit INTERFACE)
+        target_include_directories(_sambag_cppunit INTERFACE "${CPPUNIT_INCLUDE_DIR}")
+        target_link_libraries(_sambag_cppunit INTERFACE "${CPPUNIT_LIBRARY}")
+        set(SAMBAG_CPPUNIT_TARGET _sambag_cppunit)
     else()
         pkg_check_modules(CppUnit REQUIRED cppunit IMPORTED_TARGET)
         set(SAMBAG_CPPUNIT_TARGET PkgConfig::CppUnit)
