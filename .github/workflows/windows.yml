@@ -21,12 +21,12 @@ jobs:
         with:
           arch: x64
 
-      - name: Cache vcpkg binary archives
+      - name: Cache vcpkg installed packages
         uses: actions/cache@v4
         with:
-          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
-          key: vcpkg-x64-windows-static-${{ hashFiles('vcpkg.json') }}
-          restore-keys: vcpkg-x64-windows-static-
+          path: C:\vcpkg\installed
+          key: vcpkg-installed-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
+          restore-keys: vcpkg-installed-x64-windows-static-
           save-always: true
 
       - name: Install dependencies via vcpkg
