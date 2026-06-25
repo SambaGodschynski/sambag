@@ -30,27 +30,15 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: C:\vcpkg-archives
-          key: vcpkg-cache-test-libpng-v2
-          restore-keys: vcpkg-cache-test-libpng-
+          key: vcpkg-archives-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
+          restore-keys: vcpkg-archives-x64-windows-static-
 
-      - name: Show cache status
-        run: |
-          if ("${{ steps.vcpkg-cache.outputs.cache-hit }}" -eq "true") {
-            Write-Host "### CACHE HIT"
-          } else {
-            Write-Host "### CACHE MISS - will build and save"
-          }
-          Get-ChildItem "C:\vcpkg-archives" -ErrorAction SilentlyContinue | Select-Object Name
-        shell: pwsh
-
-      - name: Install libpng via vcpkg
+      - name: Install dependencies via vcpkg
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-archives
-        run: vcpkg install --classic --triplet x64-windows-static libpng
-        shell: pwsh
-
-      - name: Intentional failure to test cache-save on failure
-        run: exit 1
+        run: |
+          vcpkg install --classic --triplet x64-windows-static `
+            cairo lua cppunit boost
         shell: pwsh
 
       - name: Save vcpkg binary cache
@@ -58,4 +46,27 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: C:\vcpkg-archives
-          key: vcpkg-cache-test-libpng-v2
+          key: vcpkg-archives-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
+
+      - name: Configure
+        run: |
+          cmake -S . -B build `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+            -DVCPKG_MANIFEST_MODE=OFF `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DSAMBAG_VST_SUPPORT=OFF `
+            -DSAMBAG_BUILD_TESTS=ON `
+            -DSAMBAG_BUILD_TESTAPP=OFF `
+            -DSAMBAG_USE_LOG=ON `
+            -DSAMBAG_STATIC_DEPS=ON
+        shell: pwsh
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+        shell: pwsh
+
+      - name: Run tests
+        working-directory: ${{ github.workspace }}
+        run: .\build\src\Release\unit_tests.exe
+        shell: pwsh
