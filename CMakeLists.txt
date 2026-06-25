@@ -63,6 +63,7 @@ endif()
 # Global compile definitions (silences MSVC/Boost warnings, harmless on GCC)
 add_compile_definitions(
     BOOST_UBLAS_TYPE_CHECK=0
+    BOOST_BIND_GLOBAL_PLACEHOLDERS
     BOOST_FILESYSTEM_VERSION=3
     _SCL_SECURE_NO_WARNINGS
     _CRT_SECURE_NO_WARNINGS

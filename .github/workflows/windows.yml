@@ -38,12 +38,8 @@ jobs:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-archives
         run: |
           vcpkg install --classic --triplet x64-windows-static `
-            cairo `
-            boost-filesystem boost-system boost-thread boost-regex `
-            boost-serialization boost-date-time boost-timer boost-chrono `
-            boost-program-options boost-log boost-signals2 boost-logic `
-            lua `
-            cppunit
+            cairo lua cppunit `
+            boost
         shell: pwsh
 
       - name: Configure
