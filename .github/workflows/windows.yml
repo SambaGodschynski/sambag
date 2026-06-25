@@ -26,41 +26,32 @@ jobs:
         shell: pwsh
 
       - name: Cache vcpkg binary archives
+        id: vcpkg-cache
         uses: actions/cache@v4
         with:
           path: C:\vcpkg-archives
-          key: vcpkg-archives-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
-          restore-keys: vcpkg-archives-x64-windows-static-
+          key: vcpkg-cache-test-zlib-v1
           save-always: true
 
-      - name: Install dependencies via vcpkg
+      - name: Show cache status
+        run: |
+          if ("${{ steps.vcpkg-cache.outputs.cache-hit }}" -eq "true") {
+            Write-Host "### CACHE HIT - archives were restored, vcpkg will skip building"
+          } else {
+            Write-Host "### CACHE MISS - building zlib, cache will be saved afterwards"
+          }
+          Write-Host "Archives dir contents:"
+          Get-ChildItem "C:\vcpkg-archives" -ErrorAction SilentlyContinue | Select-Object Name
+        shell: pwsh
+
+      - name: Install zlib via vcpkg
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-archives
+        run: vcpkg install --classic --triplet x64-windows-static zlib
+        shell: pwsh
+
+      - name: Show archives after install
         run: |
-          vcpkg install --classic --triplet x64-windows-static `
-            cairo lua cppunit `
-            boost
-        shell: pwsh
-
-      - name: Configure
-        run: |
-          cmake -S . -B build `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
-            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
-            -DVCPKG_MANIFEST_MODE=OFF `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DSAMBAG_VST_SUPPORT=OFF `
-            -DSAMBAG_BUILD_TESTS=ON `
-            -DSAMBAG_BUILD_TESTAPP=OFF `
-            -DSAMBAG_USE_LOG=ON `
-            -DSAMBAG_STATIC_DEPS=ON
-        shell: pwsh
-
-      - name: Build
-        run: cmake --build build --config Release --parallel
-        shell: pwsh
-
-      - name: Run tests
-        working-directory: ${{ github.workspace }}
-        run: .\build\src\Release\unit_tests.exe
+          Write-Host "Archives dir after install:"
+          Get-ChildItem "C:\vcpkg-archives" | Select-Object Name, Length
         shell: pwsh
