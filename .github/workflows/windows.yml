@@ -27,6 +27,7 @@ jobs:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: vcpkg-x64-windows-static-${{ hashFiles('vcpkg.json') }}
           restore-keys: vcpkg-x64-windows-static-
+          save-always: true
 
       - name: Install dependencies via vcpkg
         run: |
