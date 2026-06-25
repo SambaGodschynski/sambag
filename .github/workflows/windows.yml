@@ -30,28 +30,25 @@ jobs:
         uses: actions/cache@v4
         with:
           path: C:\vcpkg-archives
-          key: vcpkg-cache-test-zlib-v1
+          key: vcpkg-cache-test-libpng-v1
           save-always: true
 
       - name: Show cache status
         run: |
           if ("${{ steps.vcpkg-cache.outputs.cache-hit }}" -eq "true") {
-            Write-Host "### CACHE HIT - archives were restored, vcpkg will skip building"
+            Write-Host "### CACHE HIT"
           } else {
-            Write-Host "### CACHE MISS - building zlib, cache will be saved afterwards"
+            Write-Host "### CACHE MISS - will build and save"
           }
-          Write-Host "Archives dir contents:"
           Get-ChildItem "C:\vcpkg-archives" -ErrorAction SilentlyContinue | Select-Object Name
         shell: pwsh
 
-      - name: Install zlib via vcpkg
+      - name: Install libpng via vcpkg
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-archives
-        run: vcpkg install --classic --triplet x64-windows-static zlib
+        run: vcpkg install --classic --triplet x64-windows-static libpng
         shell: pwsh
 
-      - name: Show archives after install
-        run: |
-          Write-Host "Archives dir after install:"
-          Get-ChildItem "C:\vcpkg-archives" | Select-Object Name, Length
+      - name: Intentional failure to test save-always
+        run: exit 1
         shell: pwsh
