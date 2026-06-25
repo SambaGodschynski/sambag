@@ -6,6 +6,7 @@
  */
 
 #include "BoostTimerImpl2.hpp"
+#include <chrono>
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <boost/weak_ptr.hpp>
@@ -75,7 +76,7 @@ sambag::com::BoostTimerImpl2::Timer *timerImpl)
             return; // no listeners anymore
         }
         sambag::com::ITimer::Milliseconds ms = tm->getDelay();
-        timerImpl->expires_from_now(boost::posix_time::milliseconds(ms));
+        timerImpl->expires_from_now(std::chrono::milliseconds(ms));
         timerImpl->async_wait( boost::bind(&timerExpired, _1, tm, timerImpl) );
     }
 }
@@ -107,7 +108,7 @@ void BoostTimerImpl2::startTimer(ITimer::Ptr tm) {
 	}
     ITimer::Milliseconds ms = tm->getInitialDelay();
     tm->__getNumCalled_() = 0;
-    timer->expires_from_now(boost::posix_time::milliseconds(ms));
+    timer->expires_from_now(std::chrono::milliseconds(ms));
     timer->async_wait( boost::bind(&timerExpired, _1, tm, timer.get()) );
 }
 //-----------------------------------------------------------------------------

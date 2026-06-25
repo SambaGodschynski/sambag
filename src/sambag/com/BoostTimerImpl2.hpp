@@ -13,7 +13,6 @@
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/asio/high_resolution_timer.hpp>
 
 namespace sambag { namespace com {
@@ -26,7 +25,8 @@ class BoostTimerImpl2 {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef boost::asio::deadline_timer Timer;
+    // deadline_timer was removed in Boost 1.87; steady_timer is the replacement
+    typedef boost::asio::steady_timer Timer;
 	typedef boost::shared_ptr<Timer> TimerPtr;
 private:
     TimerPtr timer;

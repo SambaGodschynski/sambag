@@ -52,6 +52,7 @@ elseif(WIN32)
         WIN32_LEAN_AND_MEAN
         NOMINMAX
         SAMBAG_USE_WINDOWS_SHARED_MEMORY
+        _WIN32_WINNT=0x0A00
     )
     if(MSVC)
         string(APPEND CMAKE_CXX_FLAGS_DEBUG   " /MTd /ZI")

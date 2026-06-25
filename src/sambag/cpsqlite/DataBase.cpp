@@ -68,7 +68,7 @@ DataBase::Ptr DataBase::getDataBase(  const std::string &dbLocation ) {
 	using namespace boost::filesystem;
 	// checke location
 	Path loc(dbLocation);
-	loc = complete (loc);
+	loc = absolute(loc);
 	// besser waere => boost::filesystem::read_symlink(). erst ab boost 1.46.1
 	if ( is_symlink( loc ) ) throw DataBaseLocationIsLink();
 	// location schon vorhanden?
