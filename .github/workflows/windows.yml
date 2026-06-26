@@ -72,3 +72,25 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: .\build\src\Release\unit_tests.exe
         shell: pwsh
+
+      - name: Install (cmake --install)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: cmake --install build --config Release --prefix dist
+        shell: pwsh
+
+      - name: Package
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: Compress-Archive -Path dist\* -DestinationPath sambag-windows-x64-static.zip
+        shell: pwsh
+
+      - name: Publish prebuilt release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view prebuilt-latest 2>$null `
+            || gh release create prebuilt-latest `
+                 --title "Prebuilt binaries (latest master)" `
+                 --notes "Auto-generated prebuilt package — do not edit manually."
+          gh release upload prebuilt-latest sambag-windows-x64-static.zip --clobber
+        shell: pwsh

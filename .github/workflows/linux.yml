@@ -57,3 +57,22 @@ jobs:
         # unit_tests uses relative paths to ./testimages/
         working-directory: ${{ github.workspace }}
         run: ./build/src/unit_tests
+
+      - name: Install (cmake --install)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: cmake --install build --prefix dist
+
+      - name: Package
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: tar czf sambag-linux-x64.tar.gz -C dist .
+
+      - name: Publish prebuilt release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view prebuilt-latest 2>/dev/null \
+            || gh release create prebuilt-latest \
+                 --title "Prebuilt binaries (latest master)" \
+                 --notes "Auto-generated prebuilt package — do not edit manually."
+          gh release upload prebuilt-latest sambag-linux-x64.tar.gz --clobber

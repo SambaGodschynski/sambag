@@ -221,3 +221,28 @@ endif()
 # ── Sub-directories ───────────────────────────────────────────────────────────
 add_subdirectory(ext/tinyxml)
 add_subdirectory(src)
+
+# ── Install rules ─────────────────────────────────────────────────────────────
+include(GNUInstallDirs)
+
+install(TARGETS sambag
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# sambag public headers (exclude test and testApp sources)
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h"
+    REGEX ".*/[Tt]ests?/.*" EXCLUDE
+    REGEX ".*/testApps/.*" EXCLUDE
+)
+
+# Loki (header-only, required by sambag public headers)
+install(DIRECTORY "${LOKI_INCLUDE_DIR}/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+# CMake package config
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sambag-config.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sambag
+)
