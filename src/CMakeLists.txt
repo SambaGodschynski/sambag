@@ -105,9 +105,17 @@ if(SAMBAG_BUILD_TESTS)
         list(FILTER _TEST_SOURCES EXCLUDE REGEX ".*/dsp/tests/TestDefaultMidiEvents\\.cpp$")
     endif()
 
+    set(_TEST_RC)
+    if(WIN32)
+        set(_TEST_RC
+            "${CMAKE_CURRENT_SOURCE_DIR}/sambag/disco/tests/win32_resources/resources.rc"
+        )
+    endif()
+
     add_executable(unit_tests
         "${CMAKE_CURRENT_SOURCE_DIR}/testApps/sambag_tests.cpp"
         ${_TEST_SOURCES}
+        ${_TEST_RC}
     )
     target_link_libraries(unit_tests PRIVATE sambag ${SAMBAG_CPPUNIT_TARGET})
 

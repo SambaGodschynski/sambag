@@ -1,0 +1,3 @@
+#pragma once
+#define SAMBAG_RES_TESTTXT1 101
+#define SAMBAG_RES_TESTPNG1 102

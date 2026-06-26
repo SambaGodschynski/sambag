@@ -1,0 +1,4 @@
+#include "resource.h"
+
+SAMBAG_RES_TESTTXT1 SAMBAG_CUSTOM "test.txt"
+SAMBAG_RES_TESTPNG1 SAMBAG_CUSTOM "../../../../../testimages/bkgrey.png"
