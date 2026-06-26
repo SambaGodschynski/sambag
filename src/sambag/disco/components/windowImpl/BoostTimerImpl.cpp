@@ -7,10 +7,9 @@
 
 #include "BoostTimerImpl.hpp"
 #include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <sambag/com/Thread.hpp>
 #include <boost/thread.hpp>
-#include <boost/foreach.hpp>
+#include <chrono>
 #include <vector>
 #include <queue>
 
@@ -58,7 +57,7 @@ private:
 	static sambag::com::RecursiveMutex freeTimerLock;
 	ITimer::Ptr tm;
 	boost::thread *thread;
-	boost::asio::io_service *io;
+	boost::asio::io_context *io;
 	bool threadIsRunning;
 	bool timerIsRunning;
 protected:
@@ -122,11 +121,11 @@ void TimerThread::markAsFree() {
 //-----------------------------------------------------------------------------
 void TimerThread::startTimer() {
 	if (!io)
-		io = new boost::asio::io_service();
+		io = new boost::asio::io_context();
 	// prepare timer
 	ITimer::Milliseconds ms = tm->getInitialDelay();
-	BoostTimerImpl::BoostTimer *t = 
-		new BoostTimerImpl::BoostTimer(*io, boost::posix_time::millisec(ms));
+	BoostTimerImpl::BoostTimer *t = new BoostTimerImpl::BoostTimer(*io);
+	t->expires_after(std::chrono::milliseconds(ms));
 	SAMBAG_BEGIN_SYNCHRONIZED(timerLock)
 		BoostTimerImpl::toInvoke.insert( BoostTimerImpl::ToInvoke::value_type(t, tm) );
 	SAMBAG_END_SYNCHRONIZED
@@ -160,13 +159,13 @@ void TimerThread::timerThreadClbk() {
 	while (threadIsRunning) {
 		while(timerIsRunning && threadIsRunning) {
 			io->run();
-			io->reset();
+			io->restart();
 			timerIsRunning = false;
 			tm.reset();
 			markAsFree();
 		}
 		while (!timerIsRunning && threadIsRunning) { // wait for exiting by main thread
-			boost::this_thread::sleep(boost::posix_time::millisec((int)SLEEPING_TIME));
+			boost::this_thread::sleep_for(boost::chrono::milliseconds(SLEEPING_TIME));
 			// TODO: close thread after X seconds
 			//SAMBAG_BEGIN_SYNCHRONIZED(msgQueueLock)
 			//	msgQueue.push(Message(CloseThread, id));
@@ -199,7 +198,7 @@ namespace {
 					msgQueue.pop();
 				}
 			SAMBAG_END_SYNCHRONIZED
-			boost::this_thread::sleep(boost::posix_time::millisec((int)SLEEPING_TIME));
+			boost::this_thread::sleep_for(boost::chrono::milliseconds(SLEEPING_TIME));
 		}
 		// close all timer threads:
 		for (size_t i=0; i<timerThreads.size(); ++i) {
@@ -216,7 +215,7 @@ BoostTimerImpl::ToInvoke BoostTimerImpl::toInvoke;
 //-----------------------------------------------------------------------------
 void BoostTimerImpl::closeAllTimer() {
 	try {
-		BOOST_FOREACH(ToInvoke::left_map::value_type &v, toInvoke.left) {
+		for (auto &v : toInvoke.left) {
 			if (!v.first) {
 				continue;
 			}
@@ -270,8 +269,7 @@ void BoostTimerImpl::timerCallback(const boost::system::error_code&,
 			return;
 		}
 		long ms = tm->getDelay();
-		timerImpl->expires_at(timerImpl->expires_at() +
-				boost::posix_time::millisec(ms));
+		timerImpl->expires_after(std::chrono::milliseconds(ms));
 		timerImpl->async_wait(
 			boost::bind(&timerCallback,
 			boost::asio::placeholders::error,

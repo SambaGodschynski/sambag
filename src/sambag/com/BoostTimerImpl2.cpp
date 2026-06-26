@@ -7,6 +7,7 @@
 
 #include "BoostTimerImpl2.hpp"
 #include <chrono>
+#include <optional>
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <boost/weak_ptr.hpp>
@@ -16,18 +17,17 @@ namespace {
 
 struct WorkerThread {
     typedef boost::thread Thread;
-    typedef boost::asio::io_service Io;
-    typedef boost::asio::io_service::work Work;
-    typedef boost::shared_ptr<Work> WorkPtr;
+    typedef boost::asio::io_context Io;
+    using Work = boost::asio::executor_work_guard<Io::executor_type>;
     Thread th;
     Io io;
-    WorkPtr work;
+    std::optional<Work> work;
     WorkerThread();
     ~WorkerThread();
 };
 WorkerThread::WorkerThread() {
-    work = WorkPtr( new Work(io) );
-    th = Thread(boost::bind(&boost::asio::io_service::run, &io));
+    work.emplace(boost::asio::make_work_guard(io));
+    th = Thread([this]() { io.run(); });
 }
 
 WorkerThread::~WorkerThread() {  
@@ -76,7 +76,7 @@ sambag::com::BoostTimerImpl2::Timer *timerImpl)
             return; // no listeners anymore
         }
         sambag::com::ITimer::Milliseconds ms = tm->getDelay();
-        timerImpl->expires_from_now(std::chrono::milliseconds(ms));
+        timerImpl->expires_after(std::chrono::milliseconds(ms));
         timerImpl->async_wait( boost::bind(&timerExpired, _1, tm, timerImpl) );
     }
 }
@@ -108,7 +108,7 @@ void BoostTimerImpl2::startTimer(ITimer::Ptr tm) {
 	}
     ITimer::Milliseconds ms = tm->getInitialDelay();
     tm->__getNumCalled_() = 0;
-    timer->expires_from_now(std::chrono::milliseconds(ms));
+    timer->expires_after(std::chrono::milliseconds(ms));
     timer->async_wait( boost::bind(&timerExpired, _1, tm, timer.get()) );
 }
 //-----------------------------------------------------------------------------

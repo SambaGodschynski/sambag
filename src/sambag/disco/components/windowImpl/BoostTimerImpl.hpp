@@ -10,12 +10,12 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/bimap.hpp>
 #include <boost/bimap/unordered_set_of.hpp>
 #include <sambag/com/ITimer.hpp>
+#include <chrono>
 
 namespace sambag { namespace com {  
 class TimerThread;
@@ -32,7 +32,7 @@ public:
 	struct TimerLockedEx {};
 private:
 	//-------------------------------------------------------------------------
-	typedef boost::asio::deadline_timer BoostTimer;
+	typedef boost::asio::steady_timer BoostTimer;
 	//-------------------------------------------------------------------------
 	typedef boost::bimap<
 			boost::bimaps::unordered_set_of<BoostTimer*>,
