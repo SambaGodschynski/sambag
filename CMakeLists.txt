@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-# CMake 4.x removed the legacy FindBoost module; use Boost's own CMake config.
 if(POLICY CMP0167)
     cmake_policy(SET CMP0167 NEW)
+endif()
+# Required for CMAKE_MSVC_RUNTIME_LIBRARY to take effect (CMake 3.15+)
+if(POLICY CMP0091)
+    cmake_policy(SET CMP0091 NEW)
 endif()
 
 project(sambag VERSION 0.1.0 LANGUAGES C CXX)
@@ -9,6 +12,11 @@ project(sambag VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Use static CRT on MSVC to match the x64-windows-static vcpkg triplet (/MT, /MTd)
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -54,10 +62,6 @@ elseif(WIN32)
         SAMBAG_USE_WINDOWS_SHARED_MEMORY
         _WIN32_WINNT=0x0A00
     )
-    if(MSVC)
-        string(APPEND CMAKE_CXX_FLAGS_DEBUG   " /MTd /ZI")
-        string(APPEND CMAKE_CXX_FLAGS_RELEASE " /MT")
-    endif()
 endif()
 
 # Global compile definitions (silences MSVC/Boost warnings, harmless on GCC)
@@ -102,6 +106,8 @@ if(WIN32)
     find_package(ZLIB     REQUIRED)
     find_package(PNG      REQUIRED)
     find_library(BZ2_LIBRARY NAMES bz2 bzip2)
+    # Cairo's FreeType backend uses fontconfig for font lookup
+    find_library(FONTCONFIG_LIBRARY NAMES fontconfig)
 
     add_library(_sambag_cairo INTERFACE)
     # cairo.h lives in include/cairo/cairo.h; add the cairo/ subdir so that
@@ -119,6 +125,9 @@ if(WIN32)
     )
     if(BZ2_LIBRARY)
         target_link_libraries(_sambag_cairo INTERFACE "${BZ2_LIBRARY}")
+    endif()
+    if(FONTCONFIG_LIBRARY)
+        target_link_libraries(_sambag_cairo INTERFACE "${FONTCONFIG_LIBRARY}")
     endif()
     set(SAMBAG_CAIRO_TARGET _sambag_cairo)
 else()

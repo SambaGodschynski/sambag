@@ -5,6 +5,8 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+  schedule:
+    - cron: '0 6 * * 1'  # every Monday 06:00 UTC — keeps vcpkg cache alive (7-day expiry)
 
 jobs:
   build:
