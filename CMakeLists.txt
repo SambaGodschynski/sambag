@@ -106,8 +106,10 @@ if(WIN32)
     find_package(ZLIB     REQUIRED)
     find_package(PNG      REQUIRED)
     find_library(BZ2_LIBRARY NAMES bz2 bzip2)
-    # Cairo's FreeType backend uses fontconfig for font lookup
+    # Cairo's FreeType backend uses fontconfig for font lookup;
+    # fontconfig in turn uses expat for XML config parsing
     find_library(FONTCONFIG_LIBRARY NAMES fontconfig)
+    find_package(EXPAT REQUIRED)
 
     add_library(_sambag_cairo INTERFACE)
     # cairo.h lives in include/cairo/cairo.h; add the cairo/ subdir so that
@@ -127,7 +129,7 @@ if(WIN32)
         target_link_libraries(_sambag_cairo INTERFACE "${BZ2_LIBRARY}")
     endif()
     if(FONTCONFIG_LIBRARY)
-        target_link_libraries(_sambag_cairo INTERFACE "${FONTCONFIG_LIBRARY}")
+        target_link_libraries(_sambag_cairo INTERFACE "${FONTCONFIG_LIBRARY}" EXPAT::EXPAT)
     endif()
     set(SAMBAG_CAIRO_TARGET _sambag_cairo)
 else()
