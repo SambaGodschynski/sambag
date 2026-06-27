@@ -62,6 +62,9 @@ protected:
 	virtual AWindowImplPtr
 	createWindowImpl(AWindowImplPtr parent = AWindowImplPtr()) const;
 	//-------------------------------------------------------------------------
+	virtual WindowPtr createNestedWindow(ArbitraryType::Ptr osParent,
+		const Rectangle &area);
+	//-------------------------------------------------------------------------
 public:
 	//-------------------------------------------------------------------------
 	/**

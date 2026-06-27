@@ -9,8 +9,6 @@
 #include "CairoSurface.hpp"
 #include <sambag/com/Common.hpp>
 #include "IDiscoFactory.hpp"
-
-
 bool isFatalCairoStatus(cairo_status_t status) {
 	if (status==CAIRO_STATUS_INVALID_STRING)
 		return false;
@@ -83,6 +81,8 @@ void CairoDrawContext::drawSurface(ISurface::Ptr _surface, Number opacity) {
 		return;
 	cairo_surface_t *png = surface->getCairoSurface();
 	if (!png)
+		return;
+	if (cairo_surface_status(png) != CAIRO_STATUS_SUCCESS)
 		return;
 	cairo_set_source_surface (context, png, 0, 0);
 	if (opacity == 1.0) {

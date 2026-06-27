@@ -538,7 +538,10 @@ void SvgComponent::setStretchToFit(bool stretch) {
 //-----------------------------------------------------------------------------
 void SvgComponent::doLayout() {
     SAMBAG_BEGIN_SYNCHRONIZED(getTreeLock())
-        svgImage->setSize(getSize(), stretchToFit);
+        Dimension sz = getSize();
+        if (sz.width() <= 0 || sz.height() <= 0)
+            return;
+        svgImage->setSize(sz, stretchToFit);
         updateDummies();
         updateDrawOrder();
     SAMBAG_END_SYNCHRONIZED

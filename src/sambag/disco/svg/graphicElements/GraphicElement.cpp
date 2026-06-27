@@ -28,7 +28,9 @@ Rectangle GraphicElement::getBoundingBox(IDrawContext::Ptr context) {
 	Matrix m;
 	context->getMatrix(m);
 	cn->transform(m);
-	draw(cn);
+	try {
+		draw(cn);
+	} catch (...) {}
 	return cn->getSurface()->getSize();
 }
 }}}} // namespaces

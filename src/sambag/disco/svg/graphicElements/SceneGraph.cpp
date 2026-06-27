@@ -616,7 +616,9 @@ void SceneGraph::validateBounds(const Dimension &size) {
     IDrawContext::Ptr cn = getDiscoFactory()->createContext();
     cn->rect(Rectangle(0,0,size.width(), size.height()));
     cn->clip();
-    computeBoundingBoxes(cn);
+    try {
+        computeBoundingBoxes(cn);
+    } catch (...) {}
 }
 //-----------------------------------------------------------------------------
 void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {

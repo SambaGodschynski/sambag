@@ -10,6 +10,7 @@
 #include "sambag/disco/IDiscoFactory.hpp"
 #include <boost/filesystem.hpp>
 #include <sambag/disco/svg/Image.hpp>
+#include <cmath>
 
 namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 
@@ -63,12 +64,15 @@ void Image::draw( IDrawContext::Ptr cn ) {
 			return;
 		}
 	}
-	cn->translate(outline.x0());
 	Rectangle orgSz = image->getSize();
-	cn->scale( Point2D(
-		outline.getWidth()/orgSz.getWidth(),
-		outline.getHeight()/orgSz.getHeight()
-	));
+	if (orgSz.getWidth() <= 0 || orgSz.getHeight() <= 0)
+		return;
+	double sx = outline.getWidth()  / orgSz.getWidth();
+	double sy = outline.getHeight() / orgSz.getHeight();
+	if (sx <= 0 || sy <= 0 || !std::isfinite(sx) || !std::isfinite(sy))
+		return;
+	cn->translate(outline.x0());
+	cn->scale(Point2D(sx, sy));
 	cn->drawSurface(image, opacity);
 }
 }}}}

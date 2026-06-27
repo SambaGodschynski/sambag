@@ -33,8 +33,43 @@ X11WindowImpl * X11WindowImpl::getX11WindowImpl(::Window win) {
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
-	const Rectangle &area) 
+	const Rectangle &area)
 {
+	if (!osParent)
+		return;
+	void *_parent = NULL;
+	sambag::com::get(osParent, _parent);
+	if (!_parent)
+		return;
+	::Window parentWin = *static_cast<::Window*>(_parent);
+
+	bounds = area;
+	screen = DefaultScreen(display);
+	visual = XDefaultVisual(display, screen);
+
+	XSetWindowAttributes attributes;
+	attributes.background_pixel = BlackPixel(display, screen);
+	attributes.event_mask = ButtonPressMask | ButtonReleaseMask | KeyPressMask
+		| KeyReleaseMask
+		| ButtonMotionMask
+		| PointerMotionHintMask
+		| StructureNotifyMask
+		| PointerMotionMask;
+	unsigned long valuemask = CWBackPixel | CWEventMask;
+
+	win = XCreateWindow(display,
+		parentWin,
+		0, 0,
+		(unsigned int)area.getWidth(),
+		(unsigned int)area.getHeight(),
+		0, CopyFromParent, InputOutput, visual,
+		valuemask, &attributes);
+
+	winmap[win] = this;
+	XMapWindow(display, win);
+	XFlush(display);
+	++instances;
+	visible = true;
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::X11WindowImpl() :
@@ -108,6 +143,27 @@ void X11WindowImpl::destroyWindow() {
 		return;
 	Ptr hold = self.lock();
 	SAMBAG_ASSERT(hold);
+	// Before calling XDestroyWindow, clean up any registered child windows that
+	// X11 will auto-destroy as children of this window (e.g. nested plugin windows).
+	{
+		::Window root_win, parent_win;
+		::Window *children = NULL;
+		unsigned int nchildren = 0;
+		if (XQueryTree(display, win, &root_win, &parent_win, &children, &nchildren)) {
+			for (unsigned int i = 0; i < nchildren; ++i) {
+				X11WindowImpl *child = getX11WindowImpl(children[i]);
+				if (child && child->win != 0) {
+					child->onDestroy();
+					winmap.erase(children[i]);
+					child->win = 0;
+					child->visible = false;
+					--instances;
+				}
+			}
+			if (children)
+				XFree(children);
+		}
+	}
 	// unregister window
 	winmap.erase(win);
 	// X11's destroy
@@ -116,13 +172,19 @@ void X11WindowImpl::destroyWindow() {
 	win = 0;
 	--instances;
 	visible = false;
+	if (instances == 0) {
+		X11WindowToolkit::getToolkit()->quit();
+	}
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::close() {
 	if (!visible)
 		return;
+	Ptr hold = self.lock();
+	if (!hold)
+		return;
 	getWindowToolkit()->invokeLater(
-		boost::bind(&X11WindowImpl::destroyWindow, this)
+		boost::bind(&X11WindowImpl::destroyWindow, hold)
 	);
 }
 //-----------------------------------------------------------------------------

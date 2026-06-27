@@ -47,8 +47,12 @@ void AComponentUI::installUI(AComponent::Ptr c) {
 	UIManager &m = getUIManager();
 	svg::Style style;
 	m.getProperty("global.style", style);
-	if (!c->isFontSet())
-		c->setFont(style.font());
+	if (!c->isFontSet()) {
+		Font f = style.font();
+		if (f.size == NULL_NUMBER)
+			f = Font(); // "arial", 11, SLANT_NORMAL, WEIGHT_NORMAL
+		c->setFont(f);
+	}
 	if (!c->isForegroundSet())
 		c->setForeground(style.strokePattern());
 	if (!c->isBackgroundSet())

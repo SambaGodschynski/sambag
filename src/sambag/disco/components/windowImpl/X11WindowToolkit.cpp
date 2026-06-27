@@ -9,6 +9,7 @@
 #include "X11WindowToolkit.hpp"
 #include "X11WindowImpl.hpp"
 #include "WindowImpl.hpp"
+#include <sambag/disco/components/Window.hpp>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
@@ -24,6 +25,7 @@ bool X11WindowToolkit::mainLoopRunning = false;
 X11WindowToolkit::InvokeLater X11WindowToolkit::_invokeLater;
 //-----------------------------------------------------------------------------
 X11WindowToolkit::X11WindowToolkit() {
+	XInitThreads();
 	globals.display = XOpenDisplay(NULL);
 }
 //-----------------------------------------------------------------------------
@@ -50,6 +52,13 @@ void X11WindowToolkit::startMainLoop() {
 AWindowImplPtr X11WindowToolkit::createWindowImpl(AWindowImplPtr parent) const {
 	AWindowImplPtr res = WindowImpl<X11WindowImpl>::create(parent);
 	return res;
+}
+//-----------------------------------------------------------------------------
+WindowPtr X11WindowToolkit::createNestedWindow(ArbitraryType::Ptr osParent,
+	const Rectangle &area)
+{
+	AWindowImpl::Ptr impl = WindowImpl<X11WindowImpl>::create(osParent, area);
+	return Window::create(impl);
 }
 //-------------------------------------------------------------------------
 const X11WindowToolkit::Globals & X11WindowToolkit::getGlobals() const {
@@ -82,14 +91,15 @@ void X11WindowToolkit::mainLoop() {
 	::Display *display = getToolkit()->getGlobals().display;
 	TimerPolicy::startUpTimer();
 	mainLoopRunning = true;
-	while ( (X11WindowImpl::getNumInstances() > 0) && mainLoopRunning ) {
-		// read in and process all pending events for the main window
+	while (mainLoopRunning) {
 		XEvent event;
 		while (X11WindowImpl::getNumInstances() > 0 && XPending(display)) {
 			XNextEvent(display, &event);
 			X11WindowImpl::handleEvent(event);
 		}
-		X11WindowImpl::drawAll();
+		if (X11WindowImpl::getNumInstances() > 0) {
+			X11WindowImpl::drawAll();
+		}
 		usleep(1000);
 		invokeWaiting();
 	}

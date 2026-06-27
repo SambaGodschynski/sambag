@@ -138,7 +138,15 @@ public:
 	//-------------------------------------------------------------------------
 	Rectangle getBounds() const;
 	//-------------------------------------------------------------------------
-	Rectangle getHostBounds() const { return Rectangle(); }
+	Rectangle getHostBounds() const {
+		if (!display || win == 0)
+			return Rectangle();
+		::Window root = RootWindow(display, DefaultScreen(display));
+		::Window child;
+		int x = 0, y = 0;
+		XTranslateCoordinates(display, win, root, 0, 0, &x, &y, &child);
+		return Rectangle(x, y, bounds.getWidth(), bounds.getHeight());
+	}
 	//-------------------------------------------------------------------------
 	void setBounds(const Rectangle &d);
 	//-------------------------------------------------------------------------
