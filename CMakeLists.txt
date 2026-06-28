@@ -225,7 +225,7 @@ add_subdirectory(src)
 # ── Install rules ─────────────────────────────────────────────────────────────
 include(GNUInstallDirs)
 
-install(TARGETS sambag
+install(TARGETS sambag ticpp_ticpp
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
@@ -245,6 +245,15 @@ install(DIRECTORY "${LOKI_INCLUDE_DIR}/"
 # VST2 SDK (needed by downstream projects like vstforx)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ext/vstsdk2.4"
     DESTINATION "ext"
+)
+
+# sambag DSP/VST sources built directly into downstream projects (e.g. vstforx)
+install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/VstMidiEventAdapter.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/VstMidiEventAdapter.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/TimeInfoVst2xHelper.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/TimeInfoVst2xHelper.hpp"
+    DESTINATION "src/sambag/dsp"
 )
 
 # CMake package config
