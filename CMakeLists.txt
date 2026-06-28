@@ -242,6 +242,11 @@ install(DIRECTORY "${LOKI_INCLUDE_DIR}/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
+# VST2 SDK (needed by downstream projects like vstforx)
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ext/vstsdk2.4"
+    DESTINATION "ext"
+)
+
 # CMake package config
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sambag-config.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sambag
