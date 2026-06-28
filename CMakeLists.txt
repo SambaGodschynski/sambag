@@ -247,6 +247,16 @@ install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ext/vstsdk2.4"
     DESTINATION "ext"
 )
 
+# ticpp headers (sambag public headers like XML2Obj.hpp include <ticpp.h> directly)
+install(FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyxml/ticpp.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyxml/ticppapi.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyxml/ticpprc.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyxml/tinystr.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyxml/tinyxml.h"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
 # sambag DSP/VST sources built directly into downstream projects (e.g. vstforx)
 install(FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/VstMidiEventAdapter.cpp"
