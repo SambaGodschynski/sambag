@@ -258,11 +258,15 @@ install(FILES
 )
 
 # sambag DSP/VST sources built directly into downstream projects (e.g. vstforx)
+# Includes all transitive headers needed to compile VstMidiEventAdapter and TimeInfoVst2xHelper.
 install(FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/VstMidiEventAdapter.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/VstMidiEventAdapter.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/IMidiEvents.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/DefaultMidiEvents.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/TimeInfoVst2xHelper.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/TimeInfoVst2xHelper.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/sambag/dsp/HostTimeInfo.hpp"
     DESTINATION "src/sambag/dsp"
 )
 

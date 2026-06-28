@@ -40,7 +40,7 @@ jobs:
             libcppunit-dev \
             libx11-dev
 
-      - name: Configure
+      - name: Configure (with tests, SAMBAG_USE_LOG=ON)
         run: |
           cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=Release \
@@ -58,9 +58,24 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: ./build/src/unit_tests
 
+      - name: Configure prebuilt (SAMBAG_USE_LOG=OFF for ABI compatibility)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          cmake -S . -B build-dist \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSAMBAG_VST_SUPPORT=OFF \
+            -DSAMBAG_BUILD_TESTS=OFF \
+            -DSAMBAG_BUILD_TESTAPP=OFF \
+            -DSAMBAG_USE_LOG=OFF \
+            -DSAMBAG_STATIC_DEPS=OFF
+
+      - name: Build prebuilt
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: cmake --build build-dist --parallel $(nproc)
+
       - name: Install (cmake --install)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: cmake --install build --prefix dist
+        run: cmake --install build-dist --prefix dist
 
       - name: Package
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
