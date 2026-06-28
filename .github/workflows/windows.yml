@@ -73,9 +73,29 @@ jobs:
         run: .\build\src\Release\unit_tests.exe
         shell: pwsh
 
+      - name: Configure prebuilt (SAMBAG_USE_LOG=OFF for ABI compatibility)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          cmake -S . -B build-dist `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+            -DVCPKG_MANIFEST_MODE=OFF `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DSAMBAG_VST_SUPPORT=OFF `
+            -DSAMBAG_BUILD_TESTS=OFF `
+            -DSAMBAG_BUILD_TESTAPP=OFF `
+            -DSAMBAG_USE_LOG=OFF `
+            -DSAMBAG_STATIC_DEPS=ON
+        shell: pwsh
+
+      - name: Build prebuilt
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: cmake --build build-dist --config Release --parallel
+        shell: pwsh
+
       - name: Install (cmake --install)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: cmake --install build --config Release --prefix dist
+        run: cmake --install build-dist --config Release --prefix dist
         shell: pwsh
 
       - name: Package
