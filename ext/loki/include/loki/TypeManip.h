@@ -89,23 +89,6 @@ namespace Loki
     };
 
 ////////////////////////////////////////////////////////////////////////////////
-// Helper types Small and Big - guarantee that sizeof(Small) < sizeof(Big)
-////////////////////////////////////////////////////////////////////////////////
-
-    namespace Private
-    {
-        template <class T, class U>
-        struct ConversionHelper
-        {
-            typedef char Small;
-            struct Big { char dummy[2]; };
-            static Big   Test(...);
-            static Small Test(U);
-            static T MakeT();
-        };
-    }
-
-////////////////////////////////////////////////////////////////////////////////
 // class template Conversion
 // Figures out the conversion relationships between two types
 // Invocations (T and U are types):
@@ -121,6 +104,61 @@ namespace Loki
 // Caveat: might not work if T and U are in a private inheritance hierarchy.
 ////////////////////////////////////////////////////////////////////////////////
 
+#if __cplusplus >= 201103L
+// C++11 and later: use <type_traits> instead of the sizeof-based SFINAE trick.
+// The sizeof trick triggers hard errors on MSVC with /std:c++17 that abort
+// processing of Typelist.h before TypelistMacros.h is included, leaving all
+// LOKI_TYPELIST_N macros and Loki::TL:: algorithms undefined.
+#include <type_traits>
+
+    template <class T, class U>
+    struct Conversion
+    {
+        enum { exists    = std::is_convertible<T, U>::value ? 1 : 0 };
+        enum { exists2Way = (exists && (std::is_convertible<U, T>::value ? 1 : 0)) };
+        enum { sameType  = std::is_same<T, U>::value ? 1 : 0 };
+    };
+
+    template <class T>
+    struct Conversion<T, T>
+    {
+        enum { exists = 1, exists2Way = 1, sameType = 1 };
+    };
+
+    template <class T>
+    struct Conversion<void, T>
+    {
+        enum { exists = 0, exists2Way = 0, sameType = 0 };
+    };
+
+    template <class T>
+    struct Conversion<T, void>
+    {
+        enum { exists = 0, exists2Way = 0, sameType = 0 };
+    };
+
+    template <>
+    struct Conversion<void, void>
+    {
+    public:
+        enum { exists = 1, exists2Way = 1, sameType = 1 };
+    };
+
+#else
+// C++98/03 fallback: sizeof-based SFINAE trick.
+    namespace Private
+    {
+        template <class T, class U>
+        struct ConversionHelper
+        {
+            typedef char Small;
+            struct Big { char dummy[2]; };
+            static Big   Test(...);
+            static Small Test(U);
+            static T MakeT();
+        };
+    }
+
     template <class T, class U>
     struct Conversion
     {
@@ -133,31 +171,33 @@ namespace Loki
         enum { exists2Way = exists && Conversion<U, T>::exists };
         enum { sameType = false };
     };
-    
+
     template <class T>
-    struct Conversion<T, T>    
+    struct Conversion<T, T>
     {
         enum { exists = 1, exists2Way = 1, sameType = 1 };
     };
-    
+
     template <class T>
-    struct Conversion<void, T>    
+    struct Conversion<void, T>
     {
         enum { exists = 0, exists2Way = 0, sameType = 0 };
     };
-    
+
     template <class T>
-    struct Conversion<T, void>    
+    struct Conversion<T, void>
     {
         enum { exists = 0, exists2Way = 0, sameType = 0 };
     };
-    
+
     template <>
-    struct Conversion<void, void>    
+    struct Conversion<void, void>
     {
     public:
         enum { exists = 1, exists2Way = 1, sameType = 1 };
     };
+
+#endif // __cplusplus >= 201103L
 
 ////////////////////////////////////////////////////////////////////////////////
 // class template SuperSubclass
