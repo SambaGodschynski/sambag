@@ -104,11 +104,13 @@ namespace Loki
 // Caveat: might not work if T and U are in a private inheritance hierarchy.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if __cplusplus >= 201103L
-// C++11 and later: use <type_traits> instead of the sizeof-based SFINAE trick.
-// The sizeof trick triggers hard errors on MSVC with /std:c++17 that abort
-// processing of Typelist.h before TypelistMacros.h is included, leaving all
-// LOKI_TYPELIST_N macros and Loki::TL:: algorithms undefined.
+#if (__cplusplus >= 201103L) || (defined(_MSC_VER) && _MSC_VER >= 1900)
+// C++11 and later (or MSVC 2015+): use <type_traits> instead of the
+// sizeof-based SFINAE trick. The sizeof trick triggers hard errors on MSVC
+// with /std:c++17 that abort processing of Typelist.h before TypelistMacros.h
+// is included, leaving all LOKI_TYPELIST_N macros and Loki::TL:: algorithms
+// undefined. Note: MSVC does not update __cplusplus by default, hence the
+// separate _MSC_VER guard.
 #include <type_traits>
 
     template <class T, class U>
@@ -197,7 +199,7 @@ namespace Loki
         enum { exists = 1, exists2Way = 1, sameType = 1 };
     };
 
-#endif // __cplusplus >= 201103L
+#endif // C++11+ or MSVC 2015+
 
 ////////////////////////////////////////////////////////////////////////////////
 // class template SuperSubclass
