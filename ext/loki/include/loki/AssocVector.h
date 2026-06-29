@@ -32,12 +32,12 @@ namespace Loki
 
     namespace Private
     {
-        template <class Value, class C>
+        template <class Key, class Value, class C>
         class AssocVectorCompare : public C
         {
-            typedef std::pair<typename C::first_argument_type, Value>
+            typedef std::pair<Key, Value>
                 Data;
-            typedef typename C::first_argument_type first_argument_type;
+            typedef Key first_argument_type;
 
         public:
             AssocVectorCompare()
@@ -84,10 +84,10 @@ namespace Loki
     >
     class AssocVector 
         : private std::vector< std::pair<K, V>, A >
-        , private Private::AssocVectorCompare<V, C>
+        , private Private::AssocVectorCompare<K, V, C>
     {
         typedef std::vector<std::pair<K, V>, A> Base;
-        typedef Private::AssocVectorCompare<V, C> MyCompare;
+        typedef Private::AssocVectorCompare<K, V, C> MyCompare;
 
     public:
         typedef K key_type;
