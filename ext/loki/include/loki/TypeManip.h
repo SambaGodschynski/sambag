@@ -117,7 +117,7 @@ namespace Loki
     struct Conversion
     {
         static constexpr int exists    = std::is_convertible<T, U>::value ? 1 : 0;
-        static constexpr int exists2Way = exists && std::is_convertible<U, T>::value ? 1 : 0;
+        static constexpr int exists2Way = (std::is_convertible<T, U>::value && std::is_convertible<U, T>::value) ? 1 : 0;
         static constexpr int sameType  = std::is_same<T, U>::value ? 1 : 0;
     };
 
