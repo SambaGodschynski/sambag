@@ -20,7 +20,6 @@
 
 #include "NullType.h"
 #include "TypelistMacros.h"
-#include "TypeManip.h"
 
 
 namespace Loki
@@ -395,62 +394,6 @@ namespace Loki
                 typename Reverse<Tail>::Result, Head>::Result Result;
         };
 
-////////////////////////////////////////////////////////////////////////////////
-// class template MostDerived
-// Finds the type in a typelist that is the most derived from a given type
-// Invocation (TList is a typelist, T is a type):
-// MostDerived<TList, T>::Result
-// returns the type in TList that's the most derived from T
-////////////////////////////////////////////////////////////////////////////////
-
-        template <class TList, class T> struct MostDerived;
-        
-        template <class T>
-        struct MostDerived<NullType, T>
-        {
-            typedef T Result;
-        };
-        
-        template <class Head, class Tail, class T>
-        struct MostDerived<Typelist<Head, Tail>, T>
-        {
-        private:
-            typedef typename MostDerived<Tail, T>::Result Candidate;
-        public:
-            typedef typename Select<
-                SuperSubclass<Candidate,Head>::value,
-                    Head, Candidate>::Result Result;
-        };
-
-////////////////////////////////////////////////////////////////////////////////
-// class template DerivedToFront
-// Arranges the types in a typelist so that the most derived types appear first
-// Invocation (TList is a typelist):
-// DerivedToFront<TList>::Result
-// returns the reordered TList 
-////////////////////////////////////////////////////////////////////////////////
-
-        template <class TList> struct DerivedToFront;
-        
-        template <>
-        struct DerivedToFront<NullType>
-        {
-            typedef NullType Result;
-        };
-        
-        template <class Head, class Tail>
-        struct DerivedToFront< Typelist<Head, Tail> >
-        {
-        private:
-            typedef typename MostDerived<Tail, Head>::Result
-                TheMostDerived;
-            typedef typename Replace<Tail,
-                TheMostDerived, Head>::Result Temp;
-            typedef typename DerivedToFront<Temp>::Result L;
-        public:
-            typedef Typelist<TheMostDerived, L> Result;
-        };
-        
     }   // namespace TL
 }   // namespace Loki
 
