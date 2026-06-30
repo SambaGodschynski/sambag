@@ -17,6 +17,13 @@
 
 // $Id: TypeManip.h 749 2006-10-17 19:49:26Z syntheticpp $
 
+// Include <type_traits> at global scope (before namespace Loki) to avoid
+// MSVC silently aborting namespace body processing when a system header is
+// included inside a user namespace. MSVC does not update __cplusplus by
+// default, hence the separate _MSC_VER guard.
+#if (__cplusplus >= 201103L) || (defined(_MSC_VER) && _MSC_VER >= 1900)
+#include <type_traits>
+#endif
 
 namespace Loki
 {
@@ -105,13 +112,6 @@ namespace Loki
 ////////////////////////////////////////////////////////////////////////////////
 
 #if (__cplusplus >= 201103L) || (defined(_MSC_VER) && _MSC_VER >= 1900)
-// C++11 and later (or MSVC 2015+): use <type_traits> instead of the
-// sizeof-based SFINAE trick. The sizeof trick triggers hard errors on MSVC
-// with /std:c++17 that abort processing of Typelist.h before TypelistMacros.h
-// is included, leaving all LOKI_TYPELIST_N macros and Loki::TL:: algorithms
-// undefined. Note: MSVC does not update __cplusplus by default, hence the
-// separate _MSC_VER guard.
-#include <type_traits>
 
     template <class T, class U>
     struct Conversion
