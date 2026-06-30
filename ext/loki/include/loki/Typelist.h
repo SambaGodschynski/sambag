@@ -19,8 +19,8 @@
 
 
 #include "NullType.h"
-#include "TypeManip.h"
 #include "TypelistMacros.h"
+#include "TypeManip.h"
 
 
 namespace Loki
