@@ -130,7 +130,7 @@ setupPostTimer(Menu::Ptr item)
 	}
 	Timer::Ptr timer = Timer::create(item->getDelay());
 	timer->EventSender<TimerEvent>::addEventListener(
-			boost::bind(&popupTimerExpired, _1, _2, Menu::WPtr(item))
+			[itemW = Menu::WPtr(item)](void* s, const TimerEvent& e){ popupTimerExpired(s, e, itemW); }
 	);
 	timer->start();
 }

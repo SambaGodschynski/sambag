@@ -8,8 +8,7 @@
 #ifndef SAMBAG_EVENTS_H
 #define SAMBAG_EVENTS_H
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
+#include <functional>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -59,7 +58,7 @@ class EventSender {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::function< void ( void*, const T& ) > EventFunction;
+	typedef std::function< void ( void*, const T& ) > EventFunction;
 	//-------------------------------------------------------------------------
 	typedef ::sambag::com::events::Connection Connection;
 private:

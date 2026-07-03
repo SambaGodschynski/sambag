@@ -102,7 +102,7 @@ void SvgComponentUI<M>::installModel(SvgComponent::Dummy::Ptr c)
     
     using namespace com::events;
     c->EventSender<PropertyChanged>::addTrackedEventListener(
-        boost::bind(&ThisClass::onPropertyChanged, this, _2),
+        [this](void*, const PropertyChanged& ev){ onPropertyChanged(ev); },
         shared_from_this()
     );
 }

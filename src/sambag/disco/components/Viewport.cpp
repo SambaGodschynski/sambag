@@ -5,6 +5,7 @@
  *      Author: Johannes Unger
  */
 
+#include <boost/bind.hpp>
 #include "Viewport.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "RedrawManager.hpp"

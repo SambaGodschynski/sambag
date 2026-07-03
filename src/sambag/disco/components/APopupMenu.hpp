@@ -187,11 +187,11 @@ void APopupMenu<SM>::initWindow() {
 	window->getContentPane()->add(AsWeakPtr<AComponent>(getPtr()));
 	window->setWindowLocation(location);
     window->addTrackedOnOpenEventListener(
-        boost::bind(&Class::template dispatch<OnOpenEvent>, this, _2),
+        [this](void*, const OnOpenEvent& ev){ dispatch<OnOpenEvent>(ev); },
         getPtr()
     );
     window->addTrackedOnCloseEventListener(
-        boost::bind(&Class::template dispatch<OnCloseEvent>, this, _2),
+        [this](void*, const OnCloseEvent& ev){ dispatch<OnCloseEvent>(ev); },
         getPtr()
     );
 }

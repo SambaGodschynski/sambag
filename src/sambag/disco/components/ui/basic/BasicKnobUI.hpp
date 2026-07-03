@@ -292,11 +292,11 @@ void BasicKnobUI<M>::installDefaults(AComponentPtr c) {
 template <class M>
 void BasicKnobUI<M>::installListeners(AComponentPtr c) {
 	c->EventSender<sdce::MouseEvent>::addTrackedEventListener(
-		boost::bind(&Class::onMouse, this, _1, _2),
+		[this](void* s, const sdce::MouseEvent& e){ onMouse(s, e); },
 		getPtr()
 	);
 	getKnob()->EventSender<StateChanged>::addTrackedEventListener(
-		boost::bind(&Class::onKnobStateChanged, this, _1, _2),
+		[this](void* s, const StateChanged& e){ onKnobStateChanged(s, e); },
 		getPtr()
 	);
 	c->setMouseWheelEventsEnabled(true);

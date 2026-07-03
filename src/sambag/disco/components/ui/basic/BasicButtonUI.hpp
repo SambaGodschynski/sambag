@@ -211,13 +211,12 @@ void BasicButtonUI<ButtonModell>::installListener(AComponentPtr c) {
 			boost::dynamic_pointer_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
-			boost::bind(&ButtonListener::onMouseEvent, &listener, _1, _2),
+			[this](void* s, const events::MouseEvent& e){ listener.onMouseEvent(s, e); },
 			b
 	);
 	b->EventSender<typename ButtonModell::StateChangedEvent>::
 	addTrackedEventListener(
-			boost::bind(&BasicButtonUI<ButtonModell>::onButtonStateChanged,
-					this, _1, _2),
+			[this](void* s, const typename ButtonModell::StateChangedEvent& e){ onButtonStateChanged(s, e); },
 			b
 	);
 }

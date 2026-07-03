@@ -1,3 +1,4 @@
+#include <boost/bind.hpp>
 /*
  * BasicScrollPaneUI.cpp
  *

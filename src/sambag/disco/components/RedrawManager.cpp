@@ -5,6 +5,7 @@
  *      Author: Johannes Unger
  */
 
+#include <boost/bind.hpp>
 #include "RedrawManager.hpp"
 #include "AContainer.hpp"
 #include "Graphics.hpp"

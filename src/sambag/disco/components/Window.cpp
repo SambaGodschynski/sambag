@@ -5,6 +5,7 @@
  *      Author: Johannes Unger
  */
 
+#include <boost/bind.hpp>
 #include "Window.hpp"
 #include "RootPane.hpp"
 #include "WindowToolkit.hpp"

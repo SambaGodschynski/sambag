@@ -5,6 +5,7 @@
  *      Author: Johannes Unger
  */
 
+#include <boost/bind.hpp>
 #include "DefaultTooltipManager.hpp"
 #include "AComponent.hpp"
 #include <boost/foreach.hpp>

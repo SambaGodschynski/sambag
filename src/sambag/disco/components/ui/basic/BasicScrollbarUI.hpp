@@ -453,13 +453,13 @@ void BasicScrollbarUI<M>::installListeners() {
 	
 	if (incrButton) {
 		incrButton->EventSender<events::MouseEvent>::addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onArrowBtn, this, _1, _2),
+			[this](void* s, const events::MouseEvent& e){ onArrowBtn(s, e); },
 			self
 		);
 	}
 	if (decrButton) {
 		decrButton->EventSender<events::MouseEvent>::addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onArrowBtn, this, _1, _2),
+			[this](void* s, const events::MouseEvent& e){ onArrowBtn(s, e); },
 			self
 		);
 	}
@@ -467,12 +467,12 @@ void BasicScrollbarUI<M>::installListeners() {
 	if (scrollbar) {
 		scrollbar->EventSender<DefaultBoundedRangeModelChanged>::
 		addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onModelChanged, this, _1, _2),
+			[this](void* s, const DefaultBoundedRangeModelChanged& e){ onModelChanged(s, e); },
 			self
 		);
 		scrollbar->EventSender<events::MouseEvent>::
 		addTrackedEventListener(
-			boost::bind(&BasicScrollbarUI<M>::onTrack, this, _1, _2),
+			[this](void* s, const events::MouseEvent& e){ onTrack(s, e); },
 			self
 		);
 		scrollbar->setMouseWheelEventsEnabled(true);
@@ -480,7 +480,7 @@ void BasicScrollbarUI<M>::installListeners() {
 	//scrollListener = createScrollListener();
 	scrollTimer = Timer::create(scrollSpeedThrottle);
 	scrollTimer->EventSender<Timer::Event>::addTrackedEventListener(
-		boost::bind(&ScrollListener::onScrollTimer, scrollListener, _1, _2),
+		[this](void* s, const Timer::Event& e){ scrollListener->onScrollTimer(s, e); },
 		self
 	);
 	scrollTimer->setNumRepetitions(-1);

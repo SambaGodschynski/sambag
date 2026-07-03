@@ -109,13 +109,12 @@ void BasicMenuItemUI<ButtonModell>::installUI(AComponentPtr c) {
 	BOOST_ASSERT(b);
 	typedef BasicMenuItemListener<ButtonModell> ButtonListener;
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
-			boost::bind(&ButtonListener::onMouseEvent, _1, _2),
+			[](void* s, const events::MouseEvent& e){ ButtonListener::onMouseEvent(s, e); },
 			b
 	);
 	b->EventSender<typename ButtonModell::StateChangedEvent>::
 	addTrackedEventListener(
-			boost::bind(&BasicMenuItemUI<ButtonModell>::onButtonStateChanged,
-					this, _1, _2),
+			[this](void* s, const typename ButtonModell::StateChangedEvent& e){ onButtonStateChanged(s, e); },
 			b
 	);
 }

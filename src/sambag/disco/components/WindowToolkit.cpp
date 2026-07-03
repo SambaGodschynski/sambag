@@ -5,6 +5,7 @@
  *      Author: Johannes Unger
  */
 
+#include <boost/bind.hpp>
 #include "WindowToolkit.hpp"
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>

@@ -1,3 +1,4 @@
+#include <boost/bind.hpp>
 #include "SvgKnobUI.hpp"
 #include <sambag/disco/IDrawable.hpp>
 #include <sambag/disco/svg/graphicElements/SceneGraph.hpp>

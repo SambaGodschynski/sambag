@@ -237,18 +237,18 @@ void BasicListUI<LT>::installUI(AComponentPtr c) {
 template <class LT>
 void BasicListUI<LT>::installListeners(AComponentPtr c) {
 	c->EventSender<events::MouseEvent>::addTrackedEventListener(
-		boost::bind(&Class::onMouse, this, _1, _2),
+		[this](void* s, const events::MouseEvent& e){ onMouse(s, e); },
 		getPtr()
 	);
 	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
 	SAMBAG_ASSERT(list);
 	list->EventSender<events::ListSelectionEvent>::addTrackedEventListener(
-		boost::bind(&Class::onSelectionStateChanged, this, _1, _2),
+		[this](void* s, const events::ListSelectionEvent& e){ onSelectionStateChanged(s, e); },
 		getPtr()
 	);
 	using sambag::com::events::PropertyChanged;
 	list->EventSender<PropertyChanged>::addTrackedEventListener(
-		boost::bind(&Class::onPropertyChanged, this, _1, _2),
+		[this](void* s, const PropertyChanged& e){ onPropertyChanged(s, e); },
 		getPtr()
 	);
 }
