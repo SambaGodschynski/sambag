@@ -7,6 +7,8 @@
 
 #include "TestBoostTimer2.hpp"
 #include <cppunit/config/SourcePrefix.h>
+#include <thread>
+#include <chrono>
 #include <sambag/com/BoostTimer2.hpp>
 
 // Registers the fixture into the 'registry'
@@ -50,7 +52,7 @@ void TestBoostTimer2::testStartTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         timerInf->stop();
     } 
 	CPPUNIT_ASSERT_EQUAL(3, counter01);
@@ -67,9 +69,9 @@ void TestBoostTimer2::testStopTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(2500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(2500));
         timerInf->stop();
-        boost::this_thread::sleep(boost::posix_time::millisec(2000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     } 
 	CPPUNIT_ASSERT_EQUAL(2, counter01);
 
@@ -87,9 +89,9 @@ void TestBoostTimer2::testRestartTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
     
@@ -102,9 +104,9 @@ void TestBoostTimer2::testRestartTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3500));
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3500));
     } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
 
@@ -117,10 +119,10 @@ void TestBoostTimer2::testRestartTimer() {
             boost::bind(&onTimerInf, _1, _2, &counter01)
         );
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3500));
         timerInf->stop();
         timerInf->start();
-        boost::this_thread::sleep(boost::posix_time::millisec(3500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3500));
         timerInf->stop();
     } 
 	CPPUNIT_ASSERT_EQUAL(6, counter01);
