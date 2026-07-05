@@ -39,7 +39,7 @@ jobs:
             boost-algorithm boost-any boost-asio boost-assign boost-bimap boost-bind `
             boost-dynamic-bitset boost-flyweight boost-foreach boost-function `
             boost-geometry boost-graph boost-integer boost-interprocess boost-lambda `
-            boost-locale boost-logic boost-numeric-ublas boost-regex boost-serialization `
+            boost-locale boost-logic boost-ublas boost-regex boost-serialization `
             boost-signals2 boost-spirit boost-static-assert boost-system boost-thread `
             boost-timer boost-tuple boost-type-traits boost-unordered boost-utility `
             boost-uuid boost-smart-ptr
