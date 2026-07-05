@@ -8,7 +8,7 @@
 #ifndef SAMBAG_TIMER_H
 #define SAMBAG_TIMER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "events/ActionEvent.hpp"
 #include <sambag/com/events/Events.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>

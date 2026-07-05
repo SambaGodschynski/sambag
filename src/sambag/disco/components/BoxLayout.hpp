@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BOXLAYOUT_H
 #define SAMBAG_BOXLAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include "SizeRequirements.hpp"
@@ -29,7 +29,7 @@ class BoxLayout : public ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BoxLayout> Ptr;
+	typedef std::shared_ptr<BoxLayout> Ptr;
 	enum Axis {
 	//-------------------------------------------------------------------------
 	/**

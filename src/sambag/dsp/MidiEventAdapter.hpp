@@ -8,7 +8,7 @@
 #ifndef SAMBAG_VSTMIDIEVENTADAPTER_H
 #define SAMBAG_VSTMIDIEVENTADAPTER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include  "IMidiEvents.hpp"
 namespace sambag { namespace dsp {
 
@@ -20,7 +20,7 @@ class VstMidiEventAdapter : public IMidiEvents {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<VstMidiEventAdapter> Ptr;
+	typedef std::shared_ptr<VstMidiEventAdapter> Ptr;
 protected:
 private:
 public:

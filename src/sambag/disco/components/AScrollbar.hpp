@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ASCROLLBAR_H
 #define SAMBAG_ASCROLLBAR_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include <sambag/com/exceptions/IllegalArgumentException.hpp>
 #include <boost/foreach.hpp>
@@ -43,9 +43,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AScrollbar> Ptr;
+	typedef std::shared_ptr<AScrollbar> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<AScrollbar> WPtr;
+	typedef std::weak_ptr<AScrollbar> WPtr;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_UNITINCREMENT;
 	static const std::string PROPERTY_ORIENTATION;

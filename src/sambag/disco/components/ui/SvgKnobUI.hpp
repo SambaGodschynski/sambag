@@ -8,12 +8,11 @@
 #ifndef SAMBAG_SVGKNOBUI_H
 #define SAMBAG_SVGKNOBUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/DefaultBoundedRangeModel.hpp>
 #include <sambag/disco/components/SvgComponent.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include "SvgComponentUI.hpp"
 
 namespace sambag { namespace disco {
@@ -27,7 +26,7 @@ class SvgKnobUI : public SvgComponentUI<DefaultBoundedRangeModel>
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgKnobUI> Ptr;
+	typedef std::shared_ptr<SvgKnobUI> Ptr;
     //-------------------------------------------------------------------------
     typedef DefaultBoundedRangeModel::StateChangedEvent StateChanged;
     //-------------------------------------------------------------------------

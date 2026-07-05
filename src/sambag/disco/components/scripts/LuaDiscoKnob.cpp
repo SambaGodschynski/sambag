@@ -32,14 +32,14 @@ void LuaDiscoKnob::onChanged(lua_State *lua, const std::string &expr) {
 }
 //-----------------------------------------------------------------------------
 float LuaDiscoKnob::getValue(lua_State *lua) {
-    boost::shared_ptr<DefaultBoundedRangeModel> model =
+    std::shared_ptr<DefaultBoundedRangeModel> model =
         getComponent()->getModel<DefaultBoundedRangeModel>();
     SAMBAG_ASSERT(model);
     return model->getValue();
 }
 //-----------------------------------------------------------------------------
 void LuaDiscoKnob::setValue(lua_State *lua, float x) {
-    boost::shared_ptr<DefaultBoundedRangeModel> model =
+    std::shared_ptr<DefaultBoundedRangeModel> model =
         getComponent()->getModel<DefaultBoundedRangeModel>();
     SAMBAG_ASSERT(model);
     return model->setValue(x);
@@ -47,7 +47,7 @@ void LuaDiscoKnob::setValue(lua_State *lua, float x) {
 //-----------------------------------------------------------------------------
 void LuaDiscoKnob::addListener(lua_State *lua, const std::string & expr) {
     typedef DefaultBoundedRangeModel::StateChangedEvent Event;
-    boost::shared_ptr<DefaultBoundedRangeModel> model =
+    std::shared_ptr<DefaultBoundedRangeModel> model =
         getComponent()->getModel<DefaultBoundedRangeModel>();
     SAMBAG_ASSERT(model);
     model->EventSender<Event>::addTrackedEventListener(

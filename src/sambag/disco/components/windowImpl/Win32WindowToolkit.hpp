@@ -9,7 +9,7 @@
 #define SAMBAG_WIN32WINDOWTOOLKIT_H
 
 #ifdef DISCO_USE_WIN32
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
@@ -66,7 +66,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void invokeLater(const InvokeFunction &f, int ms=50,
-        boost::shared_ptr<void> toTrack=boost::shared_ptr<void>());
+        std::shared_ptr<void> toTrack=std::shared_ptr<void>());
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

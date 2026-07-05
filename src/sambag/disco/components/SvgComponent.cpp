@@ -20,7 +20,7 @@ namespace sambag { namespace disco { namespace components {
 struct SvgComponent::SyncedSceneGraph :
     public sambag::disco::svg::graphicElements::ISceneGraph
 {
-    typedef boost::shared_ptr<SyncedSceneGraph> Ptr;
+    typedef std::shared_ptr<SyncedSceneGraph> Ptr;
     typedef sambag::disco::svg::graphicElements::ISceneGraph Super;
     Super::Ptr g;
     mutable com::RecursiveMutex lock;
@@ -484,7 +484,7 @@ IDrawable::Ptr SvgComponent::getDrawable(DummyPtr x) {
     if (!x) {
 	return IDrawable::Ptr();
     }
-    boost::weak_ptr<IDrawable> res;
+    std::weak_ptr<IDrawable> res;
     x->getClientProperty("svg.element", res);
     return res.lock();
 }
@@ -504,7 +504,7 @@ void SvgComponent::installExtension(DummyPtr dummy,
 SvgComponent::DummyPtr SvgComponent::createDummy(IDrawable::Ptr x) {
     svg::graphicElements::SceneGraph::Ptr g = getSvgObject()->getRelatedSceneGraph();
     DummyPtr res = Dummy::create();
-    res->putClientProperty("svg.element", boost::weak_ptr<IDrawable>(x));
+    res->putClientProperty("svg.element", std::weak_ptr<IDrawable>(x));
     res->drawable = x;
     std::stringstream ss;
     ss<<"<"<<g->getTagName(x)<<" id='"<<g->getIdName(x)<<"' ";

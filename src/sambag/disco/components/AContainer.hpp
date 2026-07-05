@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ACONTAINER_H
 #define SAMBAG_ACONTAINER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/serialization/access.hpp>
 #include "AComponent.hpp"
 #include "ALayoutManager.hpp"
@@ -35,7 +35,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AComponent Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AContainer> Ptr;
+	typedef std::shared_ptr<AContainer> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector< AComponentSharedOrWeak > Components;
 	//-------------------------------------------------------------------------
@@ -149,7 +149,7 @@ public:
 	virtual void printComponentTree(std::ostream &ss) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		Ptr s = boost::dynamic_pointer_cast<AContainer>(self.lock());
+		Ptr s = std::dynamic_pointer_cast<AContainer>(self.lock());
 		return s;
 	}
 	//-------------------------------------------------------------------------

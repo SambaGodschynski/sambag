@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICMENUITEMUI_H
 #define SAMBAG_BASICMENUITEMUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/IButtonUI.hpp>
 #include <sambag/disco/components/AButton.hpp>
 #include "BasicMenuItemListener.hpp"
@@ -29,7 +29,7 @@ class BasicMenuItemUI : public IButtonUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicMenuItemUI<ButtonModell> > Ptr;
+	typedef std::shared_ptr<BasicMenuItemUI<ButtonModell> > Ptr;
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
 protected:
@@ -75,7 +75,7 @@ BasicMenuItemUI<ButtonModell>::BasicMenuItemUI() {
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::dynamic_pointer_cast<AbstractButton>(c);
+	typename AbstractButton::Ptr b = std::dynamic_pointer_cast<AbstractButton>(c);
 	if (!b)
 		return;
 	if (b->isButtonRollover()) {
@@ -105,7 +105,7 @@ void BasicMenuItemUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 template <class ButtonModell>
 void BasicMenuItemUI<ButtonModell>::installUI(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<AbstractButton>(c);
+			std::dynamic_pointer_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
 	typedef BasicMenuItemListener<ButtonModell> ButtonListener;
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
@@ -133,7 +133,7 @@ void BasicMenuItemUI<ButtonModell>::onButtonStateChanged(void *src, const
 template <class ButtonModell>
 Dimension BasicMenuItemUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<AbstractButton>(c);
+			std::dynamic_pointer_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SCROLLPANE_H
 #define SAMBAG_SCROLLPANE_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include "Forward.hpp"
 #include "Scrollbar.hpp"
@@ -138,7 +138,7 @@ public:
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_WHEELSCROLLING_ENABLED;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ScrollPane> Ptr;
+	typedef std::shared_ptr<ScrollPane> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
@@ -289,7 +289,7 @@ public:
 	 */
 	virtual void setVerticalScrollBar(ScrollbarPtr scrollbar);
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr< AScrollbar<ScrollbarModel> > AScrollbarPtr;
+	typedef std::shared_ptr< AScrollbar<ScrollbarModel> > AScrollbarPtr;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the horizontal scroll bar that controls the viewport's
@@ -324,7 +324,7 @@ public:
 	virtual ViewportPtr getViewport() const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<ScrollPane>(Super::getPtr());
+		return std::dynamic_pointer_cast<ScrollPane>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(AComponentPtr view, VerticalScrollbarPolicy vsbPolicy,

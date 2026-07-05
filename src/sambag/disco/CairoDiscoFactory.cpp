@@ -8,7 +8,7 @@
 #include "CairoDiscoFactory.hpp"
 #include "CairoDrawContext.hpp"
 #include "cairo-version.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -28,7 +28,7 @@ IDrawContext::Ptr CairoDiscoFactory::createContext() const {
 }
 //-----------------------------------------------------------------------------
 IDrawContext::Ptr CairoDiscoFactory::createContext(ISurface::Ptr surface) const {
-	CairoSurface::Ptr surf = boost::dynamic_pointer_cast<CairoSurface>(surface);
+	CairoSurface::Ptr surf = std::dynamic_pointer_cast<CairoSurface>(surface);
 	if (!surf)
 		return CairoDrawContext::Ptr();
 	CairoDrawContext::Ptr res = CairoDrawContext::create(surf);

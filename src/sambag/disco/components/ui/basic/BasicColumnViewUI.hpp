@@ -8,8 +8,7 @@
 #ifndef SAMBAG_BASICCOLUMNVIEWUI_H
 #define SAMBAG_BASICCOLUMNVIEWUI_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 
@@ -26,9 +25,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AComponentUI Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicColumnViewUI> Ptr;
+	typedef std::shared_ptr<BasicColumnViewUI> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<BasicColumnViewUI> WPtr;
+	typedef std::weak_ptr<BasicColumnViewUI> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	WPtr self;

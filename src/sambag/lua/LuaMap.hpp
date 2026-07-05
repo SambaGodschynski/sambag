@@ -11,7 +11,7 @@
 #include "ILuaTable.hpp"
 #include "LuaHelper.hpp"
 #include <lua.hpp>
-#include <boost/shared_array.hpp>
+#include <memory>
 #include <boost/foreach.hpp>
 
 namespace sambag { namespace lua {

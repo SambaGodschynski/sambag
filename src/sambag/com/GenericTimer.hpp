@@ -8,8 +8,7 @@
 #ifndef SAMBAG_GENERICTIMER_H
 #define SAMBAG_GENERICTIMER_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "events/Events.hpp"
 #include "ITimer.hpp"
 
@@ -49,9 +48,9 @@ public:
     //-------------------------------------------------------------------------
     typedef GenericTimer<EventPolicy, TimerImplPolicy> ThisClass;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ThisClass> Ptr;
+	typedef std::shared_ptr<ThisClass> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<ThisClass> WPtr;
+	typedef std::weak_ptr<ThisClass> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	GenericTimer();

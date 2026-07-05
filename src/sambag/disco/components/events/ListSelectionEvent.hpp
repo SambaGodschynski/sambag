@@ -8,7 +8,7 @@
 #ifndef SAMBAG_LISTSELECTIONEVENT_H
 #define SAMBAG_LISTSELECTIONEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco { namespace components {
 namespace events {

@@ -8,13 +8,11 @@
 #ifndef SAMBAG_ALUAOBJECT_H
 #define SAMBAG_ALUAOBJECT_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/lua/Lua.hpp>
 #include <string>
 #include <loki/Typelist.h>
 #include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <sambag/com/Thread.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -29,7 +27,7 @@ namespace sambag { namespace lua {
   * @brief lua object base class
   */
 class ALuaObject :
-    public boost::enable_shared_from_this<ALuaObject>
+    public std::enable_shared_from_this<ALuaObject>
 {
 //=============================================================================
 public:
@@ -38,8 +36,8 @@ public:
     //-------------------------------------------------------------------------
     static const std::string FIELDNAME_UID;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ALuaObject> Ptr;
-    typedef boost::weak_ptr<ALuaObject> WPtr;
+	typedef std::shared_ptr<ALuaObject> Ptr;
+    typedef std::weak_ptr<ALuaObject> WPtr;
     //-------------------------------------------------------------------------
     SAMBAG_LUA_FTAG(__gc, void());
     SAMBAG_LUA_FTAG(__tostring, std::string());
@@ -94,7 +92,7 @@ protected:
 private:
     //-------------------------------------------------------------------------
     typedef com::RecursiveMutex Mutex;
-    typedef boost::shared_ptr<Mutex> MutexPtr;
+    typedef std::shared_ptr<Mutex> MutexPtr;
     typedef boost::unordered_map<lua_State*, MutexPtr> MutexMap;
     static MutexMap mutexMap;
     //-------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SvgButtonUI_H
 #define SAMBAG_SvgButtonUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "SvgComponentUI.hpp"
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/DefaultButtonModell.hpp>
@@ -24,7 +24,7 @@ class SvgButtonUI : public SvgComponentUI<DefaultButtonModell>
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgButtonUI> Ptr;
+	typedef std::shared_ptr<SvgButtonUI> Ptr;
     //-------------------------------------------------------------------------
     typedef DefaultButtonModell::StateChangedEvent StateChanged;
     //-------------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
     //-------------------------------------------------------------------------
     SvgComponent::Dummy::Ptr getPressed() const { return getPtr(pressed); }
     //-------------------------------------------------------------------------
-    boost::shared_ptr<DefaultButtonModell> getModel() const { return getPtr(model); }
+    std::shared_ptr<DefaultButtonModell> getModel() const { return getPtr(model); }
 	//-------------------------------------------------------------------------
 	/**
 	 * Configures the specified component appropriately for the look and feel.

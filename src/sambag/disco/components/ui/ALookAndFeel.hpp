@@ -8,7 +8,7 @@
 #ifndef SAMBAG_LOOKANDFEEL_H
 #define SAMBAG_LOOKANDFEEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <loki/LokiTypeInfo.h>
 #include <boost/unordered_map.hpp>
 #include <map>
@@ -19,7 +19,7 @@
 namespace sambag { namespace disco { namespace components { namespace ui {
 // UICreator helper classes
 struct IUICreator {
-	typedef boost::shared_ptr<IUICreator> Ptr;
+	typedef std::shared_ptr<IUICreator> Ptr;
 	virtual AComponentUI::Ptr createUI() = 0;
 	virtual std::string toString() const = 0;
 };
@@ -41,7 +41,7 @@ class ALookAndFeel {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ALookAndFeel> Ptr;
+	typedef std::shared_ptr<ALookAndFeel> Ptr;
 protected:
 private:
 	//-------------------------------------------------------------------------

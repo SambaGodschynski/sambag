@@ -10,7 +10,7 @@
 
 #include <cairo.h>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "sambag/disco/ISurface.hpp"
 #include "sambag/disco/Geometry.hpp"
 #include "sambag/xml/cpAtl/Html.hpp"
@@ -26,7 +26,7 @@ namespace tests {
  */
 class TestSuiteHtmlOutput {
 public:
-	typedef boost::shared_ptr<TestSuiteHtmlOutput> Ptr;
+	typedef std::shared_ptr<TestSuiteHtmlOutput> Ptr;
 private:
 	// one for doc
 	sambag::xml::cpAtl::Html *_doc;

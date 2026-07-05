@@ -22,9 +22,9 @@ SvgUse::SvgUse() {
 //-----------------------------------------------------------------------------
 void SvgUse::solveHRef() {
 	using namespace sambag::disco::svg::graphicElements;
-	SvgRoot::Ptr root = boost::dynamic_pointer_cast<SvgRoot>(getRoot());
+	SvgRoot::Ptr root = std::dynamic_pointer_cast<SvgRoot>(getRoot());
 	GraphicElement::Ptr ref =
-		boost::dynamic_pointer_cast<GraphicElement>(getRelatedSceneGraph()->getElementById(href) );
+		std::dynamic_pointer_cast<GraphicElement>(getRelatedSceneGraph()->getElementById(href) );
 	if (!ref)
 		return;
 	object->setReference(ref);

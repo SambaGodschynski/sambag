@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SOLIDBORDER_H
 #define SAMBAG_SOLIDBORDER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IBorder.hpp"
 #include <sambag/disco/svg/Style.hpp>
 
@@ -23,7 +23,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IBorder Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SolidBorder> Ptr;
+	typedef std::shared_ptr<SolidBorder> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	SolidBorder();

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_IBUTTONUI_H
 #define SAMBAG_IBUTTONUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AComponentUI.hpp"
 namespace sambag { namespace disco { namespace components { namespace ui {
 
@@ -20,7 +20,7 @@ class IButtonUI : public AComponentUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IButtonUI> Ptr;
+	typedef std::shared_ptr<IButtonUI> Ptr;
 }; // IButtonUI
 }}}} // namespace(s)
 

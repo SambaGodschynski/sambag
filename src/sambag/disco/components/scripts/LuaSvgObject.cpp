@@ -126,7 +126,7 @@ LuaSvgObject::SvgRect LuaSvgObject::getBounds(lua_State *lua) {
 //-----------------------------------------------------------------------------
 void LuaSvgObject::setText(lua_State *lua, const std::string & txt) {
     using namespace svg::graphicElements;
-    Text::Ptr text = boost::dynamic_pointer_cast<Text>(getObject());
+    Text::Ptr text = std::dynamic_pointer_cast<Text>(getObject());
     if (!text) {
         throw std::runtime_error("element contains no text");
     }
@@ -135,7 +135,7 @@ void LuaSvgObject::setText(lua_State *lua, const std::string & txt) {
 //-----------------------------------------------------------------------------
 std::string LuaSvgObject::getText(lua_State *lua) {
     using namespace svg::graphicElements;
-    Text::Ptr text = boost::dynamic_pointer_cast<Text>(getObject());
+    Text::Ptr text = std::dynamic_pointer_cast<Text>(getObject());
     if (!text) {
         throw std::runtime_error("element contains no text");
     }

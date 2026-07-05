@@ -22,7 +22,7 @@ class Win32Surface : public CairoSurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Win32Surface> Ptr;
+	typedef std::shared_ptr<Win32Surface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	Win32Surface(cairo_surface_t *s) : CairoSurface(s) {}

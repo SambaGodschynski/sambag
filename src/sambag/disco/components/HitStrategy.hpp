@@ -8,8 +8,7 @@
 #ifndef SAMBAG_HITSTRATEGY_H
 #define SAMBAG_HITSTRATEGY_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "Forward.hpp"
 #include <sambag/disco/Geometry.hpp>
 
@@ -24,8 +23,8 @@ class HitStrategy {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<HitStrategy> Ptr;
-	typedef boost::weak_ptr<HitStrategy> WPtr;
+	typedef std::shared_ptr<HitStrategy> Ptr;
+	typedef std::weak_ptr<HitStrategy> WPtr;
     //-------------------------------------------------------------------------
     virtual bool operator()(AComponentPtr c, const Point2D &p) = 0;
 }; // HitStrategy

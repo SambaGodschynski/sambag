@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ACOLUMNBROWSER_H
 #define SAMBAG_ACOLUMNBROWSER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ColumnView.hpp"
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <boost/foreach.hpp>
@@ -51,13 +51,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef ColumnBrowserListCellRenderer<T> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
 	//-------------------------------------------------------------------------
 	template <class ListType>
 	AComponentPtr getListCellRendererComponent(
-			boost::shared_ptr<ListType> list, // the list
+			std::shared_ptr<ListType> list, // the list
 			const T &value, // value to display
 			int index, // cell index
 			bool isSelected, // is the cell selected
@@ -106,7 +106,7 @@ public:
 	typedef ColumnBrowserList<T, _ListCellRenderer, 
 		_ListModel, _ListSelectionModel> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
 	SAMBAG_STD_STATIC_COMPONENT_CREATOR(Class)
 	//-------------------------------------------------------------------------
@@ -190,13 +190,13 @@ public:
 	typedef ColumnBrowserList<Entry,
 		_ListCellRenderer, _ListModel, _ListSelectionModel> ListType;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ListType> ListTypePtr;
+	typedef std::shared_ptr<ListType> ListTypePtr;
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
 	typedef ColumnView<ListType> ColumnViewClass;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AColumnBrowser> Ptr;
+	typedef std::shared_ptr<AColumnBrowser> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector<Node> Path;
 protected:

@@ -22,7 +22,7 @@ class Compound : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Compound> Ptr;
+	typedef std::shared_ptr<Compound> Ptr;
 private:
 protected:
 	Compound(){}

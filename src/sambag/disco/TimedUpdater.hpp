@@ -103,7 +103,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _DoUpdatePolicy<UpdateValueType> DoUpdatePolicy;
 	//-------------------------------------------------------------------------
-	typedef std::set<UpdateValueType> Values;
+	typedef std::set<UpdateValueType, std::owner_less<UpdateValueType>> Values;
 	//-------------------------------------------------------------------------
 	typedef TimedUpdater<UpdateValueType, _DoUpdatePolicy, RefreshTime, UpdaterPolicy> Class;
 protected:

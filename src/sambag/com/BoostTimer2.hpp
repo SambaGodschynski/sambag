@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BOOSTTIMER2_H
 #define SAMBAG_BOOSTTIMER2_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "GenericTimer.hpp"
 #include "BoostTimerImpl2.hpp"
 

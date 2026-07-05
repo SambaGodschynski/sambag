@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTTREEMODEL_H
 #define SAMBAG_DEFAULTTREEMODEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/foreach.hpp>

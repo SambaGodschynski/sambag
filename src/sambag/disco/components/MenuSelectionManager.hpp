@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MENUSELECTIONMANAGER_H
 #define SAMBAG_MENUSELECTIONMANAGER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "MenuItem.hpp"
 #include "IMenuElement.hpp"
 #include "loki/Singleton.h"
@@ -31,7 +31,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IMenuElement::MenuElements MenuElements;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<MenuSelectionManager> Ptr;
+	typedef std::shared_ptr<MenuSelectionManager> Ptr;
 protected:
 private:
 	//-------------------------------------------------------------------------

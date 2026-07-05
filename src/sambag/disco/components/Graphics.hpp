@@ -8,7 +8,7 @@
 #ifndef SAMBAG_GRAPHICS_H
 #define SAMBAG_GRAPHICS_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/IDrawContext.hpp>
 
 namespace sambag { namespace disco { namespace components {

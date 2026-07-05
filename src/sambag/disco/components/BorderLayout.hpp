@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BORDERLAYOUT_H
 #define SAMBAG_BORDERLAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -19,7 +19,7 @@ class BorderLayout : public ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BorderLayout> Ptr;
+	typedef std::shared_ptr<BorderLayout> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	/**

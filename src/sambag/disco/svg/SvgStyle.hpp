@@ -18,7 +18,7 @@ class SvgStyle : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgStyle> Ptr;
+	typedef std::shared_ptr<SvgStyle> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	std::string styleText;

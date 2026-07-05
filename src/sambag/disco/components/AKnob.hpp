@@ -8,7 +8,7 @@
 #ifndef SAMBAG_AKNOB_H
 #define SAMBAG_AKNOB_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/AComponent.hpp>
 namespace sambag { namespace disco { namespace components {
 //=============================================================================
@@ -24,7 +24,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AComponent Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AKnob> Ptr;
+	typedef std::shared_ptr<AKnob> Ptr;
 protected:
 private:
 public:

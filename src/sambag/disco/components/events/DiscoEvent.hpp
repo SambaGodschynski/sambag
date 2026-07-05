@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DISCOEVENT_H
 #define SAMBAG_DISCOEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco { namespace components { namespace events {
 //=============================================================================
@@ -20,7 +20,7 @@ class DiscoEvent {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<DiscoEvent> Ptr;
+	typedef std::shared_ptr<DiscoEvent> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	DiscoEvent();

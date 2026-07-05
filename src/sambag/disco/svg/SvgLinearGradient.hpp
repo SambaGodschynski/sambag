@@ -24,7 +24,7 @@ class SvgLinearGradient : public SvgGradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgLinearGradient> Ptr;
+	typedef std::shared_ptr<SvgLinearGradient> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
 	//-------------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
 	struct Y2_tag { typedef units::Unit Type; };
 	//-------------------------------------------------------------------------
 	virtual void add(SvgObject::Ptr obj) {
-		SvgColorStop::Ptr stop = boost::dynamic_pointer_cast<SvgColorStop>(obj);
+		SvgColorStop::Ptr stop = std::dynamic_pointer_cast<SvgColorStop>(obj);
 		if (!stop)
 			return;
 		addColorStop(stop);

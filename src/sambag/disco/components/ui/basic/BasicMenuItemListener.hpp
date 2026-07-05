@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICMENUITEMLISTENER_H
 #define SAMBAG_BASICMENUITEMLISTENER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/MenuItem.hpp>
 #include <sambag/com/ICommand.hpp>
@@ -46,7 +46,7 @@ void BasicMenuItemListener<ComponentModell>::
 {
 	using namespace events;
 	MenuItem::Ptr b =
-			boost::dynamic_pointer_cast<MenuItem>(ev.getSource());
+			std::dynamic_pointer_cast<MenuItem>(ev.getSource());
 	SAMBAG_ASSERT(b);
 	switch(ev.getType()) {
 	case MouseEvent::DISCO_MOUSE_ENTERED:

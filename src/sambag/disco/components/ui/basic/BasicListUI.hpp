@@ -8,8 +8,7 @@
 #ifndef SAMBAG_BASICLISTUI_H
 #define SAMBAG_BASICLISTUI_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/AList.hpp>
 #include <sambag/disco/components/events/ListSelectionEvent.hpp>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
@@ -39,13 +38,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef BasicListUI<ListType> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ListType> ListTypePtr;
+	typedef std::shared_ptr<ListType> ListTypePtr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<ListType> ListTypeWPtr;
+	typedef std::weak_ptr<ListType> ListTypeWPtr;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Class> WPtr;
+	typedef std::weak_ptr<Class> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	BasicListUI() :
@@ -221,7 +220,7 @@ public:
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::installUI(AComponentPtr c) {
-	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
+	ListTypePtr list = std::dynamic_pointer_cast<ListType>(c);
 	this->_list = list;
 	layoutOrientation = list->getLayoutOrientation();
 	rendererPane = CellRendererPane::create();
@@ -240,7 +239,7 @@ void BasicListUI<LT>::installListeners(AComponentPtr c) {
 		[this](void* s, const events::MouseEvent& e){ onMouse(s, e); },
 		getPtr()
 	);
-	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
+	ListTypePtr list = std::dynamic_pointer_cast<ListType>(c);
 	SAMBAG_ASSERT(list);
 	list->EventSender<events::ListSelectionEvent>::addTrackedEventListener(
 		[this](void* s, const events::ListSelectionEvent& e){ onSelectionStateChanged(s, e); },
@@ -255,7 +254,7 @@ void BasicListUI<LT>::installListeners(AComponentPtr c) {
 //-----------------------------------------------------------------------------
 template <class LT>
 void BasicListUI<LT>::installDefaults(AComponentPtr c) {
-	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
+	ListTypePtr list = std::dynamic_pointer_cast<ListType>(c);
 	SAMBAG_ASSERT(list);
 
 	list->setLayout(ALayoutManagerPtr());
@@ -552,7 +551,7 @@ template <class LT>
 Rectangle BasicListUI<LT>::getCellBounds(AComponentPtr c,
 		int index1, int index2)
 {
-	ListTypePtr list = boost::dynamic_pointer_cast<ListType>(c);
+	ListTypePtr list = std::dynamic_pointer_cast<ListType>(c);
 	if (!list)
 		return NULL_RECTANGLE;
 	return getCellBounds(*(list.get()), index1, index2);

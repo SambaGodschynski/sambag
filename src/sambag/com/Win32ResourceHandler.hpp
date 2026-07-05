@@ -10,7 +10,7 @@
 
 #ifdef DISCO_USE_WIN32
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IDataHandler.hpp"
 #include <sstream>
 #include <windows.h>
@@ -25,9 +25,9 @@ class Win32ResourceHandler : public IDataHandler {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Win32ResourceHandler> Ptr;
+	typedef std::shared_ptr<Win32ResourceHandler> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<std::stringstream> SStreamPtr;
+	typedef std::shared_ptr<std::stringstream> SStreamPtr;
 private:
 	//-------------------------------------------------------------------------
 	HINSTANCE hI;

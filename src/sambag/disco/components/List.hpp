@@ -8,7 +8,7 @@
 #ifndef SAMBAG_LIST_H
 #define SAMBAG_LIST_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AList.hpp"
 #include "AComponent.hpp"
 #include "DefaultListCellRenderer.hpp"
@@ -44,7 +44,7 @@ public:
 			DefaultListModel,
 			DefaultListSelectionModel> Super;*/
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr
 	createComponentUI(ui::ALookAndFeelPtr laf) const

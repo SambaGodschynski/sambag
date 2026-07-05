@@ -8,14 +8,13 @@
 #ifndef SAMBAG_LuaSvg_H
 #define SAMBAG_LuaSvg_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "LuaSvgBase.hpp"
 #include <sambag/disco/IDrawable.hpp>
 
 namespace sambag { namespace disco { namespace components { 
 class SvgComponent;
-typedef boost::shared_ptr<SvgComponent> SvgComponentPtr;
+typedef std::shared_ptr<SvgComponent> SvgComponentPtr;
 //=============================================================================
 class LuaSvg : public LuaSvgBase {
 //=============================================================================
@@ -23,9 +22,9 @@ public:
     //-------------------------------------------------------------------------
     typedef LuaSvgBase Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaSvg> Ptr;
+    typedef std::shared_ptr<LuaSvg> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaSvg> WPtr;
+    typedef std::weak_ptr<LuaSvg> WPtr;
     //-------------------------------------------------------------------------
 private:
     //-------------------------------------------------------------------------

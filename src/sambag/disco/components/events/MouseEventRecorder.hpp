@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MOUSEEVENTRECORDER_H
 #define SAMBAG_MOUSEEVENTRECORDER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "MouseEventCreator.hpp"
 namespace sambag { namespace disco { namespace components { namespace events {
 namespace sce = sambag::com::events;
@@ -24,7 +24,7 @@ class MouseEventRecorder : public MouseEventCreator {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<MouseEventRecorder> Ptr;
+	typedef std::shared_ptr<MouseEventRecorder> Ptr;
     //-------------------------------------------------------------------------
     typedef MouseEventCreator Super;
 protected:

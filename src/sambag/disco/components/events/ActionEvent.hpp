@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ACTIONEVENT_H
 #define SAMBAG_ACTIONEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/Forward.hpp>
 namespace sambag { namespace disco { namespace components { namespace events {
 

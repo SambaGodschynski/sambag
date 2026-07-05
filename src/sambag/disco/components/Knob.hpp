@@ -8,7 +8,7 @@
 #ifndef SAMBAG_KNOB_H
 #define SAMBAG_KNOB_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AKnob.hpp"
 #include "DefaultBoundedRangeModel.hpp"
 
@@ -22,7 +22,7 @@ class Knob : public AKnob<DefaultBoundedRangeModel> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Knob> Ptr;
+	typedef std::shared_ptr<Knob> Ptr;
 protected:
 private:
 public:

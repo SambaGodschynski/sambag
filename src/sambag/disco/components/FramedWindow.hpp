@@ -8,7 +8,7 @@
 #ifndef SAMBAG_FRAMEDWINDOW_H
 #define SAMBAG_FRAMEDWINDOW_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Window.hpp"
 #include <string>
 
@@ -21,7 +21,7 @@ class FramedWindow : public Window {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<FramedWindow> Ptr;
+	typedef std::shared_ptr<FramedWindow> Ptr;
 protected:
 	FramedWindow(Window::Ptr parent=Window::Ptr());
     //-------------------------------------------------------------------------

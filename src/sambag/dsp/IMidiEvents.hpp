@@ -8,15 +8,13 @@
 #ifndef SAMBAG_IMIDIEVENTS_H
 #define SAMBAG_IMIDIEVENTS_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <boost/tuple/tuple.hpp>
 #include <boost/integer.hpp>
 #include <sstream>
 #include <ostream>
 #include <vector>
 #include <sambag/com/Exception.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 namespace sambag { namespace dsp {
 //-----------------------------------------------------------------------------
@@ -39,7 +37,7 @@ SAMBAG_EXCEPTION_CLASS(MidiDataError);
   *	      | VstMidiEventAdapter set(independet); // no convertion
   *		  | XXXMidiEventAdapter set(independet); // convertion
   */
-struct IMidiEvents : public boost::enable_shared_from_this<IMidiEvents> {
+struct IMidiEvents : public std::enable_shared_from_this<IMidiEvents> {
 //=============================================================================
     //-------------------------------------------------------------------------
     enum EventType { Unknown,
@@ -51,8 +49,8 @@ struct IMidiEvents : public boost::enable_shared_from_this<IMidiEvents> {
                      Pc,
                      PitchBend};
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<IMidiEvents> Ptr;
-    typedef boost::weak_ptr<IMidiEvents> WPtr;
+    typedef std::shared_ptr<IMidiEvents> Ptr;
+    typedef std::weak_ptr<IMidiEvents> WPtr;
 	//-------------------------------------------------------------------------
 	typedef boost::int_t<32>::exact Int;
 	//-------------------------------------------------------------------------

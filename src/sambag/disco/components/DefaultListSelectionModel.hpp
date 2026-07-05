@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTLISTSELECTIONMODEL_H
 #define SAMBAG_DEFAULTLISTSELECTIONMODEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <limits.h>
 #include <boost/dynamic_bitset.hpp>

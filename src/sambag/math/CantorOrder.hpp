@@ -8,7 +8,7 @@
 #ifndef SAMBAG_CANTORORDER_H
 #define SAMBAG_CANTORORDER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 //#include "MetaSqrt.hpp"
 
 namespace sambag {  namespace math { 

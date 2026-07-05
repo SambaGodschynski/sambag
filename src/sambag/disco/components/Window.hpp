@@ -8,7 +8,7 @@
 #ifndef SAMBAG_WINDOW_H
 #define SAMBAG_WINDOW_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "RootPane.hpp"
 #include <sambag/disco/ISurface.hpp>
 #include "windowImpl/AWindowImpl.hpp"
@@ -21,7 +21,7 @@
 #define SAMBAG_STD_WINDOW_CREATOR(window_class_name) 						\
 	Ptr getPtr() const {													\
 		return 																\
-		  boost::dynamic_pointer_cast<window_class_name>                     \
+		  std::dynamic_pointer_cast<window_class_name>                     \
             ( ::sambag::disco::components::Window::getPtr() ); 	            \
 	}																		\
 	static Ptr create(::sambag::disco::components::Window::Ptr parent =     \
@@ -47,13 +47,13 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Window> Ptr;
+	typedef std::shared_ptr<Window> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Window> WPtr;
+	typedef std::weak_ptr<Window> WPtr;
 	//-------------------------------------------------------------------------
 	enum CloseOperation {DISPOSE_ON_CLOSE, EXIT_ON_CLOSE};
 	//-------------------------------------------------------------------------
-	typedef std::set<WPtr> Windows;
+	typedef std::set<WPtr, std::owner_less<WPtr>> Windows;
 protected:
 	//-------------------------------------------------------------------------
 	WindowWPtr parentWindow;
@@ -192,7 +192,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<Window>(self.lock());
+		return std::dynamic_pointer_cast<Window>(self.lock());
 	}
 	//-------------------------------------------------------------------------
 	RootPane::Ptr getRootPane() const;

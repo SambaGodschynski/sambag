@@ -10,7 +10,7 @@
 
 #include "IDrawContext.hpp"
 #include "cairo.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/tuple/tuple.hpp>
 #include "CairoSurface.hpp"
 #include "CairoHelper.hpp"
@@ -43,7 +43,7 @@ namespace sambag { namespace disco {
 class CairoPath : public Path {
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoPath> Ptr;
+	typedef std::shared_ptr<CairoPath> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	cairo_path_t * cpath;
@@ -71,7 +71,7 @@ class CairoDrawContext: public sambag::disco::IDrawContext {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoDrawContext> Ptr;
+	typedef std::shared_ptr<CairoDrawContext> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	enum PatternInUse { INVALID, STROKE, FILL };

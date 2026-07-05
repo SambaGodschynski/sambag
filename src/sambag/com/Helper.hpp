@@ -9,6 +9,7 @@
 #define HELPER_HPP_
 
 #include <boost/tuple/tuple.hpp>
+#include <algorithm>
 
 namespace sambag { namespace com {
 //=============================================================================

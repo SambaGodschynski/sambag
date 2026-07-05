@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MOUSEEVENT_H
 #define SAMBAG_MOUSEEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include "DiscoEvent.hpp"

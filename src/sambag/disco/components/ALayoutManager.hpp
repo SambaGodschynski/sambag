@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ILAYOUTMANAGER_H
 #define SAMBAG_ILAYOUTMANAGER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/Geometry.hpp>
 #include "Forward.hpp"
 #include <sambag/com/ArbitraryType.hpp>
@@ -22,9 +22,9 @@ class ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ALayoutManager> Ptr;
+	typedef std::shared_ptr<ALayoutManager> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<ALayoutManager> WPtr;
+	typedef std::weak_ptr<ALayoutManager> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	/*

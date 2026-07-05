@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 #include <boost/algorithm/string.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/signals2.hpp>
 #include <boost/function.hpp>
 #include <sstream>
@@ -18,7 +18,7 @@ namespace xml {
 // Default Creator policies:
 template <class T>
 struct SharedCreateCreator {
-	typedef boost::shared_ptr<T> PointeeType;
+	typedef std::shared_ptr<T> PointeeType;
 	PointeeType create() {
 		return T::create();
 	}
@@ -33,7 +33,7 @@ struct SharedWithClosure {
 	struct Creator {
 		Closure val;
 		Closure *pClosure;
-		typedef boost::shared_ptr<T> PointeeType;
+		typedef std::shared_ptr<T> PointeeType;
 		PointeeType create() {
 			if (!pClosure)
 				return T::create(val);
@@ -178,7 +178,7 @@ struct DefaultXmlTextSetter {
 /** @class XML2Object Parser:
  *	Policy concepts:
  *	- CreatorPolicy:
- *		typedef boost::shared_ptr<T> PointeeType;
+ *		typedef std::shared_ptr<T> PointeeType;
  *		PointeeType create();
  *		template <class U>
  *		SharedCreateCreator(const SharedCreateCreator<U> &b);

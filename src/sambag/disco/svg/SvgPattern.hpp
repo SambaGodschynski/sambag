@@ -25,7 +25,7 @@ class SvgPatternBase : public SvgObject {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<SvgPatternBase> Ptr;
+    typedef std::shared_ptr<SvgPatternBase> Ptr;
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
 protected:
@@ -49,7 +49,7 @@ class SvgGradient : public SvgPatternBase {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<SvgGradient> Ptr;
+    typedef std::shared_ptr<SvgGradient> Ptr;
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
 private:
     //-------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
     //-------------------------------------------------------------------------
     typedef SvgPatternBase Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<SvgPattern> Ptr;
+    typedef std::shared_ptr<SvgPattern> Ptr;
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tag
     struct X_tag { typedef units::Unit Type; };
     struct Y_tag { typedef units::Unit Type; };

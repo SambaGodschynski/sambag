@@ -4,7 +4,7 @@
 #include "sqlite3.h"
 #include <string>
 #include <list>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag {
 namespace cpsqlite {
@@ -13,7 +13,7 @@ namespace cpsqlite {
 // to be used in that way: http://www.sqlite.org/c3ref/bind_blob.html
 //============================================================================================================
 struct IParameter {
-	typedef boost::shared_ptr<IParameter> Ptr;
+	typedef std::shared_ptr<IParameter> Ptr;
 	virtual int bind ( sqlite3_stmt* ) = 0;
 };
 typedef std::list<IParameter::Ptr> ParameterList;
@@ -24,7 +24,7 @@ struct NullType {};
 template <typename T>
 struct Parameter : IParameter {
 	typedef T ValueType;
-	typedef boost::shared_ptr< Parameter<ValueType> > Ptr;
+	typedef std::shared_ptr< Parameter<ValueType> > Ptr;
 	T value;
 	size_t index;
 	Parameter( size_t index, const T &value ) : value(value), index(index) {}
@@ -36,7 +36,7 @@ struct Parameter : IParameter {
 template <>
 struct Parameter<NullType> : IParameter {
 	typedef NullType ValueType;
-	typedef boost::shared_ptr< Parameter<ValueType> > Ptr;
+	typedef std::shared_ptr< Parameter<ValueType> > Ptr;
 	size_t index;
 	Parameter( size_t index ) : index(index) {}
 	virtual int bind ( sqlite3_stmt* ) = 0;
@@ -46,7 +46,7 @@ struct Parameter<NullType> : IParameter {
 //============================================================================================================
 struct NullParameter : Parameter<NullType> {
 	typedef Parameter<NullType> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	NullParameter( size_t index ) : ParameterType(index) {}
 	static Ptr create( size_t index ) { return Ptr( new NullParameter( index ) ); }
 	virtual int bind ( sqlite3_stmt* stmt ) {
@@ -58,7 +58,7 @@ struct NullParameter : Parameter<NullType> {
 //============================================================================================================
 struct DoubleParameter : Parameter<double> {
 	typedef Parameter<double> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	DoubleParameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 
 		return Ptr( new DoubleParameter( index, value ) ); 
@@ -72,7 +72,7 @@ struct DoubleParameter : Parameter<double> {
 //============================================================================================================
 struct IntParameter : Parameter<int> {
 	typedef Parameter<int> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	IntParameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 
 		return Ptr( new IntParameter( index, value ) ); 
@@ -86,7 +86,7 @@ struct IntParameter : Parameter<int> {
 //============================================================================================================
 struct Int64Parameter : Parameter<sqlite3_int64> {
 	typedef Parameter<sqlite3_int64> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	Int64Parameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 
 		return Ptr( new Int64Parameter( index, value ) ); 
@@ -100,7 +100,7 @@ struct Int64Parameter : Parameter<sqlite3_int64> {
 //============================================================================================================
 struct ValueParameter : Parameter<sqlite3_value*> {
 	typedef Parameter<sqlite3_value*> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	ValueParameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 
 		return Ptr( new ValueParameter( index, value ) ); 
@@ -114,7 +114,7 @@ struct ValueParameter : Parameter<sqlite3_value*> {
 //============================================================================================================
 struct TextParameter : Parameter<std::string> {
 	typedef Parameter<std::string> ParameterType;
-	typedef boost::shared_ptr< ParameterType > Ptr;
+	typedef std::shared_ptr< ParameterType > Ptr;
 	TextParameter( size_t index, const ParameterType::ValueType &value ) : ParameterType(index, value) {}
 	static Ptr create( size_t index, const ParameterType::ValueType &value ) { 
 		return Ptr( new TextParameter( index, value ) ); 

@@ -17,7 +17,7 @@ class SvgEllipse : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgEllipse> Ptr;
+	typedef std::shared_ptr<SvgEllipse> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct CX_tag { typedef units::Unit Type; };

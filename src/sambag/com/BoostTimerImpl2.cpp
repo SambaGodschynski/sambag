@@ -10,7 +10,7 @@
 #include <optional>
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <boost/unordered_set.hpp>
 
 namespace {
@@ -41,8 +41,8 @@ WorkerThread::~WorkerThread() {
 }
 
 sambag::com::RecursiveMutex __mutex;
-typedef boost::shared_ptr<WorkerThread> WkPtr;
-typedef boost::weak_ptr<WorkerThread> WkWPtr;
+typedef std::shared_ptr<WorkerThread> WkPtr;
+typedef std::weak_ptr<WorkerThread> WkWPtr;
 
 WkWPtr __wkt;
 WkPtr __wktHolder;

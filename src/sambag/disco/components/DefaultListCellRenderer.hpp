@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTLISTCELLRENDERER_H
 #define SAMBAG_DEFAULTLISTCELLRENDERER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Label.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "Forward.hpp"
@@ -30,7 +30,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef Label Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<DefaultListCellRenderer> Ptr;
+	typedef std::shared_ptr<DefaultListCellRenderer> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr
 	getComponentUI(ui::ALookAndFeelPtr laf) const {
@@ -57,7 +57,7 @@ public:
 	//-------------------------------------------------------------------------
 	template <class ListType>
 	AComponentPtr getListCellRendererComponent(
-			boost::shared_ptr<ListType> list, // the list
+			std::shared_ptr<ListType> list, // the list
 			const T &value, // value to display
 			int index, // cell index
 			bool isSelected, // is the cell selected
@@ -120,7 +120,7 @@ protected:
 template <class T>
 template <class ListType>
 AComponentPtr DefaultListCellRenderer<T>::getListCellRendererComponent(
-		boost::shared_ptr<ListType> list, const T &value, int index,
+		std::shared_ptr<ListType> list, const T &value, int index,
 		bool isSelected, bool cellHasFocus)
 {
 	//setComponentOrientation(list.getComponentOrientation());

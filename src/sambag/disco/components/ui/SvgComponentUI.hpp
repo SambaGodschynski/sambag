@@ -8,10 +8,9 @@
 #ifndef SAMBAG_SvgComponentUI_H
 #define SAMBAG_SvgComponentUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/events/MouseEvent.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <sambag/disco/components/SvgComponent.hpp>
 
 namespace sambag { namespace disco {
@@ -21,19 +20,19 @@ namespace components { namespace ui {
   * @class SvgComponentUIBase.
   */
 class SvgComponentUIBase : public AComponentUI,
-                           public boost::enable_shared_from_this<SvgComponentUIBase>
+                           public std::enable_shared_from_this<SvgComponentUIBase>
 {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgComponentUIBase> Ptr;
+	typedef std::shared_ptr<SvgComponentUIBase> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	SvgComponentUIBase(){}
     //-------------------------------------------------------------------------
     template <class T>
-    boost::shared_ptr<T> getPtr(boost::weak_ptr<T> _x, bool _throw=true) const {
-        boost::shared_ptr<T> res = _x.lock();
+    std::shared_ptr<T> getPtr(std::weak_ptr<T> _x, bool _throw=true) const {
+        std::shared_ptr<T> res = _x.lock();
         if (!res && _throw) {
             throw std::runtime_error(std::string("SvgComponentUIBase:") +
             typeid(T).name() + " = null");
@@ -65,10 +64,10 @@ public:
     //-------------------------------------------------------------------------
     typedef _Model Model;
     typedef SvgComponentUI<Model> ThisClass;
-	typedef boost::shared_ptr<ThisClass> Ptr;
-	typedef boost::weak_ptr<ThisClass> WPtr;
-    typedef boost::shared_ptr<Model> ModelPtr;
-	typedef boost::weak_ptr<Model> ModelWPtr;
+	typedef std::shared_ptr<ThisClass> Ptr;
+	typedef std::weak_ptr<ThisClass> WPtr;
+    typedef std::shared_ptr<Model> ModelPtr;
+	typedef std::weak_ptr<Model> ModelWPtr;
 protected:
     //-------------------------------------------------------------------------
     ModelWPtr model;

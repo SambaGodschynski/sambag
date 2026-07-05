@@ -8,7 +8,7 @@
 #ifndef SAMBAG_CHANGEDEVENT_H
 #define SAMBAG_CHANGEDEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace com { namespace events {
 //=============================================================================

@@ -57,7 +57,7 @@ void Win32BufferedDraw::processDraw(ISurface::Ptr surface) {
 namespace {
 	class Win32ImageBuffer : public CairoImageSurface {
 	public:
-		typedef boost::shared_ptr<Win32ImageBuffer> Ptr;
+		typedef std::shared_ptr<Win32ImageBuffer> Ptr;
 	private:
 		Win32ImageBuffer(cairo_surface_t *s) : CairoImageSurface(s){}
 		// it seems that image surfaces created via 

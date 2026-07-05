@@ -12,8 +12,7 @@
 #ifndef SAMBAG_LuaCppTestClass_H
 #define SAMBAG_LuaCppTestClass_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/lua/Lua.hpp>
 #include <loki/Typelist.h>
 #include <sambag/lua/ALuaObject.hpp>
@@ -28,9 +27,9 @@ public:
     //-------------------------------------------------------------------------
     typedef sambag::lua::ALuaObject Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaCppTestClass> Ptr;
+    typedef std::shared_ptr<LuaCppTestClass> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaCppTestClass> WPtr;
+    typedef std::weak_ptr<LuaCppTestClass> WPtr;
 private:
 protected:
     //-------------------------------------------------------------------------

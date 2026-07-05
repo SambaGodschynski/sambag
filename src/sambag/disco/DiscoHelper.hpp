@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DISCOHELPER_H
 #define SAMBAG_DISCOHELPER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IPattern.hpp"
 #include <sambag/disco/Geometry.hpp>
 #include "IDrawContext.hpp"

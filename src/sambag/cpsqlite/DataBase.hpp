@@ -88,7 +88,7 @@ public:
 		typedef std::string Column;
 		typedef std::string Entry;
 		typedef boost::unordered_map<Column, Entry> Column2Entry; // unordered = mapping via hash
-		typedef boost::shared_ptr<Result> Ptr;
+		typedef std::shared_ptr<Result> Ptr;
 		//...................................................................................................
 		static const Entry NULL_ENTRY;
 		//...................................................................................................
@@ -123,31 +123,31 @@ public:
 	//--------------------------------------------------------------------------------------------------------
 	typedef std::vector<Result::Ptr> Results;
 	//--------------------------------------------------------------------------------------------------------
-	typedef boost::shared_ptr<DataBase> Ptr;
+	typedef std::shared_ptr<DataBase> Ptr;
 	//--------------------------------------------------------------------------------------------------------
 	typedef sqlite3_int64 Int;
 	//--------------------------------------------------------------------------------------------------------
 	typedef Path U;
 	//--------------------------------------------------------------------------------------------------------
-	typedef boost::weak_ptr<DataBase> V;
+	typedef std::weak_ptr<DataBase> V;
 	//--------------------------------------------------------------------------------------------------------
 	typedef std::map<U, V> Location2DataBase;
 	//--------------------------------------------------------------------------------------------------------
-	typedef boost::shared_ptr<Location2DataBase> Location2DataBasePtr;
+	typedef std::shared_ptr<Location2DataBase> Location2DataBasePtr;
 private:
 	//--------------------------------------------------------------------------------------------------------
-	boost::weak_ptr<Executer> executer;
+	std::weak_ptr<Executer> executer;
 	//--------------------------------------------------------------------------------------------------------
 	Path location;
 	//--------------------------------------------------------------------------------------------------------
 	// as static object => lifetime vague; problems with access in destructor
 	Location2DataBasePtr dieLate;
 	//--------------------------------------------------------------------------------------------------------
-	boost::weak_ptr<DataBase> self;
+	std::weak_ptr<DataBase> self;
 	//--------------------------------------------------------------------------------------------------------
 	DataBase( const Path &dbLocation );
 public:
-	boost::shared_ptr<Executer> getExecuter();
+	std::shared_ptr<Executer> getExecuter();
 	//--------------------------------------------------------------------------------------------------------
 	const Path & getLocation() const { return location; }
 	//--------------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public:
 class DataBase::Executer {
 public:
 	//--------------------------------------------------------------------------------------------------------
-	typedef boost::shared_ptr<Executer> Ptr;
+	typedef std::shared_ptr<Executer> Ptr;
 private:
 	//--------------------------------------------------------------------------------------------------------
 	DataBase *db;

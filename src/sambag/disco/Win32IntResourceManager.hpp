@@ -10,7 +10,7 @@
 
 #ifdef DISCO_USE_WIN32
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IResourceManager.hpp"
 #include <loki/Singleton.h>
 #include <boost/unordered_map.hpp>
@@ -27,7 +27,7 @@ class Win32IntResourceManager : public IResourceManager {
 friend struct Loki::CreateUsingNew<Win32IntResourceManager>;
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Win32IntResourceManager> Ptr;
+	typedef std::shared_ptr<Win32IntResourceManager> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	Win32IntResourceManager();

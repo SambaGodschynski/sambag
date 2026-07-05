@@ -23,7 +23,7 @@ class GraphicElement : public virtual IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<GraphicElement> Ptr;
+	typedef std::shared_ptr<GraphicElement> Ptr;
 private:
     //-------------------------------------------------------------------------
     std::string userData;
@@ -31,7 +31,7 @@ protected:
 	//-------------------------------------------------------------------------
 	GraphicElement();
 	//-------------------------------------------------------------------------
-	boost::weak_ptr<GraphicElement> __self;
+	std::weak_ptr<GraphicElement> __self;
 	//-------------------------------------------------------------------------
 	void __setSelf( Ptr self ) { __self = self; }
 public:

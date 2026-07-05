@@ -8,7 +8,7 @@
 #ifndef SAMBAG_TWEENS_H
 #define SAMBAG_TWEENS_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 
 namespace sambag { namespace disco { namespace components {

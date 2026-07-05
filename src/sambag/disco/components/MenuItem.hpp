@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MENUITEM_H
 #define SAMBAG_MENUITEM_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "DefaultButtonModell.hpp"
 #include "AButton.hpp"
 #include "IMenuElement.hpp"
@@ -25,7 +25,7 @@ class MenuItem :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<MenuItem> Ptr;
+	typedef std::shared_ptr<MenuItem> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------

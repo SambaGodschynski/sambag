@@ -40,7 +40,7 @@ class CairoSurface : public ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoSurface> Ptr;
+	typedef std::shared_ptr<CairoSurface> Ptr;
 	//-------------------------------------------------------------------------
 	SAMBAG_EXCEPTION_CLASS(SurfaceCreationFailed);
 protected:
@@ -71,7 +71,7 @@ class CairoImageSurface : public CairoSurface, public IImageSurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoImageSurface> Ptr;
+	typedef std::shared_ptr<CairoImageSurface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	Rectangle & getImageSurfaceRect(Rectangle &res) const;
@@ -102,7 +102,7 @@ class CairoRecordingSurface : public CairoSurface, public IRecordingSurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoRecordingSurface> Ptr;
+	typedef std::shared_ptr<CairoRecordingSurface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	CairoRecordingSurface(cairo_surface_t *s) : CairoSurface(s) {}

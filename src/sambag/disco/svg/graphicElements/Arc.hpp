@@ -18,7 +18,7 @@ class Arc : public virtual GraphicElement, public virtual Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Arc> Ptr;
+	typedef std::shared_ptr<Arc> Ptr;
 private:
 protected:
 	//-------------------------------------------------------------------------

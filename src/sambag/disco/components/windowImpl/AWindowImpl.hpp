@@ -8,7 +8,7 @@
 #ifndef SAMBAG_AWINDOW_H
 #define SAMBAG_AWINDOW_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/RootPane.hpp>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/com/events/Events.hpp>
@@ -50,9 +50,9 @@ class AWindowImpl :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AWindowImpl> Ptr;
+	typedef std::shared_ptr<AWindowImpl> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<AWindowImpl> WPtr;
+	typedef std::weak_ptr<AWindowImpl> WPtr;
 protected:
 private:
 public:

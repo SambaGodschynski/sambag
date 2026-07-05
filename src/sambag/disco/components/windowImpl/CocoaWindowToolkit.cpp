@@ -83,7 +83,7 @@ namespace {
 } // namespace(s)
 //----------------------------------------------------------------------------
 void CocoaWindowToolkit::invokeLater(const InvokeFunction &f,
-    int ms, boost::shared_ptr<void> toTrack)
+    int ms, std::shared_ptr<void> toTrack)
 {
 	sambag::disco::components::Timer::Ptr tm =
         sambag::disco::components::Timer::create(ms);

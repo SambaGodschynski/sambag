@@ -8,7 +8,7 @@
 #ifndef SAMBAG_COMPONENTWRAPPER_H
 #define SAMBAG_COMPONENTWRAPPER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/svg/graphicElements/GraphicElement.hpp>
 #include <sambag/disco/svg/Style.hpp>
 #include <sambag/disco/components/AComponent.hpp>
@@ -28,7 +28,7 @@ class ComponentWrapper : public AComponent {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ComponentWrapper> Ptr;
+	typedef std::shared_ptr<ComponentWrapper> Ptr;
 	//-------------------------------------------------------------------------
 	typedef ComponentWrapper<Drawable> Class;
 	//-------------------------------------------------------------------------

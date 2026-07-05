@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BOOSTTIMERIMPL2_H
 #define SAMBAG_BOOSTTIMERIMPL2_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ITimer.hpp"
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
@@ -27,7 +27,7 @@ public:
     //-------------------------------------------------------------------------
     // deadline_timer was removed in Boost 1.87; steady_timer is the replacement
     typedef boost::asio::steady_timer Timer;
-	typedef boost::shared_ptr<Timer> TimerPtr;
+	typedef std::shared_ptr<Timer> TimerPtr;
 private:
     TimerPtr timer;
 public:
@@ -40,7 +40,7 @@ public:
 	 * (call it before starting a timer)
      * Otherwise the thread starts on first need. 
      */
-	typedef boost::shared_ptr<void> WorkerThreadHolder;
+	typedef std::shared_ptr<void> WorkerThreadHolder;
     static WorkerThreadHolder startWorkerThread();
     //-------------------------------------------------------------------------
     BoostTimerImpl2();

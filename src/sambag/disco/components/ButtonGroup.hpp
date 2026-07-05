@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BUTTONGROUP_H
 #define SAMBAG_BUTTONGROUP_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -20,7 +20,7 @@ class ButtonGroup {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ButtonGroup> Ptr;
+	typedef std::shared_ptr<ButtonGroup> Ptr;
 protected:
 private:
 public:

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICPANELUI_H
 #define SAMBAG_BASICPANELUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 
 namespace sambag { namespace disco {
@@ -21,7 +21,7 @@ class BasicPanelUI : public AComponentUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicPanelUI> Ptr;
+	typedef std::shared_ptr<BasicPanelUI> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	BasicPanelUI() {}

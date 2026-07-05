@@ -72,7 +72,7 @@ Point2D Menu::computePopupLocation() const {
 
 
 	AContainerPtr parent = getParent();
-	PopupMenu::Ptr parentPop = boost::dynamic_pointer_cast<PopupMenu>(parent);
+	PopupMenu::Ptr parentPop = std::dynamic_pointer_cast<PopupMenu>(parent);
 	if (parent) {
 		// We are a submenu (pull-right)
 		Coordinate xOffset = 0;

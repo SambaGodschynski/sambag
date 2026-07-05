@@ -9,8 +9,7 @@
 #ifndef SAMBAG_SHAREDORWEAK_H
 #define SAMBAG_SHAREDORWEAK_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 namespace sambag { namespace com {
 //=============================================================================
 /**
@@ -20,7 +19,7 @@ namespace sambag { namespace com {
 template <class T>
 struct AsWeakPtr {
 //=============================================================================
-	typedef boost::shared_ptr<T> Ptr;
+	typedef std::shared_ptr<T> Ptr;
 	Ptr wptr;
 	AsWeakPtr(Ptr p) : wptr(p){}
 };
@@ -41,8 +40,8 @@ private:
 		void operator delete(void*){}
 	};
 public:
-	typedef boost::shared_ptr<T> Ptr;
-	typedef boost::weak_ptr<T> WPtr;
+	typedef std::shared_ptr<T> Ptr;
+	typedef std::weak_ptr<T> WPtr;
 	Ptr ptr;
 	WPtr wptr;
 	SharedOrWeak(){}
@@ -50,7 +49,7 @@ public:
 	template <class Derivated>
 	SharedOrWeak(AsWeakPtr<Derivated> wptr) : wptr(wptr.wptr) {}
 	template <class Derivated>
-	SharedOrWeak(boost::shared_ptr<Derivated> ptr) {
+	SharedOrWeak(std::shared_ptr<Derivated> ptr) {
 		this->ptr = ptr;
 	}
 
@@ -67,7 +66,7 @@ public:
 		return a==b;
 	}
 	template <class B>
-	bool operator==(boost::shared_ptr<B> b) const {
+	bool operator==(std::shared_ptr<B> b) const {
 		Ptr a = *this;
 		return a==b;
 	}
@@ -78,7 +77,7 @@ public:
 		return a!=b;
 	}
 	template <class B>
-	bool operator!=(boost::shared_ptr<B> b) const {
+	bool operator!=(std::shared_ptr<B> b) const {
 		Ptr a = *this;
 		return a!=b;
 	}
@@ -105,13 +104,13 @@ public:
 };
 }}
 template <class A, class B>
-bool operator==(boost::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
-	boost::shared_ptr<B> b = _b;
+bool operator==(std::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
+	std::shared_ptr<B> b = _b;
 	return a==b;
 }
 template <class A, class B>
-bool operator!=(boost::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
-	boost::shared_ptr<B> b = _b;
+bool operator!=(std::shared_ptr<A> a, const sambag::com::SharedOrWeak<B> &_b) {
+	std::shared_ptr<B> b = _b;
 	return a!=b;
 }
 #endif // SAMBAG_SHAREDORWEAK_H

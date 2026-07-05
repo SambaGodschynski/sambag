@@ -18,7 +18,7 @@ class SvgCircle : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgCircle> Ptr;
+	typedef std::shared_ptr<SvgCircle> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct CX_tag { typedef units::Unit Type; };

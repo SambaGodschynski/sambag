@@ -8,7 +8,7 @@
 #ifndef SAMBAG_PANEL_H
 #define SAMBAG_PANEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include "Forward.hpp"
 
@@ -21,7 +21,7 @@ class Panel : public AContainer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Panel> Ptr;
+	typedef std::shared_ptr<Panel> Ptr;
 	//-------------------------------------------------------------------------
 	ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:

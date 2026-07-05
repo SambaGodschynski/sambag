@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ABUTTON_H
 #define SAMBAG_ABUTTON_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AComponent.hpp"
 #include <string>
 
@@ -24,7 +24,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AbstractButton> Ptr;
+	typedef std::shared_ptr<AbstractButton> Ptr;
 	//-------------------------------------------------------------------------
 	typedef ButtonModell Model;
 protected:
@@ -38,7 +38,7 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<AbstractButton>(AComponent::getPtr());
+		return std::dynamic_pointer_cast<AbstractButton>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	/**

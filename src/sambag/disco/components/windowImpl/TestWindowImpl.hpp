@@ -8,7 +8,7 @@
 #ifndef SAMBAG_TESTWINDOWIMPL_H
 #define SAMBAG_TESTWINDOWIMPL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AWindowImpl.hpp"
 #include "WindowFlags.hpp"
 
@@ -22,7 +22,7 @@ class TestWindowImpl : public AWindowImpl, public WindowFlags {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<TestWindowImpl> Ptr;
+	typedef std::shared_ptr<TestWindowImpl> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	TestWindowImpl(){}

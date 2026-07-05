@@ -8,7 +8,7 @@
 #ifndef SAMBAG_HOSTTIMEINFO_H
 #define SAMBAG_HOSTTIMEINFO_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/integer.hpp>
 #include <string>
 

@@ -66,17 +66,17 @@ void CairoDrawContext::rect(const Rectangle &rect, const Number &cornerRadius) {
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setFillPattern(IPattern::Ptr pattern) {
-	fillPattern = boost::dynamic_pointer_cast<CairoPatternBase>(pattern);
+	fillPattern = std::dynamic_pointer_cast<CairoPatternBase>(pattern);
 	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::setStrokePattern(IPattern::Ptr pattern) {
-	strokePattern = boost::dynamic_pointer_cast<CairoPatternBase>(pattern);
+	strokePattern = std::dynamic_pointer_cast<CairoPatternBase>(pattern);
 	patternInUse = INVALID;
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::drawSurface(ISurface::Ptr _surface, Number opacity) {
-	CairoSurface::Ptr surface = boost::dynamic_pointer_cast<CairoSurface>(_surface);
+	CairoSurface::Ptr surface = std::dynamic_pointer_cast<CairoSurface>(_surface);
 	if (!_surface)
 		return;
 	cairo_surface_t *png = surface->getCairoSurface();
@@ -119,7 +119,7 @@ void CairoDrawContext::setClip(const Rectangle &r) {
 void CairoDrawContext::copyTo(IDrawContext::Ptr cn) const
 {
 	CairoDrawContext::Ptr dst =
-		boost::dynamic_pointer_cast<CairoDrawContext>(cn);
+		std::dynamic_pointer_cast<CairoDrawContext>(cn);
 	SAMBAG_ASSERT(dst);
 	cairo_set_source_surface (dst->getCairoContext(),
 			surfaceRef->getCairoSurface(),
@@ -132,7 +132,7 @@ void CairoDrawContext::copyAreaTo(IDrawContext::Ptr cn,
 		const Rectangle &src, const Point2D &dest) const
 {
 	CairoDrawContext::Ptr dstCn =
-		boost::dynamic_pointer_cast<CairoDrawContext>(cn);
+		std::dynamic_pointer_cast<CairoDrawContext>(cn);
 	SAMBAG_ASSERT(dstCn);
 	cairo_t *cr = dstCn->getCairoContext();
 	cairo_set_source_surface (cr,
@@ -406,7 +406,7 @@ void CairoDrawContext::setFillColor( const ColorRGBA &val ) {
 //-----------------------------------------------------------------------------
 ColorRGBA CairoDrawContext::getFillColor() const {
 	CairoSolidPattern::Ptr sPt =
-			boost::dynamic_pointer_cast<CairoSolidPattern>(fillPattern);
+			std::dynamic_pointer_cast<CairoSolidPattern>(fillPattern);
 	if (!sPt)
 		return false;
 	return sPt->getSolidColor();
@@ -419,7 +419,7 @@ void CairoDrawContext::setStrokeColor( const ColorRGBA &val ) {
 //-----------------------------------------------------------------------------
 ColorRGBA CairoDrawContext::getStrokeColor() const {
 	CairoSolidPattern::Ptr sPt =
-			boost::dynamic_pointer_cast<CairoSolidPattern>(strokePattern);
+			std::dynamic_pointer_cast<CairoSolidPattern>(strokePattern);
 	if (!sPt)
 		return false;
 	return sPt->getSolidColor();
@@ -541,7 +541,7 @@ Path::Ptr CairoDrawContext::copyPathFlat() const {
 }
 //-----------------------------------------------------------------------------
 void CairoDrawContext::appendPath( Path::Ptr path ) {
-	CairoPath::Ptr cp = boost::dynamic_pointer_cast<CairoPath, Path>(path);
+	CairoPath::Ptr cp = std::dynamic_pointer_cast<CairoPath, Path>(path);
 	if (!cp) return;
 	cairo_append_path(context, cp->getPath());
 	SAMBAG_CHECK_CONTEXT_STATE(context);
@@ -640,7 +640,7 @@ bool CairoDrawContext::inFill(const Point2D &p) const {
 //-----------------------------------------------------------------------------
 void CairoDrawContext::clone(IDrawContext::Ptr _dst) const {
     CairoDrawContext::Ptr dst =
-        boost::dynamic_pointer_cast<CairoDrawContext>(_dst);
+        std::dynamic_pointer_cast<CairoDrawContext>(_dst);
    
     if (!dst) {
         throw std::runtime_error("CairoDrawContext::clone wrong DST type");

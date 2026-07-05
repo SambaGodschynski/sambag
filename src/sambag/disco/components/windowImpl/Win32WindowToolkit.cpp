@@ -103,7 +103,7 @@ namespace {
 } // namespace(s)
 //----------------------------------------------------------------------------
 void Win32WindowToolkit::invokeLater(const InvokeFunction &f, int ms,
-    boost::shared_ptr<void> toTrack)
+    std::shared_ptr<void> toTrack)
 {
 	Timer::Ptr tm = Timer::create(ms);
 	tm->setNumRepetitions(0);

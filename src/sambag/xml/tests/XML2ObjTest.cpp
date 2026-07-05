@@ -1,7 +1,7 @@
 #include <cppunit/config/SourcePrefix.h>
 #include "XML2ObjTest.hpp"
 #include "sambag/xml/XML2Obj.hpp"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/algorithm/string.hpp>
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
@@ -44,7 +44,7 @@ struct Attr_X{};
 // Object Classes which are registered in the XML2Object Parser
 //------------------------------------------------------------------------------
 struct BaseObject {
-  typedef boost::shared_ptr<BaseObject> Ptr;
+  typedef std::shared_ptr<BaseObject> Ptr;
   typedef std::list<Ptr> ObjectList;
   ObjectList oL;
   std::string xmlText;
@@ -68,7 +68,7 @@ int BaseObject::numObjects = 0;
 static bool createdSignalPassed = false;
 //------------------------------------------------------------------------------
 struct Root : public BaseObject {
-  typedef boost::shared_ptr<Root> Ptr;
+  typedef std::shared_ptr<Root> Ptr;
   typedef std::pair<double, int> Closure;
   Closure closure;
   Root() {}
@@ -86,7 +86,7 @@ struct Root : public BaseObject {
 };
 //------------------------------------------------------------------------------
 struct ObjectA : public BaseObject {
-  typedef boost::shared_ptr<ObjectA> Ptr;
+  typedef std::shared_ptr<ObjectA> Ptr;
   int x;
   ObjectA() : x(0) {}
   static Ptr create() {
@@ -99,7 +99,7 @@ struct ObjectA : public BaseObject {
 };
 //------------------------------------------------------------------------------
 struct ObjectB : public BaseObject {
-  typedef boost::shared_ptr<ObjectB> Ptr;
+  typedef std::shared_ptr<ObjectB> Ptr;
   std::string descr;
   int x;
   ObjectB() : x(0) {}
@@ -194,7 +194,7 @@ void XML2ObjectTest::testClosure() {
 	xml2Obj.registerObject<Root>("root");
 	xml2Obj.setClosure(&pv);
 	BaseObject::Ptr base = xml2Obj.buildWithXmlString("<root/>");
-	Root::Ptr root = boost::dynamic_pointer_cast<Root>(base);
+	Root::Ptr root = std::dynamic_pointer_cast<Root>(base);
 	CPPUNIT_ASSERT( root );
 	CPPUNIT_ASSERT( root->closure == pv );
 }
@@ -259,11 +259,11 @@ void XML2ObjectTest::testBuildStructure() {
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>assert x
   BOOST_FOREACH( BaseObject::Ptr obj, ptr->oL ) {
 	  if (obj->getClassName() == "ObjectA") {
-		  ObjectA::Ptr oa = boost::dynamic_pointer_cast<ObjectA, BaseObject>(obj);
+		  ObjectA::Ptr oa = std::dynamic_pointer_cast<ObjectA, BaseObject>(obj);
 		  CPPUNIT_ASSERT_EQUAL( 10, oa->x);
 	  }
 	  if (obj->getClassName() == "ObjectB") {
-		  ObjectB::Ptr ob = boost::dynamic_pointer_cast<ObjectB, BaseObject>(obj);
+		  ObjectB::Ptr ob = std::dynamic_pointer_cast<ObjectB, BaseObject>(obj);
 	  	  CPPUNIT_ASSERT_EQUAL( 20, ob->x);
 	  }
   }

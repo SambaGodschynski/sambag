@@ -8,7 +8,7 @@
 #ifndef SAMBAG_COMPONENTUI_H
 #define SAMBAG_COMPONENTUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/Forward.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/IDrawContext.hpp>
@@ -26,7 +26,7 @@ class AComponentUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AComponentUI> Ptr;
+	typedef std::shared_ptr<AComponentUI> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	AComponentUI() {}

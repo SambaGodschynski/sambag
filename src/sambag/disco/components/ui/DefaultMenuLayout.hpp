@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTMENULAYOUT_H
 #define SAMBAG_DEFAULTMENULAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/BoxLayout.hpp>
 #include <sambag/disco/components/Forward.hpp>
 namespace sambag { namespace disco { namespace components { namespace ui {
@@ -20,7 +20,7 @@ class DefaultMenuLayout : public BoxLayout {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<DefaultMenuLayout> Ptr;
+	typedef std::shared_ptr<DefaultMenuLayout> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	DefaultMenuLayout(AContainerPtr target, Axis axis);

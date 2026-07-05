@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICSCROLLBARUI_H
 #define SAMBAG_BASICSCROLLBARUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ALayoutManager.hpp>
 #include <sambag/disco/components/Scrollbar.hpp>
@@ -32,7 +32,7 @@ class BasicScrollbarUI :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicScrollbarUI> Ptr;
+	typedef std::shared_ptr<BasicScrollbarUI> Ptr;
 	//-------------------------------------------------------------------------
 	typedef AComponentUI Super;
 	//-------------------------------------------------------------------------
@@ -41,7 +41,7 @@ protected:
 	//-------------------------------------------------------------------------
 	Timer::Ptr scrollTimer;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<BasicScrollbarUI> WPtr;
+	typedef std::weak_ptr<BasicScrollbarUI> WPtr;
 	//-------------------------------------------------------------------------
 	WPtr self;
 	//-------------------------------------------------------------------------
@@ -349,7 +349,7 @@ bool BasicScrollbarUI<M>::contains(AComponent::Ptr c, const Point2D &p) {
 template <class M>
 void BasicScrollbarUI<M>::installUI(AComponentPtr c) {
 	typename ScrollBarType::Ptr scrollbar = 
-		boost::dynamic_pointer_cast<ScrollBarType>(c);
+		std::dynamic_pointer_cast<ScrollBarType>(c);
 	SAMBAG_ASSERT(scrollbar);
 	_scrollbar = scrollbar;
 	thumbRect = Rectangle(0, 0, 0, 0);
@@ -790,7 +790,7 @@ void BasicScrollbarUI<M>::layoutContainer(AContainerPtr c) {
 	}
 
 	typename ScrollBarType::Ptr scrollbar =
-			boost::dynamic_pointer_cast<ScrollBarType>(c);
+			std::dynamic_pointer_cast<ScrollBarType>(c);
 	SAMBAG_ASSERT(scrollbar);
 	switch (scrollbar->getOrientation()) {
 	case ScrollBarType::VERTICAL:
@@ -1249,14 +1249,14 @@ template <class M>
 Coordinate BasicScrollbarUI<M>::
 TrackListener::adjustValueIfNecessary(const Coordinate &scrollBarValue) {
 	typename ScrollBarType::Ptr scrollbar = parent.getScrollbar();
-	ScrollPane::Ptr scrollBar = boost::dynamic_pointer_cast<ScrollPane>(
+	ScrollPane::Ptr scrollBar = std::dynamic_pointer_cast<ScrollPane>(
 			scrollbar->getParent());
 	if (!scrollBar)
 		return scrollBarValue;
 	Coordinate value = scrollBarValue;
 //	Viewport::Ptr viewport = scrollpane->getViewport();
 //	AComponentPtr view = viewport->getView();
-//	AList::Ptr list = boost::shared_ptr<AList>(view);
+//	AList::Ptr list = std::shared_ptr<AList>(view);
 //	if (!view)
 //		return value;
 //	JList list = (JList) view;

@@ -8,14 +8,13 @@
 #ifndef SAMBAG_Image_H
 #define SAMBAG_Image_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/disco/IDrawable.hpp>
 #include <sambag/disco/svg/graphicElements/ISceneGraph.hpp>
 
 namespace sambag { namespace disco { namespace svg {
 class SvgRoot;
-typedef boost::shared_ptr<SvgRoot> SvgRootPtr;
+typedef std::shared_ptr<SvgRoot> SvgRootPtr;
 //=============================================================================
 /** 
   * @class Image.
@@ -26,8 +25,8 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IDrawable Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Image> Ptr;
-	typedef boost::weak_ptr<Image> WPtr;
+	typedef std::shared_ptr<Image> Ptr;
+	typedef std::weak_ptr<Image> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	Image();

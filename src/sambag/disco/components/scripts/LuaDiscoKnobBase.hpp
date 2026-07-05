@@ -12,8 +12,7 @@
 #ifndef SAMBAG_LuaDiscoKnobBase_H
 #define SAMBAG_LuaDiscoKnobBase_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/lua/Lua.hpp>
 #include <loki/Typelist.h>
 #include <sambag/lua/ALuaObject.hpp>
@@ -28,9 +27,9 @@ public:
     //-------------------------------------------------------------------------
     typedef LuaDiscoObject Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaDiscoKnobBase> Ptr;
+    typedef std::shared_ptr<LuaDiscoKnobBase> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaDiscoKnobBase> WPtr;
+    typedef std::weak_ptr<LuaDiscoKnobBase> WPtr;
     //-------------------------------------------------------------------------
     
 private:

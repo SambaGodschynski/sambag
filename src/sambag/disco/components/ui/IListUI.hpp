@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ILISTUI_H
 #define SAMBAG_ILISTUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/Forward.hpp>
 
 namespace sambag { namespace disco { namespace components { namespace ui {
@@ -21,7 +21,7 @@ class IListUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IListUI> Ptr;
+	typedef std::shared_ptr<IListUI> Ptr;
 protected:
 private:
 public:

@@ -8,8 +8,7 @@
 #ifndef SAMBAG_ITIMER_H
 #define SAMBAG_ITIMER_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace com {
 //=============================================================================
@@ -20,9 +19,9 @@ class ITimer {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ITimer> Ptr;
+	typedef std::shared_ptr<ITimer> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<ITimer> WPtr;
+	typedef std::weak_ptr<ITimer> WPtr;
     //-------------------------------------------------------------------------
     typedef long Milliseconds;
 	//-------------------------------------------------------------------------

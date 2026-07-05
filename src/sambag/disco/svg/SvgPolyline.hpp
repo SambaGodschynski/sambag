@@ -22,7 +22,7 @@ class SvgPolyline : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPolyline> Ptr;
+	typedef std::shared_ptr<SvgPolyline> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct Points_tag { typedef graphicElements::pathInstruction::PointContainer Type; };

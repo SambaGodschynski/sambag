@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICPOPUPMENUUI_H
 #define SAMBAG_BASICPOPUPMENUUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 namespace sambag { namespace disco {
 namespace components { namespace ui { namespace basic {
@@ -21,7 +21,7 @@ class BasicPopupMenuUI : public AComponentUI {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicPopupMenuUI<ComponentModell> > Ptr;
+	typedef std::shared_ptr<BasicPopupMenuUI<ComponentModell> > Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	BasicPopupMenuUI();

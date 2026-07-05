@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SCROLLBAR_H
 #define SAMBAG_SCROLLBAR_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AComponent.hpp"
 #include "AScrollbar.hpp"
 #include "DefaultBoundedRangeModel.hpp"
@@ -24,7 +24,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AScrollbar<DefaultBoundedRangeModel> Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Scrollbar> Ptr;
+	typedef std::shared_ptr<Scrollbar> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:
@@ -36,7 +36,7 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<Scrollbar>(Super::getPtr());
+		return std::dynamic_pointer_cast<Scrollbar>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	static Ptr create(Scrollbar::Orientation orientation, const Coordinate &value,

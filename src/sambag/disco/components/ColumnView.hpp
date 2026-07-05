@@ -8,7 +8,7 @@
 #ifndef SAMBAG_COLUMNVIEW_H
 #define SAMBAG_COLUMNVIEW_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include "Panel.hpp"
 #include "ScrollPane.hpp"
@@ -36,11 +36,11 @@ public:
 	//-------------------------------------------------------------------------
 	typedef ColumnView<ListType> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ListType> ListTypePtr;
+	typedef std::shared_ptr<ListType> ListTypePtr;
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ColumnView> Ptr;
+	typedef std::shared_ptr<ColumnView> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector<ListTypePtr> Lists;
 	//-------------------------------------------------------------------------

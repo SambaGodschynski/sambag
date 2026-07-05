@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTLISTMODEL_H
 #define SAMBAG_DEFAULTLISTMODEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <boost/foreach.hpp>
 #include <sambag/com/Helper.hpp>

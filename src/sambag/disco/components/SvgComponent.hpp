@@ -8,8 +8,7 @@
 #ifndef SAMBAG_SVGCOMPONENT_H
 #define SAMBAG_SVGCOMPONENT_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include <boost/unordered_map.hpp>
 #include <sambag/disco/svg/Image.hpp>
@@ -41,8 +40,8 @@ public:
     class Dummy : public AContainer {
     public:
         //---------------------------------------------------------------------
-        typedef boost::shared_ptr<Dummy> Ptr;
-        typedef boost::weak_ptr<Dummy> WPtr;
+        typedef std::shared_ptr<Dummy> Ptr;
+        typedef std::weak_ptr<Dummy> WPtr;
         //---------------------------------------------------------------------
         static const std::string PROPERTY_MODEL;
         static const std::string PROPERTY_HIT_STRATEGY;
@@ -56,7 +55,7 @@ public:
         mutable IPattern::Ptr tmpBg, tmpFg;
         //---------------------------------------------------------------------
         friend class SvgComponent;
-        boost::weak_ptr<IDrawable> drawable;
+        std::weak_ptr<IDrawable> drawable;
         //---------------------------------------------------------------------
         /**
         * the model object which is possibly used by an extension.
@@ -80,7 +79,7 @@ public:
         }
         //---------------------------------------------------------------------
         template<class Model>
-        void setModel(boost::shared_ptr<Model> model) {
+        void setModel(std::shared_ptr<Model> model) {
             com::ArbitraryType::Ptr old = this->model;
             this->model = com::createObject(model);
             firePropertyChanged(PROPERTY_MODEL, old, this->model);
@@ -91,8 +90,8 @@ public:
         * no extension is used or the concrete type doesn't match.
         */
         template <class ConcreteModel>
-        boost::shared_ptr<ConcreteModel> getModel() const {
-            boost::shared_ptr<ConcreteModel> res;
+        std::shared_ptr<ConcreteModel> getModel() const {
+            std::shared_ptr<ConcreteModel> res;
             com::get(model, res);
             return res;
         }
@@ -130,7 +129,7 @@ public:
          * please consider the differences between a style ref. and a calculated
          * style
          */
-        typedef boost::shared_ptr<svg::Style> StylePtr;
+        typedef std::shared_ptr<svg::Style> StylePtr;
         StylePtr getStyleRef();
         //---------------------------------------------------------------------
         SAMBAG_STD_STATIC_COMPONENT_CREATOR(Dummy)
@@ -141,13 +140,13 @@ public:
         //---------------------------------------------------------------------
         virtual bool isVisible() const;
     };
-    typedef boost::shared_ptr<Dummy> DummyPtr;
-    typedef boost::weak_ptr<Dummy> DummyWPtr;
+    typedef std::shared_ptr<Dummy> DummyPtr;
+    typedef std::weak_ptr<Dummy> DummyWPtr;
     //-------------------------------------------------------------------------
     typedef AContainer Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<SvgComponent> Ptr;
-    typedef boost::weak_ptr<SvgComponent> WPtr;
+    typedef std::shared_ptr<SvgComponent> Ptr;
+    typedef std::weak_ptr<SvgComponent> WPtr;
 protected:
     //-------------------------------------------------------------------------
     /**
@@ -175,7 +174,7 @@ protected:
 private:
     //-------------------------------------------------------------------------
     struct SyncedSceneGraph;
-    mutable boost::shared_ptr<SyncedSceneGraph> sceneGraph;
+    mutable std::shared_ptr<SyncedSceneGraph> sceneGraph;
     //-------------------------------------------------------------------------
     void initExtendRegister();
     //-------------------------------------------------------------------------

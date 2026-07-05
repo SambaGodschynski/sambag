@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ANIMATON_H
 #define SAMBAG_ANIMATON_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/Common.hpp>
 #include <sambag/disco/GenericAnimator.hpp>
 #include <sambag/com/events/Events.hpp>
@@ -43,8 +43,8 @@ struct Animation :
             _UpdatePolicy>
 {
     typedef Animation<T, _Tween, _UpdatePolicy, _TimerImpl> ThisClass;
-    typedef boost::shared_ptr<ThisClass> Ptr;
-	typedef boost::weak_ptr<ThisClass> WPtr;
+    typedef std::shared_ptr<ThisClass> Ptr;
+	typedef std::weak_ptr<ThisClass> WPtr;
     typedef typename _TimerImpl::Milliseconds Ms;
     static Ptr create(const T &s=T(), const T &e=T(), Ms d=0, Ms rfsh=0)
     {

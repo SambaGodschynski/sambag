@@ -18,9 +18,9 @@ class FileHandler : public IDataHandler {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<FileHandler> Ptr;
+	typedef std::shared_ptr<FileHandler> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<std::fstream> FStreamPtr;
+	typedef std::shared_ptr<std::fstream> FStreamPtr;
 private:
 	//-------------------------------------------------------------------------
 	StreamPtr is; // stream to data

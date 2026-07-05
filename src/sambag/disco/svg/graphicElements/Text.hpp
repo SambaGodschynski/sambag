@@ -19,7 +19,7 @@ class Text : public virtual GraphicElement, public virtual Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Text> Ptr;
+	typedef std::shared_ptr<Text> Ptr;
 private:
 protected:
 	//-------------------------------------------------------------------------

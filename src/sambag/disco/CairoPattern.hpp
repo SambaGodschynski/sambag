@@ -16,7 +16,7 @@
 
 namespace sambag { namespace disco {
 //-----------------------------------------------------------------------------
-typedef boost::shared_ptr<cairo_pattern_t> CairoPatternRef;
+typedef std::shared_ptr<cairo_pattern_t> CairoPatternRef;
 inline void destroyCairoPattern(cairo_pattern_t *p) {
 	cairo_pattern_destroy(p);
 }
@@ -56,7 +56,7 @@ class CairoPatternBase : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoPatternBase> Ptr;
+	typedef std::shared_ptr<CairoPatternBase> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	Number opacity;
@@ -104,7 +104,7 @@ class CairoSolidPattern : public CairoPatternBase, public virtual ISolidPattern 
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoSolidPattern> Ptr;
+	typedef std::shared_ptr<CairoSolidPattern> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	CairoSolidPattern(CairoPatternRef ref) : CairoPatternBase(ref) {}
@@ -182,7 +182,7 @@ class CairoLinearPattern :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoLinearPattern> Ptr;
+	typedef std::shared_ptr<CairoLinearPattern> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Point2D> LinearPoints;
 private:
@@ -299,7 +299,7 @@ class CairoRadialPattern :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoRadialPattern> Ptr;
+	typedef std::shared_ptr<CairoRadialPattern> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Number, Point2D, Number> RadialCircles;
 private:
@@ -418,7 +418,7 @@ class CairoSurfacePattern :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CairoSurfacePattern> Ptr;
+	typedef std::shared_ptr<CairoSurfacePattern> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	ISurface::Ptr surface;

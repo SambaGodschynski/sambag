@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MESSAGEBOX_H
 #define SAMBAG_MESSAGEBOX_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "FramedWindow.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -20,7 +20,7 @@ class MessageBox : public FramedWindow {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<MessageBox> Ptr;
+	typedef std::shared_ptr<MessageBox> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	MessageBox(Window::Ptr parent) : FramedWindow(parent) {}

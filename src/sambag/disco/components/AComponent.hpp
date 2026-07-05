@@ -8,7 +8,7 @@
 #ifndef SAMBAG_COMPONENT_HPP_
 #define SAMBAG_COMPONENT_HPP_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/events/Events.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/Font.hpp>
@@ -48,7 +48,7 @@
 
 #define SAMBAG_STD_STATIC_COMPONENT_CREATOR(sambag_macro_class_name)		\
 	Ptr getPtr() const {													\
-		return boost::dynamic_pointer_cast<sambag_macro_class_name>(AComponent::getPtr());\
+		return std::dynamic_pointer_cast<sambag_macro_class_name>(AComponent::getPtr());\
 	}																		\
 	static Ptr create() {													\
 		Ptr res(new sambag_macro_class_name());								\
@@ -77,9 +77,9 @@ friend class AContainer;
 friend class Viewport; // used for drawForceDoubleBuffered call
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AComponent> Ptr;
+	typedef std::shared_ptr<AComponent> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<AComponent> WPtr;
+	typedef std::weak_ptr<AComponent> WPtr;
 	//-------------------------------------------------------------------------
 	typedef sambag::com::RecursiveMutex Lock;
 	//-------------------------------------------------------------------------
@@ -1398,7 +1398,7 @@ void AComponent::getClientProperty(const std::string &name, T &out) const {
 //-----------------------------------------------------------------------------
 template <class ContainerType>
 typename ContainerType::Ptr AComponent::getFirstContainer() const {
-	AContainerPtr p = boost::dynamic_pointer_cast<AContainer>(getPtr());
+	AContainerPtr p = std::dynamic_pointer_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	if (!p)
@@ -1407,7 +1407,7 @@ typename ContainerType::Ptr AComponent::getFirstContainer() const {
 		// !: we can't use AContainer: it's header can't
 		//    be included because of cross including issues.
 		typename ContainerType::Ptr ctp = 
-			boost::dynamic_pointer_cast<ContainerType>(p);
+			std::dynamic_pointer_cast<ContainerType>(p);
 		if (ctp)
 			return ctp;
 	}
@@ -1416,7 +1416,7 @@ typename ContainerType::Ptr AComponent::getFirstContainer() const {
 //-----------------------------------------------------------------------------
 template <class ContainerType>
 typename ContainerType::Ptr AComponent::getLastContainer() const {
-	AContainerPtr p = boost::dynamic_pointer_cast<AContainer>(getPtr());
+	AContainerPtr p = std::dynamic_pointer_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	if (!p)
@@ -1426,7 +1426,7 @@ typename ContainerType::Ptr AComponent::getLastContainer() const {
 		// !: we can't use AContainer: it's header can't
 		//    be included because of cross including issues.
 		 typename ContainerType::Ptr tmp = 
-			boost::dynamic_pointer_cast<ContainerType>(p);
+			std::dynamic_pointer_cast<ContainerType>(p);
 		if (tmp)
 			ctp = tmp;
 	}

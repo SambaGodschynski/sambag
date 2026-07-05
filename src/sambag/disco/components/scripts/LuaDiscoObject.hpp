@@ -8,8 +8,7 @@
 #ifndef SAMBAG_LuaDiscoObject_H
 #define SAMBAG_LuaDiscoObject_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/lua/Lua.hpp>
 #include "LuaDiscoObjectBase.hpp"
 #include <sambag/disco/components/Forward.hpp>
@@ -27,9 +26,9 @@ public:
     //-------------------------------------------------------------------------
     typedef LuaDiscoObjectBase Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaDiscoObject> Ptr;
+    typedef std::shared_ptr<LuaDiscoObject> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaDiscoObject> WPtr;
+    typedef std::weak_ptr<LuaDiscoObject> WPtr;
     //-------------------------------------------------------------------------
     typedef SvgComponent::Dummy Component;
     //-------------------------------------------------------------------------

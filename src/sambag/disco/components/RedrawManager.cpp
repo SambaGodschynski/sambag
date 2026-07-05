@@ -24,7 +24,7 @@ namespace {
     enum { SAMBAG_REFRESH_TRIGGER_TIME = 33 };
     typedef boost::timer::nanosecond_type NanosecondsType;
 	typedef boost::timer::cpu_timer CPUTimer;
-    typedef boost::shared_ptr<CPUTimer> CPUTimerPtr;
+    typedef std::shared_ptr<CPUTimer> CPUTimerPtr;
     const  NanosecondsType ONE_MILLI_IN_NANO = 1000000;
 }
 
@@ -465,7 +465,7 @@ void RedrawManager::drawDirtyRegions(ComponentMap &tmpDirtyComponents) {
 }
 //-----------------------------------------------------------------------------
 void RedrawManager::removeInvalidComponent(AComponentPtr component) {
-	AContainer::Ptr c = boost::dynamic_pointer_cast<AContainer>(component);
+	AContainer::Ptr c = std::dynamic_pointer_cast<AContainer>(component);
 	if (c)
 		invalidComponents.remove(c);
 }

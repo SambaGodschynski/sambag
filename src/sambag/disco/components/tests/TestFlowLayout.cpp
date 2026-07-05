@@ -11,7 +11,7 @@
 #include <sambag/disco/components/FlowLayout.hpp>
 #include "TestComponents.hpp"
 #include "TestHelper.hpp"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestFlowLayout );
@@ -89,7 +89,7 @@ void TestFlowLayout::testAlignment() {
 			"[TestComponent4,440,5,50x55,invalid]\n");
 	//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<LEFT
 	std::stringstream ss;
-	FlowLayout::Ptr fl = boost::dynamic_pointer_cast<FlowLayout>(con->getLayout());
+	FlowLayout::Ptr fl = std::dynamic_pointer_cast<FlowLayout>(con->getLayout());
 	CPPUNIT_ASSERT(fl);
 	fl->setAlignment(FlowLayout::LEFT);
 	con->doLayout();
@@ -118,7 +118,7 @@ void TestFlowLayout::testGap() {
 			"[TestComponent2,125,155,50x55,invalid]\n"
 			"[TestComponent3,325,155,50x55,invalid]\n"
 			"[TestComponent4,225,260,50x55,invalid]\n");
-	FlowLayout::Ptr fl = boost::dynamic_pointer_cast<FlowLayout>(con->getLayout());
+	FlowLayout::Ptr fl = std::dynamic_pointer_cast<FlowLayout>(con->getLayout());
 	CPPUNIT_ASSERT(fl);
 	fl->setHgap(150);
 	fl->setVgap(50);
@@ -134,7 +134,7 @@ void TestFlowLayout::testGap() {
 void TestFlowLayout::testPreferredLayoutSize() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	FlowLayout::Ptr fl = boost::dynamic_pointer_cast<FlowLayout>(con->getLayout());
+	FlowLayout::Ptr fl = std::dynamic_pointer_cast<FlowLayout>(con->getLayout());
 	CPPUNIT_ASSERT(fl);
 	CPPUNIT_ASSERT_EQUAL( Dimension(280, 65), fl->preferredLayoutSize(con));
 }
@@ -142,7 +142,7 @@ void TestFlowLayout::testPreferredLayoutSize() {
 void TestFlowLayout::testMinimumLayoutSize() {
 	using namespace sambag::disco;
 	using namespace sambag::disco::components;
-	FlowLayout::Ptr fl = boost::dynamic_pointer_cast<FlowLayout>(con->getLayout());
+	FlowLayout::Ptr fl = std::dynamic_pointer_cast<FlowLayout>(con->getLayout());
 	CPPUNIT_ASSERT(fl);
 	CPPUNIT_ASSERT_EQUAL( Dimension(280, 290), fl->minimumLayoutSize(con));
 }

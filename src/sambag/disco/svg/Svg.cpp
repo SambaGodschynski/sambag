@@ -46,7 +46,7 @@ void SvgObject::add(Ptr obj) {
 }
 //-----------------------------------------------------------------------------
 void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
-	SvgPatternBase::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPatternBase>(fillObj);
+	SvgPatternBase::Ptr svgPattern = std::dynamic_pointer_cast<SvgPatternBase>(fillObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
@@ -58,7 +58,7 @@ void SvgObject::onFillObject(SvgObject::Ptr fillObj) {
 //-----------------------------------------------------------------------------
 void SvgObject::onStrokeObject(SvgObject::Ptr strokeObj)
 {
-	SvgPatternBase::Ptr svgPattern = boost::dynamic_pointer_cast<SvgPatternBase>(strokeObj);
+	SvgPatternBase::Ptr svgPattern = std::dynamic_pointer_cast<SvgPatternBase>(strokeObj);
 	if (!svgPattern)
 		return;
 	GraphicElement::Ptr obj = getGraphicElement();
@@ -76,7 +76,7 @@ void SvgObject::set( const SvgObject::Stroke_tag::Type &colorStr,
 	// check whether referenced by id
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
-		SvgRoot::Ptr root = boost::dynamic_pointer_cast<SvgRoot>(this->getRoot());
+		SvgRoot::Ptr root = std::dynamic_pointer_cast<SvgRoot>(this->getRoot());
 		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onStrokeObject, this, _1);
@@ -100,7 +100,7 @@ void SvgObject::set( const SvgObject::Fill_tag::Type &colorStr,
 	// check whether referenced by id
 	std::string id = AttributeParser::getUrl(colorStr);
 	if (id.length()>0) { // get object by id (via recall)
-		SvgRoot::Ptr root = boost::dynamic_pointer_cast<SvgRoot>(this->getRoot());
+		SvgRoot::Ptr root = std::dynamic_pointer_cast<SvgRoot>(this->getRoot());
 		SAMBAG_ASSERT(root);
 		SvgRoot::ObjectRequestFunction callBk =
 			boost::bind(&SvgObject::onFillObject, this, _1);

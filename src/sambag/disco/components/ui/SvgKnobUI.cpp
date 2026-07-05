@@ -11,7 +11,7 @@ namespace sambag { namespace disco {
 namespace components { namespace ui {
 namespace {
     struct KnobHitStrategy : public HitStrategy {
-        typedef boost::shared_ptr<KnobHitStrategy> Ptr;
+        typedef std::shared_ptr<KnobHitStrategy> Ptr;
         virtual bool operator()(AComponentPtr c, const Point2D &p);
         static Ptr get();
     private:
@@ -61,7 +61,7 @@ void SvgKnobUI::installListeners(AComponent::Ptr c) {
 void SvgKnobUI::installUI(AComponentPtr c) {
     Super::installUI(c);
    	SvgComponent::Dummy::Ptr main =
-        boost::dynamic_pointer_cast<SvgComponent::Dummy>(c);
+        std::dynamic_pointer_cast<SvgComponent::Dummy>(c);
     if (!main) {
         throw std::runtime_error("SvgKnobUI: wrong component");
     }

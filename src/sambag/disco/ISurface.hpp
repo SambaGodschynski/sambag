@@ -10,7 +10,7 @@
 
 #include "sambag/com/Common.hpp"
 #include "Geometry.hpp"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -21,7 +21,7 @@ class ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ISurface> Ptr;
+	typedef std::shared_ptr<ISurface> Ptr;
 	//-------------------------------------------------------------------------
 	virtual Rectangle getSize() const = 0;
 	//-------------------------------------------------------------------------
@@ -45,7 +45,7 @@ class IImageSurface : public virtual ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IImageSurface> Ptr;
+	typedef std::shared_ptr<IImageSurface> Ptr;
 	//-------------------------------------------------------------------------
 	virtual void writeToFile(const std::string &filename) const = 0;
 };
@@ -54,7 +54,7 @@ class IRecordingSurface : public virtual ISurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IRecordingSurface> Ptr;
+	typedef std::shared_ptr<IRecordingSurface> Ptr;
 };
 }} // namespace
 

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SHAPE_H
 #define SAMBAG_SHAPE_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IDrawable.hpp"
 namespace sambag { namespace disco {
 //=============================================================================
@@ -19,7 +19,7 @@ class Shape : public virtual IDrawable {
 //=============================================================================
 public:
     //-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Shape> Ptr;
+	typedef std::shared_ptr<Shape> Ptr;
     //-------------------------------------------------------------------------
     /**
      * @brief put shapes into context

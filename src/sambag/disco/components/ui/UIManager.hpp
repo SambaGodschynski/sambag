@@ -8,7 +8,7 @@
 #ifndef SAMBAG_UIMANAGER_H
 #define SAMBAG_UIMANAGER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <loki/Singleton.h>
 #include "ALookAndFeel.hpp"
 #include <boost/unordered_map.hpp>

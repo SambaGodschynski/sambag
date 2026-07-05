@@ -8,7 +8,7 @@
 #ifndef SAMBAG_MOUSEEVENTCREATOR_H
 #define SAMBAG_MOUSEEVENTCREATOR_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "MouseEvent.hpp"
 #include <sambag/com/events/Events.hpp>
 #include <sambag/disco/Geometry.hpp>
@@ -27,7 +27,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef int Bitmask;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<MouseEventCreator> Ptr;
+	typedef std::shared_ptr<MouseEventCreator> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	MouseEvent lastEvent;

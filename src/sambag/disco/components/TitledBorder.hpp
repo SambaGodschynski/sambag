@@ -8,7 +8,7 @@
 #ifndef SAMBAG_TITLEDBORDER_H
 #define SAMBAG_TITLEDBORDER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/svg/Style.hpp>
 #include "IBorder.hpp"
 
@@ -23,7 +23,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IBorder Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<TitledBorder> Ptr;
+	typedef std::shared_ptr<TitledBorder> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	IBorder::Ptr border;

@@ -39,7 +39,7 @@ IDrawable::Ptr LuaDiscoButton::getTextElement() const {
 //-----------------------------------------------------------------------------
 std::string LuaDiscoButton::getText(lua_State *lua) {
     using svg::graphicElements::Text;
-    Text::Ptr txt = boost::dynamic_pointer_cast<Text>(getTextElement());
+    Text::Ptr txt = std::dynamic_pointer_cast<Text>(getTextElement());
     if (!txt) {
         return "";
     }
@@ -48,7 +48,7 @@ std::string LuaDiscoButton::getText(lua_State *lua) {
 //-----------------------------------------------------------------------------
 void LuaDiscoButton::setText(lua_State *lua, const std::string & text) {
     using svg::graphicElements::Text;
-    Text::Ptr txt = boost::dynamic_pointer_cast<Text>(getTextElement());
+    Text::Ptr txt = std::dynamic_pointer_cast<Text>(getTextElement());
     if (!txt) {
         return;
     }
@@ -72,7 +72,7 @@ void LuaDiscoButton::onAction(lua_State *lua, const std::string &expr)
 void LuaDiscoButton::addOnClickedListener(lua_State *lua, const std::string & expr)
 {
     Component::Ptr comp = getComponent();
-    boost::shared_ptr<DefaultButtonModell> model =
+    std::shared_ptr<DefaultButtonModell> model =
         comp->getModel<DefaultButtonModell>();
     SAMBAG_ASSERT(model);
     model->EventSender<events::ActionEvent>::addTrackedEventListener(

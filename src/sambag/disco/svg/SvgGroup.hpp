@@ -19,7 +19,7 @@ class SvgGroup : public SvgCompound {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgGroup> Ptr;
+	typedef std::shared_ptr<SvgGroup> Ptr;
 private:
 protected:
 	SvgGroup(){}

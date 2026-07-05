@@ -8,8 +8,7 @@
 #ifndef SAMBAG_MENU_H
 #define SAMBAG_MENU_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "MenuItem.hpp"
 #include "Forward.hpp"
 
@@ -22,9 +21,9 @@ class Menu : public MenuItem {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Menu> Ptr;
+	typedef std::shared_ptr<Menu> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Menu> WPtr;
+	typedef std::weak_ptr<Menu> WPtr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:

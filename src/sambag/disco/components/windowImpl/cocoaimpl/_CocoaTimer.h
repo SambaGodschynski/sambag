@@ -2,7 +2,7 @@
 #define SAMBAG__COCOATIMERIMPL_H
 #ifdef DISCO_USE_COCOA
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/ITimer.hpp>
 
 namespace sambag { namespace disco { namespace components {

@@ -16,18 +16,18 @@
 namespace tests {
 namespace {
 	struct A {
-		typedef boost::shared_ptr<A> Ptr;
-		typedef boost::weak_ptr<A> WPtr;
+		typedef std::shared_ptr<A> Ptr;
+		typedef std::weak_ptr<A> WPtr;
 		int val;
 		A(int v=0) : val(v) {}
 	};
 	struct B : public A {
-		typedef boost::shared_ptr<B> Ptr;
-		typedef boost::weak_ptr<B> WPtr;
+		typedef std::shared_ptr<B> Ptr;
+		typedef std::weak_ptr<B> WPtr;
 	};
 	struct C {
-		typedef boost::shared_ptr<C> Ptr;
-		typedef boost::weak_ptr<C> WPtr;
+		typedef std::shared_ptr<C> Ptr;
+		typedef std::weak_ptr<C> WPtr;
 	};
 	int func(const sambag::com::SharedOrWeak<A> &a) {
 		return a->val;

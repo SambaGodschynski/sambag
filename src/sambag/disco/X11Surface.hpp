@@ -23,7 +23,7 @@ class X11Surface : public CairoSurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<X11Surface> Ptr;
+	typedef std::shared_ptr<X11Surface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	X11Surface(cairo_surface_t *s) : CairoSurface(s) {}

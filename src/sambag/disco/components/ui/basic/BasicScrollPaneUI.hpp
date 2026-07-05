@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICSCROLLPANEUI_H
 #define SAMBAG_BASICSCROLLPANEUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ScrollPane.hpp>
 #include <sambag/disco/components/Viewport.hpp>
@@ -27,9 +27,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AComponentUI Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicScrollPaneUI> Ptr;
+	typedef std::shared_ptr<BasicScrollPaneUI> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<BasicScrollPaneUI> WPtr;
+	typedef std::weak_ptr<BasicScrollPaneUI> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	WPtr self;

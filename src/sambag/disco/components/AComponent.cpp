@@ -973,11 +973,11 @@ void AComponent::processMouseEvent(const events::MouseEvent &ev) {
 }
 //-----------------------------------------------------------------------------
 RootPanePtr AComponent::getTopLevelRootPane() const {
-	/*AContainer::Ptr p = boost::dynamic_pointer_cast<AContainer>(getPtr());
+	/*AContainer::Ptr p = std::dynamic_pointer_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	for (; p; p = p->getParent()) {
-		RootPanePtr rt = boost::dynamic_pointer_cast<RootPane>(p);
+		RootPanePtr rt = std::dynamic_pointer_cast<RootPane>(p);
 		if (rt)
 			return rt;
 	}
@@ -986,11 +986,11 @@ RootPanePtr AComponent::getTopLevelRootPane() const {
 }
 //-----------------------------------------------------------------------------
 WindowPtr AComponent::getTopLevelAncestor() const {
-	/*AContainer::Ptr p = boost::dynamic_pointer_cast<AContainer>(getPtr());
+	/*AContainer::Ptr p = std::dynamic_pointer_cast<AContainer>(getPtr());
 	if (!p)
 		p = getParent();
 	for (; p; p = p->getParent()) {
-		WindowPtr w = boost::dynamic_pointer_cast<Window>(p);
+		WindowPtr w = std::dynamic_pointer_cast<Window>(p);
 		if (w)
 			return w;
 	}
@@ -1144,7 +1144,7 @@ void AComponent::drawForceDoubleBuffered(IDrawContext::Ptr cn) {
 bool AComponent::isDrawing() const {
 	if (getFlag(ANCESTOR_USING_BUFFER))
 		return true;
-	AContainerPtr component = boost::dynamic_pointer_cast<AContainer>(getPtr());
+	AContainerPtr component = std::dynamic_pointer_cast<AContainer>(getPtr());
 	while (component) {
 		if (component->getFlag(ANCESTOR_USING_BUFFER)) {
 			return true;
@@ -1201,7 +1201,7 @@ void AComponent::scrollRectToVisible(const Rectangle &aRect) {
 	Rectangle rect = aRect;
 	AContainerPtr parent = getParent();
 	CellRendererPane::Ptr cellR = 
-		boost::dynamic_pointer_cast<CellRendererPane>(parent);
+		std::dynamic_pointer_cast<CellRendererPane>(parent);
 	Coordinate dx = getX(), dy = getY();
 	if (parent && !cellR) {
 		rect.x ( rect.x() + dx );

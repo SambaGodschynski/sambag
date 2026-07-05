@@ -8,7 +8,7 @@
 #ifndef SAMBAG_FLOWLAYOUT_H
 #define SAMBAG_FLOWLAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 #include <sambag/com/ArithmeticWrapper.hpp>
 
@@ -24,7 +24,7 @@ class FlowLayout : public ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<FlowLayout> Ptr;
+	typedef std::shared_ptr<FlowLayout> Ptr;
 	//-------------------------------------------------------------------------
 	/**
 	 * This value indicates that each row of components

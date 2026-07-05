@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ISCROLLABLE_H
 #define SAMBAG_ISCROLLABLE_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/Geometry.hpp>
 #include "AScrollbar.hpp"
 
@@ -21,7 +21,7 @@ class IScrollable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IScrollable> Ptr;
+	typedef std::shared_ptr<IScrollable> Ptr;
 	//-------------------------------------------------------------------------
 	/**
 	 * Returns the preferred size of the viewport for a view component.

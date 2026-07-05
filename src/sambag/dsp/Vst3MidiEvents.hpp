@@ -8,8 +8,7 @@
 #ifndef SAMBAG_VST3MIDIEVENTS_H
 #define SAMBAG_VST3MIDIEVENTS_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "IMidiEvents.hpp"
 #include <ivstevents.h>
 #include <vector>
@@ -24,8 +23,8 @@ namespace sambag { namespace dsp {
 class Vst3MidiAdapter : public Steinberg::Vst::IEventList {
 //=============================================================================
 public:
-    typedef boost::shared_ptr<Vst3MidiAdapter> Ptr;
-    typedef boost::weak_ptr<Vst3MidiAdapter> WPtr;
+    typedef std::shared_ptr<Vst3MidiAdapter> Ptr;
+    typedef std::weak_ptr<Vst3MidiAdapter> WPtr;
 
 protected:
     Vst3MidiAdapter() {}
@@ -55,8 +54,8 @@ public:
 class IMidiAdapter : public IMidiEvents {
 //=============================================================================
 public:
-    typedef boost::shared_ptr<IMidiAdapter> Ptr;
-    typedef boost::weak_ptr<IMidiAdapter> WPtr;
+    typedef std::shared_ptr<IMidiAdapter> Ptr;
+    typedef std::weak_ptr<IMidiAdapter> WPtr;
 protected:
     IMidiAdapter() {}
     IMidiAdapter(const IMidiAdapter&) {}

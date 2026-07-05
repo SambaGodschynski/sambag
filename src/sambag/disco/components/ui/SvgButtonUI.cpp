@@ -46,7 +46,7 @@ void SvgButtonUI::installListeners(AComponent::Ptr c) {
 void SvgButtonUI::installUI(AComponentPtr c) {
     Super::installUI(c);
    	SvgComponent::Dummy::Ptr main =
-        boost::dynamic_pointer_cast<SvgComponent::Dummy>(c);
+        std::dynamic_pointer_cast<SvgComponent::Dummy>(c);
     if (!main) {
         throw std::runtime_error("SvgButtonUI: wrong component");
     }

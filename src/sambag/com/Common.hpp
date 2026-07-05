@@ -11,8 +11,7 @@
 // common used headers
 #include <sambag/math/VectorN.hpp>
 #include <math.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 // boost/foreach.hpp was removed in Boost 1.87; provide drop-in replacements
 namespace sambag { namespace com { namespace detail {
     template<typename T> struct ReverseRange {

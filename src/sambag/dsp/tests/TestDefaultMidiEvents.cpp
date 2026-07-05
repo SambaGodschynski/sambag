@@ -20,7 +20,7 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testEventCopy() {
 	using namespace sambag::dsp;
-	typedef boost::shared_array<IMidiEvents::Data> DataArray;
+	typedef std::shared_ptr<IMidiEvents::Data> DataArray;
 	DataArray data[1024];
 	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
 	for (int i=0; i<1024; ++i) {
@@ -44,8 +44,8 @@ void TestDefaultMidiEvents::testEventCopy() {
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testInsertDeep() {
 	using namespace sambag::dsp;
-	typedef boost::shared_array<IMidiEvents::Data> DataArray;
-    typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
+	typedef std::shared_ptr<IMidiEvents::Data> DataArray;
+    typedef std::shared_ptr<IMidiEvents> MidiEventsPtr;
 	DataArray statData[1024];
 	DataArray tmp[1024];
     DefaultMidiEvents::Ptr deep = DefaultMidiEvents::create();
@@ -74,8 +74,8 @@ void TestDefaultMidiEvents::testInsertDeep() {
 //-----------------------------------------------------------------------------
 void TestDefaultMidiEvents::testCreateFlatRawData() {
 	using namespace sambag::dsp;
-	typedef boost::shared_array<IMidiEvents::Data> DataArray;
-    typedef boost::shared_ptr<IMidiEvents> MidiEventsPtr;
+	typedef std::shared_ptr<IMidiEvents::Data> DataArray;
+    typedef std::shared_ptr<IMidiEvents> MidiEventsPtr;
 	DataArray data[1024];
 	DefaultMidiEvents::Ptr orig = DefaultMidiEvents::create();
     size_t sumBytes = 0;

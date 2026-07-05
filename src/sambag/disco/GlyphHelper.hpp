@@ -8,7 +8,7 @@
 #ifndef SAMBAG_GLYPHHELPER_H
 #define SAMBAG_GLYPHHELPER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <limits>
 #include <string>

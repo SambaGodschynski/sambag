@@ -24,7 +24,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef GraphicElement Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<RefElement> Ptr;
+	typedef std::shared_ptr<RefElement> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	IDrawable::Ptr ref;
@@ -64,7 +64,7 @@ public:
 	}
     //-------------------------------------------------------------------------
 	virtual void shape( IDrawContext::Ptr context ) {
-        Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(ref);
+        Shape::Ptr shape = std::dynamic_pointer_cast<Shape>(ref);
         if (shape) {
             shape->shape(context);
         }

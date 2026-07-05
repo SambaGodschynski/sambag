@@ -8,7 +8,7 @@
 #ifndef SAMBAG_VIEWPORTLAYOUT_H
 #define SAMBAG_VIEWPORTLAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -20,7 +20,7 @@ class ViewportLayout : public ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ViewportLayout> Ptr;
+	typedef std::shared_ptr<ViewportLayout> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	ViewportLayout();

@@ -8,8 +8,7 @@
 #ifndef SAMBAG_APOPUPMENU_H
 #define SAMBAG_APOPUPMENU_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include "FlowLayout.hpp"
 #include <sambag/disco/components/Window.hpp>
@@ -44,9 +43,9 @@ public:
 	//-------------------------------------------------------------------------
     typedef APopupMenu<Model> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Class> WPtr;
+	typedef std::weak_ptr<Class> WPtr;
     //-------------------------------------------------------------------------
 	static const std::string PROPERTY_POPUP_LOCATION;
     //-------------------------------------------------------------------------
@@ -200,7 +199,7 @@ template <class SM>
 void APopupMenu<SM>::getSubElements(MenuElements &out) const {
 	for (size_t i=0; i<getComponentCount(); ++i) {
 		AComponentPtr comp = AContainer::getComponent(i);
-		IMenuElement::Ptr el = boost::dynamic_pointer_cast<IMenuElement>(comp);
+		IMenuElement::Ptr el = std::dynamic_pointer_cast<IMenuElement>(comp);
 		if (!el)
 			continue;
 		out.push_back(el);
@@ -219,7 +218,7 @@ AComponentPtr APopupMenu<SM>::getInvoker() const {
 //-----------------------------------------------------------------------------
 template <class SM>
 void APopupMenu<SM>::menuSelectionChanged(bool isIncluded) {
-	Menu::Ptr m = boost::dynamic_pointer_cast<Menu>(getInvoker());
+	Menu::Ptr m = std::dynamic_pointer_cast<Menu>(getInvoker());
 	if (m)
 		m->setPopupMenuVisible(isIncluded);
 	else

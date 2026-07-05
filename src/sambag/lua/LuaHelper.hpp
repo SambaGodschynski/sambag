@@ -11,7 +11,7 @@
 #include <lua.hpp>
 #include "ILuaTable.hpp"
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/tuple/tuple.hpp>
 #include <sambag/com/Helper.hpp>
 #include <loki/NullType.h>
@@ -44,8 +44,8 @@ typedef boost::tuple<IgnoreReturn, IgnoreReturn> IgnoreReturn2;
 typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn3;
 typedef boost::tuple<IgnoreReturn, IgnoreReturn, IgnoreReturn, IgnoreReturn> IgnoreReturn4;
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-typedef boost::shared_ptr<lua_State> LuaStateRef;
-typedef boost::weak_ptr<lua_State> LuaStateWRef;
+typedef std::shared_ptr<lua_State> LuaStateRef;
+typedef std::weak_ptr<lua_State> LuaStateWRef;
 inline LuaStateRef createLuaStateRef(bool openLibs = true) {
 	LuaStateRef lRef(luaL_newstate(), &lua_close);
 	if (!openLibs)

@@ -8,8 +8,7 @@
 #ifndef SAMBAG_WIN32WINDOW_H
 #define SAMBAG_WIN32WINDOW_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <boost/unordered_map.hpp>
 
 #ifdef DISCO_USE_WIN32
@@ -29,8 +28,8 @@ struct WndClassManager {
 //=============================================================================
 	typedef boost::tuple<std::string, HINSTANCE, bool> WndClassId;
 	struct WndClassHolder {
-		typedef boost::shared_ptr<WndClassHolder> Ptr;
-		typedef boost::weak_ptr<WndClassHolder> WPtr;
+		typedef std::shared_ptr<WndClassHolder> Ptr;
+		typedef std::weak_ptr<WndClassHolder> WPtr;
 		WndClassId wndClassId;
 		WNDCLASS wndClass;
 		static Ptr create(const WndClassId &id);
@@ -55,9 +54,9 @@ class Win32WindowImpl : public WindowFlags {
 friend class Win32WindowToolkit;
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Win32WindowImpl> Ptr;
+	typedef std::shared_ptr<Win32WindowImpl> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Win32WindowImpl> WPtr;
+	typedef std::weak_ptr<Win32WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
 	WndClassManager::WndClassHolder::Ptr wndClassHolder;

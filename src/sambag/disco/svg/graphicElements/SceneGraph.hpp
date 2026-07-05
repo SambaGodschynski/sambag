@@ -29,7 +29,7 @@ namespace sambag { namespace disco { namespace svg { namespace graphicElements {
 struct IProcessListObject {
 //=============================================================================
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<IProcessListObject> Ptr;
+    typedef std::shared_ptr<IProcessListObject> Ptr;
     //-------------------------------------------------------------------------
     virtual void perform(IDrawContext::Ptr context) = 0;
     //-------------------------------------------------------------------------
@@ -51,8 +51,8 @@ struct IProcessListObject {
 };
 
 extern IProcessListObject::Ptr createProcessDrawable( IDrawable::Ptr drawable,
-    bool resetContextState, boost::shared_ptr<Style> style,
-    boost::shared_ptr<Matrix> transformation);
+    bool resetContextState, std::shared_ptr<Style> style,
+    std::shared_ptr<Matrix> transformation);
 
 //=============================================================================
 /**
@@ -61,7 +61,7 @@ extern IProcessListObject::Ptr createProcessDrawable( IDrawable::Ptr drawable,
 struct DoNothing : public IProcessListObject {
 //=============================================================================
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<DoNothing> Ptr;
+    typedef std::shared_ptr<DoNothing> Ptr;
     //-------------------------------------------------------------------------
     virtual std::string toString() const {
         return "DoNothing";
@@ -88,7 +88,7 @@ struct RestoreContextState : public IProcessListObject {
 	//-------------------------------------------------------------------------
 	virtual ~RestoreContextState() {}
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<RestoreContextState> Ptr;
+    typedef std::shared_ptr<RestoreContextState> Ptr;
     //-------------------------------------------------------------------------
     RestoreContextState(){};
     //-------------------------------------------------------------------------
@@ -110,7 +110,7 @@ struct RestoreContextState : public IProcessListObject {
 };
 
 class GraphicElement;
-typedef boost::shared_ptr<GraphicElement> GraphicElementPtr;
+typedef std::shared_ptr<GraphicElement> GraphicElementPtr;
 //=============================================================================
 /**
  * @class SceneGraph.
@@ -124,16 +124,16 @@ public:
     //-------------------------------------------------------------------------
     typedef boost::vecS VertexContainerType;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<SceneGraph> Ptr;
+    typedef std::shared_ptr<SceneGraph> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<SceneGraph> WPtr;
+    typedef std::weak_ptr<SceneGraph> WPtr;
     //-------------------------------------------------------------------------
     // TODO: cleanup SceneGraphElement / IDrawable confusuion
     typedef IDrawable::Ptr SceneGraphElement;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<Style> StylePtr;
+    typedef std::shared_ptr<Style> StylePtr;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<Matrix> MatrixPtr;
+    typedef std::shared_ptr<Matrix> MatrixPtr;
     //-------------------------------------------------------------------------
     typedef int OrderNumber;
     //-------------------------------------------------------------------------

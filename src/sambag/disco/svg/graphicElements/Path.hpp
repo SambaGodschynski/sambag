@@ -20,7 +20,7 @@ class Path : public virtual GraphicElement, public virtual Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Path> Ptr;
+	typedef std::shared_ptr<Path> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	virtual void drawPath( IDrawContext::Ptr context );

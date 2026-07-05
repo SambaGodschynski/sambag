@@ -104,7 +104,7 @@ void TestSvg::testSvgFirstElements() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//CPPUNIT_ASSERT_EQUAL(12.*35.43307, (Number)rootObject->getSize().getWidth());
@@ -119,7 +119,7 @@ void TestSvg::testSvgFirstElements() {
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> manipulate object
     using svg::graphicElements::GraphicElement;
 	GraphicElement::Ptr text =
-        boost::dynamic_pointer_cast<GraphicElement>(g->getElementById("#text"));
+        std::dynamic_pointer_cast<GraphicElement>(g->getElementById("#text"));
 	CPPUNIT_ASSERT(text);
     CPPUNIT_ASSERT_EQUAL(std::string("HELLO"), text->getUserData());
 	svg::graphicElements::SceneGraph::StylePtr textStyle = g->getStyleRef(text);
@@ -137,7 +137,7 @@ void TestSvg::testSvgTransform01() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -157,7 +157,7 @@ void TestSvg::testSvgTransform02() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -177,7 +177,7 @@ void TestSvg::testSvgTransform03() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -197,7 +197,7 @@ void TestSvg::testSvgTransform04() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -217,7 +217,7 @@ void TestSvg::testSvgTransform05() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -237,7 +237,7 @@ void TestSvg::testSvgPath() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -258,7 +258,7 @@ void TestSvg::testSvgPath02() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -278,7 +278,7 @@ void TestSvg::testSvgPath03() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -298,7 +298,7 @@ void TestSvg::testSvgPath04() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -318,7 +318,7 @@ void TestSvg::testSvgPath04b() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -338,7 +338,7 @@ void TestSvg::testSvgPath05() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -358,7 +358,7 @@ void TestSvg::testSvgPath05b() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -378,7 +378,7 @@ void TestSvg::testSvgPath06() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -398,7 +398,7 @@ void TestSvg::testSvgPathValues() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -418,7 +418,7 @@ void TestSvg::testSvgPolyline() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -438,7 +438,7 @@ void TestSvg::testSvgPolygon() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -458,7 +458,7 @@ void TestSvg::testSvgStdFill() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -478,7 +478,7 @@ void TestSvg::testSvgArc() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -498,7 +498,7 @@ void TestSvg::testSvgUse() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -518,7 +518,7 @@ void TestSvg::testSvgFont() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -538,7 +538,7 @@ void TestSvg::testSvgOpacity() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -560,7 +560,7 @@ void TestSvg::testSvgImage() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -581,7 +581,7 @@ void TestSvg::testSvgStyle() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -601,7 +601,7 @@ void TestSvg::testSvgStyle2() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -621,7 +621,7 @@ void TestSvg::testLineCapStyle() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -641,7 +641,7 @@ void TestSvg::testLineJoinStyle() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -661,7 +661,7 @@ void TestSvg::testSvgGradient() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -682,7 +682,7 @@ void TestSvg::testBoundingBoxes() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -706,7 +706,7 @@ void TestSvg::testBoundingBoxes() {
 	context->setStrokeWidth(2);
 	// draw
 	boost_for_each(IDrawable::Ptr obj, l) {
-		//if (!boost::dynamic_pointer_cast<graphicElements::RefElement>(obj))
+		//if (!std::dynamic_pointer_cast<graphicElements::RefElement>(obj))
 		//	continue;
 		context->rect(g->getBoundingBox(obj, context));
 		context->stroke();
@@ -722,7 +722,7 @@ void TestSvg::testIssue146() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -747,7 +747,7 @@ void TestSvg::testUnits() {
 	CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
 	svg::SvgBuilder builder;
-	svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+	svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 			( builder.buildSvgFromFilename(TEST_SVG) );
 	CPPUNIT_ASSERT(rootObject);
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png
@@ -767,7 +767,7 @@ void TestSvg::testPattern() {
     CPPUNIT_ASSERT(boost::filesystem::exists(TEST_SVG));
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>build svg
     svg::SvgBuilder builder;
-    svg::SvgRoot::Ptr rootObject = boost::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
+    svg::SvgRoot::Ptr rootObject = std::dynamic_pointer_cast<svg::SvgRoot, svg::SvgObject>
 	( builder.buildSvgFromFilename(TEST_SVG) );
     CPPUNIT_ASSERT(rootObject);
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create png

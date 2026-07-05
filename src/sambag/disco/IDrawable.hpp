@@ -11,8 +11,7 @@
 #include "IDrawContext.hpp"
 #include "sambag/com/Common.hpp"
 #include "string"
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco {
 //=============================================================================
@@ -23,9 +22,9 @@ class IDrawable {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IDrawable> Ptr;
+	typedef std::shared_ptr<IDrawable> Ptr;
         //-------------------------------------------------------------------------
-        typedef boost::weak_ptr<IDrawable> WPtr;
+        typedef std::weak_ptr<IDrawable> WPtr;
 	//-------------------------------------------------------------------------
 	virtual void draw(IDrawContext::Ptr context) = 0;
 	//-------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_FRXGRAPHICFILEREPOSITORY_H
 #define SAMBAG_FRXGRAPHICFILEREPOSITORY_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <loki/Singleton.h>
 #include "IResourceManager.hpp"
 #include <boost/unordered_map.hpp>

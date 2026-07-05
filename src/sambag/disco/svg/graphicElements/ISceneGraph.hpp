@@ -26,16 +26,16 @@ public:
     //-------------------------------------------------------------------------
     virtual ~ISceneGraph() {}
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<ISceneGraph> Ptr;
+    typedef std::shared_ptr<ISceneGraph> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<ISceneGraph> WPtr;
+    typedef std::weak_ptr<ISceneGraph> WPtr;
     //-------------------------------------------------------------------------
     // TODO: cleanup SceneGraphElement / IDrawable confusuion
     typedef IDrawable::Ptr SceneGraphElement;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<Style> StylePtr;
+    typedef std::shared_ptr<Style> StylePtr;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<Matrix> MatrixPtr;
+    typedef std::shared_ptr<Matrix> MatrixPtr;
     //-------------------------------------------------------------------------
     typedef std::string Id;
     //-------------------------------------------------------------------------

@@ -19,7 +19,7 @@ class SvgPath : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPath> Ptr;
+	typedef std::shared_ptr<SvgPath> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct D_tag { typedef PathInstructions Type; };

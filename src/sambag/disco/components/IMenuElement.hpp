@@ -8,7 +8,7 @@
 #ifndef SAMBAG_IMENUELEMENT_H
 #define SAMBAG_IMENUELEMENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include "Forward.hpp"
 #include "events/MouseEvent.hpp"
@@ -25,7 +25,7 @@ class IMenuElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IMenuElement> Ptr;
+	typedef std::shared_ptr<IMenuElement> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector<Ptr> MenuElements;
 	//-------------------------------------------------------------------------

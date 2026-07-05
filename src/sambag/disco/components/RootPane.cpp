@@ -23,7 +23,7 @@ namespace sambag { namespace disco { namespace components {
 class RootPane::RootLayout : public ALayoutManager {
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<RootLayout> Ptr;
+	typedef std::shared_ptr<RootLayout> Ptr;
 	//-------------------------------------------------------------------------
 private:
 	//-------------------------------------------------------------------------

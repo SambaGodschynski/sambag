@@ -41,7 +41,7 @@ namespace tests {
 //-----------------------------------------------------------------------------
 void TestVstMidiEventAdapter::testCreateNCopy() {
 	using namespace sambag::dsp;
-	typedef boost::shared_array<IMidiEvents::Data> DataArray;
+	typedef std::shared_ptr<IMidiEvents::Data> DataArray;
 	DataArray data[1024];
 	DefaultMidiEvents::Ptr a = DefaultMidiEvents::create();
 	for (int i=0; i<1024; ++i) {

@@ -20,7 +20,7 @@ class QuartzSurface : public CairoSurface {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<QuartzSurface> Ptr;
+	typedef std::shared_ptr<QuartzSurface> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	QuartzSurface(cairo_surface_t *s) : CairoSurface(s) {}

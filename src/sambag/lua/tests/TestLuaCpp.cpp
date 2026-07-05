@@ -14,7 +14,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( tests::TestLuaCpp );
 namespace tests {
 
 struct TestClass : public LuaCppTestClass {
-    typedef boost::shared_ptr<TestClass> Ptr;
+    typedef std::shared_ptr<TestClass> Ptr;
     static Ptr create(lua_State *lua) {
         Ptr res(new TestClass());
         res->createLuaObject(lua, "testClass");

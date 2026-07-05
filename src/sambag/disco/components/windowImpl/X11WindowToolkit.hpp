@@ -9,7 +9,7 @@
 #define SAMBAG_X11WINDOWTOOLKIT_H
 
 #ifdef DISCO_USE_X11
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/asio.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
@@ -89,7 +89,7 @@ public:
 	 * @note delay and tracking not supported.
 	 */
         virtual void invokeLater(const InvokeFunction &f, int delay=50,
-        boost::shared_ptr<void> toTrack=boost::shared_ptr<void>());
+        std::shared_ptr<void> toTrack=std::shared_ptr<void>());
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SVGUNITS_H
 #define SAMBAG_SVGUNITS_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/disco/IDrawContext.hpp>
 

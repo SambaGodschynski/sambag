@@ -8,7 +8,7 @@
 #ifndef SAMBAG_GEOMETRYSERIALIZATION_H
 #define SAMBAG_GEOMETRYSERIALIZATION_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Geometry.hpp"
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/base_object.hpp>

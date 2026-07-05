@@ -40,9 +40,9 @@ public:
 		sambag::xml::SharedWithClosure<SvgRoot*>::Creator
 	> BuilderType;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgObject> Ptr;
+	typedef std::shared_ptr<SvgObject> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<SvgObject> WPtr;
+	typedef std::weak_ptr<SvgObject> WPtr;
 	//-------------------------------------------------------------------------
 	typedef std::list<SvgObject::Ptr> SvgObjects;
 	//-------------------------------------------------------------------------
@@ -118,7 +118,7 @@ protected:
 	//-------------------------------------------------------------------------
 	SvgObject() {}
 	//-------------------------------------------------------------------------
-	boost::weak_ptr<SvgObject> __self;
+	std::weak_ptr<SvgObject> __self;
 	//-------------------------------------------------------------------------
 	void __setSelf( Ptr self ) { __self = self; }
 public:

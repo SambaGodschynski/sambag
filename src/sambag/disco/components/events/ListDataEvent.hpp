@@ -8,7 +8,7 @@
 #ifndef SAMBAG_LISTDATAEVENT_H
 #define SAMBAG_LISTDATAEVENT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/ArithmeticWrapper.hpp>
 
 namespace sambag { namespace disco {

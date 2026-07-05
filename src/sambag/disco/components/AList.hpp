@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ALIST_H
 #define SAMBAG_ALIST_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 #include "ui/ALookAndFeel.hpp"
 #include "ui/UIManager.hpp"
@@ -77,7 +77,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _ListCellRenderer<T> ListCellRenderer;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ListCellRenderer> ListCellRendererPtr;
+	typedef std::shared_ptr<ListCellRenderer> ListCellRendererPtr;
 	//-------------------------------------------------------------------------
 	typedef _ListModel<T> ListModel;
 	//-------------------------------------------------------------------------
@@ -87,7 +87,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<AList> Ptr;
+	typedef std::shared_ptr<AList> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	Coordinate fixedCellWidth;
@@ -133,7 +133,7 @@ protected:
 public:
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<Class>(Super::getPtr());
+		return std::dynamic_pointer_cast<Class>(Super::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	/**
@@ -507,7 +507,7 @@ template < class T,
 Rectangle AList<T, CR, DM, SM>::getCellBounds(int index0, int index1) const
 {
 	using namespace ui;
-	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
+	IListUI::Ptr ui = std::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->getCellBounds(getPtr(), index0, index1) : NULL_RECTANGLE;
 }
 //-----------------------------------------------------------------------------
@@ -827,7 +827,7 @@ bool AList<T, CR, DM, SM>::getScrollableTracksViewportHeight() {
 		return true;
 	}
 	Viewport::Ptr parent = // TODO:SwingUtilities.getUnwrappedParent(this);
-			boost::dynamic_pointer_cast<Viewport> (
+			std::dynamic_pointer_cast<Viewport> (
 				getParent()
 			);
 	if (parent) {
@@ -847,7 +847,7 @@ bool AList<T, CR, DM, SM>::getScrollableTracksViewportWidth() {
 		return true;
 	}
 	Viewport::Ptr parent = // TODO:SwingUtilities.getUnwrappedParent(this);
-			boost::dynamic_pointer_cast<Viewport> (
+			std::dynamic_pointer_cast<Viewport> (
 				getParent()
 			);
 
@@ -1024,7 +1024,7 @@ template < class T,
 >
 Point2D AList<T, CR, DM, SM>::indexToLocation(int index) const {
 	using namespace ui;
-	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
+	IListUI::Ptr ui = std::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->indexToLocation(getPtr(), index) : NULL_POINT2D;
 }
 //-----------------------------------------------------------------------------
@@ -1036,7 +1036,7 @@ template < class T,
 int AList<T, CR, DM, SM>::locationToIndex(const Point2D & location) const
 {
 	using namespace ui;
-	IListUI::Ptr ui = boost::dynamic_pointer_cast<IListUI>(getUI());
+	IListUI::Ptr ui = std::dynamic_pointer_cast<IListUI>(getUI());
 	return (ui) ? ui->locationToIndex(getPtr(), location) : -1;
 }
 //-----------------------------------------------------------------------------

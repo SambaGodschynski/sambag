@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SIZEREQUIREMENTS_H
 #define SAMBAG_SIZEREQUIREMENTS_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace sambag { namespace disco { namespace components {
@@ -20,7 +20,7 @@ class SizeRequirements {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SizeRequirements> Ptr;
+	typedef std::shared_ptr<SizeRequirements> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::vector<int> Ints;
 	//-------------------------------------------------------------------------

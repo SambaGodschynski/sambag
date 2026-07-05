@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ROOTPANE_H
 #define SAMBAG_ROOTPANE_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/ISurface.hpp>
 #include "AContainer.hpp"
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
@@ -30,7 +30,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<RootPane> Ptr;
+	typedef std::shared_ptr<RootPane> Ptr;
 	//-------------------------------------------------------------------------
 	static const std::string PROPERTY_SURFACE;
 protected:
@@ -81,7 +81,7 @@ public:
 	void getComponentsByTag(const std::string &tag, Container &out) const;
 	//-------------------------------------------------------------------------
 	Ptr getPtr() const {
-		return boost::dynamic_pointer_cast<RootPane>(AComponent::getPtr());
+		return std::dynamic_pointer_cast<RootPane>(AComponent::getPtr());
 	}
 	//-------------------------------------------------------------------------
 	ui::ALookAndFeelPtr getCurrentLookAndFeel() const;

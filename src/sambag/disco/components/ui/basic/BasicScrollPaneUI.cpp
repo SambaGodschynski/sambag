@@ -67,7 +67,7 @@ void BasicScrollPaneUI::syncScrollPaneWithViewport() {
 //-----------------------------------------------------------------------------
 void BasicScrollPaneUI::installUI(AComponentPtr c) {
 	Super::installUI(c);
-	ScrollPane::Ptr scrollpane  = boost::dynamic_pointer_cast<ScrollPane>(c);
+	ScrollPane::Ptr scrollpane  = std::dynamic_pointer_cast<ScrollPane>(c);
 	SAMBAG_ASSERT(scrollpane);
 	_scrollpane = scrollpane;
 	ScrollPane::AScrollbarPtr vsb = scrollpane->getVerticalScrollBar();

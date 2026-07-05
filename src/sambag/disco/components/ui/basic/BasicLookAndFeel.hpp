@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICLOOKANDFEEL_H
 #define SAMBAG_BASICLOOKANDFEEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 #include <sambag/disco/svg/Style.hpp>
 
@@ -22,7 +22,7 @@ class BasicLookAndFeel : public ALookAndFeel {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicLookAndFeel> Ptr;
+	typedef std::shared_ptr<BasicLookAndFeel> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	BasicLookAndFeel();

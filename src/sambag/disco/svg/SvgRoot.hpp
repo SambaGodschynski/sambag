@@ -27,7 +27,7 @@ class SvgRoot : public SvgCompound {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgRoot> Ptr;
+	typedef std::shared_ptr<SvgRoot> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::list<SvgObject::Ptr> Svgs;
 	// created svg objects

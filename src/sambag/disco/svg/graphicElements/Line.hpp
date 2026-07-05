@@ -18,7 +18,7 @@ class Line : public GraphicElement,  public Shape {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Line> Ptr;
+	typedef std::shared_ptr<Line> Ptr;
 private:
 protected:
 	//-------------------------------------------------------------------------

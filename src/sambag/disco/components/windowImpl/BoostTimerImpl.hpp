@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BOOSTTIMERIMPL_H
 #define SAMBAG_BOOSTTIMERIMPL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/system/error_code.hpp>

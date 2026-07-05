@@ -8,7 +8,7 @@
 #ifndef SAMBAG_X11WINDOW_H
 #define SAMBAG_X11WINDOW_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/unordered_map.hpp>
 
 #ifdef DISCO_USE_X11
@@ -29,7 +29,7 @@
 
 namespace sambag { namespace disco { namespace components {
 class X11WindowToolkit;
-class X11WindowImpl; typedef boost::shared_ptr<X11WindowImpl> X11WindowImplPtr;
+class X11WindowImpl; typedef std::shared_ptr<X11WindowImpl> X11WindowImplPtr;
 //=============================================================================
 /** 
   * @class X11Window.
@@ -42,9 +42,9 @@ friend struct OpenWindow;
 friend class X11WindowToolkit;
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<X11WindowImpl> Ptr;
+	typedef std::shared_ptr<X11WindowImpl> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<X11WindowImpl> WPtr;
+	typedef std::weak_ptr<X11WindowImpl> WPtr;
 private:
 	//-------------------------------------------------------------------------
 	Rectangle bounds;

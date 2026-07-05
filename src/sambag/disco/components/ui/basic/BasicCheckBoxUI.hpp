@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICCHECKBOXUI_H
 #define SAMBAG_BASICCHECKBOXUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "BasicButtonUI.hpp"
 #include "BasicCheckBoxListener.hpp"
 
@@ -29,7 +29,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef BasicButtonUI<_ButtonModel> Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
 	typedef typename Super::AbstractButton AbstractButton;
 protected:
@@ -119,7 +119,7 @@ void BasicCheckBoxUI<ButtonModell>::onButtonStateChanged(void *src, const
 template <class ButtonModell>
 void BasicCheckBoxUI<ButtonModell>::installListener(AComponentPtr c) {
 	typename Super::AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<typename Super::AbstractButton>(c);
+			std::dynamic_pointer_cast<typename Super::AbstractButton>(c);
 	BOOST_ASSERT(b);
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
 			[this](void* s, const events::MouseEvent& e){ listener.onMouseEvent(s, e); },
@@ -135,7 +135,7 @@ void BasicCheckBoxUI<ButtonModell>::installListener(AComponentPtr c) {
 template <class ButtonModell>
 void BasicCheckBoxUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
 	typename Super::AbstractButton::Ptr b = 
-		boost::dynamic_pointer_cast<typename Super::AbstractButton>(c);
+		std::dynamic_pointer_cast<typename Super::AbstractButton>(c);
 	if (!b)
 		return;
 	Super::sNormal.intoContext(cn);
@@ -158,7 +158,7 @@ void BasicCheckBoxUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) 
 template <class ButtonModell>
 Dimension BasicCheckBoxUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename Super::AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<typename Super::AbstractButton>(c);
+			std::dynamic_pointer_cast<typename Super::AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

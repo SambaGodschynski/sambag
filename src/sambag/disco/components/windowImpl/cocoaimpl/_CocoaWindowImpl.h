@@ -12,7 +12,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <string>
 #include <sambag/disco/components/windowImpl/WindowFlags.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/Thread.hpp>
 
 namespace cocoaImplTypes {
@@ -22,7 +22,7 @@ namespace cocoaImplTypes {
 namespace sambag { namespace disco { namespace components {
 typedef void* RawDiscoWindowPtr;
 typedef void* RawDiscoViewPtr;
-typedef boost::shared_ptr<void> CarbonWindowRefPtr;
+typedef std::shared_ptr<void> CarbonWindowRefPtr;
 
 //=============================================================================
 /**
@@ -104,7 +104,7 @@ public:
     //-------------------------------------------------------------------------
     virtual void __handleMouseWheelEvent(Number x, Number y, Number wheelRotation) = 0;
     //-------------------------------------------------------------------------
-    virtual boost::shared_ptr<void> __getPtr() const = 0;
+    virtual std::shared_ptr<void> __getPtr() const = 0;
 	//-------------------------------------------------------------------------
 	virtual void __windowWillCose() = 0;
 	//-------------------------------------------------------------------------

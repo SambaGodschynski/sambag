@@ -9,9 +9,7 @@
 #define SAMBAG_EVENTS_H
 
 #include <functional>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include <memory>
 #include <list>
 
 namespace sambag { namespace com { namespace events{
@@ -22,14 +20,14 @@ namespace sambag { namespace com { namespace events{
  */
 struct TrackingDummy {
 //=============================================================================
-	typedef boost::shared_ptr<TrackingDummy> Ptr;
+	typedef std::shared_ptr<TrackingDummy> Ptr;
 	static Ptr create() {
 		return Ptr( new TrackingDummy() );
 	}
 	virtual ~TrackingDummy(){}
 };
 //=============================================================================
-typedef boost::weak_ptr<void> AnyWPtr;
+typedef std::weak_ptr<void> AnyWPtr;
 //=============================================================================
 /**
  * @class Connection.
@@ -40,8 +38,8 @@ class Connection {
 		bool disconnected;
 		State() : disconnected(false) {}
 	};
-	boost::shared_ptr<State> state_;
-	explicit Connection(boost::shared_ptr<State> s) : state_(s) {}
+	std::shared_ptr<State> state_;
+	explicit Connection(std::shared_ptr<State> s) : state_(s) {}
 public:
 	Connection() {}
 	void disconnect()  { if (state_) state_->disconnected = true; }
@@ -65,9 +63,9 @@ private:
 	//-------------------------------------------------------------------------
 	struct Slot {
 		EventFunction fn;
-		boost::weak_ptr<void> tracker;
+		std::weak_ptr<void> tracker;
 		bool hasTracker;
-		boost::shared_ptr<Connection::State> state;
+		std::shared_ptr<Connection::State> state;
 	};
 	mutable std::list<Slot> slots;
 protected:
@@ -85,7 +83,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	Connection addEventListener ( const EventFunction &vCl ) {
-		boost::shared_ptr<Connection::State> s = boost::make_shared<Connection::State>();
+		std::shared_ptr<Connection::State> s = std::make_shared<Connection::State>();
 		Slot slot;
 		slot.fn = vCl;
 		slot.hasTracker = false;
@@ -100,7 +98,7 @@ public:
 	 */
 	Connection addTrackedEventListener ( const EventFunction &vCl, AnyWPtr toTrack )
 	{
-		boost::shared_ptr<Connection::State> s = boost::make_shared<Connection::State>();
+		std::shared_ptr<Connection::State> s = std::make_shared<Connection::State>();
 		Slot slot;
 		slot.fn = vCl;
 		slot.tracker = toTrack;

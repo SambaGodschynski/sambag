@@ -8,7 +8,7 @@
 #ifndef SAMBAG_ACTIONMAP_H
 #define SAMBAG_ACTIONMAP_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sambag { namespace disco { namespace components {
 
@@ -20,7 +20,7 @@ class ActionMap {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ActionMap> Ptr;
+	typedef std::shared_ptr<ActionMap> Ptr;
 protected:
 private:
 public:

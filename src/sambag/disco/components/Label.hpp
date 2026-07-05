@@ -8,7 +8,7 @@
 #ifndef SAMBAG_LABEL_H
 #define SAMBAG_LABEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AComponent.hpp"
 #include <string>
 
@@ -21,7 +21,7 @@ class Label : public AComponent {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Label> Ptr;
+	typedef std::shared_ptr<Label> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 	//-------------------------------------------------------------------------

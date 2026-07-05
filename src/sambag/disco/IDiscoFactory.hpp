@@ -10,7 +10,7 @@
 
 #include "sambag/com/Common.hpp"
 #include "sambag/disco/Geometry.hpp"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 #include "IDrawContext.hpp"
 #include "ISurface.hpp"

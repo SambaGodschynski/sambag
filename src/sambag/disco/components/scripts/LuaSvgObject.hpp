@@ -8,8 +8,7 @@
 #ifndef SAMBAG_LuaSvgObject_H
 #define SAMBAG_LuaSvgObject_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/lua/Lua.hpp>
 #include "LuaSvgObjectBase.hpp"
 #include <sambag/disco/IDrawable.hpp>
@@ -24,9 +23,9 @@ public:
     //-------------------------------------------------------------------------
     typedef LuaSvgObjectBase Super;
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<LuaSvgObject> Ptr;
+    typedef std::shared_ptr<LuaSvgObject> Ptr;
     //-------------------------------------------------------------------------
-    typedef boost::weak_ptr<LuaSvgObject> WPtr;
+    typedef std::weak_ptr<LuaSvgObject> WPtr;
     //-------------------------------------------------------------------------
     typedef svg::graphicElements::ISceneGraph SceneGraph;
 private:

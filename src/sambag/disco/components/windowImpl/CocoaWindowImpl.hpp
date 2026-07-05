@@ -8,8 +8,7 @@
 #ifndef SAMBAG_COCOAWINDOW_H
 #define SAMBAG_COCOAWINDOW_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <boost/unordered_map.hpp>
 
 #ifdef DISCO_USE_COCOA
@@ -28,7 +27,7 @@ namespace sambag { namespace disco { namespace components {
   */
 class CocoaWindowImpl :
 	public _CocoaWindowImpl, // encapsulated objective-c impl.
-    public boost::enable_shared_from_this<CocoaWindowImpl>
+    public std::enable_shared_from_this<CocoaWindowImpl>
 {
 //=============================================================================
 friend class CocoaWindowToolkit;
@@ -36,9 +35,9 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _CocoaWindowImpl Impl;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CocoaWindowImpl> Ptr;
+	typedef std::shared_ptr<CocoaWindowImpl> Ptr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<CocoaWindowImpl> WPtr;
+	typedef std::weak_ptr<CocoaWindowImpl> WPtr;
 	//-------------------------------------------------------------------------
 	typedef cocoaImplTypes::Number Nb;
 private:
@@ -136,7 +135,7 @@ public:
     //-------------------------------------------------------------------------
     virtual void __onCreated();
     //-------------------------------------------------------------------------
-    virtual boost::shared_ptr<void> __getPtr() const { return getPtr(); }
+    virtual std::shared_ptr<void> __getPtr() const { return getPtr(); }
 	//-------------------------------------------------------------------------
 	void setEnabled(bool b) {
 		// TODO

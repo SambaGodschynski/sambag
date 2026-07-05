@@ -8,8 +8,7 @@
 #ifndef SAMBAG_BASICKNOBUI_H
 #define SAMBAG_BASICKNOBUI_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/AComponentUI.hpp>
 #include <sambag/disco/components/ui/UIManager.hpp>
 #include <sambag/disco/components/AKnob.hpp>
@@ -32,17 +31,17 @@ public:
 	//-------------------------------------------------------------------------
 	typedef BasicKnobUI<ComponentModel> Class;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Class> Ptr;
+	typedef std::shared_ptr<Class> Ptr;
 	//-------------------------------------------------------------------------
 	typedef AKnob<ComponentModel> KnobType;
 	//-------------------------------------------------------------------------
 	typedef typename ComponentModel::StateChangedEvent StateChanged;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<KnobType> KnobTypePtr;
+	typedef std::shared_ptr<KnobType> KnobTypePtr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<KnobType> KnobTypeWPtr;
+	typedef std::weak_ptr<KnobType> KnobTypeWPtr;
 	//-------------------------------------------------------------------------
-	typedef boost::weak_ptr<Class> WPtr;
+	typedef std::weak_ptr<Class> WPtr;
 protected:
 	//-------------------------------------------------------------------------
 	WPtr self;
@@ -158,7 +157,7 @@ bool BasicKnobUI<M>::contains(AComponentPtr c, const Point2D &p) {
 //-----------------------------------------------------------------------------
 template <class M>
 void BasicKnobUI<M>::installUI(AComponentPtr c) {
-	knob = boost::dynamic_pointer_cast<KnobType>(c);
+	knob = std::dynamic_pointer_cast<KnobType>(c);
 	installDefaults(c);
 	installListeners(c);
 }

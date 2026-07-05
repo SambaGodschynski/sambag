@@ -17,7 +17,7 @@ class SvgColorStop : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgColorStop> Ptr;
+	typedef std::shared_ptr<SvgColorStop> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct Offset_tag { typedef Number Type; };

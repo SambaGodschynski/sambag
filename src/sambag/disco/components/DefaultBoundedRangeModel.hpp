@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTBOUNDEDRANGEMODEL_H
 #define SAMBAG_DEFAULTBOUNDEDRANGEMODEL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
@@ -32,7 +32,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef DefaultBoundedRangeModelChanged StateChangedEvent;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<DefaultBoundedRangeModel> Ptr;
+	typedef std::shared_ptr<DefaultBoundedRangeModel> Ptr;
 protected:
 	void fireStateChanged() {
 		com::events::EventSender<DefaultBoundedRangeModelChanged>::notifyListeners(

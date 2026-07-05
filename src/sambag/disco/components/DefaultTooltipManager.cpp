@@ -15,7 +15,7 @@
 
 namespace sambag { namespace disco { namespace components {
 struct TooltipWindow : public Window {
-	typedef boost::shared_ptr<TooltipWindow> Ptr;
+	typedef std::shared_ptr<TooltipWindow> Ptr;
 	static TooltipWindow::Ptr sharedInstance;
 	Label::Ptr label;
 	TooltipWindow(Window::Ptr parent) : Window(parent) {}

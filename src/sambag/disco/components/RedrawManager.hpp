@@ -8,7 +8,7 @@
 #ifndef SAMBAG_REDRAWMANAGER_H
 #define SAMBAG_REDRAWMANAGER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/ISurface.hpp>
 #include <sambag/disco/IDrawContext.hpp>
 #include <boost/unordered_map.hpp>
@@ -30,7 +30,7 @@ class RedrawManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<RedrawManager> Ptr;
+	typedef std::shared_ptr<RedrawManager> Ptr;
 	//-------------------------------------------------------------------------
 	typedef std::list<AComponentPtr> Components;
 	//-------------------------------------------------------------------------

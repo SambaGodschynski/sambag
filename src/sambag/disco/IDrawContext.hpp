@@ -8,7 +8,7 @@
 #ifndef IDRAWCONTEXT_H_
 #define IDRAWCONTEXT_H_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <math.h>
 #include <string>
 #include "Geometry.hpp"
@@ -35,7 +35,7 @@ using namespace sambag::math;
 // to CairoContext.
 //=============================================================================
 struct Path { // TODO: change to interface
-	typedef boost::shared_ptr<Path> Ptr;
+	typedef std::shared_ptr<Path> Ptr;
 	// TODO: use boost::iterator if possible
 	virtual ~Path() {}
 };
@@ -49,7 +49,7 @@ struct Path { // TODO: change to interface
 class IDrawContext {
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IDrawContext> Ptr;
+	typedef std::shared_ptr<IDrawContext> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>drawing
 	//-------------------------------------------------------------------------
 	virtual void moveTo( const Point2D &p0 ) = 0;

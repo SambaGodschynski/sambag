@@ -8,7 +8,7 @@
 #ifndef SAMBAG_CHECKBOX_H
 #define SAMBAG_CHECKBOX_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AComponent.hpp"
 #include "DefaultButtonModell.hpp"
 #include "AButton.hpp"
@@ -26,7 +26,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AButton<DefaultButtonModell> Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CheckBox> Ptr;
+	typedef std::shared_ptr<CheckBox> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ui::AComponentUIPtr createComponentUI(ui::ALookAndFeelPtr laf) const;
 protected:

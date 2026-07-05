@@ -22,7 +22,7 @@ class Rect : public virtual GraphicElement,
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Rect> Ptr;
+	typedef std::shared_ptr<Rect> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	void _rect(IDrawContext::Ptr context);

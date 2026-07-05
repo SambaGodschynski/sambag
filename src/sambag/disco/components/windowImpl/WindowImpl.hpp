@@ -36,7 +36,7 @@ class WindowImpl :
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<WindowImpl> Ptr;
+	typedef std::shared_ptr<WindowImpl> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	AWindowImpl::WPtr _parent;

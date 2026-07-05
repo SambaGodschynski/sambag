@@ -31,7 +31,7 @@ struct ProcessDrawable : public IProcessListObject {
 	//-------------------------------------------------------------------------
 	virtual ~ProcessDrawable() {}
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<ProcessDrawable> Ptr;
+    typedef std::shared_ptr<ProcessDrawable> Ptr;
     //-------------------------------------------------------------------------
     IDrawable::Ptr drawable;
     //-------------------------------------------------------------------------
@@ -39,16 +39,16 @@ struct ProcessDrawable : public IProcessListObject {
     // will do it later.
     const bool resetContextState;
     //-------------------------------------------------------------------------
-    boost::shared_ptr<Style> style;
+    std::shared_ptr<Style> style;
     //-------------------------------------------------------------------------
     IPattern::Ptr fill, stroke;
     //-------------------------------------------------------------------------
-    boost::shared_ptr<Matrix> transformation;
+    std::shared_ptr<Matrix> transformation;
     //-------------------------------------------------------------------------
     ProcessDrawable(IDrawable::Ptr drawable,
 		    bool resetContextState,
-		    boost::shared_ptr<Style> style,
-		    boost::shared_ptr<Matrix> transformation) :
+		    std::shared_ptr<Style> style,
+		    std::shared_ptr<Matrix> transformation) :
         drawable(drawable),
         resetContextState(resetContextState),
         style(style),
@@ -78,8 +78,8 @@ struct ProcessDrawable : public IProcessListObject {
 } // namespace
 ///////////////////////////////////////////////////////////////////////////////
 IProcessListObject::Ptr createProcessDrawable( IDrawable::Ptr drawable,
-    bool resetContextState, boost::shared_ptr<Style> style,
-        boost::shared_ptr<Matrix> transformation)
+    bool resetContextState, std::shared_ptr<Style> style,
+        std::shared_ptr<Matrix> transformation)
 {
     ProcessDrawable::Ptr neu( new ProcessDrawable(drawable,
         resetContextState, style, transformation)
@@ -162,7 +162,7 @@ void ProcessDrawable::perform(IDrawContext::Ptr context) {
         style->intoContext(context);
     }
     
-    Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
+    Shape::Ptr shape = std::dynamic_pointer_cast<Shape>(drawable);
     if (!shape) {
         drawable->draw(context);
     } else {
@@ -209,7 +209,7 @@ Rectangle ProcessDrawable::getBounds(IDrawContext::Ptr context) const {
         if (style) {
             style->intoContext(context);
         }
-        Shape::Ptr shape = boost::dynamic_pointer_cast<Shape>(drawable);
+        Shape::Ptr shape = std::dynamic_pointer_cast<Shape>(drawable);
         if (!shape) {
             Rectangle b = drawable->getBoundingBox(context);
             context->setStrokeColor(ColorRGBA(0,0,0));
@@ -625,7 +625,7 @@ void SceneGraph::computeBoundingBoxes(IDrawContext::Ptr cn) {
     std::vector<IDrawable::Ptr> parents;
     boost_reverse_for_each( IProcessListObject::Ptr o, processList ) {
         ProcessDrawable::Ptr pr =
-            boost::dynamic_pointer_cast<ProcessDrawable>(o);
+            std::dynamic_pointer_cast<ProcessDrawable>(o);
         if (pr) {
             IDrawable::Ptr x=pr->getDrawable();
             SAMBAG_ASSERT(x);

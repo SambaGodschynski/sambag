@@ -8,7 +8,7 @@
 #ifndef SAMBAG_IGRAPHICSREPOSITORY_H
 #define SAMBAG_IGRAPHICSREPOSITORY_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/ISurface.hpp>
 #include <sambag/disco/Geometry.hpp>
 #include <string>

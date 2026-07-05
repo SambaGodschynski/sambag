@@ -50,7 +50,7 @@ svg::graphicElements::ISceneGraph::Ptr Image::getSceneGraph() const {
 void Image::setSvgPath(const std::string &path) {
     svg::SvgBuilder builder;
     try {
-        rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
+        rootObject = std::dynamic_pointer_cast<svg::SvgRoot>
                     (builder.buildSvgFromFilename(path));
     } catch (...) {
         setSvgString(SVG_FALLBACK);
@@ -60,7 +60,7 @@ void Image::setSvgPath(const std::string &path) {
 //-----------------------------------------------------------------------------
 void Image::setSvgString(const std::string &str) {
     svg::SvgBuilder builder;
-    rootObject = boost::dynamic_pointer_cast<svg::SvgRoot>
+    rootObject = std::dynamic_pointer_cast<svg::SvgRoot>
                 (builder.buildSvgFromString(str));
 }
 //-----------------------------------------------------------------------------

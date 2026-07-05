@@ -19,7 +19,7 @@
     }
 }}}*/
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/containers/vector.hpp>

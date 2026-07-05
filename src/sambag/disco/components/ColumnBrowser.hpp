@@ -8,7 +8,7 @@
 #ifndef SAMBAG_COLUMNBROWSER_H
 #define SAMBAG_COLUMNBROWSER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AColumnBrowser.hpp"
 #include "DefaultTreeModel.hpp"
 
@@ -37,7 +37,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AColumnBrowser<DefaultTreeModel<T> >  Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ColumnBrowser> Ptr;
+	typedef std::shared_ptr<ColumnBrowser> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	ColumnBrowser() {

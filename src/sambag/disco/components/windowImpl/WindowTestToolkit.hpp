@@ -8,7 +8,7 @@
 #ifndef SAMBAG_WINDOWTESTTOOLKIT_
 #define SAMBAG_WINDOWTESTTOOLKIT_
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <loki/Singleton.h>
 #include <sambag/disco/components/windowImpl/BoostTimerImpl.hpp>
@@ -28,7 +28,7 @@ class WindowTestToolkit : public WindowToolkit, public TimerPolicy{
 friend struct Loki::CreateUsingNew<WindowTestToolkit>;
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<WindowTestToolkit> Ptr;
+	typedef std::shared_ptr<WindowTestToolkit> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	virtual AWindowImplPtr 
@@ -42,7 +42,7 @@ private:
 public:
 	//-------------------------------------------------------------------------
 	virtual void invokeLater(const InvokeFunction &f, int ms=50,
-        boost::shared_ptr<void> toTrack=boost::shared_ptr<void>())
+        std::shared_ptr<void> toTrack=std::shared_ptr<void>())
     {
 		f(); // call immediately
 	}

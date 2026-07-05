@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICARROWBUTTONUI_H
 #define SAMBAG_BASICARROWBUTTONUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "BasicButtonUI.hpp"
 #include "BasicArrowButton.hpp"
 namespace sambag { namespace disco {
@@ -22,7 +22,7 @@ class BasicArrowButtonUI : public BasicButtonUI<_ButtonModell> {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicArrowButtonUI> Ptr;
+	typedef std::shared_ptr<BasicArrowButtonUI> Ptr;
 	//-------------------------------------------------------------------------
 	typedef _ButtonModell ButtonModell;
 	//-------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public:
 //-----------------------------------------------------------------------------
 template <class BM>
 void BasicArrowButtonUI<BM>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	BasicArrowButton::Ptr b = boost::dynamic_pointer_cast<BasicArrowButton>(c);
+	BasicArrowButton::Ptr b = std::dynamic_pointer_cast<BasicArrowButton>(c);
 	if (!b)
 		return;
 	Rectangle bounds = Super::getBtnRect(cn, c);

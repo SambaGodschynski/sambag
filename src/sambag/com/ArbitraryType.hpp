@@ -10,7 +10,7 @@
 
 #include <sambag/com/Exception.hpp>
 #include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 
 namespace sambag { namespace com {
@@ -21,7 +21,7 @@ namespace sambag { namespace com {
 // boost::any is doing.
 struct ArbitraryType {
 	boost::any value;
-	typedef boost::shared_ptr<ArbitraryType> Ptr;
+	typedef std::shared_ptr<ArbitraryType> Ptr;
 };
 
 

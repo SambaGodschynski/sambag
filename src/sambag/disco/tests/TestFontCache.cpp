@@ -26,7 +26,7 @@ void TestFontCache::setUp() {
 void TestFontCache::testGetFontMap() {
 	using namespace sambag::disco;
 	FontCache &fc = FontCache::instance();
-	IImageSurface::Ptr surface = boost::dynamic_pointer_cast<IImageSurface>(
+	IImageSurface::Ptr surface = std::dynamic_pointer_cast<IImageSurface>(
 		boost::get<0>( 
 			fc.getGlyphMap( createFontTraits(ColorRGBA(0), Font().setSize(56.)) 
 		))

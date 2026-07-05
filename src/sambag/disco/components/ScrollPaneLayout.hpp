@@ -8,7 +8,7 @@
 #ifndef SAMBAG_SCROLLPANELAYOUT_H
 #define SAMBAG_SCROLLPANELAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 #include "Forward.hpp"
 #include "ScrollPane.hpp"
@@ -24,7 +24,7 @@ class ScrollPaneLayout: public ALayoutManager {
 	//=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ScrollPaneLayout> Ptr;
+	typedef std::shared_ptr<ScrollPaneLayout> Ptr;
 	typedef ScrollPane::VerticalScrollbarPolicy VerticalScrollbarPolicy;
 	typedef ScrollPane::HorizontalScrollbarPolicy HorizontalScrollbarPolicy;
 	typedef ScrollPane::AScrollbarPtr AScrollbarPtr;

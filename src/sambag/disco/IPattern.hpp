@@ -9,7 +9,7 @@
 #define PATTERN_HPP_
 
 #include "ColorRGBA.hpp"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/tuple/tuple.hpp>
 #include "sambag/com/Common.hpp"
 #include "sambag/math/Matrix.hpp"
@@ -30,7 +30,7 @@ class IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IPattern> Ptr;
+	typedef std::shared_ptr<IPattern> Ptr;
 	//-------------------------------------------------------------------------
 	enum Extend {
 		DISCO_EXTEND_NONE,
@@ -79,7 +79,7 @@ class ISolidPattern : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ISolidPattern> Ptr;
+	typedef std::shared_ptr<ISolidPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ColorRGBA getSolidColor() const = 0;
     //-------------------------------------------------------------------------
@@ -115,7 +115,7 @@ class ILinearPattern : public virtual IPattern, public virtual IGradient {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ILinearPattern> Ptr;
+	typedef std::shared_ptr<ILinearPattern> Ptr;
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Point2D> LinearPoints;
 	//-------------------------------------------------------------------------
@@ -130,7 +130,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef boost::tuple<Point2D, Number, Point2D, Number> RadialCircles;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IRadialPattern> Ptr;
+	typedef std::shared_ptr<IRadialPattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual RadialCircles getRadialCircles() const = 0;
     //-------------------------------------------------------------------------
@@ -141,7 +141,7 @@ class ISurfacePattern : public virtual IPattern {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<ISurfacePattern> Ptr;
+	typedef std::shared_ptr<ISurfacePattern> Ptr;
 	//-------------------------------------------------------------------------
 	virtual ISurface::Ptr getSurface() const = 0;
     //-------------------------------------------------------------------------

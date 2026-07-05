@@ -10,7 +10,7 @@
 
 #ifdef DISCO_USE_WIN32
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/IDiscoFactory.hpp>
 #include <sambag/disco/components/RedrawManager.hpp>
 #include <sambag/disco/components/Forward.hpp>

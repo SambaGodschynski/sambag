@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICARROWBUTTON_H
 #define SAMBAG_BASICARROWBUTTON_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/Button.hpp>
 #include <sambag/disco/components/ui/ALookAndFeel.hpp>
 
@@ -26,7 +26,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef Super::Model Model;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicArrowButton> Ptr;
+	typedef std::shared_ptr<BasicArrowButton> Ptr;
 	//-------------------------------------------------------------------------
 	enum Direction {
 		NORTH, WEST, SOUTH, EAST

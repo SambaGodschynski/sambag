@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICBUTTONLISTENER_H
 #define SAMBAG_BASICBUTTONLISTENER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/events/MouseEvent.hpp>
 #include <sambag/disco/components/AButton.hpp>
 #include <sambag/com/ICommand.hpp>
@@ -48,7 +48,7 @@ typename BasicButtonListener<BM>::ButtonClassPtr
 BasicButtonListener<BM>::getButton(const events::MouseEvent &ev) const
 {
 	return
-		boost::dynamic_pointer_cast<ButtonClass>(ev.getSource());
+		std::dynamic_pointer_cast<ButtonClass>(ev.getSource());
 }
 //-----------------------------------------------------------------------------
 template <class BM>

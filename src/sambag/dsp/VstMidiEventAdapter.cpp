@@ -62,7 +62,7 @@ VstEvent * VstMidiEventAdapter::allocVstEventNecessary(size_t bytes, VstEvent *o
 void VstMidiEventAdapter::set(IMidiEvents::Ptr ev) {
 	// special case:
 	VstMidiEventAdapter::Ptr _ev =
-		boost::dynamic_pointer_cast<VstMidiEventAdapter>(ev);
+		std::dynamic_pointer_cast<VstMidiEventAdapter>(ev);
 	if (_ev) {
 		freeDataIfNecessary();
 		this->events = _ev->events;

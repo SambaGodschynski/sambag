@@ -58,7 +58,7 @@ public:
 	// NO_COLOR is unsetted. NONE_COLOR is setted but none.
 	static const ColorRGBA NONE_COLOR;
     struct NonePattern : public IPattern {
-        typedef boost::shared_ptr<NonePattern> Ptr;
+        typedef std::shared_ptr<NonePattern> Ptr;
         virtual void setOpacity(const Number &v) {}
         virtual Number getOpacity() const { return 0; }
         virtual void setMatrix (const sambag::math::Matrix &m) {}
@@ -88,7 +88,7 @@ private:
 	FLYWEIGHT(Number, _miterLimit);
 	FLYWEIGHT(LineJoin, _lineJoin);
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Style> Ptr;
+	typedef std::shared_ptr<Style> Ptr;
 	static Ptr NULL_STYLE_SINGLETON;
 public:
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>methods

@@ -8,7 +8,7 @@
 #ifndef SAMBAG_IBORDER_H
 #define SAMBAG_IBORDER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Forward.hpp"
 #include <sambag/disco/IDrawContext.hpp>
 
@@ -22,7 +22,7 @@ class IBorder {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<IBorder> Ptr;
+	typedef std::shared_ptr<IBorder> Ptr;
 public:
 	//-------------------------------------------------------------------------
 	/**

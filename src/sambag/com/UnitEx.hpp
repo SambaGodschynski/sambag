@@ -8,7 +8,7 @@
 #ifndef SAMBAG_UNITEX_H
 #define SAMBAG_UNITEX_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <cppunit/extensions/HelperMacros.h>
 
 namespace sambag { namespace com { namespace unitex {

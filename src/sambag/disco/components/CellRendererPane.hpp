@@ -8,7 +8,7 @@
 #ifndef SAMBAG_CELLRENDERERPANE_H
 #define SAMBAG_CELLRENDERERPANE_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "AContainer.hpp"
 
 namespace sambag { namespace disco { namespace components {
@@ -22,7 +22,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef AContainer Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<CellRendererPane> Ptr;
+	typedef std::shared_ptr<CellRendererPane> Ptr;
 protected:
 	//-------------------------------------------------------------------------
 	CellRendererPane();

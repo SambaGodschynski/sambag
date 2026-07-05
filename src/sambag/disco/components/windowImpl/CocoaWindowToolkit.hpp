@@ -9,13 +9,12 @@
 #define SAMBAG_COCOAWINDOWTOOLKIT_H
 
 #ifdef DISCO_USE_COCOA
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <loki/Singleton.h>
 #include "NullTimerImpl.hpp"
 #include "CocoaTimer.hpp"
-#include <boost/enable_shared_from_this.hpp>
 
 namespace sambag { namespace disco { namespace components {
 typedef CocoaTimerImpl TimerImpl;
@@ -62,7 +61,7 @@ public:
 	}
 	//-------------------------------------------------------------------------
 	virtual void invokeLater(const InvokeFunction &f,
-        int ms = 50, boost::shared_ptr<void> toTrack=boost::shared_ptr<void>());
+        int ms = 50, std::shared_ptr<void> toTrack=std::shared_ptr<void>());
 	//-------------------------------------------------------------------------
 	virtual void startTimer(Timer::Ptr tm);
 	//-------------------------------------------------------------------------

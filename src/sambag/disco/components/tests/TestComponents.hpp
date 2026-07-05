@@ -69,7 +69,7 @@ namespace tests {
 	//=========================================================================
 	class TestComponentUI : public sdc::ui::AComponentUI {
 	public:
-		typedef boost::shared_ptr<TestComponentUI> Ptr;
+		typedef std::shared_ptr<TestComponentUI> Ptr;
 		static Ptr create() {
 			return Ptr(new TestComponentUI());
 		}
@@ -79,7 +79,7 @@ namespace tests {
 	protected:
 		LookAndFeelForTest();
 	public:
-		typedef boost::shared_ptr<LookAndFeelForTest> Ptr;
+		typedef std::shared_ptr<LookAndFeelForTest> Ptr;
 		virtual void installLookAndFeel() {};
 		static Ptr create() {
 			return Ptr(new LookAndFeelForTest());
@@ -93,7 +93,7 @@ namespace tests {
 	public:
 		sdc::ui::AComponentUIPtr createComponentUI(sdc::ui::ALookAndFeelPtr laf) const;
 		static int numDrawCalled;
-		typedef boost::shared_ptr<TestComponent> Ptr;
+		typedef std::shared_ptr<TestComponent> Ptr;
 		static Ptr create() {
 			using namespace sambag::disco;
 			Ptr res(new TestComponent());
@@ -109,7 +109,7 @@ namespace tests {
 		sdc::ui::AComponentUIPtr getComponentUI(sdc::ui::ALookAndFeelPtr laf) const {
 			return sdc::ui::AComponentUIPtr();
 		}
-		typedef boost::shared_ptr<TestContainer> Ptr;
+		typedef std::shared_ptr<TestContainer> Ptr;
 		static Ptr create() {
 			Ptr res(new TestContainer());
 			res->self = res;
@@ -123,7 +123,7 @@ namespace tests {
 	protected:
 		TestContainerVariant() {}
 	public:
-		typedef boost::shared_ptr<TestContainerVariant> Ptr;
+		typedef std::shared_ptr<TestContainerVariant> Ptr;
 		static Ptr create() {
 			Ptr res(new TestContainerVariant());
 			res->self = res;
@@ -133,7 +133,7 @@ namespace tests {
 	//=============================================================================
 	class TestLayoutManager : public  sdc::ALayoutManager {
 	public:
-		typedef boost::shared_ptr<TestLayoutManager> Ptr;
+		typedef std::shared_ptr<TestLayoutManager> Ptr;
 	protected:
 		TestLayoutManager() {}
 	public:
@@ -179,7 +179,7 @@ namespace tests {
 	//=========================================================================
 	struct TestButtonAction : public sambag::com::ICommand {
 		sambag::com::ArithmeticWrapper<bool> called;
-		typedef boost::shared_ptr<TestButtonAction> Ptr;
+		typedef std::shared_ptr<TestButtonAction> Ptr;
 		void execute() {
 			called = true;
 		}

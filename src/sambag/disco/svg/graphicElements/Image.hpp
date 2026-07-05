@@ -17,7 +17,7 @@ class Image : public GraphicElement {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<Image> Ptr;
+	typedef std::shared_ptr<Image> Ptr;
 private:
 	//-------------------------------------------------------------------------
 	void drawPlaceholder(IDrawContext::Ptr cn);

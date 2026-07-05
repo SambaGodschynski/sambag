@@ -8,7 +8,7 @@
 #ifndef SAMBAG_VSTMIDIEVENTADAPTER_H
 #define SAMBAG_VSTMIDIEVENTADAPTER_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "IMidiEvents.hpp"
 #include <aeffectx.h>
 #include <sambag/com/Exception.hpp>
@@ -27,8 +27,8 @@ protected:
     VstMidiEventAdapter & operator=(const VstMidiEventAdapter&) {}
 public:
     //-------------------------------------------------------------------------
-    typedef boost::shared_ptr<VstMidiEventAdapter> Ptr;
-    typedef boost::weak_ptr<VstMidiEventAdapter> WPtr;
+    typedef std::shared_ptr<VstMidiEventAdapter> Ptr;
+    typedef std::weak_ptr<VstMidiEventAdapter> WPtr;
 	VstEvents *events;
 	Int maxEvents;
 	bool ownerOfData;

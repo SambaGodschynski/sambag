@@ -8,7 +8,7 @@
 #ifndef SAMBAG_BASICBUTTONUI_H
 #define SAMBAG_BASICBUTTONUI_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/disco/components/ui/IButtonUI.hpp>
 #include <sambag/disco/components/AButton.hpp>
 #include "BasicButtonListener.hpp"
@@ -34,7 +34,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef IButtonUI Super;
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<BasicButtonUI<ButtonModell> > Ptr;
+	typedef std::shared_ptr<BasicButtonUI<ButtonModell> > Ptr;
 	//-------------------------------------------------------------------------
 	typedef AButton<ButtonModell> AbstractButton;
 protected:
@@ -175,7 +175,7 @@ void BasicButtonUI<ButtonModell>::drawRect(IDrawContext::Ptr cn,
 //-----------------------------------------------------------------------------
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::draw(IDrawContext::Ptr cn, AComponentPtr c) {
-	typename AbstractButton::Ptr b = boost::dynamic_pointer_cast<AbstractButton>(c);
+	typename AbstractButton::Ptr b = std::dynamic_pointer_cast<AbstractButton>(c);
 	if (!b)
 		return;
 	// draw rect
@@ -208,7 +208,7 @@ void BasicButtonUI<ButtonModell>::installUI(AComponentPtr c) {
 template <class ButtonModell>
 void BasicButtonUI<ButtonModell>::installListener(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<AbstractButton>(c);
+			std::dynamic_pointer_cast<AbstractButton>(c);
 	BOOST_ASSERT(b);
 	b->EventSender<events::MouseEvent>::addTrackedEventListener(
 			[this](void* s, const events::MouseEvent& e){ listener.onMouseEvent(s, e); },
@@ -283,7 +283,7 @@ Dimension BasicButtonUI<ButtonModell>::getMinimumSize(AComponentPtr c) {
 template <class ButtonModell>
 Dimension BasicButtonUI<ButtonModell>::getPreferredSize(AComponentPtr c) {
 	typename AbstractButton::Ptr b =
-			boost::dynamic_pointer_cast<AbstractButton>(c);
+			std::dynamic_pointer_cast<AbstractButton>(c);
 	IDrawContext::Ptr cn = getDiscoFactory()->createContext();
 	// TODO: handle font style/size
 	cn->setFont(b->getFont());

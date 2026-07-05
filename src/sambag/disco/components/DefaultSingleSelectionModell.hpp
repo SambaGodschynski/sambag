@@ -8,7 +8,7 @@
 #ifndef SAMBAG_DEFAULTSINGLESELECTIONMODELL_H
 #define SAMBAG_DEFAULTSINGLESELECTIONMODELL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include <sambag/com/events/ChangedEvent.hpp>
 #include <sambag/com/events/Events.hpp>

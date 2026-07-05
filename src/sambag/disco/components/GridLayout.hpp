@@ -8,7 +8,7 @@
 #ifndef SAMBAG_GRIDLAYOUT_H
 #define SAMBAG_GRIDLAYOUT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ALayoutManager.hpp"
 #include <sambag/com/ArithmeticWrapper.hpp>
 
@@ -25,7 +25,7 @@ class GridLayout : public ALayoutManager {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<GridLayout> Ptr;
+	typedef std::shared_ptr<GridLayout> Ptr;
 protected:
 private:
 	//-------------------------------------------------------------------------

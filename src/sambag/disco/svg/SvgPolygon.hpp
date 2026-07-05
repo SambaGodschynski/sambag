@@ -21,7 +21,7 @@ class SvgPolygon : public SvgObject {
 //=============================================================================
 public:
 	//-------------------------------------------------------------------------
-	typedef boost::shared_ptr<SvgPolygon> Ptr;
+	typedef std::shared_ptr<SvgPolygon> Ptr;
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Attribute tags
 	//-------------------------------------------------------------------------
 	struct Points_tag { typedef PointContainer Type; };

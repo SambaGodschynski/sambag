@@ -8,7 +8,7 @@
 #ifndef SAMBAG_WINDOWTOOLKIT_H
 #define SAMBAG_WINDOWTOOLKIT_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "Forward.hpp"
 #include <sambag/disco/Geometry.hpp>
 #include <sambag/com/ICommand.hpp>
@@ -80,7 +80,7 @@ public:
      * @see boost::signals2 tracking
      */
     virtual void invokeLater(const InvokeFunction &f,
-        int delay=50, boost::shared_ptr<void> toTrack=boost::shared_ptr<void>()) = 0;
+        int delay=50, std::shared_ptr<void> toTrack=std::shared_ptr<void>()) = 0;
 	//-------------------------------------------------------------------------
 	/**
 	 * aborts mainloop.

@@ -24,7 +24,7 @@ namespace { // thread stuff
 	//-------------------------------------------------------------------------
 	enum {SLEEPING_TIME = 10}; // for timer and main thread
 	//-------------------------------------------------------------------------
-	typedef std::pair<Messages, boost::shared_ptr<TimerThread> > Message;
+	typedef std::pair<Messages, std::shared_ptr<TimerThread> > Message;
 	//-------------------------------------------------------------------------
 	typedef std::queue<Message> MessageQueue;
 	//-------------------------------------------------------------------------
@@ -34,9 +34,9 @@ namespace { // thread stuff
 	//-------------------------------------------------------------------------
 	typedef boost::thread MainThread;
 	//-------------------------------------------------------------------------
-	typedef std::vector< boost::shared_ptr<TimerThread> > TimerThreads;
+	typedef std::vector< std::shared_ptr<TimerThread> > TimerThreads;
 	//-------------------------------------------------------------------------
-	typedef std::queue< boost::shared_ptr<TimerThread> > FreeTimerThreads;
+	typedef std::queue< std::shared_ptr<TimerThread> > FreeTimerThreads;
 	//-------------------------------------------------------------------------
 	MainThread mainThread;
 	//-------------------------------------------------------------------------
@@ -50,8 +50,8 @@ namespace { // thread stuff
 class TimerThread {
 //=============================================================================
 public:
-	typedef boost::shared_ptr<TimerThread> Ptr;
-	typedef boost::weak_ptr<TimerThread> WPtr;
+	typedef std::shared_ptr<TimerThread> Ptr;
+	typedef std::weak_ptr<TimerThread> WPtr;
 private:
 	static FreeTimerThreads freeThreads;
 	static sambag::com::RecursiveMutex freeTimerLock;
