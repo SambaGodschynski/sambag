@@ -1,11 +1,11 @@
 #ifndef _DIR_WALKER_H_
 #define _DIR_WALKER_H_
 
-#include "boost/filesystem.hpp"
+#include <filesystem>
 
 namespace sambag {
 namespace com {
-typedef boost::filesystem::path Location;
+typedef std::filesystem::path Location;
 //============================================================================================================
 // class IWalkerVisitor
 //============================================================================================================

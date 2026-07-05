@@ -6,9 +6,10 @@
  */
 
 #include "FileResourceManager.hpp"
-#include <boost/filesystem.hpp>
+
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <sambag/disco/IDiscoFactory.hpp>
+#include <filesystem>
 #include <sambag/disco/svg/SvgBuilder.hpp>
 #include <fstream>
 
@@ -69,8 +70,8 @@ FileResourceManager::Url FileResourceManager::getPath(const Url &url) const {
 //-----------------------------------------------------------------------------
 std::string FileResourceManager::getString(const Url &url) {
 	assumeHomeDir();
-	boost::filesystem::path path = getPath(url);
-	if ( !boost::filesystem::exists(path) ) {
+	std::filesystem::path path = getPath(url);
+	if ( !std::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
 			"file" + path.string() + " dosent exists.");
 		return "";
@@ -89,8 +90,8 @@ std::string FileResourceManager::getString(const Url &url) {
 FileResourceManager::ImagePtr FileResourceManager::loadImage(const std::string &_path) 
 {
 	assumeHomeDir();
-	boost::filesystem::path path = getPath(_path);
-	if ( !boost::filesystem::exists(path) ) {
+	std::filesystem::path path = getPath(_path);
+	if ( !std::filesystem::exists(path) ) {
 		SAMBAG_THROW(sambag::com::exceptions::IllegalStateException,
 			"file: " + path.string() + " dosent exists.");
 		return ImagePtr();

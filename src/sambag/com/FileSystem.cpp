@@ -11,22 +11,20 @@ namespace com {
 //     - file
 //============================================================================================================
 void dirWalker ( const Location &loc, IWalkerVisitor &vis, bool *abort ) {
-	using namespace com;
-	using namespace boost;	
-	using namespace filesystem; // boost::filesystem	
+	using namespace std::filesystem;
 	if ( !exists( loc ) ) return;
 	directory_iterator end_it;
 	directory_iterator it(loc);
 	for ( ; it!=end_it; ++it ) {
-		
-		if ( abort ) 
+
+		if ( abort )
 			if ( *abort ) return;
 
-		if ( is_directory ( *it ) ) {
-			if ( !vis.changeDirectory ( *it ) ) continue; // visitor returns false=>skip directory						
-			dirWalker ( *it, vis, abort );
-		}		
-		else vis.file(*it);
+		if ( is_directory( it->path() ) ) {
+			if ( !vis.changeDirectory( it->path() ) ) continue;
+			dirWalker( it->path(), vis, abort );
+		}
+		else vis.file( it->path() );
 	} //for
 }
 //============================================================================================================

@@ -29,7 +29,7 @@ FileHandler::~FileHandler() {
 }
 //-----------------------------------------------------------------------------
 FileHandler::Ptr FileHandler::create(const std::string &location) {
-	if (!boost::filesystem::exists(location)) {
+	if (!std::filesystem::exists(location)) {
 		return FileHandler::Ptr();
 	}
 	FStreamPtr fs(

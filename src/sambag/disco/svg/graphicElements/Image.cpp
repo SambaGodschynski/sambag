@@ -8,7 +8,7 @@
 #include "Image.hpp"
 #include "sambag/com/FileHandler.hpp"
 #include "sambag/disco/IDiscoFactory.hpp"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <sambag/disco/svg/Image.hpp>
 #include <cmath>
 
@@ -37,7 +37,7 @@ namespace {
 //=============================================================================
 //-----------------------------------------------------------------------------
 void Image::loadImage(const Dimension &r) {
-    if (boost::filesystem::path(uri).extension().string()==".svg") {
+    if (std::filesystem::path(uri).extension().string()==".svg") {
         image = _loadSvg(uri, r);
         return;
     }

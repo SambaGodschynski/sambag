@@ -6,6 +6,7 @@
  */
 
 #include "SvgBuilder.hpp"
+#include <filesystem>
 #include "sambag/disco/svg/SvgLine.hpp"
 #include "sambag/disco/svg/SvgRect.hpp"
 #include "sambag/disco/svg/SvgGroup.hpp"
@@ -26,9 +27,9 @@
 #include "sambag/disco/svg/SvgRadialGradient.hpp"
 #include "sambag/disco/svg/SvgColorStop.hpp"
 #include <boost/bind.hpp>
-#include <boost/filesystem.hpp>
+
 #include <boost/regex.hpp>
-#include <boost/filesystem/path.hpp>
+
 
 namespace {
     /**
@@ -66,7 +67,7 @@ namespace {
     }
     std::string __loadCss(const std::string &svgPath, const std::string &cssPath)
     {
-        boost::filesystem::path path(svgPath);
+        std::filesystem::path path(svgPath);
         std::string dst = path.parent_path().string() + "/" + cssPath;
         std::ifstream f(dst.c_str());
         if (f.fail()) {
@@ -159,7 +160,7 @@ SvgObject::Ptr SvgBuilder::buildSvgFromFilename(const std::string & name)
 {
 	graphicElements::SceneGraph::Ptr g = graphicElements::SceneGraph::create();
 	SvgRoot::Ptr root = SvgRoot::create(g.get(),true);
-	boost::filesystem::path loc = name;
+	std::filesystem::path loc = name;
 	root->setSvgPath(loc.remove_filename().string() + "/");
 	xml2Obj.setClosure(root.get());
 	SvgObject::BuilderType::CreatedSignalFunction f =

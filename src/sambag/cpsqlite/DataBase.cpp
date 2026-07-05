@@ -65,7 +65,7 @@ size_t DataBase::getNumDataBases() {
 }
 //------------------------------------------------------------------------------------------------------------
 DataBase::Ptr DataBase::getDataBase(  const std::string &dbLocation ) {
-	using namespace boost::filesystem;
+	using namespace std::filesystem;
 	// checke location
 	Path loc(dbLocation);
 	loc = absolute(loc);
