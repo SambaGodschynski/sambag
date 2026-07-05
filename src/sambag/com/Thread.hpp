@@ -8,31 +8,33 @@
 #ifndef SAMBAG_THREAD_HPP_
 #define SAMBAG_THREAD_HPP_
 
-#include <boost/thread.hpp>
+#include <mutex>
+#include <thread>
+#include <chrono>
 #include <sambag/com/Exception.hpp>
 
 namespace sambag { namespace com {
-	typedef boost::recursive_timed_mutex RecursiveMutex;
-	typedef boost::timed_mutex Mutex;
-    typedef boost::thread::id ThreadId;
+	typedef std::recursive_timed_mutex RecursiveMutex;
+	typedef std::timed_mutex Mutex;
+    typedef std::thread::id ThreadId;
 	inline ThreadId getThreadId() {
-        return boost::this_thread::get_id();
+        return std::this_thread::get_id();
     }
     SAMBAG_EXCEPTION_CLASS(DeadLockException);
 	inline void wait(long sec) {
-		boost::this_thread::sleep(boost::posix_time::seconds(sec));
+		std::this_thread::sleep_for(std::chrono::seconds(sec));
 	}
 }} // namespaces
 
 #define SAMBAG_DEADLOCK_EXCEPTION sambag::com::DeadLockException
 #define SAMBAG_LOCK_TIMEOUT 30
 
-#define SAMBAG_TRY_TO_LOCK_TIMED(mutex) boost::unique_lock<sambag::com::Mutex> __lock( (mutex), boost::try_to_lock);\
-	if (!__lock.owns_lock()) { __lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(SAMBAG_LOCK_TIMEOUT)); }\
+#define SAMBAG_TRY_TO_LOCK_TIMED(mutex) std::unique_lock<sambag::com::Mutex> __lock( (mutex), std::try_to_lock);\
+	if (!__lock.owns_lock()) { __lock.try_lock_for(std::chrono::seconds(SAMBAG_LOCK_TIMEOUT)); }\
 	if ( !__lock.owns_lock() ) SAMBAG_THROW(SAMBAG_DEADLOCK_EXCEPTION, "deadlock exception");
 
-#define SAMBAG_TRY_TO_LOCK_RECURSIVE(mutex) boost::unique_lock<sambag::com::RecursiveMutex> __lock( (mutex), boost::try_to_lock);\
-	if (!__lock.owns_lock()) { __lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(SAMBAG_LOCK_TIMEOUT)); }\
+#define SAMBAG_TRY_TO_LOCK_RECURSIVE(mutex) std::unique_lock<sambag::com::RecursiveMutex> __lock( (mutex), std::try_to_lock);\
+	if (!__lock.owns_lock()) { __lock.try_lock_for(std::chrono::seconds(SAMBAG_LOCK_TIMEOUT)); }\
 	if ( !__lock.owns_lock() ) SAMBAG_THROW(SAMBAG_DEADLOCK_EXCEPTION, "deadlock exception");
 
 
@@ -46,7 +48,7 @@ namespace sambag { namespace com {
 #define SAMBAG_END_SYNCHRONIZED }
 
 #define SAMBAG_WHEN_UNLOCKED(mutex) {											\
-	boost::unique_lock<sambag::com::Mutex> __lock( (mutex), boost::try_to_lock);\
+	std::unique_lock<sambag::com::Mutex> __lock( (mutex), std::try_to_lock);\
 		if (__lock.owns_lock()) {
 
 #define SAMBAG_END_WHEN_UNLOCKED }}

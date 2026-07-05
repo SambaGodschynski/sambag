@@ -13,6 +13,7 @@
 #include <sambag/disco/IDrawContext.hpp>
 #include <boost/unordered_map.hpp>
 #include <sambag/com/Thread.hpp>
+#include <list>
 #include <sambag/com/ArithmeticWrapper.hpp>
 #include "Forward.hpp"
 

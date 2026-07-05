@@ -12,8 +12,8 @@
 #include <sambag/disco/components/Timer.hpp>
 #include <set>
 #include <sambag/com/Thread.hpp>
-#include <boost/function.hpp>
-#include <sambag/com/Thread.hpp>
+#include <thread>
+#include <chrono>
 #include <sambag/disco/components/WindowToolkit.hpp>
 
 namespace sambag { namespace disco {
@@ -41,13 +41,13 @@ struct UpdaterUsingThread {
         Function f;
         int refreshTime;
         bool running;
-        boost::thread *thread;
+        std::thread *thread;
         Thread(int refreshTime, const Function &f) :
             f(f),
             refreshTime(refreshTime)
         {
             running = true;
-            thread = new boost::thread(boost::bind(&Class::onUpdate, this));
+            thread = new std::thread(&Class::onUpdate, this);
         }
         ~Thread() {
             running = false;
@@ -57,14 +57,14 @@ struct UpdaterUsingThread {
         void onUpdate() {
             while(running) {
                 f();
-                boost::this_thread::sleep(boost::posix_time::milliseconds(refreshTime));
+                std::this_thread::sleep_for(std::chrono::milliseconds(refreshTime));
             }
         }
     };
-    boost::shared_ptr<void> thread;
+    std::shared_ptr<void> thread;
     template <class Function>
     void init(int refreshTime, const Function &f) {
-        thread = boost::shared_ptr<void>(
+        thread = std::shared_ptr<void>(
             new Thread<Function>(refreshTime, f)
         );
     }
@@ -124,7 +124,7 @@ public:
 			values.insert(data);
 		}
 		if (!UpdaterPolicy::isReady()) {
-			UpdaterPolicy::init(RefreshTime, boost::bind(&Class::doUpdate, this));
+			UpdaterPolicy::init(RefreshTime, [this](void*, const sambag::disco::components::TimerEvent&){ this->doUpdate(); });
 		}
 	}
 	//-------------------------------------------------------------------------

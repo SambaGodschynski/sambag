@@ -15,6 +15,8 @@
 #include "TestWindowImpl.hpp"
 #include <iostream>
 #include <boost/thread.hpp>
+#include <thread>
+#include <chrono>
 namespace sambag { namespace disco { namespace components {
 //============================================================================
 /** 
@@ -88,7 +90,7 @@ void WindowTestToolkit<T, W>::startMainLoop() {
 	int sec = 1;
 	T::startUpTimer();
 	while (true) {
-		boost::this_thread::sleep(boost::posix_time::millisec((int)Res));
+		std::this_thread::sleep_for(std::chrono::milliseconds((int)Res));
 		waited+=Res;
 		if ( waited > 1000 * sec ) {
 			++sec;
