@@ -9,6 +9,7 @@
 #define HELPER_HPP_
 
 #include <boost/tuple/tuple.hpp>
+#include <tuple>
 #include <algorithm>
 
 namespace sambag { namespace com {
@@ -28,15 +29,17 @@ namespace {
 	template <typename Tuple, class Visitor, int N>
 	struct _TupleForeach {
 		enum {
-			SIZE = boost::tuples::length<Tuple>::value,
+			SIZE = std::tuple_size<Tuple>::value,
 			INDEX = SIZE-N
 		};
 		static void visit(const Tuple &t, Visitor &v) {
-			v(boost::get<INDEX>(t));
+			using std::get;
+			v(get<INDEX>(t));
 			_TupleForeach<Tuple, Visitor, N-1>::visit(t, v);
 		}
 		static void visit(Tuple &t, Visitor &v) {
-			v(boost::get<INDEX>(t));
+			using std::get;
+			v(get<INDEX>(t));
 			_TupleForeach<Tuple, Visitor, N-1>::visit(t, v);
 		}
 	};
@@ -54,7 +57,7 @@ namespace {
  */
 template <typename Tuple, class Visitor>
 void foreach(const Tuple &t, Visitor &v) {
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	_TupleForeach<Tuple, Visitor, N>::visit(t, v);
 
 }
@@ -65,7 +68,7 @@ void foreach(const Tuple &t, Visitor &v) {
  */
 template <typename Tuple, class Visitor>
 void foreach(Tuple &t, Visitor &v) {
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	_TupleForeach<Tuple, Visitor, N>::visit(t, v);
 
 }
@@ -76,7 +79,7 @@ namespace {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 template <typename Tuple, typename Container, int I>
 struct _CopyToTuple {
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	static void copyTo(
 			Tuple &t,
 			typename Container::const_iterator &it,
@@ -84,7 +87,8 @@ struct _CopyToTuple {
 	{
 		enum { X = N - I };
 		if (it!=end) {
-			boost::get<X>(t) = *(it++);
+			using std::get;
+			get<X>(t) = *(it++);
 		}
 		_CopyToTuple<Tuple, Container, I-1>::copyTo(t, it, end);
 	}
@@ -92,7 +96,7 @@ struct _CopyToTuple {
 //-----------------------------------------------------------------------------
 template <typename Tuple, typename Container>
 struct _CopyToTuple<Tuple, Container, 0> {
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	static void copyTo(
 			Tuple &t,
 			typename Container::const_iterator &it,
@@ -119,7 +123,7 @@ struct _CopyToTuple<Tuple, Container, 0> {
 template <typename Tuple, typename Container>
 Tuple fromContainer(const Container &c) {
 	Tuple t;
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	typename Container::const_iterator it = c.begin();
 	typename Container::const_iterator end = c.end();
 	_CopyToTuple<Tuple, Container, N>::copyTo(t, it, end);
@@ -138,7 +142,7 @@ Tuple fromContainer(
 	 const typename Container::const_iterator &end)
 {
 	Tuple t;
-	enum {N = boost::tuples::length<Tuple>::value};
+	enum {N = std::tuple_size<Tuple>::value};
 	_CopyToTuple<Tuple, Container, N>::copyTo(t, it, end);
 	return t;
 }

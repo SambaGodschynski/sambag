@@ -344,7 +344,7 @@ template <typename Tuple>
 bool pop(lua_State *L, Tuple &t) {
 	if(!get(L, t))
 		return false;
-	lua_pop(L, (int)boost::tuples::length<Tuple>::value);
+	lua_pop(L, (int)std::tuple_size<Tuple>::value);
 	return true;
 }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -378,7 +378,7 @@ inline void callLuaFunc(lua_State *L,
 	__getF(L, fName);
 	push(L, args);
 	__callF(L,
-		(int)boost::tuples::length<ArgTuple>::value, // num args
+		(int)std::tuple_size<ArgTuple>::value, // num args
 		0
 	);
 }
@@ -400,8 +400,8 @@ inline void callLuaFunc(lua_State *L,
 	__getF(L, fName);
 	push(L, args);
 	__callF(L,
-		(int)boost::tuples::length<ArgTuple>::value, // num args
-		(int)boost::tuples::length<RetTuple>::value // num rets
+		(int)std::tuple_size<ArgTuple>::value, // num args
+		(int)std::tuple_size<RetTuple>::value // num rets
 	);
 	pop(L, ret);
 }

@@ -11,12 +11,51 @@
 #include <loki/Singleton.h>
 #include <sambag/disco/components/Timer.hpp>
 #include <set>
+#include <tuple>
+#include <memory>
 #include <sambag/com/Thread.hpp>
 #include <thread>
 #include <chrono>
 #include <sambag/disco/components/WindowToolkit.hpp>
 
 namespace sambag { namespace disco {
+
+// Generic comparator for set keys that may contain std::weak_ptr elements.
+// std::owner_less<T> only works for direct weak_ptr/shared_ptr — not for
+// pair/tuple wrappers. This comparator handles those recursively.
+namespace detail {
+    template<class T> struct wptr_less {
+        bool operator()(const T& a, const T& b) const { return std::less<T>{}(a, b); }
+    };
+    template<class T> struct wptr_less<std::weak_ptr<T>> {
+        bool operator()(const std::weak_ptr<T>& a, const std::weak_ptr<T>& b) const {
+            return a.owner_before(b);
+        }
+    };
+    template<class T, class U> struct wptr_less<std::pair<T,U>> {
+        bool operator()(const std::pair<T,U>& a, const std::pair<T,U>& b) const {
+            if (wptr_less<T>{}(a.first,  b.first))  return true;
+            if (wptr_less<T>{}(b.first,  a.first))  return false;
+            return wptr_less<U>{}(a.second, b.second);
+        }
+    };
+    template<class... Ts> struct wptr_less<std::tuple<Ts...>> {
+        template<std::size_t I, class Tup>
+        static bool cmp(const Tup& a, const Tup& b) {
+            if constexpr (I == sizeof...(Ts)) return false;
+            else {
+                using E = std::tuple_element_t<I, Tup>;
+                if (wptr_less<E>{}(std::get<I>(a), std::get<I>(b))) return true;
+                if (wptr_less<E>{}(std::get<I>(b), std::get<I>(a))) return false;
+                return cmp<I+1>(a, b);
+            }
+        }
+        bool operator()(const std::tuple<Ts...>& a, const std::tuple<Ts...>& b) const {
+            return cmp<0>(a, b);
+        }
+    };
+} // namespace detail
+
 struct UpdaterUsingTimer {
 	typedef sambag::disco::components::Timer RefreshTimer;
     RefreshTimer::Ptr refreshTimer;
@@ -103,7 +142,7 @@ public:
 	//-------------------------------------------------------------------------
 	typedef _DoUpdatePolicy<UpdateValueType> DoUpdatePolicy;
 	//-------------------------------------------------------------------------
-	typedef std::set<UpdateValueType, std::owner_less<UpdateValueType>> Values;
+	typedef std::set<UpdateValueType, detail::wptr_less<UpdateValueType>> Values;
 	//-------------------------------------------------------------------------
 	typedef TimedUpdater<UpdateValueType, _DoUpdatePolicy, RefreshTime, UpdaterPolicy> Class;
 protected:

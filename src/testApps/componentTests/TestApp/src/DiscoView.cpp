@@ -353,7 +353,7 @@ void updateContent(Browser::Ptr miller, const Browser::Path &path) {
 void onMillerPathChanged(void *src,
 	const Browser::Event &ev)
 {
-	Browser::Ptr browser = boost::dynamic_pointer_cast<Browser>(ev.getSource());
+	Browser::Ptr browser = std::dynamic_pointer_cast<Browser>(ev.getSource());
 	SAMBAG_ASSERT(browser);
 	std::cout<<browser->selectionPathToString()<<std::endl;
 	updateContent(browser, browser->getSelectionPath());
@@ -382,7 +382,7 @@ void createWindow<MILLER>() {
 }
 
 void onScrollTimer(void *src, const sdc::TimerEvent &ev, 
-	boost::weak_ptr<sdc::Viewport> viewport) 
+	std::weak_ptr<sdc::Viewport> viewport) 
 {
 	if (currScrollSpeed == 0.f)
 		return;
@@ -626,7 +626,7 @@ void onClearTxtField(void *src, const sdc::events::ActionEvent &ev) {
 	win[ACME]->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
 	if (l.empty())
 		return;
-	Label::Ptr label = boost::dynamic_pointer_cast<Label>(l.back());
+	Label::Ptr label = std::dynamic_pointer_cast<Label>(l.back());
 	if (!label)
 		return;
 	label->setText("");
@@ -674,7 +674,7 @@ void onRootMouse(void *src, const sdc::events::MouseEvent &ev) {
 
 void onACMEButton(void *src, const sdc::events::ActionEvent &ev) {
 	using namespace sambag::disco::components;
-	Button::Ptr b = boost::dynamic_pointer_cast<Button>(ev.getSource());
+	Button::Ptr b = std::dynamic_pointer_cast<Button>(ev.getSource());
 	if (!b) {
 		std::cout<<ev.getSource()->toString()<<std::endl;
 		return;
@@ -683,7 +683,7 @@ void onACMEButton(void *src, const sdc::events::ActionEvent &ev) {
 	win[ACME]->getRootPane()->getComponentsByTag(INPUT_LABEL, l);
 	if (l.empty())
 		return;
-	Label::Ptr label = boost::dynamic_pointer_cast<Label>(l.back());
+	Label::Ptr label = std::dynamic_pointer_cast<Label>(l.back());
 	if (!label)
 		return;
 	std::string txt = label->getText() + b->getText();

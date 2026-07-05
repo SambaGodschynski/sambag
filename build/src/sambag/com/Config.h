@@ -13,7 +13,7 @@
  #define SAMBAG_32
 #endif
 
-#define SAMBAG_VERSION_BUILD "504660d"
+#define SAMBAG_VERSION_BUILD "574462b"
 
 
 #endif // SAMBAG_CONFIG_H

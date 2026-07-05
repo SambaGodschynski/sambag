@@ -98,13 +98,11 @@ template <
 	class T6, class T7, class T8, class T9
 >
 struct NumReturnValues<
-	boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
+	std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
 > 
 {
 	enum {Value=
-		boost::tuples::length< 
-			boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
-		>::value
+		std::tuple_size<std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>::value
 	};
 };
 //=============================================================================
@@ -143,14 +141,14 @@ void callF(const Function &f,
 		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg1_type
 	> args;
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
 	push(L, f(
-		boost::get<0>(args)
+		std::get<0>(args)
 	));
 }
 //-----------------------------------------------------------------------------
@@ -161,14 +159,14 @@ void callF(const Function &f,
 		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg1_type
 	> args;
 	if (!pop(L, args))
 		throwArgumentsMismatch<Function>(L);
 	// call
 	f(
-		boost::get<0>(args)
+		std::get<0>(args)
 	);
 }
 //=============================================================================
@@ -181,7 +179,7 @@ void callF(const Function &f,
 		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg2_type,
 		typename Function::arg1_type
 	> args;
@@ -189,8 +187,8 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	push(L, f(
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<1>(args),
+		std::get<0>(args)
 	));
 }
 //-----------------------------------------------------------------------------
@@ -201,7 +199,7 @@ void callF(const Function &f,
 		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg2_type,
 		typename Function::arg1_type
 	> args;
@@ -209,8 +207,8 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	f(
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<1>(args),
+		std::get<0>(args)
 	);
 }
 //=============================================================================
@@ -223,7 +221,7 @@ void callF(const Function &f,
 		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg3_type,
 		typename Function::arg2_type,
 		typename Function::arg1_type
@@ -232,9 +230,9 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	push(L, f(
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	));
 }
 //-----------------------------------------------------------------------------
@@ -245,7 +243,7 @@ void callF(const Function &f,
 		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg3_type,
 		typename Function::arg2_type,
 		typename Function::arg1_type
@@ -254,9 +252,9 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	f(
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	);
 }
 //=============================================================================
@@ -269,7 +267,7 @@ void callF(const Function &f,
 		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg4_type,
 		typename Function::arg3_type,
 		typename Function::arg2_type,
@@ -279,10 +277,10 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	push(L, f(
-		boost::get<3>(args),
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<3>(args),
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	));
 }
 //-----------------------------------------------------------------------------
@@ -293,7 +291,7 @@ void callF(const Function &f,
 		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg4_type,
 		typename Function::arg3_type,
 		typename Function::arg2_type,
@@ -303,10 +301,10 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	f(
-		boost::get<3>(args),
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<3>(args),
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	);
 }
 //=============================================================================
@@ -319,7 +317,7 @@ void callF(const Function &f,
 		com::Int2Type<0>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg5_type,
 		typename Function::arg4_type,
 		typename Function::arg3_type,
@@ -330,11 +328,11 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	push(L, f(
-		boost::get<4>(args),
-		boost::get<3>(args),
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<4>(args),
+		std::get<3>(args),
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	));
 }
 //-----------------------------------------------------------------------------
@@ -345,7 +343,7 @@ void callF(const Function &f,
 		com::Int2Type<1>) // is void?
 {
 	// get argument(s) from stack
-	boost::tuple<
+	std::tuple<
 		typename Function::arg5_type,
 		typename Function::arg4_type,
 		typename Function::arg3_type,
@@ -356,11 +354,11 @@ void callF(const Function &f,
 		throwArgumentsMismatch<Function>(L);
 	// call
 	f(
-		boost::get<4>(args),
-		boost::get<3>(args),
-		boost::get<2>(args),
-		boost::get<1>(args),
-		boost::get<0>(args)
+		std::get<4>(args),
+		std::get<3>(args),
+		std::get<2>(args),
+		std::get<1>(args),
+		std::get<0>(args)
 	);
 }
 //=============================================================================
@@ -406,10 +404,10 @@ struct RegisterHelperClass {
         if (!lua_isstring(L, -1)) {
             pushLuaError(L, "callback failed, invalid table.");
         }
-        boost::tuple<std::string> uid;
+        std::tuple<std::string> uid;
         pop(L, uid);
         
-		typename FMap::iterator it = fMap.find(boost::get<0>(uid));
+		typename FMap::iterator it = fMap.find(std::get<0>(uid));
 		if (it == fMap.end()) {
 			pushLuaError(L, "callback failed. UUID not found");
 		}
@@ -564,7 +562,8 @@ template <class Tuple>
 struct TupleAccessor {
     template <int Index, class Result>
     static void get(const Tuple &tuple, Result &out) {
-        out = boost::get<Index>(tuple);
+        using std::get;
+        out = get<Index>(tuple);
     }
 };
 
