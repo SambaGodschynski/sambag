@@ -27,7 +27,6 @@ namespace sambag { namespace com { namespace detail {
 #define BOOST_REVERSE_FOREACH(VAR, RANGE) for (VAR : sambag::com::detail::make_reverse(RANGE))
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <float.h>

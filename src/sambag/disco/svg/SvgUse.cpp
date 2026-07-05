@@ -6,6 +6,7 @@
  */
 
 #include "SvgUse.hpp"
+#include <sambag/math/Matrix.hpp>
 #include "SvgRoot.hpp"
 #include "graphicElements/SceneGraphHelper.hpp"
 

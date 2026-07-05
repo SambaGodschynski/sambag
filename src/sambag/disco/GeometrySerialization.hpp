@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "Geometry.hpp"
 #include <boost/serialization/split_free.hpp>
+#include <boost/serialization/base_object.hpp>
 
 namespace boost { namespace serialization {
 namespace sd = sambag::disco;
