@@ -7,6 +7,7 @@
 
 #include "TestThread.hpp"
 #include <cppunit/config/SourcePrefix.h>
+#include <thread>
 
 void callLockRecursive(sambag::com::RecursiveMutex &mutex, int i=0) {
 	if (i==10)
@@ -57,8 +58,8 @@ void TestThread::testSynchronizedRecursively() {
 	// force lock-> two threads one lock
 	bool deadlockExThrown = false;
 	Deadlock dl(mutex, deadlockExThrown);
-	boost::thread thread01(dl);
-	boost::thread thread02(dl);
+	std::thread thread01(dl);
+	std::thread thread02(dl);
 	thread01.join();
 	thread02.join();
 	// Deadlock Exception occurred in another thread, so we can't use
