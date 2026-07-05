@@ -49,7 +49,7 @@ void ComTests::setUp() {
 	if (init)
 		return;
 	init = true;
-	testFolders = boost::filesystem::absolute(
+	testFolders = std::filesystem::absolute(
 		com::Location(FILENAME).parent_path().string() + std::string("/TestFolders")
 	);
 }
