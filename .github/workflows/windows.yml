@@ -59,6 +59,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release `
             -DSAMBAG_VST_SUPPORT=OFF `
             -DSAMBAG_BUILD_TESTS=ON `
+            "-DCMAKE_CXX_FLAGS=/Bt" `
             -DSAMBAG_BUILD_TESTAPP=OFF `
             -DSAMBAG_USE_LOG=ON `
             -DSAMBAG_STATIC_DEPS=ON
