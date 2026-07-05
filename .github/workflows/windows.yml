@@ -23,32 +23,27 @@ jobs:
         with:
           arch: x64
 
-      - name: Create vcpkg binary cache dir
-        run: New-Item -ItemType Directory -Force -Path "C:\vcpkg-archives" | Out-Null
-        shell: pwsh
-
-      - name: Restore vcpkg binary cache
+      - name: Restore vcpkg installed packages
         id: vcpkg-cache
         uses: actions/cache/restore@v4
         with:
-          path: C:\vcpkg-archives
-          key: vcpkg-archives-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
-          restore-keys: vcpkg-archives-x64-windows-static-
+          path: C:\vcpkg\installed
+          key: vcpkg-installed-x64-windows-static-boost1.91-cairo-lua-cppunit-v1
+          restore-keys: vcpkg-installed-x64-windows-static-
 
       - name: Install dependencies via vcpkg
-        env:
-          VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-archives
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
         run: |
           vcpkg install --classic --triplet x64-windows-static `
             cairo lua cppunit boost
         shell: pwsh
 
-      - name: Save vcpkg binary cache
-        if: always()
+      - name: Save vcpkg installed packages
+        if: steps.vcpkg-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
-          path: C:\vcpkg-archives
-          key: vcpkg-archives-x64-windows-static-${{ hashFiles('.github/workflows/windows.yml') }}
+          path: C:\vcpkg\installed
+          key: vcpkg-installed-x64-windows-static-boost1.91-cairo-lua-cppunit-v1
 
       - name: Configure
         run: |
@@ -59,9 +54,8 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release `
             -DSAMBAG_VST_SUPPORT=OFF `
             -DSAMBAG_BUILD_TESTS=ON `
-            "-DCMAKE_CXX_FLAGS=/Bt" `
             -DSAMBAG_BUILD_TESTAPP=OFF `
-            -DSAMBAG_USE_LOG=ON `
+            -DSAMBAG_USE_LOG=OFF `
             -DSAMBAG_STATIC_DEPS=ON
         shell: pwsh
 
@@ -74,29 +68,9 @@ jobs:
         run: .\build\src\Release\unit_tests.exe
         shell: pwsh
 
-      - name: Configure prebuilt (SAMBAG_USE_LOG=OFF for ABI compatibility)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          cmake -S . -B build-dist `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
-            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
-            -DVCPKG_MANIFEST_MODE=OFF `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DSAMBAG_VST_SUPPORT=OFF `
-            -DSAMBAG_BUILD_TESTS=OFF `
-            -DSAMBAG_BUILD_TESTAPP=OFF `
-            -DSAMBAG_USE_LOG=OFF `
-            -DSAMBAG_STATIC_DEPS=ON
-        shell: pwsh
-
-      - name: Build prebuilt
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: cmake --build build-dist --config Release --parallel
-        shell: pwsh
-
       - name: Install (cmake --install)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: cmake --install build-dist --config Release --prefix dist
+        run: cmake --install build --config Release --prefix dist
         shell: pwsh
 
       - name: Package
