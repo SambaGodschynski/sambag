@@ -7,6 +7,7 @@
 #ifdef DISCO_USE_WIN32
 
 #include "Win32WindowImpl.hpp"
+#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <sambag/disco/components/WindowToolkit.hpp>
 #include <sambag/com/Common.hpp>

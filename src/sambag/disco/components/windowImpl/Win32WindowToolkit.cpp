@@ -12,6 +12,7 @@
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/Timer.hpp>
 #include <windows.h>
+#include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include "Win32BufferedDraw.hpp"
 

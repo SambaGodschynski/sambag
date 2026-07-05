@@ -12,6 +12,7 @@
 #include "cocoaimpl/_CocoaWindowImpl.h"
 #include <sambag/disco/components/Window.hpp>
 #include <sambag/disco/components/Timer.hpp>
+#include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
 namespace sambag { namespace disco { namespace components {

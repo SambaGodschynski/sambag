@@ -11,6 +11,7 @@
 #include <memory>
 #include "ColumnView.hpp"
 #include <sambag/com/ArithmeticWrapper.hpp>
+#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include "Forward.hpp"
 #include <sambag/com/events/Events.hpp>

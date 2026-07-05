@@ -11,6 +11,7 @@
 #include <sambag/com/Thread.hpp>
 #include <sambag/com/exceptions/IllegalStateException.hpp>
 #include <memory>
+#include <boost/bind.hpp>
 #include <boost/unordered_set.hpp>
 
 namespace {

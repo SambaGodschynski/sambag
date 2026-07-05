@@ -8,6 +8,7 @@
 #include "LuaHelper.hpp"
 #include <string>
 #include <map>
+#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <lua.hpp>

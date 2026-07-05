@@ -8,6 +8,7 @@
 #ifdef _WIN32
 
 #include "Win32TimerImpl.hpp"
+#include <boost/bind.hpp>
 #include <boost/bimap.hpp>
 #include <boost/bimap/unordered_set_of.hpp>
 #include <windows.h>

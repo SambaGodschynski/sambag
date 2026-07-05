@@ -8,6 +8,7 @@
 
 #include "X11WindowImpl.hpp"
 #include <sambag/disco/X11Surface.hpp>
+#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include "X11WindowToolkit.hpp"
 #include <sambag/disco/components/WindowToolkit.hpp>

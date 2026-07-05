@@ -6,6 +6,7 @@
  */
 
 #include "BoostTimerImpl.hpp"
+#include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <sambag/com/Thread.hpp>
 #include <boost/thread.hpp>
