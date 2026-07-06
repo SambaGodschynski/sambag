@@ -326,6 +326,13 @@ void push(lua_State *L,
 	sambag::com::foreach(t, pft);
 }
 //-----------------------------------------------------------------------------
+template <class... Ts>
+void push(lua_State *L, const std::tuple<Ts...> &t)
+{
+	_PushFromTuple pft(L);
+	sambag::com::foreach(t, pft);
+}
+//-----------------------------------------------------------------------------
 template <typename Tuple>
 bool get(lua_State *L, Tuple &t, int index = -1) {
 	_IntoTuple into(L, index);

@@ -92,18 +92,10 @@ template <>
 struct NumReturnValues<void> {
 	enum {Value=0};
 };
-template <
-	class T0, class T1, class T2,
-	class T3, class T4, class T5,
-	class T6, class T7, class T8, class T9
->
-struct NumReturnValues<
-	std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
->
+template <class... Ts>
+struct NumReturnValues<std::tuple<Ts...>>
 {
-	enum {Value=
-		std::tuple_size<std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>::value
-	};
+	enum {Value = std::tuple_size<std::tuple<Ts...>>::value};
 };
 template <
 	class T0, class T1, class T2,
