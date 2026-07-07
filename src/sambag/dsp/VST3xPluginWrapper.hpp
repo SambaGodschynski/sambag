@@ -117,6 +117,7 @@ class VST3xPluginWrapper :
     public Steinberg::Vst::IAudioProcessor,  // FUnknown
     public Steinberg::Vst::IEditController,  // IPluginBase -> FUnknown
     public _PluginProcessor,
+    public _CreateEditorPolicy,
     public IHost
 {
 //=============================================================================
@@ -125,13 +126,8 @@ public:
     typedef _PluginTraits       PluginTraits;
     typedef _CreateEditorPolicy CreateEditorPolicy;
 
-private:
-    std::atomic<Steinberg::int32> _refCount{1};
-    Steinberg::Vst::IComponentHandler* _componentHandler{nullptr};
-    HostTimeInfo _hostTimeInfo;
-
     // ─────────────────────────────────────────────────────────────────────
-    // FUnknown — overrides every vtable slot (all three base-class copies)
+    // FUnknown — must be public so the factory can call release()
     // ─────────────────────────────────────────────────────────────────────
     Steinberg::uint32 PLUGIN_API addRef() override {
         return static_cast<Steinberg::uint32>(++_refCount);
@@ -146,6 +142,12 @@ private:
         return static_cast<Steinberg::uint32>(rc < 0 ? 0 : rc);
     }
 
+private:
+    std::atomic<Steinberg::int32> _refCount{1};
+    Steinberg::Vst::IComponentHandler* _componentHandler{nullptr};
+    HostTimeInfo _hostTimeInfo;
+
+public:
     Steinberg::tresult PLUGIN_API queryInterface(const Steinberg::TUID iid, void** obj) override {
         using namespace Steinberg;
         using namespace Steinberg::Vst;
@@ -443,7 +445,7 @@ private:
 
     Steinberg::IPlugView* PLUGIN_API createView(Steinberg::FIDString name) override {
         if (name && std::strcmp(name, Steinberg::Vst::ViewType::kEditor) == 0) {
-            return CreateEditorPolicy::template createEditor<Steinberg::IPlugView>(this);
+            return this->_CreateEditorPolicy::template createEditor<Steinberg::IPlugView>(this);
         }
         return nullptr;
     }

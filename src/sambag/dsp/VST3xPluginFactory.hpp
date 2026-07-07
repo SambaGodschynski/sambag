@@ -99,13 +99,12 @@ class VST3xPluginFactory : public Steinberg::IPluginFactory
                                                   Steinberg::FIDString riid,
                                                   void** obj) override {
         if (!obj) return Steinberg::kInvalidArgument;
-        if (!tuidEqual(reinterpret_cast<const Steinberg::TUID>(cid), _classId)) {
+        if (std::memcmp(cid, _classId, sizeof(Steinberg::TUID)) != 0) {
             *obj = nullptr;
             return Steinberg::kResultFalse;
         }
         Plugin* instance = new Plugin();
-        Steinberg::tresult res = instance->queryInterface(
-            reinterpret_cast<const Steinberg::TUID>(riid), obj);
+        Steinberg::tresult res = instance->queryInterface(riid, obj);
         instance->release(); // factory ref; queryInterface added its own ref
         return res;
     }
