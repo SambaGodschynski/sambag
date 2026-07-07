@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Required for libsambag.a to be linkable into shared libraries (.so/.dll)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Use static CRT on MSVC to match the x64-windows-static vcpkg triplet (/MT, /MTd)
 if(MSVC)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
