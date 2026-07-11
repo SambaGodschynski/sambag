@@ -53,7 +53,6 @@ void X11WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	attributes.event_mask = ButtonPressMask | ButtonReleaseMask | KeyPressMask
 		| KeyReleaseMask
 		| ButtonMotionMask
-		| PointerMotionHintMask
 		| StructureNotifyMask
 		| PointerMotionMask;
 	unsigned long valuemask = CWBackPixel | CWEventMask;
@@ -86,10 +85,11 @@ X11WindowImpl::X11WindowImpl() :
 }
 //-----------------------------------------------------------------------------
 void X11WindowImpl::createWindow() {
-	if (instances++==0) {
+	if (visible) return; // already created (invokeLater was queued twice)
+	++instances;
+	if (wm_protocols_atom == 0) {
 		wm_protocols_atom = XInternAtom(display, "WM_PROTOCOLS", False);
 		wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
-		//XSynchronize(display, True);
 	}
 	screen = DefaultScreen(display);
 	// init visual
@@ -102,10 +102,8 @@ void X11WindowImpl::createWindow() {
 	attributes.event_mask = ButtonPressMask | ButtonReleaseMask | KeyPressMask
 			| KeyReleaseMask
 			| ButtonMotionMask
-			| PointerMotionHintMask
 			| StructureNotifyMask
 			| PointerMotionMask
-			| PointerMotionHintMask
 	//		| ExposureMask
 	;
 	unsigned long valuemask = CWBackPixel | CWEventMask;

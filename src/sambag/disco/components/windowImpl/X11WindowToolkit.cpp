@@ -117,11 +117,27 @@ void X11WindowToolkit::quit() {
 void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f, int ms,
     std::shared_ptr<void> toTrack)
 {
-	if (!isMainLoopRunning()) {
-		f();
-		return;
-	}
+	// Always queue. processEvents() drains the queue after each event batch.
+	// Immediate execution would cause use-after-free: e.g. a close() triggered
+	// inside an event handler destroys the MouseEventCreator while we are still
+	// executing inside it.
 	_invokeLater.push(f);
+}
+//-----------------------------------------------------------------------------
+void X11WindowToolkit::processEvents() {
+	::Display* display = getToolkit()->getGlobals().display;
+	if (!display) return;
+	XEvent event;
+	while (X11WindowImpl::getNumInstances() > 0 && XPending(display)) {
+		XNextEvent(display, &event);
+		X11WindowImpl::handleEvent(event);
+	}
+	if (X11WindowImpl::getNumInstances() > 0) {
+		X11WindowImpl::drawAll();
+	}
+	// Drain deferred work (window create/destroy, invokeLater callbacks) only
+	// after all pending X events and drawing are done.
+	invokeWaiting();
 }
 ///////////////////////////////////////////////////////////////////////////////
 WindowToolkit * _getWindowToolkitImpl() {

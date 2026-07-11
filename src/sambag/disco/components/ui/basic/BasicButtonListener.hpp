@@ -53,7 +53,6 @@ BasicButtonListener<BM>::getButton(const events::MouseEvent &ev) const
 //-----------------------------------------------------------------------------
 template <class BM>
 void BasicButtonListener<BM>::mouseEntered(const events::MouseEvent &ev) {
-	
 	ButtonClassPtr b = getButton(ev);
 	b->setButtonRollover(true);
 }
