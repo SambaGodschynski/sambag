@@ -43,6 +43,9 @@ private:
 	static void mainLoop();
 	//-------------------------------------------------------------------------
 	static void invokeWaiting();
+public:
+	static void flushInvokeLater() { invokeWaiting(); }
+private:
 	//-------------------------------------------------------------------------
 	typedef std::queue<InvokeFunction> InvokeLater;
 	//-------------------------------------------------------------------------

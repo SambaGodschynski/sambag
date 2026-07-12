@@ -478,4 +478,5 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/cmake,c++,visualstudio,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/cmake,c++,visualstudio,visualstudiocode/build/
+/sambag_testresult.xml

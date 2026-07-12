@@ -70,6 +70,7 @@ void X11WindowImpl::initAsNestedWindow(ArbitraryType::Ptr osParent,
 	XFlush(display);
 	++instances;
 	visible = true;
+	nested = true;
 }
 //-----------------------------------------------------------------------------
 X11WindowImpl::X11WindowImpl() :
@@ -165,9 +166,13 @@ void X11WindowImpl::destroyWindow() {
 	}
 	// unregister window
 	winmap.erase(win);
-	// X11's destroy
 	onDestroy();
-	XDestroyWindow(display, win);
+	// For nested (plugin) windows the host owns and may have already destroyed
+	// the parent, which auto-destroys our child.  Calling XDestroyWindow on an
+	// already-destroyed window causes a BadWindow X error, so skip it here.
+	if (!nested) {
+		XDestroyWindow(display, win);
+	}
 	win = 0;
 	--instances;
 	visible = false;

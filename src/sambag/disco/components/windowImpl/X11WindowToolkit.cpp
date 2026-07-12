@@ -127,6 +127,9 @@ void X11WindowToolkit::invokeLater(const X11WindowToolkit::InvokeFunction &f, in
 void X11WindowToolkit::processEvents() {
 	::Display* display = getToolkit()->getGlobals().display;
 	if (!display) return;
+	// Drain pending window destroys before drawing so stale winmap entries
+	// from a previous removed() cycle don't reach drawAll() and cause BadDrawable.
+	invokeWaiting();
 	XEvent event;
 	while (X11WindowImpl::getNumInstances() > 0 && XPending(display)) {
 		XNextEvent(display, &event);
@@ -135,8 +138,6 @@ void X11WindowToolkit::processEvents() {
 	if (X11WindowImpl::getNumInstances() > 0) {
 		X11WindowImpl::drawAll();
 	}
-	// Drain deferred work (window create/destroy, invokeLater callbacks) only
-	// after all pending X events and drawing are done.
 	invokeWaiting();
 }
 ///////////////////////////////////////////////////////////////////////////////
